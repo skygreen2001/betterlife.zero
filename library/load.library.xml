@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    /**
+     * 加载库遵循以下规则：
+     * 1.加载的库文件应该都放在library目录下以加载库的名称为子目录的名称内
+     * 2.是否加载库由load.library.xml文件相关规范说明决定。
+     * 3.name:加载库的名称，要求必须是英文和数字。
+     * 4.init:加载库的方法，一般库有一个头文件，该方法由库提供者定义在本文件内。
+     * 5.open:是否加载库。true:加载，false:不加载，如果不定义则代表该库由逻辑自定义开关规则。
+     * 6.required:是否必须加载的，如无定义，则根据open定义加载库。
+     */
+ -->
+<resourceLibrarys>
+  <resourceLibrary id="1" name="PHPUnit" open="false" init="load_phpunit" required="false" updateTime="2011-07-12 14:03:49"/>
+  <resourceLibrary id="2" name="adodb5" open="false" init="load_adode" required="false" updateTime="2011-07-12 22:30:05"/>
+  <resourceLibrary id="3" name="mdb2" open="true" init="load_mdb2"/>
+  <resourceLibrary id="4" name="phpexcel" open="true" init="load_phpexcel" required="false" updateTime="2011-07-12 21:32:05"/>
+  <resourceLibrary id="5" name="yaml" open="false" init="load_yaml_spyc"/>
+  <resourceLibrary id="6" name="linq" open="false" init="load_PHPLinq"/>
+  <resourceLibrary id="7" name="template" required="true" init="load_template"/>
+  <resourceLibrary id="1310483617" name="gggg" init="g" commitTime="2011-07-12 23:13:37"/>
+  <resourceLibrary id="1310483965" name="bbbb" init="b" commitTime="2011-07-12 23:19:25"/>
+  <resourceLibrary id="1310483980" name="dddd" init="d" commitTime="2011-07-12 23:19:40"/>
+</resourceLibrarys>

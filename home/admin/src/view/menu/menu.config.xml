@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menuGroups>
+    <menuGroup id="nav" name="功能区" lang="en" iconCls="nav">
+        <menu name="CSDN" address="http://www.csdn.net" />
+        <menu name="InfoQ" address="http://www.infoq.com" />
+        <menu name="PHP" address="http://www.php.net" />        
+        <menu name="CS-Cart" address="http://www.cs-cart.com" />
+        <menu name="Sencha" address="http://www.sencha.com/" />
+        <menu name="ITEye" address="http://www.iteye.com/" title="ITeye Java编程 Spring框架 AJAX技术 Agile敏捷软件开发 ruby on rails实践 - ITeye做最棒的软件开发交流社区"/>      
+        <menu name="C#" address="http://cplus.about.com/" />        
+    </menuGroup>
+    <menuGroup id="navdesign" lang="en" name="展示区" iconCls="navdesign">
+        <menu name="Photoshop Online" address="http://www.photoshop.com/tools" />
+        <menu name="PhotoEditor" title="Pixlr Photo editor" address="http://pixlr.com/editor" />   
+        <menu name="CSSTidy" title="a free, online application that will fix errors and optimize your CSS code." address="http://csstidy.sourceforge.net/example.php" />
+        <menu name="Icon Finder" address="http://www.iconfinder.com/" />
+        <menu name="Convert Icon" address="http://www.converticon.com/" />    
+        <menu name="Background Patterns" address="http://www.bgpatterns.com/" />   
+        <menu name="Test Everything" address="http://tester.jonasjohn.de/" />
+    </menuGroup>
+    <menuGroup id="navSystem" name="系统设置" iconCls="settings">
+        <menu name="菜单管理" address="index.php?go=admin.system.menumanager" />
+        <menu name="资源库管理" title="第三方库加载" address="index.php?go=admin.system.librarymanager" />
+        <menu name="模块管理" title="功能模块加载" address="index.php?go=admin.system.modulemanager" />        
+        <menu name="数据库工具" address="tools/tools/db.php" />
+        <menu name="性能探测器" title="性能探针Probe，查看服务器性能" address="index.php?go=admin.system.probe" />
+        <menu name="文件管理" title="显示所有的核心源码文件信息" address="index.php?go=admin.system.filemanager" />
+        <menu name="实体类工具" title="根据输入的变量们直接生成setter和getter方法" address="tools/dev/phpsetget/PHPGetSet.html" />
+    </menuGroup>    
+    <menuGroup id="navDev" name="开发者园地" iconCls="nav">
+        <menu name="百度" title="开发者平台" address="http://dev.baidu.com/" />
+        <menu name="淘宝" title="淘宝网 - 淘！我喜欢" address="http://www.taobao.com" />
+    </menuGroup>    
+</menuGroups>

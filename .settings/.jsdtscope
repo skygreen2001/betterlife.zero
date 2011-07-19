@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.wst.jsdt.launching.WebProject">
+		<attributes>
+			<attribute name="hide" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.wst.jsdt.launching.baseBrowserLibrary"/>
+	<classpathentry excluding="nls/hu/|_editor/nls/el/|nls/es/|_editor/nls/ar/|_editor/plugins/|nls/nl/|_editor/nls/ko/|_editor/nls/cs/|_base/|form/nls/hu/|form/nls/zh-tw/|nls/cs/|_editor/nls/da/|form/nls/tr/|nls/da/|form/nls/ru/|nls/ar/|nls/sk/|nls/zh-tw/|_editor/nls/it/|form/nls/ca/|nls/sl/|_editor/nls/zh/|form/nls/zh/|_editor/nls/sv/|_editor/nls/nb/|nls/he/|nls/sv/|_editor/nls/he/|nls/ja/|nls/|nls/fi/|nls/nb/|form/|nls/de/|_editor/nls/ca/|_editor/nls/pt-pt/|form/nls/pt-pt/|_editor/nls/zh-tw/|form/nls/ko/|_editor/nls/ja/|_tree/|_editor/nls/es/|form/nls/fr/|_editor/nls/pl/|layout/|_editor/nls/th/|form/nls/th/|nls/fr/|_editor/nls/fr/|nls/it/|form/nls/da/|_editor/nls/nl/|form/nls/sk/|form/nls/sl/|form/nls/it/|form/nls/|form/nls/fi/|form/nls/nb/|form/nls/he/|tree/|_editor/nls/de/|_editor/nls/pt/|_editor/nls/fi/|_editor/nls/hu/|nls/pt-pt/|_editor/nls/ru/|form/nls/de/|form/nls/sv/|nls/pl/|nls/th/|nls/ko/|nls/ru/|form/nls/nl/|form/nls/ja/|_editor/nls/|_editor/nls/sl/|form/nls/es/|_editor/nls/sk/|form/nls/pt/|resources/|nls/zh/|_editor/nls/tr/|nls/pt/|nls/tr/|form/nls/ar/|form/nls/pl/|form/nls/el/|nls/ca/|_editor/|form/nls/cs/|nls/el/" kind="src" path="common/js/dojo/dijit"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_base"/>
+	<classpathentry excluding="nls/el/|nls/ar/|plugins/|nls/ko/|nls/cs/|nls/da/|nls/it/|nls/zh/|nls/sv/|nls/nb/|nls/he/|nls/ca/|nls/pt-pt/|nls/zh-tw/|nls/ja/|nls/es/|nls/pl/|nls/th/|nls/fr/|nls/nl/|nls/de/|nls/pt/|nls/fi/|nls/hu/|nls/ru/|nls/|nls/sl/|nls/sk/|nls/tr/" kind="src" path="common/js/dojo/dijit/_editor"/>
+	<classpathentry excluding="el/|ar/|ko/|cs/|da/|it/|zh/|sv/|nb/|he/|ca/|pt-pt/|zh-tw/|ja/|es/|pl/|th/|fr/|nl/|de/|pt/|fi/|hu/|ru/|sl/|sk/|tr/" kind="src" path="common/js/dojo/dijit/_editor/nls"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/ar"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/ca"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/cs"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/da"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/de"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/el"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/es"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/fi"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/fr"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/he"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/hu"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/it"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/ja"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/ko"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/nb"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/nl"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/pl"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/pt"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/pt-pt"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/ru"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/sk"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/sl"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/sv"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/th"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/tr"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/zh"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/nls/zh-tw"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_editor/plugins"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/_tree"/>
+	<classpathentry excluding="nls/hu/|nls/zh-tw/|nls/tr/|nls/ru/|nls/ca/|nls/zh/|nls/pt-pt/|nls/ko/|nls/fr/|nls/th/|nls/da/|nls/sk/|nls/sl/|nls/it/|nls/|nls/fi/|nls/nb/|nls/he/|nls/de/|nls/sv/|nls/nl/|nls/ja/|nls/es/|nls/pt/|nls/ar/|nls/pl/|nls/el/|nls/cs/" kind="src" path="common/js/dojo/dijit/form"/>
+	<classpathentry excluding="hu/|zh-tw/|tr/|ru/|ca/|zh/|pt-pt/|ko/|fr/|th/|da/|sk/|sl/|it/|fi/|nb/|he/|de/|sv/|nl/|ja/|es/|pt/|ar/|pl/|el/|cs/" kind="src" path="common/js/dojo/dijit/form/nls"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/ar"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/ca"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/cs"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/da"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/de"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/el"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/es"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/fi"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/fr"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/he"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/hu"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/it"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/ja"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/ko"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/nb"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/nl"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/pl"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/pt"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/pt-pt"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/ru"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/sk"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/sl"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/sv"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/th"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/tr"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/zh"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/form/nls/zh-tw"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/layout"/>
+	<classpathentry excluding="hu/|es/|nl/|cs/|da/|ar/|sk/|zh-tw/|sl/|he/|sv/|ja/|fi/|nb/|de/|fr/|it/|pt-pt/|pl/|th/|ko/|ru/|zh/|pt/|tr/|ca/|el/" kind="src" path="common/js/dojo/dijit/nls"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/ar"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/ca"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/cs"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/da"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/de"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/el"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/es"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/fi"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/fr"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/he"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/hu"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/it"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/ja"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/ko"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/nb"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/nl"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/pl"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/pt"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/pt-pt"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/ru"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/sk"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/sl"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/sv"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/th"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/tr"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/zh"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/nls/zh-tw"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/resources"/>
+	<classpathentry kind="src" path="common/js/dojo/dijit/tree"/>
+	<classpathentry excluding="cldr/nls/it-it/|cldr/nls/zh/|cldr/nls/hu/|_firebug/|nls/el/|dnd/|cldr/nls/ca/|cldr/nls/pl/|cldr/nls/es-es/|cldr/nls/th/|nls/tr/|cldr/nls/ru/|cldr/nls/en-us/|cldr/nls/nl/|data/|cldr/nls/fr/|cldr/nls/pt-br/|cldr/nls/pt/|nls/zh-tw/|cldr/nls/zh-tw/|nls/it/|nls/ca/|nls/pt-pt/|rpc/|cldr/nls/nb/|cldr/nls/el/|nls/zh/|cldr/nls/ko-kr/|cldr/nls/en/|nls/ko/|resources/|data/api/|nls/|cldr/nls/de-de/|cldr/nls/ko/|nls/ar/|cldr/nls/tr/|cldr/nls/en-au/|nls/th/|cldr/nls/pt-pt/|cldr/|cldr/nls/it/|nls/fr/|nls/pl/|cldr/nls/en-ca/|cldr/nls/ja/|nls/hu/|cldr/nls/sv/|cldr/nls/es/|io/|nls/fi/|nls/nb/|cldr/nls/cs/|nls/de/|nls/sv/|_base/|nls/sl/|nls/pt/|cldr/nls/he/|nls/sk/|cldr/nls/ar/|cldr/nls/en-gb/|nls/da/|cldr/nls/zh-cn/|_base/_loader/|fx/|cldr/nls/fi/|nls/ru/|cldr/nls/da/|nls/ja/|nls/es/|date/|nls/nl/|cldr/nls/ja-jp/|nls/he/|cldr/nls/de/|cldr/nls/sl/|data/util/|cldr/nls/|nls/cs/|cldr/nls/sk/" kind="src" path="common/js/dojo/dojo"/>
+	<classpathentry excluding="_loader/" kind="src" path="common/js/dojo/dojo/_base"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/_base/_loader"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/_firebug"/>
+	<classpathentry excluding="nls/it-it/|nls/zh/|nls/hu/|nls/ca/|nls/pl/|nls/es-es/|nls/th/|nls/ru/|nls/en-us/|nls/nl/|nls/fr/|nls/pt-br/|nls/pt/|nls/zh-tw/|nls/nb/|nls/el/|nls/ko-kr/|nls/en/|nls/de-de/|nls/ko/|nls/tr/|nls/en-au/|nls/pt-pt/|nls/it/|nls/en-ca/|nls/ja/|nls/sv/|nls/es/|nls/cs/|nls/he/|nls/ar/|nls/en-gb/|nls/zh-cn/|nls/fi/|nls/da/|nls/ja-jp/|nls/de/|nls/sl/|nls/|nls/sk/" kind="src" path="common/js/dojo/dojo/cldr"/>
+	<classpathentry excluding="it-it/|zh/|hu/|ca/|pl/|es-es/|th/|ru/|en-us/|nl/|fr/|pt-br/|pt/|zh-tw/|nb/|el/|ko-kr/|en/|de-de/|ko/|tr/|en-au/|pt-pt/|it/|en-ca/|ja/|sv/|es/|cs/|he/|ar/|en-gb/|zh-cn/|fi/|da/|ja-jp/|de/|sl/|sk/" kind="src" path="common/js/dojo/dojo/cldr/nls"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/ar"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/ca"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/cs"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/da"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/de"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/de-de"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/el"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/en"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/en-au"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/en-ca"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/en-gb"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/en-us"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/es"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/es-es"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/fi"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/fr"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/he"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/hu"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/it"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/it-it"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/ja"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/ja-jp"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/ko"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/ko-kr"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/nb"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/nl"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/pl"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/pt"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/pt-br"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/pt-pt"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/ru"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/sk"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/sl"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/sv"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/th"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/tr"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/zh"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/zh-cn"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/cldr/nls/zh-tw"/>
+	<classpathentry excluding="api/|util/" kind="src" path="common/js/dojo/dojo/data"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/data/api"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/data/util"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/date"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/dnd"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/fx"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/io"/>
+	<classpathentry excluding="el/|tr/|zh-tw/|it/|ca/|pt-pt/|zh/|ko/|ar/|th/|fr/|pl/|hu/|fi/|nb/|de/|sv/|sl/|pt/|sk/|da/|ru/|ja/|es/|nl/|he/|cs/" kind="src" path="common/js/dojo/dojo/nls"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/ar"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/ca"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/cs"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/da"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/de"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/el"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/es"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/fi"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/fr"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/he"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/hu"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/it"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/ja"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/ko"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/nb"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/nl"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/pl"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/pt"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/pt-pt"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/ru"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/sk"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/sl"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/sv"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/th"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/tr"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/zh"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/nls/zh-tw"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/resources"/>
+	<classpathentry kind="src" path="common/js/dojo/dojo/rpc"/>
+	<classpathentry excluding="form/nls/nb/|form/nls/fi/|gfx/|analytics/plugins/|html/|widget/nls/sv/|gfx3d/|atom/widget/nls/it/|form/nls/de/|widget/nls/th/|form/nls/he/|off/|fx/|charting/widget/|av/widget/|atom/widget/nls/ko/|charting/action2d/|atom/widget/nls/zh-tw/|form/nls/ja/|widget/gauge/|robot/|widget/nls/zh/|analytics/profiles/|grid/compat/tests/support/|grid/nls/|form/nls/fr/|validate/|widget/nls/zh-tw/|encoding/|layout/ext-dijit/layout/|highlight/languages/|form/nls/sv/|widget/nls/ar/|widget/nls/ko/|form/nls/sl/|lang/|form/nls/sk/|storage/|form/nls/|widget/nls/el/|editor/plugins/|encoding/compression/|highlight/languages/pygments/|collections/|form/nls/cs/|dtl/utils/|form/nls/es/|dtl/filter/|form/nls/hu/|widget/nls/tr/|wire/|jsonPath/|grid/compat/|form/nls/nl/|math/|atom/widget/nls/|image/|layout/nls/|sql/|sketch/|dtl/contrib/|resources/|wire/ml/|layout/nls/en/|charting/|form/manager/|dtl/ext-dojo/|dtl/|off/resources/|form/nls/pt-pt/|charting/plot3d/|atom/widget/nls/hu/|analytics/|form/nls/ar/|widget/nls/sl/|form/nls/da/|widget/nls/it/|widget/nls/sk/|embed/|widget/nls/ca/|widget/nls/pt-pt/|editor/plugins/nls/|atom/io/|uuid/|xmpp/widget/|atom/widget/nls/pt/|widget/nls/ru/|atom/widget/nls/zh/|charting/themes/|atom/widget/nls/cs/|lang/aspect/|form/nls/zh-tw/|widget/nls/pt/|flash/|charting/axis2d/|lang/functional/|form/nls/tr/|atom/widget/nls/es/|charting/scaler/|grid/compat/_data/|widget/nls/da/|atom/widget/nls/ru/|io/|testing/|string/|lang/oo/|charting/themes/ET/|form/nls/el/|layout/|grid/compat/tests/|rpc/|form/nls/pt/|widget/nls/cs/|form/nls/zh/|widget/nls/es/|grid/compat/_grid/|widget/nls/ja/|form/nls/ru/|color/|xml/|widget/nls/he/|form/nls/ca/|data/util/|charting/themes/PlotKit/|widget/nls/nl/|charting/plot2d/|layout/dnd/|fx/ext-dojo/|grid/cells/|form/nls/th/|form/nls/pl/|encoding/digests/|widget/nls/fr/|highlight/|atom/widget/|atom/widget/nls/de/|form/nls/it/|atom/widget/nls/ja/|dtl/tag/|date/|timing/|grid/|help/|widget/nls/nb/|widget/nls/fi/|widget/nls/|io/proxy/|cometd/|layout/nls/fr/|atom/widget/nls/fr/|form/nls/ko/|dtl/render/|widget/nls/de/|data/|atom/widget/nls/pl/|embed/IE/|xmpp/|widget/nls/pl/|widget/|secure/|json/|encoding/crypto/|widget/nls/hu/|form/|av/" kind="src" path="common/js/dojo/dojox"/>
+	<classpathentry excluding="plugins/|profiles/" kind="src" path="common/js/dojo/dojox/analytics"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/analytics/plugins"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/analytics/profiles"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/atom/io"/>
+	<classpathentry excluding="nls/it/|nls/ko/|nls/zh-tw/|nls/|nls/hu/|nls/pt/|nls/zh/|nls/cs/|nls/es/|nls/ru/|nls/de/|nls/ja/|nls/fr/|nls/pl/" kind="src" path="common/js/dojo/dojox/atom/widget"/>
+	<classpathentry excluding="it/|ko/|zh-tw/|hu/|pt/|zh/|cs/|es/|ru/|de/|ja/|fr/|pl/" kind="src" path="common/js/dojo/dojox/atom/widget/nls"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/atom/widget/nls/cs"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/atom/widget/nls/de"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/atom/widget/nls/es"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/atom/widget/nls/fr"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/atom/widget/nls/hu"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/atom/widget/nls/it"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/atom/widget/nls/ja"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/atom/widget/nls/ko"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/atom/widget/nls/pl"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/atom/widget/nls/pt"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/atom/widget/nls/ru"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/atom/widget/nls/zh"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/atom/widget/nls/zh-tw"/>
+	<classpathentry excluding="widget/" kind="src" path="common/js/dojo/dojox/av"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/av/widget"/>
+	<classpathentry excluding="widget/|action2d/|plot3d/|themes/|axis2d/|scaler/|themes/ET/|themes/PlotKit/|plot2d/" kind="src" path="common/js/dojo/dojox/charting"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/charting/action2d"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/charting/axis2d"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/charting/plot2d"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/charting/plot3d"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/charting/scaler"/>
+	<classpathentry excluding="ET/|PlotKit/" kind="src" path="common/js/dojo/dojox/charting/themes"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/charting/themes/ET"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/charting/themes/PlotKit"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/charting/widget"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/collections"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/color"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/cometd"/>
+	<classpathentry excluding="util/" kind="src" path="common/js/dojo/dojox/data"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/data/util"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/date"/>
+	<classpathentry excluding="utils/|filter/|contrib/|ext-dojo/|tag/|render/" kind="src" path="common/js/dojo/dojox/dtl"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/dtl/contrib"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/dtl/ext-dojo"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/dtl/filter"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/dtl/render"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/dtl/tag"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/dtl/utils"/>
+	<classpathentry excluding="nls/" kind="src" path="common/js/dojo/dojox/editor/plugins"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/editor/plugins/nls"/>
+	<classpathentry excluding="IE/" kind="src" path="common/js/dojo/dojox/embed"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/embed/IE"/>
+	<classpathentry excluding="compression/|digests/|crypto/" kind="src" path="common/js/dojo/dojox/encoding"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/encoding/compression"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/encoding/crypto"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/encoding/digests"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/flash"/>
+	<classpathentry excluding="nls/nb/|nls/fi/|nls/de/|nls/he/|nls/ja/|nls/fr/|nls/sv/|nls/sl/|nls/sk/|nls/|nls/cs/|nls/es/|nls/hu/|nls/nl/|manager/|nls/pt-pt/|nls/ar/|nls/da/|nls/zh-tw/|nls/tr/|nls/el/|nls/pt/|nls/zh/|nls/ru/|nls/ca/|nls/th/|nls/pl/|nls/it/|nls/ko/" kind="src" path="common/js/dojo/dojox/form"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/manager"/>
+	<classpathentry excluding="nb/|fi/|de/|he/|ja/|fr/|sv/|sl/|sk/|cs/|es/|hu/|nl/|pt-pt/|ar/|da/|zh-tw/|tr/|el/|pt/|zh/|ru/|ca/|th/|pl/|it/|ko/" kind="src" path="common/js/dojo/dojox/form/nls"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/ar"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/ca"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/cs"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/da"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/de"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/el"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/es"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/fi"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/fr"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/he"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/hu"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/it"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/ja"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/ko"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/nb"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/nl"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/pl"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/pt"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/pt-pt"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/ru"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/sk"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/sl"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/sv"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/th"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/tr"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/zh"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/form/nls/zh-tw"/>
+	<classpathentry excluding="ext-dojo/" kind="src" path="common/js/dojo/dojox/fx"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/fx/ext-dojo"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/gfx"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/gfx3d"/>
+	<classpathentry excluding="compat/tests/support/|nls/|compat/|compat/_data/|compat/tests/|compat/_grid/|cells/" kind="src" path="common/js/dojo/dojox/grid"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/grid/cells"/>
+	<classpathentry excluding="tests/support/|_data/|tests/|_grid/" kind="src" path="common/js/dojo/dojox/grid/compat"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/grid/compat/_data"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/grid/compat/_grid"/>
+	<classpathentry excluding="support/" kind="src" path="common/js/dojo/dojox/grid/compat/tests"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/grid/compat/tests/support"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/grid/nls"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/help"/>
+	<classpathentry excluding="languages/|languages/pygments/" kind="src" path="common/js/dojo/dojox/highlight"/>
+	<classpathentry excluding="pygments/" kind="src" path="common/js/dojo/dojox/highlight/languages"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/highlight/languages/pygments"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/html"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/image"/>
+	<classpathentry excluding="proxy/" kind="src" path="common/js/dojo/dojox/io"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/io/proxy"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/json"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/jsonPath"/>
+	<classpathentry excluding="aspect/|functional/|oo/" kind="src" path="common/js/dojo/dojox/lang"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/lang/aspect"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/lang/functional"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/lang/oo"/>
+	<classpathentry excluding="ext-dijit/layout/|nls/|nls/en/|dnd/|nls/fr/" kind="src" path="common/js/dojo/dojox/layout"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/layout/dnd"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/layout/ext-dijit/layout"/>
+	<classpathentry excluding="en/|fr/" kind="src" path="common/js/dojo/dojox/layout/nls"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/layout/nls/en"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/layout/nls/fr"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/math"/>
+	<classpathentry excluding="resources/" kind="src" path="common/js/dojo/dojox/off"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/off/resources"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/resources"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/robot"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/rpc"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/secure"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/sketch"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/sql"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/storage"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/string"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/testing"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/timing"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/uuid"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/validate"/>
+	<classpathentry excluding="nls/sv/|nls/th/|gauge/|nls/zh/|nls/zh-tw/|nls/ar/|nls/ko/|nls/el/|nls/tr/|nls/sl/|nls/it/|nls/sk/|nls/ca/|nls/pt-pt/|nls/ru/|nls/pt/|nls/da/|nls/cs/|nls/es/|nls/ja/|nls/he/|nls/nl/|nls/fr/|nls/nb/|nls/fi/|nls/|nls/de/|nls/pl/|nls/hu/" kind="src" path="common/js/dojo/dojox/widget"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/gauge"/>
+	<classpathentry excluding="sv/|th/|zh/|zh-tw/|ar/|ko/|el/|tr/|sl/|it/|sk/|ca/|pt-pt/|ru/|pt/|da/|cs/|es/|ja/|he/|nl/|fr/|nb/|fi/|de/|pl/|hu/" kind="src" path="common/js/dojo/dojox/widget/nls"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/ar"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/ca"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/cs"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/da"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/de"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/el"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/es"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/fi"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/fr"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/he"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/hu"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/it"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/ja"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/ko"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/nb"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/nl"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/pl"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/pt"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/pt-pt"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/ru"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/sk"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/sl"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/sv"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/th"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/tr"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/zh"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/widget/nls/zh-tw"/>
+	<classpathentry excluding="ml/" kind="src" path="common/js/dojo/dojox/wire"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/wire/ml"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/xml"/>
+	<classpathentry excluding="widget/" kind="src" path="common/js/dojo/dojox/xmpp"/>
+	<classpathentry kind="src" path="common/js/dojo/dojox/xmpp/widget"/>
+	<classpathentry excluding="adapter/prototype/|adapter/jquery/|air/samples/tasks/ext-2.0/adapter/ext/|air/samples/tasks/ext-air/|air/samples/tasks/adobe/|air/|shared/|adapter/yui/|air/src/sql/|air/samples/tasks/ext-2.0/|air/samples/tasks/|adapter/ext/|air/samples/tasks/js/|air/src/" kind="src" path="common/js/ext"/>
+	<classpathentry kind="src" path="common/js/ext/adapter/ext"/>
+	<classpathentry kind="src" path="common/js/ext/adapter/jquery"/>
+	<classpathentry kind="src" path="common/js/ext/adapter/prototype"/>
+	<classpathentry kind="src" path="common/js/ext/adapter/yui"/>
+	<classpathentry excluding="samples/tasks/ext-2.0/adapter/ext/|samples/tasks/ext-air/|samples/tasks/adobe/|src/sql/|samples/tasks/ext-2.0/|samples/tasks/|samples/tasks/js/|src/" kind="src" path="common/js/ext/air"/>
+	<classpathentry excluding="ext-2.0/adapter/ext/|ext-air/|adobe/|ext-2.0/|js/" kind="src" path="common/js/ext/air/samples/tasks"/>
+	<classpathentry kind="src" path="common/js/ext/air/samples/tasks/adobe"/>
+	<classpathentry excluding="adapter/ext/" kind="src" path="common/js/ext/air/samples/tasks/ext-2.0"/>
+	<classpathentry kind="src" path="common/js/ext/air/samples/tasks/ext-2.0/adapter/ext"/>
+	<classpathentry kind="src" path="common/js/ext/air/samples/tasks/ext-air"/>
+	<classpathentry kind="src" path="common/js/ext/air/samples/tasks/js"/>
+	<classpathentry excluding="sql/" kind="src" path="common/js/ext/air/src"/>
+	<classpathentry kind="src" path="common/js/ext/air/src/sql"/>
+	<classpathentry kind="src" path="common/js/ext/shared"/>
+	<classpathentry kind="src" path="common/js/jquery"/>
+	<classpathentry kind="src" path="common/js/mootools"/>
+	<classpathentry kind="src" path="common/js/prototype"/>
+	<classpathentry kind="src" path="common/js/scriptaculous"/>
+	<classpathentry excluding="ux/" kind="src" path="home/admin/view/default/js/portal"/>
+	<classpathentry kind="src" path="home/admin/view/default/js/portal/ux"/>
+	<classpathentry kind="src" path="library/PHPUnit/Util/Report/Template"/>
+	<classpathentry kind="con" path="org.eclipse.wst.jsdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path=""/>
+</classpath>

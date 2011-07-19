@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<settings>
+  <db>
+    <host>localhost</host>
+    <name>test</name> 
+  </db> 
+</settings>

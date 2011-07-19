@@ -1,0 +1,20 @@
+/* --------------- 修改 Ext CSS -------------- */
+
+.x-window-header-text, x-panel-header-text{
+	font-size:10pt;
+}
+.x-panel-header-text, .x-window-header-text{
+	font-size:10pt;
+}
+
+.x-tab button {	
+	font-size:10pt;
+}
+.x-grid-row .x-grid-cell {
+    border-style: solid;
+    font: 13px tahoma,arial,verdana,sans-serif;
+}
+div.x-tab-strip-wrap .add-tab a span.x-tab-strip-inner {
+    width:26px;
+    background: url(ajax/ext4/resources/images/new/add.gif) no-repeat center center;
+}

@@ -1,0 +1,68 @@
+/* ---------------修改  Ext CSS -------------- */
+/* Ext 3.3 */
+.x-window-footer {
+    position: relative;
+    top: 0;
+    right: 0;
+}
+.x-tab-strip SPAN.x-tab-strip-text  {
+	font-size: 13px;
+}
+.x-panel-header {
+	font-size: 13px;
+}
+.x-tree-node {
+	font-size: 13px;
+}
+.x-grid3-hd-row TD {
+	font-size: 13px;
+}
+.x-grid3-row TD {
+	font-size: 13px;
+	LINE-HEIGHT: 18px;
+}
+.x-tip .x-tip-bd {
+	font-size: 13px;
+}
+.x-tip h3{
+	font-size: 13px;
+}
+.x-tip .x-tip-bd-inner{
+	font-size:13px;
+}
+.x-panel-tl .x-panel-header {
+	FONT: normal 13px tahoma,arial,verdana,sans-serif;
+}
+.x-form-field {
+	FONT: 13px tahoma,arial,helvetica,sans-serif	
+}
+.x-small-editor .x-form-field {
+	FONT: 13px tahoma,arial,helvetica,sans-serif	
+}
+.x-combo-list-item {
+	FONT: 13px tahoma,arial,helvetica,sans-serif;	
+}	
+.x-menu-list-item {
+	FONT: 13px tahoma,arial,sans-serif;
+}
+.x-window-tl .x-window-header {
+	FONT: bold 13px tahoma,arial,verdana,sans-serif;	
+}
+/*
+.x-layout-split-west .x-layout-mini {	
+	BACKGROUND-IMAGE: url(ajax/ext/resources/images/mini-left.jpg);
+}*/
+.ext-ie .x-form-text {
+	margin-top:1px;
+} /* the textField missing bottom line */
+.x-form-item {	
+	FONT: 13px tahoma,arial,helvetica,sans-serif
+}
+.x-grid-group-hd DIV {	
+	FONT: bold 13px tahoma,arial,helvetica,sans-serif;
+}
+div.x-tab-strip-wrap .add-tab a span.x-tab-strip-inner {
+    width:26px;
+    background: url(ajax/ext/resources/images/new/add.gif) no-repeat center center;
+}
+/* END */

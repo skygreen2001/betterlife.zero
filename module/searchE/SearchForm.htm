@@ -1,0 +1,62 @@
+<html>
+    <head>
+        <title>红蜘蛛搜索引擎-V0.1</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=gb2312">
+        <link rel="stylesheet" href="../All.css" type="text/css">
+    </head>
+    <body bgcolor="#eeffee" text="#000000">
+        <table width="600" border="0" cellspacing="2" cellpadding="2" align="center" bgcolor="#99CC00">
+            <tr>
+                <td>
+                    <div align="center"><font color="#FF0000"><b><span class="pt16">红蜘蛛搜索引擎</span><span class="pt12">V0.1</span></b></font></div>
+                </td>
+            </tr>
+        </table>
+        <form name="form1" method="post" action="Search.php">
+            <table width="600" border="1" cellspacing="1" cellpadding="1" align="center" bordercolor="#99CC00">
+                <tr>
+                    <td>
+                        <div align="left"><span class="pt15"><font color="#FF0000"><b>关 键 字</b>：</font></span><input type="text" name="KeyWords" size="40" maxlength="40"></div>
+                    </td>
+                    <td>
+                        <div align="left">
+                            <span class="pt15"><font color="#FF0000"><b>查找范围</b>：</font></span>
+                            <select name="SearchIn">
+                                <option value="Content" selected>网页正文</option>
+                                <option value="Title">网页标题</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <span class="pt15"><font color="#FF0000"><b>查找方式</b>：</font></span>
+                        <select name="Speed"><option value="Fast" selected>快速查找</option><option value="Slow">更深查找</option></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2"><div align="left"><input type="submit" name="Submit" value="搜索"></div></td>
+                </tr>
+            </table>
+        </form>
+        <table width="600" border="0" cellspacing="2" cellpadding="2" align="center">
+            <tr>
+                <td height="18">
+                    <p class="pt12"><font color="#FF0000"><b>使用方法</b></font>：仅需在关键字一栏输入查询内容并按回车键（Enter)即可。</p>
+                    <blockquote>
+                        <p align="left" class="pt12">如果希望输入多个条件，只需要用空格分隔即可：</p>
+                        <p class="pt12">例如：要查询同时包含“西昌”和“卫星”的网页，只需输入[西昌 卫星]。</p>
+                        <p class="pt12">又如：要查询只包含关键字“西昌”而不包含“卫星”的网页，只需要输入[西昌 -卫星]。注意中间的空格不能少。</p>
+                    </blockquote>
+                    <p class="pt12"><font color="#FF0000"><b>查找范围</b></font>：你可以选择从“网页标题”中查找或者从“网页正文”中查找。</p>
+                    <p class="pt12"><font color="#FF0000"><b>查找方式</b></font>：“快速查找”速度快但找到的网页数可能较少，因为：</p>
+                    <blockquote>
+                        <p class="pt12">“快速查找”只搜索网页正文的前512个字符。</p>
+                        <p class="pt12">“更深查找”搜索网页正文的前2048个字符。</p>
+                        <div align="right"><a href="mailto:zdyhlp@263.net"><font color="#FF0000" class="pt13"><b>欢迎提出宝贵意见</b></font></a></div>
+                    </blockquote>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

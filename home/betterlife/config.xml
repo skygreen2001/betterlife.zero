@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<view-config>
+  <theme_dir>default</theme_dir>
+  <action-mappings>
+     <action path="blog" type="action.Action_Blog">
+       <forward name="list" path="core/blog/display.tpl" />
+     </action>
+  </action-mappings>
+  <tiles-config> 
+      <definition name="baseDef" path="/WEB-INF/frame/template.jsp">
+        <put name="header" value="/WEB-INF/frame/header.jsp" />
+        <put name="body" value="/WEB-INF/frame/body.jsp" />
+        <put name="footer" value="/WEB-INF/frame/footer.jsp" />
+      </definition>
+      <definition name="infoDef" extends="baseDef" path="/pages/bg/info.jsp" />
+  </tiles-config>
+</view-config>
+
+<!--
+参考JAVA的框架Apache组织的Struts和Tiles的做法编写的配置文件
+-->

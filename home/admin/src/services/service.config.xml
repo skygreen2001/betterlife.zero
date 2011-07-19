@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services>
+    <service name="MemberService">
+        <methods>
+            <method name="doSelect">
+                <param name="len">2</param>
+                <param name="formHandler">true</param>
+            </method>
+            <method name="getInfo">
+                <param name="len">1</param>
+            </method>  
+            <method name="getApp">
+                <param name="len">1</param>
+            </method> 
+        </methods>
+    </service>
+    <service name="OrderService">
+        <methods>
+            <method name="doSelect">
+                <param name="len">2</param>
+                <param name="formHandler">true</param>
+            </method>
+        </methods>
+    </service>    
+</services>

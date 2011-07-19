@@ -1,0 +1,7 @@
+### Better Life START ###
+<IfModule mod_rewrite.c>
+       RewriteEngine On
+       RewriteCond $1 !^(index\.php|public|robots\.txt)
+       RewriteRule ^(.*)$ index.php/$1 [L]
+</IfModule>
+### Better Life END ###

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx">
+	<fx:Script> 
+		<![CDATA[ 
+			import mx.controls.Alert; 
+			[Bindable] 
+			private var arr_comData:Array=["private","public","internal","dynamic","final"]; 
+			
+			private var result:String=""; 
+			private function bulid():void 
+			{ 
+				var str_result:String=""; 
+				var str_result_var:String=""; 
+				var str_temp:String=com_textinput.text; 
+				if(str_temp=="") 
+				{ 
+					Alert.show("You must input something "); 
+				} 
+				else 
+				{ 
+					var myPattern2:RegExp=/\r\n/;//清除回车和换行符 
+					str_temp=str_temp.replace(myPattern2,''); 
+					var arr_temp:Array=str_temp.split(","); 
+					
+					var i:int=0; 
+					var arr_len:int=arr_temp.length; 
+					
+					for(i=0;i<arr_len;i++) 
+					{ 
+						str_result_var=str_result_var+"\r"+com_classModel.selectedLabel+" $"+arr_temp[i]+";";  
+					} 
+					for(i=0;i<arr_len;i++) 
+					{ 
+						var functionName:String=arr_temp[i]; 
+						var str:String=functionName.charAt(0).toUpperCase();
+						functionName=str+functionName.substr(1,functionName.length);
+						
+						str_result=str_result+"\r"+"public "+" function set"+functionName+"($value)\r{"; 
+						str_result=str_result+"\r"+"  $this->"+arr_temp[i]+"="+"$value"+";\r}"; 
+						str_result=str_result+"\r"+"public"+" function get"+functionName+"()\r{"; 
+						str_result=str_result+"\r"+"  return $this->"+arr_temp[i]+";\r}"; 
+					} 
+					result=str_result_var+str_result; 
+					tx_show.text=result; 
+				} 
+			} 
+			private function clear():void 
+			{ 
+				tx_show.text=""; 
+			} 
+			
+		]]> 
+	</fx:Script> 
+	<mx:Canvas width="100%" height="116" top="0" horizontalCenter="0"> 
+		<mx:ComboBox id="com_classModel" dataProvider="{arr_comData}" x="223" y="39"></mx:ComboBox> 
+		
+		<mx:TextInput width="307" id="com_textinput" x="369" y="39"/> 
+		<mx:Label text="输入变量名字（以 逗号隔开）：" x="326.5" y="13"/> 
+		<mx:Button label="生成" width="83" click="bulid()" x="369" y="84"/> 
+		<mx:Button x="527" y="84" label="清空" click="clear()"/> 
+		
+		<mx:Label text="选择变量封装性：" x="175" y="13"/> 
+	</mx:Canvas> 
+	<mx:TextArea height="335" width="378" id="tx_show" horizontalCenter="0" y="121"/> 
+	
+</s:Application>
