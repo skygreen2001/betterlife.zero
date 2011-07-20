@@ -51,11 +51,29 @@ if(!function_exists('get_called_class')) {
                 self::$fl = $bt[2]['file'].$bt[2]['line'];
             }
             $lines = file($bt[2]['file']);
-            preg_match_all('/([a-zA-Z0-9\_]+)::'.$bt[2]['function'].'/',
-                $lines[$bt[2]['line']-1],
-                $matches
-            );
-            return $matches[1][self::$i];
+            $match_line_start_pos=$bt[2]['line']-1;
+            if (!contain($lines[$match_line_start_pos],"::")) {
+               $match_line_start_pos=$match_line_start_pos-1;
+              while (!contain($lines[$match_line_start_pos],"::")){
+                $match_line_start_pos=$match_line_start_pos-1;
+                if($match_line_start_pos==-1){
+                    break;
+                }
+              }  
+            }
+            if ($match_line_start_pos>=0){
+                preg_match_all('/([a-zA-Z0-9\_]+)::'.$bt[2]['function'].'/',
+                    $lines[$match_line_start_pos],
+                    $matches
+                );
+                if (count($matches[1])==1){
+                   return $matches[1][0];     
+                }else{
+                    return $matches[1][self::$i];  
+                }
+            }else{
+                return null;
+            }
         }
     }
     function get_called_class()

@@ -1,6 +1,12 @@
 <?php
 /**
-* 本系统第三方资源库
+ +---------------------------------<br/> 
+ * 本系统第三方资源库
+ +---------------------------------<br/> 
+ * @category betterlife
+ * @package web.back.admin.doman
+ * @subpackage system
+ * @author skygreen
 */
 class ResourceLibrary extends XmlObject
 {    

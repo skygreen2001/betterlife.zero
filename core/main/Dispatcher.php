@@ -84,7 +84,12 @@ class Dispatcher
         $view = Loader::load(Loader::CLASS_VIEW,$moduleName,$templateFile);
         $current_action->setView($view);
         ob_end_clean();
-        $current_action->$action();
+        if (method_exists($current_action,$action)){
+            $current_action->$action();
+        }else{   
+          include_once(Gc::$nav_root_path.Router::URL_DEFAULT_CONTROLLER.Config_F::SUFFIX_FILE_PHP);
+          return;
+        }
         UnitTest::tearDown();
         return $view;
     }
@@ -100,6 +105,14 @@ class Dispatcher
         $controller = $router->getController();
         $action = $router->getAction();
         $templateFile=$controller.DIRECTORY_SEPARATOR.$action;//模板文件路径名称
+        $controller_path=$router->getController_path();
+        if (!empty($controller_path)){
+            if (endWith($controller_path,DIRECTORY_SEPARATOR)){
+                $templateFile=$controller_path.$templateFile;   
+            }else{
+                $templateFile=$controller_path.DIRECTORY_SEPARATOR.$templateFile;
+            }
+        }
         if (!file_exists(Gc::$nav_root_path.$view->template_dir().$templateFile.$view->template_suffix_name())) {
             throw new Exception(" view/{$controller}".Wl::ERROR_INFO_VIEW_UNKNOWN." '".$action.$view->template_suffix_name()."'");
         }

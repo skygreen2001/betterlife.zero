@@ -149,23 +149,24 @@ class Router
      * @var string WEB应用模块名
      */
     private $module;
-    /**
-     *
+    /**  
      * @var string Action Controller名称
      */
     private $controller;
     /**
-     *
+    * @var string 控制器所在的文件夹路径，同事映射为表示层的文件夹路径。
+    * @example:如控制器Action_Library所在目录为system目录下，则tpl文件所在目录为system/library/目录下。
+    */
+    private $controller_path;
+    /**  
      * @var string 具体的导航页面名称
      */
     private $action;
-    /**
-     *
+    /**    
      * @var array 所有的参数
      */
     private $params;
-    /**
-     *
+    /**        
      * @var array 真正需要的数据
      */
     private $data;
@@ -275,12 +276,25 @@ class Router
         }
     }
     
-    private function resolveNavDispathParam(){
+    /**
+    * 支持通过go=admin.index.index的快捷方式进行导航<br/>
+    * 参考cs-cart的导航规则进行了改进。
+    */
+    private function resolveNavDispathParam()
+    {
         if(!empty($_GET[self::VAR_DISPATCH])){
             $_NavSection=explode(self::VAR_DISPATCH_DEPR,$_GET[self::VAR_DISPATCH]);
-            $_GET[self::VAR_GROUP] = @$_NavSection[0];
-            $_GET[self::VAR_MODULE] = @$_NavSection[1];   
-            $_GET[self::VAR_ACTION] = @$_NavSection[2];                    
+            $_GET[self::VAR_GROUP] = @$_NavSection[0];   
+            $_GET[self::VAR_ACTION] = @end($_NavSection);//@$_NavSection[2];   
+            unset($_NavSection[count($_NavSection)-1]);             
+            unset($_NavSection[0]);                   
+            if (!empty($_NavSection)&&count($_NavSection)>0){
+                $_GET[self::VAR_MODULE] = @$_NavSection[count($_NavSection)]; 
+                unset($_NavSection[count($_NavSection)]);
+            }            
+            if (!empty($_NavSection)&&count($_NavSection)>0){
+                $this->controller_path= implode(DIRECTORY_SEPARATOR,$_NavSection);//@$_NavSection[1]; 
+            }
         }
     }
 
@@ -304,6 +318,13 @@ class Router
          */
         $var  =  self::VAR_MODULE;
         $controller = !empty($route[$var])?$route[$var]:self::URL_DEFAULT_CONTROLLER;
+        //支持路径的控制器
+        if (contain($controller,self::VAR_DISPATCH_DEPR)){            
+            $_NavSection=explode(self::VAR_DISPATCH_DEPR,$controller);
+            $controller=$_NavSection[count($_NavSection)-1];
+            unset($_NavSection[count($_NavSection)-1]);            
+            $this->controller_path=implode(DIRECTORY_SEPARATOR,$_NavSection);
+        }
         $this->controller =$controller;
         if(self::URL_CASE_INSENSITIVE) {
             // URL地址不区分大小写
@@ -323,8 +344,7 @@ class Router
         $this->extras=array_intersect_key($route, self::$extrasList);
         $this->data=array_diff_key($route, self::$extrasList);
     }
-
-
+             
     /**
      +----------------------------------------------------------
      * 获得实际的分组名称
@@ -341,7 +361,12 @@ class Router
     public function getController() {
         return $this->controller;
     }
+    
+    public function getController_path() {
+        return $this->controller_path;
+    }
 
+    
     public function getAction() {
         return $this->action;
     }

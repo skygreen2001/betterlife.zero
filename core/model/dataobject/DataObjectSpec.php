@@ -268,7 +268,10 @@ class EnumDataSpec extends Enum{
            $field_spec=self::$field_spec_default;   
         }
         if (property_exists($dataobject, EnumDataObjectDefaultKeyword::NAME_FIELD_SPEC)){
-            $propertyname=EnumDataObjectDefaultKeyword::NAME_FIELD_SPEC;     
+            $propertyname=EnumDataObjectDefaultKeyword::NAME_FIELD_SPEC;    
+            if (is_string($dataobject)){
+                $dataobject=new $dataobject();
+            }
             if (!empty($dataobject->$propertyname)){       
                 $object_field_spec=$dataobject->$propertyname;
             }

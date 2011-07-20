@@ -4,8 +4,8 @@
  * 控制器:网站后台系统管理类<br/>
  +---------------------------------
  * @category betterlife
- * @package  web.back
- * @subpackage admin
+ * @package  web.back.admin
+ * @subpackage action
  * @author skygreen
  */
 class Action_System extends Action

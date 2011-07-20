@@ -23,13 +23,15 @@ class Enum {
      * @return bool 指定的枚举值是否存在
      */
     public static function isEnumValue($value){
-       $class = new ReflectionClass(get_called_class());
-       $consts = $class->getConstants();        
-       //$consts= self::allEnums();
-       if (isset ($consts)){
-           if (in_array($value,$consts)){
-               return true;
-           }
+       if (!empty($value)){
+           $class = new ReflectionClass(get_called_class());
+           $consts = $class->getConstants();        
+           //$consts= self::allEnums();
+           if (isset ($consts)){
+               if (in_array($value,$consts)){
+                   return true;
+               }               
+           }                   
        }
        return false;
     }
@@ -40,10 +42,12 @@ class Enum {
      * @return bool 指定的枚举键是否存在
      */
     public static function isEnumKey($key){
-       $consts= self::allEnums();
-       if (isset ($consts)){
-           if (array_key_exists($key,$consts)){
-               return true;
+       if (!empty($key)){  
+           $consts= self::allEnums();
+           if (isset ($consts)){
+               if (array_key_exists($key,$consts)){
+                   return true;
+               }
            }
        }
        return false;

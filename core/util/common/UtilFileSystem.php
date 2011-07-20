@@ -161,7 +161,7 @@ class UtilFileSystem extends Util {
         $iterator = new DirectoryIterator($dir);
         foreach ($iterator as $fileinfo) {
             if ($fileinfo->isDir()) {
-                if($fileinfo->getFilename()!='.'&& $fileinfo->getFilename()!='..'&& $fileinfo->getFilename()!='.svn') {
+                if($fileinfo->getFilename()!='.'&& $fileinfo->getFilename()!='..'&& $fileinfo->getFilename()!='.svn'&& $fileinfo->getFilename()!='.git') {
                     $dirdata[$fileinfo->getFilename()]=$fileinfo->getPathname();
 //                    echo $fileinfo->getFilename() ."=>".$fileinfo->getPathname()."\n";
                 }
@@ -176,7 +176,7 @@ class UtilFileSystem extends Util {
                 $dh = opendir($dir);
                 if ($dh) {
                     while (($file = readdir($dh)) !== false) {
-                         if($file!='.'&& $file!='..'&& $file!='.svn' &&UtilString::contain($file,".")) {    
+                         if($file!='.'&& $file!='..'&& $file!='.svn' && $file!='.git'&&UtilString::contain($file,".")) {    
                              foreach ($agreesuffix as $suffix) {
                                 if (strcasecmp(end(explode('.', $file)),$suffix)===0) {
                                     $result[]=$dir.$file;
@@ -247,7 +247,7 @@ class UtilFileSystem extends Util {
             $dp=dir($path);
             $dirdata[]=$path;
             while($file=$dp->read()) {
-                if($file!='.'&& $file!='..'&& $file!='.svn') {
+                if($file!='.'&& $file!='..'&& $file!='.svn'&& $file!='.git') {
                     self::searchAllDirsInDirectory($path.DIRECTORY_SEPARATOR.$file,$dirdata);
                 }
             }
@@ -268,7 +268,7 @@ class UtilFileSystem extends Util {
         $handle = @opendir($path);
         if ($handle) {
             while (false !== ($file = @readdir($handle))) {
-                if($file=='.' || $file=='..'|| $file=='.svn') {
+                if($file=='.' || $file=='..'|| $file=='.svn'|| $file=='.git') {
                     continue;
                 }
                 $nextpath = $path.DIRECTORY_SEPARATOR.$file;

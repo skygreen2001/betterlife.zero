@@ -58,10 +58,19 @@ function endWith($haystack, $needle,$strict=true){
         return eregi($needle."$", $haystack);        
     }
 }
-
-function print_pre($s)
+   
+/**
+ * 是否直接显示出来
+ * @param type $s
+ * @param type $isEcho 
+ */
+function print_pre($s,$isEcho=false)
 {
-    print "<pre>";print_r($s);print "</pre>";
+    if ($isEcho){
+        print "<pre>";print_r($s);print "</pre>";    
+    }else{
+        return "<pre>".var_export($s,true)."</pre>";
+    }
 }
 
 ?>

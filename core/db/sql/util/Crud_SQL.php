@@ -125,15 +125,19 @@ abstract class Crud_SQL {
                 //第零种情况|第一种情况     
                 if (is_array($clause)&&count($clause)==1){
                     $detailStr=$clause[0];
-                    if (contain($detailStr, "or")||
-                        contain($detailStr, "like")||
-                        contain($detailStr, "(")){
+                    if (contain($detailStr, self::SQL_OR)||
+                        contain($detailStr, self::SQL_LIKE)||
+                        contain($detailStr, " (")){
                         $this->whereClause=$detailStr;
                         return $this;
                     }
+                    if (!contain($detailStr,",")){
+                        $this->whereClause=$detailStr;  
+                        return $this;     
+                    }
                 }
                 
-                $detailclause=str_replace("and",",",$clause);
+                $detailclause=str_replace(trim(self::SQL_AND),",",$clause);
                 $detailclause=implode(",", $detailclause);
                 if (!empty($detailclause)) {
                     $detailclause=$this->parseValidInputParam($detailclause);
@@ -275,9 +279,9 @@ abstract class Crud_SQL {
             return $result;
         }
         if (is_string($param)) {
-            if (contain($param, "or")||
-                contain($param, "like")||
-                contain($param, "(")){
+            if (contain($param, self::SQL_OR)||
+                contain($param, self::SQL_LIKE)||
+                contain($param, " (")){
                 return $param;
             } else{           
                 $param=explode(",", $param);
@@ -291,8 +295,8 @@ abstract class Crud_SQL {
                     if ((strlen($value)>0)&&($value{0}=='(')&&($value{strlen($value)-1}==')')){
                       $value=substr($value,1,strlen($value)-2); 
                     }
-                    if (contain($value, "like")){
-                        $tmp=explode("like", $value);
+                    if (contain($value, self::SQL_LIKE)){
+                        $tmp=explode(trim(self::SQL_LIKE), $value);
                     }else{
                         $tmp=explode("=", $value);
                     }

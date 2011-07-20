@@ -111,9 +111,9 @@ class Gc
      * @static
      */
     public static $module_names=array(
-            "admin",
-            "ucenter",
+            "admin",    
             "betterlife",
+            "business",
     );
     
     /**

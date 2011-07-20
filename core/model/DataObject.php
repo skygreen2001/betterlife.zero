@@ -245,6 +245,12 @@ abstract class DataObject extends Object implements ArrayAccess
     
     //<editor-fold defaultstate="collapsed" desc="数据持久化：数据库的CRUD操作">
     /**
+    * 获取当前数据对象的表名
+    */
+    public static function tablename(){
+        return Config_Db::orm(get_called_class());
+    }    
+    /**
      * 保存前操作
      */
     protected function onBeforeWrite() 

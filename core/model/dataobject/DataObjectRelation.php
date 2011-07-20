@@ -23,8 +23,11 @@ class DataObjectRelation extends Object
                 }            
             } 
             
-            $tablename =Config_Db::orm($classname_has);
-            $tablename= substr($tablename,0,strrpos($tablename, Config_Db::TABLENAME_CONCAT));
+            $tablename =Config_Db::orm($classname_has);       
+            $tncount=explode(Config_Db::TABLENAME_CONCAT,$tablename);               
+            if (count($tncount)>2){
+                $tablename= substr($tablename,0,strrpos($tablename, Config_Db::TABLENAME_CONCAT));
+            }
             $tablename.=Config_Db::TABLENAME_RELATION.Config_Db::TABLENAME_CONCAT;
             $tablename.=strtolower($classname_has.$classname_belong);
             return $tablename;   
