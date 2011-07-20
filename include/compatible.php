@@ -14,32 +14,54 @@
  *     改写就是先找到debug_backtrace的行号，再向上找到第一个出现::的行，再进行匹配查找静态方法引用的类<br/>
  * line:progman at centrum dot sk<br/>
  * 10-Mar-2009 08:49<br/>
- * @see http://php.net/manual/en/function.get-called-class.php
+ * @link http://php.net/manual/en/function.get-called-class.php
+ * @link http://roygu.com/2010/07/php/php-5-2%E4%B8%ADget_called_class%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8F%8A%E5%BA%94%E7%94%A8.html
  +--------------------------------------------------<br/>
  */
-if (!function_exists('get_called_class')) {
-    function get_called_class() {
-        $bt = debug_backtrace();
-        $lines = file($bt[1]['file']);
-        $match_line_start_pos=$bt[1]['line']-1;
-        if (!contain($lines[$match_line_start_pos],"::")) {
-           $match_line_start_pos=$match_line_start_pos-1;
-          while (!contain($lines[$match_line_start_pos],"::")){
-            $match_line_start_pos=$match_line_start_pos-1;
-            if($match_line_start_pos==-1){
-                break;
+if(!function_exists('get_called_class')) { 
+    class class_tools
+    {
+        private static $i = 0;
+        private static $fl = null;
+        public static function get_called_class()
+        {
+            $bt = debug_backtrace();
+            //使用call_user_func或call_user_func_array函数调用类方法，处理如下
+            if (array_key_exists(3, $bt)
+                && array_key_exists('function', $bt[3])
+                && in_array($bt[3]['function'], array('call_user_func', 'call_user_func_array'))
+               ) {
+                //如果参数是数组
+                if (is_array($bt[3]['args'][0])) {
+                    $toret = $bt[3]['args'][0][0];
+                    return $toret;
+                }else if(is_string($bt[3]['args'][0])) {//如果参数是字符串
+                //如果是字符串且字符串中包含::符号，则认为是正确的参数类型，计算并返回类名
+                    if(false !== strpos($bt[3]['args'][0], '::')) {
+                        $toret = explode('::', $bt[3]['args'][0]);
+                        return $toret[0];
+                    }
+                }
             }
-          }  
-        }
-        if ($match_line_start_pos>=0){
-            preg_match('/([a-zA-Z0-9\_]+)::'.$bt[1]['function'].'/',
-                    $lines[$match_line_start_pos],
-                    $matches);
-            return $matches[1];
-        }else{
-            return null;
+            //使用正常途径调用类方法，如:A::make()
+            if(self::$fl == $bt[2]['file'].$bt[2]['line']) {
+                self::$i++;
+            } else {
+                self::$i = 0;
+                self::$fl = $bt[2]['file'].$bt[2]['line'];
+            }
+            $lines = file($bt[2]['file']);
+            preg_match_all('/([a-zA-Z0-9\_]+)::'.$bt[2]['function'].'/',
+                $lines[$bt[2]['line']-1],
+                $matches
+            );
+            return $matches[1][self::$i];
         }
     }
+    function get_called_class()
+    {
+        return class_tools::get_called_class();
+    }    
 }
 
 /**
