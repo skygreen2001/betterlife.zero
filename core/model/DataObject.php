@@ -70,12 +70,21 @@ abstract class DataObject extends Object implements ArrayAccess
      * 获取当前使用的数据库调用对象
      * @return IDao 
      */
-    public static function dao() {
+    public static function dao() 
+    {
         if (empty(self::$currentDao)) {
             self::$currentDao=Manager_Db::newInstance()->dao();
         }
         return self::$currentDao;
-    }
+    }      
+    /**
+    * 静态方法:获取数据对象的类名   
+    */
+    public static function classname_static() 
+    {
+        $result=get_called_class();
+        return $result;
+    }  
     //</editor-fold>   
     
     //<editor-fold defaultstate="collapsed" desc="魔术方法">
@@ -249,7 +258,18 @@ abstract class DataObject extends Object implements ArrayAccess
     */
     public static function tablename(){
         return Config_Db::orm(get_called_class());
-    }    
+    } 
+      
+    /**
+    * 根据数据对象的属性名获取属性名的显示。
+    * @param mixed $data 数据对象数组。如:array(user,user)
+    * @param mixed $property_name  属性名【可以一次指定多个属性名】
+    */
+    public static function propertyShow($data,$property_name)
+    {            
+        DataObjectFunc::propertyShow($data,get_called_class(),$property_name);
+    }     
+     
     /**
      * 保存前操作
      */

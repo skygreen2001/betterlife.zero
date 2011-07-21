@@ -118,6 +118,8 @@ class RemoteServiceCall
             );
             $o = new $action();
             $params = isset($cdata->data) && is_array($cdata->data) ? $cdata->data : array();
+            
+            $params=$this->clearValuelessData($params);     
 
             $r['result'] = call_user_func_array(array($o, $method), $params);
 
@@ -129,7 +131,27 @@ class RemoteServiceCall
             $r['where'] = $e->getTraceAsString();
         }
         return $r;
-    }
+    }    
+    
+    /**
+     * 清除无价值的数据
+     */
+    private function clearValuelessData($params)
+    {
+        if(is_array($params)&&count($params)>0)
+        {
+            if (is_array($params[0])&&count($params[0]>0))
+            {
+                unset($params[0]["extAction"]);
+                unset($params[0]["extMethod"]);  
+                unset($params[0]["extTID"]);
+                unset($params[0]["extType"]); 
+                unset($params[0]["extUpload"]);             
+            }
+        }                           
+        return $params;
+    }    
+    
     /**
      * 在主程序前或者后执行方法。
      * @param type $fns

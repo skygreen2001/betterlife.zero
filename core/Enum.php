@@ -51,6 +51,51 @@ class Enum {
            }
        }
        return false;
-    }
+    }      
+    
+    
+    /**
+    * 根据数据对象的属性名获取属性名的显示。
+    * @param mixed $data 数据对象数组。如:array(user,user)
+    * @param mixed $property_name  属性名【可以一次指定多个属性名】
+    */
+    public static function propertyShow($data,$property_name){
+        $class_name=get_called_class(); 
+        if (!empty($class_name))
+        {
+            $class_property_name=array($class_name);         
+            if (is_string($property_name))
+            {        
+                $class_property_name[]=$property_name; 
+            }
+            else if (is_array($property_name))
+            {                                           
+                $class_property_name=array_merge($class_property_name,$property_name);
+            }
+                
+            foreach ($data as $record){          
+                array_walk($record, array("Enum",'property_alter'),$class_property_name); 
+            }
+        }            
+    }   
+    
+    /**
+    * 替换值为描述 
+    * @param mixed $item
+    * @param mixed $key
+    * @param mixed $class_property_name
+    */
+    private static function property_alter(&$item,$key,$class_property_name)
+    {      
+        $enum_name= $class_property_name[0];
+        unset($class_property_name[0]);
+        foreach ($class_property_name as $property_name)
+        {                                                                    
+            if (is_string($key)&&($key===$property_name)){
+                $static_method_name= "get".ucfirst($property_name)."Show"; 
+                $item=call_user_func($enum_name."::".$static_method_name,$item);
+            }
+        }
+    }     
 }
 ?>
