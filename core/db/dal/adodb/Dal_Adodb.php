@@ -515,6 +515,8 @@ class Dal_Adodb extends Dal implements IDal
     /**
      * 对象分页
      * @param string|class $object 需要查询的对象实体|类名称
+     * @param int $startPoint  分页开始记录数
+     * @param int $endPoint    分页结束记录数 
      * @param object|string|array $filter 查询条件，在where后的条件
      * 示例如下：<br/>
      *      0."id=1,name='sky'"<br/>

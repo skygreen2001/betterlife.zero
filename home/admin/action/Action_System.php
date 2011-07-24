@@ -92,8 +92,9 @@ class Action_System extends Action
         UtilCss::loadCssReady($this->view->viewObject,$templateurl."resources/css/library.css",true);       
         UtilJavascript::loadJsReady($this->view->viewObject,"shared/message.js",true,EnumJsFramework::JS_FW_EXTJS,UtilAjaxExtjs::$ext_version);        
         UtilJavascript::loadJsReady($this->view->viewObject,"shared/grid/roweditor.js",true,EnumJsFramework::JS_FW_EXTJS,UtilAjaxExtjs::$ext_version);
-        UtilJavascript::loadJsReady($this->view->viewObject,"shared/grid/checkcolumn.js",true,EnumJsFramework::JS_FW_EXTJS,UtilAjaxExtjs::$ext_version);
-        UtilJavascript::loadJsReady($this->view->viewObject,$templateurl.$module_templateurl_relative."system/library.js");        
+        UtilJavascript::loadJsReady($this->view->viewObject,"shared/grid/checkcolumn.js",true,EnumJsFramework::JS_FW_EXTJS,UtilAjaxExtjs::$ext_version);  
+        UtilJavascript::loadJsReady($this->view->viewObject,$templateurl.$module_templateurl_relative."system/library.js");  
+        UtilJavascript::loadJsReady($this->view->viewObject,"home/admin/src/services/ajax/extjs/direct/api.php");            
    }
    
    /**

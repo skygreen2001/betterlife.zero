@@ -157,13 +157,15 @@ class UtilFileSystem extends Util {
         if (strcmp(substr($dir, strlen($dir)-1,strlen($dir)),DIRECTORY_SEPARATOR)==0) {
             $dir=substr($dir,0,strlen($dir)-1);//如果路径不以DIRECTORY_SEPARATOR结尾的话，应补上
         }
-
-        $iterator = new DirectoryIterator($dir);
-        foreach ($iterator as $fileinfo) {
-            if ($fileinfo->isDir()) {
-                if($fileinfo->getFilename()!='.'&& $fileinfo->getFilename()!='..'&& $fileinfo->getFilename()!='.svn'&& $fileinfo->getFilename()!='.git') {
-                    $dirdata[$fileinfo->getFilename()]=$fileinfo->getPathname();
-//                    echo $fileinfo->getFilename() ."=>".$fileinfo->getPathname()."\n";
+        if (is_dir($dir))
+        {
+            $iterator = new DirectoryIterator($dir);
+            foreach ($iterator as $fileinfo) {
+                if ($fileinfo->isDir()) {
+                    if($fileinfo->getFilename()!='.'&& $fileinfo->getFilename()!='..'&& $fileinfo->getFilename()!='.svn'&& $fileinfo->getFilename()!='.git') {
+                        $dirdata[$fileinfo->getFilename()]=$fileinfo->getPathname();
+    //                    echo $fileinfo->getFilename() ."=>".$fileinfo->getPathname()."\n";
+                    }
                 }
             }
         }

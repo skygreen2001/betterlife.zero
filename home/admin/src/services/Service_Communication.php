@@ -7,7 +7,7 @@ Manager_Communication::init();
  * 提供远程数据服务。<br/>
  +---------------------------------
  * @category betterlife
- * @package admin.services
+ * @package web.back.admin.services
  * @author skygreen
  */
 class Service_Communication extends Service

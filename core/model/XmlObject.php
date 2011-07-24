@@ -175,7 +175,69 @@ class XmlObject extends Object implements ArrayAccess
             $result[]=$blockAttr;
         }
         return $result;
+    }    
+
+    /**
+     * Xml数据对象总计数
+     * @param object|string|array $filter<br/>
+     *      $filter 格式示例如下：<br/>
+     *          0.允许对象如new User(id="1",name="green");<br/>
+     *          1."id=1","name='sky'"<br/>
+     *          2.array("id=1","name='sky'")<br/>
+     *          3.array("id"=>"1","name"=>"sky")
+     * @return 对象总计数
+     */
+    public static function count($filter=null) 
+    {
+        $result=0;
+        if ($xmlObject_classname==null){
+            $classname=get_called_class();
+        }else{
+            $classname=$xmlObject_classname;
+        }
+        $filename=call_user_func("$classname::address");
+        $spec_library=UtilXmlSimple::fileXmlToArray($filename);
+        if (($spec_library!=null)&&(count($spec_library))>0){
+            foreach ($spec_library as $dataobjets){
+                $result=count($dataobjets);
+            }
+        }
+        return $result;
     }
+    
+    /**
+     * Xml对象分页
+     * @param string $xmlObject_classname 具体的Xml对象类名
+     * @param int $startPoint  分页开始记录数
+     * @param int $endPoint    分页结束记录数 
+     * @param object|string|array $filter 查询条件，在where后的条件
+     * 示例如下：<br/>
+     *      0."id=1,name='sky'"<br/>
+     *      1.array("id=1","name='sky'")<br/>
+     *      2.array("id"=>"1","name"=>"sky")<br/>
+     *      3.允许对象如new User(id="1",name="green");<br/>
+     * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
+     * @return mixed 对象分页
+     */
+    public static function queryPage($xmlObject_classname,$startPoint,$endPoint,$filter=null) 
+    {
+        if ($xmlObject_classname==null){
+            $classname=get_called_class();
+        }else{
+            $classname=$xmlObject_classname;
+        }
+        $filename=call_user_func("$classname::address");
+        $spec_library=UtilXmlSimple::fileXmlToArray($filename);
+        $result=array();             
+        $classname{0} = strtolower($classname{0});
+        foreach ($spec_library[$classname] as $block)
+        {
+            $blockAttr=$block[Util::XML_ELEMENT_ATTRIBUTES];        
+            $result[]=$blockAttr;
+        }
+        $result=array_slice($result, $startPoint, $endPoint); 
+        return $result;
+    }    
     
     /**
      * 保存Xml对象的信息

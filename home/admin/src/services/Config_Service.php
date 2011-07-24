@@ -1,11 +1,11 @@
 <?php
 
 /**
-  +---------------------------------<br/>
+ +---------------------------------<br/>
  * 配置类：Service<br/>
-  +---------------------------------
+ +---------------------------------
  * @category betterlife
- * @package
+ * @package web.back.admin.services
  * @author skygreen
  */
 class Config_Service extends ConfigBB
@@ -191,7 +191,7 @@ class Config_Service extends ConfigBB
                    $count=1;
                    foreach ($params as $i => $param) {
                        $paramname=$param->getName();
-                       if ($paramname=="formPacket"){
+                       if ($paramname=="formHandler"){
                          $count+=1;  
                          $paramArr[$paramname]=true;
                        }else{

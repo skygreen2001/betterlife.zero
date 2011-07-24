@@ -22,13 +22,14 @@
         <menu name="菜单管理" address="index.php?go=admin.system.menumanager" />
         <menu name="资源库管理" title="第三方库加载" address="index.php?go=admin.system.librarymanager" />
         <menu name="模块管理" title="功能模块加载" address="index.php?go=admin.system.modulemanager" />        
-        <menu name="数据库工具" address="tools/tools/db.php" />
+        <menu name="监控宝" title="监测网站故障、发送告警短信和邮件，并分析网站性能趋势" address="http://www.jiankongbao.com/" />        
         <menu name="性能探测器" title="性能探针Probe，查看服务器性能" address="index.php?go=admin.system.probe" />
-        <menu name="文件管理" title="显示所有的核心源码文件信息" address="index.php?go=admin.system.filemanager" />
-        <menu name="实体类工具" title="根据输入的变量们直接生成setter和getter方法" address="tools/dev/phpsetget/PHPGetSet.html" />
     </menuGroup>    
     <menuGroup id="navDev" name="开发者园地" iconCls="nav">
+        <menu name="实体类工具" title="根据输入的变量们直接生成setter和getter方法" address="tools/dev/phpsetget/PHPGetSet.html" />
+        <menu name="数据库工具" address="tools/tools/db.php" />
+        <menu name="文件管理" title="显示所有的核心源码文件信息" address="index.php?go=admin.system.filemanager" />
+        <menu name="淘宝" title="淘宝开放平台" address="http://open.taobao.com/" />
         <menu name="百度" title="开发者平台" address="http://dev.baidu.com/" />
-        <menu name="淘宝" title="淘宝网 - 淘！我喜欢" address="http://www.taobao.com" />
     </menuGroup>    
 </menuGroups>

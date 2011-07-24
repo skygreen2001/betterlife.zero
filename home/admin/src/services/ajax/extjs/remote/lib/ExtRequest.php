@@ -6,6 +6,7 @@
 class ExtRequest 
 {
     public $restful, $method, $controller, $action, $id, $params;
+    public $start,$limit;
 
     public function __construct($params) 
     {
@@ -41,6 +42,13 @@ class ExtRequest
             // grab JSON data if there...
             $this->params = (isset($_REQUEST['data'])) ? json_decode(stripslashes($_REQUEST['data'])) : null;
 
+            if (isset($_REQUEST['start'])){
+                $this->start=$_REQUEST['start'];
+            }
+            if (isset($_REQUEST['limit'])){
+                $this->limit=$_REQUEST['limit'];
+            }
+            
             if (isset($_REQUEST['data'])) {
                 $this->params =  json_decode(stripslashes($_REQUEST['data']));
             } else {

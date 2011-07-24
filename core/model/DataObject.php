@@ -414,7 +414,6 @@ abstract class DataObject extends Object implements ArrayAccess
 
     /**
      * 对象总计数
-     * @param string|class $object 需要查询的对象实体|类名称
      * @param object|string|array $filter<br/>
      *      $filter 格式示例如下：<br/>
      *          0.允许对象如new User(id="1",name="green");<br/>
@@ -429,7 +428,8 @@ abstract class DataObject extends Object implements ArrayAccess
 
     /**
      * 对象分页
-     * @param string|class $object 需要查询的对象实体|类名称
+     * @param int $startPoint  分页开始记录数
+     * @param int $endPoint    分页结束记录数 
      * @param object|string|array $filter 查询条件，在where后的条件
      * 示例如下：<br/>
      *      0."id=1,name='sky'"<br/>

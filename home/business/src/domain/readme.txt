@@ -1,0 +1,3 @@
+这是实体数据对象放置的路径，一般都继承DataObject，采用ActiveRecord设计模式；
+还有更多便利通用的数据转换方法。
+通信数据对象继承自RemoteObject

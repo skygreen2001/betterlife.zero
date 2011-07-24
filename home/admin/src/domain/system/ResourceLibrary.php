@@ -81,7 +81,7 @@ class ResourceLibrary extends XmlObject
     */
     public static function get()
     {
-        $result= parent::get(__CLASS__);        
+        $result= parent::get(__CLASS__);
         for ($i=0;$i<count($result);$i++) {
             if (!array_key_exists(Library_Loader::SPEC_REQUIRED,$result[$i]))
             {
@@ -97,6 +97,30 @@ class ResourceLibrary extends XmlObject
         }
         return $result;
     }
+
+    /**
+    * 分页:获取资料库的信息列表
+    * @param int $startPoint  分页开始记录数
+    * @param int $endPoint    分页结束记录数 
+    */
+    public static function queryPage($startPoint,$endPoint,$filter=null) 
+    {
+        $result= parent::queryPage(__CLASS__,$startPoint,$endPoint);
+        foreach ($result as $key=>$value) {
+            if (!array_key_exists(Library_Loader::SPEC_REQUIRED,$result[$key]))
+            {
+                $result[$key][Library_Loader::SPEC_REQUIRED]=false;
+            }else{
+                if ($result[$key][Library_Loader::SPEC_REQUIRED]=='true'){
+                    $result[$key][Library_Loader::SPEC_OPEN]=Library_Loader::OPEN_YES;
+                    $result[$key][Library_Loader::SPEC_REQUIRED]=true;
+                }else{
+                    $result[$key][Library_Loader::SPEC_REQUIRED]=false;
+                }
+            }      
+        }
+        return $result;
+    }    
     
     /**
      * 保存资料库的信息

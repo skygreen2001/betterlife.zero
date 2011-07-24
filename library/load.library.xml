@@ -12,13 +12,13 @@
  -->
 <resourceLibrarys>
   <resourceLibrary id="1" name="PHPUnit" open="false" init="load_phpunit" required="false" updateTime="2011-07-12 14:03:49"/>
-  <resourceLibrary id="2" name="adodb5" open="false" init="load_adode" required="false" updateTime="2011-07-12 22:30:05"/>
-  <resourceLibrary id="3" name="mdb2" open="true" init="load_mdb2"/>
+  <resourceLibrary id="2" name="adodb5" open="false" init="load_adode" required="false" updateTime="2011-07-24 11:48:45"/>
+  <resourceLibrary id="3" name="mdb2" open="false" init="load_mdb2" required="false" updateTime="2011-07-23 22:49:15"/>
   <resourceLibrary id="4" name="phpexcel" open="true" init="load_phpexcel" required="false" updateTime="2011-07-12 21:32:05"/>
   <resourceLibrary id="5" name="yaml" open="false" init="load_yaml_spyc"/>
   <resourceLibrary id="6" name="linq" open="false" init="load_PHPLinq"/>
   <resourceLibrary id="7" name="template" required="true" init="load_template"/>
   <resourceLibrary id="1310483617" name="gggg" init="g" commitTime="2011-07-12 23:13:37"/>
-  <resourceLibrary id="1310483965" name="bbbb" init="b" commitTime="2011-07-12 23:19:25"/>
-  <resourceLibrary id="1310483980" name="dddd" init="d" commitTime="2011-07-12 23:19:40"/>
+  <resourceLibrary id="1311476438" name="aaa" init="aaa" commitTime="2011-07-24 11:00:38" open="true" updateTime="2011-07-24 11:01:11" required="true"/>
+  <resourceLibrary id="1311476462" name="bbb" init="bbb" commitTime="2011-07-24 11:01:02"/>
 </resourceLibrarys>

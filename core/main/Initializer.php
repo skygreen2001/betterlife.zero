@@ -111,11 +111,11 @@ class Initializer
         /**
          * 记录框架核心所有的对象类加载进来
          */
-        self::recordCoreClasses();
+        self::recordCoreClasses();    
         /**
          * 加载通用函数库
          */
-        self::loadCommonFunctionLibrarys();         
+        self::loadCommonFunctionLibrarys();     
         /**
          * 加载第三方库
          */        
@@ -258,7 +258,7 @@ class Initializer
         $lan_dir=self::$NAV_CORE_PATH.$core_lang.DIRECTORY_SEPARATOR;
         if (strcasecmp(Gc::$language,$default_language)!=0) {
             if (file_exists($lan_dir.$world_language.self::SUFFIX_FILE_PHP)) {
-                throw new Exception("You need delete file:".$lan_dir.$world_language.self::SUFFIX_FILE_PHP." on run time");
+                LogMe::log("You need delete file:".$lan_dir.$world_language.self::SUFFIX_FILE_PHP." on run time");
             }
             require_once $lan_dir.$language.self::SUFFIX_FILE_PHP;
         }
@@ -275,7 +275,8 @@ class Initializer
         $core_util="util";
         $include_paths=array(
                 self::$NAV_CORE_PATH,
-                self::$NAV_CORE_PATH.$core_util,
+                self::$NAV_CORE_PATH.$core_util,                
+                self::$NAV_CORE_PATH."log",
                 self::$NAV_CORE_PATH.$core_util.DIRECTORY_SEPARATOR."common",
         );
         set_include_path(get_include_path().PATH_SEPARATOR.join(PATH_SEPARATOR, $include_paths));
@@ -287,18 +288,26 @@ class Initializer
         }                
         foreach (Gc::$module_names as $moduleName) {  
             $moduleDir=$module_Dir.$moduleName.DIRECTORY_SEPARATOR;
-            $modulesubdir=array_keys(UtilFileSystem::getSubDirsInDirectory($moduleDir));
-            /**
-             * view主要为html,javascript,css文件；因此应该排除在外
-             */
-            $modulesubdir=array_diff($modulesubdir, Gc::$moudle_exclude_subpackage);
-            foreach ($modulesubdir as $subdir) {
-                $modulePath=$moduleDir;
-                if (is_dir($moduleDir.$subdir)) {
-                    $modulePath.=$subdir.DIRECTORY_SEPARATOR;
+            if (is_dir($moduleDir))
+            {
+                $modulesubdir=array_keys(UtilFileSystem::getSubDirsInDirectory($moduleDir));
+                /**
+                 * view主要为html,javascript,css文件；因此应该排除在外
+                 */
+                $modulesubdir=array_diff($modulesubdir, Gc::$moudle_exclude_subpackage);
+                foreach ($modulesubdir as $subdir) {
+                    $modulePath=$moduleDir;
+                    if (is_dir($moduleDir.$subdir)) {
+                        $modulePath.=$subdir.DIRECTORY_SEPARATOR;
+                    }
+                    
+                    $tmps=UtilFileSystem::getAllDirsInDriectory($modulePath);
+                    
+                    $include_paths=array_merge($include_paths, $tmps);
                 }
-                $tmps=UtilFileSystem::getAllDirsInDriectory($modulePath);
-                $include_paths=array_merge($include_paths, $tmps);
+            }else{
+              echo("加载应用模块路径不存在:".$moduleDir);
+              die();
             }
         }
         set_include_path(get_include_path().PATH_SEPARATOR.join(PATH_SEPARATOR, $include_paths));

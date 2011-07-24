@@ -34,7 +34,14 @@ class ExtController
         switch ($this->request->method) {
             case 'GET':
                 $response->message = "加载数据";
-                $response->data =call_user_func("$object_name::get");
+                if (isset($this->request->start)&&($this->request->start!=null)){
+                    $response->data =call_user_func_array("$object_name::queryPage",array($this->request->start,$this->request->limit));
+                }else{
+                    $response->data =call_user_func("$object_name::get");
+                }
+                if ($response->data!=null){
+                    $response->totalCount=call_user_func("$object_name::count");
+                }
                 break;
             case 'POST':
                 foreach ($this->params as $key => $value) {

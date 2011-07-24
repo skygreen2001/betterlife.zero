@@ -8,10 +8,11 @@ var proxy = new Ext.data.HttpProxy({
 
 // Typical JsonReader.  Notice additional meta-data params for defining the core attributes of your json-response
 var reader = new Ext.data.JsonReader({
-    totalProperty: 'total',
+    totalProperty: 'totalCount',
     successProperty: 'success',
     idProperty: 'id',
     root: 'data',
+    remoteSort: true, 
     messageProperty: 'message'  // <-- New "messageProperty" meta-data
 }, [
     {name: 'id'},
@@ -34,7 +35,7 @@ var store = new Ext.data.Store({
     reader: reader,
     writer: writer    // <-- plug a DataWriter into the store just as you would a Reader
 });         
-
+store.setDefaultSort('id', 'desc');
 ////
 // ***New*** centralized listening of DataProxy events "beforewrite", "write" and "writeexception"
 // upon Ext.data.DataProxy class.  This is handy for centralizing user-feedback messaging into one place rather than
@@ -97,13 +98,14 @@ var editor = new Ext.ux.grid.RowEditor({
     saveText: '修改',
     clicksToEdit: 2
 });     
+
 // Create a typical GridPanel with RowEditor plugin
 var resourceLibraryGrid = new Ext.grid.GridPanel({
     iconCls: 'icon-grid',
-    frame: true,
+    //frame: true,
     collapsible: true,        
     title: '资源库管理',
-    width:800,
+    width: 800,
     height: 600,
     store: store,
     plugins: [editor],          
@@ -130,8 +132,9 @@ var resourceLibraryGrid = new Ext.grid.GridPanel({
             handler: onDelete
         }, '-'],
     bbar: new Ext.PagingToolbar({
-        pageSize: 25,
+        pageSize: 10,
         store: store,
+        autoShow:true,
         displayInfo: true,
         displayMsg: '当前显示 {0} - {1}条记录 /共 {2}条记录',
         emptyMsg: "无显示数据"
@@ -193,13 +196,144 @@ function showResult(btn) {
     
 Ext.onReady(function() {
     Ext.QuickTips.init(); 
-    
-    resourceLibraryGrid.render('resourceLibrary-grid'),
+    Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
+    Ext.Direct.addProvider(Ext.app.REMOTING_API);
+     
+    //resourceLibraryGrid.render('resourceLibrary-grid'),
 
-    // load the store immeditately
-    store.load();
+    // load the store
+    //store.load();
+    store.load({params:{start:0, limit:10}});
     
     resourceLibraryGrid.getSelectionModel().on('selectionchange', function(sm){
         resourceLibraryGrid.removeBtn.setDisabled(sm.getCount() < 1);
     });
+    
+
+   searchForm = new Ext.form.FormPanel({
+        labelAlign: 'left',
+        frame:true,//True表示为面板的边框外框可自定义的，false表示为边框可1px的点线,这个属性很重要，不显式地设置为true时，FormPanel中的指定的items和buttons的背景色会不一致
+        labelWidth: 55,
+        headerAsText:false,//是否显示标题栏
+        bodyStyle:'padding:5px 5px 0',
+        height:85,
+        api: {
+            // The server-side must mark the submit handler a-s a 'formHandler'
+            submit: SystemService.doLibrarySelect//表单数据提交，service.config.xml中要加'formHandler'=>true
+        },
+        items: [{
+            layout:'column',
+            items:[{
+                columnWidth:.33,
+                layout:'form',
+                items:[{
+                    fieldLabel: '用户名',
+                    anchor:'90%',
+                    xtype:'textfield',
+                    name: 'username'
+
+                }]
+            }, {
+                columnWidth:.33,
+                layout:'form',
+                items:[{
+                    fieldLabel: '性别',
+                    anchor:'90%',
+                    xtype:'textfield',
+                    name: 'realName'
+
+                }]
+            },{
+                columnWidth:.33,
+                layout:'form',
+                items:[{
+                    fieldLabel: '手机',
+                    anchor:'90%',
+                    xtype:'textfield',
+                    name: 'phone'
+                            
+                }]
+            }]
+                    
+        },{
+            layout:'column',
+            items:[{
+                columnWidth:.33,
+                layout:'form',
+                items:[{
+                    fieldLabel: '邮件',
+                    xtype:'textfield',
+                    anchor:'90%',
+                    name: 'email'
+
+                }]
+            },{
+                columnWidth:.33,
+                layout:'form',
+                items:[{
+                    fieldLabel: '应用名',
+                    xtype:'textfield',
+                    anchor:'90%',
+                    name: 'appName'
+
+                }]
+            },{
+                columnWidth:.33,
+                layout:'form',
+                items:[{
+                    xtype:'button',
+                    id:'btn',
+                    text:'搜索',
+                    width:100,
+                    style:'cursor:pointer;margin:0 0 0 100px',
+                    listeners:{
+                        render:function(){
+                            Ext.fly(this.el).on('click',function(){
+                                searchForm.getForm().submit({
+                                    success:function(form, action) {//表单提交成功后,调用的函数.参数分为两个,一个是提交的表单对象,另一个是JSP返回的参数值对象
+                                        store.loadData(action.result.data);
+                                    },
+                                    failure: function(form, action) {
+                                        Ext.Msg.alert('提示', '保存成功');
+                                    }
+                                });
+                            });
+                        }
+                    }
+                }]
+            }]
+        }]
+    });
+    
+    
+    
+    centerPanel=[{                    
+            region:'center',       
+            id: 'centerPanel',
+            contenEl:'resourceLibrary-grid',
+            height:'100%', 
+            headerAsText:false,
+            defaults:{
+                margins:'5 5 5 5'
+            },//定义边距与间距
+            layout:{
+                type:'vbox',
+                align:'stretch'
+            },
+            items:[searchForm,resourceLibraryGrid]
+            }];   
+    var viewport = new Ext.Viewport({
+        layout: 'border',
+        items: [      
+          centerPanel
+        ]
+    });    
+    viewport.doLayout();
+    setTimeout(function(){
+        Ext.get('loading').remove();
+        Ext.get('loading-mask').fadeOut({
+            remove:true
+        });
+    }, 250);       
+    
 });
