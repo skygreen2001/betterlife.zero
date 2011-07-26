@@ -53,6 +53,7 @@ Ext.data.DataProxy.addListener('beforewrite', function(proxy, action) {
 Ext.data.DataProxy.addListener('write', function(proxy, action, result, res, rs) {
     resourceLibraryGrid.addBtn.setDisabled(false);
     App.setAlert(true, action + ':' + res.message);
+    resourceLibraryGrid.getView().refresh();
 });
 
 ////
@@ -82,9 +83,22 @@ Ext.applyIf(sm, {
     return false;
   }
 });  
+
+var rm= new Ext.grid.RowNumberer({
+                header:'序号',
+                width:40,                
+                renderer:function(value,metadata,record,rowIndex){
+                        if(this.rowspan){
+                            p.cellAttr = 'rowspan="'+this.rowspan+'"';
+                        }
+                        var start = record.store.lastOptions.params.start;
+                        return start + rowIndex+1;
+                    }
+            });     //自动行号
+
 // Let's pretend we rendered our grid-columns with meta-data from our ORM framework.
 var resourceLibraryColumns =  new Ext.grid.ColumnModel([
-    new Ext.grid.RowNumberer(),           
+    rm,           
     sm, 
     {header: "库名称", width: 100, sortable: true, dataIndex: 'name', editor: new Ext.form.TextField({})},
     {header: "已加载", width: 150, sortable: true, dataIndex: 'open', xtype: 'checkcolumn',editor: {xtype:'checkbox'}},
@@ -102,13 +116,16 @@ var editor = new Ext.ux.grid.RowEditor({
 // Create a typical GridPanel with RowEditor plugin
 var resourceLibraryGrid = new Ext.grid.GridPanel({
     iconCls: 'icon-grid',
-    //frame: true,
+    frame: true,
     collapsible: true,        
     title: '资源库管理',
     width: 800,
-    height: 600,
+    height: 400,
     store: store,
-    plugins: [editor],          
+    plugins: [editor],
+    defaults:{
+         autoScroll:true
+    },          
     //columns : resourceLibraryColumns,
     sm:sm,
     cm:resourceLibraryColumns,          
@@ -314,7 +331,8 @@ Ext.onReady(function() {
             height:'100%', 
             headerAsText:false,
             defaults:{
-                margins:'5 5 5 5'
+                margins:'5 5 5 5',
+                autoScroll:true
             },//定义边距与间距
             layout:{
                 type:'vbox',

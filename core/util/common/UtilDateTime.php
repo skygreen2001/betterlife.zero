@@ -39,7 +39,8 @@ class UtilDateTime extends Util {
      * 格式：年-月-日 小时:分钟:秒<br/> 
      +----------------------------------------------------------<br/>      
      */
-    public static function now($type=EnumDateTimeFormat::TIMESTAMP) {
+    public static function now($type=EnumDateTimeFormat::DATE)
+    {
         date_default_timezone_set('Asia/Shanghai');
         $now= date(self::TIMEFORMAT_YMDHIS);
         switch ($type){
