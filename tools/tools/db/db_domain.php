@@ -143,7 +143,7 @@ function tableToDataObjectDefine($tablename,$tableInfoList,$fieldInfo,$type=1){
     /**
      * ".$comment."
      * @var $datatype
-     * @access private 
+     * @access public 
      */
     private \$".$fieldname.";\r\n";
                 };
