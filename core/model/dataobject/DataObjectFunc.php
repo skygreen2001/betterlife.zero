@@ -179,20 +179,66 @@
        }
        return json_encode($object_arr);
     }    
-
-    /**
-     * 
+          
+    /**  
      * 对应数据对象的updateProperties方法
-     * @param string $classname 当前数据对象类名
+     * @param string classname 数据对象类名  
+     * @param string $sql_id 需删除数据的ID编号或者ID编号的Sql语句<br/>        
+     * 示例如下：<br/>
+     *     $sql_id:<br/>
+     *         1.1<br/>
+     *         2.user_id=1<br/>
+     * @param string $array_properties 指定的属性<br/>
+     * 示例如下：<br/>
+     *     $array_properties<br/>
+     *      1.pass=1,name='sky'<br/>
+     *      2.array("pass"=>"1","name"=>"sky")<br/>
      * @return boolen 是否更新成功；true为操作正常<br/>
      */
     public static function updateProperties($classname,$sql_id,$array_properties) {
         $tablename=Config_Db::orm($classname);
         $_SQL=new Crud_Sql_Update();
         $_SQL->isPreparedStatement=false;
+        if (!contain($sql_id,"=")){
+            if (is_string($classname)) {
+                if (class_exists($classname)) {
+                    $classname=new $classname();
+                }
+            }
+            if ($classname instanceof DataObject){
+                $idColumn=DataObjectSpec::getRealIDColumnName($classname);
+            }
+            $sql_id=$idColumn."='$sql_id'";
+        }
+        
         $sQuery=$_SQL->update($tablename)->set($array_properties)->where($sql_id)->result();
         return DataObject::dao()->sqlExecute($sQuery);
     }
+    
+    /**
+    * 由标识删除指定ID数据对象
+    * @param string classname 数据对象类名  
+    * @param mixed $id 数据对象编号
+    */
+    public static function deleteByID($classname,$id)
+    {
+        $tablename=Config_Db::orm($classname);          
+        $_SQL=new Crud_Sql_Delete();
+        $_SQL->isPreparedStatement=false;
+        if (is_string($classname)) {
+            if (class_exists($classname)) {
+                $classname=new $classname();
+            }
+        }
+        if ($classname instanceof DataObject){
+            $idColumn=DataObjectSpec::getRealIDColumnName($classname);
+        }
+        
+        if (isset($idColumn)){
+            $sQuery= $_SQL->deletefrom($tablename)->where($idColumn."='$id'")->result();
+            return DataObject::dao()->sqlExecute($sQuery); 
+        }                                                       
+    } 
     //</editor-fold>      
   }
 ?>

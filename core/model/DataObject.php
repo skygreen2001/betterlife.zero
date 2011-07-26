@@ -342,6 +342,16 @@ abstract class DataObject extends Object implements ArrayAccess
     {    
         return DataObjectRelation::saveRelationForManyToMany($this,$relation_object,$relation_id_value,$other_column_values);
     }
+      
+    /**
+    * 由标识删除指定ID数据对象
+    * 
+    * @param mixed $id
+    */
+    public static function deleteByID($id)
+    {
+        return DataObjectFunc::deleteByID(get_called_class(),$id);  
+    }
 
     /**
      * 删除当前对象
@@ -361,12 +371,13 @@ abstract class DataObject extends Object implements ArrayAccess
         return  self::dao()->update($this);
     }
 
-    /**
-     * 更新对象指定的属性
-     * @param string $sql_id 需删除数据的ID编号Sql语句<br/>
+      /**
+     * 更新对象指定的属性                    
+     * @param string $sql_id 需删除数据的ID编号或者ID编号的Sql语句<br/>        
      * 示例如下：<br/>
      *     $sql_id:<br/>
-     *         user_id=1<br/>
+     *         1.1<br/>
+     *         2.user_id=1<br/>
      * @param string $array_properties 指定的属性<br/>
      * 示例如下：<br/>
      *     $array_properties<br/>
