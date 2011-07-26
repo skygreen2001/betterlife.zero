@@ -1,5 +1,15 @@
 <?php
 /**
+* 输出日期时间的格式
+*/
+class EnumDateTimeFORMAT extends Enum
+{
+    const TIMESTAMP=0;
+    const DATE=1;
+    const STRING=2;
+}  
+
+/**
  +---------------------------------<br/>
  * 功能:处理文件目录相关的事宜方法。<br/>
  +---------------------------------
@@ -27,11 +37,20 @@ class UtilDateTime extends Util {
      +----------------------------------------------------------<br/>
      * 获取现在的时间显示<br/>
      * 格式：年-月-日 小时:分钟:秒<br/> 
-     +----------------------------------------------------------<br/>
+     +----------------------------------------------------------<br/>      
      */
-    public static function now() {
+    public static function now($type=EnumDateTimeFormat::TIMESTAMP) {
         date_default_timezone_set('Asia/Shanghai');
-        return date(self::TIMEFORMAT_YMDHIS);
+        $now= date(self::TIMEFORMAT_YMDHIS);
+        switch ($type){
+            case EnumDateTimeFORMAT::TIMESTAMP: 
+                return UtilDateTime::dateToTimestamp($now);      
+            case EnumDateTimeFORMAT::DATE:
+                return $now;        
+            case EnumDateTimeFORMAT::STRING:
+                return $now."";        
+        }
+        return $now;
     }
 
     /**

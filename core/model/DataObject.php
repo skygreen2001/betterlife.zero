@@ -89,6 +89,18 @@ abstract class DataObject extends Object implements ArrayAccess
     
     //<editor-fold defaultstate="collapsed" desc="魔术方法">
     /**
+    * 从数组创建对象。
+    * @param mixed $array
+    * @return DataObject
+    */
+    public function __construct($array=null)
+    {
+      if (!empty($array)){
+        UtilObject::array_to_object($array,$this);   
+      }
+    }
+        
+    /**
      * 说明：若每个具体的实现类希望不想实现set,get方法；<br/>
      *      则将该方法复制到每个具体继承他的对象类内。<br/>
      * 可设定对象未定义的成员变量[但不建议这样做]<br/>
@@ -180,8 +192,10 @@ abstract class DataObject extends Object implements ArrayAccess
      */
     public function setCommitTime($commitTime) 
     {
-        if (DataObjectSpec::isNeedCommitTime($this)){
-            DataObjectSpec::setRealProperty($this,EnumColumnNameDefault::COMMITTIME,$commitTime);
+        if (DataObjectSpec::isNeedCommitTime($this))
+        {            
+            $columnName=DataObjectSpec::getRealColumnName($this,EnumColumnNameDefault::COMMITTIME);
+            $this->$columnName= $commitTime;                                                           
         }        
     }
 
@@ -206,8 +220,10 @@ abstract class DataObject extends Object implements ArrayAccess
      */
     public function setUpdateTime($updateTime) 
     {
-        if (DataObjectSpec::isNeedUpdateTime($this)){            
-            DataObjectSpec::setRealProperty($this,EnumColumnNameDefault::UPDATETIME,$updateTime);
+        if (DataObjectSpec::isNeedUpdateTime($this))
+        {  
+            $columnName=DataObjectSpec::getRealColumnName($this,EnumColumnNameDefault::UPDATETIME);
+            $this->$columnName= $updateTime;
         }else{
             $this->setCommitTime($updateTime); 
         }
