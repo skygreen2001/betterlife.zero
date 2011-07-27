@@ -101,9 +101,16 @@
             {                                           
                 $class_property_name=array_merge($class_property_name,$property_name);
             }
-                
-            foreach ($data as $record){          
-                array_walk($record, array("DataObjectFunc",'property_alter'),$class_property_name); 
+            if (is_array($data)&&(count($data)>0)){  
+                foreach ($data as $record){          
+                    array_walk($record, array("DataObjectFunc",'property_alter'),$class_property_name); 
+                }
+            }else if (is_object($data)){
+                unset($class_property_name[0]);
+                foreach ($class_property_name as $property_name)
+                {              
+                    $data->$property_name=call_user_func($class_name."::".$property_name."show",$property_name);
+                }
             }
         }            
     }   

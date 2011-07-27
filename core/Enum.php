@@ -72,9 +72,16 @@ class Enum {
             {                                           
                 $class_property_name=array_merge($class_property_name,$property_name);
             }
-                
-            foreach ($data as $record){          
-                array_walk($record, array("Enum",'property_alter'),$class_property_name); 
+            if (is_array($data)&&(count($data)>0)){     
+                foreach ($data as $record){          
+                    array_walk($record, array("Enum",'property_alter'),$class_property_name); 
+                }
+            }else if (is_object($data)){
+                unset($class_property_name[0]);
+                foreach ($class_property_name as $property_name)
+                {              
+                    $data->$property_name=call_user_func($class_name."::".$property_name."show",$property_name);
+                }
             }
         }            
     }   
@@ -92,7 +99,7 @@ class Enum {
         foreach ($class_property_name as $property_name)
         {                                                                    
             if (is_string($key)&&($key===$property_name)){
-                $static_method_name= "get".ucfirst($property_name)."Show"; 
+                $static_method_name= $property_name."Show"; 
                 $item=call_user_func($enum_name."::".$static_method_name,$item);
             }
         }
