@@ -53,12 +53,13 @@ class UtilAjaxDojo extends UtilAjax implements IUtilAjax
         //<editor-fold defaultstate="collapsed" desc="dojo">       
         if((is_array($dataArray))&&(count($dataArray)>0))
         {
-            $data="{";
-            foreach ($dataArray as $key => $value) {
-              $data.=$key.":'".$value."'".",";
-            }    
-            $data=substr($data, 0, strlen($data)-1);
-            $data.="}";
+            $data=json_encode($dataArray);
+//            $data="{";
+//            foreach ($dataArray as $key => $value) {
+//              $data.=$key.":'".$value."'".",";
+//            }    
+//            $data=substr($data, 0, strlen($data)-1);
+//            $data.="}";
         }          
         $result.="
             //Deferred对象允许用同步调用的写法写异步调用

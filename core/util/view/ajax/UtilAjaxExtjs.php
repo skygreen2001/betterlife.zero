@@ -104,15 +104,20 @@ class UtilAjaxExtjs extends UtilAjax implements IUtilAjax
         $result.= "headers:{
                     'response_type':'$response_type'
                 },";
-        if (isset($dataArray)){        
-            $result.= "params:{";
-            foreach ($dataArray as $key => $value) {
-                $result.=$key.":'".$value."',";                
-            }
-            if (endWith($result, ",")){
-                $result=substr($result, 0, strlen($result)-1);
-            }
-            $result.="},";
+        if (isset($dataArray))
+        {  
+            $result.= "params:";            
+            $data=json_encode($dataArray); 
+            $result.=$data;
+//            $result.= "{";
+//            foreach ($dataArray as $key => $value) {
+//                $result.=$key.":'".$value."',";                
+//            }
+//            if (endWith($result, ",")){
+//                $result=substr($result, 0, strlen($result)-1);
+//            }
+//            $result.="}";
+            $result.=",";
         }
         if (isset($callback)){ 
             $result.= "success:".$callback;

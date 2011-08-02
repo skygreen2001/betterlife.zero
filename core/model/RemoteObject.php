@@ -117,6 +117,17 @@ class RemoteObject extends Object
         unset ($this->IsSync);
         unset ($this->Is_Url_Rewrite);
         $data=UtilObject::object_to_array($this);
+        if (!Gc::$dev_debug_on){
+            foreach ($data as $key=>$value){
+                if (is_array($value)){
+                    foreach ($value as $subkey=>$subvalue){
+                        if (is_object($subvalue)){
+                            $data[$key][$subkey]=UtilObject::object_to_array($subvalue);
+                        }                      
+                    }
+                }
+            }    
+        }
         if ($Is_Url_Rewrite){
             return Manager_Communication::newInstance()->currentComm()->sendRequest(
                    self::$server_addr.$this->classname(),$data,$method,$response_type);
@@ -136,6 +147,19 @@ class RemoteObject extends Object
         unset ($this->response_type);
         unset ($this->IsSync);        
         $data=UtilObject::object_to_array($this);
+        foreach ($data as $key=>$value){
+            if (is_array($value)){
+                foreach ($value as $subkey=>$subvalue){
+                    if (is_object($subvalue)){
+                        $data[$key][$subkey]=UtilObject::object_to_array($subvalue);
+                    }                      
+                }
+            }
+        }    
+        if (!Gc::$dev_debug_on){            
+            $data=UtilArray::Array2String($data);
+            $data=array("data"=>$data);  
+        }  
         $result= Manager_Communication::newInstance()->currentComm()->sendRequestAsync_local($this->classname(),$data,$method,$response_type);   
         return $result;
     }    

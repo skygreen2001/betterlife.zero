@@ -30,6 +30,8 @@
      * @access private 
      */
     public $password;
+    
+    public $line_items;
     //</editor-fold>
   }
   

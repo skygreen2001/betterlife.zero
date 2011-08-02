@@ -69,12 +69,13 @@ class UtilAjaxMootools extends UtilAjax implements IUtilAjax
         if ($response_type==EnumResponseType::JSON){                          
             if((is_array($dataArray))&&(count($dataArray)>0))
             {
-                $data="{";
-                foreach ($dataArray as $key => $value) {
-                  $data.=$key.":'".$value."'".",";
-                }    
-                $data=substr($data, 0, strlen($data)-1);
-                $data.="}";
+                $data=json_encode($dataArray);                
+//                $data="{";
+//                foreach ($dataArray as $key => $value) {
+//                  $data.=$key.":'".$value."'".",";
+//                }    
+//                $data=substr($data, 0, strlen($data)-1);
+//                $data.="}";
             }    
         }
         else if ($response_type==EnumResponseType::XML) 

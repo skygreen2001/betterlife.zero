@@ -39,6 +39,14 @@ class TestClientRequest {
     public static function user_post(){
         $user=new UserRO();   
         self::user_data($user);
+        $orderProducts=new OrderproductsRO();
+        $orderProducts->item_id=13;
+        $orderProducts->product_id=1679;
+        $orderProducts->product_name="冠生园蜂蜜";
+        $orderProducts->amount=100;
+        $orderProducts->price="11";
+        $orderProducts->nums=3;
+        $user->line_items[]=$orderProducts;            
         $result=$user->post();
         echo $result;        
     }    

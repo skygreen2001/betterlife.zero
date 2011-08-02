@@ -54,12 +54,13 @@ class UtilAjaxJquery extends UtilAjax implements IUtilAjax
         //@link http://api.jquery.com/jQuery.ajax/
         if((is_array($dataArray))&&(count($dataArray)>0))
         {
-            $data="{";
-            foreach ($dataArray as $key => $value) {
-              $data.=$key.":'".$value."'".",";
-            }    
-            $data=substr($data, 0, strlen($data)-1);
-            $data.="}";
+            $data=json_encode($dataArray);
+//            $data="{";
+//            foreach ($dataArray as $key => $value) {
+//              $data.=$key.":'".$value."'".",";
+//            }    
+//            $data=substr($data, 0, strlen($data)-1);
+//            $data.="}";
         }
 
         $result.= "$.ajax({";

@@ -32,7 +32,6 @@ class UtilArray extends Util
 
         // loop through the data passed in.
         foreach( $data as $key => $value ) {
-
             // no numeric keys in our xml please!
             if ( is_numeric( $key ) ) {
                 $numeric = 1;
@@ -95,7 +94,8 @@ class UtilArray extends Util
      * @param string $xml - XML document - can optionally be a SimpleXMLElement object
      * @return array ARRAY
      */
-    public static function xml_to_array( $xml,$rootNodeName = 'data') {
+    public static function xml_to_array( $xml,$rootNodeName = 'data') 
+    {
         if ( is_string( $xml ) ){
             $xmlSxe = new SimpleXMLElement( $xml );
         }else{
@@ -131,7 +131,8 @@ class UtilArray extends Util
     }
 
     // determine if a variable is an associative array
-    public static function is_assoc( $array ) {
+    public static function is_assoc( $array ) 
+    {
         return (is_array($array) && 0 !== count(array_diff_key($array, array_keys(array_keys($array)))));
     }
     //</editor-fold>
@@ -145,7 +146,8 @@ class UtilArray extends Util
     * 如$row=array("db"=>array("table"=>array("row"=>15)))
     *   可通过$array_multi_key="db.table.row"获得
     */
-    public static function array_multi_direct_get($array_multi,$array_multi_key) {
+    public static function array_multi_direct_get($array_multi,$array_multi_key) 
+    {
          $var = explode('.', $array_multi_key);
          $result = $array_multi;
          foreach ($var as $key) {
@@ -161,7 +163,8 @@ class UtilArray extends Util
      * @param string $keys 键字符串，如"key1,key3"
      * @return array  数组中包含键数组的数组,如array("key1"=>1,"key3"=>3);
      */
-    public static function array_key_filter($array,$keys){
+    public static function array_key_filter($array,$keys)
+    {
         $return = array();
         foreach(explode(',',$keys) as $k){
             if(isset($array[$k])){
@@ -179,7 +182,8 @@ class UtilArray extends Util
      * @param bool $isprefix 是否前缀，true:前缀,false:后缀
      * @return string 数组中指定值的键名称
      */
-    public static function array_search($arr,$propertyValue,$pre1sufix="",$isprefix=true){           
+    public static function array_search($arr,$propertyValue,$pre1sufix="",$isprefix=true)
+    {           
         $result=null;        
         if (isset($propertyValue)&&isset($arr)&&in_array($propertyValue,$arr)){
             if (!empty($pre1sufix)){
@@ -205,6 +209,79 @@ class UtilArray extends Util
             }
         }
         return $result;
-    }    
-  }
+    }
+
+    /** 
+     * convert a multidimensional array to url save and encoded string
+     *  usage: string Array2String( array Array )
+     *  @link http://php.net/manual/en/ref.array.php
+     */
+    public static function Array2String($Array) 
+    {
+        $Return='';
+        $NullValue="^^^";
+        foreach ($Array as $Key => $Value) {
+            if (is_object($Value)){
+               $Value=UtilObject::object_to_array($Value); 
+            }
+            if(is_array($Value)){
+              $ReturnValue='^^array^'.self::Array2String($Value);
+            }
+            else{
+              $ReturnValue=(strlen($Value)>0)?$Value:$NullValue;
+            }
+            $Return.=urlencode(base64_encode($Key)) . '|' . urlencode(base64_encode($ReturnValue)).'||';
+        }
+        return urlencode(substr($Return,0,-2));
+    }
+
+    /** 
+     * convert a string generated with Array2String() back to the original (multidimensional) array
+     * usage: array String2Array ( string String)
+     */ 
+    public static function String2Array($String) 
+    {
+        $Return=array();
+        $String=urldecode($String);
+        $TempArray=explode('||',$String);
+        $NullValue=urlencode(base64_encode("^^^"));
+        foreach ($TempArray as $TempValue) {
+            list($Key,$Value)=explode('|',$TempValue);
+            $DecodedKey=base64_decode(urldecode($Key));
+            if($Value!=$NullValue) {
+                $ReturnValue=base64_decode(urldecode($Value));
+                if(substr($ReturnValue,0,8)=='^^array^'){
+                    $ReturnValue=self::String2Array(substr($ReturnValue,8));
+                }
+                $Return[$DecodedKey]=$ReturnValue;
+            }
+            else{
+              $Return[$DecodedKey]=NULL;
+            }
+        }
+        return $Return;
+    }  
+    
+    /**
+     *  return depth of given array
+     * if Array is a string ArrayDepth() will return 0
+     * usage: int ArrayDepth(array Array)
+     */ 
+    public static function ArrayDepth($Array,$DepthCount=-1,$DepthArray=array()) 
+    {
+        $DepthCount++;
+        if (is_array($Array)){
+            foreach ($Array as $Key => $Value){
+              $DepthArray[]=ArrayDepth($Value,$DepthCount);
+            }
+        }
+        else{
+            return $DepthCount;
+        }
+        foreach($DepthArray as $Value){
+            $Depth=$Value>$Depth?$Value:$Depth;
+        }
+        return $Depth;    
+    }
+}
 ?>

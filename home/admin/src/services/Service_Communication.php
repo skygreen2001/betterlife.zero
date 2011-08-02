@@ -77,31 +77,38 @@ class Service_Communication extends Service
         if (strtoupper($this->method)==EnumHttpMethod::GET){
             echo Manager_Communication::newInstance()->currentComm()->sendRequest(self::$remote_server.$str_object,$request_data,$this->method,$this->response_type);
         }else{
-            $str_objectRO=$str_object."RO"; 
-            $objectRO=UtilObject::array_to_object($request_data,$str_objectRO);
-            if ($objectRO){                        
-                //当Ajax框架为Prototype或者Mootools时，会通过param:_method提交原始的request method。
-                if (isset($_POST["_method"])){
-                    $this->method=$_POST["_method"];
-                } 
-                $Is_Url_Rewrite=$objectRO->Is_Url_Rewrite;
-                unset ($objectRO->response_type);
-                unset ($objectRO->IsSync);   
-                unset ($objectRO->Is_Url_Rewrite);
-                $objectXml=$objectRO->toXml(); 
+            $str_objectRO=$str_object."RO";
+            //当Ajax框架为Prototype或者Mootools时，会通过param:_method提交原始的request method。
+            if (isset($_POST["_method"])){
+                $this->method=$_POST["_method"];
+            } 
+            if (isset($request_data["data"])){
+                $data=$request_data["data"];
+                $request_data=UtilArray::String2Array($data);
+                $data=UtilArray::array_to_xml($request_data);
+            }else{ 
+                if (class_exists($str_objectRO)){
+                    $objectRO=new $str_objectRO();
+                }
+                if ($objectRO){ 
+                    $Is_Url_Rewrite=$objectRO->Is_Url_Rewrite;
+                }
+                unset($request_data["service"]);
+                $objectXml=UtilArray::array_to_xml($request_data,$objectRO->classname());  
+                //$objectXml=$objectRO->toXml(); 
+                
                 $objectXml=str_replace($str_objectRO,$str_object,$objectXml); 
                 $sxe = new SimpleXMLElement($objectXml);
                 $attribute_href=self::$remote_server.$str_object.".xml";     
                 $sxe->addAttribute('href', $attribute_href);         
                 $data=$sxe->asXML(); 
-                if ($Is_Url_Rewrite){ 
-                    echo Manager_Communication::newInstance()->currentComm()->sendRequest(self::$remote_server.$str_object,$data,$this->method,$this->response_type);
-                }else{
-                    echo Manager_Communication::newInstance()->currentComm()->sendRequest(self::$remote_server.self::$index_file.$str_object,$data,$this->method,$this->response_type);
-                }
+            }
+            if ($Is_Url_Rewrite){ 
+                echo Manager_Communication::newInstance()->currentComm()->sendRequest(self::$remote_server.$str_object,$data,$this->method,$this->response_type);
+            }else{
+                echo Manager_Communication::newInstance()->currentComm()->sendRequest(self::$remote_server.self::$index_file.$str_object,$data,$this->method,$this->response_type);
             }
         }
-        
     }
     
     /**
