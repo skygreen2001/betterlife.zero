@@ -16,7 +16,29 @@ class SystemService extends Service
      */
     public function doLibrarySelect($formPacket=array())
     {
-        return "hello,babby,SystemService";
+        
+        $condition=array();
+        foreach ($formPacket as $key=>$value){
+           if (!empty($value)){
+               if ($key=='name') {
+                    $condition[]="$key contain '$value'";    
+               } else if ($key=='init') {
+                    $condition[]="$key contain '$value'";    
+               } else {
+                    $condition[$key]=$value;
+               }
+           } 
+        }     
+        
+        $startPoint=0;
+        $endPoint=10; 
+        $result= ResourceLibrary::queryPage($startPoint,$endPoint,$condition);                
+        $data=$result;
+        if ($data==null)$data=array();
+        return array(  
+            'success'=>true,
+            'data'=>$data
+        );              
     }
 }
 ?>

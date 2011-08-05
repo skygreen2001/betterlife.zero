@@ -1,7 +1,9 @@
 <?php
 require_once ("init.php");
 
-//LogMe::log("我在想事情呢！等等我");
+
+//print_r(SystemService::doLibrarySelect(array("name"=>"m")));                                             
+//LogMe::log("我在想事情呢！等等我");       
 //LogMe::log("装深沉，你就装吧！");
 
 //PHP 与 Linq

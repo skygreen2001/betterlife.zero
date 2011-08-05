@@ -85,7 +85,7 @@
     //<editor-fold defaultstate="collapsed" desc="其他">     
     /**
     * 根据数据对象的属性名获取属性名的显示。
-    * @param mixed $data 数据对象数组。如:array(user,user)
+    * @param mixed $data 数据对象数组|数据对象。如:array(user,user)
     * @param mixed $property_name  属性名【可以一次指定多个属性名】
     */
     public static function propertyShow($data,$class_name,$property_name)

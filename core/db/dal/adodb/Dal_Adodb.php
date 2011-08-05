@@ -152,7 +152,7 @@ class Dal_Adodb extends Dal implements IDal
             return $autoId;
         }
         try {
-            $object->setCommitTime(UtilDateTime::now());  
+            $object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::STRING));  
             $this->saParams=UtilObject::object_to_array($object);
 //            $sql = Crud_SQL::SQL_SELECT." * ".Crud_SQL::SQL_FROM.$tablename.Crud_SQL::SQL_WHERE.$this->sql_id($object).self::EQUAL."-1";
 //            $rs = $this->connection->Execute($sql); # Execute the query and get the empty recordset
@@ -235,8 +235,8 @@ class Dal_Adodb extends Dal implements IDal
         $id=$object->getId();
         if(!empty($id)) {
             try {
-                $object->setUpdateTime(UtilDateTime::now()); 
-                $this->saParams=UtilObject::object_to_array($object,true);
+                $object->setUpdateTime(UtilDateTime::now(EnumDateTimeFormat::STRING)); 
+                $this->saParams=UtilObject::object_to_array($object);
                 unset($this->saParams[DataObjectSpec::getRealIDColumnName($object)]);
                 $this->filterViewProperties($this->saParams);
                 $_SQL=new Crud_Sql_Update();

@@ -102,17 +102,30 @@ class ResourceLibrary extends XmlObject
     * 分页:获取资料库的信息列表
     * @param int $startPoint  分页开始记录数
     * @param int $endPoint    分页结束记录数 
+    * @param array $filter 过滤条件
+    * 示例如下：<br/>       
+    *      string[只有一个查询条件]
+    *      1. id="1"--精确查找
+    *      2. name contain 'sky'--模糊查找
+    *      array[多个查询条件]
+    *      1.array("id"=>"1","name"=>"sky")<br/>--精确查找
+    *      2.array("id"=>"1","name contain 'sky'")<br/>--模糊查找
     */
     public static function queryPage($startPoint,$endPoint,$filter=null) 
     {
-        $result= parent::queryPage(__CLASS__,$startPoint,$endPoint);
+        $result= parent::queryPage(__CLASS__,$startPoint,$endPoint,$filter);
+        
+        //必须加载的一定是已加载，如果必须加载的参数没有设置，则不是必须加载。
         foreach ($result as $key=>$value) {
+            if(!empty($result[$key][Library_Loader::SPEC_OPEN])){
+                $result[$key][Library_Loader::SPEC_OPEN]=(bool)$result[$key][Library_Loader::SPEC_OPEN];
+            }
             if (!array_key_exists(Library_Loader::SPEC_REQUIRED,$result[$key]))
             {
                 $result[$key][Library_Loader::SPEC_REQUIRED]=false;
             }else{
                 if ($result[$key][Library_Loader::SPEC_REQUIRED]=='true'){
-                    $result[$key][Library_Loader::SPEC_OPEN]=Library_Loader::OPEN_YES;
+                    $result[$key][Library_Loader::SPEC_OPEN]=(bool)Library_Loader::OPEN_YES;
                     $result[$key][Library_Loader::SPEC_REQUIRED]=true;
                 }else{
                     $result[$key][Library_Loader::SPEC_REQUIRED]=false;

@@ -210,17 +210,18 @@ class XmlObject extends Object implements ArrayAccess
      * @param string $xmlObject_classname 具体的Xml对象类名
      * @param int $startPoint  分页开始记录数
      * @param int $endPoint    分页结束记录数 
-     * @param object|string|array $filter 查询条件，在where后的条件
-     * 示例如下：<br/>
-     *      0."id=1,name='sky'"<br/>
-     *      1.array("id=1","name='sky'")<br/>
-     *      2.array("id"=>"1","name"=>"sky")<br/>
-     *      3.允许对象如new User(id="1",name="green");<br/>
-     * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
+     * @param string|array $filter 过滤条件
+     * 示例如下：<br/>    
+     *      string[只有一个查询条件]
+     *      1. id="1"--精确查找
+     *      2. name contain 'sky'--模糊查找
+     *      array[多个查询条件]
+     *      1.array("id"=>"1","name"=>"sky")<br/>--精确查找
+     *      2.array("id"=>"1","name contain 'sky'")<br/>--模糊查找
      * @return mixed 对象分页
      */
     public static function queryPage($xmlObject_classname,$startPoint,$endPoint,$filter=null) 
-    {
+    {                                   
         if ($xmlObject_classname==null){
             $classname=get_called_class();
         }else{
@@ -228,16 +229,88 @@ class XmlObject extends Object implements ArrayAccess
         }
         $filename=call_user_func("$classname::address");
         $spec_library=UtilXmlSimple::fileXmlToArray($filename);
-        $result=array();             
+        $result=array();            
         $classname{0} = strtolower($classname{0});
         foreach ($spec_library[$classname] as $block)
         {
-            $blockAttr=$block[Util::XML_ELEMENT_ATTRIBUTES];        
-            $result[]=$blockAttr;
+            $blockAttr=$block[Util::XML_ELEMENT_ATTRIBUTES]; 
+            if (self::isValidData($blockAttr,$filter)){       
+                $result[]=$blockAttr;
+            }
         }
         $result=array_slice($result, $startPoint, $endPoint); 
         return $result;
     }    
+    
+    /**
+    * 查看是否过滤条件允许的数据。
+    * @param array $blockAttr
+    * @param $filter filter 过滤条件
+    * 示例如下：<br/>    
+    *      string[只有一个查询条件]
+    *      1. id="1"--精确查找
+    *      2. name contain 'sky'--模糊查找
+    *      array[多个查询条件]
+    *      1.array("id"=>"1","name"=>"sky")<br/>--精确查找                               
+    *      2.array("id"=>"1","name contain 'sky'")<br/>--模糊查找
+    */
+    public static function isValidData($blockAttr,$filter)
+    {                         
+        if (empty($filter)) return true;
+        if (is_string($filter)){
+           if (contain($filter,"and")){
+               $condition=explode("and",$filter);
+               if (count($condition)==2){
+                   $column=trim($condition[0]);          
+                   $col_value=trim($condition[1]);  
+                   if (array_key_exists($column,$blockAttr)){                   
+                       $block_value= $blockAttr[$column];
+                       if ($block_value==$col_value){
+                            return true;
+                       }
+                   }
+               }
+           } else if (contain($filter,"contain")){
+               $condition=explode("contain",$filter);
+               if (count($condition)==2){
+                   $column=trim($condition[0]);          
+                   $col_value=trim($condition[1]);
+                   if (array_key_exists($column,$blockAttr)){                   
+                       $block_value= $blockAttr[$column];
+                       if (contain($block_value,$col_value)){
+                            return true;
+                       }
+                   }
+               }
+           } 
+        }else{
+            foreach ($filter as $key=>$value){
+                if (is_int($key)){
+                   $condition=explode("contain",$value);
+                   if (count($condition)==2){
+                       $column=trim($condition[0]);          
+                       $col_value=trim($condition[1]);
+                       if (array_key_exists($column,$blockAttr)){
+                           $block_value= $blockAttr[$column];
+                           $col_value=str_replace("'","",$col_value);
+                           if (contain($block_value,$col_value)){
+                                return true;
+                           }
+                       }
+                   }
+                }else{
+                   if (array_key_exists($key,$blockAttr)){
+                       $block_value= $blockAttr[$key];
+                       if ($block_value==$value){
+                            return true;
+                       }
+                   }                    
+                }
+            }
+        }
+        return false;   
+    }
+    
     
     /**
      * 保存Xml对象的信息

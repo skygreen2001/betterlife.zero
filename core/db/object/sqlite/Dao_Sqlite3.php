@@ -91,7 +91,7 @@ class Dao_Sqlite3 extends Dao implements IDaoNormal {
         }
         try {
             $_SQL=new Crud_Sql_Insert();
-            $object->setCommitTime(UtilDateTime::now());
+            $object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::STRING));
             $this->saParams=UtilObject::object_to_array($object);
             $this->filterViewProperties($this->saParams);
             $this->sQuery=$_SQL->insert($this->classname)->values($this->saParams)->result();
@@ -149,8 +149,8 @@ class Dao_Sqlite3 extends Dao implements IDaoNormal {
         if(!empty($id)) {
             try {
                 $_SQL=new Crud_Sql_Update();
-                $object->setUpdateTime(UtilDateTime::now());
-                $this->saParams=UtilObject::object_to_array($object,true);
+                $object->setUpdateTime(UtilDateTime::now(EnumDateTimeFormat::STRING));
+                $this->saParams=UtilObject::object_to_array($object);
                 unset($this->saParams[DataObjectSpec::getRealIDColumnName($object)]);
                 $this->filterViewProperties($this->saParams);
                 $where=$this->sql_id($object).self::EQUAL.$id;

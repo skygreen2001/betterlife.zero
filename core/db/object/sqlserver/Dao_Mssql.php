@@ -106,7 +106,7 @@ class Dao_Mssql extends Dao implements IDaoNormal{
         }
         try {
             $_SQL=new Crud_Sql_Insert();
-            $object->setCommitTime(UtilDateTime::now());
+            $object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::STRING));
             if (Config_Db::$db==EnumDbSource::DB_SQLSERVER&&
                     ((trim(strtoupper(Gc::$encoding))==Config_C::CHARACTER_UTF_8)||(trim(strtolower(Gc::$encoding))==Config_C::CHARACTER_UTF8))) {
                 $this->saParams=UtilObject::object_to_array($object,false,array(Config_C::CHARACTER_UTF_8=>Config_C::CHARACTER_GBK));
@@ -172,13 +172,13 @@ class Dao_Mssql extends Dao implements IDaoNormal{
             try {
                 $_SQL=new Crud_Sql_Update();
                 $_SQL->isPreparedStatement=false;
-                $object->setUpdateTime(UtilDateTime::now());
+                $object->setUpdateTime(UtilDateTime::now(EnumDateTimeFormat::STRING));
                 $object->setId(null);   
                 if (Config_Db::$db==EnumDbSource::DB_SQLSERVER&&
                         ((trim(strtoupper(Gc::$encoding))==Config_C::CHARACTER_UTF_8)||(trim(strtolower(Gc::$encoding))==Config_C::CHARACTER_UTF8))) {
-                    $this->saParams=UtilObject::object_to_array($object,true,array(Config_C::CHARACTER_UTF_8=>Config_C::CHARACTER_GBK));
+                    $this->saParams=UtilObject::object_to_array($object,false,array(Config_C::CHARACTER_UTF_8=>Config_C::CHARACTER_GBK));
                 }else {
-                    $this->saParams=UtilObject::object_to_array($object,true);
+                    $this->saParams=UtilObject::object_to_array($object);
                 }
                 unset($this->saParams[DataObjectSpec::getRealIDColumnName($object)]);
                 $this->filterViewProperties($this->saParams);

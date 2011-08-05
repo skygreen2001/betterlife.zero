@@ -4,8 +4,17 @@
 */
 class EnumDateTimeFORMAT extends Enum
 {
+    /**
+    * Timestamp
+    */
     const TIMESTAMP=0;
+    /**
+    * 日期时间
+    */
     const DATE=1;
+    /**
+    * 日期字符串时间形式
+    */
     const STRING=2;
 }  
 

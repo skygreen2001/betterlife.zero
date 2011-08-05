@@ -289,7 +289,7 @@ abstract class Crud_SQL {
         }
         if (is_array($param)) {
             $filterc=each($param);
-            if (strpos($filterc["value"],"=")!==false) {
+            if (is_string($filterc["value"])&&strpos($filterc["value"],"=")!==false) {
                 $f_values=array_values($param);
                 foreach ($f_values as $value) {
                     if ((strlen($value)>0)&&($value{0}=='(')&&($value{strlen($value)-1}==')')){

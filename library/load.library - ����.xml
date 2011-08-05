@@ -10,12 +10,12 @@
      * 6.required:是否必须加载的，如无定义，则根据open定义加载库。
      */
  -->
-<library>
-   <block name="PHPUnit" open="false" init="load_phpunit" />
-   <block name="adodb5" open="true" init="load_adode" />
-   <block name="mdb2" open="true" init="load_mdb2" />
-   <block name="phpexcel" open="true" init="load_phpexcel" />
-   <block name="yaml" open="false" init="load_yaml_spyc" />
-   <block name="linq" open="false" init="load_PHPLinq" />
-   <block name="template" required="true" init="load_template" />  
-</library>
+<resourceLibrarys>
+   <resourceLibrary id="1" name="PHPUnit" open="false" init="load_phpunit" />
+   <resourceLibrary id="2" name="adodb5" open="true" init="load_adode" />
+   <resourceLibrary id="3" name="mdb2" open="true" init="load_mdb2" />
+   <resourceLibrary id="4" name="phpexcel" open="true" init="load_phpexcel" />
+   <resourceLibrary id="5" name="yaml" open="false" init="load_yaml_spyc" />
+   <resourceLibrary id="6" name="linq" open="false" init="load_PHPLinq" />
+   <resourceLibrary id="7" name="template" required="true" init="load_template" />  
+</resourceLibrarys>

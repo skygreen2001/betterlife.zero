@@ -34,10 +34,10 @@
 	FONT: normal 13px tahoma,arial,verdana,sans-serif;
 }
 .x-form-field {
-	FONT: 13px tahoma,arial,helvetica,sans-serif	
+	FONT: 13px tahoma,arial,helvetica,SimSun,sans-serif	
 }
 .x-small-editor .x-form-field {
-	FONT: 13px tahoma,arial,helvetica,sans-serif	
+	FONT: 13px tahoma,arial,helvetica,SimSun,sans-serif	
 }
 .x-combo-list-item {
 	FONT: 13px tahoma,arial,helvetica,sans-serif;	
@@ -56,7 +56,7 @@
 	margin-top:1px;
 } /* the textField missing bottom line */
 .x-form-item {	
-	FONT: 13px tahoma,arial,helvetica,sans-serif
+	FONT: 13px tahoma,arial,helvetica,SimSun,sans-serif
 }
 .x-grid-group-hd DIV {	
 	FONT: bold 13px tahoma,arial,helvetica,sans-serif;
@@ -65,4 +65,12 @@ div.x-tab-strip-wrap .add-tab a span.x-tab-strip-inner {
     width:26px;
     background: url(ajax/ext/resources/images/new/add.gif) no-repeat center center;
 }
+
+/**按钮字体大小 */
+.ext-gecko .x-btn button {  
+    font-size: 13px;  
+    padding-top: 0;  
+}  
+
+
 /* END */

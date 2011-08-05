@@ -102,7 +102,7 @@ class Dao_Postgres extends Dao implements IDaoNormal {
             $_SQL=new Crud_Sql_Insert();
             $_SQL->type_rep=1;
             $_SQL->isPreparedStatement=true;
-            $object->setCommitTime(UtilDateTime::now());
+            $object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::STRING));
             $this->saParams=UtilObject::object_to_array($object);
             $this->filterViewProperties($this->saParams);
             foreach ($this->saParams as $key=>&$value) {
@@ -170,9 +170,9 @@ class Dao_Postgres extends Dao implements IDaoNormal {
             try {
                 $_SQL=new Crud_Sql_Update();
                 $_SQL->type_rep=1;
-                $object->setUpdateTime(UtilDateTime::now());
+                $object->setUpdateTime(UtilDateTime::now(EnumDateTimeFormat::STRING));
                 $object->setId(null);
-                $this->saParams=UtilObject::object_to_array($object,true);
+                $this->saParams=UtilObject::object_to_array($object);
                 unset($this->saParams[DataObjectSpec::getRealIDColumnName($object)]);
                 $this->filterViewProperties($this->saParams);
                 $where=$this->sql_id($object).self::EQUAL.$id;
