@@ -63,6 +63,12 @@ class ExtRequest
                     $this->params = $params->data;
                 }
             }
+            if (strtoupper($this->method)=="GET"){
+               unset($_GET["_dc"]); 
+               unset($_GET["start"]);                
+               unset($_GET["limit"]);  
+               $this->params =$_GET;
+            }
 
         }
         // Quickndirty PATH_INFO parser

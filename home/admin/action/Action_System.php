@@ -95,7 +95,7 @@ class Action_System extends Action
         UtilJavascript::loadJsReady($this->view->viewObject,"shared/grid/checkcolumn.js",true,EnumJsFramework::JS_FW_EXTJS,UtilAjaxExtjs::$ext_version);  
         UtilJavascript::loadJsReady($this->view->viewObject,$templateurl.$module_templateurl_relative."system/library.js");  
         UtilJavascript::loadJsReady($this->view->viewObject,"home/admin/src/services/ajax/extjs/direct/api.php");            
-   }
+   }                 
    
    /**
     * 功能模块加载

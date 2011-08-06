@@ -15,8 +15,7 @@ class SystemService extends Service
      * @return array 
      */
     public function doLibrarySelect($formPacket=array())
-    {
-        
+    {           
         $condition=array();
         foreach ($formPacket as $key=>$value){
            if (!empty($value)){

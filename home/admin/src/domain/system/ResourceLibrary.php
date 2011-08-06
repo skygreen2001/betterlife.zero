@@ -79,7 +79,7 @@ class ResourceLibrary extends XmlObject
     * 获取所有资料库的信息
     * 
     */
-    public static function get()
+    public static function get($filter=null)
     {
         $result= parent::get(__CLASS__);
         for ($i=0;$i<count($result);$i++) {
@@ -113,24 +113,55 @@ class ResourceLibrary extends XmlObject
     */
     public static function queryPage($startPoint,$endPoint,$filter=null) 
     {
-        $result= parent::queryPage(__CLASS__,$startPoint,$endPoint,$filter);
-        
+        foreach ($filter as $key=>$value){
+          if (empty($value)){
+              unset($filter[$key]);
+          }else{
+              if ($key=='name') {
+                    $condition[]="$key contain '$value'";    
+               } else if ($key=='init') {
+                    $condition[]="$key contain '$value'";    
+               } else if ($key=='open') {
+                   $filter_open=($value=="true"?true:false);
+//                   if ($value=="true")
+//                   $filter_open=true;
+//                   else $filter_open=false; 
+               } else {
+                    $condition[$key]=$value;
+               }
+          }  
+        }  
+        $resourceLibs= parent::queryPage(__CLASS__,$startPoint,$endPoint,$condition);
+        $result=array();
         //必须加载的一定是已加载，如果必须加载的参数没有设置，则不是必须加载。
-        foreach ($result as $key=>$value) {
-            if(!empty($result[$key][Library_Loader::SPEC_OPEN])){
-                $result[$key][Library_Loader::SPEC_OPEN]=(bool)$result[$key][Library_Loader::SPEC_OPEN];
+        foreach ($resourceLibs as $key=>$value) {
+            if(!empty($resourceLibs[$key][Library_Loader::SPEC_OPEN])){ 
+                 if ($resourceLibs[$key][Library_Loader::SPEC_OPEN]=="true"){
+                    $resourceLibs[$key][Library_Loader::SPEC_OPEN]=true;    
+                 }else{
+                    $resourceLibs[$key][Library_Loader::SPEC_OPEN]=false; 
+                 } 
             }
-            if (!array_key_exists(Library_Loader::SPEC_REQUIRED,$result[$key]))
+            if (!array_key_exists(Library_Loader::SPEC_REQUIRED,$resourceLibs[$key]))
             {
-                $result[$key][Library_Loader::SPEC_REQUIRED]=false;
+                $resourceLibs[$key][Library_Loader::SPEC_REQUIRED]=false;
             }else{
-                if ($result[$key][Library_Loader::SPEC_REQUIRED]=='true'){
-                    $result[$key][Library_Loader::SPEC_OPEN]=(bool)Library_Loader::OPEN_YES;
-                    $result[$key][Library_Loader::SPEC_REQUIRED]=true;
+                if ($resourceLibs[$key][Library_Loader::SPEC_REQUIRED]=='true'){                     
+                     if ($resourceLibs[$key][Library_Loader::SPEC_OPEN]=="true"){
+                        $resourceLibs[$key][Library_Loader::SPEC_OPEN]=true;    
+                     }else{
+                        $resourceLibs[$key][Library_Loader::SPEC_OPEN]=false; 
+                     }
+                    $resourceLibs[$key][Library_Loader::SPEC_REQUIRED]=true;                                               
                 }else{
-                    $result[$key][Library_Loader::SPEC_REQUIRED]=false;
-                }
-            }      
+                    $resourceLibs[$key][Library_Loader::SPEC_REQUIRED]=false;                     
+                }                  
+            }  
+            //过滤条件是否需要判断open字段
+            if (isset($filter_open)&&($filter_open!=$resourceLibs[$key][Library_Loader::SPEC_OPEN])){               
+            }else{
+                $result[]=$resourceLibs[$key]; 
+            }                     
         }
         return $result;
     }    

@@ -101,7 +101,7 @@ var resourceLibraryColumns =  new Ext.grid.ColumnModel([
     rm,           
     sm, 
     {header: "库名称", width: 100, sortable: true, dataIndex: 'name', editor: new Ext.form.TextField({})},
-    {header: "已加载", width: 150, sortable: true, dataIndex: 'open', xtype: 'checkcolumn',editor: {xtype:'checkbox'}},
+    {header: "已加载", width: 150, sortable: true, dataIndex: 'open', xtype: 'checkcolumn',editor:{xtype:'checkbox'}},
     {header: "初始化方法", width: 150, sortable: true, dataIndex: 'init', editor: new Ext.form.TextField({})},
     {header: "必须加载", width: 150, sortable: true, dataIndex: 'required', xtype: 'checkcolumn',editor:{xtype:'checkbox'}},
     {header:"操作" , width:150, id:'id',dataIndex: 'id', align:'center',renderer:renderOperation,sortable: false}
@@ -132,7 +132,7 @@ var resourceLibraryGrid = new Ext.grid.GridPanel({
     cm:resourceLibraryColumns,          
     trackMouseOver:true,
     loadMask:true,//{msg:'正在加载数据，请稍侯……'}
-    stripeRows:true,         
+    stripeRows:true,             
     tbar: [{
             ref: '../reverseSelectBtn',
             text: '反选',          
@@ -144,7 +144,7 @@ var resourceLibraryGrid = new Ext.grid.GridPanel({
             handler: onAdd
         }, '-', {
             ref: '../removeBtn',
-            text: '批量删除',
+            text: '删除',
             disabled: true,
             iconCls: 'silk-delete',
             handler: onDelete
@@ -162,7 +162,9 @@ var resourceLibraryGrid = new Ext.grid.GridPanel({
     }
 }); 
 
-
+/**
+* 反选选择
+*/
 function onReverseSelect() {
     for (var i = resourceLibraryGrid.getView().getRows().length - 1; i >= 0; i--) {
         if (sm.isSelected(i)) {
@@ -190,96 +192,94 @@ function onAdd(btn, ev) {
 /**
  * 删除
  */
-function onDelete() {
+function onDelete() {   
+    Ext.MessageBox.confirm('提示', '确实要删除所选的记录吗?',showResult);  
+}
+
+function showResult(btn) {  
 //        删除单条记录        
 //        var rec = resourceLibraryGrid.getSelectionModel().getSelected();
 //        if (!rec) {
 //            return false;
 //        }
-//        resourceLibraryGrid.store.remove(rec); 
-    Ext.MessageBox.confirm('提示', '确实要删除所选的记录吗?',showResult);  
-}
-
-function showResult(btn) {  
+//        resourceLibraryGrid.store.remove(rec);     
       //确定要删除你选定项的信息  
      if(btn=='yes')  
      {  
         var selectedRows  = resourceLibraryGrid.getSelectionModel().getSelections();        
         for(var i = 0; i<selectedRows.length; i++){    
+            if (!selectedRows[i]) {
+               continue;
+            }
             resourceLibraryGrid.store.remove(selectedRows[i]);
         }   
      } 
      resourceLibraryGrid.getView().refresh();//刷新整个grid视图,重新排序.
 };     
-
-function doSelectlibrary(){
-     searchForm.getForm().submit({
-        success:function(form, action) {//表单提交成功后,调用的函数.参数分为两个,一个是提交的表单对象,另一个是JSP返回的参数值对象
-            libraryStore.loadData(action.result.data);
-        },
-        failure: function(form, action) {
-            Ext.Msg.alert('提示', '失败');
-         }
-     });
-} 
     
 Ext.onReady(function() {
     Ext.QuickTips.init(); 
-    Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
-    Ext.Direct.addProvider(Ext.app.REMOTING_API);
-     
-    //resourceLibraryGrid.render('resourceLibrary-grid'),
-
-    // load the store
-    //store.load();
+    Ext.state.Manager.setProvider(new Ext.state.CookieProvider());                
+                                                               
+    // load the store        
     libraryStore.load({params:{start:0, limit:10}});
     
     resourceLibraryGrid.getSelectionModel().on('selectionchange', function(sm){
         resourceLibraryGrid.removeBtn.setDisabled(sm.getCount() < 1);
     });
           
-
+  /**
+ *  订单状态
+ */
+   openStore = new Ext.data.SimpleStore({
+        fields : ['value', 'text'],
+        data : [['true', '是'], ['false', '否']]
+    });
    searchForm = new Ext.form.FormPanel({
-        region:'north',     
-        labelAlign: 'left',          
+        region:'north',    
+        labelAlign: 'right',          
         labelWidth:75,  
         title:'高级查询',      
         frame:true,//True表示为面板的边框外框可自定义的，false表示为边框可1px的点线,这个属性很重要，不显式地设置为true时，FormPanel中的指定的items和buttons的背景色会不一致
         collapsible: true, 
         collapseMode: 'mini',     
         //collapsed:true,  
-        bodyStyle:'padding:5px 5px 0',
-        height:70,          
-//        buttons:[{text:"查询",handler:function(){doSelectlibrary();}}],  
-//        buttonAlign: 'right',            
-        api: {
-            // The server-side must mark the submit handler a-s a 'formHandler'
-            submit: SystemService.doLibrarySelect//表单数据提交，service.config.xml中要加'formHandler'=>true
-        },
+        bodyStyle:'padding:5px 5px 0',  
+        height:70,
         items: [{
             layout:'column',            
             items:[
-               {columnWidth:.25,layout:'form',items:[{fieldLabel: '库名称',anchor:'90%',xtype:'textfield',name: 'name'}]},                                                                                                           
+               {columnWidth:.25,layout:'form',items:[{fieldLabel: '库名称',anchor:'90%',xtype:'textfield',name:'name',id:'name'}]},                                                                                                           
                {columnWidth:.25,layout:'form',items:[{fieldLabel: '初始化方法',anchor:'90%',xtype:'textfield',name: 'init'}]},
-               {columnWidth:.25,layout:'form',items:[{fieldLabel: '是否已加载',anchor:'90%',xtype:'textfield',name: 'open'}]},
-               {columnWidth:.10,layout:'form',items:[{xtype:'button',id:'btn',text:'查询',width:80,
-                    style:'cursor:pointer;margin:0 0 0 10px',
-                    listeners:{
-                        render:function(){
-                            Ext.fly(this.el).on('click',function(){
-                                searchForm.getForm().submit({ 
-                                    success:function(form, action) {//表单提交成功后,调用的函数.参数分为两个,一个是提交的表单对象,另一个是JSP返回的参数值对象
-                                        libraryStore.loadData(action.result.data);
-                                    },
-                                    failure: function(form, action) {
-                                        Ext.Msg.alert('提示', '查询中出现故障，请通知系统管理员！');
-                                    }
-                                });
-                            });
-                        }
+               {columnWidth:.25,layout:'form',items:[{fieldLabel: '是否已加载',anchor:'90%',xtype:'combo',name: 'open',
+                    emptyText : '',mode : 'local',//数据模式，local代表本地数据                      
+                    store : openStore,
+                    hiddenName: 'open',
+                    //readOnly : true,//是否只读
+                    //allowBlank : false,//不允许为空  
+                    triggerAction : 'all',// 显示所有下列数据，一定要设置属性triggerAction为all
+                    valueField : 'value',//值
+                    displayField : 'text',//显示文本
+                    editable: false//是否允许输入                    
+                      
+               }]},
+               {columnWidth:.08,layout:'form',items:[{xtype:'button',id:'btn',text:'查询',width:80, 
+                    handler: function() {
+                        var params=searchForm.getForm().getValues();
+                        params.start=0;
+                        params.limit=10;  
+                        libraryStore.load({
+                          params:params   
+                        })
                     }
-                }]},
-               {columnWidth:.25}]                  
+                  }]
+               },
+               {columnWidth:.08,layout:'form',items:[{xtype:'button',id:'reset',text: '重置',width:80,
+                    handler: function(){searchForm.getForm().reset();}
+                  }]
+               },
+               {columnWidth:.09}
+            ]                  
         }]  
     });  
             
