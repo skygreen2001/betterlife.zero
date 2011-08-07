@@ -1,19 +1,3 @@
-/*
-Navicat MySQL Data Transfer
-
-Source Server         : wamp2
-Source Server Version : 50136
-Source Host           : localhost:3306
-Source Database       : betterlife
-
-Target Server Type    : MYSQL
-Target Server Version : 50136
-File Encoding         : 65001
-
-Date: 2011-05-27 10:46:52
-*/
-
-SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
 -- Table structure for `bb_core_blog`
 -- ----------------------------
@@ -258,7 +242,8 @@ CREATE TABLE `bb_user_user` (
 -- ----------------------------
 -- Records of bb_user_user
 -- ----------------------------
-INSERT INTO `bb_user_user` VALUES ('1', '1', 'skygreen2001', '52d90c6335ea43f89e452883df1f5649', '2010-11-04 17:27:52', '2011-05-26 14:40:35');
+
+INSERT INTO `bb_user_user` VALUES ('1', '0', 'admin', '21232f297a57a5a743894a0e4a801fc3', '2011-08-07 09:32:14', '2011-08-07 09:32:51');
 
 -- ----------------------------
 -- Table structure for `bb_user_userdetail`

@@ -10,6 +10,18 @@
  */
 interface IDbInfo {
     /**
+     * 检查 操作Db的 Php Extensions驱动 是否已打开.   
+     * @return TRUE/FALSE 是否已打开.  
+     */
+    public static function extension_is_available();      
+        
+    /**
+     * 在mysql数据库中执行SQL脚本   
+     * @return TRUE/FALSE 是否正常运行
+     */
+    public static function run_script($db_config);    
+    
+    /**
      * 获取数据库的版本信息
      * @return float
      */

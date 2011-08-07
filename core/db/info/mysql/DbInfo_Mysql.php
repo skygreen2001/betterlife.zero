@@ -19,6 +19,102 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo {
      * @var bool 
      */
     public static $isUseDbInfoDatabase=false;
+    
+    
+    /**
+     * 检查 操作Db的 Php Extensions驱动 是否已打开.   
+     * @return TRUE/FALSE 是否已打开. 
+     */
+    public static function extension_is_available() { return function_exists('mysql_connect'); }
+        
+    /**     
+     * 在mysql数据库中执行SQL脚本   
+     * @return TRUE/FALSE 是否正常运行
+     */
+    public static function run_script($db_config)
+    {
+        if (!self::extension_is_available())
+        {
+            LogMe::log('默认的PHP MySQL Extension没有打开.您需要打开对应的 php extensions');
+            return FALSE;
+        } 
+
+        // Decode url-encoded information in the db connection string.
+        $host    =$db_config["host"];
+        $user    =$db_config["user"];
+        
+        $password=$db_config["password"];
+        $dbname  =$db_config["dbname"];
+        $script_filename=$db_config["script_filename"];  
+        
+        // Allow for non-standard MySQL port.
+        if (isset($db_config["port"]) && !empty($db_config["port"]))
+        {
+            $host=$host . ':' . $db_config["port"];
+        }
+
+        // Test connecting to the database.
+        $connection=@mysql_connect($host, $user, $password, TRUE, 2);
+
+        if (!$connection)
+        {
+            LogMe::log(
+                '连接到 MySQL 数据库失败. MySQL报告错误信息: ' . mysql_error()
+                    . '.<ul><li>确认用户名和密码正确吗?</li><li>确认输入正确的数据库主机名?</li><li确认数据库服务器在运行?</li></ul>');
+            return FALSE;
+        }
+
+        // Test selecting the database.
+        if (!mysql_select_db($dbname))
+        {
+            if (mysql_query("CREATE DATABASE $dbname",$connection))
+            {
+                LogMe::log("指定数据库不存在，创建数据库$dbname成功！<br/>");                       
+                if (!mysql_select_db($dbname))
+                {                 
+                   LogMe::log("无法指定数据库，数据库报告错误信息: " . mysql_error());                       
+                   return FALSE;
+                }
+            }
+            else
+            {
+              LogMe::log("指定数据库不存在，创建数据库失败错误信息: " . mysql_error());
+              return FALSE;
+            }                                               
+        }     
+        $isSetcharset=mysql_set_charset(Config_C::CHARACTER_UTF8, $connection);    
+        if (!$isSetcharset){
+            $error=mysql_error();
+            LogMe::log('执行字符集操作命令发生错误脚本: ' . $v
+                                   . '.<br/> MySQL报告错误信息:' . $error."<br/>");                
+        }           
+        if (file_exists($script_filename)){
+            $query  =file($script_filename, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES|FILE_TEXT);
+            $query=implode("\n",$query);    
+            $query=str_replace("&nbsp;","--&nbsp--",$query);              
+            $query_e=explode(';', $query);
+
+            foreach ($query_e as $k => $v)
+            {                       
+                $v=str_replace("--&nbsp--","&nbsp;",$v);    
+                if (!empty($v)&&($v!="\r")){
+                    $result = mysql_query($v);                                                                                       
+                    if (!$result)
+                    {
+                        $error=mysql_error();
+                        LogMe::log('数据库服务器执行命令发生错误脚本: ' . $v
+                                       . '.<br/> MySQL报告错误信息:' . $error);
+                        return FALSE;
+                    }
+                }
+            }                 
+            LogMe::log("数据库操作成功，无异常！");   
+        }else{
+            LogMe::log('指定的脚本文件路径错误，请查看路径文件名: '. $script_filename); 
+        }                                                                      
+    }    
+    
+    
     /**
      * 连接数据库
      * @param string $host
