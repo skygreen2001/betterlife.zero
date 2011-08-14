@@ -79,5 +79,26 @@ class Blog extends DataObject {
     public function getCommitTimeShow(){
         return date("Y-m-d H:i",strtotime($this->commitTime)); 
     }
+    /**
+    * 当前登录用户是否可编辑该博客
+    * @return bool true 可以
+    */
+    public function canEdit(){
+        if (HttpSession::get("userid")==$this->userId) {
+            return true;
+        }       
+        return false;
+    }
+    
+    /**
+    * 当前登录用户是否可删除该博客
+    * @return bool true 可以
+    */
+    public function canDelete(){
+        if (HttpSession::get("userid")==$this->userId) {
+            return true;
+        }       
+        return false;
+    }
 }
 ?>

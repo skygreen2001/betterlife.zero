@@ -37,7 +37,8 @@ class Action_Blog extends Action
     {
         $this->loadCss();   
         $this->loadJs();           
-        UtilJavascript::loadJsReady($this->view->viewObject, "common/js/htmleditor/kindeditor/kindeditor.js"); 
+        //UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/kindeditor.js");                                                                                                 
+        UtilXheditor::loadReady("comment","commentForm",$this->view->viewObject);        
         $postid= $this->data["id"];                      
         if (count($_POST)>0) {
             $comment = $this->model->Comment;
@@ -60,7 +61,9 @@ class Action_Blog extends Action
     { 
         $this->loadCss();
         $this->loadJs();
-        UtilJavascript::loadJsReady($this->view->viewObject, "common/js/htmleditor/kindeditor/kindeditor.js");
+        //UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/kindeditor.js");                   
+        UtilXheditor::loadReady("content","postForm",$this->view->viewObject);
+
         $this->view->color="green";  
         if (!empty($_POST)) {
             $post = $this->model->Blog;     

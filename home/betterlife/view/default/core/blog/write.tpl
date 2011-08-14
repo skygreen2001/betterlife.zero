@@ -14,8 +14,8 @@
 *}
 {extends file="$templateDir/layout/normal/layout.tpl"}
 {block name=body}
-    <script>showHtmlEditor("postForm","content");</script>
-    <div>
+    <script>//showHtmlEditor("postForm","content");//KindEditor 加载语句</script>
+    <div class="contentBox">
         <b><a href="{$url_base}index.php?go=betterlife.auth.logout">退出</a></b><br/>
         <a href="{$url_base}index.php?go=betterlife.blog.display&pageNo={$smarty.get.pageNo|default:"1"}">博客列表</a>
         <br/><font color="{$color}">{$message|nl2br|default:''}</font><br/>

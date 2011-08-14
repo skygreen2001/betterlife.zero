@@ -25,7 +25,10 @@
         {if $posts}
         {foreach item=post from=$posts}         
         <div id='post{$post.id}' class="post"> 
-            <b><a href='{$url_base}index.php?go=betterlife.blog.post&id={$post.id}&pageNo={$smarty.get.pageNo|default:"1"}'>{$post.name}</a>[<a href="{$url_base}index.php?go=betterlife.blog.write&id={$post.id}&pageNo={$smarty.get.pageNo|default:"1"}">改</a>][<a href="{$url_base}index.php?go=betterlife.blog.delete&id={$post.id}&pageNo={$smarty.get.pageNo|default:"1"}">删</a>]</b><br/>
+            <b><a href='{$url_base}index.php?go=betterlife.blog.post&id={$post.id}&pageNo={$smarty.get.pageNo|default:"1"}'>{$post.name}</a>
+            {if $post.canEdit}[<a href="{$url_base}index.php?go=betterlife.blog.write&id={$post.id}&pageNo={$smarty.get.pageNo|default:"1"}">改</a>]{/if}
+            {if $post.canDelete}[<a href="{$url_base}index.php?go=betterlife.blog.delete&id={$post.id}&pageNo={$smarty.get.pageNo|default:"1"}">删</a>]{/if}
+            </b><br/>
             {$post.content|nl2br}<br/><br/>
             由 {$post.user.name} 在 {$post.commitTimeShow} 发表<br/>
             评论数:{$viewObject->count_comments($post.id)}<br/>

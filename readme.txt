@@ -60,10 +60,12 @@ View:
 mod_rewrite：控制网站导航转向。
     http://httpd.apache.org/docs/2.0/mod/mod_rewrite.html
 
-HtmlEditor:
+Online HtmlEditor:
 22个Web在线编辑器:http://paranimage.com/22-online-web-editor/
 TinyMce:http://tinymce.moxiecode.com/
 KindEditor:http://www.kindsoft.net/index.php
+xhEditor:http://xheditor.com/
+CKEditer+CKFinder:http://ckeditor.com/
 YuiEditor:http://developer.yahoo.com/yui/editor/
 
 校验 Html和Css是否符合规范

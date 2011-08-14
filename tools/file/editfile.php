@@ -7,7 +7,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>编辑源代码</title>   
-    <script language="Javascript" type="text/javascript" src="<?php echo $urlbase; ?>/common/js/edit_area/edit_area_full.js"></script>
+    <script language="Javascript" type="text/javascript" src="<?php echo $urlbase; ?>/common/js/onlineditor/edit_area/edit_area_full.js"></script>
     <script language="Javascript" type="text/javascript">
         // initialisation
         editAreaLoader.init({

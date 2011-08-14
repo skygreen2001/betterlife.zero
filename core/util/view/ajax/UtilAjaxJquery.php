@@ -10,13 +10,24 @@
 class UtilAjaxJquery extends UtilAjax implements IUtilAjax
 {
     /**
+     * 动态预加载Jquery:Ajax Javascript Framework库
+     * @link http://jquery.com/
+     * @link https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js
+     * @param ViewObject $viewObject 表示层显示对象,只在Web框架中使用,一般结合loadJsReady使用
+     * @param string $version javascript框架的版本号                                          
+     */    
+    public static function loadReady($viewObject=null,$version="1.6.1"){
+        self::load($version,$viewObject);            
+    }                                    
+    
+    /**
      * 动态加载Jquery:Ajax Javascript Framework库
      * @link http://jquery.com/
      * @link https://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js
      * @param string $version javascript框架的版本号
      * @param ViewObject $viewObject 表示层显示对象,只在Web框架中使用,一般结合loadJsReady使用
      */
-    public static function load($version="",$viewObject=null)
+    public static function load($version="1.6.1",$viewObject=null)
     {     
         if (self::$IsGoogleApi){
             if ($viewObject)

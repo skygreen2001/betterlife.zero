@@ -22,6 +22,10 @@
         }else if (strpos($method,"get")!==false) {
             $property=substr($method,strlen("get"),strlen($method));
             $property{0}=strtolower($property{0});
+            if (method_exists($this,$property)){
+                $method= $property;
+                return $dataobject->$method();
+            }
         //            $property=lcfirst(substr($method,strlen("get"),strlen($method)));
             return $dataobject->{$property};
         }else {
@@ -55,7 +59,11 @@
                 return $relationData;
             }else {
                 if (!property_exists($dataobject,$property)) {
-                    return @$dataobject->{$property};
+                    if (method_exists($dataobject,$property)){
+                        return  $dataobject->$property();
+                    }else{
+                        return @$dataobject->{$property};
+                    }
                 }
             }
         }

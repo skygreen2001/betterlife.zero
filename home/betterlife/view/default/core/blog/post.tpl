@@ -25,7 +25,7 @@
 
 {extends file="$templateDir/layout/normal/layout.tpl"}
 {block name=body} 
-    <script>showHtmlEditor("commentForm","comment");</script>    
+    <script>//showHtmlEditor("commentForm","comment");</script>    
     <div id="content">
         <a href='{$url_base}?go=betterlife.auth.logout'><b>退出</b></a><br/>
         <a href='{$url_base}?go=betterlife.blog.display&pageNo={$smarty.get.pageNo|default:"1"}'><b>博客列表</b></a>
@@ -41,6 +41,7 @@
             </blockquote>
         </div>        
         {/foreach}
+        {if !$post.canEdit}
         <div>
             <font color="{$color|default:'white'}">{$message|default:""}</font><br/>
             <h2>提交新评论</h2>                      
@@ -49,6 +50,7 @@
                 <textarea name="comment" id="comment" style="width:700px;height:300px;visibility:hidden;"></textarea><br/>
                 <input type="submit" />
             </form>   
-        </div>  
+        </div> 
+        {/if} 
     </div>
 {/block}
