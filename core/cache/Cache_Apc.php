@@ -14,11 +14,17 @@ class Cache_Apc extends Cache_Base{
     public static $name = 'Alternative PHP Cache (APC)';
     public static $desc = 'The Alternative PHP Cache (APC) is a free and open opcode cache for PHP. It was conceived of to provide a free, open, and robust framework for caching and optimizing PHP intermediate code.';
 
-    public function store($key,&$value){
+
+    public function Cache_Apc($host="127.0.0.1",$port="11211"){   
+    
+      
+    }
+    
+    public function save($key,&$value){
         return apc_store($key,$value,0);
     }
 
-    public function fetch($key,&$data){
+    public function get($key,&$data){
         $data = apc_fetch($key);
         return $data!==false;
     }

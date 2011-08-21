@@ -11,37 +11,79 @@
  * @package core.cache
  * @author skygreen
  */
-class Cache_Memcache extends Cache_Base{
-    /**
-     * memcache服务器ip
-     * @var string 
-     */
-    public static $host="127.0.0.1";
-    /**
-     * memcache服务器端口
-     */
-    public static $port="11211";
+class Cache_Memcache extends Cache_Base{   
     public static $name='Memcache';
     public static $desc='Memcache module provides handy procedural and object oriented interface to memcached, highly effective caching daemon, which was especially designed to decrease database load in dynamic web applications.';
 
-    public function cache_memcache(){
+    /**
+    * 测试体验MemCache
+    */
+    public static function TestRun(){
+        $mem = new Cache_Memcache;                           
+        $value="Hello World";
+        //$mem->save("key", $value);        
+        $mem->update("key", "I'm a newbie!");                 
+        $val = $mem->get("key");            
+        echo $val;        
+        $mem->update("key", array("Home"=>$value,"Guest"=>"I'm a newbie!"));             
+        $val = $mem->get("key");         
+        print_r($val);  
+        $mem->delete("key");            
+        $val = $mem->get("key");         
+        echo $val;
+    }
+    
+    public function Cache_Memcache($host="127.0.0.1",$port="11211"){         
         if(!class_exists('Memcache')){
-            trigger_error('Missing php_memcache module',E_USER_ERROR);
+            LogMe::log('请检查是否启动了Php Extensions:php_memcache',EnumLogLevel::ERR);
         }
         $this->obj = new Memcache;
-        if(!$this->obj->connect(self::$host, self::$port)){
-            trigger_error('Can\'t connect memcached server',E_USER_ERROR);
+        if(!$this->obj->connect($host, $port)){
+            LogMe::log('不能连接上memcached服务器;Host:'.self::$host.",Port:".self::$port,EnumLogLevel::ERR);
         }
+        
+        //$version = $this->obj->getVersion();
+        //echo "Server's version: ".$version."<br/>\n";    
         parent::cachemgr();
     }
-
-    public function store($key,&$value){
+    
+    /**
+    * 在缓存里保存指定$key的数据
+    * @param mixed $key
+    * @param string|array $value
+    * @return bool
+    */
+    public function save($key,$value){
         return $this->obj->set($key,$value);
     }
 
-    public function fetch($key,&$data){
+    /**
+    * 在缓存里更新指定$key的数据
+    * @param mixed $key
+    * @param string|array $value
+    * @return bool
+    */    
+    public function update($key,$value){
+        $valueByKey= $this->get($key);
+        if (empty($valueByKey)){
+            return $this->save($key,$value);
+        }
+        //替换数据
+        return $this->obj->replace($key, $value, 0, 60);
+    }
+    
+   /**
+    * 在缓存里删除指定$key的数据
+    * @param mixed $key           
+    * @return bool
+    */    
+    public function delete($key){    
+        $this->obj->delete($key);                            
+    }
+    
+    public function get($key){
         $data = $this->obj->get($key);
-        return $data!==false;
+        return $data;
     }
 
     public function clear(){
