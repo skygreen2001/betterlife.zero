@@ -51,11 +51,19 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal {
      */
     private function executeSQL() {
         try {
+            if (Config_Db::$debug_show_sql){
+                echo "SQL:".$this->sQuery."<br />";
+                if (!empty($this->saParams)) { 
+                    echo "SQL PARAM:";
+                    print_r($this->saParams);
+                    echo "<br />";
+                }
+            }
             if (!empty($this->saParams)) {
                 $this->sQuery=self::preparse_prepared($this->sQuery, $this->saParams);
             }
 
-            $this->stmt  =$this->connection->prepare($this->sQuery);
+            $this->stmt  =$this->connection->prepare($this->sQuery);       
             Exception_Mysqli::record();
             /*****************************************************************************
              * START:执行预编译生成SQL语句
@@ -90,8 +98,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal {
             Exception_Mysqli::record($ex->getTraceAsString());
         }
     }
-
-
+              
     /**
      *  直接执行SQL语句
      * @param mixed $sql SQL查询|更新|删除语句
@@ -103,7 +110,10 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal {
     public function sqlExecute($sqlstring,$object=null) {
         $result=null;
         try {
-            $this->stmt=$this->connection->prepare($sqlstring);  
+            if (Config_Db::$debug_show_sql){
+                echo "SQL:".$sqlstring."<br />";
+            }
+            $this->stmt=$this->connection->prepare($sqlstring);     
             Exception_Mysqli::record();
             if ($this->stmt){
                 $this->stmt->execute();
@@ -153,7 +163,10 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal {
             $this->saParams=$_SQL->parseValidInputParam($filter);
             $_SQL->isPreparedStatement=false;
             $this->sQuery=$_SQL->select(Crud_Sql_Select::SQL_COUNT)->from($this->classname)->where($this->saParams)->result();
-            $object_arr=$this->connection->query($this->sQuery);
+            if (Config_Db::$debug_show_sql){
+                echo "SQL:".$this->sQuery."<br />";
+            }
+            $object_arr=$this->connection->query($this->sQuery);   
             $row = $object_arr->fetch_row();
             $result=$row[0];
             return $result;
@@ -407,6 +420,9 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal {
                 $_SQL=new Crud_Sql_Delete();
                 $where=$this->sql_id($object).self::EQUAL.$id;
                 $this->sQuery=$_SQL->deletefrom($this->classname)->where($where)->result();
+                if (Config_Db::$debug_show_sql){
+                    echo "SQL:".$this->sQuery."<br />";
+                }                
                 $this->stmt=mysqli_prepare($this->connection,$this->sQuery);
                 $this->stmt->execute ();
                 $this->stmt->free_result ();

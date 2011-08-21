@@ -41,6 +41,9 @@ class Dao_Sqlite2 extends Dao implements IDaoNormal {
      * 无法防止SQL注入黑客技术
      */
     private function executeSQL() {
+        if (Config_Db::$debug_show_sql){
+            echo "SQL:".$this->sQuery."<br />";  
+        }             
         $this->stmt=sqlite_query($this->sQuery,$this->connection);
     }
 
@@ -85,6 +88,9 @@ class Dao_Sqlite2 extends Dao implements IDaoNormal {
             $this->saParams=UtilObject::object_to_array($object);
             $this->filterViewProperties($this->saParams);
             $this->sQuery=$_SQL->insert($this->classname)->values($this->saParams)->result();
+            if (Config_Db::$debug_show_sql){
+                echo "SQL:".$this->sQuery."<br />";  
+            }                         
             $result = sqlite_exec($this->connection,  $this->sQuery, $error);
             if (!$result) {
                 Exception_Db.log($error);
@@ -117,6 +123,9 @@ class Dao_Sqlite2 extends Dao implements IDaoNormal {
                 $_SQL=new Crud_Sql_Delete();
                 $where=$this->sql_id($object).self::EQUAL.$id;
                 $this->sQuery=$_SQL->deletefrom($this->classname)->where($where)->result();
+                if (Config_Db::$debug_show_sql){
+                    echo "SQL:".$this->sQuery."<br />";  
+                }                             
                 $result = sqlite_exec($this->connection,  $this->sQuery, $error);
                 if (!$result) {
                     Exception_Db.log($error);
@@ -151,6 +160,9 @@ class Dao_Sqlite2 extends Dao implements IDaoNormal {
                 $this->filterViewProperties($this->saParams);
                 $where=$this->sql_id($object).self::EQUAL.$id;
                 $this->sQuery=$_SQL->update($this->classname)->set($this->saParams)->where($where)->result();
+                if (Config_Db::$debug_show_sql){
+                    echo "SQL:".$this->sQuery."<br />";  
+                }                             
                 $result = sqlite_exec($this->connection,  $this->sQuery, $error);
                 if (!$result) {
                     Exception_Db.log($error);
@@ -291,6 +303,9 @@ class Dao_Sqlite2 extends Dao implements IDaoNormal {
         $result=null;
         try {
             $this->sQuery=$sqlstring;
+            if (Config_Db::$debug_show_sql){
+                echo "SQL:".$this->sQuery."<br />";  
+            }                         
             $this->executeSQL();
 
             $parts = split(" ",trim($sqlstring));

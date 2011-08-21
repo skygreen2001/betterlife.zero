@@ -50,7 +50,10 @@ class Dao_Php5 extends Dao implements IDaoNormal {
      * 执行预编译SQL语句
      * 无法防止SQL注入黑客技术
      */
-    private function executeSQL() {
+    private function executeSQL() { 
+        if (Config_Db::$debug_show_sql){
+            echo "SQL:".$this->sQuery."<br />"; 
+        }
         $this->result=mysql_query($this->sQuery,$this->connection);
         if (!$this->result) {
             Exception_Db::log(Wl::ERROR_INFO_DB_HANDLE);
@@ -104,6 +107,9 @@ class Dao_Php5 extends Dao implements IDaoNormal {
             $value=$this->escape($value);
         }
         $this->sQuery=$_SQL->insert($this->classname)->values($this->saParams)->result();
+        if (Config_Db::$debug_show_sql){
+            echo "SQL:".$this->sQuery."<br />"; 
+        }
         $result=mysql_query($this->sQuery);
         if ($result) {
             $autoid=@mysql_insert_id($this->connection);            
@@ -133,6 +139,9 @@ class Dao_Php5 extends Dao implements IDaoNormal {
                 $where=$this->sql_id($object).self::EQUAL.$id;
                 $this->sQuery=$_SQL->deletefrom($this->classname)->where($where)->result();
                 $this->sQuery=$this->escape($this->sQuery);
+                if (Config_Db::$debug_show_sql){
+                    echo "SQL:".$this->sQuery."<br />"; 
+                }                
                 $result=mysql_query($this->sQuery);
                 return $result;
             } catch (Exception $exc) {
@@ -167,6 +176,9 @@ class Dao_Php5 extends Dao implements IDaoNormal {
                     $value=$this->escape($value);
                 }
                 $this->sQuery=$_SQL->update($this->classname)->set($this->saParams)->where($where)->result();
+                if (Config_Db::$debug_show_sql){
+                    echo "SQL:".$this->sQuery."<br />"; 
+                }                
                 $result=mysql_query($this->sQuery);
                 return $result;
             } catch (Exception $exc) {
@@ -214,6 +226,9 @@ class Dao_Php5 extends Dao implements IDaoNormal {
             $_SQL->isPreparedStatement=false;    
             $this->sQuery=$_SQL->select()->from($this->classname)->where($this->saParams)->order($sort)->limit($limit)->result();
             $this->sQuery=$this->escape($this->sQuery);
+            if (Config_Db::$debug_show_sql){
+                echo "SQL:".$this->sQuery."<br />"; 
+            }            
             $this->result=mysql_query($this->sQuery,$this->connection);
             $result=$this->getResultToObjects($object);
             return $result;
@@ -343,6 +358,9 @@ class Dao_Php5 extends Dao implements IDaoNormal {
             $this->saParams=$_SQL->parseValidInputParam($filter);
             $_SQL->isPreparedStatement=false;
             $this->sQuery=$_SQL->select(Crud_Sql_Select::SQL_COUNT)->from($this->classname)->where($this->saParams)->result();
+            if (Config_Db::$debug_show_sql){
+                echo "SQL:".$this->sQuery."<br />"; 
+            }            
             $object_arr=mysql_query($this->sQuery);
             $row = mysql_fetch_row($object_arr);
             $result=$row[0];

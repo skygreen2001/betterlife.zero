@@ -206,6 +206,12 @@ class Config_Db extends ConfigBB
      */
     public static $dbname="betterlife";
     /**
+    * 协助调试：打印SQL语句
+    * @var bool
+    * @static
+    */
+    public static $debug_show_sql=true;
+    /**
      +--------------------------------------------------<br/>
      * 目前调试通过  该参数对Config_Db::$engine<br/>
      *     *ENGINE_DAL_ADODB<br/>

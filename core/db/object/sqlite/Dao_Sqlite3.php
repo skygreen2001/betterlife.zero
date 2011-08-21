@@ -35,6 +35,14 @@ class Dao_Sqlite3 extends Dao implements IDaoNormal {
     private function executeSQL() {
         $result=null;
         try {
+            if (Config_Db::$debug_show_sql){
+                echo "SQL:".$this->sQuery."<br />"; 
+                if (!empty($this->saParams)) { 
+                    echo "SQL PARAM:";
+                    print_r($this->saParams);
+                    echo "<br />";
+                }                 
+            }                         
             $this->stmt=$this->connection->prepare($this->sQuery);
             $i = 0;
             if (count($this->saParams)>0) {
@@ -94,7 +102,10 @@ class Dao_Sqlite3 extends Dao implements IDaoNormal {
             $object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::STRING));
             $this->saParams=UtilObject::object_to_array($object);
             $this->filterViewProperties($this->saParams);
-            $this->sQuery=$_SQL->insert($this->classname)->values($this->saParams)->result();
+            $this->sQuery=$_SQL->insert($this->classname)->values($this->saParams)->result();    
+            if (Config_Db::$debug_show_sql){
+                echo "SQL:".$this->sQuery."<br />";
+            }                      
             $this->connection->exec($this->sQuery);
             $autoId=$this->connection->lastInsertRowID();
         } catch (Exception $exc) {
@@ -123,7 +134,10 @@ class Dao_Sqlite3 extends Dao implements IDaoNormal {
             try {
                 $_SQL=new Crud_Sql_Delete();
                 $where=$this->sql_id($object).self::EQUAL.$id;
-                $this->sQuery=$_SQL->deletefrom($this->classname)->where($where)->result();
+                $this->sQuery=$_SQL->deletefrom($this->classname)->where($where)->result();     
+                if (Config_Db::$debug_show_sql){
+                    echo "SQL:".$this->sQuery."<br />";
+                }                    
                 $this->connection->exec($this->sQuery);
                 $result = true;
             } catch (Exception $exc) {
@@ -341,6 +355,10 @@ class Dao_Sqlite3 extends Dao implements IDaoNormal {
             $this->saParams=$_SQL->parseValidInputParam($filter);
             $_SQL->isPreparedStatement=false;
             $this->sQuery=$_SQL->select(Crud_Sql_Select::SQL_COUNT)->from($this->classname)->where($this->saParams)->result();
+
+            if (Config_Db::$debug_show_sql){
+                echo "SQL:".$this->sQuery."<br />";
+            }            
             $result=$this->connection->querySingle($this->sQuery);
             return $result;
         } catch (Exception $exc) {

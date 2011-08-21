@@ -86,6 +86,9 @@ class Dao_Odbc extends Dao implements IDaoNormal {
             }
             $this->sQuery=$_SQL->insert($this->classname)->values($this->saParams)->result();
             $_SQL->isPreparedStatement=true;
+            if (Config_Db::$debug_show_sql){
+                echo "SQL:".$this->sQuery."<br />"; 
+            }            
             $this->stmt = odbc_prepare($this->connection, $this->sQuery);
             $success = odbc_execute($this->stmt, array_values($this->saParams));
             if (!$success) {
@@ -97,7 +100,10 @@ class Dao_Odbc extends Dao implements IDaoNormal {
             $sql_maxid=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sql_maxid);
             
             $tablename =Config_Odbc::orm($this->classname);
-            $autoIdSql=Crud_SQL::SQL_SELECT.$sql_maxid.Crud_SQL::SQL_FROM.$tablename;             
+            $autoIdSql=Crud_SQL::SQL_SELECT.$sql_maxid.Crud_SQL::SQL_FROM.$tablename;
+            if (Config_Db::$debug_show_sql){
+                echo "SQL:".$autoIdSql."<br />"; 
+            }                         
             $this->stmt = odbc_exec($this->connection,$autoIdSql);
             $autoId=odbc_result($this->stmt,1);
         } catch (Exception $exc) {
@@ -126,6 +132,9 @@ class Dao_Odbc extends Dao implements IDaoNormal {
                 $_SQL=new Crud_Sql_Delete();
                 $where=$this->sql_id($object).self::EQUAL.$id;
                 $this->sQuery=$_SQL->deletefrom($this->classname)->where($where)->result();
+                if (Config_Db::$debug_show_sql){
+                    echo "SQL:".$this->sQuery."<br />"; 
+                }                    
                 odbc_exec($this->connection,$this->sQuery);
                 $result=true;
             } catch (Exception $exc) {
@@ -163,6 +172,9 @@ class Dao_Odbc extends Dao implements IDaoNormal {
                 $this->filterViewProperties($this->saParams);
                 $where=$this->sql_id($object).self::EQUAL.$id;
                 $this->sQuery=$_SQL->update($this->classname)->set($this->saParams)->where($where)->result();
+                if (Config_Db::$debug_show_sql){
+                    echo "SQL:".$this->sQuery."<br />"; 
+                }                    
                 odbc_exec($this->connection,$this->sQuery);
                 $result=true;
             } catch (Exception $exc) {
@@ -248,6 +260,9 @@ class Dao_Odbc extends Dao implements IDaoNormal {
             $this->saParams=$_SQL->parseValidInputParam($filter);
             $_SQL->isPreparedStatement=false;            
             $this->sQuery=$_SQL->select()->from($this->classname)->where($this->saParams)->order($sort)->limit($limit)->result();
+            if (Config_Db::$debug_show_sql){
+                echo "SQL:".$this->sQuery."<br />"; 
+            }                
             $this->stmt = odbc_exec($this->connection,$this->sQuery);
             $result=$this->getResultToObjects($object);
             return $result;
@@ -283,6 +298,9 @@ class Dao_Odbc extends Dao implements IDaoNormal {
             $realIdName=$this->sql_id($object);
             $sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);
             $this->sQuery=$_SQL->select()->from($this->classname)->where($this->saParams)->order($sort)->result();
+            if (Config_Db::$debug_show_sql){
+                echo "SQL:".$this->sQuery."<br />"; 
+            }                
             $this->stmt = odbc_exec($this->connection,$this->sQuery);
             $result=$this->getResultToObjects($object);
             if (count($result)>=1) {
@@ -312,6 +330,9 @@ class Dao_Odbc extends Dao implements IDaoNormal {
                 $where=$this->sql_id($object).self::EQUAL.$id;
                 $this->saParams=null;
                 $this->sQuery=$_SQL->select()->from($this->classname)->where($where)->result();
+                if (Config_Db::$debug_show_sql){
+                    echo "SQL:".$this->sQuery."<br />"; 
+                }                    
                 $this->stmt = odbc_exec($this->connection,$this->sQuery);
                 $result=$this->getResultToObjects($object);
                 if (count($result)==1) {
@@ -338,7 +359,10 @@ class Dao_Odbc extends Dao implements IDaoNormal {
               if (UtilString::is_utf8($sqlstring)) { 
                  $sqlstring=UtilString::utf82gbk($sqlstring); 
               }   
-            }
+            }               
+            if (Config_Db::$debug_show_sql){
+                echo "SQL:".$sqlstring."<br />"; 
+            }                
             $this->stmt = odbc_exec($this->connection,$sqlstring);
             $parts = split(" ",trim($sqlstring));
             $type = strtolower($parts[0]);
@@ -351,7 +375,11 @@ class Dao_Odbc extends Dao implements IDaoNormal {
                     $realIdName=DataObjectSpec::getRealIDColumnName($object);
                     $sql_maxid=Crud_SQL::SQL_MAXID;
                     $sql_maxid=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sql_maxid);
-                    $this->stmt = odbc_exec($this->connection,Crud_SQL::SQL_SELECT.$sql_maxid.Crud_SQL::SQL_FROM.$tablename);
+                    $autoSql= Crud_SQL::SQL_SELECT.$sql_maxid.Crud_SQL::SQL_FROM.$tablename;
+                    if (Config_Db::$debug_show_sql){
+                        echo "SQL:".$autoSql."<br />"; 
+                    }                            
+                    $this->stmt = odbc_exec($this->connection,$autoSql);
                     $autoId=odbc_result($this->stmt,1);
                 }else{
                     $autoId=-1;
@@ -388,6 +416,9 @@ class Dao_Odbc extends Dao implements IDaoNormal {
             $this->saParams=$_SQL->parseValidInputParam($filter);
             $_SQL->isPreparedStatement=false;
             $this->sQuery=$_SQL->select(Crud_Sql_Select::SQL_COUNT)->from($this->classname)->where($this->saParams)->result();
+            if (Config_Db::$debug_show_sql){
+                echo "SQL:".$this->sQuery."<br />"; 
+            }                    
             $this->stmt = odbc_exec($this->connection,$this->sQuery);
             $result = odbc_result($this->stmt,1);
             if (empty($result)){
