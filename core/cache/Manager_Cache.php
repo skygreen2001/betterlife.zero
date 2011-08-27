@@ -58,7 +58,7 @@ class Manager_Cache{
     * @param mixed $cache_drive 处理缓存的方式的类型,默认采用Memcache
     * @return Cache_Memcache
     */
-    public function server1($cache_drive=EnumCacheDriverType::MEMCACHE){
+    public function server1($cache_drive=EnumCacheDriverType::MEMCACHE,$host="127.0.0.1",$port="11211"){
         if (self::$server1==null) {
             self::$server1=$this->serverCache($cache_drive);
         }
@@ -70,7 +70,7 @@ class Manager_Cache{
     * @param mixed $cache_drive 处理缓存的方式的类型,默认采用Memcache
     * @return Cache_Memcache
     */
-    public function server2($cache_drive=EnumCacheDriverType::MEMCACHE){
+    public function server2($cache_drive=EnumCacheDriverType::MEMCACHE,$host="127.0.0.1",$port="11211"){
         if (self::$server2==null) {
             self::$server2=$this->serverCache($cache_drive,"127.0.0.1","11211");
         }

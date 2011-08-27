@@ -1,9 +1,8 @@
 <?php
 require_once ("init.php");
-
-//Cache_Memcache::TestRun();
-$serverCache=Manager_Cache::newInstance()->server1();
-$serverCache->TestRun();
+                                  
+//$serverCache=Manager_Cache::newInstance()->server1();
+//$serverCache->TestRun();
 
 //print_r(SystemService::doLibrarySelect(array("name"=>"m")));                                             
 //LogMe::log("我在想事情呢！等等我");       
