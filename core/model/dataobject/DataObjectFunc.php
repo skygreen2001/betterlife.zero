@@ -263,7 +263,7 @@
             $sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);  
         }                               
         $sQuery=$_SQL->select($columns)->from($tablename)->where($filter)->order($sort)->limit($limit)->result();    
-        return DataObject::dao()->sqlExecute($sQuery,$classname);
+        return DataObject::dao()->sqlExecute($sQuery);//,$classname
     }
     
     /**

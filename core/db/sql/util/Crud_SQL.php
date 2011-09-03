@@ -20,7 +20,9 @@ abstract class Crud_SQL {
     const SQL_SET=" set ";
     const SQL_DELETE="delete ";
     const SQL_FROM=" from ";
-    const SQL_WHERE=" where ";
+    const SQL_WHERE=" where ";      
+    const SQL_GROUPBY=" group by ";
+    const SQL_HAVING=" having ";   
     const SQL_AND=" and ";
     const SQL_LIKE=" like ";
     const SQL_OR=" or ";

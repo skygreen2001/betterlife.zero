@@ -16,9 +16,19 @@ class Crud_Sql_Select extends Crud_SQL {
     */
     private $selectables = array();
     /**
+     * SQL join 子语句
      * @var array 关联表名 
      */
     private $join;
+    /**
+    * SQL group by 子语句
+    * @var mixed
+    */
+    private $groupby;
+    /**
+    * SQL having 子语句
+    */
+    private $having;
     /**
      * @var string 排序字段 
      */
@@ -85,6 +95,24 @@ class Crud_Sql_Select extends Crud_SQL {
         return $this;
     }
 
+    /**
+    * 创建 groupby 子语句
+    * @param string $groupby
+    */
+    public function groupby($groupby)
+    {
+        $this->groupby = $groupby;  
+    }
+     
+    /**
+    * 创建 having 子语句
+    * @param string $having
+    */
+    public function having($having)
+    {
+        $this->having = $having;  
+    }
+    
     /**
      * 根据$order排序<br/>
      * 默认为倒序<br/>
@@ -156,10 +184,14 @@ class Crud_Sql_Select extends Crud_SQL {
             $selectClause="*";
         }
         $this->query = self::SQL_SELECT.$selectClause.self::SQL_FROM.$this->tableName;
-        if (!empty($this->whereClause))
-            $this->query.= self::SQL_WHERE.$this->whereClause;
         if (!empty($this->join))
             $this->query.= $this->join;
+        if (!empty($this->whereClause))
+            $this->query.= self::SQL_WHERE.$this->whereClause;
+        if (!empty($this->groupby))
+            $this->query.= self::SQL_GROUPBY.$this->groupby;
+        if (!empty($this->having))
+            $this->query.= self::SQL_HAVING.$this->having;   
         if (!empty($this->order))
             $this->query.= self::SQL_ORDERBY.$this->order;
         if (!empty($this->limit))
