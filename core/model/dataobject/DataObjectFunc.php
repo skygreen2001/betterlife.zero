@@ -173,9 +173,8 @@
             $result.="</pre>";
             return $result;
         }          
-    }
-    
-
+    }           
+                                                                                    
     /**
      * 将数据对象转换成Json类型格式
      * @param string $dataobject 当前数据对象
@@ -194,7 +193,9 @@
        }
        return json_encode($object_arr);
     }    
+    //</editor-fold>     
           
+    //<editor-fold defaultstate="collapsed" desc="数据持久化：数据库的CRUD操作">
     /**  
      * 对应数据对象的updateProperties方法
      * @param string classname 数据对象类名  
@@ -228,6 +229,41 @@
         
         $sQuery=$_SQL->update($tablename)->set($array_properties)->where($sql_id)->result();
         return DataObject::dao()->sqlExecute($sQuery);
+    }                     
+    
+   /**
+    * 查询当前对象需显示属性的列表  
+    * @param string classname 数据对象类名  
+    * @param string 指定的显示属性，同SQL语句中的Select部分。 
+    * 示例如下：<br/>
+    *     id,name,commitTime                                                               
+    * @param mixed $filter 查询条件，在where后的条件<br/>
+    * 示例如下：<br/>
+    *      0."id=1,name='sky'"<br/>
+    *      1.array("id=1","name='sky'")<br/>
+    *      2.array("id"=>"1","name"=>"sky")<br/>
+    *      3.允许对象如new User(id="1",name="green");<br/>
+    * 默认:SQL Where条件子语句。如："(id=1 and name='sky') or (name like 'sky')"<br/>
+    * @param string $sort 排序条件<br/>
+    * 示例如下：<br/>
+    *      1.id asc;<br/>
+    *      2.name desc;<br/>
+    * @param string $limit 分页数目:同Mysql limit语法
+    * 示例如下：<br/>
+    *    0,10<br/>
+    * @return 对象列表数组
+    */
+    public static function showColumns($classname,$columns,$filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null)
+    {
+        $tablename=Config_Db::orm($classname);   
+        $_SQL=new Crud_Sql_Select();          
+
+        if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){ 
+            $realIdName=DataObjectSpec::getRealIDColumnName($classname);
+            $sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);  
+        }                               
+        $sQuery=$_SQL->select($columns)->from($tablename)->where($filter)->order($sort)->limit($limit)->result();    
+        return DataObject::dao()->sqlExecute($sQuery,$classname);
     }
     
     /**
@@ -245,15 +281,15 @@
                 $classname=new $classname();
             }
         }
-        if ($classname instanceof DataObject){
-            $idColumn=DataObjectSpec::getRealIDColumnName($classname);
-        }
-        
+
+        $idColumn=DataObjectSpec::getRealIDColumnName($classname);
+                                          
         if (isset($idColumn)){
             $sQuery= $_SQL->deletefrom($tablename)->where($idColumn."='$id'")->result();
             return DataObject::dao()->sqlExecute($sQuery); 
         }                                                       
-    } 
-    //</editor-fold>      
+    }
+    //</editor-fold>     
+                        
   }
 ?>

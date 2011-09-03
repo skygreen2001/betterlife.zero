@@ -213,18 +213,15 @@ class Gc
      * @var bool
      * @static
      */
-    public static $session_auto_start=true;  
+    public static $session_auto_start=true;
     
     /**
-     * @todo 目前缓冲策略尚未投入实际应用中，待验证。
-     * 采用何种缓冲策略
-     * #.memcached
-     * #.cacheApc
-     * #.cachedir
-     * @var string
-     * @static
-     */
-    public static $cache_method="memcached";    
+    * 单点登录认证框架:oauth
+    * -oauth
+    * -openid
+    * @var mixed
+    */
+    public static $sso_method="oauth";  
     
     /**
      * 通常用于用邮件发送重要日志给管理员。

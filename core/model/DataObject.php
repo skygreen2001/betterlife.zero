@@ -389,6 +389,32 @@ abstract class DataObject extends Object implements ArrayAccess
     {
         return DataObjectFunc::updateProperties(get_called_class(),$sql_id,$array_properties);
     }
+                                              
+    /**
+    * 查询当前对象需显示属性的列表  
+    * @param string 指定的显示属性，同SQL语句中的Select部分。 
+    * 示例如下：<br/>
+    *     id,name,commitTime                                                               
+    * @param mixed $filter 查询条件，在where后的条件<br/>
+    * 示例如下：<br/>
+    *      0."id=1,name='sky'"<br/>
+    *      1.array("id=1","name='sky'")<br/>
+    *      2.array("id"=>"1","name"=>"sky")<br/>
+    *      3.允许对象如new User(id="1",name="green");<br/>
+    * 默认:SQL Where条件子语句。如："(id=1 and name='sky') or (name like 'sky')"<br/>
+    * @param string $sort 排序条件<br/>
+    * 示例如下：<br/>
+    *      1.id asc;<br/>
+    *      2.name desc;<br/>
+    * @param string $limit 分页数目:同Mysql limit语法
+    * 示例如下：<br/>
+    *    0,10<br/>
+    * @return 对象列表数组
+    */
+    public static function showColumns($columns,$filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null)
+    {
+          return DataObjectFunc::showColumns(get_called_class(),$columns,$filter, $sort, $limit); 
+    }
 
     /**
      * 查询当前对象列表
