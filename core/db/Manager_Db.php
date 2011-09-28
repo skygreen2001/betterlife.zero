@@ -28,7 +28,7 @@ class Manager_Db extends Manager {
     /**
      * @var Manager_Db 当前唯一实例化的Db管理类。 
      */
-    private static $manger_Db;
+    private static $instance;
     
     /**
      * 构造器
@@ -36,15 +36,20 @@ class Manager_Db extends Manager {
     private function __construct() {
     }
 
+    public static function singleton() {
+        return newInstance();
+    }                                 
+    
     /**
      * 单例化
      * @return Manager_Db 
      */
     public static function newInstance() {
-        if (self::$manger_Db==null) {
-            self::$manger_Db=new Manager_Db();
+        if (!isset(self::$instance)) {
+            $c = __CLASS__;   
+            self::$instance=new $c();
         }
-        return self::$manger_Db;
+        return self::$instance;
     }
     
     /**

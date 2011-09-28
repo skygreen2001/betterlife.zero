@@ -1,26 +1,26 @@
 <?php
 /*
  +---------------------------------<br/>
- * 使用memcached作为系统缓存。<br/>
- * 使用方法: 添加以下内容到Config_Memcache中<br/>
- *     所有的缓存服务器Memcache 主机IP地址和端口配置<br/>
- *     保存数据是否需要压缩。 <br/>        
- +---------------------------------
+ * 使用memcached作为系统缓存。<br/>                                                         
+ +---------------------------------                                        
+ * @see PHP & memcached:http://www.nioxiao.com/php-memcached
  * @category betterlife
  * @package core.cache
  * @author skygreen
  */
-class Cache_Memcache extends Cache_Base{   
-    public static $name='Memcache';
-    public static $desc='Memcache module provides handy procedural and object oriented interface to memcached, highly effective caching daemon, which was especially designed to decrease database load in dynamic web applications.';
-
+class Cache_Memcached_Client extends Cache_Base
+{      
     /**
     * 测试体验MemCache
     */
     public function TestRun()
     {                                                        
         $value="Hello World";
-        //$mem->save("key", $value);        
+        for($i=0;$i<100;$i++){
+           $this->set($i,$i.":testrrrr".$value); 
+        }                           
+        
+        $this->save("key", $value);        
         $this->update("key", "I'm a newbie!");                 
         $val = $this->get("key");            
         echo $val;        
@@ -47,21 +47,27 @@ class Cache_Memcache extends Cache_Base{
         print_r($users);
         $this->clear();
         $this->close();
-    }
+    }                                          
     
-    public function Cache_Memcache($host="127.0.0.1",$port="11211")
+    public function Cache_Memcached_Client()
     {         
-        if(!class_exists('Memcache')){
-            LogMe::log('请检查是否启动了Php Extensions:php_memcache',EnumLogLevel::ERR);
+        if(!class_exists('Memcached_Client')){
+            LogMe::log('请检查是否加载Memcached',EnumLogLevel::ERR);
+        }                          
+        $servers=array();     
+        $config=array();  
+        //加载所有的分布式服务器 
+        foreach  (Config_Memcache::$cache_servers as $cache_server)
+        {     
+            $servers[]=$cache_server[0].":".$cache_server[1];                              
+        }       
+        $config['servers']=$servers;    
+        if (Config_Memcache::$is_compressed){
+           $config['compress_threshold']=10240;
         }
-        $this->obj = new Memcache;
-        //加载所有的分布式服务器
-        foreach  (Config_Memcache::$cache_servers as $host=>$port)
-        {
-            $this->obj->addServer($host, $port);                  
-        }
-        $this->obj->addServer('127.0.0.1', 11212);       
-        $this->obj->addServer('127.0.0.1', 11213);       
+        $config['debug']=Gc::$dev_debug_on;
+        $config['persistant']=Config_Memcache::$is_persistant;  
+        $this->obj = new Memcached_Client($config);                                    
 //        if(!$this->obj->connect($host, $port)){
 //            LogMe::log('不能连接上memcached服务器;Host:'.self::$host.",Port:".self::$port,EnumLogLevel::ERR);
 //        }
@@ -69,6 +75,21 @@ class Cache_Memcache extends Cache_Base{
         //$version = $this->obj->getVersion();
         //echo "Server's version: ".$version."<br/>\n";    
         parent::cachemgr();
+    }
+    
+    /**  
+     * 查看键key是否存在。   
+     * @param string $key  
+     */ 
+    public function Contains($key)
+    {
+        if (isset($this->obj)){
+            $tmp=$this->get($key);
+           if (!empty($tmp)){
+             return true;
+           }
+        }
+        return false;
     }
     
     /**
@@ -81,7 +102,7 @@ class Cache_Memcache extends Cache_Base{
     */ 
     public function save($key,$value,$expired=86400)
     {
-        return $this->obj->add($key,$value,Config_Memcache::$is_compressed,$expired);
+        return $this->obj->add($key,$value,$expired);
     }
          
     /**
@@ -94,7 +115,7 @@ class Cache_Memcache extends Cache_Base{
     */
     public function set($key,$value,$expired=86400)
     {
-        return $this->obj->set($key,$value,Config_Memcache::$is_compressed,$expired);
+        return $this->obj->set($key,$value,$expired);
     }
 
     /**
@@ -107,7 +128,7 @@ class Cache_Memcache extends Cache_Base{
     public function update($key,$value,$expired=86400)
     {          
         //替换数据
-        return $this->obj->replace($key, $value,Config_Memcache::$is_compressed,$expired);
+        return $this->obj->replace($key, $value,$expired);
     }
     
    /**
@@ -139,48 +160,24 @@ class Cache_Memcache extends Cache_Base{
     */
     public function gets($keyArr)
     {
-        $data = $this->obj->get($keyArr);
+        $data = $this->obj->get_multi($keyArr);
         return $data;   
     }
     
     /**
-    * 清除所有的对象。
-    * 
+    * 清除所有的对象。                
     */
     public function clear()
-    {
-        return $this->obj->flush();
-    }
-
-    public function status(&$curBytes,&$totalBytes)
-    {
-        $info = $this->obj->getStats();
-        $curBytes = $info['bytes'];
-        $totalBytes = $info['limit_maxbytes'];
-
-        $return[] = array('name'=>'子系统运行时间','value'=>timeLength($info['uptime']));
-        $return[] = array('name'=>'缓存服务器','value'=>MEMCACHED_HOST.':'.MEMCACHED_PORT." (ver:{$info['version']})");
-        $return[] = array('name'=>'数据读取','value'=>$info['cmd_get'].'次 '.formatBytes($info['bytes_written']));
-        $return[] = array('name'=>'数据写入','value'=>$info['cmd_set'].'次 '.formatBytes($info['bytes_read']));
-        $return[] = array('name'=>'缓存命中','value'=>$info['get_hits'].'次');
-        $return[] = array('name'=>'缓存未命中','value'=>$info['get_misses'].'次');
-        $return[] = array('name'=>'已缓存数据条数','value'=>$info['curr_items'].'条');
-        $return[] = array('name'=>'进程数','value'=>$info['threads']);
-        $return[] = array('value'=>$info['pid'],'name'=>'服务器进程ID');
-        $return[] = array('value'=>$info['rusage_user'],'name'=>'该进程累计的用户时间(秒:微妙)');
-        $return[] = array('value'=>$info['rusage_system'],'name'=>'该进程累计的系统时间(秒:微妙)');
-        $return[] = array('value'=>$info['curr_items'],'name'=>'服务器当前存储的内容数量');
-        $return[] = array('value'=>$info['total_items'],'name'=>'服务器启动以来存储过的内容总数');
-
-//    $return[] = array('value'=>$info['curr_connections'],'name'=>'连接数量');
-//    $return[] = array('value'=>$info['total_connections'],'name'=>'服务器运行以来接受的连接总数 ');
-//    $return[] = array('value'=>$info['connection_structures'],'name'=>'服务器分配的连接结构的数量');
-        return $return;
-    }
+    {                                 
+    }                     
     
+    /**
+    * 关闭所有资源
+    */
     public function close()
     {
-        $this->obj->close();
-    }
+        $this->obj->forget_dead_hosts ();
+        $this->obj->disconnect_all ();
+    }      
 }
 ?>

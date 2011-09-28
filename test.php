@@ -1,9 +1,10 @@
 <?php
 require_once ("init.php");
-                                  
-//$serverCache=Manager_Cache::newInstance()->server1();
-//$serverCache->TestRun();
-
+//$blogs=Blog::select('name,content');
+//print_r($blogs);                                                  
+$serverCache=Manager_Cache::singleton()->server(EnumCacheDriverType::REDIS);
+$serverCache->TestRun();
+           //EnumCacheDriverType::REDIS
 //print_r(SystemService::doLibrarySelect(array("name"=>"m")));                                             
 //LogMe::log("我在想事情呢！等等我");       
 //LogMe::log("装深沉，你就装吧！");

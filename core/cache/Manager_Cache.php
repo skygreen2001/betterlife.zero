@@ -5,77 +5,72 @@
 */
 class EnumCacheDriverType extends Enum{
     const MEMCACHE=0;
-    const APC=1;    
+    const MEMCACHED=1;
+    const MEMCACHED_CLIENT=2;
+    const REDIS=3; 
+    const APC=4;    
 }
 
 /**
 * 分布式缓存管理器
 */                
-class Manager_Cache{                                      
+class Manager_Cache extends Manager{                                      
     /**
     * 分布式缓存管理器唯一实例  
     * @var Manager_Cache
     */
-    private static $manager_Cache;
+    private static $instance;
     /**
-    * 第一台缓存服务器
+    * 缓存服务器
     * 
     * @var mixed
     */
-    private static $server1;
-    /**
-    * 第二台缓存服务器
-    * 
-    * @var mixed
-    */
-    private static $server2;
+    private static $server;    
+    
+    private function __construct() 
+    {
+    }    
     
     /**
      * 单例化
      * @return Manager_Db 
      */
-    public static function newInstance() {
-        if (self::$manager_Cache==null) {
-            self::$manager_Cache=new Manager_Cache();
+    public static function singleton() {
+        if (!isset(self::$instance)){
+            $c = __CLASS__;   
+            self::$instance=new $c();
         }
-        return self::$manager_Cache;
+        return self::$instance;
     }
  
        
-    private function serverCache($cache_drive=EnumCacheDriverType::MEMCACHE,$host="127.0.0.1",$port="11211"){
+    private function serverCache($cache_drive=EnumCacheDriverType::MEMCACHE){
         switch ($cache_drive){
            case  EnumCacheDriverType::MEMCACHE:
-                return new Cache_Memcache($host,$port);  
-           case  EnumCacheDriverType::MEMCACHE:
-                return new Cache_Apc($host,$port);  
+                return new Cache_Memcache();  
+           case  EnumCacheDriverType::MEMCACHED_CLIENT:
+                return new Cache_Memcached_Client();   
+           case  EnumCacheDriverType::MEMCACHED:
+                return new Cache_Memcached(); 
+           case  EnumCacheDriverType::REDIS:
+                return new Cache_Redis();    
+           case  EnumCacheDriverType::APC:
+                return new Cache_Apc();  
            default:
-                return new Cache_Memcache($host,$port);      
+                return new Cache_Memcache();      
         }
     }
     
     /**
-    * 获取第一台缓存服务器
+    * 获取缓存服务器
     * @param mixed $cache_drive 处理缓存的方式的类型,默认采用Memcache
     * @return Cache_Memcache
     */
-    public function server1($cache_drive=EnumCacheDriverType::MEMCACHE,$host="127.0.0.1",$port="11211"){
-        if (self::$server1==null) {
-            self::$server1=$this->serverCache($cache_drive);
+    public function server($cache_drive=EnumCacheDriverType::MEMCACHE){
+        if (self::$server==null) {
+            self::$server=$this->serverCache($cache_drive);
         }
-        return self::$server1;
-    }
-    
-    /**
-    * 获取第一台缓存服务器
-    * @param mixed $cache_drive 处理缓存的方式的类型,默认采用Memcache
-    * @return Cache_Memcache
-    */
-    public function server2($cache_drive=EnumCacheDriverType::MEMCACHE,$host="127.0.0.1",$port="11211"){
-        if (self::$server2==null) {
-            self::$server2=$this->serverCache($cache_drive,"127.0.0.1","11211");
-        }
-        return self::$server2;
-    }       
-    
+        return self::$server;
+    }    
 }  
 ?>

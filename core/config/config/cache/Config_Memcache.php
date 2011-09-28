@@ -36,16 +36,22 @@ class Config_Memcache extends ConfigBB
     * @var mixed
     */
     public static $cache_servers=array(
-        '127.0.0.1'=>11211,
-        '127.0.0.1'=>11212,
-        '127.0.0.1'=>11213,
+        array('127.0.0.1',11211,40),
+        array('127.0.0.1',11212,30),
+        array('127.0.0.1',11213,30)
     );
 
     /**
     * 存储数据是否采用压缩格式(需要使用zlib)。   
     * @var mixed
     */
-    public static $is_compressed=false;    
+    public static $is_compressed=false;  
+    
+    /**
+    * 是否持久化
+    * @var mixed
+    */
+    public static $is_persistant=false;
     
 }
 ?>                                                     

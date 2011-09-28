@@ -218,8 +218,8 @@ class EnumDataSpec extends Enum{
  *      数据对象定义需定义字段：public $field_spec，它定义了当前数据对象的列规格说明。 
  * @static
  */
-  class DataObjectSpec
-  {
+class DataObjectSpec
+{
     /**
     * 默认的数据对象的列规格说明<br/>
     * 它全局的定义了当前应用的列规格说明；<br/>

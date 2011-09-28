@@ -165,6 +165,20 @@ class Library_Loader
     }
 
     /**
+    * 加载单点登录类库
+    * @see http://code.google.com/p/oauth-php/downloads/list[下载oauth]
+    * @see http://code.google.com/p/oauth-php/wiki/ConsumerHowTo#Two-legged_OAuth[文档oauth]    
+    */
+    private static function load_sso()
+    {
+        if (Gc::$sso_method=="oauth"){
+            
+        }else if (Gc::$sso_method=="openid"){
+        
+        }             
+    }
+    
+    /**
      * 加载Smarty模板库
      * @see http://www.smarty.net/
      */

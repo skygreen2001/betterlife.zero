@@ -72,7 +72,7 @@ abstract class DataObject extends Object implements ArrayAccess
      */
     public static function dao() 
     {
-        if (empty(self::$currentDao)) {
+        if (!isset(self::$currentDao)) {
             self::$currentDao=Manager_Db::newInstance()->dao();
         }
         return self::$currentDao;
@@ -411,7 +411,7 @@ abstract class DataObject extends Object implements ArrayAccess
     *    0,10<br/>
     * @return 对象列表数组
     */
-    public static function showColumns($columns,$filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null)
+    public static function select($columns,$filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null)
     {
           return DataObjectFunc::showColumns(get_called_class(),$columns,$filter, $sort, $limit); 
     }

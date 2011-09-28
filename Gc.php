@@ -154,7 +154,7 @@ class Gc
      * @var bool
      * @static
      */
-    public static $dev_debug_on=false;
+    public static $dev_debug_on=true;
     
     /**
      * 是否要Profile网站性能
