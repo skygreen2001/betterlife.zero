@@ -293,13 +293,15 @@ class Gc
     */
     //<editor-fold defaultstate="collapsed" desc="初始化设置">        
     public static function init(){
-        if (empty(Gc::$url_base)){
+        if (empty(Gc::$url_base)){          
             if(isset($_SERVER['HTTPS']) && strpos('on',$_SERVER['HTTPS'])){
                 $baseurl = 'https://'.$_SERVER['HTTP_HOST'];
                 if($_SERVER['SERVER_PORT']!=443)$baseurl.=':'.$_SERVER['SERVER_PORT'];
             }else{
                 $baseurl = 'http://'.$_SERVER['HTTP_HOST'];
-                if($_SERVER['SERVER_PORT']!=80)$baseurl.=':'.$_SERVER['SERVER_PORT'];
+                if (!(strpos($_SERVER['HTTP_HOST'],$_SERVER['SERVER_PORT'])!== false)){
+                    if($_SERVER['SERVER_PORT']!=80)$baseurl.=':'.$_SERVER['SERVER_PORT'];
+                }
             }            
             $baseDir = dirname($_SERVER['SCRIPT_NAME']);
             $baseurl.=($baseDir == '\\' ? '' : $baseDir).'/';
