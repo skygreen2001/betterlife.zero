@@ -19,10 +19,10 @@ class UtilPage {
      * @var mixed
      */
     private static $tag_viewpagecount=10;
-    private  $count = 10; // 记录总数
-    private  $allPageCount;//总页数
-    private  $nowpage = 1; // 当前页数
-    private  $pageSize; // 每页显示记录数
+    private $count = 10; // 记录总数
+    private $allPageCount;//总页数
+    private $nowpage = 1; // 当前页数
+    private $pageSize; // 每页显示记录数
     private $startPoint;//分页开始记录数
     private $endPoint;//分页结束记录数
 
@@ -30,9 +30,11 @@ class UtilPage {
 
     private  $navig;// 导航条
     private  $navigTo;// 导航条
-
-
-
+                                 
+    public static function Init($nowpage,$count,$pageSize=3,$linkUrl=null){
+        return new UtilPage($nowpage,$count,$pageSize,$linkUrl);
+    }  
+                                 
     /**
      *
      * @param pageSize
@@ -42,7 +44,8 @@ class UtilPage {
      * @param count
      *            :记录总数
      */
-    function __construct($nowpage,$count,$linkUrl=null,$pageSize=3) {
+    function __construct($nowpage,$count,$pageSize=3,$linkUrl=null) 
+    {
         if (empty($linkUrl)){         
           $linkUrl=@$_SERVER['HOST'].@$_SERVER['REQUEST_URI'];
         }
@@ -82,7 +85,8 @@ class UtilPage {
      * 2.如果没有，则加后缀?pageno=分页数
      * @param mixed $this->linkUrl
      */
-    private function url_link_pageparam($pageNo) {                                 
+    private function url_link_pageparam($pageNo) 
+    {                                 
         if (UtilString::contain($this->linkUrl,"?")) {
             $result="<a href='$this->linkUrl&".self::$linkUrl_pageFlag."=$pageNo'>";
         }else {
@@ -95,7 +99,8 @@ class UtilPage {
      * 获取当前页开始记录数
      *
      */
-    public function getStartPoint() {
+    public function getStartPoint() 
+    {
         return $this->startPoint;
     }
 
@@ -103,7 +108,8 @@ class UtilPage {
      * 获取当前页结束记录数
      *
      */
-    public function getEndPoint() {
+    public function getEndPoint() 
+    {
         return $this->endPoint;
     }
 
@@ -113,7 +119,8 @@ class UtilPage {
      * @param somedo
      * @return
      */
-    public function createBaseNavi() {
+    public function createBaseNavi() 
+    {
         if ($this->count < $this->pageSize) {
             $this->navig = "";
             return "";
@@ -203,7 +210,8 @@ class UtilPage {
         return $stb;
     }
 
-    private function viewStatistic() {
+    private function viewStatistic() 
+    {
         $stb="<br />";
         $stb.="当前：第&nbsp;";
         $stb.=$this->getNowpage();
@@ -217,12 +225,14 @@ class UtilPage {
         return $stb;
     }
 
-    private function createNavig() {
+    private function createNavig() 
+    {
         $this->navig = $this->createBaseNavi();
         return $this->navig.$this->viewStatistic();
     }
 
-    private function createNavigTo() {
+    private function createNavigTo() 
+    {
         $this->navigTo=$this->createBaseNavi();
         $stb="";
         //当某个分页板块内容超过10页以上，那么允许显示跳转到指定页功能
@@ -250,56 +260,68 @@ class UtilPage {
         return $this->navigTo.$stb.$this->viewStatistic();
     }
 
-    public function getCount() {
+    public function getCount() 
+    {
         return $this->count;
     }
 
-    public function getNavig() {
+    public function getNavig() 
+    {
         $this->navig=$this->createNavig();
         return $this->navig;
     }
 
-    public function getNowpage() {
+    public function getNowpage() 
+    {
         return $this->nowpage;
     }
 
-    public function getPageSize() {
+    public function getPageSize() 
+    {
         return $this->pageSize;
     }
 
-    public function setCount($count) {
+    public function setCount($count) 
+    {
         $this->count = $count;
     }
 
-    public function setNowpage($nowpage) {
+    public function setNowpage($nowpage) 
+    {
         $this->nowpage = $nowpage;
     }
 
-    public function setPageSize($pageSize) {
+    public function setPageSize($pageSize) 
+    {
         $this->pageSize = $pageSize;
     }
 
     /**
      * wap使用替换空格
      */
-    public function wapReplace() {
+    public function wapReplace() 
+    {
         $this->navig = str_replace("&nbsp;", "  ",navig);
     }   
 
-    public function getNavigTo() {
+    public function getNavigTo() 
+    {
         $this->navigTo=$this->createNavigTo();
         return $this->navigTo;
     }
 
-    public function getLinkUrl() {
+    public function getLinkUrl() 
+    {
         return $this->linkUrl;
     }
 
-    public function setLinkUrl($linkUrl) {
+    public function setLinkUrl($linkUrl) 
+    {
         $this->linkUrl = $linkUrl;
     }
 
-    public function setNavig($navig) {
+    public function setNavig($navig) 
+    {
         $this->navig = $navig;
     }
 

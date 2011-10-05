@@ -14,7 +14,7 @@
 *}
 {extends file="$templateDir/layout/normal/layout.tpl"}
 {block name=body}
-    <script>//showHtmlEditor("postForm","content");//KindEditor 加载语句</script>
+    {*<script>showHtmlEditor("postForm","content");//KindEditor 加载语句</script>*}
     <div class="contentBox">
         <b><a href="{$url_base}index.php?go=betterlife.auth.logout">退出</a></b><br/>
         <a href="{$url_base}index.php?go=betterlife.blog.display&pageNo={$smarty.get.pageNo|default:"1"}">博客列表</a>
@@ -22,8 +22,9 @@
         <form name="postForm" method="POST">
             博文名:<br/>
             <input type="text" name="name" value="{$post.name}"/><br/>
-            内容: <br/>
-            <textarea id="content" name="content" style="width:700px;height:300px;visibility:hidden;">{$post.content}</textarea><br/>
+            内容: <br/>  
+            {* <textarea id="content" name="content" style="width:700px;height:300px;visibility:hidden;">{$post.content}</textarea><br/> *}
+            {$editorHtml}<br/>     
             <input type="submit" />
         </form>
     </div>

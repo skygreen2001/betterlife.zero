@@ -1,4 +1,21 @@
 <?php
+
+/**
+* 返回数据类型
+*/
+class EnumReturnType extends Enum
+{
+    /**
+    * 数据对象
+    */
+    const DATAOBJECT=0;
+    /**
+    * 数组
+    */
+    const ARRAYTYPE=1; 
+}
+
+
 /**
  +---------------------------------------<br/>
  * 所有对象的基类<br/>

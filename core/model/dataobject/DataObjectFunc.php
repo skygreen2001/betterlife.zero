@@ -22,7 +22,7 @@
         }else if (strpos($method,"get")!==false) {
             $property=substr($method,strlen("get"),strlen($method));
             $property{0}=strtolower($property{0});
-            if (method_exists($this,$property)){
+            if (method_exists($dataobject,$property)){
                 $method= $property;
                 return $dataobject->$method();
             }

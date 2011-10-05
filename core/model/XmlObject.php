@@ -190,11 +190,7 @@ class XmlObject extends Object implements ArrayAccess
     public static function count($filter=null) 
     {
         $result=0;
-        if ($xmlObject_classname==null){
-            $classname=get_called_class();
-        }else{
-            $classname=$xmlObject_classname;
-        }
+        $classname=get_called_class(); 
         $filename=call_user_func("$classname::address");
         $spec_library=UtilXmlSimple::fileXmlToArray($filename);
         if (($spec_library!=null)&&(count($spec_library))>0){

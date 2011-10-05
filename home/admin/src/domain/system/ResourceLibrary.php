@@ -113,6 +113,7 @@ class ResourceLibrary extends XmlObject
     */
     public static function queryPage($startPoint,$endPoint,$filter=null) 
     {
+        $condition=array();
         foreach ($filter as $key=>$value){
           if (empty($value)){
               unset($filter[$key]);
@@ -146,12 +147,8 @@ class ResourceLibrary extends XmlObject
             {
                 $resourceLibs[$key][Library_Loader::SPEC_REQUIRED]=false;
             }else{
-                if ($resourceLibs[$key][Library_Loader::SPEC_REQUIRED]=='true'){                     
-                     if ($resourceLibs[$key][Library_Loader::SPEC_OPEN]=="true"){
-                        $resourceLibs[$key][Library_Loader::SPEC_OPEN]=true;    
-                     }else{
-                        $resourceLibs[$key][Library_Loader::SPEC_OPEN]=false; 
-                     }
+                if ($resourceLibs[$key][Library_Loader::SPEC_REQUIRED]=='true'){  
+                    $resourceLibs[$key][Library_Loader::SPEC_OPEN]=true; 
                     $resourceLibs[$key][Library_Loader::SPEC_REQUIRED]=true;                                               
                 }else{
                     $resourceLibs[$key][Library_Loader::SPEC_REQUIRED]=false;                     

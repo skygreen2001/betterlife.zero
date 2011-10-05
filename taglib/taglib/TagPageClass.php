@@ -6,7 +6,7 @@
  */
 class TagPageClass extends TagClass {
     public static $tag_page_sessionname="bb_page";
-    private $src;//链接地址
+    private $src;//链接地址  
     function setHtml() {
         $page=HttpSession::get(self::$tag_page_sessionname);
         if ($page) {
@@ -16,7 +16,7 @@ class TagPageClass extends TagClass {
                 $this->src=$attributes["src"];
                 $page->setLinkUrl($this->src);
             }
-        $this->html=$page->createBaseNavi();
+            $this->html=$page->createBaseNavi();
 //            $this->html=$page->getNavig();
 //            $this->html=$page->getNavigTo();
 

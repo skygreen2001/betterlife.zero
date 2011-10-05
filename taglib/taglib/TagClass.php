@@ -5,7 +5,7 @@
  * @author zyp
  */
 abstract class TagClass {
-    const  PREFIX="my";// tag prefix name
+    const PREFIX="my";// tag prefix name
     protected $tagname;
     protected $attributesDesc;
     protected $content;

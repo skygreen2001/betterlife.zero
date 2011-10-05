@@ -30,25 +30,12 @@
               //bb.Layout.footerPanel,              
               //bb.Layout.rightPanel           
             ]
-        });
-        
-        Ext.getCmp('west-panel').add(bb.Layout.LeftMenuGroups);
-        Ext.getCmp('west-panel').doLayout();    
-        
-        // get a reference to the HTML element with id "hideit" and add a click listener to it 
-        if (Ext.get("hideit")){
-            Ext.get("hideit").on('click', function(){
-                // get a reference to the Panel that was created with id = 'west-panel' 
-                var w = Ext.getCmp('west-panel');
-                // expand or collapse that Panel based on its collapsed property state
-                w.collapsed ? w.expand() : w.collapse();
-            });
-        }
-        
-        var navEs=Ext.get('west-panel').select('a');
-        navEs.on('click', bb.Navigaion.HyperlinkClicked);
+        });                                  
+
+        bb.Layout.Init();
         
         viewport.doLayout();
+        
         setTimeout(function(){
             Ext.get('loading').remove();
             Ext.get('loading-mask').fadeOut({remove:true});

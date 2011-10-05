@@ -110,8 +110,8 @@
 //                layout: 'fit'
 //            }]
 //        })    
-    }
-        
+    } 
+    
     //页面右部    
     bb.Layout.rightPanel=[{
                 region: 'east',
@@ -168,3 +168,27 @@
                 title: '状态栏',
                 margins: '0 0 0 0'
             }];
+            
+    //Layout初始化        
+    bb.Layout.Init=function(){           
+        Ext.getCmp('west-panel').add(bb.Layout.LeftMenuGroups);
+        Ext.getCmp('west-panel').doLayout();                           
+        // get a reference to the HTML element with id "hideit" and add a click listener to it 
+        if (Ext.get("hideit")){
+            Ext.get("hideit").on('click', function(){
+                // get a reference to the Panel that was created with id = 'west-panel' 
+                var w = Ext.getCmp('west-panel');
+                // expand or collapse that Panel based on its collapsed property state
+                if (w.collapsed){
+                    Ext.get("hideit").update("隐藏左侧");
+                    w.expand(); 
+                }else{     
+                    Ext.get("hideit").update("显示左侧");
+                    w.collapse(); 
+                }     
+            });
+        }
+        
+        var navEs=Ext.get('west-panel').select('a');
+        navEs.on('click', bb.Navigaion.HyperlinkClicked); 
+    };

@@ -25,7 +25,7 @@
 
 {extends file="$templateDir/layout/normal/layout.tpl"}
 {block name=body} 
-    <script>//showHtmlEditor("commentForm","comment");</script>    
+    {*<script>showHtmlEditor("commentForm","comment");</script>*}    
     <div id="content">
         <a href='{$url_base}?go=betterlife.auth.logout'><b>退出</b></a><br/>
         <a href='{$url_base}?go=betterlife.blog.display&pageNo={$smarty.get.pageNo|default:"1"}'><b>博客列表</b></a>
@@ -47,7 +47,8 @@
             <h2>提交新评论</h2>                      
             <form name="commentForm" method="POST">
                 我要发言: <br/><input type="hidden" name="id" value="{$post.id}"/>
-                <textarea name="comment" id="comment" style="width:700px;height:300px;visibility:hidden;"></textarea><br/>
+                {*<textarea name="comment" id="comment" style="width:700px;height:300px;visibility:hidden;"></textarea><br/>*}
+                {$editorHtml}<br/>     
                 <input type="submit" />
             </form>   
         </div> 

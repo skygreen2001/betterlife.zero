@@ -122,8 +122,7 @@ class MenuGroup extends Viewable
     
     
     /**
-     * 根据菜单分组获取菜单分组信息
-     * @param string $name 菜单分组ID
+     * 根据菜单分组获取菜单分组信息   
      */
     public function getByID()
     {
@@ -168,7 +167,7 @@ class MenuGroup extends Viewable
     }
     
     /**
-     * 获取所有的MenuGroups
+     * 获取所有的MenuGroups             
      */
     public static function all()
     {
@@ -187,6 +186,37 @@ class MenuGroup extends Viewable
             }
         }
         return $result;
+    }
+    
+    /**
+    * 只获取菜单分组信息 
+    * @param int $returnType 返回类型;0:数据对象,1:数组
+    */
+    public static function allMenuGroups($returnType=EnumReturnType::DATAOBJECT){
+        $uri=dirname(__FILE__).DIRECTORY_SEPARATOR.self::CONFIG_MENU_FILE;
+        $menuConfigs=UtilXmlSimple::fileXmlToObject($uri);   
+        $result=array();
+        if ($menuConfigs!=null)
+        {
+            foreach ($menuConfigs as $menuGroup) 
+            {              
+                $attributes=$menuGroup->attributes();
+                $id= $attributes->id."";
+                if ($returnType==EnumReturnType::DATAOBJECT){
+                    $menuG=new MenuGroup($id);
+                    $menuG->name=$attributes->name."";
+                    $menuG->lang=$attributes->lang."";
+                    $menuG->iconCls=$attributes->iconCls."";
+                }else{
+                    $menuG['id']=$id;  
+                    $menuG['name']=$attributes->name."";
+                    $menuG['lang']=$attributes->lang."";
+                    $menuG['iconCls']=$attributes->iconCls."";
+                }
+                $result[]=$menuG;
+            }
+        }
+        return $result; 
     }
     
     /**

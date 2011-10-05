@@ -228,13 +228,14 @@ Ext.onReady(function() {
         resourceLibraryGrid.removeBtn.setDisabled(sm.getCount() < 1);
     });
           
-  /**
- *  订单状态
- */
+   /**
+    *  库加载状态
+    */
    openStore = new Ext.data.SimpleStore({
         fields : ['value', 'text'],
         data : [['true', '是'], ['false', '否']]
     });
+    
    searchForm = new Ext.form.FormPanel({
         region:'north',    
         labelAlign: 'right',          
@@ -283,19 +284,20 @@ Ext.onReady(function() {
         }]  
     });  
             
-    var viewport = new Ext.Viewport({
+   var viewport = new Ext.Viewport({
         layout: 'border',
         items: [        
           searchForm,
           resourceLibraryGrid
         ]
     });    
-    viewport.doLayout();
-    setTimeout(function(){
+    
+   viewport.doLayout();
+   
+   setTimeout(function(){
         Ext.get('loading').remove();
         Ext.get('loading-mask').fadeOut({
             remove:true
         });
-    }, 250);       
-    
+    }, 250);     
 });

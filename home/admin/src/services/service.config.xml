@@ -1,25 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <services>
-    <service name="SystemService">
+    <service name="MenuService">
         <methods>
-            <method name="doLibrarySelect">
+            <method name="AllMenuGroup">
+                <param name="len">0</param>              
+            </method>
+            <method name="QueryPageMenu">
                 <param name="len">2</param>
                 <param name="formHandler">true</param>
-            </method>
-            <method name="getInfo">
-                <param name="len">1</param>
             </method> 
         </methods>
-    </service>
-    <service name="UserService">
-        <methods>
-            <method name="doSelect">
-                <param name="len">2</param>
-                <param name="formHandler">true</param>
-            </method>
-            <method name="getInfo">
-                <param name="len">1</param>
-            </method> 
-        </methods>
-    </service>
+    </service> 
 </services>

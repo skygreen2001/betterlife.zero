@@ -5,13 +5,16 @@
  +--------------------------------
  * @category betterlife
  * @package util.view
+ * @subpackage onlinediotr
  * @author skygreen
  */
 class UtilXheditor extends Util 
 {                       
     /**
     * 预加载xhEditor的样式和JS 库
-    *                         
+    * @param string $textarea_id 在线编辑器所在的内容编辑区域TextArea的ID
+    * @param string form_id  在线编辑器所在的Form的ID
+    * @param ViewObject $viewobject 表示层显示对象,只在Web框架中使用                     
     */
     public static function loadReady($textarea_id,$form_id,$viewObject=null) 
     {  
@@ -49,9 +52,8 @@ class UtilXheditor extends Util
                 color:#000;
                 background:#FFF;                
             }            
-        ");
-        UtilAjaxJquery::$IsGoogleApi=true;
-        UtilAjaxJquery::loadReady($viewObject,"1.4.2"); 
+        ");                                 
+        UtilJavascript::loadJsReady($viewObject,"common/js/onlineditor/xheditor/jquery/jquery-1.4.2.min.js"); 
         UtilJavascript::loadJsReady($viewObject, "common/js/onlineditor/xheditor/xheditor-1.1.9-zh-cn.min.js"); 
         UtilJavascript::loadJsContentReady($viewObject,"
             $(pageInit);

@@ -18,5 +18,5 @@
   <resourceLibrary id="5" name="yaml" open="false" init="load_yaml_spyc"/>
   <resourceLibrary id="6" name="linq" open="false" init="load_PHPLinq"/>
   <resourceLibrary id="7" name="template" required="true" init="load_template"/> 
-   <resourceLibrary id="8" name="sso" open="true" init="load_sso" />                
+   <resourceLibrary id="8" name="sso" open="false" init="load_sso" updateTime="2011-10-05 14:47:54"/>                
 </resourceLibrarys>
