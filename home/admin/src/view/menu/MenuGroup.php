@@ -97,10 +97,19 @@ class MenuGroup extends Viewable
         return $this->lang;
     }
     
+    /**
+     * Xml格式存储的文件路径地址
+     */
+    public static function address()
+    {
+        return dirname(__FILE__).DIRECTORY_SEPARATOR.self::CONFIG_MENU_FILE;    
+    }
+    
+    
     private function getMenuConfigs()
     {
         if ($this->menuConfigs==null){
-            $uri=dirname(__FILE__).DIRECTORY_SEPARATOR.self::CONFIG_MENU_FILE;
+            $uri= self::address();
             $this->menuConfigs=UtilXmlSimple::fileXmlToObject($uri);        
         }
         return $this->menuConfigs;
@@ -118,8 +127,7 @@ class MenuGroup extends Viewable
             $this->getByID();
         }
         return $this->menus;
-    }
-    
+    }   
     
     /**
      * 根据菜单分组获取菜单分组信息   
@@ -154,7 +162,7 @@ class MenuGroup extends Viewable
                            $address=Gc::$url_base.$address;
                        }
                        $menu->setAddress($address."");
-                       $menu->setTitle($attributes->title."");
+                       $menu->setTitle($attributes->title."");    
                        $menu->setIconCls($attributes->iconCls."");
                        $menu->setLang($attributes->lang."");
                        $this->menus[]=$menu;
@@ -192,7 +200,8 @@ class MenuGroup extends Viewable
     * 只获取菜单分组信息 
     * @param int $returnType 返回类型;0:数据对象,1:数组
     */
-    public static function allMenuGroups($returnType=EnumReturnType::DATAOBJECT){
+    public static function allMenuGroups($returnType=EnumReturnType::DATAOBJECT)
+    {
         $uri=dirname(__FILE__).DIRECTORY_SEPARATOR.self::CONFIG_MENU_FILE;
         $menuConfigs=UtilXmlSimple::fileXmlToObject($uri);   
         $result=array();
@@ -202,15 +211,19 @@ class MenuGroup extends Viewable
             {              
                 $attributes=$menuGroup->attributes();
                 $id= $attributes->id."";
+                $lang=$attributes->lang."";
+                if (empty($lang)){
+                   $lang="cn"; 
+                }
                 if ($returnType==EnumReturnType::DATAOBJECT){
                     $menuG=new MenuGroup($id);
                     $menuG->name=$attributes->name."";
-                    $menuG->lang=$attributes->lang."";
+                    $menuG->lang=$lang;
                     $menuG->iconCls=$attributes->iconCls."";
                 }else{
                     $menuG['id']=$id;  
                     $menuG['name']=$attributes->name."";
-                    $menuG['lang']=$attributes->lang."";
+                    $menuG['lang']=$lang;
                     $menuG['iconCls']=$attributes->iconCls."";
                 }
                 $result[]=$menuG;
@@ -218,6 +231,81 @@ class MenuGroup extends Viewable
         }
         return $result; 
     }
+    
+    /**
+     * 菜单总计数
+     * @param object|string|array $filter<br/>
+     *      $filter 格式示例如下：<br/>
+     *          0.允许对象如new User(id="1",name="green");<br/>
+     *          1."id=1","name='sky'"<br/>
+     *          2.array("id=1","name='sky'")<br/>
+     *          3.array("id"=>"1","name"=>"sky")
+     * @return 菜单总计数
+     */
+    public static function count($filter=null) 
+    {
+        $uri=dirname(__FILE__).DIRECTORY_SEPARATOR.self::CONFIG_MENU_FILE;
+        $menuConfigs=UtilXmlSimple::fileXmlToObject($uri);   
+        $result=array();
+        if ($menuConfigs!=null)
+        {
+            foreach ($menuConfigs as $menuGroup) 
+            {              
+                $attributes=$menuGroup->attributes();
+                $id= $attributes->id."";
+                $menuG=new MenuGroup($id);
+                $menus=$menuG->getMenus();  
+                foreach ($menus as $menu){    
+                    $menu=UtilObject::object_to_array($menu);                  
+                    if (XmlObject::isValidData($menu,$filter)){       
+                        $result[]=$menu;
+                    }
+                }   
+            }
+        }
+        return count($result);
+    }
+    
+    /**
+     * 菜单对象分页
+     * @param string $xmlObject_classname 具体的Xml对象类名
+     * @param int $startPoint  分页开始记录数
+     * @param int $endPoint    分页结束记录数 
+     * @param string|array $filter 过滤条件
+     * 示例如下：<br/>    
+     *      string[只有一个查询条件]
+     *      1. id="1"--精确查找
+     *      2. name contain 'sky'--模糊查找
+     *      array[多个查询条件]
+     *      1.array("id"=>"1","name"=>"sky")<br/>--精确查找
+     *      2.array("id"=>"1","name contain 'sky'")<br/>--模糊查找
+     * @return mixed 对象分页
+     */
+    public static function queryPage($startPoint,$endPoint,$filter=null) 
+    {
+        $uri=dirname(__FILE__).DIRECTORY_SEPARATOR.self::CONFIG_MENU_FILE;
+        $menuConfigs=UtilXmlSimple::fileXmlToObject($uri);   
+        $result=array();
+        if ($menuConfigs!=null)
+        {
+            foreach ($menuConfigs as $menuGroup) 
+            {              
+                $attributes=$menuGroup->attributes();
+                $id= $attributes->id."";
+                $menuG=new MenuGroup($id);
+                $menus=$menuG->getMenus();  
+                foreach ($menus as $menu){    
+                    $menu=UtilObject::object_to_array($menu);                  
+                    if (XmlObject::isValidData($menu,$filter)){       
+                        $result[]=$menu;
+                    }
+                }   
+            }
+        }
+        $result=array_slice($result, $startPoint, $endPoint);   
+        return $result;
+    }
+    
     
     /**
      * ExtJs菜单显示

@@ -187,8 +187,8 @@ class XmlObject extends Object implements ArrayAccess
      *          3.array("id"=>"1","name"=>"sky")
      * @return 对象总计数
      */
-    public static function count($filter=null) 
-    {
+    public static function count() 
+    {    
         $result=0;
         $classname=get_called_class(); 
         $filename=call_user_func("$classname::address");
@@ -216,7 +216,7 @@ class XmlObject extends Object implements ArrayAccess
      *      2.array("id"=>"1","name contain 'sky'")<br/>--模糊查找
      * @return mixed 对象分页
      */
-    public static function queryPage($xmlObject_classname,$startPoint,$endPoint,$filter=null) 
+    public static function queryPage($startPoint,$endPoint,$filter=null,$xmlObject_classname) 
     {                                   
         if ($xmlObject_classname==null){
             $classname=get_called_class();
@@ -261,7 +261,7 @@ class XmlObject extends Object implements ArrayAccess
                    $col_value=trim($condition[1]);  
                    if (array_key_exists($column,$blockAttr)){                   
                        $block_value= $blockAttr[$column];
-                       if ($block_value==$col_value){
+                       if (strtolower($block_value)==strtolower($col_value)){
                             return true;
                        }
                    }
@@ -297,7 +297,7 @@ class XmlObject extends Object implements ArrayAccess
                 }else{
                    if (array_key_exists($key,$blockAttr)){
                        $block_value= $blockAttr[$key];
-                       if ($block_value==$value){
+                       if (strtolower($block_value)==strtolower($value)){
                             return true;
                        }
                    }                    

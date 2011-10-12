@@ -5,10 +5,16 @@
             <method name="AllMenuGroup">
                 <param name="len">0</param>              
             </method>
+            <method name="GetMenusByGroupId">
+                <param name="len">1</param>    
+            </method>  
             <method name="QueryPageMenu">
-                <param name="len">2</param>
-                <param name="formHandler">true</param>
-            </method> 
+                <param name="len">1</param>             
+            </method>   
+            <method name="QueryPageMenuForm">
+                <param name="len">1</param>
+                <param name="formHandler">true</param>           
+            </method>
         </methods>
     </service> 
 </services>

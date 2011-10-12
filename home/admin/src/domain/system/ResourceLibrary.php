@@ -97,6 +97,52 @@ class ResourceLibrary extends XmlObject
         }
         return $result;
     }
+    
+    /**
+     * 资料库总计数
+     * @param object|string|array $filter<br/>
+     *      $filter 格式示例如下：<br/>
+     *          0.允许对象如new User(id="1",name="green");<br/>
+     *          1."id=1","name='sky'"<br/>
+     *          2.array("id=1","name='sky'")<br/>
+     *          3.array("id"=>"1","name"=>"sky")
+     * @return 资料库总计数
+     */
+    public static function count($filter=null) 
+    {
+        foreach ($filter as $key=>$value){ 
+          if (empty($value)){
+              unset($filter[$key]);
+          }else{
+              if ($key=='name') {
+                    $condition[]="$key contain '$value'";    
+               } else if ($key=='init') {
+                    $condition[]="$key contain '$value'";    
+               } else if ($key=='open') {
+                   $filter_open=($value=="true"?true:false);  
+               } else {
+                    $condition[$key]=$value;
+               }
+          }  
+        }   
+        $result=0;
+        $classname=get_called_class(); 
+        $filename=call_user_func("$classname::address");
+        $spec_library=UtilXmlSimple::fileXmlToArray($filename);
+        if (($spec_library!=null)&&(count($spec_library))>0){
+            foreach ($spec_library as $key=>$dataobjets){ 
+                $spec_library= $dataobjets;       
+                foreach ($dataobjets as $key=>$block){  
+                    $blockAttr=$block[Util::XML_ELEMENT_ATTRIBUTES];     
+                    if (isset($condition)&&(!self::isValidData($blockAttr,$condition))){    
+                        unset($dataobjets[$key]);
+                    }
+                }
+            }            
+            $result=count($dataobjets);
+        }
+        return $result;
+    }
 
     /**
     * 分页:获取资料库的信息列表
@@ -132,7 +178,7 @@ class ResourceLibrary extends XmlObject
                }
           }  
         }  
-        $resourceLibs= parent::queryPage(__CLASS__,$startPoint,$endPoint,$condition);
+        $resourceLibs= parent::queryPage($startPoint,$endPoint,$condition,__CLASS__);
         $result=array();
         //必须加载的一定是已加载，如果必须加载的参数没有设置，则不是必须加载。
         foreach ($resourceLibs as $key=>$value) {

@@ -6932,3 +6932,5 @@ body.x-body-masked .x-window-plain .x-window-mc {
 .x-window-dlg .ext-mb-error {
     background-image:url(ajax/ext/resources/images/default/window/icon-error.gif);
 }
+.silk-add { background-image:url(ajax/ext/resources/images/new/add.gif) !important; background-repeat: no-repeat; }
+.silk-delete { background-image:url(ajax/ext/resources/images/new/delete.gif) !important; background-repeat: no-repeat; }

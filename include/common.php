@@ -22,7 +22,8 @@ function e_view() {
  * @param mixed $needle
  */
 function contain($subject,$needle) {
-    if (strpos($subject,$needle)!== false) {
+    if (empty($subject))return false;
+    if (strpos(strtolower($subject),strtolower($needle))!== false) {
         return true;
     }else {
         return false;

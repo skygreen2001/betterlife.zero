@@ -1,5 +1,19 @@
+Ext.namespace("betterlife.admin.resourceLibrary");   
+bb = betterlife.admin.resourceLibrary;  
+    
 // Application instance for showing user-feedback messages.
 var App = new Ext.App({});
+
+/**
+ * 全局配置
+ */
+bb.Config=Ext.emptyFn;
+bb.Config={
+    /**
+     *分页:每页显示记录数
+     */        
+    pageSize:8
+};       
 
 // Create a standard HttpProxy instance.
 var proxy = new Ext.data.HttpProxy({
@@ -7,20 +21,24 @@ var proxy = new Ext.data.HttpProxy({
 });
 
 // Typical JsonReader.  Notice additional meta-data params for defining the core attributes of your json-response
-var reader = new Ext.data.JsonReader({
-    totalProperty: 'totalCount',
-    successProperty: 'success',
-    idProperty: 'id',
-    root: 'data',
-    remoteSort: true, 
-    messageProperty: 'message'  // <-- New "messageProperty" meta-data
-}, [
-    {name: 'id',type: 'string'},
-    {name: 'name',type: 'string'},//, allowBlank: false
-    {name: 'open', type: 'bool'},
-    {name: 'required',type: 'bool'},
-    {name: 'init',type: 'string'}//, allowBlank: false
-]);
+var reader = new Ext.data.JsonReader
+(
+   {
+        totalProperty: 'totalCount',
+        successProperty: 'success',
+        idProperty: 'id',
+        root: 'data',
+        remoteSort: true, 
+        messageProperty: 'message'  // <-- New "messageProperty" meta-data
+    }, 
+    [
+        {name: 'id',type: 'string'},
+        {name: 'name',type: 'string'},//, allowBlank: false
+        {name: 'open', type: 'bool'},
+        {name: 'required',type: 'bool'},
+        {name: 'init',type: 'string'}//, allowBlank: false
+    ]    
+);
 
 // The new DataWriter component.
 var writer = new Ext.data.JsonWriter({
@@ -33,8 +51,9 @@ var libraryStore = new Ext.data.Store({
     restful: true,     // <-- This Store is RESTful
     proxy: proxy,
     reader: reader,     
-    writer: writer    // <-- plug a DataWriter into the store just as you would a Reader
-});         
+    writer: writer,    // <-- plug a DataWriter into the store just as you would a Reader
+    autoLoad: {params:{start: 0, limit: bb.Config.pageSize}}
+});
 libraryStore.setDefaultSort('id', 'desc');
 ////
 // ***New*** centralized listening of DataProxy events "beforewrite", "write" and "writeexception"
@@ -45,8 +64,7 @@ libraryStore.setDefaultSort('id', 'desc');
 //
 Ext.data.DataProxy.addListener('beforewrite', function(proxy, action) {
     //App.setAlert(App.STATUS_NOTICE, "Before " + action);
-});
-
+});  
 ////
 // all write events
 //
@@ -54,15 +72,13 @@ Ext.data.DataProxy.addListener('write', function(proxy, action, result, res, rs)
     resourceLibraryGrid.addBtn.setDisabled(false);
     App.setAlert(true, action + ':' + res.message);
     resourceLibraryGrid.getView().refresh();
-});
-
+});        
 ////
 // all exception events
 //
 Ext.data.DataProxy.addListener('exception', function(proxy, type, action, options, res) {
     App.setAlert(false, "发生异常，执行： " + action);
-});
-
+});    
 // pluggable renders  
 function renderOperation(value, p, record){
     return String.format(
@@ -70,7 +86,7 @@ function renderOperation(value, p, record){
             '<a href="index.php?go=admin.system.library.edit" target="_blank">编辑</a>|'+ 
             '<a href="index.php?go=admin.system.library.delete" target="_blank">删除</a>', 
              record.data.id);
-}
+}         
 
 var sm = new Ext.grid.CheckboxSelectionModel();  // add checkbox column  
  
@@ -104,7 +120,7 @@ var resourceLibraryColumns =  new Ext.grid.ColumnModel([
     {header: "已加载", width: 150, sortable: true, dataIndex: 'open', xtype: 'checkcolumn',editor:{xtype:'checkbox'}},
     {header: "初始化方法", width: 150, sortable: true, dataIndex: 'init', editor: new Ext.form.TextField({})},
     {header: "必须加载", width: 150, sortable: true, dataIndex: 'required', xtype: 'checkcolumn',editor:{xtype:'checkbox'}},
-    {header:"操作" , width:150, id:'id',dataIndex: 'id', align:'center',renderer:renderOperation,sortable: false}
+    {header:"操作" , width:150, id:'id',align:'center',renderer:renderOperation,sortable: false}
 ]);
 
 // use RowEditor for editing
@@ -150,7 +166,7 @@ var resourceLibraryGrid = new Ext.grid.GridPanel({
             handler: onDelete
         }, '-'],
     bbar: new Ext.PagingToolbar({
-        pageSize: 10,
+        pageSize: bb.Config.pageSize,
         store: libraryStore,
         autoShow:true,
         displayInfo: true,
@@ -162,6 +178,11 @@ var resourceLibraryGrid = new Ext.grid.GridPanel({
     }
 }); 
 
+//判断删除按钮是否可以激活
+resourceLibraryGrid.getSelectionModel().on('selectionchange', function(sm){
+    resourceLibraryGrid.removeBtn.setDisabled(sm.getCount() < 1);
+});
+    
 /**
 * 反选选择
 */
@@ -196,6 +217,7 @@ function onDelete() {
     Ext.MessageBox.confirm('提示', '确实要删除所选的记录吗?',showResult);  
 }
 
+//批量删除
 function showResult(btn) {  
 //        删除单条记录        
 //        var rec = resourceLibraryGrid.getSelectionModel().getSelected();
@@ -216,85 +238,95 @@ function showResult(btn) {
      } 
      resourceLibraryGrid.getView().refresh();//刷新整个grid视图,重新排序.
 };     
-    
+
+/**
+*  库加载状态
+*/
+openStore = new Ext.data.SimpleStore({
+    fields : ['value', 'text'],
+    data : [['true', '是'], ['false', '否']]
+});
+
+/**
+* 查询Form表单:根据条件查询资源库
+*/
+var searchForm = new Ext.form.FormPanel({
+    region:'north',    
+    labelAlign: 'right',          
+    labelWidth:75,  
+    title:'高级查询',      
+    frame:true,//True表示为面板的边框外框可自定义的，false表示为边框可1px的点线,这个属性很重要，不显式地设置为true时，FormPanel中的指定的items和buttons的背景色会不一致
+    collapsible: true, 
+    collapseMode: 'mini',     
+    //collapsed:true,  
+    bodyStyle:'padding:5px 5px 0',  
+    height:70,  
+    items: [{
+        layout:'column',            
+        items:[
+           {columnWidth:.25,layout:'form',items:[{fieldLabel: '库名称',anchor:'90%',xtype:'textfield',name:'name',id:'name'}]},                                                                                                           
+           {columnWidth:.25,layout:'form',items:[{fieldLabel: '初始化方法',anchor:'90%',xtype:'textfield',name: 'init'}]},
+           {columnWidth:.25,layout:'form',items:[{fieldLabel: '是否已加载',anchor:'90%',xtype:'combo',name: 'open',
+                emptyText : '',mode : 'local',//数据模式，local代表本地数据                      
+                store : openStore,
+                hiddenName: 'open',
+                //readOnly : true,//是否只读
+                //allowBlank : false,//不允许为空  
+                triggerAction : 'all',// 显示所有下列数据，一定要设置属性triggerAction为all
+                valueField : 'value',//值
+                displayField : 'text',//显示文本
+                editable: false//是否允许输入                    
+                  
+           }]},
+           {columnWidth:.08,layout:'form',items:[{xtype:'button',id:'btn',text:'查询',width:80, 
+                handler: onSubmitQuery
+              }]
+           },
+           {columnWidth:.08,layout:'form',items:[{xtype:'button',id:'reset',text: '重置',width:80,
+                handler: function(){searchForm.getForm().reset();}
+              }]
+           },
+           {columnWidth:.09}
+        ]                  
+    }],
+    keys:[{ //处理键盘回车事件     
+        key:Ext.EventObject.ENTER,     
+        fn:onSubmitQuery,     
+        scope:this    
+    }]       
+});   
+
+//根据条件查询资料库
+function onSubmitQuery(){
+    var params=searchForm.getForm().getValues();
+    params.start=0;
+    params.limit=bb.Config.pageSize;  
+    libraryStore.load({
+      params:params   
+    })
+} 
+         
 Ext.onReady(function() {
     Ext.QuickTips.init(); 
-    Ext.state.Manager.setProvider(new Ext.state.CookieProvider());                
-                                                               
-    // load the store        
-    libraryStore.load({params:{start:0, limit:10}});
+    Ext.state.Manager.setProvider(new Ext.state.CookieProvider());     
     
-    resourceLibraryGrid.getSelectionModel().on('selectionchange', function(sm){
-        resourceLibraryGrid.removeBtn.setDisabled(sm.getCount() < 1);
-    });
-          
-   /**
-    *  库加载状态
-    */
-   openStore = new Ext.data.SimpleStore({
-        fields : ['value', 'text'],
-        data : [['true', '是'], ['false', '否']]
+    //保证分页也将查询条件带上    
+    libraryStore.on('beforeload', function(store,options){
+        var params=searchForm.getForm().getValues();
+        Ext.apply(options.params,params);
     });
     
-   searchForm = new Ext.form.FormPanel({
-        region:'north',    
-        labelAlign: 'right',          
-        labelWidth:75,  
-        title:'高级查询',      
-        frame:true,//True表示为面板的边框外框可自定义的，false表示为边框可1px的点线,这个属性很重要，不显式地设置为true时，FormPanel中的指定的items和buttons的背景色会不一致
-        collapsible: true, 
-        collapseMode: 'mini',     
-        //collapsed:true,  
-        bodyStyle:'padding:5px 5px 0',  
-        height:70,
-        items: [{
-            layout:'column',            
-            items:[
-               {columnWidth:.25,layout:'form',items:[{fieldLabel: '库名称',anchor:'90%',xtype:'textfield',name:'name',id:'name'}]},                                                                                                           
-               {columnWidth:.25,layout:'form',items:[{fieldLabel: '初始化方法',anchor:'90%',xtype:'textfield',name: 'init'}]},
-               {columnWidth:.25,layout:'form',items:[{fieldLabel: '是否已加载',anchor:'90%',xtype:'combo',name: 'open',
-                    emptyText : '',mode : 'local',//数据模式，local代表本地数据                      
-                    store : openStore,
-                    hiddenName: 'open',
-                    //readOnly : true,//是否只读
-                    //allowBlank : false,//不允许为空  
-                    triggerAction : 'all',// 显示所有下列数据，一定要设置属性triggerAction为all
-                    valueField : 'value',//值
-                    displayField : 'text',//显示文本
-                    editable: false//是否允许输入                    
-                      
-               }]},
-               {columnWidth:.08,layout:'form',items:[{xtype:'button',id:'btn',text:'查询',width:80, 
-                    handler: function() {
-                        var params=searchForm.getForm().getValues();
-                        params.start=0;
-                        params.limit=10;  
-                        libraryStore.load({
-                          params:params   
-                        })
-                    }
-                  }]
-               },
-               {columnWidth:.08,layout:'form',items:[{xtype:'button',id:'reset',text: '重置',width:80,
-                    handler: function(){searchForm.getForm().reset();}
-                  }]
-               },
-               {columnWidth:.09}
-            ]                  
-        }]  
-    });  
-            
-   var viewport = new Ext.Viewport({
+    var viewport = new Ext.Viewport({
         layout: 'border',
         items: [        
           searchForm,
           resourceLibraryGrid
         ]
     });    
-    
-   viewport.doLayout();
-   
-   setTimeout(function(){
+
+    viewport.doLayout();
+
+    setTimeout(function(){
         Ext.get('loading').remove();
         Ext.get('loading-mask').fadeOut({
             remove:true

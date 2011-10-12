@@ -43,11 +43,20 @@ class UtilAjaxExtjs extends UtilAjax implements IUtilAjax
             }else{
                 $ajax_root="common/js/ajax/ext4/";   
             }
-            if ($viewObject)
-            {
-                self::loadJsReady($viewObject,$ajax_root."ext-all.js");
+            if (self::$IsDebug){
+                if ($viewObject)
+                {
+                    self::loadJsReady($viewObject,$ajax_root."ext-all-debug-w-comments.js");
+                }else{
+                    self::loadJs($ajax_root."ext-all-debug-w-comments.js");                
+                }
             }else{
-                self::loadJs($ajax_root."ext-all.js");                
+                if ($viewObject)
+                {
+                    self::loadJsReady($viewObject,$ajax_root."ext-all.js");
+                }else{
+                    self::loadJs($ajax_root."ext-all.js");                
+                }
             }
             self::loadJs("locale/ext-lang-zh_CN.js",true,EnumJsFramework::JS_FW_EXTJS,$version,$viewObject);
         }

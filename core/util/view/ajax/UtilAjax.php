@@ -81,6 +81,12 @@ class UtilAjax extends Util
      * @var bool 
      */
     public static $IsHtmlBody=false;
+    /**
+    * 是否允许调试
+    * 
+    * @var mixed
+    */
+    public static $IsDebug=true;
     //</editor-fold>     
     /**
      * 初始化方能加载枚举类型。

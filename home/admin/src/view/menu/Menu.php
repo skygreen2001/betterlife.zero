@@ -20,7 +20,7 @@ class Menu extends Viewable
      * 菜单地址
      * @var string 
      */
-    private $address;
+    private $address; 
     /**
      * 语言文字种类
      * @var string 
@@ -75,7 +75,7 @@ class Menu extends Viewable
     public function getLang()
     {
         return $this->lang;
-    }    
+    }          
     
     public function setTitle($title)
     {

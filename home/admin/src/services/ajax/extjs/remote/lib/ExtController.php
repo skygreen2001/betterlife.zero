@@ -36,12 +36,15 @@ class ExtController
                 $response->message = "加载数据";
                 if (isset($this->request->start)&&($this->request->start!=null)){
                     $response->data =call_user_func_array("$object_name::queryPage",array($this->request->start,$this->request->limit,$this->params));
+                    if ($response->data!=null){
+                        $response->totalCount=call_user_func("$object_name::count",$this->params);
+                    }
                 }else{
                     $response->data =call_user_func("$object_name::get",$this->params);
-                }
-                if ($response->data!=null){
-                    $response->totalCount=call_user_func("$object_name::count");
-                }
+                    if ($response->data!=null){
+                        $response->totalCount=call_user_func("$object_name::count");
+                    }
+                }        
                 break;                                                     
             case 'POST':
                 foreach ($this->params as $key => $value) {

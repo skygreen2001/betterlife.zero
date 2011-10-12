@@ -63,12 +63,12 @@ strong {
 .x-row-editor-header {
     height:2px;
     overflow:hidden;
-    background: transparent url(images/row-editor-bg.gif) repeat-x 0 0;
+    background: transparent url(js/ajax/ext/resources/images/new/row-editor-bg.gif) repeat-x 0 0;
 }
 .x-row-editor-footer {
     height:2px;
     overflow:hidden;
-    background: transparent url(images/row-editor-bg.gif) repeat-x 0 -2px;
+    background: transparent url(js/ajax/ext/resources/images/new/row-editor-bg.gif) repeat-x 0 -2px;
 }
 .ext-ie .x-row-editor-footer {
     margin-top:-1px;
@@ -85,24 +85,24 @@ strong {
     top:28px;
     left:20px;
     padding-left:5px;
-    background: transparent url(images/row-editor-btns.gif) no-repeat 0 0;
+    background: transparent url(ajax/ext/resources/images/new/row-editor-btns.gif) no-repeat 0 0;
 }
 .x-row-editor .x-btns .x-plain-bwrap {
     padding-right:5px;
-    background: transparent url(images/row-editor-btns.gif) no-repeat right -31px;
+    background: transparent url(ajax/ext/resources/images/new/row-editor-btns.gif) no-repeat right -31px;
 }
 .x-row-editor .x-btns .x-plain-body {
-    background: transparent url(images/row-editor-btns.gif) repeat-x 0 -62px;
+    background: transparent url(ajax/ext/resources/images/new/row-editor-btns.gif) repeat-x 0 -62px;
     height:31px;
 }
 .x-row-editor .x-btns .x-table-layout-cell {
     padding:3px;
 }
 .icon-user-add {
-    background-image: url(../shared/icons/fam/user_add.gif) !important;
+    background-image: url(ajax/ext/resources/images/new/user_add.gif) !important;
 }
 .icon-user-delete {
-    background-image: url(../shared/icons/fam/user_delete.gif) !important;
+    background-image: url(ajax/ext/resources/images/new/user_delete.gif) !important;
 }
 
 .errorTip .x-tip-body ul{
@@ -122,12 +122,12 @@ strong {
 .x-row-editor-header {
     height:2px;
     overflow:hidden;
-    background: transparent url(../images/row-editor-bg.gif) repeat-x 0 0;
+    background: transparent url(ajax/ext/resources/images/new/row-editor-bg.gif) repeat-x 0 0;
 }
 .x-row-editor-footer {
     height:2px;
     overflow:hidden;
-    background: transparent url(../images/row-editor-bg.gif) repeat-x 0 -2px;
+    background: transparent url(ajax/ext/resources/images/new/row-editor-bg.gif) repeat-x 0 -2px;
 }
 .ext-ie .x-row-editor-footer {
     margin-top:-1px;
@@ -144,14 +144,14 @@ strong {
     top:28px;
     left:20px;
     padding-left:5px;
-    background: transparent url(../images/row-editor-btns.gif) no-repeat 0 0;
+    background: transparent url(ajax/ext/resources/images/new/row-editor-btns.gif) no-repeat 0 0;
 }
 .x-row-editor .x-btns .x-plain-bwrap {
     padding-right:5px;
-    background: transparent url(../images/row-editor-btns.gif) no-repeat right -31px;
+    background: transparent url(ajax/ext/resources/images/new/row-editor-btns.gif) no-repeat right -31px;
 }
 .x-row-editor .x-btns .x-plain-body {
-    background: transparent url(../images/row-editor-btns.gif) repeat-x 0 -62px;
+    background: transparent url(ajax/ext/resources/images/new/row-editor-btns.gif) repeat-x 0 -62px;
     height:31px;
 }
 .x-row-editor .x-btns .x-table-layout-cell {
@@ -197,7 +197,7 @@ h2 {
     border:1px solid #c3daf9;
     border-top:1px solid #DCEAFB;
     border-left:1px solid #DCEAFB;
-    background:#ecf5fe url( info-bg.gif ) repeat-x;
+    background:#ecf5fe url( ajax/ext/resources/images/new/info-bg.gif ) repeat-x;
     font-size:10px;
     padding:8px;
 }
@@ -228,5 +228,3 @@ pre.code{
 .icon-32 { height:32px; width:32px}
 .icon-24 { height:24px; width:24px}
 
-.silk-add { background-image:url(../../home/admin/view/default/resources/images/other/add.gif) !important; background-repeat: no-repeat; }
-.silk-delete { background-image:url(../../home/admin/view/default/resources/images/other/delete.gif) !important; background-repeat: no-repeat; }

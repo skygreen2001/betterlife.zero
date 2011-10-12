@@ -75,7 +75,7 @@ class Action_System extends Action
    {
         //初始化加载Css和Javascript库
         $this->view->viewObject=new ViewObject();
-        UtilCss::loadExt($this->view->viewObject,UtilAjaxExtjs::$ext_version);
+        UtilCss::loadExt($this->view->viewObject,UtilAjaxExtjs::$ext_version);               
         UtilAjaxExtjs::load(UtilAjaxExtjs::$ext_version,$this->view->viewObject);  
         
         $templateurl=$this->view->template_url;        
