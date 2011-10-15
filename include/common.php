@@ -52,12 +52,12 @@ function startWith($haystack, $needle,$strict=true) {
  * @param bool $strict 是否严格区分字母大小写
  * @return bool true:是，false:否。
  */
-function endWith($haystack, $needle,$strict=true){
-    if ($strict){
-        return ereg($needle."$", $haystack);
-    }else{
-        return eregi($needle."$", $haystack);        
-    }
+function endWith($haystack, $needle,$strict=true){ 
+    if (!$strict){
+        $haystack=strtoupper($haystack);
+        $needle=strtoupper($needle);
+    }    
+    return (strpos(strrev($haystack), strrev($needle)) === 0);   
 }
    
 /**
