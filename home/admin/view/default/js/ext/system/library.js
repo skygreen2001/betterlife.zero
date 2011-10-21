@@ -1,6 +1,6 @@
 Ext.namespace("betterlife.admin.resourceLibrary");   
-bb = betterlife.admin.resourceLibrary;  
-    
+bb = betterlife.admin.resourceLibrary;     
+                               
 // Application instance for showing user-feedback messages.
 var App = new Ext.App({});
 

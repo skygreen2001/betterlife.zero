@@ -102,8 +102,7 @@ bb.Menu.MenuGroupGrid = new Ext.grid.EditorGridPanel({
     autoScroll:true,  
     clicksToEdit: 2,
     headerAsText:false,//是否显示标题栏         
-    cm:MenuGroupGridCM,
-                     
+    cm:MenuGroupGridCM, 
     stripeRows:true,     
     tbar: new Ext.Toolbar(['-', {
         ref: '../addBtn',
@@ -127,11 +126,10 @@ bb.Menu.MenuGroupGrid = new Ext.grid.EditorGridPanel({
         iconCls: 'silk-delete',
         handler:function() {
             Ext.Msg.confirm('信息','确定要删除？',function(btn) {
-                if(btn == 'yes') {
-                    var sm = grid.getSelectionModel();
-                    var cell = sm.getSelectedCell();   
-                    var record = store.getAt(cell[0]);
-                    store.remove(record);
+                if(btn == 'yes') {     
+                    var cell = bb.Menu.MenuGroupGrid.getSelectionModel().getSelectedCell();   
+                    var record = bb.Menu.MenuGroupStore.getAt(cell[0]);
+                    bb.Menu.MenuGroupStore.remove(record);
                 }
             });
         }
@@ -155,6 +153,11 @@ bb.Menu.MenuGroupGrid = new Ext.grid.EditorGridPanel({
         }
     })                         
 });   
+
+//判断删除按钮是否可以激活
+bb.Menu.MenuGroupGrid.getSelectionModel().on('selectionchange', function(sm){
+    bb.Menu.MenuGroupGrid.removeBtn.setDisabled(false);
+});
 
 Ext.onReady(function(){
     Ext.QuickTips.init();
@@ -190,7 +193,7 @@ Ext.onReady(function(){
         items:[{
             xtype: 'fieldset',    
             layout:"column",       
-            style:'border:0;padding-bottom:0',    
+            style:'border:0;padding-bottom:0;margin-top:5',    
             autoHeight:true,    
             collapsible: false,   
             defaults: {
@@ -287,13 +290,13 @@ Ext.onReady(function(){
             {
                 header: '菜单地址',
                 sortable: true,
-                width    : 600, 
+                width    : 400, 
                 dataIndex: 'address'
             },
             {
                 header: '说明', 
                 sortable: true,
-                width    : 450,  
+                width    : 200,  
                 dataIndex: 'title'
             }
         ],
@@ -314,7 +317,8 @@ Ext.onReady(function(){
             displayMsg: '当前显示 {0} - {1}条记录/共 {2}条记录。',
             emptyMsg: "无显示数据"
         })                             
-    });       
+    }); 
+          
     /**
     * 菜单分组所在的容器面板
     */    

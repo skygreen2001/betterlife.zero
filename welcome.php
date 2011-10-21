@@ -60,6 +60,7 @@ div#content{
     margin-top: 20px;
 }
 </style>
+<link rel="icon" href="favicon.ico" mce_href="favicon.ico" type="image/x-icon"> 
 </head>
 <body>
 <?php require_once ("Gc.php"); ?>         

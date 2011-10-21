@@ -257,14 +257,16 @@ class LogMe extends Object {
      * 显示当前运行的日志。
      */
     public static function showLogs() {
-        if (Gc::$dev_debug_on){
-            foreach (self::$log as $log) {
-                echo '<pre>';
-                echo $log;
-                echo '</pre>';
+        if (Gc::$dev_debug_on){ 
+            if (self::$log){            
+                foreach (self::$log as $log) {
+                    echo '<pre>';
+                    echo $log;
+                    echo '</pre>';
+                }
+                self::save();
+                echo "您可以在日志文件中找到信息：".Gc::$log_config["logpath"];
             }
-            self::save();
-            echo "您可以在日志文件中找到信息：".Gc::$log_config["logpath"];
         }
     }
     //</editor-fold>
