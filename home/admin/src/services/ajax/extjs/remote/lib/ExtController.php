@@ -79,12 +79,12 @@ class ExtController
                 }   
                 break;
             case 'DELETE':
-                $object->setId($this->id);
-                $result=$object->delete();
+                $object->setId($this->id);    
+                $result=$object->delete();    
                 if ($result) {
-                    $response->success = true;
+                    $response->success = true;    
                     $response->message = '删除资源库 ' . $this->id;
-                } else {
+                } else { 
                     $response->message = "删除资源库失败！";
                 }         
                 break;

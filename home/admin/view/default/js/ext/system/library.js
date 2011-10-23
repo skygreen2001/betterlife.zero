@@ -43,6 +43,7 @@ var reader = new Ext.data.JsonReader
 // The new DataWriter component.
 var writer = new Ext.data.JsonWriter({
     encode: false   // <-- don't return encoded JSON -- causes Ext.Ajax#request to send data using jsonData config rather than HTTP params
+    //writeAllFields: false
 });
 
 // Typical Store collecting the Proxy, Reader and Writer together.
@@ -52,7 +53,9 @@ var libraryStore = new Ext.data.Store({
     proxy: proxy,
     reader: reader,     
     writer: writer,    // <-- plug a DataWriter into the store just as you would a Reader
-    autoLoad: {params:{start: 0, limit: bb.Config.pageSize}}
+    autoLoad: {params:{start: 0, limit: bb.Config.pageSize}},      
+    autoSave:false,
+    autoDestroy: true
 });
 libraryStore.setDefaultSort('id', 'desc');
 ////
@@ -69,14 +72,15 @@ Ext.data.DataProxy.addListener('beforewrite', function(proxy, action) {
 // all write events
 //
 Ext.data.DataProxy.addListener('write', function(proxy, action, result, res, rs) {
-    resourceLibraryGrid.addBtn.setDisabled(false);
-    App.setAlert(true, action + ':' + res.message);
-    resourceLibraryGrid.getView().refresh();
+    bb.resourceLibraryGrid.addBtn.setDisabled(false);
+    App.setAlert(true, action + ':' + res.message);        
+    bb.resourceLibraryGrid.getView().refresh();
 });        
 ////
 // all exception events
 //
 Ext.data.DataProxy.addListener('exception', function(proxy, type, action, options, res) {
+    //this.rejectChanges();
     App.setAlert(false, "发生异常，执行： " + action);
 });    
 // pluggable renders  
@@ -88,7 +92,20 @@ function renderOperation(value, p, record){
              record.data.id);
 }         
 
-var sm = new Ext.grid.CheckboxSelectionModel();  // add checkbox column  
+var sm = new Ext.grid.CheckboxSelectionModel({  
+    handleMouseDown: Ext.emptyFn,
+    listeners:{  
+      'rowselect':function(sm,rowIndex,record){  
+        //console.log('rowselect',rowIndex)  
+      },  
+      'rowdeselect':function(sm,rowIndex,record){  
+        //console.log('rowdeselect',rowIndex)  
+      },  
+      'selectionchange':function(sm){  
+        //console.log('selectionchange',sm.getSelections().length);  
+      }
+    }
+    });
  
 /** 解决了CheckboxSelectionModel和RowEditor的冲突问题
  * @link http://www.sencha.com/forum/showthread.php?116823-OPEN-1419-RowEditor-CheckboxSelectionModel-causes-error.
@@ -126,11 +143,17 @@ var resourceLibraryColumns =  new Ext.grid.ColumnModel([
 // use RowEditor for editing
 var editor = new Ext.ux.grid.RowEditor({
     saveText: '修改',
-    clicksToEdit: 2
+    //保证选择左侧的选择框时，不影响启动显示RowEdior
+    onRowClick: function(g, rowIndex, e){  
+        if (!e.getTarget('.x-grid3-row-checker')) {
+            this.constructor.prototype.onRowClick.apply(this, arguments);
+        }
+    } 
+    //,clicksToEdit: 2
 });     
 
 // Create a typical GridPanel with RowEditor plugin
-var resourceLibraryGrid = new Ext.grid.GridPanel({
+bb.resourceLibraryGrid = new Ext.grid.GridPanel({
     region: 'center',
     iconCls: 'icon-grid',
     frame: true,
@@ -139,14 +162,14 @@ var resourceLibraryGrid = new Ext.grid.GridPanel({
     width: 800,
     height: 400,
     store: libraryStore,
-    plugins: [editor],
+    plugins: [editor],    
     defaults:{
          autoScroll:true
     },          
-    //columns : resourceLibraryColumns,
     sm:sm,
     cm:resourceLibraryColumns,          
     trackMouseOver:true,
+    columnLines: true,
     loadMask:true,//{msg:'正在加载数据，请稍侯……'}
     stripeRows:true,             
     tbar: [{
@@ -164,6 +187,13 @@ var resourceLibraryGrid = new Ext.grid.GridPanel({
             disabled: true,
             iconCls: 'silk-delete',
             handler: onDelete
+        }, '-',{
+            ref: '../saveBtn',
+            iconCls: 'icon-user-save',
+            text: '提交',
+            handler: function(){
+                 bb.resourceLibraryGrid.store.save();
+            }
         }, '-'],
     bbar: new Ext.PagingToolbar({
         pageSize: bb.Config.pageSize,
@@ -179,15 +209,15 @@ var resourceLibraryGrid = new Ext.grid.GridPanel({
 }); 
 
 //判断删除按钮是否可以激活
-resourceLibraryGrid.getSelectionModel().on('selectionchange', function(sm){
-    resourceLibraryGrid.removeBtn.setDisabled(sm.getCount() < 1);
+bb.resourceLibraryGrid.getSelectionModel().on('selectionchange', function(sm){
+    bb.resourceLibraryGrid.removeBtn.setDisabled(sm.getCount() < 1);
 });
     
 /**
 * 反选选择
 */
 function onReverseSelect() {
-    for (var i = resourceLibraryGrid.getView().getRows().length - 1; i >= 0; i--) {
+    for (var i = bb.resourceLibraryGrid.getView().getRows().length - 1; i >= 0; i--) {
         if (sm.isSelected(i)) {
             sm.deselectRow(i);
         }else {
@@ -199,16 +229,17 @@ function onReverseSelect() {
  * 新增
  */
 function onAdd(btn, ev) {
-    resourceLibraryGrid.addBtn.setDisabled(true);
-    var u = new resourceLibraryGrid.store.recordType({
+    //bb.resourceLibraryGrid.addBtn.setDisabled(true);
+    var u = new bb.resourceLibraryGrid.store.recordType({
         name : '',
         init : '',
         open : false,
         required : false
-    });
+    });                   
     editor.stopEditing();
-    resourceLibraryGrid.store.insert(0, u);
-    editor.startEditing(0);
+    bb.resourceLibraryGrid.store.insert(0, u);  
+    bb.resourceLibraryGrid.getView().refresh();               
+    editor.startEditing(0, 0);                                                     
 }
 /**
  * 删除
@@ -220,23 +251,25 @@ function onDelete() {
 //批量删除
 function showResult(btn) {  
 //        删除单条记录        
-//        var rec = resourceLibraryGrid.getSelectionModel().getSelected();
+//        var rec = bb.resourceLibraryGrid.getSelectionModel().getSelected();
 //        if (!rec) {
 //            return false;
 //        }
-//        resourceLibraryGrid.store.remove(rec);     
+//        bb.resourceLibraryGrid.store.remove(rec);     
       //确定要删除你选定项的信息  
      if(btn=='yes')  
      {  
-        var selectedRows  = resourceLibraryGrid.getSelectionModel().getSelections();        
-        for(var i = 0; i<selectedRows.length; i++){    
+        editor.stopEditing();
+        var selectedRows  = bb.resourceLibraryGrid.getSelectionModel().getSelections();        
+        for(var i = 0,r;r=selectedRows[i];i++){    
             if (!selectedRows[i]) {
                continue;
             }
-            resourceLibraryGrid.store.remove(selectedRows[i]);
+            bb.resourceLibraryGrid.store.remove(r);
         }   
      } 
-     resourceLibraryGrid.getView().refresh();//刷新整个grid视图,重新排序.
+     bb.resourceLibraryGrid.store.save();
+     bb.resourceLibraryGrid.getView().refresh();//刷新整个grid视图,重新排序.
 };     
 
 /**
@@ -320,7 +353,7 @@ Ext.onReady(function() {
         layout: 'border',
         items: [        
           searchForm,
-          resourceLibraryGrid
+          bb.resourceLibraryGrid
         ]
     });    
 

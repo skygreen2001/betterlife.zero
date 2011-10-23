@@ -90,8 +90,8 @@ Ext.ux.grid.RowEditor = Ext.extend(Ext.Panel, {
         // stopEditing without saving when a record is removed from Store.
         grid.getStore().on('remove', function() {
             this.stopEditing(false);
-        },this);
-
+        },this);     
+        
         grid.on({
             scope: this,
             keydown: this.onGridKey,
@@ -415,12 +415,13 @@ Ext.ux.grid.RowEditor = Ext.extend(Ext.Panel, {
             }
             for(var i = index||0, len = cm.getColumnCount(); i < len; i++){
                 c = cm.getColumnAt(i);
-        if(Ext.isFunction(c.getEditor)){
-                if(!c.hidden && c.getEditor()){
-                    c.getEditor().focus();
-                    break;
+                if(Ext.isFunction(c.getEditor)){
+                    if(!c.hidden && c.getEditor()){
+                        c.getEditor().focus();
+                        break;
+                    }
                 }
-            }}
+            }
         }
     },
 

@@ -118,8 +118,6 @@ class ResourceLibrary extends XmlObject
                     $condition[]="$key contain '$value'";    
                } else if ($key=='init') {
                     $condition[]="$key contain '$value'";    
-               } else if ($key=='open') {
-                   $filter_open=($value=="true"?true:false);  
                } else {
                     $condition[$key]=$value;
                }
@@ -135,7 +133,13 @@ class ResourceLibrary extends XmlObject
                 foreach ($dataobjets as $key=>$block){  
                     $blockAttr=$block[Util::XML_ELEMENT_ATTRIBUTES];     
                     if (isset($condition)&&(!self::isValidData($blockAttr,$condition))){    
-                        unset($dataobjets[$key]);
+                        if (isset($blockAttr[Library_Loader::SPEC_REQUIRED])&&($blockAttr[Library_Loader::SPEC_REQUIRED]=='true')){
+                            if ($condition[Library_Loader::SPEC_OPEN]=="false"){
+                               unset($dataobjets[$key]);  
+                            }
+                        }else{
+                           unset($dataobjets[$key]); 
+                        }
                     }
                 }
             }            
@@ -168,7 +172,7 @@ class ResourceLibrary extends XmlObject
                     $condition[]="$key contain '$value'";    
                } else if ($key=='init') {
                     $condition[]="$key contain '$value'";    
-               } else if ($key=='open') {
+               } else if ($key==Library_Loader::SPEC_OPEN) {
                    $filter_open=($value=="true"?true:false);
 //                   if ($value=="true")
 //                   $filter_open=true;

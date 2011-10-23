@@ -320,7 +320,9 @@ class XmlObject extends Object implements ArrayAccess
         $xml=UtilXmlSimple::fileXmlToObject($filename);        
         $classname{0} = strtolower($classname{0});
         $child=$xml->addChild($classname);//取该对象的类名作为节点名，头字母转化为小写
-        $this->id=UtilDateTime::dateToTimestamp();
+        $this->id=microtime(false)."";
+        $this->id=str_replace(" ","",$this->id);
+        $this->id=str_replace(".","",$this->id);
         $child->addAttribute(self::$name_id_property, $this->id);     
         foreach($data as $key=>$value) {
             if ($value!=null&&!endWith($key,"Show")){

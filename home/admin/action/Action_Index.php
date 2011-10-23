@@ -56,7 +56,9 @@ class Action_Index extends Action
             UtilJavascript::loadJsContentReady($viewobject,MenuGroup::viewForExtJs());  
             //核心功能:导航[Tab新建窗口]
             UtilJavascript::loadJsReady($viewobject,$templateurl.$module_templateurl_relative."navigation.js");  
-        }else{
+        }
+        else
+        {
             UtilJavascript::loadJs($templateurl.$module_templateurl_relative."index.js"); 
             //核心功能:外观展示
             UtilJavascript::loadJs($templateurl.$module_templateurl_relative."layout.js",true);              

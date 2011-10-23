@@ -156,7 +156,7 @@ bb.Menu.MenuGroupGrid = new Ext.grid.EditorGridPanel({
 
 //判断删除按钮是否可以激活
 bb.Menu.MenuGroupGrid.getSelectionModel().on('selectionchange', function(sm){
-    bb.Menu.MenuGroupGrid.removeBtn.setDisabled(false);
+    bb.Menu.MenuGroupGrid.removeBtn.setDisabled(sm.getCount() < 1);
 });
 
 Ext.onReady(function(){
