@@ -19,8 +19,7 @@ Ext.App = function(config) {
     Ext.App.superclass.constructor.apply(this, arguments);
 };
 
-Ext.extend(Ext.App, Ext.util.Observable, {
-
+Ext.extend(Ext.App, Ext.util.Observable, {  
     /***
      * response status codes.
      */
@@ -161,7 +160,29 @@ Ext.extend(Ext.App, Ext.util.Observable, {
                 break;
             case false:
                 title_show = this.TITLE_STATUS_ERROR;
+                break;                                  
+            case this.STATUS_NOTICE:
+                title_show=this.TITLE_STATUS_NOTICE;
                 break;
+            case this.STATUS_EXCEPTION:
+                title_show=this.TITLE_STATUS_EXCEPTION;
+                break;    
+            case this.STATUS_VALIDATION_ERROR:
+                title_show=this.TITLE_STATUS_VALIDATION_ERROR;
+                break;
+                
+            case this.STATUS_ERROR:
+                title_show=this.TITLE_STATUS_ERROR;
+                break;
+            case this.STATUS_OK:
+                title_show=this.TITLE_STATUS_OK;
+                break;    
+            case this.STATUS_HELP:
+                title_show=this.TITLE_STATUS_HELP;
+                break;
+            default:
+                title_show="";
+                break;         
         }
         return [
             '<div class="app-msg">',
@@ -247,6 +268,7 @@ Ext.onReady(Ext.msg.init, Ext.msg);
 
 // old school cookie functions
 var Cookies = {};
+
 Cookies.set = function(name, value){
      var argv = arguments;
      var argc = arguments.length;

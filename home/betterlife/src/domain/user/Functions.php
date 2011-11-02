@@ -7,7 +7,7 @@
  * @package domain.user
  * @author skygreen
  */
-class Function extends DataObject {
+class Functions extends DataObject {
     //<editor-fold defaultstate="collapsed" desc="定义部分">
     /**
      * 允许访问的URL权限

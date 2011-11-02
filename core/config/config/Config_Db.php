@@ -254,6 +254,7 @@ class Config_Db extends ConfigBB
      * @static
      */
     private static $orm=array( 
+    	"Functions"=>"bb_user_function"
     );
 
     /**
