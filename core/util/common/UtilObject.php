@@ -115,6 +115,13 @@ class UtilObject extends Util {
                     }
                 }
             }
+            if ($data){      
+                //去除数据对象规格定义
+                if (($data instanceof DataObject)||($data instanceof RemoteObject)) {
+                    unset($data->field_spec); 
+                    unset($data->real_fieldspec);    
+                }
+            }      
             return $data;
         }
         return null;
