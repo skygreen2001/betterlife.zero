@@ -1,6 +1,6 @@
-Ext.namespace("betterlife.admin.menu");
+Ext.namespace("Betterlife.Admin.Menu");
 
-bb = betterlife.admin.menu;
+bb = Betterlife.Admin.Menu;
 
 /**
  * 全局配置

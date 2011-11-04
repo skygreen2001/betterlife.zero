@@ -315,7 +315,7 @@ class MenuGroup extends Viewable
         $uri=dirname(__FILE__).DIRECTORY_SEPARATOR.self::CONFIG_MENU_FILE;
         $menuConfigs=UtilXmlSimple::fileXmlToObject($uri);   
         $result="
-                bb.Layout.LeftMenuGroups= [";
+                Bb.Layout.LeftMenuGroups= [";
         if ($menuConfigs!=null)
         {
             foreach ($menuConfigs as $menuGroup) 

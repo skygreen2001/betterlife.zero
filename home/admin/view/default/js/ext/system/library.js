@@ -1,4 +1,4 @@
-Ext.ns("Betterlife.Admin");
+Ext.ns("Betterlife.Admin.Library");
 
 Bb = Betterlife.Admin;
 /**
