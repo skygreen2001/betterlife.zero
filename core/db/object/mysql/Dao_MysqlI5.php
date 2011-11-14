@@ -532,6 +532,9 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal {
             }
             else if (is_string($Param)) {
                 $sRetval.='s';
+            } 
+            else {   
+                $sRetval.='s';
             }
         }
         return $sRetval;

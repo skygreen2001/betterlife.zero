@@ -1,5 +1,6 @@
 <?php
 header("Content-Type:text/html; charset=UTF-8");
+if ( !defined('__DIR__') ) define('__DIR__', dirname(__FILE__));  
 require_once 'Gc.php';//加载全局变量文件
 require_once 'core/main/Initializer.php'; 
 

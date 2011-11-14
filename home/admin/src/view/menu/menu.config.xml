@@ -14,6 +14,7 @@
         <menu name="Photoshop Online" address="http://www.photoshop.com/tools" />
         <menu name="PhotoEditor" title="Pixlr Photo editor" address="http://pixlr.com/editor" />   
         <menu name="HtmlTidy" title="Html Tidy online" address="http://infohound.net/tidy/" /> 
+        <menu name="cssdrive" title="CSS Drive- Categorized CSS gallery and examples" address="http://www.cssdrive.com/" />
         <menu name="CSSTidy" title="a free, online application that will fix errors and optimize your CSS code." address="http://csstidy.sourceforge.net/example.php" />
         <menu name="Icon Finder" address="http://www.iconfinder.com/" />
         <menu name="Convert Icon" address="http://www.converticon.com/" />    

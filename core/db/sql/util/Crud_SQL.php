@@ -109,6 +109,9 @@ abstract class Crud_SQL {
                                 $detailclause=implode(",", $detailclause);
                                 if (!empty($detailclause)) {
                                     $detailclause=$this->parseValidInputParam($detailclause);
+                                    if (is_string($detailclause)){
+                                        $this->whereClause=$detailclause;
+                                    }                                    
                                 }else {
                                     return $this;
                                 }
@@ -295,18 +298,25 @@ abstract class Crud_SQL {
                 $f_values=array_values($param);
                 foreach ($f_values as $value) {
                     if ((strlen($value)>0)&&($value{0}=='(')&&($value{strlen($value)-1}==')')){
-                      $value=substr($value,1,strlen($value)-2); 
+                        $value=substr($value,1,strlen($value)-2); 
                     }
-                    if (contain($value, self::SQL_LIKE)){
-                        $tmp=explode(trim(self::SQL_LIKE), $value);
-                    }else{
-                        $tmp=explode("=", $value);
-                    }
-                    if ($this->isPreparedStatement) {                                                
-                        $result[$tmp[0]]=str_replace("'","",$tmp[1]); 
-                        $result[$tmp[0]]=str_replace("\"","",$result[$tmp[0]]);    
-                    }else {
-                        $result[$tmp[0]]=$tmp[1];
+                    if (contain($value,"1=1")){
+                        $value=str_replace("1=1","",$value);
+                        $value=str_replace("and","",$value);  
+                        $value=trim($value);
+                    }                          
+                    if (!empty($value)){                    
+                        if (contain($value, self::SQL_LIKE)){
+                            $tmp=explode(trim(self::SQL_LIKE), $value);
+                        }else{
+                            $tmp=explode("=", $value);
+                        }
+                        if ($this->isPreparedStatement) {                                                
+                            $result[$tmp[0]]=str_replace("'","",$tmp[1]); 
+                            $result[$tmp[0]]=str_replace("\"","",$result[$tmp[0]]);    
+                        }else {
+                            $result[$tmp[0]]=$tmp[1];
+                        }
                     }
                 }
             }else {

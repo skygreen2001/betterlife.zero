@@ -351,7 +351,20 @@ abstract class DataObject extends Object implements ArrayAccess
     public static function deleteByID($id)
     {
         return DataObjectFunc::deleteByID(get_called_class(),$id);  
-    }
+    }    
+      
+   /**
+    * 根据主键删除多条记录  
+    * @param string classname 数据对象类名  
+    * @param array|string $ids 数据对象编号
+    *  形式如下:
+    *  1.array:array(1,2,3,4,5)
+    *  2.字符串:1,2,3,4
+    */
+    public static function deleteByIds($ids)
+    {
+        return DataObjectFunc::deleteByIds(get_called_class(),$ids);  
+    } 
 
     /**
      * 删除当前对象
@@ -374,10 +387,10 @@ abstract class DataObject extends Object implements ArrayAccess
       /**
      * 更新对象指定的属性                    
      * @param string $sql_id 需删除数据的ID编号或者ID编号的Sql语句<br/>        
-     * 示例如下：<br/>
-     *     $sql_id:<br/>
-     *         1.1<br/>
-     *         2.user_id=1<br/>
+     * 示例如下：<br/>          
+     *     $sql_ids:<br/>
+     *         1.1,2,3<br/>
+     *         2.array(1,2,3)<br/>
      * @param string $array_properties 指定的属性<br/>
      * 示例如下：<br/>
      *     $array_properties<br/>
@@ -385,9 +398,9 @@ abstract class DataObject extends Object implements ArrayAccess
      *      2.array("pass"=>"1","name"=>"sky")<br/>
      * @return boolen 是否更新成功；true为操作正常<br/>
      */
-    public static function updateProperties($sql_id,$array_properties) 
+    public static function updateProperties($sql_ids,$array_properties) 
     {
-        return DataObjectFunc::updateProperties(get_called_class(),$sql_id,$array_properties);
+        return DataObjectFunc::updateProperties(get_called_class(),$sql_ids,$array_properties);
     }
                                               
     /**

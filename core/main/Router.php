@@ -309,10 +309,17 @@ class Router
          * 设置模块
          */
         $var  = self::VAR_GROUP;
-        $group= !empty($route[$var])?$route[$var]:Gc::$module_names[2];
-        unset($route[$var]);
-        $this->module=strtolower($group);//ucfirst()
-
+        $group= !empty($route[$var])?$route[$var]:Gc::$module_names[2];                          
+        if(!empty($route[$var])){
+            $group=$route[$var]; 
+            unset($route[$var]);
+            $this->module=strtolower($group); 
+        }else{
+          if (count(Gc::$module_names)>=3){
+            $group= Gc::$module_names[2];  
+          }  
+          $this->module=strtolower($group); 
+        }  
         /**
          * 设置控制器
          */

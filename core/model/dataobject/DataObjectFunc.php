@@ -200,10 +200,10 @@
      * 对应数据对象的updateProperties方法
      * @param string classname 数据对象类名  
      * @param string $sql_id 需删除数据的ID编号或者ID编号的Sql语句<br/>        
-     * 示例如下：<br/>
-     *     $sql_id:<br/>
-     *         1.1<br/>
-     *         2.user_id=1<br/>
+     * 示例如下：<br/>          
+     *     $sql_ids:<br/>
+     *         1.1,2,3<br/>
+     *         2.array(1,2,3)<br/>
      * @param string $array_properties 指定的属性<br/>
      * 示例如下：<br/>
      *     $array_properties<br/>
@@ -211,7 +211,7 @@
      *      2.array("pass"=>"1","name"=>"sky")<br/>
      * @return boolen 是否更新成功；true为操作正常<br/>
      */
-    public static function updateProperties($classname,$sql_id,$array_properties) {
+    public static function updateProperties($classname,$sql_ids,$array_properties) {
         $tablename=Config_Db::orm($classname);
         $_SQL=new Crud_Sql_Update();
         $_SQL->isPreparedStatement=false;
@@ -224,10 +224,22 @@
             if ($classname instanceof DataObject){
                 $idColumn=DataObjectSpec::getRealIDColumnName($classname);
             }
-            $sql_id=$idColumn."='$sql_id'";
+            $condition=" ";   
+            if (is_string($sql_ids)){
+                $sql_ids=explode(",",$sql_ids);
+            } 
+            if ($sql_ids&&(count($sql_ids)>0)){ 
+               $condition= " $idColumn=".$sql_ids[0]." ";
+               for($i=1;$i<count($sql_ids);$i++){
+                   if (!empty($sql_ids[$i])){
+                        $condition.= " or $idColumn=".$sql_ids[$i]." ";    
+                   }
+               }  
+            }    
+            $sql_ids=$condition;
         }
         
-        $sQuery=$_SQL->update($tablename)->set($array_properties)->where($sql_id)->result();
+        $sQuery=$_SQL->update($tablename)->set($array_properties)->where($sql_ids)->result();
         return DataObject::dao()->sqlExecute($sQuery);
     }                     
     
@@ -273,22 +285,66 @@
     */
     public static function deleteByID($classname,$id)
     {
-        $tablename=Config_Db::orm($classname);          
-        $_SQL=new Crud_Sql_Delete();
-        $_SQL->isPreparedStatement=false;
-        if (is_string($classname)) {
-            if (class_exists($classname)) {
-                $classname=new $classname();
+        if (is_numeric($id)){        
+            $tablename=Config_Db::orm($classname);          
+            $_SQL=new Crud_Sql_Delete();
+            $_SQL->isPreparedStatement=false;
+            if (is_string($classname)) {
+                if (class_exists($classname)) {
+                    $classname=new $classname();
+                }
             }
-        }
 
-        $idColumn=DataObjectSpec::getRealIDColumnName($classname);
-                                          
-        if (isset($idColumn)){
-            $sQuery= $_SQL->deletefrom($tablename)->where($idColumn."='$id'")->result();
-            return DataObject::dao()->sqlExecute($sQuery); 
-        }                                                       
+            $idColumn=DataObjectSpec::getRealIDColumnName($classname);                                               
+            if (isset($idColumn)){
+                $sQuery= $_SQL->deletefrom($tablename)->where($idColumn."='$id'")->result();
+                return DataObject::dao()->sqlExecute($sQuery); 
+            }   
+        }
+        return false; 
     }
+        
+    /**
+    * 根据主键删除多条记录  
+    * @param string classname 数据对象类名  
+    * @param array|string $ids 数据对象编号
+    *  形式如下:
+    *  1.array:array(1,2,3,4,5)
+    *  2.字符串:1,2,3,4
+    */
+    public function deleteByIds($classname,$ids){
+       $data=false;                 
+       if (!empty($ids)) {  
+            $tablename=Config_Db::orm($classname);          
+            $_SQL=new Crud_Sql_Delete();
+            $_SQL->isPreparedStatement=false;
+            if (is_string($classname)) {
+                if (class_exists($classname)) {
+                    $classname=new $classname();
+                }
+            } 
+            if ($classname instanceof DataObject){
+                $idColumn=DataObjectSpec::getRealIDColumnName($classname);
+            }  
+            if (isset($idColumn)){
+                $condition=" ";   
+                if (is_string($ids)){
+                    $ids=explode(",",$ids);
+                } 
+                if ($ids&&(count($ids)>0)){ 
+                   $condition= " $idColumn=".$ids[0]." ";
+                   for($i=1;$i<count($ids);$i++){
+                       if (!empty($ids[$i])){
+                            $condition.= " or $idColumn=".$ids[$i]." ";    
+                       }
+                   }  
+                }  
+                $sQuery= $_SQL->deletefrom($tablename)->where($condition)->result();
+                return DataObject::dao()->sqlExecute($sQuery); 
+            } 
+       }
+    }
+    
     //</editor-fold>     
                         
   }
