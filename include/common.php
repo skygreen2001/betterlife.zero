@@ -61,6 +61,26 @@ function endWith($haystack, $needle,$strict=true){
 }
    
 /**
+* 专供Flex调试使用的Debug工具
+* @link http://www.adobe.com/cn/devnet/flex/articles/flex_php_05.html
+* @param mixed $var
+*/
+function logMe($var) {
+    $filename = dirname(__FILE__) . '/__log.txt';            
+    if (!$handle = fopen($filename, 'a')) {
+        echo "Cannot open file ($filename)";
+        return;
+    }
+    
+    $toSave = var_export($var, true);
+    fwrite($handle, "[" . date("y-m-d H:i:s") . "]");
+    fwrite($handle, "\n");
+    fwrite($handle, $toSave);
+    fwrite($handle, "\n");
+    fclose($handle);
+}       
+   
+/**
  * 是否直接显示出来
  * @param type $s
  * @param type $isEcho 

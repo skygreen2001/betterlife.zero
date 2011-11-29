@@ -312,9 +312,10 @@
     *  1.array:array(1,2,3,4,5)
     *  2.字符串:1,2,3,4
     */
-    public function deleteByIds($classname,$ids){
+    public function deleteByIds($classname,$ids)
+    {
        $data=false;                 
-       if (!empty($ids)) {  
+       if (!empty($ids)) {        
             $tablename=Config_Db::orm($classname);          
             $_SQL=new Crud_Sql_Delete();
             $_SQL->isPreparedStatement=false;
@@ -327,7 +328,10 @@
                 $idColumn=DataObjectSpec::getRealIDColumnName($classname);
             }  
             if (isset($idColumn)){
-                $condition=" ";   
+                $condition=" "; 
+                $ids=str_replace("(", "", $ids);
+                $ids=str_replace(")", "", $ids);               
+                $ids=str_replace("'", "", $ids);                                
                 if (is_string($ids)){
                     $ids=explode(",",$ids);
                 } 

@@ -2,9 +2,13 @@
 require_once ("init.php");
 //$blogs=Blog::select('name,content');
 //print_r($blogs);                                                  
-$serverCache=Manager_Cache::singleton()->server(EnumCacheDriverType::REDIS);
-$serverCache->TestRun();
-           //EnumCacheDriverType::REDIS
+
+User::get("1=1 and username like '%a%'");
+
+//$serverCache=Manager_Cache::singleton()->server(EnumCacheDriverType::REDIS);
+//$serverCache->TestRun();
+                    
+//EnumCacheDriverType::REDIS
 //print_r(SystemService::doLibrarySelect(array("name"=>"m")));                                             
 //LogMe::log("我在想事情呢！等等我");       
 //LogMe::log("装深沉，你就装吧！");
