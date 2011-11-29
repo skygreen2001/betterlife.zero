@@ -158,7 +158,7 @@ class UtilArray extends Util
     }
     
     /**
-     * 获取数组中报刊键数组的数组
+     * 获取数组中指定键数组的数组
      * @param array $array 数组,如array("key1"=>1,"key2"=>2,"key3"=>3,"key4"=>4);
      * @param string $keys 键字符串，如"key1,key3"
      * @return array  数组中包含键数组的数组,如array("key1"=>1,"key3"=>3);
@@ -172,7 +172,23 @@ class UtilArray extends Util
             }
         }
         return $return;
-    }
+    }         
+
+    /**
+     * 多维数组转为一维数组
+     * @param array $array 数组
+     */
+    public static function array_multi2single($array) 
+    {
+        static $result_array = array();
+        foreach ($array as $value) {
+            if (is_array($value)) {
+                UtilArray::array_multi2single($value);
+            } else
+                $result_array[] = $value;
+        }
+        return $result_array;
+    }   
     
      /**
      * 返回数组中指定值的键名称。

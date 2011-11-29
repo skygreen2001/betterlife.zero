@@ -315,7 +315,7 @@ class UtilImage {
         }
         for($i=0;$i<$length;$i++) {
             $fontcolor=imagecolorallocate($im,mt_rand(0,120),mt_rand(0,120),mt_rand(0,120)); //这样保证随机出来的颜色较深。
-            $codex= msubstr($code,$i,1);
+            $codex= UtilString::msubstr($code,$i,1);
             imagettftext($im,mt_rand(16,20),mt_rand(-60,60),40*$i+20,mt_rand(30,35),$fontcolor,$fontface,$codex);
         }
         self::output($im,$type);

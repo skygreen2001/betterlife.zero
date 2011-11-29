@@ -34,7 +34,12 @@ class MenuGroup extends Viewable
      * 菜单分组的图标Css样式
      * @var string 
      */
-    private $iconCls;
+    private $iconCls;      
+    /**
+    * 是否需要显示
+    * @var bool
+    */
+    private $show;
     /**
      * 分组拥有的菜单列表
      * $key:菜单分组ID,$value:所有的菜单项。
@@ -96,6 +101,17 @@ class MenuGroup extends Viewable
     {
         return $this->lang;
     }
+    
+    private function setShow($show)
+    {
+        $this->show=$show;
+    }
+    
+    public function getShow()
+    {
+        return $this->show;
+    }
+        
     
     /**
      * Xml格式存储的文件路径地址
@@ -321,12 +337,15 @@ class MenuGroup extends Viewable
             foreach ($menuConfigs as $menuGroup) 
             {              
                 $attributes=$menuGroup->attributes();
-                $result.="{
-                    contentEl:'$attributes->id',
-                    title:'$attributes->name',
-                    border: false,
-                    iconCls: '$attributes->iconCls'},";
-                    
+                $isShow=true;  
+                if (isset($attributes->show)&&$attributes->show=='false')$isShow=false;
+                if ($isShow) {
+                    $result.="{
+                        contentEl:'$attributes->id',
+                        title:'$attributes->name',
+                        border: false,
+                        iconCls: '$attributes->iconCls'},";
+                } 
             }
         }
         $result=substr($result,0,strlen($result)-1);

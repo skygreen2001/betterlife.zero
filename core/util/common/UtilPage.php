@@ -245,7 +245,7 @@ class UtilPage {
             $stb.=" maxlength='3' />";
             $stb.="<a href=\"javascript:";    
             $stb.="var topage=document.getElementById('".self::$linkUrl_pageFlag."').value;";
-            $stb.="if(!(/^\d+$/.test(topage)))";
+            $stb.='if(!(/^\d+$/.test(topage)))';
             $stb.="{";
             $stb.="alert('需要输入数字');";
             $stb.="}else{";                     
