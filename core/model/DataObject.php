@@ -384,7 +384,7 @@ abstract class DataObject extends Object implements ArrayAccess
         return  self::dao()->update($this);
     }
 
-      /**
+    /**
      * 更新对象指定的属性                    
      * @param string $sql_id 需删除数据的ID编号或者ID编号的Sql语句<br/>        
      * 示例如下：<br/>          
@@ -402,6 +402,39 @@ abstract class DataObject extends Object implements ArrayAccess
     {
         return DataObjectFunc::updateProperties(get_called_class(),$sql_ids,$array_properties);
     }
+
+    
+    /**
+    * 对属性进行递增
+    * @param string $filter 查询条件，在where后的条件<br/>
+    * 示例如下：<br/>
+    *      0."id=1,name='sky'"<br/>
+    *      1.array("id=1","name='sky'")<br/>
+    *      2.array("id"=>"1","name"=>"sky")<br/>
+    *      3.允许对象如new User(id="1",name="green");<br/>      
+    * @param string property_name 属性名称
+    * @param int incre_value 递增数      
+    */
+    public static function increment($filter=null,$property_name,$incre_value)
+    {
+         return DataObjectFunc::increment(get_called_class(),$filter,$property_name,$incre_value);  
+    }
+    
+    /**
+    * 对属性进行递减    
+    * @param string $filter 查询条件，在where后的条件<br/>
+    * 示例如下：<br/>
+    *      0."id=1,name='sky'"<br/>
+    *      1.array("id=1","name='sky'")<br/>
+    *      2.array("id"=>"1","name"=>"sky")<br/>
+    *      3.允许对象如new User(id="1",name="green");<br/>   
+    * @param string property_name 属性名称
+    * @param int decre_value 递减数
+    */
+    public static function decrement($filter=null,$property_name,$decre_value)
+    {
+         return DataObjectFunc::decrement(get_called_class(),$filter,$property_name,$decre_value);          
+    }    
                                               
     /**
     * 查询当前对象需显示属性的列表  
