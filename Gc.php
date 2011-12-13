@@ -305,6 +305,10 @@ class Gc
             }            
             $baseDir = dirname($_SERVER['SCRIPT_NAME']);
             $baseurl.=($baseDir == '\\' ? '' : $baseDir).'/';
+            
+            if (strpos(strtolower($baseurl),strtolower("common/js"))!== false) {
+                $baseurl=str_replace("common/js/","",$baseurl);     
+            }            
             Gc::$url_base=$baseurl;
         }
         if (empty(Gc::$nav_root_path)){
