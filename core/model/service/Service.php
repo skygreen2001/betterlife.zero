@@ -3,9 +3,10 @@
  +--------------------------------------------------<br/>
  * 所有Service的父类<br/>
  +---------------------------------------------------
- * @category betterlife
+ * @category betterlife  
  * @package core.model
- * @author skygreen
+ * @subpackage service
+ * @author skygreen 
  */
 class Service extends Object {
     /**

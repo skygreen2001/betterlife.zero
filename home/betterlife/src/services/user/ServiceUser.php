@@ -9,7 +9,10 @@ class_exists("Service")||require(dirname(__FILE__)."/../../../../../init.php");
  *  Authenticate users before allowing them to call these methods.
  */
 
-class ServiceUser extends Service implements IServiceNormal {
+ /**
+ * 服务类:用户
+ */
+class ServiceUser extends Service {
 
     public function getUsers() {
         return  self::dao()->get(new User());
@@ -24,7 +27,7 @@ class ServiceUser extends Service implements IServiceNormal {
     }
 
     public function getUserByName($searchStr) {
-        return self::dao()->get(new User(),"name LIKE ?");
+        return self::dao()->get(new User(),"name LIKE '%$searchStr%'");
     }
 
     public function createUser($object) {
