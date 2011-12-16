@@ -84,7 +84,8 @@ class Action_System extends Action
         }else{
             $module_templateurl_relative="js/ext4/";   
         }
-        UtilJavascript::loadJsReady($this->view->viewObject,$templateurl.$module_templateurl_relative."system/menu.js");   
+        UtilJavascript::loadJsReady($this->view->viewObject,"shared/grid/roweditor.js",true,EnumJsFramework::JS_FW_EXTJS,UtilAjaxExtjs::$ext_version); 
+        UtilJavascript::loadJsReady($this->view->viewObject,$templateurl.$module_templateurl_relative."system/menu.js");                               
         UtilJavascript::loadJsReady($this->view->viewObject,"home/admin/src/services/ajax/extjs/direct/api.php");     
         
    }

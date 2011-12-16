@@ -1,4 +1,4 @@
-<html>
+﻿<html>
 <head>
   <title>Title</title>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -7,5 +7,7 @@
 <body>
     <a href="db/rename_db_prefix.php">修改数据库表前缀</a><br/>
     <a href="db/db_domain.php">数据库生成实体类</a>
+    <a href="db/db_delete_tables.php">删除所有的表</a>
+    <a href="db/db_delete_data.php">删除所有的表数据</a>
 </body>
 </html>

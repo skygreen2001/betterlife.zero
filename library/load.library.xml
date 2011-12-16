@@ -18,7 +18,4 @@
   <resourceLibrary id="5" name="yaml" open="false" init="load_yaml_spyc" updateTime="2011-10-28 21:48:03"/>
   <resourceLibrary id="6" name="linq" open="false" init="load_PHPLinq" required="false" updateTime="2011-10-29 09:50:28"/>
   <resourceLibrary id="7" name="template" required="true" init="load_template" open="false" updateTime="2011-10-29 10:34:36"/>
-  <resourceLibrary id="0995078001319987423" name="ggg" init="ggg" commitTime="2011-10-30 23:10:23"/>
-  <resourceLibrary id="0203538001320027371" name="dddda" init="dad" commitTime="2011-10-31 10:16:11"/>
-  <resourceLibrary id="0264047001320030040" name="kkk" init="kkk" commitTime="2011-10-31 11:00:40"/>
 </resourceLibrarys>

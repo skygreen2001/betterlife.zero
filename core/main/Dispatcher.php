@@ -48,6 +48,9 @@ class Dispatcher
                 $isValidRequet=true;
             //break;
             }
+        }else {
+          include_once(Gc::$nav_root_path.Router::URL_DEFAULT_CONTROLLER.Config_F::SUFFIX_FILE_PHP);
+          return;
         }
         //}
         if (!$isValidRequet) {

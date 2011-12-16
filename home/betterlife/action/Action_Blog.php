@@ -19,8 +19,7 @@ class Action_Blog extends Action
 
         $count=Blog::count();
         $bb_page=UtilPage::init($nowpage,$count); 
-        $posts = Blog::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
-        //$posts = Manager_Db::newInstance()->dao()->sqlExecute("select top 3 * from bb_core_blog where name='阿什顿' order by id desc",Blog);
+        $posts = Blog::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());     
         if(!$posts) {
             $this->redirect("blog","write");
         }else {
@@ -75,7 +74,8 @@ class Action_Blog extends Action
             if (!empty($id)){
               $post->update();              
             }else{
-              $post->save();              
+              $post->save();      
+              $this->redirect("blog","display");               
             }    
             $content=$post->content;                                                                                                                    
             $this->view->message="博客提交成功";

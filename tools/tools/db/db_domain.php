@@ -87,18 +87,15 @@ if (isset($_REQUEST["save_dir"])&&!empty($_REQUEST["save_dir"]))
  */
 function tableToDataObjectDefine($tablename,$tableInfoList,$fieldInfo,$type=1){
     $result="<?php\r\n";
+    $classname=getClassname($tablename);    
     if ($tableInfoList!=null&&count($tableInfoList)>0&&  array_key_exists("$tablename", $tableInfoList)){
         $table_comment=$tableInfoList[$tablename]["Comment"];
     }else{
-        $table_comment="关于$tablename的描述";
+        $table_comment="关于$classname的描述";
     }    
     $category=  Gc::$appName;
-    $author= "skygreen";
-    
-    $package=getPackage($tablename);
-    $classname=getClassname($tablename);
-    
-    
+    $author= "skygreen";                                                    
+    $package=getPackage($tablename);    
     $result.="/**
  +---------------------------------------<br/>
  * $table_comment<br/>
@@ -236,7 +233,7 @@ function comment_type($type){
 }
 
 /**
- *
+ * 保存生成的代码到指定命名规范的文件中 
  * @param type $dir
  * @param type $definePhpFileContent 
  */
