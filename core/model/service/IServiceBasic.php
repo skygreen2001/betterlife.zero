@@ -1,10 +1,10 @@
 <?php
 /**
- * 提供业务方法服务的接口
+ * 提供业务方法服务的接口  
  * @category betterlife  
  * @package core.model
  * @subpackage service
- * @author skygreen 
+ * @author skygreen     
  */
 interface IServiceBasic 
 {

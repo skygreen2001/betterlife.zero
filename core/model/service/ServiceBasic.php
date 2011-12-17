@@ -10,12 +10,12 @@
 *     根据过滤条件获取数据对象
 *     根据数据对象的计数
 *     分页获取数据对象
-*     对属性进行递增递减    
+*     对属性进行递增递减            
 * @category betterlife  
 * @package core.model
 * @subpackage service
 * @author skygreen 
-*/ 
+*/              
 class ServiceBasic extends Service implements IServiceBasic
 {  
     /**
