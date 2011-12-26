@@ -1,4 +1,4 @@
-﻿*数据库数据
+*数据库数据
 在Data目录下：
 1.Betterlife.mdf
   Betterlife_log.ldf 是数据库C:\Program Files\Microsoft SQL Server\MSSQL10.SQLEXPRESS\MSSQL\DATA中的数据文件

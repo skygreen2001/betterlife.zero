@@ -6,7 +6,7 @@ require_once(dirname(__FILE__)."/../../init.php");
 
 UtilAjax::init();
 
-if(extension_loaded('zlib')){//检查服务器是否开启了zlib拓展
+if(extension_loaded('zlib')){//检查服务器是否开启了zlib拓展        
     ob_start('ob_gzhandler');
 }
 header("Cache-Control: must-revalidate");

@@ -42,13 +42,13 @@ class Action_Index extends ActionExt
         $this->loadExtCss("index.css",true);    
         if ($viewobject)
         {
-            $this->loadExtView("index.js");                                                                
+            $this->loadExtJs("index.js");                                                                
             //核心功能:外观展示             
-            $this->loadExtView("layout.js",true); 
+            $this->loadExtJs("layout.js",true); 
             //左侧菜单组生成显示
             UtilJavascript::loadJsContentReady($viewobject,MenuGroup::viewForExtJs());  
             //核心功能:导航[Tab新建窗口]
-            $this->loadExtView("navigation.js");  
+            $this->loadExtJs("navigation.js");  
         }
         else
         {
