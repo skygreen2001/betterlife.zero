@@ -321,8 +321,7 @@ class MenuGroup extends Viewable
         $result=array_slice($result, $startPoint, $endPoint);   
         return $result;
     }
-    
-    
+           
     /**
      * ExtJs菜单显示
      */

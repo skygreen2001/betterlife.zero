@@ -7,13 +7,15 @@
  * @package util.common
  * @author skygreen
  */
-class UtilFileSystem extends Util {
+class UtilFileSystem extends Util
+{
     /**
      * 移除数据中的BOM头，它一般是看不见的，但php或html文件有BOM头会影响显示，在头部总有删除不掉的空行。
      * @param string $data 数据
      * @return type 
      */
-    public static function removeBom($data){
+    public static function removeBom($data)
+    {
         if(is_array($data)){
             foreach($data as $k=>$v){
                 $charset[1] = substr($v, 0, 1);
@@ -41,7 +43,8 @@ class UtilFileSystem extends Util {
     * @param string $dest 新文件名
     * @return bool 是否重命名成功。
     */
-    public static function file_rename($source,$dest){
+    public static function file_rename($source,$dest)
+    {
         if(PHP_OS=='WINNT'){
             @copy($source,$dest);
             @unlink($source);
@@ -57,11 +60,11 @@ class UtilFileSystem extends Util {
      * @param string $dir
      * @return bool 是否创建成功。 
      */
-    public static function createDir($dir){
+    public static function createDir($dir)
+    {
        return is_dir($dir) or (self::createDir(dirname($dir)) and mkdir($dir, 0777));
     }
-    
-        
+             
     /**
      * 保存内容到指定文件。
      * 如果该文件不存在，则创建该文件。
@@ -69,7 +72,8 @@ class UtilFileSystem extends Util {
      * @param string $content  内容
      * @return bool 是否创建成功。 
      */
-    public static function save_file_content($filename,$content){
+    public static function save_file_content($filename,$content)
+    {
         $cFile = fopen ($filename, 'w' ); 
         if ($cFile){
             file_put_contents($filename, $content);
@@ -77,15 +81,15 @@ class UtilFileSystem extends Util {
             LogMe::log("创建文件:".$filename."失败！");
         }
         fclose($cFile);     
-    }
-    
+    }    
     
     /**
      * 移除文件夹。<br/>
      * 前提是该目录下没有子目录。
      * @param string $path 文件路径
      */
-    public static function remove_folder($path){
+    public static function remove_folder($path)
+    {
         if(($handle = opendir($path))){
             while (false !==($file = readdir($handle))){
                 if($file!='.' && $file!='..'){
@@ -106,7 +110,8 @@ class UtilFileSystem extends Util {
      * 删除目录
      * @param string $dir 目录
      */
-    public static function deleteDir($dir){
+    public static function deleteDir($dir)
+    {
         $handle = @opendir($dir);
         if(!$handle){
             die("目录不存在");
@@ -132,14 +137,51 @@ class UtilFileSystem extends Util {
      * @param string $mod 文件访问权限
      * @return bool 是否操作成功 
      */
-    public static function move_chmod_uploaded_file($filename,$destination,$mod=0644){
+    public static function move_chmod_uploaded_file($filename,$destination,$mod=0644)
+    {
         if(move_uploaded_file($filename,$destination)){
             chmod($destination,$mod);
             return true;
         }else{
             return false;
         }
-    }    
+    }      
+    
+    /**
+    * 服务器上传文件
+    * @param mixed $_FILES 上传的文件对象
+    * @param string $uploadPath 文件路径或者文件名
+    * @return array 返回信息数组
+    */
+    public static function uploadFile($_FILES,$uploadPath)
+    {                             
+        if ($_FILES["upload_file"]["size"] < intval(ini_get("upload_max_filesize") * 1024000)) {
+            if ($_FILES["upload_file"]["error"] > 0) {
+                return array('success' => false, 'msg' => $_FILES["upload_file"]["error"]);
+            } else {
+                //获得临时文件名
+                $tmptail = end(explode('.', $_FILES["upload_file"]["name"]));
+                if (is_file($uploadPath)){
+                    $temp_name=basename($uploadPath);
+                    self::createDir(dirname($uploadPath));      
+                }else{
+                    $temp_name = date("YmdHis").'.'.$tmptail;
+                    self::createDir($uploadPath);      
+                }
+                if (file_exists($uploadPath.$temp_name)) {
+                    return array('success' => false, 'msg' => '文件重名!');
+                } else {
+                    $IsUploadSucc=move_uploaded_file($_FILES["upload_file"]["tmp_name"], $uploadPath.$temp_name);
+                    if (!$IsUploadSucc){
+                        return array('success' => false, 'msg' => '文件上传失败，通知系统管理员!');
+                    }
+                    return array('success' => true,'file_showname'=>$_FILES["upload_file"]["name"],'file_name' => $temp_name);
+                }
+            }
+        } else {
+            return array('success' => false, 'msg' => '文件太大！');
+        }    
+    }      
     
     /**
      +----------------------------------------------------------<br/>
@@ -152,7 +194,8 @@ class UtilFileSystem extends Util {
      *   1:key-子目录名
      *   2:value-全路径名
      */
-    public static function getSubDirsInDirectory($dir) {
+    public static function getSubDirsInDirectory($dir) 
+    {
         $dirdata=array();
         if (strcmp(substr($dir, strlen($dir)-1,strlen($dir)),DIRECTORY_SEPARATOR)==0) {
             $dir=substr($dir,0,strlen($dir)-1);//如果路径不以DIRECTORY_SEPARATOR结尾的话，应补上
@@ -172,27 +215,33 @@ class UtilFileSystem extends Util {
         return  $dirdata;
     }
 
-        public static function getFilesInDirectory($dir,$agreesuffix=array("php")) {
-            $result=array();
-            if (is_dir($dir)) {
-                $dh = opendir($dir);
-                if ($dh) {
-                    while (($file = readdir($dh)) !== false) {
-                         if($file!='.'&& $file!='..'&& $file!='.svn' && $file!='.git'&&UtilString::contain($file,".")) {    
-                             foreach ($agreesuffix as $suffix) {
-                                if (strcasecmp(end(explode('.', $file)),$suffix)===0) {
-                                    $result[]=$dir.$file;
-                                    //echo "filename: $file : filetype: " . filetype($dir . $file) . "\n";                                  
-                                }
-                             }
+    /**
+    * 获取指定文件夹下下符合要求的文件们
+    * 
+    * @param mixed $dir 指定文件夹
+    * @param mixed $agreesuffix 符合要求的文件名后缀名
+    */
+    public static function getFilesInDirectory($dir,$agreesuffix=array("php")) 
+    {
+        $result=array();
+        if (is_dir($dir)) {
+            $dh = opendir($dir);
+            if ($dh) {
+                while (($file = readdir($dh)) !== false) {
+                     if($file!='.'&& $file!='..'&& $file!='.svn' && $file!='.git'&&UtilString::contain($file,".")) {    
+                         foreach ($agreesuffix as $suffix) {
+                            if (strcasecmp(end(explode('.', $file)),$suffix)===0) {
+                                $result[]=$dir.$file;
+                                //echo "filename: $file : filetype: " . filetype($dir . $file) . "\n";                                  
+                            }
                          }
-                    }
-                    closedir($dh);
+                     }
                 }
+                closedir($dh);
             }
-            return $result;
         }
-
+        return $result;
+    }   
     
     /**
      +----------------------------------------------------------<br/>
@@ -207,7 +256,8 @@ class UtilFileSystem extends Util {
      *      3.当$agreesuffix=array('php','xml')为查找所有php和xml后缀名的文件
      * @return array
      */
-    public static function getAllFilesInDirectory($dir,$agreesuffix=array("php")) {
+    public static function getAllFilesInDirectory($dir,$agreesuffix=array("php")) 
+    {
         $data=array();
         if (strcmp(substr($dir, strlen($dir)-1,strlen($dir)),DIRECTORY_SEPARATOR)==0) {
             $dir=substr($dir,0,strlen($dir)-1);//如果路径不以DIRECTORY_SEPARATOR结尾的话，应补上
@@ -229,7 +279,8 @@ class UtilFileSystem extends Util {
      * @param string $dir 指定目录
      * @return array
      */
-    public static function getAllDirsInDriectory($dir) {
+    public static function getAllDirsInDriectory($dir) 
+    {
         $dirdata=array();
         if (strcmp(substr($dir, strlen($dir)-1,strlen($dir)),DIRECTORY_SEPARATOR)==0) {
             $dir=substr($dir,0,strlen($dir)-1);//如果路径不以DIRECTORY_SEPARATOR结尾的话，应补上
@@ -244,7 +295,8 @@ class UtilFileSystem extends Util {
      * @param string $dir 指定目录
      * @return array
      */
-    private static function searchAllDirsInDirectory($path,&$dirdata) {
+    private static function searchAllDirsInDirectory($path,&$dirdata) 
+    {
         if(is_dir($path)) {
             $dp=dir($path);
             $dirdata[]=$path;
@@ -266,7 +318,8 @@ class UtilFileSystem extends Util {
      *      3.当$agreesuffix=array('php','xml')为查找所有php和xml后缀名的文件
      * @return array
      */
-    private static function searchAllFilesInDirectory($path,&$data,$agreesuffix=array("php")) {
+    private static function searchAllFilesInDirectory($path,&$data,$agreesuffix=array("php")) 
+    {
         $handle = @opendir($path);
         if ($handle) {
             while (false !== ($file = @readdir($handle))) {
@@ -306,10 +359,12 @@ class UtilFileSystem extends Util {
      * @return string
      * @example print_r(UtilFileSystem::getAllFilesInDirectory("D:\\测试文件夹\\"));
      */
-    private static function charsetConvert($path) {
+    private static function charsetConvert($path) 
+    {
         return iconv("UTF-8", "GBK", $path);
     }
 }
 //print_r(UtilFileSystem::getAllFilesInDirectory("D:\\wamp\\www"));
 
 ?>
+

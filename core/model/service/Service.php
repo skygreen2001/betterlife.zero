@@ -21,6 +21,17 @@ class Service extends Object {
     }
     
     /**
+     * 获取数据对象属性映射表字段意义
+     * @param string $dataobject 当前数据对象
+     * 可设定对象未定义的成员变量[但不建议这样做]<br/>
+     * @return array 表列名列表；键:列名,值:列注释说明
+     */
+    public static function fieldsMean($tablename)
+    {
+       return Manager_Db::newInstance()->dbinfo()->fieldMapNameList($tablename);  
+    }    
+    
+    /**
      * 转换成数组
      * @return int 
      */

@@ -35,8 +35,13 @@ class Menu extends Viewable
      * 菜单内容介绍说明
      * @var string 
      */
-    private $title;    
-    
+    private $title; 
+    /**
+    * 所属菜单分组
+    * @var mixed
+    */
+    private $menuGroup_id; 
+                                                                                                                
     public function setName($name)
     {
         $this->name=$name;
@@ -85,7 +90,17 @@ class Menu extends Viewable
     public function getTitle()
     {
         return $this->title;
-    }    
+    }  
+    
+    public function setMenuGroup_id($menuGroup_id)
+    {
+        $this->menuGroup_id=$menuGroup_id;
+    }
+
+    public function getMenuGroup_id()
+    {
+        return $this->menuGroup_id;
+    }        
 }
 
 ?>

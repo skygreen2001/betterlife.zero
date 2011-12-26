@@ -322,6 +322,7 @@ class ServiceBasic extends Service implements IServiceBasic
         if (array_key_exists($current_servicename,self::$std)){
             $current_dataobjectname=self::$std[$current_servicename];
         }else{
+            $current_servicename=str_replace("ExtService","",$current_servicename);
             $current_servicename=str_replace("Service_","",$current_servicename);
             $current_servicename=str_replace("Service","",$current_servicename);
             $current_dataobjectname=ucfirst($current_servicename);                     

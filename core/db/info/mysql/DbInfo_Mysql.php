@@ -7,8 +7,14 @@
  * @package core.db.info
  * @subpackage mysql
  * @author skygreen
- */
-class DbInfo_Mysql extends  DbInfo implements IDbInfo {
+ */   
+class DbInfo_Mysql extends  DbInfo implements IDbInfo 
+{
+    /**
+    * Mysql的版本号
+    * 
+    * @var mixed
+    */
     private $mysqlVersion;
     /**
      * @var string 获取数据库信息的数据库名称
@@ -18,14 +24,13 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo {
      * 是否使用获取数据库信息的数据库
      * @var bool 
      */
-    public static $isUseDbInfoDatabase=false;
-    
-    
+    public static $isUseDbInfoDatabase=false;   
     /**
      * 检查 操作Db的 Php Extensions驱动 是否已打开.   
      * @return TRUE/FALSE 是否已打开. 
      */
-    public static function extension_is_available() { return function_exists('mysql_connect'); }
+    public static function extension_is_available() 
+    { return function_exists('mysql_connect'); }
         
     /**     
      * 在mysql数据库中执行SQL脚本   
@@ -113,8 +118,7 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo {
             LogMe::log('指定的脚本文件路径错误，请查看路径文件名: '. $script_filename); 
         }                                                                      
     }    
-    
-    
+           
     /**
      * 连接数据库
      * @param string $host
@@ -125,7 +129,8 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo {
      * @param mixed $engine 指定操作数据库引擎。{该字段的值参考：EnumDbEngine}
      * @return mixed 数据库连接
      */
-    public function connect($host=null,$port=null,$username=null,$password=null,$dbname=null,$engine=null) {
+    public function connect($host=null,$port=null,$username=null,$password=null,$dbname=null,$engine=null) 
+    {
         $this->connection = Manager_Db::newInstance()->object_mysql_php5($host,$port,$username,$password,$dbname)->getConnection();
     }
 
@@ -133,7 +138,8 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo {
      * 设置数据库字符集
      * @param string $character_code 字符集
      */
-    public function change_character_set($character_code='UTF8'){
+    public function change_character_set($character_code='UTF8')
+    {
        $sql = "set names ".$character_code;
        $result =  mysql_query($sql,$this->connection);
     }
@@ -141,7 +147,8 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo {
     /**
      * 显示数据库的字符集
      */
-    public function character_set() {
+    public function character_set() 
+    {
         $sql = "SHOW VARIABLES LIKE '%character%'";
         $result =  mysql_query($sql,$this->connection);
         if(!$result) {
@@ -163,7 +170,8 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo {
      * 获取数据库的版本信息
      * @return float
      */
-    public function getVersion() {
+    public function getVersion() 
+    {
         if(!$this->mysqlVersion) {
             $this->mysqlVersion = (float)substr(trim(ereg_replace("([A-Za-z-])","",$this->query("SELECT VERSION()")->value())), 0, 3);
         }
@@ -173,7 +181,8 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo {
     /**
      * 返回所有的数据库列表
      */
-    public function allDatabaseNames() {
+    public function allDatabaseNames() 
+    {
         return $this->query("SHOW DATABASES")->column();
     }
 
@@ -181,7 +190,8 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo {
      * 返回数据库所有的表列表.
      * @return array
      */
-    public function tableList() {
+    public function tableList() 
+    {
         $tables = array();
         foreach($this->query("SHOW TABLES") as $record) {
             $table = reset($record);
@@ -194,7 +204,8 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo {
      *返回数据库表信息列表
      * @return array 数据库表信息列表
      */
-    public function tableInfoList(){
+    public function tableInfoList()
+    {
         $tableInfos = $this->query("show table status");
         
         foreach($tableInfos as $tableInfo) {
@@ -210,7 +221,8 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo {
      * 获取表所有的列信息
      * @param string $table 表名
      */
-    public function fieldInfoList($table){
+    public function fieldInfoList($table)
+    {
         //$fields = $this->query("select * from columns where table_name='$table'");//需要从数据库information_schema中获取。
         $fields = $this->query("SHOW FULL FIELDS IN $table");
         
@@ -225,7 +237,8 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo {
      * 获取表所有的列定义
      * @param string $table 表名
      */
-    public function fieldDefineList($table) {
+    public function fieldDefineList($table) 
+    {
         $fields = $this->query("SHOW FULL FIELDS IN $table");
 
         foreach($fields as $field) {
@@ -254,26 +267,63 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo {
         if(isset ($fieldList)) return $fieldList;
         return null;
     }
-
+    
+    /**
+     * 获取表所有的列名称定义映射数组                      
+     * @param string $table 表名
+     * @param bool $isCommentFull 列名称是否获取完整的表列自定义注释，默认获取注释第一列
+     * @return 表所有的列名称定义映射数组
+     * 示例如下:
+     *     array('username'=>'用户名','password'=>'密码')
+     */
+    public function fieldMapNameList($table,$isCommentFull=false)
+    {
+        $fieldList=$this->fieldInfoList($table);
+        $result=array();
+        if (!empty($fieldList)){            
+            foreach($fieldList as $field)
+            {
+                if ($isCommentFull){
+                    $result[$field[Field]]= $field[Comment];          
+                }else{
+                    if (contain($field[Comment],"\n"))
+                    {
+                        $comment=explode("\n",$field[Comment]);
+                        if (count($comment)>0){
+                            $result[$field[Field]]= $comment[0];            
+                        }                                                                                
+                    }else{
+                        $result[$field[Field]]= $field[Comment];       
+                    }
+                }
+               
+            }
+        }
+        return $result;    
+    }
+    
     /**
      * 查看表在数据库里是否存在
      * NOTE: Experimental; introduced for db-abstraction and may changed before 2.4 is released.
      */
-    public function hasTable($table) {
+    public function hasTable($table) 
+    {
         return (bool)($this->query("SHOW TABLES LIKE '$table'")->value());
     }
 
     /**
      * 查看指定的数据库是否存在
      */
-    public function hasDatabase($name) {
+    public function hasDatabase($name) 
+    {
         return $this->query("SHOW DATABASES LIKE '$name'")->value() ? true : false;
     }
 
     /**
      * 获取指定表的枚举类型的列的设定枚举值
      */
-    public function enumValuesForField($tableName, $fieldName) {
+    public function enumValuesForField($tableName, $fieldName) 
+    {
         // Get the enum of all page types from the SiteTree table
         $classnameinfo = $this->query("DESCRIBE $tableName \"$fieldName\"")->first();
         preg_match_all("/'[^,]+'/", $classnameinfo["Type"], $matches);
@@ -287,7 +337,8 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo {
     /**
      * 获取数据库创建表的定义
      */
-    public function getDbSqlDefinition($tableName) {
+    public function getDbSqlDefinition($tableName) 
+    {
         $dbDefine= $this->query("SHOW CREATE TABLE $tableName");
         $dbDefine=$dbDefine->next();
         return $dbDefine["Create Table"];
@@ -300,7 +351,8 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo {
      * @param bool $showqueries 是否显示profile信息
      * @return Query_Mysql 
      */
-    private function query($sql, $errorLevel = E_USER_ERROR,$showqueries=false) {
+    private function query($sql, $errorLevel = E_USER_ERROR,$showqueries=false) 
+    {
         if(isset($_REQUEST['showqueries'])) {
             $starttime = microtime(true);
         }

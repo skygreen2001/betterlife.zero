@@ -35,7 +35,7 @@ class UtilJavascript extends Util
      */   
     public static function loadJsReady($viewobject,$jsFile,$isGzip=false,$jsFlag=null,$version="")
     {        
-         UtilAjax::loadJsReady($viewobject,$jsFile, $isGzip,$jsFlag,$version);
+         UtilAjax::loadJsReady($viewobject,$jsFile,$isGzip,$jsFlag,$version);
     }    
     
     /**

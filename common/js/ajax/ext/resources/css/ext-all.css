@@ -6303,7 +6303,7 @@ td.grid-hd-group-cell {
 }
 
 .x-date-inner .x-date-today a{
-	border-color:darkred;
+	border-color:#660000;/**darkred*/
 }
 
 .x-date-inner .x-date-selected span{
@@ -6932,6 +6932,25 @@ body.x-body-masked .x-window-plain .x-window-mc {
 .x-window-dlg .ext-mb-error {
     background-image:url(ajax/ext/resources/images/default/window/icon-error.gif);
 }
-.silk-add { background-image:url(ajax/ext/resources/images/new/add.gif) !important; background-repeat: no-repeat; }
-.silk-delete { background-image:url(ajax/ext/resources/images/new/delete.gif) !important; background-repeat: no-repeat; }
-.icon-user-save { background-image:url(ajax/ext/resources/images/default/tree/drop-yes.gif) !important; background-repeat: no-repeat; }
+/** 自定义样式*/
+.icon-add { background-image:url(ajax/ext/resources/images/new/add.gif) !important; background-repeat: no-repeat; }
+.icon-delete { background-image:url(ajax/ext/resources/images/new/delete.gif) !important; background-repeat: no-repeat; }
+.icon-edit{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -40px !important;}
+.icon-commit { background-image:url(ajax/ext/resources/images/new/commit.gif) !important; background-repeat: no-repeat; }
+.icon-import { background-image:url(ajax/ext/resources/images/new/import.png) !important; background-repeat: no-repeat; }
+.icon-export { background-image:url(ajax/ext/resources/images/new/export.png) !important; background-repeat: no-repeat; }
+
+.page{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left 0px !important;}
+.page_add{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -20px !important;}
+.page_edit{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -40px !important;}
+.page_delete{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -60px !important;}
+.page_find{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -80px !important;}
+.page_gear{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -100px !important;}
+.page_attach{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -120px !important;}
+.page_link{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -140px !important;}
+.page_goto{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -160px !important;}
+.page_key{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -180px !important;}
+.page_save{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -200px !important;}
+.page_refresh{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -220px !important;}
+.page_excel{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -240px !important;}
+.page_word{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -260px !important;}

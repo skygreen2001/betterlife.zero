@@ -90,27 +90,7 @@ class Action extends Object
     public function getData() 
     {
         return $this->data;
-    }
-    
-    /**
-     * 加载通用的Css<br/>
-     * 默认:当前模板目录下:resources/css/index.css<br/>
-     * @param ViewObject $viewobject 表示层显示对象
-     */
-    public function loadCss(){
-        $defaultCssFile=$this->view->template_url."resources/css/index.css";
-        $viewObject=$this->view->viewObject;
-        if(empty($viewObject))
-        {
-            $this->view->viewObject=new ViewObject();
-        }
-        if ($this->view->viewObject)
-        {
-            UtilCss::loadCssReady($this->view->viewObject,$defaultCssFile,true); 
-        }else{
-            UtilCss::loadCss($defaultCssFile,true); 
-        }
-    }
+    }          
 
     /**
      * 加载通用的Javascript库<br/>

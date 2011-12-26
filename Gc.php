@@ -84,7 +84,19 @@ class Gc
      * @var string
      * @static
      */
-    public static $nav_framework_path;//="C:\\wamp\\www\\betterlife\\";
+    public static $nav_framework_path;//="C:\\wamp\\www\\betterlife\\";       
+    /**
+    * 上传或者下载文件的路径
+    * 
+    * @var mixed
+    */
+    public static $attachment_path;//="C:\\wamp\\www\\betterlife\\attachment\\";  
+    /**
+    * 上传或者下载文件的网络路径
+    * 
+    * @var mixed
+    */
+    public static $attachment_url;//="http://localhost/betterlife/attachment/";     
     //</editor-fold>
     
     //<editor-fold desc="开发者使用设置">
@@ -291,8 +303,17 @@ class Gc
     /**
     * 无需配置自动注入网站的网络地址和物理地址。
     */
-    //<editor-fold defaultstate="collapsed" desc="初始化设置">        
+    //<editor-fold defaultstate="collapsed" desc="初始化设置">      
     public static function init(){
+        if (empty(Gc::$nav_root_path)){
+           Gc::$nav_root_path=dirname(__FILE__).DIRECTORY_SEPARATOR;
+           Gc::$attachment_path=Gc::$nav_root_path."attachment".DIRECTORY_SEPARATOR;
+        }
+       
+        if (empty(Gc::$nav_framework_path)){
+           Gc::$nav_framework_path=dirname(__FILE__).DIRECTORY_SEPARATOR;
+        }
+        
         if (empty(Gc::$url_base)){          
             if(isset($_SERVER['HTTPS']) && strpos('on',$_SERVER['HTTPS'])){
                 $baseurl = 'https://'.$_SERVER['HTTP_HOST'];
@@ -308,16 +329,15 @@ class Gc
             
             if (strpos(strtolower($baseurl),strtolower("common/js"))!== false) {
                 $baseurl=str_replace("common/js/","",$baseurl);     
-            }            
+            }
             Gc::$url_base=$baseurl;
-        }
-        if (empty(Gc::$nav_root_path)){
-           Gc::$nav_root_path=dirname(__FILE__).DIRECTORY_SEPARATOR;
-        }
-       
-        if (empty(Gc::$nav_framework_path)){
-           Gc::$nav_framework_path=dirname(__FILE__).DIRECTORY_SEPARATOR;
-        }
+            Gc::$attachment_url=Gc::$url_base;
+            $same_part=explode(DIRECTORY_SEPARATOR,Gc::$nav_root_path);
+            if ($same_part&&(count($same_part)>2)){
+                $same_part=$same_part[count($same_part)-2];
+                Gc::$attachment_url=substr(Gc::$attachment_url,0,(strpos(Gc::$attachment_url,$same_part)+strlen($same_part)+1))."attachment/";
+            }              
+        }     
     }
     //</editor-fold>
 }

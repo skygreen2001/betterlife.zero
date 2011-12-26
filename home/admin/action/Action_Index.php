@@ -8,7 +8,7 @@
  * @subpackage action
  * @author skygreen
  */
-class Action_Index extends Action
+class Action_Index extends ActionExt
 {
      /**
       * 控制器:首页
@@ -16,6 +16,9 @@ class Action_Index extends Action
      public function index()
      {        
          $this->init();
+         $this->loadIndexJs();              
+         //加载菜单
+         $this->view->menuGroups=MenuGroup::all();
      }
      /**
       * 初始化，加载Css和Javascript库。
@@ -25,11 +28,7 @@ class Action_Index extends Action
          //初始化加载Css和Javascript库
          $this->view->viewObject=new ViewObject();
          UtilCss::loadExt($this->view->viewObject,UtilAjaxExtjs::$ext_version);
-         UtilAjaxExtjs::loadUI($this->view->viewObject,UtilAjaxExtjs::$ext_version);  
-         $this->loadCss();
-         $this->loadIndexJs();
-         //加载菜单
-         $this->view->menuGroups=MenuGroup::all();
+         UtilAjaxExtjs::loadUI($this->view->viewObject,UtilAjaxExtjs::$ext_version);         
      }
      
      /**
@@ -38,27 +37,28 @@ class Action_Index extends Action
       * @param string $templateurl
       */
      private function loadIndexJs()
-     {
-        $templateurl=$this->view->template_url;
-        $viewobject=$this->view->viewObject;
-        if (UtilAjaxExtjs::$ext_version<4)
-        {
-            $module_templateurl_relative="js/ext/";        
-        }else{
-            $module_templateurl_relative="js/ext4/";  
-        }            
+     {                                          
+        $viewobject=$this->view->viewObject;  
+        $this->loadExtCss("index.css",true);    
         if ($viewobject)
         {
-            UtilJavascript::loadJsReady($viewobject,$templateurl.$module_templateurl_relative."index.js"); 
-            //核心功能:外观展示
-            UtilJavascript::loadJsReady($viewobject,$templateurl.$module_templateurl_relative."layout.js",true); 
+            $this->loadExtView("index.js");                                                                
+            //核心功能:外观展示             
+            $this->loadExtView("layout.js",true); 
             //左侧菜单组生成显示
             UtilJavascript::loadJsContentReady($viewobject,MenuGroup::viewForExtJs());  
             //核心功能:导航[Tab新建窗口]
-            UtilJavascript::loadJsReady($viewobject,$templateurl.$module_templateurl_relative."navigation.js");  
+            $this->loadExtView("navigation.js");  
         }
         else
         {
+            $templateurl=$this->view->template_url;
+            if (UtilAjaxExtjs::$ext_version<4)
+            {
+                $module_templateurl_relative="js/ext/";        
+            }else{
+                $module_templateurl_relative="js/ext4/";  
+            }                 
             UtilJavascript::loadJs($templateurl.$module_templateurl_relative."index.js"); 
             //核心功能:外观展示
             UtilJavascript::loadJs($templateurl.$module_templateurl_relative."layout.js",true);              

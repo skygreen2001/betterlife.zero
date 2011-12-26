@@ -1,17 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <services>
-    <service name="MenuService">
-        <methods>
-            <method name="AllMenuGroup">
+    <service name="ServiceMenuGroup">  
+        <methods>        
+            <method name="save">
+                <param name="len">1</param>
+                <param name="formHandler">true</param>           
+            </method>    
+            <method name="update">
+                <param name="len">1</param>
+                <param name="formHandler">true</param>           
+            </method>    
+            <method name="delete">
+                <param name="len">1</param>    
+            </method>   
+            <method name="allMenuGroup">
                 <param name="len">0</param>              
-            </method>
-            <method name="GetMenusByGroupId">
+            </method>   
+        </methods>  
+    </service> 
+    
+    <service name="ServiceMenu">
+        <methods>     
+            <method name="save">
+                <param name="len">1</param>
+                <param name="formHandler">true</param>           
+            </method>    
+            <method name="update">
+                <param name="len">1</param>
+                <param name="formHandler">true</param>           
+            </method>    
+            <method name="delete">
+                <param name="len">1</param>    
+            </method>   
+            <method name="getMenusByGroupId">
                 <param name="len">1</param>    
             </method>  
-            <method name="QueryPageMenu">
+            <method name="queryPageMenu">
                 <param name="len">1</param>             
             </method>   
-            <method name="QueryPageMenuForm">
+            <method name="queryPageMenuForm">
                 <param name="len">1</param>
                 <param name="formHandler">true</param>           
             </method>

@@ -9,29 +9,44 @@
  * @package web.back.admin.services
  * @author skygreen
  */
-class MenuService extends Service
-{   
+class ServiceMenu extends Service
+{     
     /**
-     * 获取所有的菜单分组列表
-     * @param mixed $formPacket
-     * @return array 
-     */
-    public function AllMenuGroup()
-    {
-        $data=MenuGroup::allMenuGroups(EnumReturnType::ARRAYTYPE);       
-        if ($data==null)$data=array();
+    * 新建保存菜单
+    */
+    public function save($menu)
+    {             
         return array(  
-            'success'=>true,
-            'data'=>$data
+            'success'=>true,  
+            'data'=>true
         ); 
-    } 
+        
+    }
     
+    /**
+    * 更新菜单
+    */
+    public function update($menu)
+    {
+        
+    }
+    
+    /**
+    * 删除指定编号的菜单
+    * 
+    * @param mixed $id
+    */
+    public function delete($id)
+    {
+        
+    }
+
     /**
     * 根据菜单分组标识获取所有相关的菜单
     * 
     * @param mixed $menuGroup_id
     */
-    public function GetMenusByGroupId($menuGroup_id)
+    public function getMenusByGroupId($menuGroup_id)
     {           
         $menugroup=new MenuGroup($menuGroup_id);
         $menugroup->getByID();   
@@ -39,6 +54,7 @@ class MenuService extends Service
         $data=array();
         if ($menus){
             foreach($menus as $menu){
+               $menu->menuGroup_id=$menuGroup_id; 
                $data[]=UtilObject::object_to_array($menu);  
             }       
         }
@@ -48,17 +64,19 @@ class MenuService extends Service
             'data'=>$data
         ); 
     }
+    
     /**
     * 分页查询:菜单列表
     */
-    public function QueryPageMenuForm($formPacket=array())
+    public function queryPageMenuForm($formPacket=array())
     {
         return $this->QueryPageMenu($formPacket);
     }
+    
     /**
     * 分页查询:菜单列表
     */
-    public function QueryPageMenu($formPacket=array())
+    public function queryPageMenu($formPacket=array())
     {
         $condition=array();
         if (is_object($formPacket)){
@@ -94,7 +112,6 @@ class MenuService extends Service
             'totalCount'=>$count,    
             'data'=>$data
         );          
-    }
-           
+    }      
 }
 ?>

@@ -8,7 +8,7 @@
  * @subpackage action
  * @author skygreen
  */
-class Action_System extends Action
+class Action_System extends ActionExt
 {
     /**
      * 网站系统文件管理
@@ -76,18 +76,10 @@ class Action_System extends Action
         //初始化加载Css和Javascript库
         $this->view->viewObject=new ViewObject();
         UtilCss::loadExt($this->view->viewObject,UtilAjaxExtjs::$ext_version);               
-        UtilAjaxExtjs::load(UtilAjaxExtjs::$ext_version,$this->view->viewObject);  
-        
-        $templateurl=$this->view->template_url;        
-        if (UtilAjaxExtjs::$ext_version<4){
-            $module_templateurl_relative="js/ext/"; 
-        }else{
-            $module_templateurl_relative="js/ext4/";   
-        }
-        UtilJavascript::loadJsReady($this->view->viewObject,"shared/grid/roweditor.js",true,EnumJsFramework::JS_FW_EXTJS,UtilAjaxExtjs::$ext_version); 
-        UtilJavascript::loadJsReady($this->view->viewObject,$templateurl.$module_templateurl_relative."system/menu.js");                               
-        UtilJavascript::loadJsReady($this->view->viewObject,"home/admin/src/services/ajax/extjs/direct/api.php");     
-        
+        UtilAjaxExtjs::load(UtilAjaxExtjs::$ext_version,$this->view->viewObject);   
+        $this->loadExtView("shared/grid/roweditor.js",true); 
+        $this->loadExtView("system/menu.js"); 
+        $this -> ExtDirectMode();        
    }
    
    /**
@@ -97,20 +89,13 @@ class Action_System extends Action
    {        
         //初始化加载Css和Javascript库
         $this->view->viewObject=new ViewObject();
-        UtilCss::loadExt($this->view->viewObject,UtilAjaxExtjs::$ext_version);
-        UtilAjaxExtjs::loadUI($this->view->viewObject,UtilAjaxExtjs::$ext_version);  
-        
-        $templateurl=$this->view->template_url;        
-        if (UtilAjaxExtjs::$ext_version<4){
-            $module_templateurl_relative="js/ext/"; 
-        }else{
-            $module_templateurl_relative="js/ext4/";   
-        }
-        UtilCss::loadCssReady($this->view->viewObject,$templateurl."resources/css/library.css",true);       
-        UtilJavascript::loadJsReady($this->view->viewObject,"shared/message.js",true,EnumJsFramework::JS_FW_EXTJS,UtilAjaxExtjs::$ext_version);        
-        UtilJavascript::loadJsReady($this->view->viewObject,"shared/grid/roweditor.js",true,EnumJsFramework::JS_FW_EXTJS,UtilAjaxExtjs::$ext_version);
-        UtilJavascript::loadJsReady($this->view->viewObject,"shared/grid/checkcolumn.js",true,EnumJsFramework::JS_FW_EXTJS,UtilAjaxExtjs::$ext_version);          
-        UtilJavascript::loadJsReady($this->view->viewObject,$templateurl.$module_templateurl_relative."system/library.js");          
+        UtilCss::loadExt($this->view->viewObject,UtilAjaxExtjs::$ext_version);                     
+        UtilAjaxExtjs::load(UtilAjaxExtjs::$ext_version,$this->view->viewObject);   
+        $this->loadExtCss("library.css",true);       
+        $this->loadExtView("shared/message.js",true);        
+        $this->loadExtView("shared/grid/roweditor.js",true);
+        $this->loadExtView("shared/grid/checkcolumn.js",true);          
+        $this->loadExtView("system/library.js");          
    }                 
    
    /**
