@@ -385,36 +385,35 @@ Bb.Menu.View={
                         new Ext.Toolbar({  
                             height : 27,    
                             items : [{
+                                    text: '反选',  
+                                    iconCls : 'icon-reverse',                                     
+                                    scope: this,                                              
+                                    handler: function(){
+                                        this.onReverseSelect();
+                                    }
+                                }, '-',{
                                     ref : '../addBtn',
                                     scope: this,  
                                     text : '新增',
                                     iconCls : 'icon-add',
                                     handler : this.onAdd   
-                                }, {
-                                    xtype : 'tbseparator'
-                                }, {
+                                }, '-',{
                                     ref : '../editBtn',
                                     scope: this,  
                                     text : '修改',
                                     iconCls : 'icon-edit'
-                                }, {
-                                    xtype : 'tbseparator'
-                                }, {
+                                }, '-',{
                                     id : 'removeButton',
                                     scope: this,  
                                     text : '删除',
                                     disabled : true,
                                     iconCls : 'icon-delete'
-                                }, {
-                                    xtype : 'tbseparator'
-                                }, {
+                                }, '-',{
                                     ref : '../saveBtn',
                                     scope: this,  
                                     iconCls : 'icon-commit',
                                     text : '提交'
-                                }, {
-                                    xtype : 'tbseparator'
-                                }/**, {
+                                }, '-'/**, {
                                     ref : '../importBtn',
                                     scope: this,  
                                     iconCls : 'icon-import',
@@ -470,7 +469,19 @@ Bb.Menu.View={
                     // console.log('selectionchange',sm.getSelections().length);
                 }
             }
-        }),
+        }), 
+        /**
+         * 反选
+         */
+        onReverseSelect:function() {
+            for (var i = this.getView().getRows().length - 1; i >= 0; i--) {
+                if (this.sm.isSelected(i)) {
+                    this.sm.deselectRow(i);
+                }else {
+                    this.sm.selectRow(i, true);
+                }
+            }
+        }, 
         /**
          * 新增
          */

@@ -91,15 +91,36 @@ class Action extends Object
     {
         return $this->data;
     }          
-
+    
+    /**
+     * 加载通用的Css<br/>
+     * 默认:当前模板目录下:resources/css/index.css<br/>
+     * @param ViewObject $viewobject 表示层显示对象
+     */
+    public function loadCss($defaultCssFile="resources/css/index.css")
+    {                                                                       
+        $defaultCssFile=$this->view->template_url.$defaultCssFile;
+        $viewObject=$this->view->viewObject;
+        if(empty($viewObject))
+        {
+            $this->view->viewObject=new ViewObject();
+        }
+        if ($this->view->viewObject)
+        {
+            UtilCss::loadCssReady($this->view->viewObject,$defaultCssFile,true); 
+        }else{
+            UtilCss::loadCss($defaultCssFile,true); 
+        }
+    }
+    
     /**
      * 加载通用的Javascript库<br/>
      * 默认:当前模板目录下:js/index.js<br/>
-     * @param ViewObject $viewobject 表示层显示对象
+     * @param string $defaultJsFile 默认需加载JS文件
      */
-    public function loadJs()
+    public function loadJs($defaultJsFile="js/index.js")
     {
-        $defaultJsFile=$this->view->template_url."js/index.js";
+        $defaultJsFile=$this->view->template_url.$defaultJsFile;
         $viewObject=$this->view->viewObject;
         if(empty($viewObject))
         {

@@ -6933,9 +6933,22 @@ body.x-body-masked .x-window-plain .x-window-mc {
     background-image:url(ajax/ext/resources/images/default/window/icon-error.gif);
 }
 /** 自定义样式*/
+.tabs {
+    background-image:url(ajax/ext/resources/images/new/tabs.gif)!important;
+}
+.menuIcon {
+    background-image:url(ajax/ext/resources/images/new/tabs.gif)!important;
+    background-repeat:no-repeat;
+    margin-left:4px;
+    padding-left:20px;
+}
+.icon-updown{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -222px !important;}
+.icon-fix { background-image:url(ajax/ext/resources/images/new/icon_fix.png) !important; background-repeat: no-repeat; }
+.icon-reverse { background-image:url(ajax/ext/resources/images/new/reverse.png) !important; background-repeat: no-repeat; }
 .icon-add { background-image:url(ajax/ext/resources/images/new/add.gif) !important; background-repeat: no-repeat; }
 .icon-delete { background-image:url(ajax/ext/resources/images/new/delete.gif) !important; background-repeat: no-repeat; }
-.icon-edit{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -40px !important;}
+.icon-edit{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -42px !important;}
+.icon-view{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left 0px !important;}
 .icon-commit { background-image:url(ajax/ext/resources/images/new/commit.gif) !important; background-repeat: no-repeat; }
 .icon-import { background-image:url(ajax/ext/resources/images/new/import.png) !important; background-repeat: no-repeat; }
 .icon-export { background-image:url(ajax/ext/resources/images/new/export.png) !important; background-repeat: no-repeat; }

@@ -190,23 +190,26 @@ Bb.Library.View={
 			    loadMask : true,// {msg:'正在加载数据，请稍侯……'}
 			    stripeRows : true,
 			    tbar : [{
+                        text: '反选',  
+                        iconCls : 'icon-reverse',                                     
+                        scope: this,                                              
+                        handler: function(){
+                            this.onReverseSelect();
+                        }
+                    }, '-',{
 					    ref : '../addBtn',
 					    scope: this,  
 					    text : '新增',
 					    iconCls : 'icon-add',
 					    handler : this.onAdd
-				    }, {
-					    xtype : 'tbseparator'
-				    }, {
+				    }, '-',{
 					    id : 'removeBtn',
 					    scope: this,  
 					    text : '删除',
 					    disabled : true,
 					    iconCls : 'icon-delete',
 					    handler : this.onDelete
-				    }, {
-					    xtype : 'tbseparator'
-				    }, {
+				    }, '-',{
 					    ref : '../saveBtn',
 					    scope: this,  
 					    iconCls : 'icon-commit',
@@ -214,9 +217,7 @@ Bb.Library.View={
 					    handler : function() {
 						    this.store.save();
 					    }
-				    }, {
-					    xtype : 'tbseparator'
-				    }/**, {
+				    }, '-'/**, {
 					    ref : '../importBtn',
 					    scope: this,  
 					    iconCls : 'icon-import',
@@ -296,7 +297,19 @@ Bb.Library.View={
 				    this.constructor.prototype.onRowClick.apply(this, arguments);
 			    }
 		    }// ,clicksToEdit: 2
-	    }), 
+	    }),
+	    /**
+	     * 反选
+	     */
+        onReverseSelect:function() {
+            for (var i = this.getView().getRows().length - 1; i >= 0; i--) {
+                if (this.sm.isSelected(i)) {
+                    this.sm.deselectRow(i);
+                }else {
+                    this.sm.selectRow(i, true);
+                }
+            }
+        }, 
 	    /**
 	     * 新增
 	     */

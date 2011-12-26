@@ -118,3 +118,7 @@ div.x-tab-strip-wrap .add-tab a span.x-tab-strip-inner {
     font: 13px arial,tahoma,helvetica,sans-serif;
 }
 /* END */
+
+.x-small-editor .x-form-num-field {
+    text-align: center;
+}

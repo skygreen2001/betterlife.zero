@@ -68,17 +68,6 @@ h1 {
     text-align:left;
 }
 
-.tabs {
-    background-image:url(../../home/admin/view/default/resources/images/tabs.gif)!important;
-}
-
-.menuIcon {
-    background-image:url(../../home/admin/view/default/resources/images/tabs.gif)!important;
-    background-repeat:no-repeat;
-    margin-left:4px;
-    padding-left:20px;
-}
-
 p#indexPage {
     font:120%;
     line-height:2em;

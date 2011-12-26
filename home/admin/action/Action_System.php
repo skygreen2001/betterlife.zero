@@ -77,8 +77,8 @@ class Action_System extends ActionExt
         $this->view->viewObject=new ViewObject();
         UtilCss::loadExt($this->view->viewObject,UtilAjaxExtjs::$ext_version);               
         UtilAjaxExtjs::load(UtilAjaxExtjs::$ext_version,$this->view->viewObject);   
-        $this->loadExtView("shared/grid/roweditor.js",true); 
-        $this->loadExtView("system/menu.js"); 
+        $this->loadExtJs("shared/grid/roweditor.js",true); 
+        $this->loadExtJs("system/menu.js"); 
         $this -> ExtDirectMode();        
    }
    
@@ -92,10 +92,10 @@ class Action_System extends ActionExt
         UtilCss::loadExt($this->view->viewObject,UtilAjaxExtjs::$ext_version);                     
         UtilAjaxExtjs::load(UtilAjaxExtjs::$ext_version,$this->view->viewObject);   
         $this->loadExtCss("library.css",true);       
-        $this->loadExtView("shared/message.js",true);        
-        $this->loadExtView("shared/grid/roweditor.js",true);
-        $this->loadExtView("shared/grid/checkcolumn.js",true);          
-        $this->loadExtView("system/library.js");          
+        $this->loadExtJs("shared/message.js",true);        
+        $this->loadExtJs("shared/grid/roweditor.js",true);
+        $this->loadExtJs("shared/grid/checkcolumn.js",true);          
+        $this->loadExtJs("system/library.js");          
    }                 
    
    /**
