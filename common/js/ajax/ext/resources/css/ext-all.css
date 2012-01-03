@@ -6953,6 +6953,12 @@ body.x-body-masked .x-window-plain .x-window-mc {
 .icon-import { background-image:url(ajax/ext/resources/images/new/import.png) !important; background-repeat: no-repeat; }
 .icon-export { background-image:url(ajax/ext/resources/images/new/export.png) !important; background-repeat: no-repeat; }
 
+.view-top { background-image: url(ajax/ext/resources/images/new/viewtop.gif) !important;}
+.view-bottom { background-image: url(ajax/ext/resources/images/new/viewbottom.gif) !important;}
+.view-left { background-image: url(ajax/ext/resources/images/new/viewleft.gif) !important;}
+.view-right { background-image: url(ajax/ext/resources/images/new/viewright.gif) !important;}
+.view-hide { background-image: url(ajax/ext/resources/images/new/viewhide.gif) !important;}
+
 .page{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left 0px !important;}
 .page_add{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -20px !important;}
 .page_edit{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -40px !important;}

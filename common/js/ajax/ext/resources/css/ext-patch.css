@@ -122,3 +122,32 @@ div.x-tab-strip-wrap .add-tab a span.x-tab-strip-inner {
 .x-small-editor .x-form-num-field {
     text-align: center;
 }
+
+
+/** 数据对象模板显示样式 */ 
+.viewdoblock {
+    display  :block;
+}
+.viewdoblock .entry{
+    display  :block;
+    font-size:14px;
+    margin   :10px;
+}
+.viewdoblock span{ 
+    margin-left:10px; 
+    display:block;
+}
+.viewdoblock .head{
+    text-align:right;
+    font-weight:bold;
+    line-height:2;
+    display:-moz-inline-box;
+    display:inline-block;
+    width      :100px;    
+}
+.viewdoblock .content{
+    margin-left:20;
+    display:-moz-inline-box;
+    display:inline-block;
+}
+/* END */
