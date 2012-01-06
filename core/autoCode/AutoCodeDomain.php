@@ -85,51 +85,60 @@ class AutoCodeDomain extends AutoCode
 
 	/**
 	 * 将表列定义转换成数据对象Php文件定义的内容
-	 * @param string $tablename
-	 * @param array $fieldInfo 
+	 * @param string $tablename 表名
+	 * @param array $tableInfoList 表信息列表
+	 * @param array $fieldInfo 表列信息列表
 	 */
 	private static function tableToDataObjectDefine($tablename,$tableInfoList,$fieldInfo)
 	{
 	    $result="<?php\r\n";
 	    if ($tableInfoList!=null&&count($tableInfoList)>0&&  array_key_exists("$tablename", $tableInfoList)){
 	        $table_comment=$tableInfoList[$tablename]["Comment"];
+            $table_comment=str_replace("关系表","",$table_comment); 
+	        if (contain($table_comment,"\r")||contain($table_comment,"\n")){
+                $table_comment_arr=preg_split("/[\s,]+/", $table_comment);  
+                $table_comment=""; 
+                foreach ($table_comment_arr as $tcomment){
+                	$table_comment.=" * $tcomment<br/>\r\n";
+                }  
+            }else{
+            	$table_comment=" * ".$table_comment."\r\n";
+            }
 	    }else{
 	        $table_comment="关于$tablename的描述";
 	    }    
-	    $category=  Gc::$appName;
-	    $author= "skygreen skygreen2001@gmail.com";
-	    
-	    $package=self::getPackage($tablename);
-	    $classname=self::getClassname($tablename);
-	    	    
+		$category  = Gc::$appName;
+		$author    = self::$author;
+		$package   = self::getPackage($tablename);
+		$classname = self::getClassname($tablename);	    	    
 	    $result.="/**\r\n".
 				 " +---------------------------------------<br/>\r\n".
-				 " * $table_comment<br/>\r\n".
+				 "$table_comment".
 				 " +---------------------------------------\r\n".
 				 " * @category $category\r\n".
 				 " * @package $package\r\n".
 				 " * @author $author\r\n".
 				 " */\r\n";
-	    $result.="class $classname extends DataObject\r\n{\r\n";
-	    $datatype="string";
+		$result  .="class $classname extends DataObject\r\n{\r\n";
+		$datatype ="string";
 	    switch (self::$type) {
 	        case 2:
 	            $result.= '    //<editor-fold defaultstate="collapsed" desc="定义部分">'."\r\n";
 	            foreach ($fieldInfo as $fieldname=>$field){
-	              if (self::isNotColumnKeywork($fieldname)){
-	                   $datatype=self::comment_type($field["Type"]);
-	                   $comment=str_replace("\r\n", "     * ", $field["Comment"]);
-	                   $comment=str_replace("\r", "     * ", $comment);
-	                   $comment=str_replace("\n", "     * ", $comment);
-	                   $comment=str_replace("     * ", "\r\n     * ", $comment);
-	                   $result.= 
-								"    /**\r\n".
-								"     * ".$comment."\r\n".
-								"     * @var $datatype\r\n".
-								"     * @access public\r\n". 
-								"     */\r\n".
-								"    public \$".$fieldname.";\r\n";
-	              }
+					if (self::isNotColumnKeywork($fieldname)){
+						$datatype =self::comment_type($field["Type"]);
+						$comment  =str_replace("\r\n", "     * ", $field["Comment"]);
+						$comment  =str_replace("\r", "     * ", $comment);
+						$comment  =str_replace("\n", "     * ", $comment);
+						$comment  =str_replace("     * ", "\r\n     * ", $comment);
+						$result  .= 
+									"    /**\r\n".
+									"     * ".$comment."\r\n".
+									"     * @var $datatype\r\n".
+									"     * @access public\r\n". 
+									"     */\r\n".
+									"    public \$".$fieldname.";\r\n";
+					}
 	            };
 	            $result.= "    //</editor-fold>\r\n";
 	            break;
@@ -154,18 +163,18 @@ class AutoCodeDomain extends AutoCode
 	            $result.= "    //</editor-fold>\r\n\r\n";
 	            $result.= '    //<editor-fold defaultstate="collapsed" desc="setter和getter">'."\r\n";
 	            foreach ($fieldInfo as $fieldname=>$field){
-	              if (self::isNotColumnKeywork($fieldname)){
-	                   $result.= 
+					if (self::isNotColumnKeywork($fieldname)){
+						$result.= 
 							"    public function set".ucfirst($fieldname)."(\$".$fieldname.")\r\n".
 							"    {\r\n".
 							"        \$this->".$fieldname."=\$".$fieldname.";\r\n".
 							"    }\r\n";
-                   $result.=
+						$result.=
 							"    public function get".ucfirst($fieldname)."()\r\n".
 							"    {\r\n".
 							"        return \$this->".$fieldname.";\r\n".
 							"    }\r\n";
-	                };
+					};
 	            }      
 	            $result.= "    //</editor-fold>\r\n";            
 	            break;
@@ -192,19 +201,7 @@ class AutoCodeDomain extends AutoCode
 	}
 
 	/**
-	 * 从表名称获取对象的类名。
-	 * @param string $tablename
-	 * @return string 返回对象的类名 
-	 */
-	private static function getClassname($tablename)
-	{
-	    $classnameSplit= explode("_", $tablename);
-	    $classname=ucfirst($classnameSplit[count($classnameSplit)-1]);   
-	    return $classname;
-	}
-
-	/**
-	 * 是否默认的列关键字：id,committime
+	 * 是否默认的列关键字：id,committime,updateTime
 	 * @param type $fieldname 
 	 */
 	private static function isNotColumnKeywork($fieldname)
@@ -234,6 +231,8 @@ class AutoCodeDomain extends AutoCode
 	            return $typep; 
 	        case "bigint":            
 	            return "int";
+	        case "decimal":
+	        	return "float";
 	        case "varchar":
 	            return "string";
 	        default:
@@ -248,9 +247,9 @@ class AutoCodeDomain extends AutoCode
 	 */
 	private static function saveDataObjectDefineToDir($dir,$tablename,$definePhpFileContent)
 	{
-	    $package=self::getPackage($tablename);
-	    $filename=self::getClassname($tablename).".php";
-	    $package=str_replace(".", DIRECTORY_SEPARATOR, $package);
+		$package  =self::getPackage($tablename);
+		$filename =self::getClassname($tablename).".php";
+		$package  =str_replace(".", DIRECTORY_SEPARATOR, $package);
 	    if(endWith($dir, "domain".DIRECTORY_SEPARATOR)||endWith($dir, "domain\\")){
 	        $package=str_replace("domain", "", $package);
 	    }

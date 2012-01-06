@@ -11,18 +11,18 @@
 class ActionExt extends Action 
 {   
     /**
-    * 加载Ext 第三方定义组件定义对象  
-    */
+     * 加载Ext 第三方定义组件定义对象  
+     */
     public function loadExtComponent($objectFile)
     {               
         $this->loadExtJs("components/$objectFile");  
     }      
                          
     /**
-    * 加载Ext 显示层定义对象  
-    * @param $viewFile 显示的文件路径
-    * @param bool $isGzip 是否使用Gzip进行压缩。
-    */
+     * 加载Ext 显示层定义对象  
+     * @param $viewFile 显示的文件路径
+     * @param bool $isGzip 是否使用Gzip进行压缩。
+     */
     public function loadExtJs($viewFile,$isGzip=false)
     {                
         if (UtilAjaxExtjs::$ext_version<4){
@@ -41,10 +41,10 @@ class ActionExt extends Action
     }     
     
     /**
-    * 加载Ext 显示层Css文件      
-    * @param $viewCss 显示的Css文件路径  
-    * @param bool $isGzip 是否使用Gzip进行压缩。               
-    */
+     * 加载Ext 显示层Css文件      
+     * @param $viewCss 显示的Css文件路径  
+     * @param bool $isGzip 是否使用Gzip进行压缩。               
+     */
     public function loadExtCss($viewCss,$isGzip=false)
     {
         $templateurl=$this->view->template_url; 
@@ -67,8 +67,8 @@ class ActionExt extends Action
     
     /**
      * 加载 组件的Css
-    * @param $viewCss 显示的Css文件路径  
-    * @param bool $isGzip 是否使用Gzip进行压缩。
+     * @param $viewCss 显示的Css文件路径  
+     * @param bool $isGzip 是否使用Gzip进行压缩。
      */
     public function loadExtComponentCss($viewCss,$isGzip=false)
     {
@@ -76,18 +76,27 @@ class ActionExt extends Action
     }
     
     /**
-    * 使用Ext Direct Remote 模式
-    */
+     * 使用Ext Direct Remote 模式
+     */
     public function ExtDirectMode()
     {              
         UtilJavascript::loadJsReady($this->view->viewObject, "home/admin/src/services/ajax/extjs/direct/api.php");                         
     } 
     
     /**
-    * Ext请求返回 Response
-    * @param mixed $response  
-    * @param mixed $isFormAndIsUpload
-    */
+     *  使用Ext 上传功能
+     */
+    public function ExtUpload()
+    {
+         $this->loadExtComponentCss("fileuploadfield.css"); 
+         $this->loadExtComponent("FileUploadField.js"); 
+    }
+    
+    /**
+     * Ext请求返回 Response
+     * @param mixed $response  
+     * @param mixed $isFormAndIsUpload
+     */
     public static function ExtResponse($response,$isFormAndIsUpload=true)
     {
         if ($isFormAndIsUpload) {

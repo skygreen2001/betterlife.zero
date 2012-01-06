@@ -1,11 +1,6 @@
 <?php
 require_once ("../../../init.php");
 //$save_dir="C:\\wamp\\www\\ele\\services_create\\";
-//Service类所在的目录
-$package="services";
-/**
- * 服务类Php文件保存的路径
- */
 if (isset($_REQUEST["save_dir"])&&!empty($_REQUEST["save_dir"]))
 {
     $save_dir=$_REQUEST["save_dir"];

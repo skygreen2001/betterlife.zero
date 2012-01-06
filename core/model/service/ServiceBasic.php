@@ -126,8 +126,8 @@ class ServiceBasic extends Service implements IServiceBasic
     *      1.array("id=1","name='sky'")<br/>
     *      2.array("id"=>"1","name"=>"sky")<br/>
     *      3.允许对象如new User(id="1",name="green");<br/>      
-    * @param string property_name 属性名称
-    * @param int incre_value 递增数  
+    * @param string $property_name 属性名称
+    * @param int $incre_value 递增数  
     * @return boolen 是否操作成功；true为操作正常    
     */
     public function increment($filter=null,$property_name,$incre_value)
@@ -149,8 +149,8 @@ class ServiceBasic extends Service implements IServiceBasic
     *      1.array("id=1","name='sky'")<br/>
     *      2.array("id"=>"1","name"=>"sky")<br/>
     *      3.允许对象如new User(id="1",name="green");<br/>   
-    * @param string property_name 属性名称
-    * @param int decre_value 递减数
+    * @param string $property_name 属性名称
+    * @param int $decre_value 递减数
     * @return boolen 是否操作成功；true为操作正常
     */
     public function decrement($filter=null,$property_name,$decre_value)
@@ -166,7 +166,7 @@ class ServiceBasic extends Service implements IServiceBasic
     
     /**
     * 查询当前对象需显示属性的列表  
-    * @param string 指定的显示属性，同SQL语句中的Select部分。 
+    * @param string $columns 指定的显示属性，同SQL语句中的Select部分。 
     * 示例如下：<br/>
     *     id,name,commitTime                                                               
     * @param mixed $filter 查询条件，在where后的条件<br/>

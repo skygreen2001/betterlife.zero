@@ -20,6 +20,7 @@ class Action_Index extends ActionExt
          //加载菜单
          $this->view->menuGroups=MenuGroup::all();
      }
+     
      /**
       * 初始化，加载Css和Javascript库。
       */
