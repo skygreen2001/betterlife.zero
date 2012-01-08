@@ -5,9 +5,9 @@
  +---------------------------------------
  * @category betterlife
  * @package services   
- * @author skygreen
+ * @author skygreen skygreen2001@gmail.com
  */  
-class Manager_Service 
+class Manager_Service extends Manager  
 {
     private static $userService;
 

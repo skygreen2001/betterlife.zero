@@ -67,6 +67,10 @@ class Config_F extends ConfigBB
      */
     const SUFFIX_FILE_PHP=".php";
     /**
+     * JS文件名后缀
+     */
+    const SUFFIX_FILE_JS=".js";  
+    /**
      * Smarty模板文件名后缀
      */
     const SUFFIX_FILE_TPL=".tpl";

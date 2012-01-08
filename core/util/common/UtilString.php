@@ -7,13 +7,15 @@
  * @package util.common
  * @author skygreen
  */
-class UtilString extends Util {
+class UtilString extends Util 
+{
     /**
      * 查看字符串里是否包含指定字符串
      * @param mixed $subject
      * @param mixed $needle
      */
-    public static function contain($subject,$needle) {
+    public static function contain($subject,$needle) 
+    {
         if (strpos($subject,$needle)!== false) {
             return true;
         }else {
@@ -26,7 +28,8 @@ class UtilString extends Util {
      * @param type $str 字符串
      * @return bool 是否有影响系统稳定，数据完全的字符。 
      */
-    public static function has_unsafeword($str){
+    public static function has_unsafeword($str)
+    {
         return preg_match('/~!@#\\$%\\^&\\*\\(\\)\\+=\\|\\}]{\\[":><\\?;\'\/\\.,/', $str);
     }    
 
@@ -35,7 +38,8 @@ class UtilString extends Util {
      * @param string $title 中文文字内容
      * @return int 中文文字内容的长度
      */
-    public static function strlenChinaese( $title ){
+    public static function strlenChinaese( $title )
+    {
         $realnum = 0;
         for($i=0;$i<strlen($title);$i++)
         {
@@ -120,7 +124,8 @@ class UtilString extends Util {
      * @return Boolean
      +----------------------------------------------------------
      */
-    public static function is_utf8($str) {
+    public static function is_utf8($str) 
+    {
         $c=0;
         $b=0;
         $bits=0;
@@ -150,7 +155,8 @@ class UtilString extends Util {
     /**
      * 定义字符转换函数，解决mssql中文乱码问题
      */
-    public static function gbk2utf8($string) {
+    public static function gbk2utf8($string) 
+    {
         return iconv("gbk","utf-8",$string);
     }
 
@@ -159,7 +165,8 @@ class UtilString extends Util {
      * @param string $string 原字符串
      * @return string 转换后的字符串
      */
-    public static function utf82gbk($string) {
+    public static function utf82gbk($string) 
+    {
         return iconv("utf-8","gbk",$string);
     }
     
@@ -174,7 +181,8 @@ class UtilString extends Util {
     * @return
     * trimmed string with ellipsis added if it was truncated
     */
-    function word_trim($string,$count,$ellipsis = FALSE){
+    public static function word_trim($string,$count,$ellipsis = FALSE)
+    {
         $words = preg_split("/[\s]+/",$string);
         if (count($words)>$count){
             array_splice($words,$count);
@@ -205,7 +213,8 @@ class UtilString extends Util {
      * @return string
      +----------------------------------------------------------
      */
-    public static  function msubstr($str, $start=0, $length=0, $charset="utf-8", $suffix=true) {
+    public static function msubstr($str, $start=0, $length=0, $charset="utf-8", $suffix=true) 
+    {
         if(function_exists("mb_substr"))
             return mb_substr($str, $start, $length, $charset);
         elseif(function_exists('iconv_substr')) {
@@ -234,7 +243,8 @@ class UtilString extends Util {
      * @return string
      +----------------------------------------------------------
      */
-    public static function rand_string($len=6,$type='',$addChars='') {
+    public static function rand_string($len=6,$type='',$addChars='') 
+    {
         $str ='';
         switch($type) {
             case 0:
@@ -284,7 +294,8 @@ class UtilString extends Util {
      * @return string
      +----------------------------------------------------------
      */
-    public static function build_count_rand ($number,$length=4,$mode=1) {
+    public static function build_count_rand ($number,$length=4,$mode=1) 
+    {
         if($mode==1 && $length<strlen($number) ) {
             //不足以生成一定数量的不重复数字
             return false;
@@ -317,7 +328,8 @@ class UtilString extends Util {
      * @return string | array
      +----------------------------------------------------------
      */
-    public static function build_format_rand($format,$number=1) {
+    public static function build_format_rand($format,$number=1) 
+    {
         $str  =  array();
         $length =  strlen($format);
         for($j=0; $j<$number; $j++) {

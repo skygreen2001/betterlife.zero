@@ -1,21 +1,21 @@
 <?php
 /**
-* 通用的方法服务类。
-* 继承本基本服务方法类要求遵循命名规范
-*     服务类名=Service+[DataObject名称]
-*     如用户服务ServiceUser=Service+User
-* 通用的方法包括如下：
-*     数据对象的增删改
-*     根据标识ID获取数据对象
-*     根据过滤条件获取数据对象
-*     根据数据对象的计数
-*     分页获取数据对象
-*     对属性进行递增递减            
-* @category betterlife  
-* @package core.model
-* @subpackage service
-* @author skygreen 
-*/              
+ * 通用的方法服务类。
+ * 继承本基本服务方法类要求遵循命名规范
+ *     服务类名=Service+[DataObject名称]
+ *     如用户服务ServiceUser=Service+User
+ * 通用的方法包括如下：
+ *     数据对象的增删改
+ *     根据标识ID获取数据对象
+ *     根据过滤条件获取数据对象
+ *     根据数据对象的计数
+ *     分页获取数据对象
+ *     对属性进行递增递减   
+ * @category betterlife
+ * @package core.model
+ * @subpackage service  
+ * @author skygreen skygreen2001@gmail.com
+ */
 class ServiceBasic extends Service implements IServiceBasic
 {  
     /**
@@ -312,8 +312,21 @@ class ServiceBasic extends Service implements IServiceBasic
             LogMe::log(Wl::ERROR_INFO_OBJECT_UNKNOWN);
             return null;
         }                                                      
-    }      
-    
+    }   
+                                                     
+    /**
+     * 直接执行SQL语句  
+     * @param mixed $sql SQL查询|更新|删除语句                      
+     * @return array
+     *  1.执行查询语句返回对象数组
+     *  2.执行更新和删除SQL语句返回执行成功与否的true|null
+     */
+    public function sqlExecute($sql)
+    {
+        $dataobject_class=self::std($this->classname()); 
+        return self::dao()->sqlExecute($sql,$dataobject_class);
+    } 
+        
     /**
     * 根据数据对象服务名称获取当前数据对象
     */
@@ -323,8 +336,8 @@ class ServiceBasic extends Service implements IServiceBasic
             $current_dataobjectname=self::$std[$current_servicename];
         }else{
             $current_servicename=str_replace("ExtService","",$current_servicename);
-            $current_servicename=str_replace("Service_","",$current_servicename);
-            $current_servicename=str_replace("Service","",$current_servicename);
+            $current_servicename=str_replace("Service_","",$current_servicename);   
+            $current_servicename=str_replace("Service","",$current_servicename);   
             $current_dataobjectname=ucfirst($current_servicename);                     
         }                                                                      
         return $current_dataobjectname;  

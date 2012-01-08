@@ -62,7 +62,11 @@ class UtilFileSystem extends Util
      */
     public static function createDir($dir)
     {
-       return is_dir($dir) or (self::createDir(dirname($dir)) and mkdir($dir, 0777));
+       if (UtilString::is_utf8($dir)){ 
+            $dir=rawurldecode(self::charsetConvert($dir));
+       }   
+       return is_dir($dir) or mkdir($dir, 0777,true);
+       //return is_dir($dir) or (self::createDir(dirname($dir)) and mkdir($dir, 0777));
     }
              
     /**
@@ -74,6 +78,9 @@ class UtilFileSystem extends Util
      */
     public static function save_file_content($filename,$content)
     {
+        if (UtilString::is_utf8($filename)){ 
+            $filename=rawurldecode(self::charsetConvert($filename));
+        }   
         $cFile = fopen ($filename, 'w' ); 
         if ($cFile){
             file_put_contents($filename, $content);

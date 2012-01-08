@@ -1,10 +1,23 @@
-<?php
-
+<?php     
 /**
- * 工具类:自动生成代码-实体类
+ +---------------------------------<br/>
+ * 工具类:自动生成代码-实体类<br/>
+ +---------------------------------<br/>  
+ * @category betterlife
+ * @package core.autoCode   
+ * @author skygreen skygreen2001@gmail.com
  */
 class AutoCodeDomain extends AutoCode
-{
+{       
+    /**
+     *实体数据对象类文件所在的路径 
+     */
+    public static $domain_dir="domain";      
+    /**
+     * 实体数据对象类完整的保存路径
+     */
+    public static $domain_dir_full; 
+    
 	/**
      * 数据对象生成定义的方式<br/>
      * 1.所有的列定义的对象属性都是private,同时定义setter和getter方法。
@@ -15,7 +28,10 @@ class AutoCodeDomain extends AutoCode
      * 自动生成代码-实体类
      */
 	public static function AutoCode()
-	{
+	{               
+        self::$app_dir=Gc::$appName;
+        self::$domain_dir_full=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR.self::$domain_dir.DIRECTORY_SEPARATOR;
+                                
 	    $tableList=Manager_Db::newInstance()->dbinfo()->tableList();
 	    $fieldInfos=array();
 	    foreach ($tableList as $tablename){
@@ -34,7 +50,7 @@ class AutoCodeDomain extends AutoCode
 	       //echo("<br/>");
 	       $definePhpFileContent=self::tableToDataObjectDefine($tablename,$tableInfoList,$fieldInfo);
 	       if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($definePhpFileContent)){
-	           $classname=self::saveDataObjectDefineToDir(self::$save_dir,$tablename,$definePhpFileContent);
+	           $classname=self::saveDataObjectDefineToDir($tablename,$definePhpFileContent);
 	           echo "生成导出完成:$tablename->$classname!<br/>";   
 	       }else{
 	           echo $definePhpFileContent."<br/>";
@@ -46,41 +62,12 @@ class AutoCodeDomain extends AutoCode
 	 * 用户输入需求
 	 */
 	public static function UserInput()
-	{
-	    /**
-	     * javascript文件夹选择框的两种解决方案,这里选择了第一种
-	     * @link http://www.blogjava.net/supercrsky/archive/2008/06/17/208641.html
-	     */
-	    echo  '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-	           <html lang="zh-CN" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">';
-	    echo "<head>\r\n";     
-	    echo UtilCss::form_css()."\r\n";
-	    $url_base=UtilNet::urlbase();
-	    echo "<script type='text/javascript' src='".$url_base."common/js/util/file.js'></script>";
-	    echo "</head>";     
-	    echo "<body>";   
-	    echo "<br/><br/><br/><br/><br/><h1 align='center'>需要定义生成实体类的输出文件路径参数</h1>";
-	    echo "<div align='center' height='450'>";
-	    echo "<form>";  
-	    echo "  <div style='line-height:1.5em;'>";
-	    echo "      <label>输出文件路径:</label><input type=\"text\" name=\"save_dir\" />
-	                    <input type=\"button\" onclick=\"browseFolder('save_dir')\" value=\"浏览...\" /><br/><br/>
-	                <label>生成模式:</label><select name=\"type\">
-	                  <option value='1'>对象属性都是private,定义setter和getter方法。</option><option value='2'>所有的列定义的对象属性都是public</option>
-	                </select>";  
-	    echo "  </div>";
-	    echo "  <input type=\"submit\" value='生成' /><br/>";
-	    echo "  <p id='indexPage'>说明： <br/>
-	                * 可手动输入文件路径，也可选择浏览指定文件夹。<br/>
-	                * 如果您希望选择指定文件夹，特别注意的是,由于安全方面的问题,你还需要如下设置才能使本JS代码正确运行,否则会出现\"没有权限\"的问题。<br/>
-	                1.设置可信任站点（例如本地的可以为：http://localhost）<br/>
-	                2.其次：可信任站点安全级别自定义设置中：设置下面的选项<br/>
-	                \"对没有标记为安全的ActiveX控件进行初始化和脚本运行\"----\"启用\"</p>"; 
-	    echo "</form>";
-	    echo "</div>";
-	    echo "</body>";      
-	    echo "</html>";
-	    return;
+	{   
+        $inputArr=array(
+            "1"=>"对象属性都是private,定义setter和getter方法。",
+            "2"=>"所有的列定义的对象属性都是public"
+        );    
+        parent::UserInput("需要定义生成实体类的输出文件路径参数",$inputArr);   
 	}
 
 	/**
@@ -189,11 +176,10 @@ class AutoCodeDomain extends AutoCode
 	 * @param string $tablename 
 	 * @return string 返回对象所在的Package名 
 	 */
-	private static function getPackage($tablename){
-	    $package="domain.";
+	private static function getPackage($tablename){  
 	    $pacre=str_replace(Config_Db::$table_prefix, "", $tablename);
 	    $pacre=str_replace(Config_Db::TABLENAME_RELATION,Config_Db::TABLENAME_DIR_RELATION, $pacre);      
-	    $package.=str_replace("_", ".", $pacre);
+	    $package=str_replace("_", ".", $pacre);
 	    $packageSplit=explode(".", $package);
 	    unset($packageSplit[count($packageSplit)-1]);
 	    $package= implode(".", $packageSplit);      
@@ -241,20 +227,16 @@ class AutoCodeDomain extends AutoCode
 	}
 
 	/**
-	 * 保存生成的代码到指定命名规范的文件中 
-	 * @param string $dir
-	 * @param string $definePhpFileContent 
+	 * 保存生成的代码到指定命名规范的文件中  
+     * @param string $tablename 表名称    
+	 * @param string $definePhpFileContent 生成的代码 
 	 */
-	private static function saveDataObjectDefineToDir($dir,$tablename,$definePhpFileContent)
+	private static function saveDataObjectDefineToDir($tablename,$definePhpFileContent)
 	{
 		$package  =self::getPackage($tablename);
 		$filename =self::getClassname($tablename).".php";
-		$package  =str_replace(".", DIRECTORY_SEPARATOR, $package);
-	    if(endWith($dir, "domain".DIRECTORY_SEPARATOR)||endWith($dir, "domain\\")){
-	        $package=str_replace("domain", "", $package);
-	    }
-	    $dir=$dir.DIRECTORY_SEPARATOR.$package;
-	    return self::saveDefineToDir($dir,$filename,$definePhpFileContent);
+		$package  =str_replace(".", DIRECTORY_SEPARATOR, $package);   
+	    return self::saveDefineToDir(self::$domain_dir_full.$package,$filename,$definePhpFileContent);
 	}	
 
 }

@@ -1,15 +1,30 @@
-<?php
-
+<?php     
 /**
- * 工具类:自动生成代码-服务类
+ +---------------------------------<br/>
+ * 工具类:自动生成代码-服务类<br/>
+ +---------------------------------<br/>  
+ * @category betterlife
+ * @package core.autoCode   
+ * @author skygreen skygreen2001@gmail.com
  */
 class AutoCodeService extends AutoCode
 {
 	/**
 	 * Service类所在的目录
 	 */
-    public static $package="services";
-
+    public static $package="services";   
+    /**
+     * Service类所在的目录
+     */
+    public static $service_dir="services";    
+    /**
+     * Ext js Service文件所在的路径 
+     */
+    public static $ext_dir="ext";
+    /**
+    * Service完整的保存路径
+    */
+    public static $service_dir_full;     
 	/**
      * 服务类生成定义的方式<br/>
      * 1.继承具有标准方法的Service。
@@ -23,23 +38,36 @@ class AutoCodeService extends AutoCode
      */
 	public static function AutoCode()
 	{
+        if (self::$type==3){
+            self::$app_dir="admin";
+        }else{
+            self::$app_dir=Gc::$appName;
+        }    
+        if (!UtilString::is_utf8(self::$service_dir_full)){
+            self::$service_dir_full=UtilString::gbk2utf8(self::$service_dir_full);    
+        }   
+        self::$service_dir_full=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR.self::$service_dir.DIRECTORY_SEPARATOR;
+        
 	    $tableList=Manager_Db::newInstance()->dbinfo()->tableList(); 
 	    $tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
 	    echo UtilCss::form_css()."\r\n";           
 	    foreach($tableList as $tablename){     
 	        $definePhpFileContent=self::tableToServiceDefine($tablename,$tableInfoList); 
-	        if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($definePhpFileContent)){
-	           $classname=self::saveServiceDefineToDir(self::$save_dir,$tablename,$definePhpFileContent);
+	        if (isset($definePhpFileContent)&&(!empty($definePhpFileContent))){
+	           $classname=self::saveServiceDefineToDir($tablename,$definePhpFileContent);
 	           echo "生成导出完成:$tablename->$classname!<br/>";   
 	        }else{
 	           echo $definePhpFileContent."<br/>";
 	        }         
 	    }
+        $category  = Gc::$appName;                 
+        $author    = self::$author;
+        $package   = self::$package;
 	    if ((self::$type==2)||(self::$type==1)){
 		    /**
 		     * 需要在管理类Manager_Service.php里添加的代码       
 		     */
-		    echo "<br/><br/>需要在管理类Manager_Service里添加的代码[如果没有]:<br/>";      
+		    echo "<br/><font color='#FF0000'>[需要在管理类Manager_Service里添加没有的代码]</font><br />";      
 		    $section_define="";
 		    $section_content="";
 		    foreach($tableList as $tablename){  
@@ -60,24 +88,40 @@ class AutoCodeService extends AutoCode
 		        $section_content.="    /**\r\n".
 		                          "     * 提供服务:".$table_comment."\r\n".
 		                          "     */\r\n";    
-		        $section_content.="    public static function ".$classname."Service() {\r\n".
+		        $section_content.="    public static function ".$classname."Service()\r\n".
+                                  "    {\r\n".
 		                          "        if (self::\$".$classname."Service==null) {\r\n".
 		                          "            self::\$".$classname."Service=new $service_classname();\r\n".
 		                          "        }\r\n".
 		                          "        return self::\$".$classname."Service;\r\n".
 		                          "    }\r\n\r\n";
-		    }
-		    $section_define=str_replace(" ","&nbsp;",$section_define); 
+		    }                 
+            $e_result="<?php\r\n".
+                     "/**\r\n".
+                     " +---------------------------------------<br/>\r\n".
+                     " * 服务类:所有Service的管理类<br/>\r\n".
+                     " +---------------------------------------\r\n".
+                     " * @category $category\r\n".
+                     " * @package $package\r\n".   
+                     " * @author $author\r\n".
+                     " */\r\n".  
+                     "class Manager_Service extends Manager\r\n".  
+                     "{\r\n".$section_define."\r\n".$section_content."}\r\n"; 
+            $e_result.="?>";                                                                                      
+            self::saveDefineToDir(self::$service_dir_full,"Manager_Service.php",$e_result);  
+              
+            echo  "新生成的Manager_Service文件路径:<font color='#0000FF'>".self::$service_dir_full."Manager_Service.php</font><br /><br /><br />";
+/*		    $section_define=str_replace(" ","&nbsp;",$section_define); 
             $section_define=str_replace("\r\n","<br />",$section_define); 
 		    echo  $section_define.'<br/>';
 		    $section_content=str_replace(" ","&nbsp;",$section_content);  
             $section_content=str_replace("\r\n","<br />",$section_content); 
-		    echo  $section_content;  
+		    echo  $section_content;*/      
 	    }else if (self::$type==3){
 		    /**
 		     * 需要在管理类Manager_ExtService.php里添加的代码       
 		     */
-		    echo "<br/><br/>需要在管理类Manager_ExtService里添加的代码[如果没有]:<br/>";      
+		    echo "<br/><font color='#FF0000'>[需要在管理类Manager_ExtService里添加没有的代码]</font><br/>";      
 		    $section_define="";
 		    $section_content="";
 		    foreach($tableList as $tablename){  
@@ -97,24 +141,41 @@ class AutoCodeService extends AutoCode
 		        $section_define .="    private static \$".$classname."Service;\r\n";  
 		        $section_content.="    /**\r\n".
 		                          "     * 提供服务:".$table_comment."\r\n".
-		                          "     */<br/>";    
-		        $section_content.="    public static function ".$classname."Service() {\r\n".
+		                          "     */\r\n";    
+		        $section_content.="    public static function ".$classname."Service()\r\n".
+                                  "    {\r\n".
 		                          "        if (self::\$".$classname."Service==null) {\r\n".
 		                          "            self::\$".$classname."Service=new Ext$service_classname();\r\n".
 		                          "        }\r\n".
 		                          "        return self::\$".$classname."Service;\r\n".
 		                          "    }\r\n\r\n";
-		    }                                                              
-		    $section_define=str_replace(" ","&nbsp;",$section_define); 
+		    } 
+            $package   = self::$app_dir.".".$package;    
+            $e_result="<?php\r\n".
+                     "/**\r\n".
+                     " +---------------------------------------<br/>\r\n".
+                     " * 服务类:所有ExtService的管理类<br/>\r\n".
+                     " +---------------------------------------\r\n".
+                     " * @category $category\r\n".
+                     " * @package $package\r\n". 
+                     " * @subpackage ext\r\n".  
+                     " * @author $author\r\n".
+                     " */\r\n".  
+                     "class Manager_ExtService extends Manager\r\n".  
+                     "{\r\n".$section_define."\r\n".$section_content."}\r\n"; 
+            $e_result.="?>";              
+            self::saveDefineToDir(self::$service_dir_full.self::$ext_dir.DIRECTORY_SEPARATOR,"Manager_ExtService.php",$e_result);                                                                     
+            echo  "新生成的Manager_ExtService文件路径:<font color='#0000FF'>".self::$service_dir_full.self::$ext_dir.DIRECTORY_SEPARATOR,"Manager_ExtService.php</font><br /><br/>";
+/*		    $section_define=str_replace(" ","&nbsp;",$section_define); 
             $section_define=str_replace("\r\n","<br />",$section_define);  
 		    echo  $section_define.'<br/>';
 		    $section_content=str_replace(" ","&nbsp;",$section_content); 
             $section_content=str_replace("\r\n","<br />",$section_content);   
-		    echo  $section_content;  
+		    echo  $section_content; */                                          
             /**
              * 需要在Ext Direct 服务配置文件:service.config.xml里添加的代码 
              */
-            echo "<br/><br/>需要在Ext Direct 服务配置文件:service.config.xml里添加的代码[如果没有]:<br/>";  
+            echo "<font color='#FF0000'>[需要在Ext Direct 服务配置文件:service.config.xml里添加没有的代码]</font><br/>";  
             $section_content="";
             foreach($tableList as $tablename){ 
                 $classname=self::getClassname($tablename);  
@@ -139,12 +200,18 @@ class AutoCodeService extends AutoCode
                                   "            </method>\r\n". 
                                   "        </methods> \r\n". 
                                   "    </service>\r\n\r\n";   
-            }          
-            $section_content=str_replace(" ","&nbsp;",$section_content);    
+            }           
+            $e_result="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n".  
+                     "<services>\r\n".  
+                     $section_content.  
+                     "</services>\r\n";                                                                                                                       
+            self::saveDefineToDir(self::$service_dir_full,"service.config.xml",$e_result);   
+            echo  "新生成的service.config.xml文件路径:<font color='#0000FF'>".self::$service_dir_full,"service.config.xml</font><br /><br /><br /><br />";
+/*            $section_content=str_replace(" ","&nbsp;",$section_content);    
             $section_content=str_replace("<","&lt;",$section_content); 
             $section_content=str_replace(">","&gt;",$section_content); 
             $section_content=str_replace("\r\n","<br />",$section_content); 
-            echo  $section_content; 
+            echo  $section_content;     */
 	    }      
 	}
 
@@ -153,40 +220,12 @@ class AutoCodeService extends AutoCode
 	 */
 	public static function UserInput()
 	{
-	    /**
-	     * javascript文件夹选择框的两种解决方案,这里选择了第一种
-	     * @link http://www.blogjava.net/supercrsky/archive/2008/06/17/208641.html
-	     */
-	    echo  '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-	           <html lang="zh-CN" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">';
-	    echo "<head>\r\n";     
-	    echo UtilCss::form_css()."\r\n";
-	    $url_base=UtilNet::urlbase();
-	    echo "<script type='text/javascript' src='".$url_base."common/js/util/file.js'></script>";
-	    echo "</head>";     
-	    echo "<body>";   
-	    echo "<br/><br/><br/><br/><br/><h1 align='center'>需要定义生成服务类的输出文件路径参数</h1>";
-	    echo "<div align='center' height='450'>";
-	    echo "<form>";  
-	    echo "  <div style='line-height:1.5em;'>";
-	    echo "      <label>输出文件路径:</label><input type=\"text\" name=\"save_dir\" />
-	                    <input type=\"button\" onclick=\"browseFolder('save_dir')\" value=\"浏览...\" /><br/><br/>
-	                <label>生成模式:</label><select name=\"type\">
-	                  <option value='1'>继承具有标准方法的Service。</option><option value='2'>生成标准方法的Service。</option><option value='3'>生成ExtJs框架使用的Service【后台】。</option>
-	                </select>";  
-	    echo "  </div>";
-	    echo "  <input type=\"submit\" value='生成' /><br/>";
-	    echo "  <p id='indexPage'>说明： <br/>
-	                * 可手动输入文件路径，也可选择浏览指定文件夹。<br/>
-	                * 如果您希望选择指定文件夹，特别注意的是,由于安全方面的问题,你还需要如下设置才能使本JS代码正确运行,否则会出现\"没有权限\"的问题。<br/>
-	                1.设置可信任站点（例如本地的可以为：http://localhost）<br/>
-	                2.其次：可信任站点安全级别自定义设置中：设置下面的选项<br/>
-	                \"对没有标记为安全的ActiveX控件进行初始化和脚本运行\"----\"启用\"</p>"; 
-	    echo "</form>";
-	    echo "</div>";
-	    echo "</body>";      
-	    echo "</html>";
-	    return;
+        $inputArr=array(
+            "1"=>"继承具有标准方法的Service。",
+            "2"=>"生成标准方法的Service。",
+            "3"=>"生成ExtJs框架使用的Service【后台】。"
+        );    
+        parent::UserInput("需要定义生成服务类的输出文件路径参数",$inputArr);  
 	}
 
 	/**
@@ -220,15 +259,21 @@ class AutoCodeService extends AutoCode
 		$category = Gc::$appName;
 		$author   = self::$author;
 		$result  .= "//加载初始化设置\r\n";
-		$package .=self::$package;
+		$package =self::$package;
+        if (self::$type==3){   
+            $package   = self::$app_dir.".".$package;  
+        }
 	    $result.="class_exists(\"Service\")||require(\"../init.php\");\r\n";       
 	    $result.="/**\r\n".
 				 " +---------------------------------------<br/>\r\n".
 				 " * $table_comment<br/>\r\n".
 				 " +---------------------------------------\r\n".
 				 " * @category $category\r\n".
-				 " * @package $package\r\n".
-				 " * @author $author\r\n".
+				 " * @package $package\r\n";
+        if (self::$type==3){         
+            $result.=" * @subpackage ext\r\n";
+        }  
+		$result.=" * @author $author\r\n".
 				 " */\r\n";	 
 	    switch (self::$type) {
 	    	case 3:
@@ -298,7 +343,21 @@ class AutoCodeService extends AutoCode
 	                     "            \$limit=\$condition['limit']; \r\n". 
 	                     "            \$limit=\$start+\$limit-1; \r\n".
 	                     "        }\r\n".        
-	                     "        unset(\$condition['start'],\$condition['limit']);\r\n".        
+	                     "        unset(\$condition['start'],\$condition['limit']);\r\n".     
+                         "        if (!empty(\$condition)&&(count(\$condition)>0)){\r\n". 
+                         "            \$conditionArr=array();\r\n".                          
+                         "            foreach (\$condition as \$key=>\$value) {\r\n". 
+                         "                if (!UtilString::is_utf8(\$value)){\r\n".         
+                         "                    \$value=UtilString::gbk2utf8(\$value);\r\n". 
+                         "                }\r\n".                          
+                         "                if (is_numeric(\$value)){ \r\n". 
+                         "                    \$conditionArr[]=\$key.\"=\".\$value;\r\n".   
+                         "                }else{\r\n". 
+                         "                    \$conditionArr[]=\$key.\" like '%\".\$value.\"%'\"; \r\n".                          
+                         "                }\r\n". 
+                         "            }\r\n".         
+                         "            \$condition=implode(\" and \",\$conditionArr);\r\n". 
+                         "        }\r\n".  
 	                     "        \$count=parent::count(\$condition);\r\n".       
 	                     "        if (\$count>0){\r\n".          
 	                     "            if (\$limit>\$count)\$limit=\$count;\r\n".          
@@ -584,7 +643,18 @@ class AutoCodeService extends AutoCode
 	            $result.="    public function queryPage(\$startPoint,\$endPoint,\$filter=null,\$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)\r\n".
 	                     "    {\r\n". 
 	                     "        return $classname::queryPage(\$startPoint,\$endPoint,\$filter,\$sort);\r\n".
-	                     "    }\r\n";                          
+	                     "    }\r\n";    
+                //sqlExecute    
+                $result.="    /**\r\n".   
+                         "     * 直接执行SQL语句\r\n".                                             
+                         "     * @return array\r\n".
+                         "     *  1.执行查询语句返回对象数组\r\n".
+                         "     *  2.执行更新和删除SQL语句返回执行成功与否的true|null\r\n".
+                         "     */\r\n".
+                         "    public function sqlExecute()\r\n".
+                         "    {\r\n".
+                         "        return self::dao()->sqlExecute(\"select * from \".$classname::tablename(),$classname::classname_static());\r\n".
+                         "    }\r\n";                     
 	            break;
 	        default:          
 	            $result.="class $service_classname extends ServiceBasic\r\n{\r\n";                         
@@ -610,17 +680,20 @@ class AutoCodeService extends AutoCode
 	   
 	/**
 	 * 保存生成的代码到指定命名规范的文件中 
-	 * @param string $dir
-	 * @param string $definePhpFileContent 
+	 * @param string $tablename 表名称
+	 * @param string $definePhpFileContent 生成的代码 
 	 */
-	private static function saveServiceDefineToDir($dir,$tablename,$definePhpFileContent)
+	private static function saveServiceDefineToDir($tablename,$definePhpFileContent)
 	{ 
 		$filename =self::getServiceClassname($tablename).".php";  
 		if (self::$type==3){
 			$filename = "Ext".$filename;
-		}  	      
-		$dir      =$dir.DIRECTORY_SEPARATOR.self::$package;
-		return self::saveDefineToDir($dir,$filename,$definePhpFileContent);
+		}  	 
+        $service_dir_full=self::$service_dir_full;             
+        if (self::$type==3){
+            $service_dir_full=$service_dir_full.DIRECTORY_SEPARATOR.self::$ext_dir;
+        }                                                                                                        
+		return self::saveDefineToDir($service_dir_full,$filename,$definePhpFileContent);
 	}
 }
 

@@ -1,9 +1,14 @@
 <?php   
 /**
+ +---------------------------------<br/>
  * 工具类:自动生成代码-使用ExtJs生成的表示层
+ +---------------------------------<br/>  
+ * @category betterlife
+ * @package core.autoCode.view   
+ * @author skygreen skygreen2001@gmail.com
  */
 class AutoCodeViewExt extends AutoCode
-{
+{                                 
 	/**
 	 * 表示层所在的目录
 	 */
@@ -12,22 +17,31 @@ class AutoCodeViewExt extends AutoCode
 	 * 表示层Js文件所在的目录
 	 */
 	public static $view_js_package;
+    /**
+     * 表示层完整的保存路径
+     */
+    public static $view_dir_full;
+    /**
+     * 菜单配置完整的保存路径
+     */
+    public static $menuconfig_dir_full;  
 	/**
 	 * 查询过滤条件字段
 	 */
-	public static $filter_fieldnames=array(
-		'Ads'=>array('name','adstype','isShow'),
-		'Product'=>array('name','product_code','isUp','upTime','downTime')
+	public static $filter_fieldnames=array(           
+        'Blog'=>array('name','content')
 	);
 
 	/**
 	 * 设置必需的路径
 	 */
     public static function pathset()
-    {
-    	$view_package=Config_F::VIEW_VIEW.DIRECTORY_SEPARATOR.Gc::$self_theme_dir.DIRECTORY_SEPARATOR;
-    	self::$view_core=$view_package."core".DIRECTORY_SEPARATOR;
-    	self::$view_js_package=$view_package."js".DIRECTORY_SEPARATOR."ext".DIRECTORY_SEPARATOR;
+    {                            
+        self::$app_dir="admin";  
+        self::$view_dir_full=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR.Config_F::VIEW_VIEW.DIRECTORY_SEPARATOR.Gc::$self_theme_dir.DIRECTORY_SEPARATOR;
+        self::$menuconfig_dir_full=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR."view".DIRECTORY_SEPARATOR."menu".DIRECTORY_SEPARATOR;
+    	self::$view_core=self::$view_dir_full.Config_F::VIEW_CORE.DIRECTORY_SEPARATOR;
+    	self::$view_js_package=self::$view_dir_full."js".DIRECTORY_SEPARATOR."ext".DIRECTORY_SEPARATOR;  
     }   
                   
     /**
@@ -56,7 +70,7 @@ class AutoCodeViewExt extends AutoCode
 	    foreach ($fieldInfos as $tablename=>$fieldInfo){
 	       $defineJsFileContent=self::tableToViewJsDefine($tablename,$tableInfoList,$fieldInfo);
 	       if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($defineJsFileContent)){
-	           $jsName=self::saveJsDefineToDir(self::$save_dir,$tablename,$defineJsFileContent);
+	           $jsName=self::saveJsDefineToDir($tablename,$defineJsFileContent);
 	           echo "生成导出完成:$tablename->$jsName!<br/>";   
 	       }else{
 	           echo $defineJsFileContent."<br/>";
@@ -66,7 +80,7 @@ class AutoCodeViewExt extends AutoCode
         foreach ($fieldInfos as $tablename=>$fieldInfo){      
            $defineTplFileContent=self::tableToViewTplDefine();
            if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($defineTplFileContent)){
-               $tplName=self::saveTplDefineToDir(self::$save_dir,$tablename,$defineTplFileContent);
+               $tplName=self::saveTplDefineToDir($tablename,$defineTplFileContent);
                echo "生成导出完成:$tablename->$tplName!<br/>";   
            }else{
                echo $defineTplFileContent."<br/>";
@@ -76,7 +90,7 @@ class AutoCodeViewExt extends AutoCode
         /**
          * 需要在后端admin/src/view/menu目录下 菜单配置文件:menu.config.xml里添加的代码 
          */
-        echo "<br/><br/>需要在后端admin/src/view/menu目录下 菜单配置文件:menu.config.xml里添加的代码[如果没有]:<br/>";  
+        echo "<br/><font color='#FF0000'>[需要在后端admin/src/view/menu目录下 菜单配置文件:menu.config.xml里添加没有的代码]</font><br/>";  
         $section_content="";
         $appName=Gc::$appName;
         foreach($tableList as $tablename){
@@ -88,12 +102,21 @@ class AutoCodeViewExt extends AutoCode
             }
             $instancename=self::getInstancename($tablename);                         
             $section_content.="        <menu name=\"$table_comment\" address=\"index.php?go=admin.$appName.{$instancename}\" />\r\n";
-        }          
-        $section_content=str_replace(" ","&nbsp;",$section_content);    
+        }        
+        $filename="menu.config.xml";
+        $output_section_content="<?xml version=\"1.0\" encoding=\"UTF-8\"?> \r\n".
+                         "<menuGroups>\r\n". 
+                         "    <menuGroup id=\"navWebDev\" name=\"功能区\" iconCls=\"navdesign\" show=\"true\">\r\n".  
+                         $section_content.
+                         "    </menuGroup> \r\n".  
+                         "</menuGroups>\r\n";                                                                                            
+        self::saveDefineToDir(self::$menuconfig_dir_full,$filename,$output_section_content);  
+        echo  "新生成的menu.config.xml文件路径:<font color='#0000FF'>".self::$menuconfig_dir_full.$filename."</font><br /><br /><br /><br /><br />";  
+/*        $section_content=str_replace(" ","&nbsp;",$section_content);    
         $section_content=str_replace("<","&lt;",$section_content); 
         $section_content=str_replace(">","&gt;",$section_content); 
         $section_content=str_replace("\r\n","<br />",$section_content); 
-        echo  $section_content;    
+        echo  $section_content;    */
 	}
 
 	/**
@@ -101,37 +124,7 @@ class AutoCodeViewExt extends AutoCode
 	 */
 	public static function UserInput()
 	{
-	    /**
-	     * javascript文件夹选择框的两种解决方案,这里选择了第一种
-	     * @link http://www.blogjava.net/supercrsky/archive/2008/06/17/208641.html
-	     */
-	    echo  '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-	           <html lang="zh-CN" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">';
-	    echo "<head>\r\n";     
-	    echo UtilCss::form_css()."\r\n";
-	    $url_base=UtilNet::urlbase();
-	    echo "<script type='text/javascript' src='".$url_base."common/js/util/file.js'></script>";
-	    echo "</head>";     
-	    echo "<body>";   
-	    echo "<br/><br/><br/><br/><br/><h1 align='center'>使用ExtJs框架生成表示层【用于后台】的输出文件路径参数</h1>";
-	    echo "<div align='center' height='450'>";
-	    echo "<form>";  
-	    echo "  <div style='line-height:1.5em;'>";
-	    echo "      <label>输出文件路径:</label><input type=\"text\" name=\"save_dir\" />
-	                    <input type=\"button\" onclick=\"browseFolder('save_dir')\" value=\"浏览...\" /><br/><br/>";  
-	    echo "  </div>";
-	    echo "  <input type=\"submit\" value='生成' /><br/>";
-	    echo "  <p id='indexPage'>说明： <br/>
-	                * 可手动输入文件路径，也可选择浏览指定文件夹。<br/>
-	                * 如果您希望选择指定文件夹，特别注意的是,由于安全方面的问题,你还需要如下设置才能使本JS代码正确运行,否则会出现\"没有权限\"的问题。<br/>
-	                1.设置可信任站点（例如本地的可以为：http://localhost）<br/>
-	                2.其次：可信任站点安全级别自定义设置中：设置下面的选项<br/>
-	                \"对没有标记为安全的ActiveX控件进行初始化和脚本运行\"----\"启用\"</p>"; 
-	    echo "</form>";
-	    echo "</div>";
-	    echo "</body>";      
-	    echo "</html>";
-	    return;
+        parent::UserInput("使用ExtJs框架生成表示层【用于后台】的输出文件路径参数");  
 	}
                         
 	/**
@@ -269,7 +262,7 @@ class AutoCodeViewExt extends AutoCode
         		if (in_array($fieldname, $filterwords)){
         			$fname=$instancename_pre.$fieldname;
 	            	$datatype=self::comment_type($field["Type"]);
-	            	$filterFields.="                                '$field_comment:　',";
+	            	$filterFields.="                                '$field_comment　',";
 		        	if ($datatype=='date'){
 		        		$filterFields.="{xtype : 'datefield',ref: '../$fname',format : \"Y-m-d\"";
 		        	}else{
@@ -393,26 +386,26 @@ class AutoCodeViewExt extends AutoCode
 	}
 	   
 	/**
-	 * 保存生成的Js代码到指定命名规范的文件中 
-	 * @param string $dir
-	 * @param string $defineJsFileContent 
+	 * 保存生成的Js代码到指定命名规范的文件中  
+     * @param string $tablename 表名称  
+	 * @param string $defineJsFileContent 生成的代码 
 	 */
-	private static function saveJsDefineToDir($dir,$tablename,$defineJsFileContent)
+	private static function saveJsDefineToDir($tablename,$defineJsFileContent)
 	{ 
 		$filename =self::getInstancename($tablename).Config_F::SUFFIX_FILE_JS;  
-		$dir      =$dir.DIRECTORY_SEPARATOR.self::$view_js_package.self::getInstancename($tablename).DIRECTORY_SEPARATOR;
+		$dir      =self::$view_js_package.self::getInstancename($tablename).DIRECTORY_SEPARATOR;
 	    return self::saveDefineToDir($dir,$filename,$defineJsFileContent);
 	}
 	   
 	/**
-	 * 保存生成的tpl代码到指定命名规范的文件中 
-	 * @param string $dir
-	 * @param string $defineTplFileContent 
+	 * 保存生成的tpl代码到指定命名规范的文件中    
+     * @param string $tablename 表名称  
+	 * @param string $defineTplFileContent 生成的代码 
 	 */
-	private static function saveTplDefineToDir($dir,$tablename,$defineTplFileContent)
+	private static function saveTplDefineToDir($tablename,$defineTplFileContent)
 	{ 
 		$filename =self::getInstancename($tablename).Config_F::SUFFIX_FILE_TPL;  
-		$dir      =$dir.DIRECTORY_SEPARATOR.self::$view_core.Gc::$appName.DIRECTORY_SEPARATOR;
+		$dir      =self::$view_core.Gc::$appName.DIRECTORY_SEPARATOR;
 	    return self::saveDefineToDir($dir,$filename,$defineTplFileContent);
 	}
 }

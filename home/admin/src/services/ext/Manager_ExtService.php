@@ -6,9 +6,9 @@
  * @category betterlife
  * @package web.back.admin.services
  * @subpackage ext   
- * @author skygreen
+ * @author skygreen skygreen2001@gmail.com
  */  
-class Manager_ExtService 
+class Manager_ExtService extends Manager 
 {        
 
              
