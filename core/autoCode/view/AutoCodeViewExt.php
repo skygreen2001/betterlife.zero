@@ -28,9 +28,7 @@ class AutoCodeViewExt extends AutoCode
 	/**
 	 * 查询过滤条件字段
 	 */
-	public static $filter_fieldnames=array(           
-        'Blog'=>array('name','content')
-	);
+	public static $filter_fieldnames;
 
 	/**
 	 * 设置必需的路径
@@ -262,7 +260,7 @@ class AutoCodeViewExt extends AutoCode
         		if (in_array($fieldname, $filterwords)){
         			$fname=$instancename_pre.$fieldname;
 	            	$datatype=self::comment_type($field["Type"]);
-	            	$filterFields.="                                '$field_comment　',";
+	            	$filterFields.="                                '{$field_comment}　',";
 		        	if ($datatype=='date'){
 		        		$filterFields.="{xtype : 'datefield',ref: '../$fname',format : \"Y-m-d\"";
 		        	}else{
