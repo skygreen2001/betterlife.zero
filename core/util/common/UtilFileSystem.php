@@ -168,7 +168,9 @@ class UtilFileSystem extends Util
             } else {
                 //获得临时文件名
                 $tmptail = end(explode('.', $_FILES["upload_file"]["name"]));
-                if (is_file($uploadPath)){
+                $temp_name=basename($uploadPath); 
+                if (contain($temp_name,".")){ 
+                    $temp_name=""; 
                     $temp_name=basename($uploadPath);
                     self::createDir(dirname($uploadPath));      
                 }else{

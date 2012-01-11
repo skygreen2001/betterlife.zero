@@ -169,32 +169,43 @@ class UtilString extends Util
     {
         return iconv("utf-8","gbk",$string);
     }
-    
+                
     /**
-    * Trim a string to a given number of words
-    * @param $string the original string
-    * @param $count  the word count
-    * @param $ellipsis  TRUE to add "..." or use a string to define other character
-    * @param $node
-    * provide the node and we'll set the $node->
-    *
-    * @return
-    * trimmed string with ellipsis added if it was truncated
-    */
-    public static function word_trim($string,$count,$ellipsis = FALSE)
-    {
-        $words = preg_split("/[\s]+/",$string);
-        if (count($words)>$count){
-            array_splice($words,$count);
-            $string=implode(" ",$words);
+     * 截取指定的字符串到指定长度。
+     * 1.英文按单词截取指定长度数的单词。
+     * 2.中文按单字截取指定长度数的字。 
+     * @param $string the original string
+     * @param $count  the word count
+     * @param $ellipsis  TRUE to add "..." or use a string to define other character   
+     * @param $count  the word count        
+     * @return
+     * trimmed string with ellipsis added if it was truncated
+     */
+    public static function word_trim($string,$count,$ellipsis = true,$isChinese=true)
+    {    
+        if ($isChinese){
+            $string = UtilString::msubstr($string,0,$count);  
             if (is_string($ellipsis)){
                 $string.=$ellipsis;
             }
             elseif ($ellipsis){
                 $string .= '&hellip;' ;
+            }                        
+            return $string;  
+        }else{
+            $words = preg_split("/[\s]+/",$string);
+            if (count($words)>$count){
+                array_splice($words,$count);
+                $string=implode(" ",$words);
+                if (is_string($ellipsis)){
+                    $string.=$ellipsis;
+                }
+                elseif ($ellipsis){
+                    $string .= '&hellip;' ;
+                }
             }
+            return $string ;    
         }
-        return $string ;
     }
 
     /**

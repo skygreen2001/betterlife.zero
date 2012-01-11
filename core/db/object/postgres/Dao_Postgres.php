@@ -52,8 +52,8 @@ class Dao_Postgres extends Dao implements IDaoNormal {
      * 无法防止SQL注入黑客技术
      */
     private function executeSQL() {
-        if (Config_Db::$debug_show_sql){
-            echo "SQL:".$this->sQuery."<br />"; 
+        if (Config_Db::$debug_show_sql){                           
+            LogMe::log("SQL:".$this->sQuery);   
         }                            
         $this->result=pg_query($this->connection,$this->sQuery);
         if (!$this->result) {
@@ -112,13 +112,11 @@ class Dao_Postgres extends Dao implements IDaoNormal {
                 $value=$this->escape($value);
             }
             $this->sQuery=$_SQL->insert($this->classname)->values($this->saParams,1)->result()." RETURNING ".$this->sql_id($object);
-            if (Config_Db::$debug_show_sql){
-                echo "SQL:".$this->sQuery."<br />"; 
-                if (!empty($this->saParams)) { 
-                    echo "SQL PARAM:";
-                    print_r($this->saParams);
-                    echo "<br />";
-                }                
+            if (Config_Db::$debug_show_sql){                                      
+                LogMe::log("SQL:".$this->sQuery);  
+                if (!empty($this->saParams)) {      
+                    LogMe::log("SQL PARAM:".var_export($this->saParams, true));
+                }
             }                    
             $this->result=pg_prepare($this->connection,"insert_query",$this->sQuery);
             $this->result=pg_execute($this->connection,"insert_query",$this->saParams);
@@ -154,8 +152,8 @@ class Dao_Postgres extends Dao implements IDaoNormal {
                 $_SQL=new Crud_Sql_Delete();
                 $where=$this->sql_id($object).self::EQUAL.$id;
                 $this->sQuery=$_SQL->deletefrom($this->classname)->where($where)->result();
-                if (Config_Db::$debug_show_sql){
-                    echo "SQL:".$this->sQuery."<br />"; 
+                if (Config_Db::$debug_show_sql){                        
+                    LogMe::log("SQL:".$this->sQuery);      
                 }                   
                 $result = pg_query($this->connection,$this->sQuery);
                 pg_free_result($result);
@@ -194,13 +192,11 @@ class Dao_Postgres extends Dao implements IDaoNormal {
                     $value=$this->escape($value);
                 }
                 $this->sQuery=$_SQL->update($this->classname)->set($this->saParams)->where($where)->result();
-                if (Config_Db::$debug_show_sql){
-                    echo "SQL:".$this->sQuery."<br />"; 
-                    if (!empty($this->saParams)) { 
-                        echo "SQL PARAM:";
-                        print_r($this->saParams);
-                        echo "<br />";
-                    }                
+                if (Config_Db::$debug_show_sql){                                       
+                    LogMe::log("SQL:".$this->sQuery);  
+                    if (!empty($this->saParams)) {      
+                        LogMe::log("SQL PARAM:".var_export($this->saParams, true));
+                    }
                 }                     
                 $this->result=pg_prepare($this->connection,"update_query",$this->sQuery);
                 $this->result=pg_execute($this->connection,"update_query",$this->saParams);
@@ -335,8 +331,8 @@ class Dao_Postgres extends Dao implements IDaoNormal {
      * @return array 返回数组
      */
     public function sqlExecute($sql,$object=null) {
-        if (Config_Db::$debug_show_sql){
-            echo "SQL:".$sql."<br />";  
+        if (Config_Db::$debug_show_sql){                           
+            LogMe::log("SQL:".$sql);  
         }             
         $parts = split(" ",trim($sql));
         $type = strtolower($parts[0]);
@@ -389,8 +385,11 @@ class Dao_Postgres extends Dao implements IDaoNormal {
             $this->saParams=$_SQL->parseValidInputParam($filter);
             $_SQL->isPreparedStatement=false;
             $this->sQuery=$_SQL->select(Crud_Sql_Select::SQL_COUNT)->from($this->classname)->where($this->saParams)->result();
-            if (Config_Db::$debug_show_sql){
-                echo "SQL:".$this->sQuery."<br />";   
+            if (Config_Db::$debug_show_sql){                            
+                LogMe::log("SQL:".$this->sQuery);  
+                if (!empty($this->saParams)) {      
+                    LogMe::log("SQL PARAM:".var_export($this->saParams, true));
+                }
             }                 
             $this->result = pg_query($this->connection,$this->sQuery);
             $row = pg_fetch_row($this->result);

@@ -31,6 +31,24 @@ function contain($subject,$needle) {
 }
 
 /**
+ * 查看字符串里是否包含数组中任意一个指定字符串
+ * @param mixed $subject
+ * @param mixed $array
+ */
+function contains($subject,$array) 
+{
+    $result=false;
+    if (!empty($array)&&is_array($array)){
+        foreach ($array as $element){
+          if (contain($subject,$element)){
+              return true;
+          }  
+        }
+    }   
+    return $result;
+}
+
+/**
  * 需要的字符是否在目标字符串的开始
  * @param string $haystack 目标字符串
  * @param string $needle 需要的字符

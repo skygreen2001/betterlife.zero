@@ -166,8 +166,11 @@ class Dal_Adodb extends Dal implements IDal
               }   
             }              
 
-            if (Config_Db::$debug_show_sql){
-                echo "SQL:".$this->sQuery."<br />";
+            if (Config_Db::$debug_show_sql){      
+                LogMe::log("SQL:".$this->sQuery);  
+                if (!empty($this->saParams)) {      
+                    LogMe::log("SQL PARAM:".var_export($this->saParams, true));
+                }                
             }            
             if ($this->connection->Execute($this->sQuery) === false) {
                 Exception_Db::log($this->connection->ErrorMsg());
@@ -214,8 +217,8 @@ class Dal_Adodb extends Dal implements IDal
                 $_SQL=new Crud_Sql_Delete();
                 $where=$this->sql_id($object).self::EQUAL.$id;
                 $this->sQuery=$_SQL->deletefrom($this->classname)->where($where)->result();     
-                if (Config_Db::$debug_show_sql){
-                    echo "SQL:".$this->sQuery."<br />";
+                if (Config_Db::$debug_show_sql){                    
+                    LogMe::log("SQL:".$this->sQuery);      
                 }            
                 $this->connection->Execute($this->sQuery);
                 $result=true;
@@ -254,8 +257,11 @@ class Dal_Adodb extends Dal implements IDal
                      $this->sQuery=UtilString::utf82gbk($this->sQuery); 
                   }   
                 }                    
-                if (Config_Db::$debug_show_sql){
-                    echo "SQL:".$this->sQuery."<br />";
+                if (Config_Db::$debug_show_sql){                   
+                    LogMe::log("SQL:".$this->sQuery);  
+                    if (!empty($this->saParams)) {      
+                        LogMe::log("SQL PARAM:".var_export($this->saParams, true));
+                    }
                 }                            
 //                $tablename =Config_Adodb::orm($this->classname);                         
 //                $sql = Crud_SQL::SQL_SELECT." * ".Crud_SQL::SQL_FROM.$tablename.Crud_SQL::SQL_WHERE.$this->sql_id($object).self::EQUAL.$id;
@@ -354,8 +360,11 @@ class Dal_Adodb extends Dal implements IDal
             $this->saParams=$_SQL->parseValidInputParam($filter);
             $_SQL->isPreparedStatement=false;
             $this->sQuery=$_SQL->select()->from($this->classname)->where($this->saParams)->order($sort)->limit($limit)->result();
-            if (Config_Db::$debug_show_sql){
-                echo "SQL:".$this->sQuery."<br />";
+            if (Config_Db::$debug_show_sql){                    
+                LogMe::log("SQL:".$this->sQuery);  
+                if (!empty($this->saParams)) {      
+                    LogMe::log("SQL PARAM:".var_export($this->saParams, true));
+                }
             }            
             $this->stmt = $this->connection->GetAll($this->sQuery); 
             $result=$this->getResultToObjects($object);
@@ -393,8 +402,11 @@ class Dal_Adodb extends Dal implements IDal
             $sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);          
             $this->sQuery=$_SQL->select()->from($this->classname)->where($this->saParams)->order($sort)->result();
 
-            if (Config_Db::$debug_show_sql){
-                echo "SQL:".$this->sQuery."<br />";
+            if (Config_Db::$debug_show_sql){                     
+                LogMe::log("SQL:".$this->sQuery);  
+                if (!empty($this->saParams)) {      
+                    LogMe::log("SQL PARAM:".var_export($this->saParams, true));
+                }
             }                        
             $this->stmt =  $this->connection->SelectLimit($this->sQuery,1,0);
             $result=$this->getResultToObjects($object);
@@ -425,8 +437,8 @@ class Dal_Adodb extends Dal implements IDal
                 $where=$this->sql_id($object).self::EQUAL.$id;
                 $this->saParams=null;
                 $this->sQuery=$_SQL->select()->from($this->classname)->where($where)->result();   
-                if (Config_Db::$debug_show_sql){
-                    echo "SQL:".$this->sQuery."<br />";
+                if (Config_Db::$debug_show_sql){                   
+                    LogMe::log("SQL:".$this->sQuery);
                 }                            
                 $this->stmt =  $this->connection->GetAll($this->sQuery);
                 $result=$this->getResultToObjects($object);
@@ -455,10 +467,9 @@ class Dal_Adodb extends Dal implements IDal
               if (UtilString::is_utf8($sqlstring)&&Config_Adodb::driver($this->dbtype)!=Config_Adodb::DRIVER_MSSQL_UTF8) { 
                  $sqlstring=UtilString::utf82gbk($sqlstring); 
               }   
-            }                            
-
-            if (Config_Db::$debug_show_sql){
-                echo "SQL:".$sqlstring."<br />";
+            }             
+            if (Config_Db::$debug_show_sql){                           
+                LogMe::log("SQL:".$sqlstring);   
             }                                                 
             $parts = split(" ",trim($sqlstring));
             $type = strtolower($parts[0]);
@@ -466,7 +477,7 @@ class Dal_Adodb extends Dal implements IDal
                 $this->stmt= $this->connection->Execute($sqlstring);
                 return true;
             }elseif (Crud_Sql_Insert::SQL_KEYWORD_INSERT==$type) {                      
-                $this->stmt= $this->connection->Execute($sqlstring);
+                $this->stmt= $this->connection->Execute($sqlstring);  
                 $autoId=$this->connection->Insert_ID();
                 if (!$autoId) {
                     $tablename=Crud_Sql_Insert::tablename($sqlstring);
@@ -477,8 +488,8 @@ class Dal_Adodb extends Dal implements IDal
                         $sql_maxid=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sql_maxid);   
 
                         $autoIdSql=Crud_SQL::SQL_SELECT.$sql_maxid.Crud_SQL::SQL_FROM.$tablename;      
-                        if (Config_Db::$debug_show_sql){
-                            echo "SQL:".$autoIdSql."<br />";
+                        if (Config_Db::$debug_show_sql){                
+                            LogMe::log("SQL:".$autoIdSql);     
                         }                                    
                         $this->stmt= $this->connection->Execute($autoIdSql);
                         if ((!empty($this->stmt))&&(count($this->stmt->fields)>0)) {
@@ -494,7 +505,7 @@ class Dal_Adodb extends Dal implements IDal
                     }
                 }
                 return $autoId;                                 
-            }                                                               
+            }    
             $this->stmt= $this->connection->GetAll($sqlstring);
             $result=$this->getResultToObjects($object);
         } catch (Exception $exc) {
@@ -526,8 +537,11 @@ class Dal_Adodb extends Dal implements IDal
             $this->saParams=$_SQL->parseValidInputParam($filter);
             $_SQL->isPreparedStatement=false;
             $this->sQuery=$_SQL->select(Crud_Sql_Select::SQL_COUNT)->from($this->classname)->where($this->saParams)->result();    
-            if (Config_Db::$debug_show_sql){
-                echo "SQL:".$this->sQuery."<br />";
+            if (Config_Db::$debug_show_sql){                           
+                LogMe::log("SQL:".$this->sQuery);  
+                if (!empty($this->saParams)) {      
+                    LogMe::log("SQL PARAM:".var_export($this->saParams, true));
+                }                                    
             }                        
             $this->stmt=$this->connection->Execute($this->sQuery);
             if (!empty($this->stmt)) {
@@ -574,8 +588,11 @@ class Dal_Adodb extends Dal implements IDal
                 $sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);            
             }
             $this->sQuery=$_SQL->select()->from($this->classname)->where($this->saParams)->order($sort)->result();  
-            if (Config_Db::$debug_show_sql){
-                echo "SQL:".$this->sQuery."<br />";
+            if (Config_Db::$debug_show_sql){                       
+                LogMe::log("SQL:".$this->sQuery);  
+                if (!empty($this->saParams)) {      
+                    LogMe::log("SQL PARAM:".var_export($this->saParams, true));
+                }
             }                        
             $this->stmt = $this->connection->SelectLimit($this->sQuery,($endPoint-$startPoint+1),$startPoint-1);
             //SelectLimit($sql,$numrows=-1,$offset=-1,$inputarr=false)

@@ -64,8 +64,8 @@ class Dal_Mdb2 extends Dal implements IDal
      */
     private function executeSQL() {
         try {           
-            if (Config_Db::$debug_show_sql){
-                echo "SQL:".$this->sQuery."<br />";
+            if (Config_Db::$debug_show_sql){                    
+                LogMe::log("SQL:".$this->sQuery);      
             }                        
             $columnCount=0;
             $this->stmt = &$this->connection->query($this->sQuery);
@@ -116,8 +116,8 @@ class Dal_Mdb2 extends Dal implements IDal
             $parts = split(" ",trim($sql));
             $type = strtolower($parts[0]);
 
-            if (Config_Db::$debug_show_sql){
-                echo "SQL:".$sql."<br />";
+            if (Config_Db::$debug_show_sql){                      
+                LogMe::log("SQL:".$sql);  
             }                        
             if((Crud_Sql_Update::SQL_KEYWORD_UPDATE==$type)||(Crud_Sql_Delete::SQL_KEYWORD_DELETE==$type)) {                
                 $this->connection->exec($sql);
@@ -154,12 +154,10 @@ class Dal_Mdb2 extends Dal implements IDal
             $this->sQuery=$_SQL->insert($this->classname)->values($this->saParams)->result();
              if (!empty($this->saParams)) {
                 $type=array_values($this->getColumnTypes($object,$this->saParams,2));                    
-                if (Config_Db::$debug_show_sql){
-                    echo "SQL:".$this->sQuery."<br />";
-                    if (!empty($this->saParams)) { 
-                        echo "SQL PARAM:";
-                        print_r($this->saParams);
-                        echo "<br />";
+                if (Config_Db::$debug_show_sql){                                                    
+                    LogMe::log("SQL:".$this->sQuery);  
+                    if (!empty($this->saParams)) {      
+                        LogMe::log("SQL PARAM:".var_export($this->saParams, true));
                     }
                 }            
                 $sth=$this->connection->prepare($this->sQuery, $type,MDB2_PREPARE_MANIP);                 
@@ -194,8 +192,8 @@ class Dal_Mdb2 extends Dal implements IDal
                 $_SQL=new Crud_Sql_Delete();
                 $where=$this->sql_id($object).self::EQUAL.$id;
                 $this->sQuery=$_SQL->deletefrom($this->classname)->where($where)->result();
-                if (Config_Db::$debug_show_sql){
-                    echo "SQL:".$this->sQuery."<br />";
+                if (Config_Db::$debug_show_sql){                       
+                    LogMe::log("SQL:".$this->sQuery);  
                 }                       
                 $this->connection->exec($this->sQuery);
                 $result=true;
@@ -227,13 +225,11 @@ class Dal_Mdb2 extends Dal implements IDal
                 $this->filterViewProperties($this->saParams);
                 $where=$this->sql_id($object).self::EQUAL.$id;
                 $this->sQuery=$_SQL->update($this->classname)->set($this->saParams)->where($where)->result();         
-                if (Config_Db::$debug_show_sql){
-                    echo "SQL:".$this->sQuery."<br />";
-                    if (!empty($this->saParams)) { 
-                        echo "SQL PARAM:";
-                        print_r($this->saParams);
-                        echo "<br />";
-                    }                    
+                if (Config_Db::$debug_show_sql){     
+                    LogMe::log("SQL:".$this->sQuery);  
+                    if (!empty($this->saParams)) {      
+                        LogMe::log("SQL PARAM:".var_export($this->saParams, true));
+                    }                   
                 }                                       
                 if (!empty($this->saParams)) {
                     $type=array_values($this->getColumnTypes($object,$this->saParams,2));
@@ -394,8 +390,11 @@ class Dal_Mdb2 extends Dal implements IDal
             $this->saParams=$_SQL->parseValidInputParam($filter);
             $_SQL->isPreparedStatement=false;
             $this->sQuery=$_SQL->select(Crud_Sql_Select::SQL_COUNT)->from($this->classname)->where($this->saParams)->result();
-            if (Config_Db::$debug_show_sql){
-                echo "SQL:".$this->sQuery."<br />";
+            if (Config_Db::$debug_show_sql){                           
+                LogMe::log("SQL:".$this->sQuery);  
+                if (!empty($this->saParams)) {      
+                    LogMe::log("SQL PARAM:".var_export($this->saParams, true));
+                }                                       
             }            
             $this->stmt=&$this->connection->query($this->sQuery);
             $result=$this->stmt->fetchOne();

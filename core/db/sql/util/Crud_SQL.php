@@ -66,7 +66,8 @@ abstract class Crud_SQL {
      * @param bool $ignore_quotes
      * @return Crud_SQL 
      */
-    public function ignoreQuotes($ignore_quotes){
+    public function ignoreQuotes($ignore_quotes)
+    {
         $this->ignore_quotes=$ignore_quotes;
         return $this;
     }
@@ -85,7 +86,8 @@ abstract class Crud_SQL {
      +-------------------------------------------------------------------------------------------------
      * @return SQL构造器本身
      */
-    public function where() {
+    public function where() 
+    {
         $clause=func_get_args();
         $whereClause="";
         if (count($clause)>0) {
@@ -157,7 +159,11 @@ abstract class Crud_SQL {
                     if ( $this->isLike) {
                         $asWhereClause[$key]=$key.self::SQL_LIKE." '%?%' ";
                     }else {
-                        $asWhereClause[$key]=$key."=?";
+                        if (contains($value,array('>',"<","=",">=","<="))||(contains(strtolower($value),array("like ","between ")))){
+                            $asWhereClause[$key]=$key." ".$value." ";
+                        }else{
+                            $asWhereClause[$key]=$key."=?";
+                        }
                     }
                 }else {
                     if ( $this->isLike) {
@@ -278,7 +284,8 @@ abstract class Crud_SQL {
      * 示例如下：
      *     array("id"=>"1","name"=>"sky")
      */
-    public function parseValidInputParam($param) {
+    public function parseValidInputParam($param) 
+    {
         $result=null;
         if (empty($param)) {
             return $result;
@@ -289,7 +296,11 @@ abstract class Crud_SQL {
                 contain($param, " (")){
                 return $param;
             } else{           
-                $param=explode(",", $param);
+                if (contain($param,",")){          
+                    $param=explode(",", $param);
+                }else{
+                    return $param;
+                }
             }
         }
         if (is_array($param)) {
@@ -322,8 +333,19 @@ abstract class Crud_SQL {
             }else {
                 foreach ($param as  $key=> $value) {
                     if ($this->isPreparedStatement) {
-                        $result[$key]=str_replace("'","",$value);
-                        $result[$key]=str_replace("\"","",$result[$key]);
+                        $isFilter=true;
+                        if (contains($value,array('"',"'"))&&(contains(strtolower($value),array('like','between')))){
+                            if  ((contain(strtolower($value),'like')&&((substr_count($value,'"')==2)||(substr_count($value,"'")==2)))||
+                                (contain(strtolower($value),'between')&&((substr_count($value,'"')==4)||(substr_count($value,"'")==4)))){
+                                $isFilter=false;        
+                            }
+                        }
+                        if ($isFilter){
+                            $result[$key]=str_replace("'","",$value);
+                            $result[$key]=str_replace("\"","",$result[$key]);
+                        }else{
+                            $result[$key]=$value;
+                        }   
                     }else {
                         $result[$key]=$value;
                     }
@@ -335,8 +357,7 @@ abstract class Crud_SQL {
             $result=UtilObject::object_to_array($param);
         }
         return $result;
-    }
-
+    }    
 
     /**
      * 生成需要的完整的SQL语句

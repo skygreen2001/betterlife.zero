@@ -57,8 +57,8 @@ class Dao_Mssql extends Dao implements IDaoNormal{
      */
     private function executeSQL() {
         if (!empty($this->sQuery)){         
-            if (Config_Db::$debug_show_sql){
-                echo "SQL:".$this->sQuery."<br />";
+            if (Config_Db::$debug_show_sql){                                    
+                LogMe::log("SQL:".$this->sQuery);  
             }                        
             $this->result=mssql_query($this->sQuery);
             if (!$this->result) {

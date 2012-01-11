@@ -59,12 +59,10 @@ class Dal_Pdo extends Dal  implements IDal
      */
     private function executeSQL() {
         try {
-            if (Config_Db::$debug_show_sql){
-                echo "SQL:".$this->sQuery."<br />";
-                if (!empty($this->saParams)) { 
-                    echo "SQL PARAM:";
-                    print_r($this->saParams);
-                    echo "<br />";
+            if (Config_Db::$debug_show_sql){                                                         
+                LogMe::log("SQL:".$this->sQuery);  
+                if (!empty($this->saParams)) {      
+                    LogMe::log("SQL PARAM:".var_export($this->saParams, true));
                 }
             }       
             $this->stmt = $this->connection->prepare($this->sQuery);
@@ -119,8 +117,8 @@ class Dal_Pdo extends Dal  implements IDal
     public function sqlExecute($sql,$object=null) {
         $result=null;
         try {                   
-            if (Config_Db::$debug_show_sql){
-                echo "SQL:".$sql."<br />";  
+            if (Config_Db::$debug_show_sql){                    
+                LogMe::log("SQL:".$sql);   
             }            
             $this->stmt=$this->connection->prepare($sql);
             $this->stmt->execute ();
@@ -162,8 +160,11 @@ class Dal_Pdo extends Dal  implements IDal
             $this->saParams=$_SQL->parseValidInputParam($filter);
             $_SQL->isPreparedStatement=false;
             $this->sQuery=$_SQL->select(Crud_Sql_Select::SQL_COUNT)->from($this->classname)->where($this->saParams)->result();
-            if (Config_Db::$debug_show_sql){
-                echo "SQL:".$this->sQuery."<br />";     
+            if (Config_Db::$debug_show_sql){                          
+                LogMe::log("SQL:".$this->sQuery);  
+                if (!empty($this->saParams)) {      
+                    LogMe::log("SQL PARAM:".var_export($this->saParams, true));
+                }   
             }                   
             $this->stmt=$this->connection->query($this->sQuery,PDO::FETCH_NUM);
             $result=$this->stmt->fetchColumn();
@@ -419,8 +420,8 @@ class Dal_Pdo extends Dal  implements IDal
                 $_SQL=new Crud_Sql_Select();
                 $where=$this->sql_id($object).self::EQUAL.$id;
                 $this->sQuery=$_SQL->select()->from($this->classname)->where($where)->result();
-                if (Config_Db::$debug_show_sql){
-                    echo "SQL:".$this->sQuery."<br />";     
+                if (Config_Db::$debug_show_sql){                         
+                    LogMe::log("SQL:".$this->sQuery);    
                 }                                   
                 $rows = $this->connection->query($this->sQuery);
                 $rows->setFetchMode(PDO::FETCH_OBJ);

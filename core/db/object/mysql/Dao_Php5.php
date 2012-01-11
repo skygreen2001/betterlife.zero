@@ -51,8 +51,8 @@ class Dao_Php5 extends Dao implements IDaoNormal {
      * 无法防止SQL注入黑客技术
      */
     private function executeSQL() { 
-        if (Config_Db::$debug_show_sql){
-            echo "SQL:".$this->sQuery."<br />"; 
+        if (Config_Db::$debug_show_sql){                             
+            LogMe::log("SQL:".$this->sQuery);  
         }
         $this->result=mysql_query($this->sQuery,$this->connection);
         if (!$this->result) {
@@ -107,8 +107,11 @@ class Dao_Php5 extends Dao implements IDaoNormal {
             $value=$this->escape($value);
         }
         $this->sQuery=$_SQL->insert($this->classname)->values($this->saParams)->result();
-        if (Config_Db::$debug_show_sql){
-            echo "SQL:".$this->sQuery."<br />"; 
+        if (Config_Db::$debug_show_sql){                       
+            LogMe::log("SQL:".$this->sQuery);  
+            if (!empty($this->saParams)) {      
+                LogMe::log("SQL PARAM:".var_export($this->saParams, true));
+            }
         }
         $result=mysql_query($this->sQuery);
         if ($result) {
@@ -139,8 +142,8 @@ class Dao_Php5 extends Dao implements IDaoNormal {
                 $where=$this->sql_id($object).self::EQUAL.$id;
                 $this->sQuery=$_SQL->deletefrom($this->classname)->where($where)->result();
                 $this->sQuery=$this->escape($this->sQuery);
-                if (Config_Db::$debug_show_sql){
-                    echo "SQL:".$this->sQuery."<br />"; 
+                if (Config_Db::$debug_show_sql){                       
+                    LogMe::log("SQL:".$this->sQuery);        
                 }                
                 $result=mysql_query($this->sQuery);
                 return $result;
@@ -176,8 +179,11 @@ class Dao_Php5 extends Dao implements IDaoNormal {
                     $value=$this->escape($value);
                 }
                 $this->sQuery=$_SQL->update($this->classname)->set($this->saParams)->where($where)->result();
-                if (Config_Db::$debug_show_sql){
-                    echo "SQL:".$this->sQuery."<br />"; 
+                if (Config_Db::$debug_show_sql){                         
+                    LogMe::log("SQL:".$this->sQuery);  
+                    if (!empty($this->saParams)) {      
+                        LogMe::log("SQL PARAM:".var_export($this->saParams, true));
+                    }
                 }                
                 $result=mysql_query($this->sQuery);
                 return $result;
@@ -226,8 +232,11 @@ class Dao_Php5 extends Dao implements IDaoNormal {
             $_SQL->isPreparedStatement=false;    
             $this->sQuery=$_SQL->select()->from($this->classname)->where($this->saParams)->order($sort)->limit($limit)->result();
             $this->sQuery=$this->escape($this->sQuery);
-            if (Config_Db::$debug_show_sql){
-                echo "SQL:".$this->sQuery."<br />"; 
+            if (Config_Db::$debug_show_sql){                       
+                LogMe::log("SQL:".$this->sQuery);  
+                if (!empty($this->saParams)) {      
+                    LogMe::log("SQL PARAM:".var_export($this->saParams, true));
+                } 
             }            
             $this->result=mysql_query($this->sQuery,$this->connection);
             $result=$this->getResultToObjects($object);
@@ -358,8 +367,11 @@ class Dao_Php5 extends Dao implements IDaoNormal {
             $this->saParams=$_SQL->parseValidInputParam($filter);
             $_SQL->isPreparedStatement=false;
             $this->sQuery=$_SQL->select(Crud_Sql_Select::SQL_COUNT)->from($this->classname)->where($this->saParams)->result();
-            if (Config_Db::$debug_show_sql){
-                echo "SQL:".$this->sQuery."<br />"; 
+            if (Config_Db::$debug_show_sql){                                  
+                LogMe::log("SQL:".$this->sQuery);  
+                if (!empty($this->saParams)) {      
+                    LogMe::log("SQL PARAM:".var_export($this->saParams, true));
+                }                                        
             }            
             $object_arr=mysql_query($this->sQuery);
             $row = mysql_fetch_row($object_arr);

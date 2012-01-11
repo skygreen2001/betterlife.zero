@@ -253,7 +253,7 @@ class Config_Db extends ConfigBB
      * @var array
      * @static
      */
-    private static $orm=array( 
+    public static $orm=array( 
     	"Functions"=>"bb_user_function"
     );
 

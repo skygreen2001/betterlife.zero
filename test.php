@@ -3,7 +3,7 @@ require_once ("init.php");
 //$blogs=Blog::select('name,content');
 //print_r($blogs);                                                  
 
-User::get("1=1 and username like '%a%'");
+print_r(User::get(array(name=> "like '%ad%'")));
 
 //$serverCache=Manager_Cache::singleton()->server(EnumCacheDriverType::REDIS);
 //$serverCache->TestRun();
