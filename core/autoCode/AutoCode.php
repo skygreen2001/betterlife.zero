@@ -9,14 +9,14 @@
  */
 class AutoCode extends Object
 {
-	/**
-	 * 开发者
-	 */    
-	public static $author= "skygreen skygreen2001@gmail.com";
-	/**
-	 * 生成Php文件保存的路径
-	 */
-	public static $save_dir;
+    /**
+     * 开发者
+     */    
+    public static $author= "skygreen skygreen2001@gmail.com";
+    /**
+     * 生成Php文件保存的路径
+     */
+    public static $save_dir;
     /**
      * 应用所在的路径 
      */
@@ -26,29 +26,39 @@ class AutoCode extends Object
      */
     public static $dir_src="src";
 
-	/**
-	 * 从表名称获取对象的类名【头字母大写】。
-	 * @param string $tablename
-	 * @return string 返回对象的类名 
-	 */
-	protected static function getClassname($tablename)
-	{
-	    $classnameSplit= explode("_", $tablename);
-	    $classname=ucfirst($classnameSplit[count($classnameSplit)-1]);   
-	    return $classname;
-	}
+    /**
+     * 从表名称获取对象的类名【头字母大写】。
+     * @param string $tablename
+     * @return string 返回对象的类名 
+     */
+    protected static function getClassname($tablename)
+    {      
+        if (in_array($tablename, Config_Db::$orm)) {
+            $classname=array_search($tablename, Config_Db::$orm);  
+        }else {                
+            $classnameSplit= explode("_", $tablename);
+            $classnameSplit=array_reverse($classnameSplit);
+            $classname=ucfirst($classnameSplit[0]);   
+        }
+        return $classname;
+    }
 
-	/**
-	 * 从表名称获取对象的类名实例化名【头字母小写】。
-	 * @param string $tablename
-	 * @return string 返回对象的类名 
-	 */
-	protected static function getInstancename($tablename)
-	{
-	    $classnameSplit= explode("_", $tablename);
-	    $classname=$classnameSplit[count($classnameSplit)-1];
-	    return $classname;
-	}
+    /**
+     * 从表名称获取对象的类名实例化名【头字母小写】。
+     * @param string $tablename
+     * @return string 返回对象的类名 
+     */
+    protected static function getInstancename($tablename)
+    {   
+        if (in_array($tablename, Config_Db::$orm)) {
+            $classname=array_search($tablename, Config_Db::$orm);
+        }else { 
+            $classnameSplit= explode("_", $tablename);
+            $classnameSplit=array_reverse($classnameSplit);
+            $classname=$classnameSplit[0];
+        }
+        return $classname;
+    }
 
     /**
      * 表中列的类型定义
@@ -79,18 +89,18 @@ class AutoCode extends Object
     }
     
     
-	/**
-	 * 保存生成的代码到指定命名规范的文件中 
-	 * @param string $dir 保存路径
+    /**
+     * 保存生成的代码到指定命名规范的文件中 
+     * @param string $dir 保存路径
      * @param string $filename 文件名称
-	 * @param string $definePhpFileContent 生成的代码 
-	 */
-	protected static function saveDefineToDir($dir,$filename,$definePhpFileContent)
-	{ 
-	    UtilFileSystem::createDir($dir);
-	    UtilFileSystem::save_file_content($dir.DIRECTORY_SEPARATOR.$filename,$definePhpFileContent); 
-	    return basename($filename, ".php");
-	}
+     * @param string $definePhpFileContent 生成的代码 
+     */
+    protected static function saveDefineToDir($dir,$filename,$definePhpFileContent)
+    { 
+        UtilFileSystem::createDir($dir);
+        UtilFileSystem::save_file_content($dir.DIRECTORY_SEPARATOR.$filename,$definePhpFileContent); 
+        return basename($filename, ".php");
+    }
     
     /**
      * 用户输入需求

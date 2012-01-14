@@ -1,7 +1,7 @@
 ﻿<?php        
 /**
  +---------------------------------<br/>
- * 工具类:自动生成代码-控制器
+ * 工具类:自动生成代码-控制器<br/>
  +---------------------------------<br/>
  * @category betterlife
  * @package core.autoCode   
@@ -9,12 +9,12 @@
  */
 class AutoCodeAction extends AutoCode
 {
-	/**
+    /**
      * 控制器生成定义的方式<br/>
-     * 1.前端Action，继承基本Action。
-     * 2.后端Action，继承ActionExt。
+     * 1.前端Action，继承基本Action。<br/> 
+     * 2.后端Action，继承ActionExt。<br/>
      */
-	public static $type;
+    public static $type;
     /**
      *Action文件所在的路径 
      */
@@ -23,10 +23,10 @@ class AutoCodeAction extends AutoCode
      * Action完整的保存路径
      */
     public static $action_dir_full;        
-	/**
-	 * 前端Action所在的namespace
-	 */
-	public static $package_front="web.front.action"; 
+    /**
+     * 前端Action所在的namespace
+     */
+    public static $package_front="web.front.action"; 
     /**
      * 前端Action所在的namespace
      */
@@ -37,17 +37,16 @@ class AutoCodeAction extends AutoCode
      */
     public static $echo_result="";        
     /**
-    * 需打印输出
-    * 
-    * @var mixed
+    * 需打印输出  
+    * @var string
     */
     public static $echo_upload="";
     
     /**
      * 自动生成代码-控制器
      */
-	public static function AutoCode()
-	{         
+    public static function AutoCode()
+    {         
         if (self::$type==2){
             self::$app_dir="admin";
         }else{
@@ -57,32 +56,31 @@ class AutoCodeAction extends AutoCode
         if (!UtilString::is_utf8(self::$action_dir_full)){
             self::$action_dir_full=UtilString::gbk2utf8(self::$action_dir_full);    
         }     
-	    $tableList=Manager_Db::newInstance()->dbinfo()->tableList();
-	    $fieldInfos=array();
-	    foreach ($tableList as $tablename){
-	       $fieldInfoList=Manager_Db::newInstance()->dbinfo()->fieldInfoList($tablename); 
-	       foreach($fieldInfoList as $fieldname=>$field){
-	           $fieldInfos[$tablename][$fieldname]["Field"]=$field["Field"];
-	           $fieldInfos[$tablename][$fieldname]["Type"]=$field["Type"];
-	           $fieldInfos[$tablename][$fieldname]["Comment"]=$field["Comment"];
-	       }
-	    }
-
-	    $tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
-	    echo UtilCss::form_css()."\r\n"; 
+        $tableList=Manager_Db::newInstance()->dbinfo()->tableList();
+        $fieldInfos=array();
+        foreach ($tableList as $tablename){
+           $fieldInfoList=Manager_Db::newInstance()->dbinfo()->fieldInfoList($tablename); 
+           foreach($fieldInfoList as $fieldname=>$field){
+               $fieldInfos[$tablename][$fieldname]["Field"]=$field["Field"];
+               $fieldInfos[$tablename][$fieldname]["Type"]=$field["Type"];
+               $fieldInfos[$tablename][$fieldname]["Comment"]=$field["Comment"];
+           }
+        }     
+        $tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
+        echo UtilCss::form_css()."\r\n"; 
         self::$echo_result="";
         self::$echo_upload="";
-	    foreach ($fieldInfos as $tablename=>$fieldInfo){  
-	       $definePhpFileContent=self::tableToActionDefine($tablename,$tableInfoList,$fieldInfo);
+        foreach ($fieldInfos as $tablename=>$fieldInfo){  
+           $definePhpFileContent=self::tableToActionDefine($tablename,$tableInfoList,$fieldInfo);
            if (!empty($definePhpFileContent)){
-	           if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($definePhpFileContent)){
-	               $classname=self::saveActionDefineToDir($tablename,$definePhpFileContent);
-	               echo "生成导出完成:$tablename->$classname!<br/>";   
-	           }else{
-	               echo $definePhpFileContent."<br/>";
-	           }
+               if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($definePhpFileContent)){
+                   $classname=self::saveActionDefineToDir($tablename,$definePhpFileContent);
+                   echo "生成导出完成:$tablename->$classname!<br/>";   
+               }else{
+                   echo $definePhpFileContent."<br/>";
+               }
            }
-	    }               
+        }               
         $category_cap=Gc::$appName;
         $category_cap{0}=ucfirst($category_cap{0});
         if (self::$type==2){                                                       
@@ -168,44 +166,44 @@ class AutoCodeAction extends AutoCode
             self::$echo_upload=str_replace("\r\n","<br />",self::$echo_upload);    
             echo self::$echo_upload;  */  
         }      
-	}
+    }
 
-	/**
-	 * 用户输入需求                 
-	 */
-	public static function UserInput()
-	{
+    /**
+     * 用户输入需求                 
+     */
+    public static function UserInput()
+    {
         $inputArr=array(
             "1"=>"前端Action，继承基本Action。",
             "2"=>"后端Action，继承ActionExt"
         );    
         parent::UserInput("需要定义生成控制器Action类的输出文件路径参数",$inputArr);  
-	}
+    }
 
-	/**
-	 * 将表列定义转换成数据对象Php文件定义的内容
-	 * @param string $tablename 表名
-	 * @param array $tableInfoList 表信息列表
-	 * @param array $fieldInfo 表列信息列表
-	 */
-	private static function tableToActionDefine($tablename,$tableInfoList,$fieldInfo)
-	{
-	    $result="<?php\r\n";
-	    if ($tableInfoList!=null&&count($tableInfoList)>0&&  array_key_exists("$tablename", $tableInfoList)){
-	        $table_comment=$tableInfoList[$tablename]["Comment"];
+    /**
+     * 将表列定义转换成数据对象Php文件定义的内容
+     * @param string $tablename 表名
+     * @param array $tableInfoList 表信息列表
+     * @param array $fieldInfo 表列信息列表
+     */
+    private static function tableToActionDefine($tablename,$tableInfoList,$fieldInfo)
+    {
+        $result="<?php\r\n";
+        if ($tableInfoList!=null&&count($tableInfoList)>0&&  array_key_exists("$tablename", $tableInfoList)){
+            $table_comment=$tableInfoList[$tablename]["Comment"];
             $table_comment=str_replace("关系表","",$table_comment); 
-	        if (contain($table_comment,"\r")||contain($table_comment,"\n")){
+            if (contain($table_comment,"\r")||contain($table_comment,"\n")){
                 $table_comment=preg_split("/[\s,]+/", $table_comment);    
                 $table_comment=$table_comment[0]; 
             }
-	    }else{
-	        $table_comment="$tablename";
-	    }   
-		$category  = Gc::$appName;              
-		$package   = self::$package_front;
-		$classname = self::getClassname($tablename);
+        }else{
+            $table_comment="$tablename";
+        }   
+        $category  = Gc::$appName;              
+        $package   = self::$package_front;
+        $classname = self::getClassname($tablename);
         $instancename=self::getInstancename($tablename);  
-		$author    = self::$author;
+        $author    = self::$author;
         switch (self::$type) {
             case 2:  
                 $result ="     /**\r\n";
@@ -229,45 +227,45 @@ class AutoCodeAction extends AutoCode
                 self::$echo_upload.=$result_upload;                
                 return "";
             default:                
-	            $result.="/**\r\n".
-				         " +---------------------------------------<br/>\r\n".
-				         " * 控制器:$table_comment<br/>\r\n".
-				         " +---------------------------------------\r\n".
-				         " * @category $category\r\n".
-				         " * @package $package\r\n".
-				         " * @author $author\r\n".
-				         " */\r\n".  
-				         "class Action_$classname extends Action\r\n".  
-				         "{\r\n".
-				         "    /**\r\n".
-				         "     * {$table_comment}列表页面\r\n".
-				         "     */\r\n".
-				         "    public function lists()\r\n".
-				         "    {\r\n".
-				         "    }\r\n".
-				         "    /**\r\n".
-				         "     * {$table_comment}详情页面\r\n".
-				         "     */\r\n".
-				         "    public function view()\r\n".
-				         "    {\r\n".
-				         "    }\r\n".
-				         "}\r\n\r\n"; 
-	            $result.="?>";  
+                $result.="/**\r\n".
+                         " +---------------------------------------<br/>\r\n".
+                         " * 控制器:$table_comment<br/>\r\n".
+                         " +---------------------------------------\r\n".
+                         " * @category $category\r\n".
+                         " * @package $package\r\n".
+                         " * @author $author\r\n".
+                         " */\r\n".  
+                         "class Action_$classname extends Action\r\n".  
+                         "{\r\n".
+                         "    /**\r\n".
+                         "     * {$table_comment}列表页面\r\n".
+                         "     */\r\n".
+                         "    public function lists()\r\n".
+                         "    {\r\n".
+                         "    }\r\n".
+                         "    /**\r\n".
+                         "     * {$table_comment}详情页面\r\n".
+                         "     */\r\n".
+                         "    public function view()\r\n".
+                         "    {\r\n".
+                         "    }\r\n".
+                         "}\r\n\r\n"; 
+                $result.="?>";  
                 break;
         }             
         return $result;
-	}
+    }
 
-	/**
-	 * 保存生成的代码到指定命名规范的文件中 
-	 * @param string $tablename 表名称
-	 * @param string $definePhpFileContent 生成的代码 
-	 */
-	private static function saveActionDefineToDir($tablename,$definePhpFileContent)
-	{
-	    $filename="Action_".self::getClassname($tablename).".php";    
-	    return self::saveDefineToDir(self::$action_dir_full,$filename,$definePhpFileContent);
-	}	
+    /**
+     * 保存生成的代码到指定命名规范的文件中 
+     * @param string $tablename 表名称
+     * @param string $definePhpFileContent 生成的代码 
+     */
+    private static function saveActionDefineToDir($tablename,$definePhpFileContent)
+    {
+        $filename="Action_".self::getClassname($tablename).".php";    
+        return self::saveDefineToDir(self::$action_dir_full,$filename,$definePhpFileContent);
+    }    
 }
 
 ?>

@@ -27,7 +27,7 @@ $appName.$classname={
             /**
              * 是否固定显示{$table_comment}信息页(或者打开新窗口)
              */
-            IsFix:1          
+            IsFix:0          
         }
     },
     /**
@@ -90,7 +90,7 @@ $appName.$classname.View={
                  */
                 savetype:0,       
                 closeAction : "hide",  
-                constrainHeader:true,
+                constrainHeader:true,maximizable: true,collapsible: true,
                 width : 450,height : 550,minWidth : 400,minHeight : 450,
                 layout : 'fit',plain : true,buttonAlign : 'center',
                 listeners:{
@@ -101,11 +101,11 @@ $appName.$classname.View={
                 items : [ 
                     new Ext.form.FormPanel({   
                         ref:'editForm',layout:'form',
-                        labelWidth : 100,width : 350,autoWidth : true,labelAlign : "center",
+                        labelWidth : 100,autoWidth : true,labelAlign : "center",
                         bodyStyle : 'padding:5px 5px 0',align : "center",
                         api : {},
                         defaults : {
-                            xtype : 'textfield',width : 300
+                            xtype : 'textfield',anchor:'100%'
                         },
                         items : [ 
 $fieldLabels        
@@ -371,7 +371,7 @@ $columns
                         new Ext.Toolbar({
                             width : 100,
                             defaults : {
-                               xtype : 'textfield',
+                               xtype : 'textfield'
                             },
                             items : [
 $filterFields                                
@@ -522,7 +522,7 @@ $filterReset
                         this.grid.hide$classname();
                         $appName.$classname.Config.View.IsShow=0;
                     }    
-                },
+                }
             }
         }),
         /**
@@ -770,6 +770,16 @@ $filterfilter
             }
         },
         /**
+         * 导出{$table_comment}
+         */
+        export{$classname} : function() {            
+            ExtService{$classname}.export{$classname}(this.filter,function(provider, response) {  
+                if (response.result.data) {
+                    window.open(response.result.data);
+                }
+            });                        
+        },
+        /**
          * 导入{$table_comment}
          */
         import$classname : function() { 
@@ -777,14 +787,6 @@ $filterfilter
                 $appName.$classname.View.current_uploadWindow=new $appName.$classname.View.UploadWindow();   
             }     
             $appName.$classname.View.current_uploadWindow.show();
-        },
-        /**
-         * 导出{$table_comment}
-         */
-        export$classname : function() {  
-            ExtService$classname.export(this.filter,function(provider, response) {                  
-                 window.open(response.result.data);
-            });
         }                
     }),
     /**

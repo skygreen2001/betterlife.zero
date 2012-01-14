@@ -150,7 +150,7 @@ class LogMe extends Object {
      * @param string $category 日志内容业务分类
      */
     public static function log_browser($message,$level=EnumLogLevel::INFO,$category=""){
-        echo $message;
+        echo $message."<br/>";
     }
 
     /**
