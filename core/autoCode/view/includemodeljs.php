@@ -732,6 +732,7 @@ $filterfilter
             $appName.$classname.View.Running.edit_window.saveBtn.setText('保 存');
             $appName.$classname.View.Running.edit_window.setTitle('添加{$table_comment}');
             $appName.$classname.View.Running.edit_window.savetype=0;
+            $appName.$classname.View.Running.edit_window.$tableFieldIdName.setValue("");
             $appName.$classname.View.Running.edit_window.show();   
         },   
         /**

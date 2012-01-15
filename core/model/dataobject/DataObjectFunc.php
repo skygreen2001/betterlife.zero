@@ -227,6 +227,8 @@
             $condition=" ";   
             if (is_string($sql_ids)){
                 $sql_ids=explode(",",$sql_ids);
+            }else if(!is_array($sql_ids)){
+                $sql_ids=array($sql_ids);
             } 
             if ($sql_ids&&(count($sql_ids)>0)){ 
                $condition= " $idColumn=".$sql_ids[0]." ";
@@ -255,7 +257,7 @@
     * @param string property_name 属性名称
     * @param int incre_value 递增数      
     */
-    public static function increment($classname,$filter=null,$property_name,$incre_value){         
+    public static function increment($classname,$filter=null,$property_name,$incre_value=1){         
         $tablename=Config_Db::orm($classname);   
         $_SQL=new Crud_Sql_Update();
         $_SQL->isPreparedStatement=false;
@@ -275,7 +277,7 @@
     * @param string property_name 属性名称
     * @param int decre_value 递减数
     */
-    public static function decrement($classname,$filter=null,$property_name,$decre_value){
+    public static function decrement($classname,$filter=null,$property_name,$decre_value=1){
         $tablename=Config_Db::orm($classname);   
         $_SQL=new Crud_Sql_Update();
         $_SQL->isPreparedStatement=false;

@@ -49,10 +49,21 @@ class AutoCodeService extends AutoCode
         self::$service_dir_full=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR.self::$service_dir.DIRECTORY_SEPARATOR;
         
         $tableList=Manager_Db::newInstance()->dbinfo()->tableList(); 
+        
+        $fieldInfos=array();
+        foreach ($tableList as $tablename){
+           $fieldInfoList=Manager_Db::newInstance()->dbinfo()->fieldInfoList($tablename); 
+           foreach($fieldInfoList as $fieldname=>$field){
+               $fieldInfos[$tablename][$fieldname]["Field"]=$field["Field"];
+               $fieldInfos[$tablename][$fieldname]["Type"]=$field["Type"];
+               $fieldInfos[$tablename][$fieldname]["Comment"]=$field["Comment"];
+           }
+        }
+        
         $tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
         echo UtilCss::form_css()."\r\n";           
         foreach($tableList as $tablename){     
-            $definePhpFileContent=self::tableToServiceDefine($tablename,$tableInfoList); 
+            $definePhpFileContent=self::tableToServiceDefine($tablename,$tableInfoList,$fieldInfos); 
             if (isset($definePhpFileContent)&&(!empty($definePhpFileContent))){
                $classname=self::saveServiceDefineToDir($tablename,$definePhpFileContent);
                echo "生成导出完成:$tablename->$classname!<br/>";   
@@ -63,7 +74,8 @@ class AutoCodeService extends AutoCode
         $category  = Gc::$appName;                 
         $author    = self::$author;
         $package   = self::$package;
-        if ((self::$type==2)||(self::$type==1)){
+        if ((self::$type==2)||(self::$type==1))
+        {
             /**
              * 需要在管理类Manager_Service.php里添加的代码       
              */
@@ -117,7 +129,9 @@ class AutoCodeService extends AutoCode
             $section_content=str_replace(" ","&nbsp;",$section_content);  
             $section_content=str_replace("\r\n","<br />",$section_content); 
             echo  $section_content;*/      
-        }else if (self::$type==3){
+        }
+        else if (self::$type==3)
+        {
             /**
              * 需要在管理类Manager_ExtService.php里添加的代码       
              */
@@ -275,15 +289,22 @@ class AutoCodeService extends AutoCode
      * 将表列定义转换成数据对象Php文件定义的内容
      * @param string $tablename 表名
      * @param array $tableInfoList 表信息列表
+     * @param array $fieldInfos 表列信息列表
      */
-    private static function tableToServiceDefine($tablename,$tableInfoList)
+    private static function tableToServiceDefine($tablename,$tableInfoList,$fieldInfos)
     {
+        if (array_key_exists($tablename,$fieldInfos)){
+            $fieldInfo=$fieldInfos[$tablename];
+        }else{
+            $fieldInfo=$fieldInfos;
+        }
         $result            ="<?php\r\n";
         $classname         =self::getClassname($tablename);
         $instance_name     =self::getInstancename($tablename); 
         $service_classname =self::getServiceClassname($tablename);
         $object_desc       ="";
-        if ($tableInfoList!=null&&count($tableInfoList)>0&&array_key_exists("$tablename", $tableInfoList)){
+        if ($tableInfoList!=null&&count($tableInfoList)>0&&array_key_exists("$tablename", $tableInfoList))
+        {
             $object_desc   =$tableInfoList[$tablename]["Comment"];
             $object_desc=str_replace("关系表","",$object_desc); 
             if (contain($object_desc,"\r")||contain($object_desc,"\n")){
@@ -295,7 +316,8 @@ class AutoCodeService extends AutoCode
             //if (endWith($table_comment,"\r\n * ")){
                //$table_comment=substr($table_comment,0,strlen($table_comment)-5);
             //}                                                         
-        }else{
+        }else
+        {
             $object_desc   =$classname;
             $table_comment ="关于服务类$classname的描述";
         }    
@@ -343,6 +365,7 @@ class AutoCodeService extends AutoCode
                          "     */\r\n";
                 $result.="    public function update(\$$instance_name)\r\n".
                          "    {\r\n".
+                         self::enumComment2KeyInExtService($instance_name,$fieldInfo,$tablename).     
                          "        \$data=parent::update(\$$instance_name);\r\n". 
                          "        return array(\r\n".
                          "            'success' => true,\r\n".   
@@ -404,7 +427,8 @@ class AutoCodeService extends AutoCode
                          "        \$count=parent::count(\$condition);\r\n".       
                          "        if (\$count>0){\r\n".          
                          "            if (\$limit>\$count)\$limit=\$count;\r\n".          
-                         "            \$data =parent::queryPage(\$start,\$limit,\$condition);\r\n".          
+                         "            \$data =parent::queryPage(\$start,\$limit,\$condition);\r\n".   
+                         self::enumKey2CommentInExtService($classname,$fieldInfo,"    "). 
                          "            if (\$data==null)\$data=array();\r\n".          
                          "        }else{\r\n".        
                          "            \$data=array();\r\n".        
@@ -414,7 +438,7 @@ class AutoCodeService extends AutoCode
                          "            'totalCount'=>\$count,\r\n".   
                          "            'data'    => \$data\r\n". 
                          "        ); \r\n".             
-                         "    }\r\n";   
+                         "    }\r\n\r\n";   
                 //import
                 $result.="    /**\r\n".
                          "     * 批量上传{$object_desc}\r\n".
@@ -434,6 +458,7 @@ class AutoCodeService extends AutoCode
                          "                    \$result=false;\r\n".
                          "                    foreach (\$data as \${$instance_name}) {\r\n".
                          "                        \${$instance_name}=new {$classname}(\${$instance_name});\r\n".
+                         self::enumComment2KeyInExtService($instance_name,$fieldInfo,$tablename,"                ").  
                          "                        \${$instance_name}_id=\${$instance_name}->getId();\r\n".
                          "                        if (!empty(\${$instance_name}_id)){\r\n".
                          "                            \$had{$classname}={$classname}::get_by_id(\${$instance_name}->getId());\r\n".
@@ -457,7 +482,7 @@ class AutoCodeService extends AutoCode
                          "            'success' => true,\r\n".   
                          "            'data'    => \$result\r\n". 
                          "        );\r\n".
-                         "    }\r\n";
+                         "    }\r\n\r\n";
                 //export
                 $result.="    /**\r\n".
                          "     * 导出{$object_desc}\r\n".
@@ -466,6 +491,7 @@ class AutoCodeService extends AutoCode
                          "    public function export{$classname}(\$filter=null)\r\n".
                          "    {\r\n".
                          "        \$data=parent::get(\$filter);\r\n".
+                         self::enumKey2CommentInExtService($classname,$fieldInfo).   
                          "        \$arr_output_header= self::fieldsMean({$classname}::tablename()); \r\n".
                          "        unset(\$arr_output_header['updateTime']);\r\n".
                          "        unset(\$arr_output_header['commitTime']);\r\n".
@@ -707,7 +733,55 @@ class AutoCodeService extends AutoCode
         $result.="}\r\n";    
         $result.="?>";
         return $result;
+    }    
+    
+    /**
+     * 将表列为枚举类型的列用户能阅读的注释文字内容转换成需要存储在数据库里的值 
+     * @param string $instance_name 实体变量    
+     * @param array $fieldInfos 表列信息列表
+     * @param string $blankPre 空白字符
+     */    
+    private static function enumComment2KeyInExtService($instance_name,$fieldInfo,$tablename,$blankPre="")
+    { 
+        $result="";   
+        foreach ($fieldInfo as $fieldname=>$field){
+            $datatype =self::comment_type($field["Type"]);
+            if ($datatype=='enum'){
+                $enumclassname=self::enumClassName($fieldname,$tablename);    
+                $enum_columnDefine=self::enumDefines($field["Comment"]);
+                $result.=$blankPre."        if (!{$enumclassname}::isEnumValue(\$".$instance_name."[\"".$fieldname."\"])){\r\n".                                          
+                         $blankPre."            \$".$instance_name."["."\"".$fieldname."\""."]=".$enumclassname."::".$fieldname."ByShow(\$".$instance_name."[\"".$fieldname."\"]);\r\n".
+                         $blankPre."        }\r\n";   
+            }
+        }   
+        return $result;  
     }
+    
+    /**
+     * 将表列为枚举类型的列转换成用户能阅读的注释文字内容 
+     * @param string $enumclassname 枚举类名称
+     * @param array $fieldInfos 表列信息列表
+     * @param string $blankPre 空白字符
+     */
+    private static function enumKey2CommentInExtService($classname,$fieldInfo,$blankPre="")
+    {   
+        $result="";
+        $enumColumns=array();         
+        foreach ($fieldInfo as $fieldname=>$field){
+            $datatype =self::comment_type($field["Type"]);
+            if ($datatype=='enum'){                                        
+                $enumColumns[]="'".$fieldname."'";
+            }
+        }        
+        if (count($enumColumns)>0){
+            $enumColumns=implode(",",$enumColumns);
+            $result.=$blankPre."        if ((!empty(\$data))&&(count(\$data)>0))\r\n".  
+                     $blankPre."        {\r\n".                                                                
+                     $blankPre."            $classname::propertyShow(\$data,array($enumColumns));\r\n".
+                     $blankPre."        }\r\n";
+        }
+        return $result;   
+    }   
      
     /**
      * 从表名称获取服务的类名。

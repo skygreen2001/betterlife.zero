@@ -74,6 +74,6 @@ interface IDbInfo {
     /**
      * 获取数据库创建表的定义
      */
-    public function getDbSqlDefinition($tableName);
+    public function getdbSqlDefinition($tableName);
 }
 ?>

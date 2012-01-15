@@ -75,6 +75,31 @@ class AutoCode extends Object
     }
     
     /**
+     * 将表中的类型定义转换成对象field的注释类型说明
+     * @param string $type 类型定义
+     */
+    protected static function comment_type($type)
+    {  
+        $typep=self::column_type($type);
+        switch ($typep) {
+            case "int":
+            case "enum":      
+                return $typep; 
+            case "timestamp":
+            case "datetime":
+                return 'date'; 
+            case "bigint":            
+                return "int";
+            case "decimal":
+                return "float";
+            case "varchar":
+                return "string";
+            default:
+                return "string";
+        }      
+    }     
+    
+    /**
      * 表中列的长度定义
      * @param string $type 
      */
@@ -147,6 +172,78 @@ class AutoCode extends Object
         echo "</body>";      
         echo "</html>";  
     }
-}
+         
+    /**
+     * 根据表列枚举类型生成枚举类名称 
+     * @param string $columnname 枚举列名称
+     * @param string $tablename 表名称    
+     */
+    protected static function enumClassName($columnname,$tablename=null)
+    {
+        $enumclassname="Enum"; 
+        if ((strtolower($columnname)=='type')||(strtolower($columnname)=='statue')||(strtolower($columnname)=='status')){ 
+            $enumclassname.=self::getClassname($tablename).ucfirst($columnname);
+        }else{  
+            if (contain($columnname,"_")){
+                $c_part=explode("_",$columnname); 
+                foreach ($c_part as $column) {
+                    $enumclassname.=ucfirst($column);
+                }
+            }else{
+                $enumclassname.=ucfirst($columnname);    
+            }  
+        }   
+        return $enumclassname;
+    }
+
+    /**
+     * 表枚举类型列注释转换成可以处理的数组数据
+     * 注释风格如下：
+     *    用户性别
+     *    0：女-female
+     *    1：男-mail
+     *    -1：待确认-unknown
+     *    默认男  
+     * @param mixed $fieldComment 表枚举类型列注释
+     */
+    protected static function enumDefines($fieldComment)
+    {
+        $comment_arr=preg_split("/[\s,]+/", $fieldComment);
+        unset($comment_arr[0]);
+        $enum_columnDefine=array();
+        if ((!empty($comment_arr))&&(count($comment_arr)>0))
+        {                               
+            foreach ($comment_arr as $comment) {
+                if (!UtilString::is_utf8($comment)){
+                    $comment=UtilString::gbk2utf8($comment);    
+                }
+                if (contain($comment,"：")){
+                    $comment = str_replace("：",':',$comment);  
+                }
+                $part_arr=preg_split("/[.:]+/", $comment);
+                if ((!empty($part_arr))&&(count($part_arr)==2)){         
+                    if (is_numeric($part_arr[0])){
+                       $cn_en_arr=explode("-",$part_arr[1]);
+                       if ((!empty($cn_en_arr))&&(count($cn_en_arr)==2)){ 
+                           $enum_columnDefine[]=array(
+                                'name'=>strtolower($cn_en_arr[1]),
+                                'value'=>$part_arr[0],
+                                'comment'=>$cn_en_arr[0]
+                           ); 
+                       } 
+                    }else{
+                       $enum_columnDefine[]=array(
+                            'name'=>strtolower($part_arr[0]),
+                            'value'=>strtolower($part_arr[0]),
+                            'comment'=>$part_arr[1]
+                       ); 
+                    }
+                }
+            }  
+        } 
+        return $enum_columnDefine;
+    }  
+        
+}    
 
 ?>

@@ -15,10 +15,10 @@ interface ISqlNormal {
      * 示例：
      *     $db=new Sql_Mysql();
      *     $data = array("name"=>"skygreen","pass"=>md5("hello world"));
-     *     $result = $this->Db->insertData($data);
+     *     $result = $this->Db->insertdata($data);
      *     其中 name,pass是表列名，"skygreen",md5("hello world"))是列值，与列名一一对应。
      */
-    public function insertData($tablename,$data);
+    public function insertdata($tablename,$data);
 
     /**
      * 删除一条数据记录

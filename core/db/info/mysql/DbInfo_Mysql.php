@@ -337,7 +337,7 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo
     /**
      * 获取数据库创建表的定义
      */
-    public function getDbSqlDefinition($tableName) 
+    public function getdbSqlDefinition($tableName) 
     {
         $dbDefine= $this->query("SHOW CREATE TABLE $tableName");
         $dbDefine=$dbDefine->next();

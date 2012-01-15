@@ -20,7 +20,7 @@ class Dao_Odbc extends Dao implements IDaoNormal {
      * 指定数据库类型
      * @param enum $dbtype 
      */
-    public function setDbType($dbtype){
+    public function setdbType($dbtype){
         $this->dbtype=$dbtype;
     }
     

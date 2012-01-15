@@ -134,24 +134,29 @@ class AutoCodeViewExt extends AutoCode
   public static function tableToViewJsDefine($tablename,$tableInfoList,$fieldInfo)
   {
     $appName=Gc::$appName;
-    if ($tableInfoList!=null&&count($tableInfoList)>0&&  array_key_exists("$tablename", $tableInfoList)){
+    if ($tableInfoList!=null&&count($tableInfoList)>0&&  array_key_exists("$tablename", $tableInfoList))
+    {
       $table_comment=$tableInfoList[$tablename]["Comment"];
       $table_comment=str_replace("关系表","",$table_comment); 
       if (contain($table_comment,"\r")||contain($table_comment,"\n")){
         $table_comment=preg_split("/[\s,]+/", $table_comment);    
         $table_comment=$table_comment[0]; 
       }
-    }else{
+    }else
+    {
       $table_comment=$tablename;
     }    
     $classname=self::getClassname($tablename);
     $instancename=self::getInstancename($tablename);    
     $fields="";//Ext "store" 中包含的fields
-    foreach ($fieldInfo as $fieldname=>$field){
-      if (self::isNotColumnKeywork($fieldname)){ 
+    foreach ($fieldInfo as $fieldname=>$field)
+    {
+      if (self::isNotColumnKeywork($fieldname))
+      { 
         $datatype=self::comment_type($field["Type"]);
         $fields.="                {name: '$fieldname',type: '".$datatype."'";
-        if ($datatype=='date'){
+        if ($datatype=='date')
+        {
           $fields.=",dateFormat:'Y-m-d H:i:s'";
         }
         $fields.="},\r\n";
@@ -159,58 +164,101 @@ class AutoCodeViewExt extends AutoCode
     }
     $fields=substr($fields,0,strlen($fields)-3);  
     $fieldLabels="";//Ext "EditWindow"里items的fieldLabels
-    foreach ($fieldInfo as $fieldname=>$field){             
-      if (self::isNotColumnKeywork($fieldname)){ 
+    $tableFieldIdName;
+    foreach ($fieldInfo as $fieldname=>$field)
+    {             
+      if (self::isNotColumnKeywork($fieldname))
+      { 
         $column_type=self::column_type($field["Type"]);      
-        if ($fieldname==self::keyIDColumn($classname)){
-          $fieldLabels.="                            {xtype: 'hidden',  name : '$fieldname'"; 
-        }else{
+        if ($fieldname==self::keyIDColumn($classname))
+        {
+          $tableFieldIdName=$fieldname;  
+          $fieldLabels.="                            {xtype: 'hidden',  name : '$fieldname',ref:'../$fieldname'"; 
+        }else
+        {
           $datatype=self::comment_type($field["Type"]);
           $field_comment=$field["Comment"];  
-          if (contain($field_comment,"\r")||contain($field_comment,"\n")){
+          if (contain($field_comment,"\r")||contain($field_comment,"\n"))
+          {
             $field_comment=preg_split("/[\s,]+/", $field_comment);    
             $field_comment=$field_comment[0]; 
           }                    
-          if (!$field["IsPermitNull"]){
+          if (!$field["IsPermitNull"])
+          {
             $fr1="(<font color=red>*</font>)";
             $fr2=",allowBlank : false";
-          }else{  
+          }else
+          {  
             $fr1="";
             $fr2=""; 
-          }            
-          $fieldLabels.="                            {fieldLabel : '$field_comment$fr1',name : '$fieldname'$fr2"; 
-          if ($datatype=='date'){
+          } 
+          //当使用form.getForm().submit()方式提交时，服务器得到的请求字段中的值总是combobox实际显示的值，也就是displayField:'text'的值;
+          //将name属性修改为hiddenName，便会将value值提交给服务器 
+          if ($column_type=='enum'){
+              $flName="hiddenName";
+          }else{
+              $flName="name";  
+          }          
+          $fieldLabels.="                            {fieldLabel : '$field_comment$fr1',$flName : '$fieldname'$fr2"; 
+          if ($datatype=='date')
+          {
             $fieldLabels.=",xtype : 'datefield',format : \"Y-m-d\"";
           }          
-          if ($column_type=='bit'){
-            $fieldLabels.=",xtype : 'combo',mode : 'local',triggerAction : 'all',lazyRender : true,\r\n".
+          if ($column_type=='bit')
+          {
+            $fieldLabels.=",xtype : 'combo',mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,\r\n".
                           "                                store : new Ext.data.SimpleStore({\r\n".
                           "                                        fields : ['value', 'text'],\r\n".
                           "                                        data : [['0', '否'], ['1', '是']]\r\n".
-                          "                                }),\r\n".
+                          "                                }),emptyText: '请选择$field_comment',\r\n".
                           "                                valueField : 'value',// 值\r\n".
-                          "                                displayField : 'text'// 显示文本\r\n";
+                          "                                displayField : 'text'// 显示文本\r\n                            ";
           }
-          if (self::columnIsTextArea($fieldname,$field["Type"])){
+          if ($column_type=='enum')
+          { 
+            $enum_columnDefine=self::enumDefines($field["Comment"]);  
+            $fieldLabels.=",xtype : 'combo',mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,allowBlank : false,\r\n".
+                          "                                store : new Ext.data.SimpleStore({\r\n".
+                          "                                        fields : ['value', 'text'],\r\n".
+                          "                                        data : [";  
+            $enumArr=array();              
+            foreach ($enum_columnDefine as $enum_column) 
+            {
+              $enumArr[]="['".$enum_column["value"]."', '".$enum_column["comment"]."']";  
+            }                                         
+            $fieldLabels.=implode(",",$enumArr);              
+            $fieldLabels.="]\r\n".
+                          "                                }),emptyText: '请选择$field_comment',\r\n".
+                          "                                valueField : 'value',// 值\r\n".
+                          "                                displayField : 'text'// 显示文本\r\n                            ";  
+          } 
+          if (self::columnIsTextArea($fieldname,$field["Type"]))
+          {
             $fieldLabels.=",xtype : 'textarea'"; 
           }
         }
-        if ($column_type=='bit'){
+        if ($column_type=='bit')
+        {
           $fieldLabels.="                            },\r\n";   
-        }else{
+        }else
+        {
           $fieldLabels.="},\r\n";   
         }
       }      
     }
     $fieldLabels=substr($fieldLabels,0,strlen($fieldLabels)-3);  
     $viewdoblock="";//Ext "Tabs" 中"onAddItems"包含的viewdoblock
-    foreach ($fieldInfo as $fieldname=>$field){
-      if (self::isNotColumnKeywork($fieldname)){ 
-        if ($fieldname==self::keyIDColumn($classname)){ 
+    foreach ($fieldInfo as $fieldname=>$field)
+    {
+      if (self::isNotColumnKeywork($fieldname))
+      { 
+        if ($fieldname==self::keyIDColumn($classname))
+        { 
           continue;
         }        		
         $field_comment=$field["Comment"];  
-        if (contain($field_comment,"\r")||contain($field_comment,"\n")){
+        if (contain($field_comment,"\r")||contain($field_comment,"\n"))
+        {
           $field_comment=preg_split("/[\s,]+/", $field_comment);    
           $field_comment=$field_comment[0]; 
         }                    
@@ -219,19 +267,24 @@ class AutoCodeViewExt extends AutoCode
     }
     $viewdoblock=substr($viewdoblock,0,strlen($viewdoblock)-2);
     $columns="";//Ext "Grid" 中包含的columns
-    foreach ($fieldInfo as $fieldname=>$field){
-      if (self::isNotColumnKeywork($fieldname)){
-        if ($fieldname==self::keyIDColumn($classname)){ 
+    foreach ($fieldInfo as $fieldname=>$field)
+    {
+      if (self::isNotColumnKeywork($fieldname))
+      {
+        if ($fieldname==self::keyIDColumn($classname))
+        { 
           continue;
         }
         $field_comment=$field["Comment"];  
-        if (contain($field_comment,"\r")||contain($field_comment,"\n")){
+        if (contain($field_comment,"\r")||contain($field_comment,"\n"))
+        {
           $field_comment=preg_split("/[\s,]+/", $field_comment);    
           $field_comment=$field_comment[0]; 
         }           
         $datatype=self::comment_type($field["Type"]);
         $columns.="                        {header : '$field_comment',dataIndex : '{$fieldname}'";
-        if ($datatype=='date'){
+        if ($datatype=='date')
+        {
           $columns.=",renderer:Ext.util.Format.dateRenderer('Y-m-d')";
         }
         $columns.="},\r\n";
@@ -242,17 +295,21 @@ class AutoCodeViewExt extends AutoCode
     $filterReset="";//重置语句
     $filterdoSelect="";//查询中的语句
     $filterfilter="";
-    if (array_key_exists($classname, self::$filter_fieldnames)){
+    if (array_key_exists($classname, self::$filter_fieldnames))
+    {
       $filterwords=self::$filter_fieldnames[$classname];
       $instancename_pre=$instancename{0}; 
       $filterfilter="                this.filter       ={";
-      foreach ($fieldInfo as $fieldname=>$field){
+      foreach ($fieldInfo as $fieldname=>$field)
+      {
         $field_comment=$field["Comment"];  
-        if (contain($field_comment,"\r")||contain($field_comment,"\n")){
+        if (contain($field_comment,"\r")||contain($field_comment,"\n"))
+        {
           $field_comment=preg_split("/[\s,]+/", $field_comment);    
           $field_comment=$field_comment[0]; 
         }         
-        if (in_array($fieldname, $filterwords)){
+        if (in_array($fieldname, $filterwords))
+        {
           $fname=$instancename_pre.$fieldname;
           $datatype=self::comment_type($field["Type"]);
           $filterFields.="                                '{$field_comment}　',";
@@ -262,9 +319,10 @@ class AutoCodeViewExt extends AutoCode
             $filterFields.="{ref: '../$fname'";
           }
           $column_type=self::column_type($field["Type"]); 
-          if ($column_type=='bit'){
+          if ($column_type=='bit')
+          {
             $filterFields.=",xtype : 'combo',mode : 'local',\r\n".
-                    "                                    triggerAction : 'all',lazyRender : true,\r\n".
+                    "                                    triggerAction : 'all',lazyRender : true,editable: false,\r\n".
                     "                                    store : new Ext.data.SimpleStore({\r\n".
                     "                                        fields : ['value', 'text'],\r\n".
                     "                                        data : [['0', '否'], ['1', '是']]\r\n".
@@ -273,13 +331,34 @@ class AutoCodeViewExt extends AutoCode
                     "                                    displayField : 'text'// 显示文本\r\n".
                     "                                ";
           }	        	
+          if ($column_type=='enum')
+          {
+            $enum_columnDefine=self::enumDefines($field["Comment"]); 
+            $filterFields.=",xtype : 'combo',mode : 'local',\r\n".
+                    "                                    triggerAction : 'all',lazyRender : true,editable: false,\r\n".
+                    "                                    store : new Ext.data.SimpleStore({\r\n".
+                    "                                        fields : ['value', 'text'],\r\n".
+                    "                                        data : [";
+            $enumArr=array();              
+            foreach ($enum_columnDefine as $enum_column) 
+            {
+              $enumArr[]="['".$enum_column["value"]."', '".$enum_column["comment"]."']";  
+            }                                         
+            $filterFields.=implode(",",$enumArr);   
+            $filterFields.="]\r\n".
+                    "                                    }),\r\n".
+                    "                                    valueField : 'value',// 值\r\n".
+                    "                                    displayField : 'text'// 显示文本\r\n".
+                    "                                ";
+          }      
           $filterFields.="},'&nbsp;&nbsp;',\r\n";
           $filterReset.="                                        this.topToolbar.$fname.setValue(\"\");\r\n"; 
           $filterdoSelect.="                var $fname = this.topToolbar.$fname.getValue();\r\n";
           $filterfilter.="'$fieldname':$fname,";                                                          
         }   
       }  
-      if (strlen($filterFields)>0){
+      if (strlen($filterFields)>0)
+      {
         $filterFields=substr($filterFields,0,strlen($filterFields)-2);    
         $filterReset=substr($filterReset,0,strlen($filterReset)-2);   
         $filterdoSelect=substr($filterdoSelect,0,strlen($filterdoSelect)-2);     
@@ -292,7 +371,7 @@ class AutoCodeViewExt extends AutoCode
     $result.=$jsContent;
     return $result;
   }       
-    
+      
   /**
    * 列是否大量文本输入应该TextArea输入  
    * @param string $column_name 列名称
@@ -328,36 +407,7 @@ class AutoCodeViewExt extends AutoCode
       return true;
     }
   }
-                
-  /**
-   * 将表中的类型定义转换成对象field的注释类型说明
-   * @param string $type 
-   */
-  private static function comment_type($type)
-  {
-    if (UtilString::contain($type,"(")){
-      list($typep,$length)=split('[()]', $type);      
-    }else{
-      $typep=$type;
-    }
-    $typep=self::column_type($type);
-    switch ($typep) {
-      case "int":
-      case "enum":
-        return $typep; 
-      case "timestamp":
-      case "datetime":
-        return 'date'; 
-      case "bigint":            
-        return "int";
-      case "decimal":
-        return "float";
-      case "varchar":
-        return "string";
-      default:
-        return "string";
-    }      
-  }		
+             
 
   /**
    * 将表列定义转换成使用ExtJs生成的表示层tpl文件定义的内容

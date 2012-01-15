@@ -266,14 +266,26 @@ class DataObjectSpec
         $field_spec=null;
         if (isset(self::$field_spec_default)){       
            $field_spec=self::$field_spec_default;   
-        }
-        if (property_exists($dataobject, EnumDataObjectDefaultKeyword::NAME_FIELD_SPEC)){
-            $propertyname=EnumDataObjectDefaultKeyword::NAME_FIELD_SPEC;    
+        }        
+        $propertyname=EnumDataObjectDefaultKeyword::NAME_FIELD_SPEC;   
+        if (property_exists($dataobject, EnumDataObjectDefaultKeyword::NAME_FIELD_SPEC)){ 
             if (is_string($dataobject)){
                 $dataobject=new $dataobject();
             }
             if (!empty($dataobject->$propertyname)){       
                 $object_field_spec=$dataobject->$propertyname;
+            }
+        }else{
+            if (!is_string($dataobject)){    
+                if (method_exists($dataobject,'classname')){                       
+                    $classname =$dataobject->classname();
+                    if (class_exists($classname)){
+                        $dataobject=new $dataobject(); 
+                        if (property_exists($dataobject, EnumDataObjectDefaultKeyword::NAME_FIELD_SPEC)){
+                           $object_field_spec=$dataobject->$propertyname; 
+                        }
+                    }
+                }
             }
         }
 

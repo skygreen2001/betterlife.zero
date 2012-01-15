@@ -415,7 +415,7 @@ abstract class DataObject extends Object implements ArrayAccess
     * @param string property_name 属性名称
     * @param int incre_value 递增数      
     */
-    public static function increment($filter=null,$property_name,$incre_value)
+    public static function increment($filter=null,$property_name,$incre_value=1)
     {
          return DataObjectFunc::increment(get_called_class(),$filter,$property_name,$incre_value);  
     }
@@ -431,7 +431,7 @@ abstract class DataObject extends Object implements ArrayAccess
     * @param string property_name 属性名称
     * @param int decre_value 递减数
     */
-    public static function decrement($filter=null,$property_name,$decre_value)
+    public static function decrement($filter=null,$property_name,$decre_value=1)
     {
          return DataObjectFunc::decrement(get_called_class(),$filter,$property_name,$decre_value);          
     }    

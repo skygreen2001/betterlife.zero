@@ -94,36 +94,8 @@ class AutoCodeDomain extends AutoCode
         foreach ($fieldInfo as $fieldname=>$field){
             $datatype =self::comment_type($field["Type"]);
             if ($datatype=='enum'){
-                $enumclassname=self::enumClassName($fieldname,$tablename); 
-                $comment_arr=preg_split("/[\s,]+/", $field["Comment"]);
-                unset($comment_arr[0]);
-                if ((!empty($comment_arr))&&(count($comment_arr)>0)){
-                    $enum_columnDefine=array();
-                    foreach ($comment_arr as $comment) {
-                        if (!UtilString::is_utf8($comment)){
-                            $comment=UtilString::gbk2utf8($comment);    
-                        }
-                        $part_arr=preg_split("/[.:：]+/", $comment);
-                        if ((!empty($part_arr))&&(count($part_arr)==2)){         
-                            if (is_numeric($part_arr[0])){
-                               $cn_en_arr=explode("-",$part_arr[1]);
-                               if ((!empty($cn_en_arr))&&(count($cn_en_arr)==2)){ 
-                                   $enum_columnDefine[]=array(
-                                        'name'=>strtolower($cn_en_arr[1]),
-                                        'value'=>$part_arr[0],
-                                        'comment'=>$cn_en_arr[0]
-                                   ); 
-                               } 
-                            }else{
-                               $enum_columnDefine[]=array(
-                                    'name'=>strtolower($part_arr[0]),
-                                    'value'=>strtolower($part_arr[0]),
-                                    'comment'=>$part_arr[1]
-                               ); 
-                            }
-                        }
-                    }  
-                }
+                $enumclassname=self::enumClassName($fieldname,$tablename);    
+                $enum_columnDefine=self::enumDefines($field["Comment"]);
                 if (isset($enum_columnDefine)&&(count($enum_columnDefine)>0))
                 {
                     $comment=$field["Comment"];
@@ -152,19 +124,17 @@ class AutoCodeDomain extends AutoCode
                                  "     */\r\n".
                                  "    const $enumname='$enumvalue';\r\n";
                     }    
-                    $result.="\r\n";
-
+                    $result.="\r\n";          
                     $comment  =str_replace("\r\n", "     * ", $field["Comment"]);
                     $comment  =str_replace("\r", "     * ", $comment);
                     $comment  =str_replace("\n", "     * ", $comment);
-                    $comment  =str_replace("     * ", "\r\n     * ", $comment);
+                    $comment  =str_replace("     * ", "<br/>\r\n     * ", $comment);
                     $result.="    /** \r\n".
-                             "     * ".$comment."\r\n".
+                             "     * 显示".$comment."<br/>\r\n".
                              "     */\r\n".
                              "    public static function {$fieldname}Show(\${$fieldname})\r\n". 
                              "    {\r\n".
-                             "       switch(\${$fieldname}){ \r\n";
-                                                                       
+                             "       switch(\${$fieldname}){ \r\n";    
                     foreach ($enum_columnDefine as $enum_column) {     
                         $enumname=strtoupper($enum_column['name']) ;      
                         $enumcomment=$enum_column['comment'];     
@@ -173,10 +143,35 @@ class AutoCodeDomain extends AutoCode
                     }         
                     $result.="       }\r\n";                    
                     $result.="       return \"未知\";\r\n".
-                             "    }\r\n";    
+                             "    }\r\n\r\n"; 
+                    $comment=explode("<br/>",$comment);
+                    if (count($comment)>0){
+                        $comment=$comment[0];
+                    }
+                    $result.="    /** \r\n". 
+                             "     * 根据{$comment}显示文字获取{$comment}<br/>\r\n".
+                             "     * @param mixed \${$fieldname}Show {$comment}显示文字\r\n".
+                             "     */\r\n".
+                             "    public static function {$fieldname}ByShow(\${$fieldname}Show)\r\n".
+                             "    {\r\n".
+                             "       switch(\${$fieldname}Show){ \r\n"; 
+                    foreach ($enum_columnDefine as $enum_column) {     
+                        $enumname=strtoupper($enum_column['name']);      
+                        $enumcomment=$enum_column['comment'];     
+                        $result.="            case \"{$enumcomment}\":\r\n".                                    
+                                 "                return self::{$enumname}; \r\n";  
+                    }    
+                    $result.="       }\r\n";   
+                    if (!empty($enum_columnDefine)&&(count($enum_columnDefine)>0)){
+                        $enumname=strtoupper($enum_columnDefine[0]['name']);
+                        $result.="       return self::{$enumname};\r\n";
+                    }else{                 
+                        $result.="       return null;\r\n";
+                    }
+                    $result.="    }\r\n\r\n";  
                     $result.="}\r\n".
                              "?>\r\n";
-                    self::$enumClass.="生成导出完成:$tablename[$fieldname]->".self::saveEnumDefineToDir($enumclassname,$result)."!<br/>";
+                    self::$enumClass.="生成导出完成:".$tablename."[".$fieldname."]->".self::saveEnumDefineToDir($enumclassname,$result)."!<br/>";
                 }         
             }                     
         }
@@ -201,7 +196,7 @@ class AutoCodeDomain extends AutoCode
                     $table_comment.=" * $tcomment<br/>\r\n";
                 }  
             }else{
-                $table_comment=" * ".$table_comment."\r\n";
+                $table_comment=" * ".$table_comment."<br/>\r\n";
             }
         }else{
             $table_comment="关于$tablename的描述";
@@ -229,7 +224,7 @@ class AutoCodeDomain extends AutoCode
                         $comment  =str_replace("\r\n", "     * ", $field["Comment"]);
                         $comment  =str_replace("\r", "     * ", $comment);
                         $comment  =str_replace("\n", "     * ", $comment);
-                        $comment  =str_replace("     * ", "\r\n     * ", $comment);
+                        $comment  =str_replace("     * ", "<br/>\r\n     * ", $comment);
                         $result  .= 
                                     "    /**\r\n".
                                     "     * ".$comment."\r\n".
@@ -277,10 +272,42 @@ class AutoCodeDomain extends AutoCode
                 }      
                 $result.= "    //</editor-fold>\r\n";            
                 break;
-        }
+        }    
+        $result.=self::domainEnumShow($fieldInfo,$tablename);
         $result.="}\r\n";    
         $result.="?>";
         return $result;
+    }
+    
+    /**
+     * 在实体数据对象定义中定义枚举类型的显示
+     * @param array $fieldInfo 表列信息列表      
+     */
+    private static function domainEnumShow($fieldInfo,$tablename)
+    {
+        $result="";
+        foreach ($fieldInfo as $fieldname=>$field){
+            if (self::isNotColumnKeywork($fieldname)){
+                $datatype =self::comment_type($field["Type"]);
+                if ($datatype=='enum'){      
+                    $enum_columnDefine=self::enumDefines($field["Comment"]);  
+                    $comment  =str_replace("\r\n", "     * ", $field["Comment"]);
+                    $comment  =str_replace("\r", "     * ", $comment);
+                    $comment  =str_replace("\n", "     * ", $comment);
+                    $comment  =str_replace("     * ", "<br/>\r\n     * ", $comment);  
+                    $result.= "\r\n".
+                              "    /** \r\n".
+                              "     * 显示".$comment."<br/>\r\n".
+                              "     */\r\n";    
+                    $enumclassname=self::enumClassName($fieldname,$tablename); 
+                    $result.="    public static function {$fieldname}Show(\${$fieldname})\r\n". 
+                             "    {\r\n".    
+                             "        return {$enumclassname}::{$fieldname}Show(\${$fieldname});\r\n".
+                             "    }\r\n"; 
+                }
+            }
+        }
+        return $result;   
     }
 
     /**
@@ -309,34 +336,7 @@ class AutoCodeDomain extends AutoCode
         }else{    
             return true;
         }
-    }
-
-    /**
-     * 将表中的类型定义转换成对象field的注释类型说明
-     * @param string $type 
-     */
-    private static function comment_type($type)
-    {
-        if (UtilString::contain($type,"(")){
-            list($typep,$length)=split('[()]', $type);      
-        }else{
-            $typep=$type;
-        }
-        switch ($typep) {
-            case "int":
-            case "enum":
-            case "timestamp":
-                return $typep; 
-            case "bigint":            
-                return "int";
-            case "decimal":
-                return "float";
-            case "varchar":
-                return "string";
-            default:
-                return "string";
-        }      
-    }
+    }        
 
     /**
      * 保存生成的代码到指定命名规范的文件中  
@@ -350,29 +350,6 @@ class AutoCodeDomain extends AutoCode
         $package  =str_replace(".", DIRECTORY_SEPARATOR, $package);   
         return self::saveDefineToDir(self::$domain_dir_full.$package,$filename,$definePhpFileContent);
     }    
-    
-    /**
-     * 根据表列枚举类型生成枚举类名称 
-     * @param string $columnname 枚举列名称
-     * @param string $tablename 表名称    
-     */
-    private static function enumClassName($columnname,$tablename=null)
-    {
-        $enumclassname="Enum"; 
-        if ((strtolower($columnname)=='type')||(strtolower($columnname)=='statue')||(strtolower($columnname)=='status')){ 
-            $enumclassname.=self::getClassname($tablename).ucfirst($columnname);
-        }else{  
-            if (contain($columnname,"_")){
-                $c_part=explode("_",$columnname); 
-                foreach ($c_part as $column) {
-                    $enumclassname.=ucfirst($column);
-                }
-            }else{
-                $enumclassname.=ucfirst($columnname);    
-            }  
-        }   
-        return $enumclassname;
-    }
     
     /**                                                           
      * 保存生成的枚举类型代码到指定命名规范的文件中  
