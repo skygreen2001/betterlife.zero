@@ -178,8 +178,7 @@ class Action extends Object
      */
     public function redirect($action,$method,$querystring="") 
     {  
-        $urlMode=Gc::$url_model;
-
+        $urlMode=Gc::$url_model; 
         $extraUrlInfo="";
         $CONNECTOR=Router::URL_SLASH;
         $CONNECTOR_VAR=Router::URL_SLASH;
@@ -207,38 +206,47 @@ class Action extends Object
             $querystring= Router::URL_CONNECTOR.$querystring;
         }
         $Header_Location="Location:";
+        $moreinfo=$extraUrlInfo.$querystring;
+        if (empty($moreinfo)){
+            $CONNECTOR_LAST="";    
+        }else{
+            if (($urlMode == Router::URL_REWRITE)||($urlMode == Router::URL_PATHINFO)){
+                $CONNECTOR_LAST=$CONNECTOR;   
+            }else{
+                $CONNECTOR_LAST=$CONNECTOR_VAR;
+            }
+        }
         if($urlMode == Router::URL_REWRITE ) {
              $querystring=str_replace(Router::URL_CONNECTOR,Router::URL_SLASH,$querystring);
              $querystring=str_replace(Router::URL_EQUAL,Router::URL_SLASH,$querystring); 
              if (Router::URL_PATHINFO_MODEL==Router::URL_PATHINFO_NORMAL) { 
                 header($Header_Location.Gc::$url_base.Router::VAR_GROUP.$CONNECTOR.$this->modulename.$CONNECTOR.Router::VAR_MODULE.$CONNECTOR.$action.$CONNECTOR.
-                    Router::VAR_ACTION.$CONNECTOR.$method.$CONNECTOR.$extraUrlInfo.$querystring); //$this->modulename.$CONNECTOR.    
+                    Router::VAR_ACTION.$CONNECTOR.$method.$CONNECTOR_LAST.$extraUrlInfo.$querystring); //$this->modulename.$CONNECTOR.    
              }else{
                 header($Header_Location.Gc::$url_base.$this->modulename.$CONNECTOR.$action.$CONNECTOR.
-                    $method.$CONNECTOR.$extraUrlInfo.$querystring);                                                                                                                             
+                    $method.$CONNECTOR_LAST.$extraUrlInfo.$querystring);                                                                                                                             
              }
         }elseif ($urlMode == Router::URL_PATHINFO) {
             $querystring=str_replace(Router::URL_CONNECTOR,Router::URL_SLASH,$querystring);
             $querystring=str_replace(Router::URL_EQUAL,Router::URL_SLASH,$querystring);  
             if (Router::URL_PATHINFO_MODEL==Router::URL_PATHINFO_NORMAL) {
                 header($Header_Location.Gc::$url_base.Router::URL_INDEX.$CONNECTOR.Router::VAR_GROUP.$CONNECTOR.$this->modulename.$CONNECTOR.Router::VAR_MODULE.$CONNECTOR.$action.$CONNECTOR.
-                        Router::VAR_ACTION.$CONNECTOR.$method.$CONNECTOR.$extraUrlInfo.$querystring);
+                        Router::VAR_ACTION.$CONNECTOR.$method.$CONNECTOR_LAST.$extraUrlInfo.$querystring);
             }else {
                 header($Header_Location.Gc::$url_base.Router::URL_INDEX.$CONNECTOR.$this->modulename.$CONNECTOR.$action.$CONNECTOR.
-                        $method.$CONNECTOR.$extraUrlInfo.$querystring);
+                        $method.$CONNECTOR_LAST.$extraUrlInfo.$querystring);
             }
         }elseif ($urlMode == Router::URL_COMMON) {
             if(!empty($_GET[Router::VAR_DISPATCH])){ 
                 header($Header_Location.Gc::$url_base.Router::URL_INDEX.Router::URL_QUESTION.Router::VAR_DISPATCH.$CONNECTOR.$this->modulename.Router::VAR_DISPATCH_DEPR.$action.Router::VAR_DISPATCH_DEPR.
-                        $method.$CONNECTOR_VAR.$extraUrlInfo.$querystring);
+                        $method.$CONNECTOR_LAST.$extraUrlInfo.$querystring);
             }else{
                 header($Header_Location.Gc::$url_base.Router::URL_INDEX.Router::URL_QUESTION.Router::VAR_GROUP.$CONNECTOR.$this->modulename.$CONNECTOR_VAR.Router::VAR_MODULE.$CONNECTOR.$action.$CONNECTOR_VAR.
-                        Router::VAR_ACTION.$CONNECTOR.$method.$CONNECTOR_VAR.$extraUrlInfo.$querystring);
-                
+                        Router::VAR_ACTION.$CONNECTOR.$method.$CONNECTOR_LAST.$extraUrlInfo.$querystring);  
             }
         }elseif ($urlMode == Router::URL_COMPAT) {
             header($Header_Location.Gc::$url_base.Router::URL_INDEX.Router::URL_QUESTION.Router::VAR_PATHINFO.Router::URL_EQUAL.$CONNECTOR_VAR.$this->modulename.$CONNECTOR_VAR.$action.$CONNECTOR_VAR.
-                    $method.$CONNECTOR_VAR.$extraUrlInfo.$querystring);
+                    $method.$CONNECTOR_LAST.$extraUrlInfo.$querystring);
         }
         $this->isRedirected=true;
     }

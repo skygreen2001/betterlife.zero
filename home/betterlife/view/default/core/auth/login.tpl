@@ -8,7 +8,7 @@
 <input type="password" name="password" /><br/>
 <input type="submit" name="Submit" value="登录" />
 </form>
-<a href="{url_base}index.php?g=betterlife&m=auth&a=register">注册</a>   
+<my:a href="{url_base}index.php?g=betterlife&m=auth&a=register">注册</my:a>   
 
 <!--Smarty 模板的写法-->*} 
 {extends file="$templateDir/layout/normal/layout.tpl"}
@@ -23,6 +23,6 @@
         </div>
         <input type="submit" name="Submit" value="登录" />
         </form>
-        <a href="{$url_base}index.php?go=betterlife.auth.register">注册</a>
+        <my:a href="{$url_base}index.php?go=betterlife.auth.register">注册</my:a>
     </div>
 {/block}

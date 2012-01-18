@@ -141,7 +141,27 @@ class UtilNet extends Util
             }
         }
         return '<'.$tag.' '.implode(' ',$ret).($finish?' /':'').'>';
-    }    
+    }   
+    
+    /** 
+     * 将url query字符串转换成数组 
+     * Returns the url query as associative array 
+     * @example http://php.net/manual/en/function.parse-url.php
+     * @param    string    query 
+     * @return    array    params 
+     */ 
+    public static function parse_urlquery($query) { 
+        $query  = html_entity_decode($query); 
+        $queryParts = explode('&', $query); 
+        
+        $params = array(); 
+        foreach ($queryParts as $param) { 
+            $item = explode('=', $param); 
+            $params[$item[0]] = $item[1]; 
+        } 
+        
+        return $params;    
+    }  
 } 
   
 ?>

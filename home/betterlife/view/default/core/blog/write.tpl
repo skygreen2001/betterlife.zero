@@ -1,7 +1,7 @@
 {* Flexy 语法写法   
 <script>showHtmlEditor("postForm","content");</script>
-<b><a href="{url_base}index.php?g=betterlife&m=auth&a=logout">退出</a></b><br/>
-<a href="{url_base}index.php?g=betterlife&m=blog&a=display&pageNo={_GET[pageNo]}">博客列表</a>
+<b><my:a href="{url_base}index.php?g=betterlife&m=auth&a=logout">退出</my:a></b><br/>
+<my:a href="{url_base}index.php?g=betterlife&m=blog&a=display&pageNo={_GET[pageNo]}">博客列表</my:a>
 <br/><font color="{color}">{message}</font><br/>
 <form method="POST">
     博文名:<br/>
@@ -16,8 +16,8 @@
 {block name=body}
     {*<script>showHtmlEditor("postForm","content");//KindEditor 加载语句</script>*}
     <div class="contentBox">
-        <b><a href="{$url_base}index.php?go=betterlife.auth.logout">退出</a></b><br/>
-        <a href="{$url_base}index.php?go=betterlife.blog.display&pageNo={$smarty.get.pageNo|default:"1"}">博客列表</a>
+        <b><my:a href="{$url_base}index.php?go=betterlife.auth.logout">退出</my:a></b><br/>
+        <my:a href="{$url_base}index.php?go=betterlife.blog.display&pageNo={$smarty.get.pageNo|default:"1"}">博客列表</my:a>
         <br/><font color="{$color}">{$message|nl2br|default:''}</font><br/>
         <form name="postForm" method="POST">
             博文名:<br/>

@@ -33,14 +33,14 @@ function render_tag($buffer) {
              * <my:page src="index.php?g=betterlife&m=blog&a=display">this is page 5</my:page>
              * @var mixed
              */
-            $repReg='/<'.TagClass::PREFIX.':(\w+[-]?\w+)((\s+\w+=\\\"[^"\']*\\\"|\s+\w+=\"[^"\']*\"|\s+\w+=\\\\\'[^"\']*\\\\\'|\s+\w+=\'[^"\']*\')*)\s*>(.*)<\/'.TagClass::PREFIX.':\1>/isU';
+            $repReg='/<'.TagClass::PREFIX.':(\w+[-]?\w*)((\s+\w+=\\\"[^"\']*\\\"|\s+\w+=\"[^"\']*\"|\s+\w+=\\\\\'[^"\']*\\\\\'|\s+\w+=\'[^"\']*\')*)\s*>(.*)<\/'.TagClass::PREFIX.':\1>/isU';
             $result = preg_replace_callback($repReg, 'parseTag', $buffer);
             /**
              * 处理自定义标签，如下形式：
              * <my:page src="index.php?g=betterlife&m=blog&a=display" />
              * @var mixed
              */
-            $repReg='/<'.TagClass::PREFIX.':(\w+[-]?\w+)((\s+\w+=\\\"[^"]*\\\"|\s+\w+=\"[^"]*\"|\s+\w+=\\\\\'[^"]*\\\\\'|\s+\w+=\'[^"]*\')*)\s*[\/]{1}>/isU';
+            $repReg='/<'.TagClass::PREFIX.':(\w+[-]?\w*)((\s+\w+=\\\"[^"]*\\\"|\s+\w+=\"[^"]*\"|\s+\w+=\\\\\'[^"]*\\\\\'|\s+\w+=\'[^"]*\')*)\s*[\/]{1}>/isU';
             $result = preg_replace_callback($repReg, 'parseTag', $result);
         }
     }
@@ -66,6 +66,10 @@ function parseTag($matches) {
             case 'page':   
                 $content=isset($matches[4])?$matches[4]:"";
                 $invokeTag=new TagPageClass($matches[1],$matches[2],$content);
+                break;
+            case 'a':   
+                $content=isset($matches[4])?$matches[4]:"";
+                $invokeTag=new TagHrefClass($matches[1],$matches[2],$content);
                 break;
             default:
                 return "undefined tag：$invokeTag->getTagName()";

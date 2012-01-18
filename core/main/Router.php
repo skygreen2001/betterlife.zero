@@ -221,6 +221,7 @@ class Router
         }
 
         if($urlMode) {
+            $this->url_mcrypt_decode();
             // 获取PATHINFO信息
             self::getPathInfo();
             if (!empty($_GET) && !isset($_GET[self::VAR_ROUTER])) {
@@ -268,11 +269,29 @@ class Router
         }else {
             // 普通URL模式 检查路由规则
             if(isset($_GET[self::VAR_ROUTER])) self::routerCheck();
+            $this->url_mcrypt_decode();  
             $this->resolveNavDispathParam();
             $_REQUEST = array_merge($_POST,$_GET);
         }
         if ($_REQUEST){
             $this->setRouteProperties($_REQUEST);
+        }
+    }
+    
+    /**
+     * 对加密过的链接地址进行解码 
+     * 加密的url具有以下特征：
+     */
+    private function url_mcrypt_decode()
+    {   
+        if (class_exists("TagHrefClass")&&TagHrefClass::$isMcrypt){     
+            if ((count($_GET)==1)){
+                $get=each($_GET);
+                if (((empty($get["1"]))||($get["1"]=="="))&&(base64_decode($get["0"], true))) {   
+                    $path = base64_decode($get["0"]); 
+                    $_GET = UtilNet::parse_urlquery($path);  
+                }
+            }
         }
     }
     

@@ -10,6 +10,6 @@
         <input type="password" name="password" /><br/> 
         <input type="submit" name="submit" value="注册"/>
         </form>
-        <a href="{$url_base}index.php?go=betterlife.auth.login">登录</a> 
+        <my:a href="{$url_base}index.php?go=betterlife.auth.login">登录</my:a> 
     </div>
 {/block}

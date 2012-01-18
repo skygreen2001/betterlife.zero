@@ -1,10 +1,10 @@
 {* Flexy 语法写法   
 <script>showHtmlEditor("commentForm","comment");</script>              
-<b><a href='{url_base}?g=betterlife&m=auth&a=logout'>退出</a></b><br/>
-<b><a href='{url_base}?g=betterlife&m=blog&a=display&pageNo={_GET[pageNo]}'>博客列表</a></b><br/><br/>
+<b><my:a href='{url_base}?g=betterlife&m=auth&a=logout'>退出</my:a></b><br/>
+<b><my:a href='{url_base}?g=betterlife&m=blog&a=display&pageNo={_GET[pageNo]}'>博客列表</my:a></b><br/><br/>
 <div id='post{post.id}' >
-<b><a href='{url_base}?g=betterlife&m=blog&a=post&id={post.id}'>
-{post.name}</a></b><br/>
+<b><my:a href='{url_base}?g=betterlife&m=blog&a=post&id={post.id}'>
+{post.name}</my:a></b><br/>
 <p>{post.content}</p>
 评论数:{count_comments(post.id)}
 </div>  
@@ -27,8 +27,8 @@
 {block name=body} 
     {*<script>showHtmlEditor("commentForm","comment");</script>*}    
     <div id="content">
-        <a href='{$url_base}?go=betterlife.auth.logout'><b>退出</b></a><br/>
-        <a href='{$url_base}?go=betterlife.blog.display&pageNo={$smarty.get.pageNo|default:"1"}'><b>博客列表</b></a>
+        <my:a href='{$url_base}?go=betterlife.auth.logout'><b>退出</b></my:a><br/>
+        <my:a href='{$url_base}?go=betterlife.blog.display&pageNo={$smarty.get.pageNo|default:"1"}'><b>博客列表</b></my:a>
         <div id='post{$post.id}' >
             <h1>{$post.name}</h1>
             <p>{$post.content|nl2br}</p>
