@@ -23,15 +23,15 @@ table {
 }
 
 .settings {
-    background-image:url(../../home/admin/view/default/resources/ico/folder_wrench.png)!important;
+    background-image:url(ico/folder_wrench.png)!important;
 }
 
 .nav {
-    background-image:url(../../home/admin/view/default/resources/ico/folder_go.png)!important;
+    background-image:url(ico/folder_go.png)!important;
 }
 
 .navdesign {
-    background-image:url(../../home/admin/view/default/resources/ico/cog_edit.png)!important;
+    background-image:url(ico/cog_edit.png)!important;
 }
 
 .docs-header .x-panel-body {

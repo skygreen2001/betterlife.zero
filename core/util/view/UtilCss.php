@@ -106,8 +106,17 @@ class UtilCss extends Util
                 }        
                 if (in_array($cssFile, self::$CssLoaded)){
                     return ;
-                }    
-                $result= "    <link rel=\"stylesheet\" type=\"text/css\" href=\"".$url_base.self::$CSS_GZIP.$cssFile."\" />\r\n";
+                }   
+                $css_gzip=self::$CSS_GZIP;
+                if (contain($cssFile,Gc::$url_base)){
+                    $isLocalCssFile=str_replace("/","\\",str_replace(Gc::$url_base,Gc::$nav_root_path,$cssFile));
+                    $isLocalGzip=dirname(dirname($isLocalCssFile)).DIRECTORY_SEPARATOR."gzip.php";
+                    if (file_exists($isLocalGzip)){
+                        $css_gzip=str_replace(Gc::$nav_root_path,"",$isLocalGzip)."?css=";
+                        $css_gzip=str_replace("\\","/",$css_gzip);
+                    }
+                }
+                $result= "    <link rel=\"stylesheet\" type=\"text/css\" href=\"".$url_base.$css_gzip.$cssFile."\" />\r\n";
             }else{
                 if (in_array($cssFile, self::$CssLoaded)){
                     return ;
