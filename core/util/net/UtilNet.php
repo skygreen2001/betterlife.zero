@@ -162,6 +162,44 @@ class UtilNet extends Util
         
         return $params;    
     }  
+
+    /**
+     * 获取客户端IP地址
+     */
+    public static function client_ip()
+    {
+        //php获取ip的算法
+        if ($HTTP_SERVER_VARS["HTTP_X_FORWARDED_FOR"])
+        {
+            $ip = $HTTP_SERVER_VARS["HTTP_X_FORWARDED_FOR"];
+        }
+        elseif ($HTTP_SERVER_VARS["HTTP_CLIENT_IP"])
+        {
+            $ip = $HTTP_SERVER_VARS["HTTP_CLIENT_IP"];
+        }
+        elseif ($HTTP_SERVER_VARS["REMOTE_ADDR"])
+        {
+            $ip = $HTTP_SERVER_VARS["REMOTE_ADDR"];
+        }
+        elseif (getenv("HTTP_X_FORWARDED_FOR"))
+        {
+            $ip = getenv("HTTP_X_FORWARDED_FOR");
+        }
+        elseif (getenv("HTTP_CLIENT_IP"))
+        {
+            $ip = getenv("HTTP_CLIENT_IP");
+        }
+        elseif (getenv("REMOTE_ADDR"))
+        {
+            $ip = getenv("REMOTE_ADDR");
+        }
+        else
+        {
+            $ip = "Unknown";
+        }
+        //echo "你的IP:".$ip ;
+        return $ip;
+    }
 } 
   
 ?>

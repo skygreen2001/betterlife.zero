@@ -94,8 +94,7 @@ class Action extends Object
     
     /**
      * 加载通用的Css<br/>
-     * 默认:当前模板目录下:resources/css/index.css<br/>
-     * @param ViewObject $viewobject 表示层显示对象
+     * 默认:当前模板目录下:resources/css/index.css<br/>      
      */
     public function loadCss($defaultCssFile="resources/css/index.css")
     {                                                                       

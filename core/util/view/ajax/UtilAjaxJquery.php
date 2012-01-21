@@ -30,23 +30,63 @@ class UtilAjaxJquery extends UtilAjax implements IUtilAjax
     public static function load($version="1.6.1",$viewObject=null)
     {     
         if (self::$IsGoogleApi){
-            if ($viewObject)
-            {
-                self::loadJsReady($viewObject,"https://ajax.googleapis.com/ajax/libs/jquery/$version/jquery.min.js");
+            if (self::$IsDebug){            
+                if ($viewObject)
+                {
+                    self::loadJsReady($viewObject,"https://ajax.googleapis.com/ajax/libs/jquery/$version/jquery.js");
+                }else{
+                    self::loadJs("https://ajax.googleapis.com/ajax/libs/jquery/$version/jquery.js");
+                }
             }else{
-                self::loadJs("https://ajax.googleapis.com/ajax/libs/jquery/$version/jquery.min.js");
+                if ($viewObject)
+                {
+                    self::loadJsReady($viewObject,"https://ajax.googleapis.com/ajax/libs/jquery/$version/jquery.min.js");
+                }else{
+                    self::loadJs("https://ajax.googleapis.com/ajax/libs/jquery/$version/jquery.min.js");
+                }
             }
         }else{
             $ajax_root="common/js/ajax/";    
             $group=EnumJsFramework::JS_FW_JQUERY;
-            if ($viewObject)
-            {
-                self::loadJsReady($viewObject,$ajax_root.$group."/".$group."-".$version.".min.js"); 
-            }else{
-                self::loadJs($ajax_root.$group."/".$group."-".$version.".min.js"); 
+            if (self::$IsDebug){
+                if ($viewObject)
+                {
+                    self::loadJsReady($viewObject,$ajax_root.$group."/".$group."-".$version.".js"); 
+                }else{
+                    self::loadJs($ajax_root.$group."/".$group."-".$version.".js"); 
+                }
+            }else{            
+                if ($viewObject)
+                {
+                    self::loadJsReady($viewObject,$ajax_root.$group."/".$group."-".$version.".min.js"); 
+                }else{
+                    self::loadJs($ajax_root.$group."/".$group."-".$version.".min.js"); 
+                }   
             }
         }
-    }    
+    }     
+   
+    /**
+     * 加载JqueryUI
+     * @param string $version JQueryUI的版本号
+     * @param ViewObject $viewObject 表示层显示对象,只在Web框架中使用,一般结合loadJsReady使用
+     */
+    public static function loadJqueryUI($viewObject=null,$version="1.8")
+    {            
+        if (self::$IsGoogleApi){ 
+            if (self::$IsDebug){                                                                         
+                UtilJavascript::loadJsReady($viewObject,"https://ajax.googleapis.com/ajax/libs/jqueryui/$version/jquery-ui.js");
+            }else{
+                UtilJavascript::loadJsReady($viewObject,"http://ajax.googleapis.com/ajax/libs/jqueryui/$version/jquery-ui.min.js"); 
+            }
+        }else{                                                                                       
+            if (self::$IsDebug){       
+                UtilJavascript::loadJsReady($viewObject,"ajax/jquery/jqueryui/jquery-ui.js",true); 
+            }else{
+                UtilJavascript::loadJsReady($viewObject,"ajax/jquery/jqueryui/jquery-ui.min.js",true);  
+            } 
+        }
+    }   
     
     /**
      * 发送Ajax请求的语句

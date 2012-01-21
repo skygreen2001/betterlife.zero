@@ -24,12 +24,21 @@ class UtilAjaxExtjs extends UtilAjax implements IUtilAjax
      */
     public static function load($version="3.3.0",$viewObject=null) 
     {   
-        if (self::$IsGoogleApi){
-            if ($viewObject)
-            {
-                self::loadJsReady($viewObject,"https://ajax.googleapis.com/ajax/libs/ext-core/$version/ext-core.js");
+        if (self::$IsGoogleApi){       
+            if (self::$IsDebug){            
+                if ($viewObject)
+                {
+                    self::loadJsReady($viewObject,"https://ajax.googleapis.com/ajax/libs/ext-core/$version/ext-core-debug.js");
+                }else{
+                    self::loadJs("https://ajax.googleapis.com/ajax/libs/ext-core/$version/ext-core-debug.js");
+                }
             }else{
-                self::loadJs("https://ajax.googleapis.com/ajax/libs/ext-core/$version/ext-core.js");
+                if ($viewObject)
+                {
+                    self::loadJsReady($viewObject,"https://ajax.googleapis.com/ajax/libs/ext-core/$version/ext-core.js");
+                }else{
+                    self::loadJs("https://ajax.googleapis.com/ajax/libs/ext-core/$version/ext-core.js");
+                }
             }
         }else{
             if ($version<4)
