@@ -324,20 +324,7 @@ class AutoCodeDomain extends AutoCode
         $package= implode(".", $packageSplit);      
         return $package;
     }
-
-    /**
-     * 是否默认的列关键字：id,committime,updateTime
-     * @param type $fieldname 
-     */
-    private static function isNotColumnKeywork($fieldname)
-    {
-        if ($fieldname=="id"||$fieldname=="commitTime"||$fieldname=="updateTime"){
-            return false;
-        }else{    
-            return true;
-        }
-    }        
-
+           
     /**
      * 保存生成的代码到指定命名规范的文件中  
      * @param string $tablename 表名称    

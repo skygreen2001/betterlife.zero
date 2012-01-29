@@ -93,10 +93,13 @@ $appName.$classname.View={
                 constrainHeader:true,maximizable: true,collapsible: true,
                 width : 450,height : 550,minWidth : 400,minHeight : 450,
                 layout : 'fit',plain : true,buttonAlign : 'center',
+                defaults : {
+                    autoScroll : true
+                },                
                 listeners:{
                     beforehide:function(){
                         this.editForm.form.getEl().dom.reset();                    
-                    }  
+                    }{$textareaCkeditor_Replace}  
                 },
                 items : [ 
                     new Ext.form.FormPanel({   
@@ -119,6 +122,7 @@ $fieldLabels
                             return;
                         }
                         editWindow=this; 
+{$textareaCkeditor_Save}                        
                         if (this.savetype==0){    
                             this.editForm.api.submit=ExtService$classname.save;                   
                             this.editForm.getForm().submit({
@@ -156,6 +160,7 @@ $fieldLabels
                     text : "重 置",ref:'../resetBtn',scope:this,
                     handler : function() {  
                         this.editForm.form.loadRecord($appName.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected());
+{$textareaCkeditor_Reset} 
                     }                  
                 }]    
             }, config);  
@@ -733,10 +738,11 @@ $filterfilter
             $appName.$classname.View.Running.edit_window.setTitle('添加{$table_comment}');
             $appName.$classname.View.Running.edit_window.savetype=0;
             $appName.$classname.View.Running.edit_window.$tableFieldIdName.setValue("");
+{$textareaCkeditor_Add}            
             $appName.$classname.View.Running.edit_window.show();   
         },   
         /**
-         * 编辑供应商时先获得选中的{$table_comment}信息
+         * 编辑{$table_comment}时先获得选中的{$table_comment}信息
          */
         update$classname : function() {
             if ($appName.$classname.View.Running.edit_window==null){   
@@ -747,6 +753,7 @@ $filterfilter
             $appName.$classname.View.Running.edit_window.setTitle('修改{$table_comment}');
             $appName.$classname.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
             $appName.$classname.View.Running.edit_window.savetype=1;
+{$textareaCkeditor_Update}            
             $appName.$classname.View.Running.edit_window.show();       
         },        
         /**

@@ -76,7 +76,7 @@ class AutoCodeViewExt extends AutoCode
     } 
 
     foreach ($fieldInfos as $tablename=>$fieldInfo){      
-      $defineTplFileContent=self::tableToViewTplDefine();
+      $defineTplFileContent=self::tableToViewTplDefine($fieldInfo);
       if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($defineTplFileContent)){
         $tplName=self::saveTplDefineToDir($tablename,$defineTplFileContent);
         echo "生成导出完成:$tablename->$tplName!<br/>";   
@@ -164,7 +164,12 @@ class AutoCodeViewExt extends AutoCode
     }
     $fields=substr($fields,0,strlen($fields)-3);  
     $fieldLabels="";//Ext "EditWindow"里items的fieldLabels
-    $tableFieldIdName;
+    $tableFieldIdName;       
+    $textareaCkeditor_Add="";
+    $textareaCkeditor_Update="";  
+    $textareaCkeditor_Replace="";  
+    $textareaCkeditor_Save=""; 
+    $textareaCkeditor_Reset="";
     foreach ($fieldInfo as $fieldname=>$field)
     {             
       if (self::isNotColumnKeywork($fieldname))
@@ -233,8 +238,25 @@ class AutoCodeViewExt extends AutoCode
                           "                                displayField : 'text'// 显示文本\r\n                            ";  
           } 
           if (self::columnIsTextArea($fieldname,$field["Type"]))
-          {
-            $fieldLabels.=",xtype : 'textarea'"; 
+          {        
+            $fieldLabels.=",xtype : 'textarea',id:'$fieldname',ref:'$fieldname'";  
+            $textareaCkeditor_Replace=",\r\n".
+                                      "                    afterrender:function(){\r\n". 
+                                      "                        ckeditor_replace(); \r\n".   
+                                      "                    }";
+            $textareaCkeditor_Add="            if (CKEDITOR.instances.$fieldname){\r\n".
+                                  "                CKEDITOR.instances.$fieldname.setData(\"\");\r\n".   
+                                  "            }\r\n"; 
+            $textareaCkeditor_Update="            if (CKEDITOR.instances.$fieldname){\r\n".
+                                     "                CKEDITOR.instances.$fieldname.setData(this.getSelectionModel().getSelected().data.$fieldname); \r\n".   
+                                     "            }\r\n"; 
+            $textareaCkeditor_Save="                        if (CKEDITOR.instances.$fieldname){\r\n".
+                                   "                            this.editForm.$fieldname.setValue(CKEDITOR.instances.$fieldname.getData());\r\n". 
+                                   "                        }\r\n";   
+            $textareaCkeditor_Reset="                        if (CKEDITOR.instances.$fieldname){\r\n".
+                                    "                            CKEDITOR.instances.$fieldname.setData($appName.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n".                                     
+                                    "                        }\r\n";
+                                                                    
           }
         }
         if ($column_type=='bit')
@@ -370,21 +392,7 @@ class AutoCodeViewExt extends AutoCode
     require("includemodeljs.php");
     $result.=$jsContent;
     return $result;
-  }       
-      
-  /**
-   * 列是否大量文本输入应该TextArea输入  
-   * @param string $column_name 列名称
-   * @param string $column_type 列类型
-   */
-  private static function columnIsTextArea($column_name,$column_type)
-  {        
-    if ((self::column_length($column_type)>=500)||(contain($column_name,"intro"))||(self::column_type($column_type)=='text')){
-       return true;
-    }else{
-       return false;
-    } 
-  }  
+  }   
     
   /**
    * 获取数据对象的ID列名称
@@ -393,29 +401,13 @@ class AutoCodeViewExt extends AutoCode
   private static function keyIDColumn($dataobject)
   {
     return DataObjectSpec::getRealIDColumnNameStatic($dataobject);  
-  }
+  }    
 
   /**
-   * 是否默认的列关键字：id,committime,updateTime   
-   * @param string $fieldname 列名称
-   */
-  private static function isNotColumnKeywork($fieldname)
-  {                                         
-    if ($fieldname=="id"||$fieldname=="commitTime"||$fieldname=="updateTime"){
-      return false; 
-    }else{    
-      return true;
-    }
-  }
-             
-
-  /**
-   * 将表列定义转换成使用ExtJs生成的表示层tpl文件定义的内容
-   * @param string $tablename 表名
-   * @param array $tableInfoList 表信息列表
+   * 将表列定义转换成使用ExtJs生成的表示层tpl文件定义的内容    
    * @param array $fieldInfo 表列信息列表
    */
-  private static function tableToViewTplDefine()
+  private static function tableToViewTplDefine($fieldInfo)
   {
     $result ="{extends file=\"\$templateDir/layout/normal/layout.tpl\"}\r\n".
              "{block name=body}\r\n".
@@ -423,8 +415,16 @@ class AutoCodeViewExt extends AutoCode
              "    <div id=\"loading\">\r\n".    
              "        <div class=\"loading-indicator\"><img src=\"{$url_base}common/js/ajax/ext/resources/images/extanim32.gif\" width=\"32\" height=\"32\" style=\"margin-right:8px;\" align=\"absmiddle\"/>正在加载中...</div>\r\n".  
              "    </div>\r\n". 
-             "   <div id=\"win1\" class=\"x-hide-display\"></div>\r\n".
-             "{/block}\r\n";  
+             "   <div id=\"win1\" class=\"x-hide-display\"></div>\r\n";
+    foreach ($fieldInfo as $fieldname=>$field)
+    {                    
+        if (self::columnIsTextArea($fieldname,$field["Type"]))
+        {
+            $result.="   {\$editorHtml}\r\n"; 
+            break;
+        }   
+    }    
+    $result .="{/block}\r\n";  
     return $result;
   }
 	   

@@ -215,6 +215,14 @@ class AutoCodeAction extends AutoCode
                 $result.="         \$this->ExtDirectMode();\r\n";
                 $result.="         \$this->ExtUpload();\r\n"; 
                 $result.="         \$this->loadExtJs('$instancename/$instancename.js');\r\n"; 
+                foreach ($fieldInfo as $fieldname=>$field)
+                {                    
+                    if (self::columnIsTextArea($fieldname,$field["Type"]))
+                    {
+                        $result.="         \$this->view->editorHtml=UtilCKEeditor::loadReplace(\"$fieldname\");\r\n"; 
+                    }   
+                }
+                
                 $result.="     }\r\n\r\n";       
                 self::$echo_result.=$result;  
                 $result_upload ="    /**\r\n".                        

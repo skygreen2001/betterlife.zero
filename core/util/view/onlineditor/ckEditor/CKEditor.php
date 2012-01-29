@@ -143,9 +143,9 @@ class CKEditor
 
 		$js = $this->returnGlobalEvents();
 		if (!empty($_config))
-			$js .= "CKEDITOR.replace('".$name."', ".$this->jsEncode($_config).");";
+			$js .= "var editor = CKEDITOR.replace('".$name."', ".$this->jsEncode($_config).");";
 		else
-			$js .= "CKEDITOR.replace('".$name."');";
+			$js .= "var editor = CKEDITOR.replace('".$name."');";
 
 		$out .= $this->script($js);
 

@@ -92,11 +92,23 @@ class Gc
     */
     public static $attachment_path;//="C:\\wamp\\www\\betterlife\\attachment\\";  
     /**
-    * 上传或者下载文件的网络路径
+    * 上传或者下载文件的网络路径[可删除] 
     * 
     * @var mixed
     */
-    public static $attachment_url;//="http://localhost/betterlife/attachment/";     
+    public static $attachment_url;//="http://localhost/betterlife/attachment/";      
+    /**
+    * 上传图片的网络路径
+    * 
+    * @var mixed
+    */
+    public static $upload_url;//="http://localhost/ele/upload/";    
+    /**
+    * 上传图片的路径 
+    * 
+    * @var mixed
+    */
+    public static $upload_path;//="C:\\wamp\\www\\ele\\upload\\";    
     //</editor-fold>
     
     //<editor-fold desc="开发者使用设置">
@@ -308,6 +320,7 @@ class Gc
         if (empty(Gc::$nav_root_path)){
            Gc::$nav_root_path=dirname(__FILE__).DIRECTORY_SEPARATOR;
            Gc::$attachment_path=Gc::$nav_root_path."attachment".DIRECTORY_SEPARATOR;
+           Gc::$upload_path=Gc::$nav_root_path."upload".DIRECTORY_SEPARATOR;    
         }
        
         if (empty(Gc::$nav_framework_path)){
@@ -332,10 +345,12 @@ class Gc
             }
             Gc::$url_base=$baseurl;
             Gc::$attachment_url=Gc::$url_base;
+            Gc::$upload_url=Gc::$url_base; 
             $same_part=explode(DIRECTORY_SEPARATOR,Gc::$nav_root_path);
             if ($same_part&&(count($same_part)>2)){
                 $same_part=$same_part[count($same_part)-2];
                 Gc::$attachment_url=substr(Gc::$attachment_url,0,(strpos(Gc::$attachment_url,$same_part)+strlen($same_part)+1))."attachment/";
+                Gc::$upload_url=substr(Gc::$upload_url,0,(strpos(Gc::$upload_url,$same_part)+strlen($same_part)+1))."upload/";
             }              
         }     
     }

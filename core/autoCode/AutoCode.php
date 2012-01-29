@@ -243,7 +243,34 @@ class AutoCode extends Object
         } 
         return $enum_columnDefine;
     }  
-        
+             
+    /**
+     * 列是否大量文本输入应该TextArea输入  
+     * @param string $column_name 列名称
+     * @param string $column_type 列类型
+     */
+    protected static function columnIsTextArea($column_name,$column_type)
+    {        
+        if (((self::column_length($column_type)>=500)&&(!contain($column_name,"images"))&&(!contain($column_name,"link"))&&(!contain($column_name,"ico")))
+             ||(contain($column_name,"intro"))||(self::column_type($column_type)=='text')||(self::column_type($column_type)=='longtext')){  //&&(!contain($column_name,"addr"))
+           return true;
+        }else{
+           return false;
+        } 
+    } 
+
+    /**
+     * 是否默认的列关键字：id,committime,updateTime   
+     * @param string $fieldname 列名称
+     */
+    protected static function isNotColumnKeywork($fieldname)
+    {                                         
+        if ($fieldname=="id"||$fieldname=="commitTime"||$fieldname=="updateTime"){
+            return false; 
+        }else{    
+            return true;
+        }  
+    }     
 }    
 
 ?>
