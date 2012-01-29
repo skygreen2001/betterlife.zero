@@ -83,7 +83,7 @@ class AutoCode extends Object
         $typep=self::column_type($type);
         switch ($typep) {
             case "int":
-            case "enum":      
+            case "enum":   
                 return $typep; 
             case "timestamp":
             case "datetime":

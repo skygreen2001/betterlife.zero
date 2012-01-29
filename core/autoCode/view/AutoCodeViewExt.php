@@ -199,7 +199,7 @@ class AutoCodeViewExt extends AutoCode
           } 
           //当使用form.getForm().submit()方式提交时，服务器得到的请求字段中的值总是combobox实际显示的值，也就是displayField:'text'的值;
           //将name属性修改为hiddenName，便会将value值提交给服务器 
-          if ($column_type=='enum'){
+          if (($column_type=='enum')||($column_type=='bit')){
               $flName="hiddenName";
           }else{
               $flName="name";  
@@ -211,7 +211,7 @@ class AutoCodeViewExt extends AutoCode
           }          
           if ($column_type=='bit')
           {
-            $fieldLabels.=",xtype : 'combo',mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,\r\n".
+            $fieldLabels.=",xtype : 'combo',mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,allowBlank : false,\r\n".
                           "                                store : new Ext.data.SimpleStore({\r\n".
                           "                                        fields : ['value', 'text'],\r\n".
                           "                                        data : [['0', '否'], ['1', '是']]\r\n".
@@ -259,13 +259,7 @@ class AutoCodeViewExt extends AutoCode
                                                                     
           }
         }
-        if ($column_type=='bit')
-        {
-          $fieldLabels.="                            },\r\n";   
-        }else
-        {
-          $fieldLabels.="},\r\n";   
-        }
+        $fieldLabels.="},\r\n"; 
       }      
     }
     $fieldLabels=substr($fieldLabels,0,strlen($fieldLabels)-3);  
@@ -283,8 +277,13 @@ class AutoCodeViewExt extends AutoCode
         {
           $field_comment=preg_split("/[\s,]+/", $field_comment);    
           $field_comment=$field_comment[0]; 
-        }                    
-        $viewdoblock.="                         '<div class=\"entry\"><span class=\"head\">$field_comment :</span><span class=\"content\">{{$fieldname}}</span></div>',\r\n";
+        }     
+        $datatype =self::comment_type($field["Type"]);
+        if ($datatype=='date')
+        {
+            $dateformat=":date(\"Y-m-d\")";    
+        }              
+        $viewdoblock.="                         '<div class=\"entry\"><span class=\"head\">$field_comment :</span><span class=\"content\">{{$fieldname}{$dateformat}}</span></div>',\r\n";
       }
     }
     $viewdoblock=substr($viewdoblock,0,strlen($viewdoblock)-2);
@@ -308,6 +307,11 @@ class AutoCodeViewExt extends AutoCode
         if ($datatype=='date')
         {
           $columns.=",renderer:Ext.util.Format.dateRenderer('Y-m-d')";
+        }
+        
+        $column_type=self::column_type($field["Type"]); 
+        if ($column_type=='bit'){
+          $columns.=",renderer:function(value){if (value == true) {return \"是\";}else{return \"否\";}}";  
         }
         $columns.="},\r\n";
       }

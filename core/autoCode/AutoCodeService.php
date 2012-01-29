@@ -351,6 +351,7 @@ class AutoCodeService extends AutoCode
                          "     */\r\n";
                 $result.="    public function save(\$$instance_name)\r\n".
                          "    {\r\n".
+                         self::bit2BoolInExtService($instance_name,$fieldInfo).
                          "        \$data=parent::save(\$$instance_name);\r\n".     
                          "        return array(\r\n".
                          "            'success' => true,\r\n".   
@@ -365,6 +366,7 @@ class AutoCodeService extends AutoCode
                          "     */\r\n";
                 $result.="    public function update(\$$instance_name)\r\n".
                          "    {\r\n".
+                         self::bit2BoolInExtService($instance_name,$fieldInfo).
                          self::enumComment2KeyInExtService($instance_name,$fieldInfo,$tablename).     
                          "        \$data=parent::update(\$$instance_name);\r\n". 
                          "        return array(\r\n".
@@ -734,6 +736,23 @@ class AutoCodeService extends AutoCode
         $result.="?>";
         return $result;
     }    
+    
+    /**
+     * 将表列为bit类型的列转换成需要存储在数据库里的bool值 
+     * @param string $instance_name 实体变量    
+     * @param array $fieldInfo 表列信息列表    
+     */
+    private static function bit2BoolInExtService($instance_name,$fieldInfo)
+    {
+        $result="";   
+        foreach ($fieldInfo as $fieldname=>$field){
+            $datatype =self::column_type($field["Type"]);
+            if ($datatype=='bit'){                                           
+                $result.="        if (isset(\${$instance_name}[\"$fieldname\"])&&(\${$instance_name}[\"$fieldname\"]=='1'))\${$instance_name}[\"$fieldname\"]=true; else \${$instance_name}[\"$fieldname\"]=false;\r\n";
+            }
+        }   
+        return $result;  
+    }
     
     /**
      * 将表列为枚举类型的列用户能阅读的注释文字内容转换成需要存储在数据库里的值 
