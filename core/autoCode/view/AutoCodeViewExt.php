@@ -149,6 +149,7 @@ class AutoCodeViewExt extends AutoCode
     $classname=self::getClassname($tablename);
     $instancename=self::getInstancename($tablename);    
     $fields="";//Ext "store" 中包含的fields
+    $appName=ucfirst($appName);
     foreach ($fieldInfo as $fieldname=>$field)
     {
       if (self::isNotColumnKeywork($fieldname))
@@ -174,11 +175,19 @@ class AutoCodeViewExt extends AutoCode
     {             
       if (self::isNotColumnKeywork($fieldname))
       { 
-        $column_type=self::column_type($field["Type"]);      
+        $column_type=self::column_type($field["Type"]);
+        $isImage =self::columnIsImage($fieldname,$field["Comment"]);        
         if ($fieldname==self::keyIDColumn($classname))
         {
           $tableFieldIdName=$fieldname;  
           $fieldLabels.="                            {xtype: 'hidden',  name : '$fieldname',ref:'../$fieldname'"; 
+        }else if ($isImage){
+          $tableFieldIdName=$fieldname;  
+          $fieldLabels.="                            {xtype: 'hidden',  name : '$fieldname',ref:'../$fieldname'},\r\n"; 
+          $fieldLabels.="                            {fieldLabel : '{$table_comment}图片',name : 'imageUpload',ref:'../imageUpload',xtype:'fileuploadfield',\r\n".
+                        "                             emptyText: '请上传{$table_comment}图片文件',buttonText: '',accept:'image/*',buttonCfg: {iconCls: 'upload-icon'}";
+          $textareaCkeditor_Reset.="                        this.imageUpload.setValue(this.{$fieldname}.getValue());\r\n";
+          $textareaCkeditor_Update.="            $appName.$classname.View.Running.edit_window.imageUpload.setValue($appName.$classname.View.Running.edit_window.{$fieldname}.getValue());\r\n";           
         }else
         {
           $datatype=self::comment_type($field["Type"]);
@@ -246,16 +255,16 @@ class AutoCodeViewExt extends AutoCode
                                       "                    }";
             $textareaCkeditor_Add="            if (CKEDITOR.instances.$fieldname){\r\n".
                                   "                CKEDITOR.instances.$fieldname.setData(\"\");\r\n".   
-                                  "            }\r\n"; 
-            $textareaCkeditor_Update="            if (CKEDITOR.instances.$fieldname){\r\n".
+                                  "            }"; 
+            $textareaCkeditor_Update.="            if (CKEDITOR.instances.$fieldname){\r\n".
                                      "                CKEDITOR.instances.$fieldname.setData(this.getSelectionModel().getSelected().data.$fieldname); \r\n".   
-                                     "            }\r\n"; 
+                                     "            }"; 
             $textareaCkeditor_Save="                        if (CKEDITOR.instances.$fieldname){\r\n".
                                    "                            this.editForm.$fieldname.setValue(CKEDITOR.instances.$fieldname.getData());\r\n". 
-                                   "                        }\r\n";   
-            $textareaCkeditor_Reset="                        if (CKEDITOR.instances.$fieldname){\r\n".
+                                   "                        }";   
+            $textareaCkeditor_Reset.="                        if (CKEDITOR.instances.$fieldname){\r\n".
                                     "                            CKEDITOR.instances.$fieldname.setData($appName.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n".                                     
-                                    "                        }\r\n";
+                                    "                        }";                       
                                                                     
           }
         }
@@ -279,11 +288,18 @@ class AutoCodeViewExt extends AutoCode
           $field_comment=$field_comment[0]; 
         }     
         $datatype =self::comment_type($field["Type"]);
+        
         if ($datatype=='date')
         {
             $dateformat=":date(\"Y-m-d\")";    
-        }              
-        $viewdoblock.="                         '<div class=\"entry\"><span class=\"head\">$field_comment :</span><span class=\"content\">{{$fieldname}{$dateformat}}</span></div>',\r\n";
+        }
+        $isImage =self::columnIsImage($fieldname,$field["Comment"]);   
+        if ($isImage){        
+            $viewdoblock.="                         '<div class=\"entry\"><span class=\"head\">{$field_comment}路径 :</span><span class=\"content\">{{$fieldname}}</span></div>',\r\n";
+            $viewdoblock.="                         '<div class=\"entry\"><span class=\"head\">$field_comment :</span><span class=\"content\"><img src=\"upload/images/{{$fieldname}}\" /></span></div>',\r\n";
+        }else{
+            $viewdoblock.="                         '<div class=\"entry\"><span class=\"head\">$field_comment :</span><span class=\"content\">{{$fieldname}{$dateformat}}</span></div>',\r\n";
+        }
       }
     }
     $viewdoblock=substr($viewdoblock,0,strlen($viewdoblock)-2);

@@ -155,23 +155,23 @@ class UtilFileSystem extends Util
     }      
     
     /**
-    * 服务器上传文件
-    * @param mixed $_FILES 上传的文件对象
-    * @param string $uploadPath 文件路径或者文件名
-    * @return array 返回信息数组
-    */
-    public static function uploadFile($_FILES,$uploadPath)
+     * 服务器上传文件
+     * @param mixed $_FILES 上传的文件对象
+     * @param string $uploadPath 文件路径或者文件名
+     * @param sting $uploadFieldName 上传文件的input组件的名称
+     * @return array 返回信息数组
+     */
+    public static function uploadFile($_FILES,$uploadPath,$uploadFieldName="upload_file")
     {                             
-        if ($_FILES["upload_file"]["size"] < intval(ini_get("upload_max_filesize") * 1024000)) {
-            if ($_FILES["upload_file"]["error"] > 0) {
-                return array('success' => false, 'msg' => $_FILES["upload_file"]["error"]);
+        if ($_FILES[$uploadFieldName]["size"] < intval(ini_get("upload_max_filesize") * 1024000)) {
+            if ($_FILES[$uploadFieldName]["error"] > 0) {
+                return array('success' => false, 'msg' => $_FILES[$uploadFieldName]["error"]);
             } else {
                 //获得临时文件名
-                $tmptail = end(explode('.', $_FILES["upload_file"]["name"]));
+                $tmptail = end(explode('.', $_FILES[$uploadFieldName]["name"])); 
                 $temp_name=basename($uploadPath); 
                 if (contain($temp_name,".")){ 
-                    $temp_name=""; 
-                    $temp_name=basename($uploadPath);
+                    $temp_name="";           
                     self::createDir(dirname($uploadPath));      
                 }else{
                     $temp_name = date("YmdHis").'.'.$tmptail;
@@ -179,19 +179,22 @@ class UtilFileSystem extends Util
                 }
                 if (file_exists($uploadPath.$temp_name)) {
                     return array('success' => false, 'msg' => '文件重名!');
-                } else {
-                    $IsUploadSucc=move_uploaded_file($_FILES["upload_file"]["tmp_name"], $uploadPath.$temp_name);
+                } else { 
+                    $IsUploadSucc=move_uploaded_file($_FILES[$uploadFieldName]["tmp_name"], $uploadPath.$temp_name);
                     if (!$IsUploadSucc){
                         return array('success' => false, 'msg' => '文件上传失败，通知系统管理员!');
                     }
-                    return array('success' => true,'file_showname'=>$_FILES["upload_file"]["name"],'file_name' => $temp_name);
+                    if (empty($temp_name)){
+                        $temp_name=basename($uploadPath); 
+                    }
+                    return array('success' => true,'file_showname'=>$_FILES[$uploadFieldName]["name"],'file_name' => $temp_name);
                 }
             }
         } else {
             return array('success' => false, 'msg' => '文件太大！');
         }    
-    }      
-    
+    }
+        
     /**
      +----------------------------------------------------------<br/>
      * 查看指定目录下的子目录<br/>

@@ -258,6 +258,19 @@ class AutoCode extends Object
            return false;
         } 
     } 
+    
+    /**
+     * 列是否是图片路径                 
+     * @param string $column_name 列名称
+     * @param mixed $column_comment 列注释
+     */
+    protected static function columnIsImage($column_name,$column_comment)
+    {
+        if ((contain($column_name,"image"))||(contain($column_name,"img"))||(contain($column_name,"ico"))||(contain($column_name,"logo"))||(contain($column_name,"pic"))){
+            return true;    
+        }  
+        return false;
+    }
 
     /**
      * 是否默认的列关键字：id,committime,updateTime   

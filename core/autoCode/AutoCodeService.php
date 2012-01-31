@@ -352,6 +352,7 @@ class AutoCodeService extends AutoCode
                 $result.="    public function save(\$$instance_name)\r\n".
                          "    {\r\n".
                          self::bit2BoolInExtService($instance_name,$fieldInfo).
+                         self::imageUploadInExtService($instance_name,$fieldInfo).
                          "        \$data=parent::save(\$$instance_name);\r\n".     
                          "        return array(\r\n".
                          "            'success' => true,\r\n".   
@@ -367,13 +368,16 @@ class AutoCodeService extends AutoCode
                 $result.="    public function update(\$$instance_name)\r\n".
                          "    {\r\n".
                          self::bit2BoolInExtService($instance_name,$fieldInfo).
-                         self::enumComment2KeyInExtService($instance_name,$fieldInfo,$tablename).     
+                         self::enumComment2KeyInExtService($instance_name,$fieldInfo,$tablename).  
+                         self::imageUploadInExtService($instance_name,$fieldInfo).   
                          "        \$data=parent::update(\$$instance_name);\r\n". 
                          "        return array(\r\n".
                          "            'success' => true,\r\n".   
                          "            'data'    => \$data\r\n". 
                          "        ); \r\n".    
-                         "    }\r\n\r\n";                      
+                         "    }\r\n\r\n";     
+                //uploadImg:有图片的上传图片功能         
+                $result.=self::imageUploadFunctionInExtService($instance_name,$fieldInfo,$object_desc);                  
                 //deleteByIds         
                 $result.="    /**\r\n".
                          "     * 根据主键删除数据对象:{$object_desc}的多条数据记录\r\n".  
@@ -456,7 +460,7 @@ class AutoCodeService extends AutoCode
                          "            if (\$result&&(\$result['success']==true)){\r\n".
                          "                if (array_key_exists('file_name',\$result)){\r\n".
                          "                    \$arr_import_header = self::fieldsMean({$classname}::tablename());\r\n".
-                         "                    \$data              = UtilExcel::exceltoArray(\$uploadPath.\$result['file_name'],\$arr_import_header);\r\n".
+                         "                    \$data              = UtilExcel::exceltoArray(\$uploadPath,\$arr_import_header);\r\n".
                          "                    \$result=false;\r\n".
                          "                    foreach (\$data as \${$instance_name}) {\r\n".
                          "                        \${$instance_name}=new {$classname}(\${$instance_name});\r\n".
@@ -736,6 +740,72 @@ class AutoCodeService extends AutoCode
         $result.="?>";
         return $result;
     }    
+    
+    /**
+     * 将表列为上传图片路径类型的列提供上传图片的功能 
+     * @param string $instance_name 实体变量    
+     * @param array $fieldInfo 表列信息列表    
+     */
+    private static function imageUploadInExtService($instance_name,$fieldInfo)
+    {
+        $result="";   
+        foreach ($fieldInfo as $fieldname=>$field){
+            $isImage =self::columnIsImage($fieldname,$field["Comment"]);
+            if ($isImage){                                           
+                $result.="        if (!empty(\$_FILES)){\r\n".
+                         "            \$result=\$this->uploadImg(\$_FILES);\r\n".
+                         "            if (\$result&&(\$result['success']==true)){\r\n".   
+                         "                if (array_key_exists('file_name',\$result)){ \r\n".
+                         "                    \${$instance_name}[\"{$fieldname}\"]= \$result['file_name'];\r\n".            
+                         "                }\r\n".
+                         "            }else{\r\n".            
+                         "                return \$result;\r\n".
+                         "            }\r\n".      
+                         "        }\r\n";
+            }
+        }   
+        return $result;
+    }
+    
+    /**
+     * 将表列为上传图片路径类型的列提供上传图片的函数,为图片上传功能提供支持 
+     * @param string $instance_name 实体变量    
+     * @param array $fieldInfo 表列信息列表
+     * @param string $object_desc     
+     */
+    private static function imageUploadFunctionInExtService($instance_name,$fieldInfo,$object_desc)
+    {
+        $result="";   
+        foreach ($fieldInfo as $fieldname=>$field){
+            $isImage =self::columnIsImage($fieldname,$field["Comment"]);
+            if ($isImage){                                            
+                $result.="\r\n".
+                         "    /**\r\n".
+                         "     * 上传{$object_desc}图片文件\r\n".
+                         "     */\r\n".     
+                         "    public function uploadImg(\$_FILES)\r\n".
+                         "    {\r\n". 
+                         "        \$diffpart=date(\"YmdHis\");\r\n".
+                         "        \$result=\"\";\r\n". 
+                         "        if (!empty(\$_FILES[\"imageUpload\"])){\r\n".
+                         "            \$tmptail = end(explode('.', \$_FILES[\"imageUpload\"][\"name\"]));\r\n". 
+                         "            \$uploadPath =GC::\$upload_path.\"images\\\\{$instance_name}\\\\\$diffpart.\$tmptail\";\r\n".
+                         "            \$result     =UtilFileSystem::uploadFile(\$_FILES,\$uploadPath,\"imageUpload\");\r\n". 
+                         "            if (\$result&&(\$result['success']==true)){\r\n".
+                         "                \$result['file_name']=\"product/\$diffpart.\$tmptail\";\r\n".    
+                         "            }else{\r\n".                     
+                         "                return array(\r\n".                     
+                         "                    'success' => true,\r\n".                     
+                         "                    'data'    => false\r\n".                     
+                         "                );\r\n".                     
+                         "            }\r\n".                         
+                         "        }\r\n".                                
+                         "        return \$result;\r\n".                                             
+                         "    }\r\n";
+            }
+        }   
+        return $result; 
+    }     
     
     /**
      * 将表列为bit类型的列转换成需要存储在数据库里的bool值 
