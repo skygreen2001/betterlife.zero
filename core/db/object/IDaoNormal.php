@@ -68,9 +68,13 @@ interface IDaoNormal {
      *      2.array("id"=>"1","name"=>"sky")<br/>
      *      3.允许对象如new User(id="1",name="green");<br/>
      * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
+     * @param string $sort 排序条件
+     * 示例如下：
+     *      1.id asc;
+     *      2.name desc;
      * @return 单个对象实体
      */
-    public function get_one($object, $filter=null);
+    public function get_one($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID);
 
     /**
      * 根据表ID主键获取指定的对象[ID对应的表列]

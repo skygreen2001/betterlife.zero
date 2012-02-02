@@ -265,9 +265,13 @@ class Dao_Postgres extends Dao implements IDaoNormal {
      *      2.array("id"=>"1","name"=>"sky")<br/>
      *      3.允许对象如new User(id="1",name="green");<br/>
      * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
+     * @param string $sort 排序条件
+     * 示例如下：
+     *      1.id asc;
+     *      2.name desc;
      * @return 单个对象实体
      */
-    public function get_one($object, $filter=null) {
+    public function get_one($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID) {
         $result=null;
         try {
             if (!$this->validParameter($object)) {
@@ -278,9 +282,10 @@ class Dao_Postgres extends Dao implements IDaoNormal {
             $_SQL->isPreparedStatement=true;     
             $this->saParams=$_SQL->parseValidInputParam($filter);
             $_SQL->isPreparedStatement=false;     
-            $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID;            
-            $realIdName=$this->sql_id($object);
-            $sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);
+            if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){                
+                $realIdName=$this->sql_id($object);
+                $sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);            
+            }
             $this->sQuery=$_SQL->select()->from($this->classname)->where($this->saParams)->order($sort)->result();
             $this->executeSQL();
             $result=$this->getResultToObjects($object);

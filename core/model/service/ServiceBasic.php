@@ -84,10 +84,10 @@ class ServiceBasic extends Service implements IServiceBasic
     }
     
     /**
-    * 由标识删除指定ID数据对象   
-    * @param int $id 数据对象标识 
-    * @return boolen 是否删除成功；true为操作正常\r\n".
-    */
+     * 由标识删除指定ID数据对象   
+     * @param int $id 数据对象标识 
+     * @return boolen 是否删除成功；true为操作正常\r\n".
+     */
     public function deleteByID($id)
     {
         $dataobject_class=self::std($this->classname()); 
@@ -119,17 +119,18 @@ class ServiceBasic extends Service implements IServiceBasic
     } 
     
     /**
-    * 对属性进行递增
-    * @param string $filter 查询条件，在where后的条件<br/>
-    * 示例如下：<br/>
-    *      0."id=1,name='sky'"<br/>
-    *      1.array("id=1","name='sky'")<br/>
-    *      2.array("id"=>"1","name"=>"sky")<br/>
-    *      3.允许对象如new User(id="1",name="green");<br/>      
-    * @param string $property_name 属性名称
-    * @param int $incre_value 递增数  
-    * @return boolen 是否操作成功；true为操作正常    
-    */
+     * 对属性进行递增
+     * @param object|string|array $filter 查询条件，在where后的条件<br/>
+     * 示例如下：<br/>
+     *      0."id=1,name='sky'"<br/>
+     *      1.array("id=1","name='sky'")<br/>
+     *      2.array("id"=>"1","name"=>"sky")<br/>
+     *      3.允许对象如new User(id="1",name="green");<br/>     
+     * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/> 
+     * @param string $property_name 属性名称
+     * @param int $incre_value 递增数  
+     * @return boolen 是否操作成功；true为操作正常    
+     */
     public function increment($filter=null,$property_name,$incre_value)
     {            
         $dataobject_class=self::std($this->classname()); 
@@ -142,17 +143,18 @@ class ServiceBasic extends Service implements IServiceBasic
     }
     
     /**
-    * 对属性进行递减    
-    * @param string $filter 查询条件，在where后的条件<br/>
-    * 示例如下：<br/>
-    *      0."id=1,name='sky'"<br/>
-    *      1.array("id=1","name='sky'")<br/>
-    *      2.array("id"=>"1","name"=>"sky")<br/>
-    *      3.允许对象如new User(id="1",name="green");<br/>   
-    * @param string $property_name 属性名称
-    * @param int $decre_value 递减数
-    * @return boolen 是否操作成功；true为操作正常
-    */
+     * 对属性进行递减    
+     * @param object|string|array $filter 查询条件，在where后的条件<br/>
+     * 示例如下：<br/>
+     *      0."id=1,name='sky'"<br/>
+     *      1.array("id=1","name='sky'")<br/>
+     *      2.array("id"=>"1","name"=>"sky")<br/>
+     *      3.允许对象如new User(id="1",name="green");<br/>   
+     * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
+     * @param string $property_name 属性名称
+     * @param int $decre_value 递减数
+     * @return boolen 是否操作成功；true为操作正常
+     */
     public function decrement($filter=null,$property_name,$decre_value)
     {
         $dataobject_class=self::std($this->classname()); 
@@ -165,26 +167,26 @@ class ServiceBasic extends Service implements IServiceBasic
     }    
     
     /**
-    * 查询当前对象需显示属性的列表  
-    * @param string $columns 指定的显示属性，同SQL语句中的Select部分。 
-    * 示例如下：<br/>
-    *     id,name,commitTime                                                               
-    * @param mixed $filter 查询条件，在where后的条件<br/>
-    * 示例如下：<br/>
-    *      0."id=1,name='sky'"<br/>
-    *      1.array("id=1","name='sky'")<br/>
-    *      2.array("id"=>"1","name"=>"sky")<br/>
-    *      3.允许对象如new User(id="1",name="green");<br/>
-    * 默认:SQL Where条件子语句。如："(id=1 and name='sky') or (name like 'sky')"<br/>
-    * @param string $sort 排序条件<br/>
-    * 示例如下：<br/>
-    *      1.id asc;<br/>
-    *      2.name desc;<br/>
-    * @param string $limit 分页数目:同Mysql limit语法
-    * 示例如下：<br/>
-    *    0,10<br/>
-    * @return 对象列表数组
-    */
+     * 查询当前对象需显示属性的列表  
+     * @param string $columns 指定的显示属性，同SQL语句中的Select部分。 
+     * 示例如下：<br/>
+     *     id,name,commitTime                                                               
+     * @param object|string|array $filter 查询条件，在where后的条件<br/>
+     * 示例如下：<br/>
+     *      0."id=1,name='sky'"<br/>
+     *      1.array("id=1","name='sky'")<br/>
+     *      2.array("id"=>"1","name"=>"sky")<br/>
+     *      3.允许对象如new User(id="1",name="green");<br/>
+     * 默认:SQL Where条件子语句。如："(id=1 and name='sky') or (name like 'sky')"<br/>
+     * @param string $sort 排序条件<br/>
+     * 示例如下：<br/>
+     *      1.id asc;<br/>
+     *      2.name desc;<br/>
+     * @param string $limit 分页数目:同Mysql limit语法
+     * 示例如下：<br/>
+     *    0,10<br/>
+     * @return 对象列表数组
+     */
     public function select($columns,$filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null)
     {        
         $dataobject_class=self::std($this->classname()); 
@@ -199,7 +201,7 @@ class ServiceBasic extends Service implements IServiceBasic
     
     /**
      * 查询当前对象列表
-     * @param string $filter 查询条件，在where后的条件<br/>
+     * @param object|string|array $filter 查询条件，在where后的条件<br/>
      * 示例如下：<br/>
      *      0."id=1,name='sky'"<br/>
      *      1.array("id=1","name='sky'")<br/>
@@ -234,14 +236,18 @@ class ServiceBasic extends Service implements IServiceBasic
      *      1.array("id=1","name='sky'")<br/>
      *      2.array("id"=>"1","name"=>"sky")<br/>
      *      3.允许对象如new User(id="1",name="green");<br/>
-     * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
+     * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>  
+     * @param string $sort 排序条件<br/>
+     * 示例如下：<br/>
+     *      1.id asc;<br/>
+     *      2.name desc;<br/>
      * @return 单个对象实体
      */
-    public function get_one($filter=null)
+    public function get_one($filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)
     {
         $dataobject_class=self::std($this->classname()); 
         if (class_exists($dataobject_class)){      
-            return call_user_func($dataobject_class."::get_one",$filter);     
+            return call_user_func_array($dataobject_class."::get_one",array($filter,$sort));     
         }else{
             LogMe::log(Wl::ERROR_INFO_OBJECT_UNKNOWN);
             return null;
@@ -272,6 +278,7 @@ class ServiceBasic extends Service implements IServiceBasic
      *          1."id=1","name='sky'"<br/>
      *          2.array("id=1","name='sky'")<br/>
      *          3.array("id"=>"1","name"=>"sky")
+     * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
      * @return 数据对象总计数
      */
     public function count($filter=null) 
@@ -328,8 +335,8 @@ class ServiceBasic extends Service implements IServiceBasic
     } 
         
     /**
-    * 根据数据对象服务名称获取当前数据对象
-    */
+     * 根据数据对象服务名称获取当前数据对象
+     */
     private static function std($current_servicename)
     {          
         if (array_key_exists($current_servicename,self::$std)){
