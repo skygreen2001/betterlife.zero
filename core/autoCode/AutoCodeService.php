@@ -66,7 +66,7 @@ class AutoCodeService extends AutoCode
             $definePhpFileContent=self::tableToServiceDefine($tablename,$tableInfoList,$fieldInfos); 
             if (isset($definePhpFileContent)&&(!empty($definePhpFileContent))){
                $classname=self::saveServiceDefineToDir($tablename,$definePhpFileContent);
-               echo "生成导出完成:$tablename->$classname!<br/>";   
+               echo "生成导出完成:$tablename=>$classname!<br/>";   
             }else{
                echo $definePhpFileContent."<br/>";
             }         
@@ -574,12 +574,13 @@ class AutoCodeService extends AutoCode
                 //increment         
                 $result.="    /**\r\n".
                          "     * 对数据对象:{$object_desc}的属性进行递增\r\n".  
-                         "     * @param string \$filter 查询条件，在where后的条件<br/> \r\n".  
+                         "     * @param object|string|array \$filter 查询条件，在where后的条件<br/> \r\n".  
                          "     * 示例如下：<br/>\r\n".
                          "     * 0.\"id=1,name='sky'\"<br/>\r\n".
                          "     * 1.array(\"id=1\",\"name='sky'\")<br/> \r\n".  
                          "     * 2.array(\"id\"=>\"1\",\"name\"=>\"sky\")<br/>\r\n".
                          "     * 3.允许对象如new User(id=\"1\",name=\"green\");<br/>\r\n".
+                         "     * 默认:SQL Where条件子语句。如：\"(id=1 and name='sky') or (name like 'sky')\"<br/>\r\n".
                          "     * @param string \$property_name 属性名称 \r\n".  
                          "     * @param int \$incre_value 递增数 \r\n". 
                          "     * @return boolen 是否操作成功；true为操作正常\r\n".
@@ -591,12 +592,13 @@ class AutoCodeService extends AutoCode
                 //decrement         
                 $result.="    /**\r\n".
                          "     * 对数据对象:{$object_desc}的属性进行递减\r\n".  
-                         "     * @param string \$filter 查询条件，在where后的条件<br/> \r\n".  
+                         "     * @param object|string|array \$filter 查询条件，在where后的条件<br/> \r\n".  
                          "     * 示例如下：<br/>\r\n".
                          "     * 0.\"id=1,name='sky'\"<br/>\r\n".
                          "     * 1.array(\"id=1\",\"name='sky'\")<br/> \r\n".  
                          "     * 2.array(\"id\"=>\"1\",\"name\"=>\"sky\")<br/>\r\n".
                          "     * 3.允许对象如new User(id=\"1\",name=\"green\");<br/>\r\n".
+                         "     * 默认:SQL Where条件子语句。如：\"(id=1 and name='sky') or (name like 'sky')\"<br/>\r\n".
                          "     * @param string \$property_name 属性名称 \r\n".  
                          "     * @param int \$decre_value 递减数 \r\n". 
                          "     * @return boolen 是否操作成功；true为操作正常\r\n".
@@ -611,7 +613,7 @@ class AutoCodeService extends AutoCode
                          "     * @param string \$columns 指定的显示属性，同SQL语句中的Select部分。 \r\n".  
                          "     * 示例如下：<br/>\r\n".
                          "     *    id,name,commitTime\r\n". 
-                         "     * @param string \$filter 查询条件，在where后的条件<br/> \r\n".  
+                         "     * @param object|string|array \$filter 查询条件，在where后的条件<br/> \r\n".  
                          "     * 示例如下：<br/>\r\n".
                          "     * 0.\"id=1,name='sky'\"<br/>\r\n".
                          "     * 1.array(\"id=1\",\"name='sky'\")<br/> \r\n".  
@@ -634,7 +636,7 @@ class AutoCodeService extends AutoCode
                 //get         
                 $result.="    /**\r\n".
                          "     * 查询数据对象:{$object_desc}的列表\r\n".       
-                         "     * @param string \$filter 查询条件，在where后的条件<br/> \r\n".  
+                         "     * @param object|string|array \$filter 查询条件，在where后的条件<br/> \r\n".  
                          "     * 示例如下：<br/>\r\n".
                          "     * 0.\"id=1,name='sky'\"<br/>\r\n".
                          "     * 1.array(\"id=1\",\"name='sky'\")<br/> \r\n".  
@@ -657,18 +659,22 @@ class AutoCodeService extends AutoCode
                 //get_one         
                 $result.="    /**\r\n".
                          "     * 查询得到单个数据对象:{$object_desc}实体\r\n".       
-                         "     * @param string \$filter 查询条件，在where后的条件<br/> \r\n".  
+                         "     * @param object|string|array \$filter 查询条件，在where后的条件<br/> \r\n".  
                          "     * 示例如下：<br/>\r\n".
                          "     * 0.\"id=1,name='sky'\"<br/>\r\n".
                          "     * 1.array(\"id=1\",\"name='sky'\")<br/> \r\n".  
                          "     * 2.array(\"id\"=>\"1\",\"name\"=>\"sky\")<br/>\r\n".
                          "     * 3.允许对象如new User(id=\"1\",name=\"green\");<br/>\r\n".
                          "     * 默认:SQL Where条件子语句。如：\"(id=1 and name='sky') or (name like 'sky')\"<br/> \r\n". 
+                         "     * @param string \$sort 排序条件<br/>\r\n". 
+                         "     * 示例如下：<br/>\r\n".    
+                         "     *      1.id asc;<br/>\r\n". 
+                         "     *      2.name desc;<br/>\r\n". 
                          "     * @return 单个数据对象:{$object_desc}实体\r\n".
                          "     */\r\n";
-                $result.="    public function get_one(\$filter=null)\r\n".
+                $result.="    public function get_one(\$filter=null, \$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)\r\n".
                          "    {\r\n". 
-                         "        return $classname::get_one(\$filter);\r\n".
+                         "        return $classname::get_one(\$filter,\$sort);\r\n".
                          "    }\r\n\r\n";   
                 //get_by_id         
                 $result.="    /**\r\n".
@@ -683,7 +689,7 @@ class AutoCodeService extends AutoCode
                 //count         
                 $result.="    /**\r\n".
                          "     * 数据对象:{$object_desc}总计数\r\n".       
-                         "     * @param string \$filter 查询条件，在where后的条件<br/> \r\n".  
+                         "     * @param object|string|array \$filter 查询条件，在where后的条件<br/> \r\n".  
                          "     * 示例如下：<br/>\r\n".
                          "     * 0.\"id=1,name='sky'\"<br/>\r\n".
                          "     * 1.array(\"id=1\",\"name='sky'\")<br/> \r\n".  
@@ -701,7 +707,7 @@ class AutoCodeService extends AutoCode
                          "     * 数据对象:{$object_desc}分页查询\r\n". 
                          "     * @param int \$startPoint  分页开始记录数\r\n". 
                          "     * @param int \$endPoint    分页结束记录数\r\n".
-                         "     * @param string \$filter 查询条件，在where后的条件<br/> \r\n".  
+                         "     * @param object|string|array \$filter 查询条件，在where后的条件<br/> \r\n".  
                          "     * 示例如下：<br/>\r\n".
                          "     * 0.\"id=1,name='sky'\"<br/>\r\n".
                          "     * 1.array(\"id=1\",\"name='sky'\")<br/> \r\n".  

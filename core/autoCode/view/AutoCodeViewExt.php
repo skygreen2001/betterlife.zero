@@ -69,7 +69,7 @@ class AutoCodeViewExt extends AutoCode
       $defineJsFileContent=self::tableToViewJsDefine($tablename,$tableInfoList,$fieldInfo);
       if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($defineJsFileContent)){
         $jsName=self::saveJsDefineToDir($tablename,$defineJsFileContent);
-        echo "生成导出完成:$tablename->$jsName!<br/>";   
+        echo "生成导出完成:$tablename=>$jsName!<br/>";   
       }else{
         echo $defineJsFileContent."<br/>";
       }       
@@ -79,7 +79,7 @@ class AutoCodeViewExt extends AutoCode
       $defineTplFileContent=self::tableToViewTplDefine($fieldInfo);
       if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($defineTplFileContent)){
         $tplName=self::saveTplDefineToDir($tablename,$defineTplFileContent);
-        echo "生成导出完成:$tablename->$tplName!<br/>";   
+        echo "生成导出完成:$tablename=>$tplName!<br/>";   
       }else{
         echo $defineTplFileContent."<br/>";
       }   

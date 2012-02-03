@@ -54,10 +54,10 @@ class AutoCodeViewDefault extends AutoCode
             if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($defineTplFileContent)){
                 $filename="lists".Config_F::SUFFIX_FILE_TPL; 
                 $tplName=self::saveTplDefineToDir($tablename,$defineTplFileContent,$filename);
-                echo "生成导出完成:$tablename->$tplName!<br/>";  
+                echo "生成导出完成:$tablename=>$tplName!<br/>";  
                 $filename="view".Config_F::SUFFIX_FILE_TPL; 
                 $tplName=self::saveTplDefineToDir($tablename,$defineTplFileContent,$filename);
-            echo "生成导出完成:$tablename->$tplName!<br/>";  
+            echo "生成导出完成:$tablename=>$tplName!<br/>";  
             }else{
                 echo $defineTplFileContent."<br/>";
             }

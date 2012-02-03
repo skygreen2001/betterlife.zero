@@ -59,7 +59,7 @@ class AutoCodeDomain extends AutoCode
            $definePhpFileContent=self::tableToDataObjectDefine($tablename,$tableInfoList,$fieldInfo);
            if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($definePhpFileContent)){
                $classname=self::saveDataObjectDefineToDir($tablename,$definePhpFileContent);
-               echo "生成导出完成:$tablename->$classname!<br/>";   
+               echo "生成导出完成:$tablename=>$classname!<br/>";   
            }else{
                echo $definePhpFileContent."<br/>";
            }
@@ -171,7 +171,7 @@ class AutoCodeDomain extends AutoCode
                     $result.="    }\r\n\r\n";  
                     $result.="}\r\n".
                              "?>\r\n";
-                    self::$enumClass.="生成导出完成:".$tablename."[".$fieldname."]->".self::saveEnumDefineToDir($enumclassname,$result)."!<br/>";
+                    self::$enumClass.="生成导出完成:".$tablename."[".$fieldname."]=>".self::saveEnumDefineToDir($enumclassname,$result)."!<br/>";
                 }         
             }                     
         }
