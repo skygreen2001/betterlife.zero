@@ -111,7 +111,7 @@ class UtilPage {
     public function getEndPoint() 
     {
         return $this->endPoint;
-    }
+    }     
 
     /**
      * 生成导航条供页面使用

@@ -758,7 +758,7 @@ class AutoCodeService extends AutoCode
         foreach ($fieldInfo as $fieldname=>$field){
             $isImage =self::columnIsImage($fieldname,$field["Comment"]);
             if ($isImage){                                           
-                $result.="        if (!empty(\$_FILES)){\r\n".
+                $result.="        if (!empty(\$_FILES)&&!empty(\$_FILES[\"imageUpload\"][\"name\"])){\r\n".
                          "            \$result=\$this->uploadImg(\$_FILES);\r\n".
                          "            if (\$result&&(\$result['success']==true)){\r\n".   
                          "                if (array_key_exists('file_name',\$result)){ \r\n".
@@ -793,7 +793,7 @@ class AutoCodeService extends AutoCode
                          "    {\r\n". 
                          "        \$diffpart=date(\"YmdHis\");\r\n".
                          "        \$result=\"\";\r\n". 
-                         "        if (!empty(\$_FILES[\"imageUpload\"])){\r\n".
+                         "        if (!empty(\$_FILES[\"imageUpload\"])&&!empty(\$_FILES[\"imageUpload\"][\"name\"])){\r\n".
                          "            \$tmptail = end(explode('.', \$_FILES[\"imageUpload\"][\"name\"]));\r\n". 
                          "            \$uploadPath =GC::\$upload_path.\"images\\\\{$instance_name}\\\\\$diffpart.\$tmptail\";\r\n".
                          "            \$result     =UtilFileSystem::uploadFile(\$_FILES,\$uploadPath,\"imageUpload\");\r\n". 

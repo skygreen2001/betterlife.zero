@@ -29,7 +29,11 @@ class AutoCodeViewExt extends AutoCode
    * 查询过滤条件字段
    */
   public static $filter_fieldnames;
-
+  /**
+   * 数据对象关系显示字段 
+   * @var mixed
+   */
+  public static $relation_viewfield;   
   /**
    * 设置必需的路径
    */

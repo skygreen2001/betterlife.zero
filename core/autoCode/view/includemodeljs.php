@@ -740,6 +740,7 @@ $filterfilter
             $appName.$classname.View.Running.edit_window.$tableFieldIdName.setValue("");
 {$textareaCkeditor_Add}            
             $appName.$classname.View.Running.edit_window.show();   
+            $appName.$classname.View.Running.edit_window.maximize();               
         },   
         /**
          * 编辑{$table_comment}时先获得选中的{$table_comment}信息
@@ -754,7 +755,8 @@ $filterfilter
             $appName.$classname.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
             $appName.$classname.View.Running.edit_window.savetype=1;
 {$textareaCkeditor_Update}            
-            $appName.$classname.View.Running.edit_window.show();       
+            $appName.$classname.View.Running.edit_window.show();    
+            $appName.$classname.View.Running.edit_window.maximize();                  
         },        
         /**
          * 删除{$table_comment}
