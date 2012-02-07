@@ -25,7 +25,15 @@ class AutoCode extends Object
      * 生成源码[services|domain]所在目录名称
      */
     public static $dir_src="src";
-
+    /**
+     * 数据对象关系显示字段 
+     * @var mixed
+     */
+    public static $relation_viewfield;  
+    /**
+     * 获取类和注释的说明 
+     */
+    public static $class_comments; 
     /**
      * 从表名称获取对象的类名【头字母大写】。
      * @param string $tablename
@@ -60,6 +68,16 @@ class AutoCode extends Object
         return $classname;
     }
 
+    /**
+     * 从表名称获取对象类名的帮助说明。
+     * @param string $tablename
+     * @return string 返回对象的类名 
+     */
+    protected static function getClassComments($classname)
+    {
+        return self::$class_comments[$classname];     
+    }    
+    
     /**
      * 表中列的类型定义
      * @param string $type 

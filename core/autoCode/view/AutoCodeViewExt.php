@@ -26,14 +26,13 @@ class AutoCodeViewExt extends AutoCode
    */
   public static $menuconfig_dir_full;  
   /**
+   * 关系列显示发送ajax请求的配置完整的保存路径
+   */
+  public static $ajax_dir_full;  
+  /**
    * 查询过滤条件字段
    */
-  public static $filter_fieldnames;
-  /**
-   * 数据对象关系显示字段 
-   * @var mixed
-   */
-  public static $relation_viewfield;   
+  public static $filter_fieldnames;     
   /**
    * 设置必需的路径
    */
@@ -42,6 +41,7 @@ class AutoCodeViewExt extends AutoCode
     self::$app_dir="admin";  
     self::$view_dir_full=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR.Config_F::VIEW_VIEW.DIRECTORY_SEPARATOR.Gc::$self_theme_dir.DIRECTORY_SEPARATOR;
     self::$menuconfig_dir_full=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR."view".DIRECTORY_SEPARATOR."menu".DIRECTORY_SEPARATOR;
+    self::$ajax_dir_full=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR."httpdata".DIRECTORY_SEPARATOR;
     self::$view_core=self::$view_dir_full.Config_F::VIEW_CORE.DIRECTORY_SEPARATOR;
     self::$view_js_package=self::$view_dir_full."js".DIRECTORY_SEPARATOR."ext".DIRECTORY_SEPARATOR;  
   }   
@@ -54,20 +54,22 @@ class AutoCodeViewExt extends AutoCode
     self::pathset();
     $tableList=Manager_Db::newInstance()->dbinfo()->tableList();
     $fieldInfos=array();
+    $tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
     foreach ($tableList as $tablename){
       $fieldInfoList=Manager_Db::newInstance()->dbinfo()->fieldInfoList($tablename); 
       foreach($fieldInfoList as $fieldname=>$field){
         $fieldInfos[$tablename][$fieldname]["Field"]=$field["Field"];
         $fieldInfos[$tablename][$fieldname]["Type"]=$field["Type"];
-        $fieldInfos[$tablename][$fieldname]["Comment"]=$field["Comment"];
+        $fieldInfos[$tablename][$fieldname]["Comment"]=$field["Comment"];          
         if ($field["Null"]=='NO'){
           $fieldInfos[$tablename][$fieldname]["IsPermitNull"]=false; 
         }else{
           $fieldInfos[$tablename][$fieldname]["IsPermitNull"]=true;   
         }
-      }
-    }
-    $tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
+      }   
+      $classname=self::getClassname($tablename); 
+      self::$class_comments[$classname]=$tableInfoList[$tablename]["Comment"];      
+    }                                                                      
     echo UtilCss::form_css()."\r\n";
     foreach ($fieldInfos as $tablename=>$fieldInfo){
       $defineJsFileContent=self::tableToViewJsDefine($tablename,$tableInfoList,$fieldInfo);
@@ -87,8 +89,10 @@ class AutoCodeViewExt extends AutoCode
       }else{
         echo $defineTplFileContent."<br/>";
       }   
-    }        
-                              
+    }  
+    
+    self::tableToAjaxPhpDefine();
+                             
     /**
      * 需要在后端admin/src/view/menu目录下 菜单配置文件:menu.config.xml里添加的代码 
      */
@@ -118,7 +122,7 @@ class AutoCodeViewExt extends AutoCode
     $section_content=str_replace("<","&lt;",$section_content); 
     $section_content=str_replace(">","&gt;",$section_content); 
     $section_content=str_replace("\r\n","<br />",$section_content); 
-    echo  $section_content;    */
+    echo  $section_content;    */   
   }  
 
   /**
@@ -128,7 +132,46 @@ class AutoCodeViewExt extends AutoCode
   {
     parent::UserInput("使用ExtJs框架生成表示层【用于后台】的输出文件路径参数");  
   }
-                        
+  
+  /**
+   * 生成关系列Ajax请求php文件。
+   */
+  public static function tableToAjaxPhpDefine()
+  {            
+    echo "<br/><font color='#FF0000'>[生成关系列Ajax请求php文件]</font><br/>";           
+    foreach (self::$relation_viewfield as $relation_viewfield) {
+        foreach ($relation_viewfield as $key=>$showClasses) {
+            foreach ($showClasses as $key=>$value) {
+                $key_i=$key;
+                $key_i{0}=strtolower($key_i{0});
+                $result="<?php \r\n".                                  
+                         "require_once (\"../../../../init.php\"); \r\n".        
+                         "\$pageSize=15;\r\n".      
+                         "\${$value}   = !empty(\$_REQUEST['query'])&&(\$_REQUEST['query']!=\"?\")&&(\$_REQUEST['query']!=\"？\") ? trim(\$_REQUEST['query']) : \"\";\r\n".
+                         "\$condition=array();\r\n".             
+                         "if (!empty(\${$value})){\r\n".
+                         "    \$condition[\"{$value}\"]=\" like '%\${$value}%'\"; \r\n".
+                         "}\r\n".                                     
+                         "\$start=0;\r\n".
+                         "if (isset(\$_REQUEST['start'])){\r\n".
+                         "    \$start=\$_REQUEST['start']+1;\r\n".
+                         "}\r\n".
+                         "\$limit=\$pageSize;\r\n".
+                         "if (isset(\$_REQUEST['limit'])){\r\n".
+                         "    \$limit=\$_REQUEST['limit']; \r\n".
+                         "    \$limit= \$start+\$limit-1;\r\n".
+                         "}\r\n".                             
+                         "\$arr['totalCount']= {$key}::count(\$condition);\r\n".
+                         "\$arr['{$key_i}s']    = {$key}::queryPage(\$start,\$limit,\$condition);\r\n".
+                         "echo json_encode(\$arr);\r\n".
+                         "?>\r\n";   
+                $ajaxName=self::saveoAjaxPhpDefineToDir($key,$result);
+                echo "生成导出Ajax服务类PHP文件完成:$tablename=>$ajaxName".Config_F::SUFFIX_FILE_PHP."!<br/>";             
+            }                  
+        }              
+    }               
+  }
+                     
   /**
    * 将表列定义转换成使用ExtJs生成的表示层Js文件定义的内容
    * @param string $tablename 表名
@@ -154,8 +197,9 @@ class AutoCodeViewExt extends AutoCode
     $instancename=self::getInstancename($tablename);    
     $fields="";//Ext "store" 中包含的fields
     $appName=ucfirst($appName);
+    $relationStore="";//Ext "$relationStore="中关系库Store的定义
     foreach ($fieldInfo as $fieldname=>$field)
-    {
+    { 
       if (self::isNotColumnKeywork($fieldname))
       { 
         $datatype=self::comment_type($field["Type"]);
@@ -164,9 +208,45 @@ class AutoCodeViewExt extends AutoCode
         {
           $fields.=",dateFormat:'Y-m-d H:i:s'";
         }
-        $fields.="},\r\n";
+        $fields.="},\r\n"; 
+        if (array_key_exists($classname,self::$relation_viewfield)){
+            $relationSpecs=self::$relation_viewfield[$classname];  
+            if (array_key_exists($fieldname,$relationSpecs)){
+                $relationShow=$relationSpecs[$fieldname];
+                foreach ($relationShow as $key=>$value) {                  
+                    if (!array_key_exists($value,$fieldInfo)){              
+                        $fields.="                {name: '$value',type: 'string'},\r\n";  
+                    }
+                    $relation_classcomment=self::getClassComments($key);
+                    $relation_classcomment=str_replace("关系表","",$relation_classcomment); 
+                    if (contain($relation_classcomment,"\r")||contain($relation_classcomment,"\n")){
+                        $relation_classcomment=preg_split("/[\s,]+/", $relation_classcomment);    
+                        $relation_classcomment=$relation_classcomment[0]; 
+                    }   
+                    $key{0}=strtolower($key{0});
+                    $relationStore.=",\r\n".
+                                    "    /**\r\n".  
+                                    "     * {$relation_classcomment}\r\n".
+                                    "     */\r\n".
+                                    "    {$key}Store : new Ext.data.Store({\r\n".
+                                    "        proxy: new Ext.data.HttpProxy({\r\n".
+                                    "            url: 'home/admin/src/httpdata/{$key}.php'\r\n".
+                                    "        }),\r\n".
+                                    "        reader: new Ext.data.JsonReader({\r\n".
+                                    "            root: '{$key}s',\r\n".
+                                    "            autoLoad: true,\r\n".
+                                    "            totalProperty: 'totalCount',\r\n".
+                                    "            id: '$fieldname'\r\n".
+                                    "        }, [\r\n".
+                                    "            {name: '$fieldname', mapping: '$fieldname'}, \r\n".
+                                    "            {name: '$value', mapping: '$value'} \r\n".
+                                    "        ])\r\n".
+                                    "    })";                    
+                }  
+            }    
+        }        
       }
-    }
+    }        
     $fields=substr($fields,0,strlen($fields)-3);  
     $fieldLabels="";//Ext "EditWindow"里items的fieldLabels
     $tableFieldIdName;       
@@ -176,9 +256,56 @@ class AutoCodeViewExt extends AutoCode
     $textareaCkeditor_Save=""; 
     $textareaCkeditor_Reset="";
     foreach ($fieldInfo as $fieldname=>$field)
-    {             
+    {        
+      if (isset($ignord_field)&&($ignord_field==$fieldname)){
+          continue;
+      }     
       if (self::isNotColumnKeywork($fieldname))
-      { 
+      {      
+        if (array_key_exists($classname,self::$relation_viewfield)){
+            $relationSpecs=self::$relation_viewfield[$classname]; 
+            if (array_key_exists($fieldname,$relationSpecs)){
+                $relationShow=$relationSpecs[$fieldname];
+                foreach ($relationShow as $key=>$value) {     
+                    if (!array_key_exists($value,$fieldInfo)){
+                        $field_comment=$field["Comment"];    
+                    }else{                         
+                        $field_comment=$fieldInfo[$value]["Comment"];  
+                        $ignord_field=$value; 
+                    } 
+                    if (contain($field_comment,"\r")||contain($field_comment,"\n"))
+                    {
+                      $field_comment=preg_split("/[\s,]+/", $field_comment);    
+                      $field_comment=$field_comment[0]; 
+                    }                          
+                    $key{0}=strtolower($key{0});
+                    $fieldLabels.="                            {xtype: 'hidden',name : '$fieldname',id:'$fieldname'},\r\n".
+                                  "                            {\r\n".
+                                  "                                 fieldLabel : '{$field_comment}',xtype: 'combo',name : '$value',id : '$value',\r\n".
+                                  "                                 store:$appName.$classname.Store.{$key}Store,emptyText: '请选择{$field_comment}',itemSelector: 'div.search-item',\r\n".
+                                  "                                 loadingText: '查询中...',width: 570, pageSize:$appName.$classname.Config.PageSize,\r\n".
+                                  "                                 displayField:'$value',// 显示文本\r\n".
+                                  "                                 mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,\r\n".
+                                  "                                 forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,\r\n".
+                                  "                                 tpl:new Ext.XTemplate(\r\n".
+                                  "                                            '<tpl for=\".\"><div class=\"search-item\">',\r\n".
+                                  "                                                '<h3>{{$value}}</h3>',\r\n".
+                                  "                                            '</div></tpl>'\r\n".
+                                  "                                 ),\r\n".
+                                  "                                 onSelect:function(record,index){\r\n".
+                                  "                                     if(this.fireEvent('beforeselect', this, record, index) !== false){\r\n".
+                                  "                                        Ext.getCmp(\"$fieldname\").setValue(record.data.$fieldname);\r\n".
+                                  "                                        Ext.getCmp(\"$value\").setValue(record.data.$value);\r\n".
+                                  "                                        this.collapse();\r\n".
+                                  "                                     }\r\n".
+                                  "                                 }\r\n".
+                                  "                            },\r\n".
+                                  "";  
+                }
+                continue;
+            }      
+        }  
+          
         $column_type=self::column_type($field["Type"]);
         $isImage =self::columnIsImage($fieldname,$field["Comment"]);        
         if ($fieldname==self::keyIDColumn($classname))
@@ -278,7 +405,27 @@ class AutoCodeViewExt extends AutoCode
     $fieldLabels=substr($fieldLabels,0,strlen($fieldLabels)-3);  
     $viewdoblock="";//Ext "Tabs" 中"onAddItems"包含的viewdoblock
     foreach ($fieldInfo as $fieldname=>$field)
-    {
+    {       
+      if (array_key_exists($classname,self::$relation_viewfield)){
+        $relationSpecs=self::$relation_viewfield[$classname];  
+        if (array_key_exists($fieldname,$relationSpecs)){
+            $relationShow=$relationSpecs[$fieldname];
+            foreach ($relationShow as $key=>$value) { 
+                if (!array_key_exists($value,$fieldInfo)){
+                    $field_comment=$field["Comment"];   
+                    if (contain($field_comment,"\r")||contain($field_comment,"\n"))
+                    {
+                      $field_comment=preg_split("/[\s,]+/", $field_comment);    
+                      $field_comment=$field_comment[0]; 
+                    }              
+                    foreach ($relationShow as $key=>$value) {
+                        $viewdoblock.="                         '<div class=\"entry\"><span class=\"head\">$field_comment :</span><span class=\"content\">{{$value}}</span></div>',\r\n";
+                    }          
+                }       
+            }
+            continue; 
+        }
+      }           
       if (self::isNotColumnKeywork($fieldname))
       { 
         if ($fieldname==self::keyIDColumn($classname))
@@ -310,6 +457,26 @@ class AutoCodeViewExt extends AutoCode
     $columns="";//Ext "Grid" 中包含的columns
     foreach ($fieldInfo as $fieldname=>$field)
     {
+      if (array_key_exists($classname,self::$relation_viewfield)){
+        $relationSpecs=self::$relation_viewfield[$classname];  
+        if (array_key_exists($fieldname,$relationSpecs)){
+            $relationShow=$relationSpecs[$fieldname];
+            foreach ($relationShow as $key=>$value) {
+                if (!array_key_exists($value,$fieldInfo)){
+                    $field_comment=$field["Comment"];  
+                    if (contain($field_comment,"\r")||contain($field_comment,"\n"))
+                    {
+                      $field_comment=preg_split("/[\s,]+/", $field_comment);    
+                      $field_comment=$field_comment[0]; 
+                    }              
+                    foreach ($relationShow as $key=>$value) {
+                        $columns.="                        {header : '$field_comment',dataIndex : '{$value}'},\r\n";
+                    }
+                }
+            }
+            continue; 
+        }
+      } 
       if (self::isNotColumnKeywork($fieldname))
       {
         if ($fieldname==self::keyIDColumn($classname))
@@ -463,7 +630,20 @@ class AutoCodeViewExt extends AutoCode
     $dir      =self::$view_js_package.self::getInstancename($tablename).DIRECTORY_SEPARATOR;
     return self::saveDefineToDir($dir,$filename,$defineJsFileContent);
   }
-	   
+       
+  /**
+   * 保存生成的Ajax服务代码到指定命名规范的文件中  
+   * @param string $classname 类名称  
+   * @param string $defineAjaxPhpFileContent 生成的代码 
+   */
+  private static function saveoAjaxPhpDefineToDir($classname,$defineAjaxPhpFileContent)
+  { 
+    $classname{0}=strtolower($classname{0});  
+    $filename =$classname.Config_F::SUFFIX_FILE_PHP;  
+    $dir      =self::$ajax_dir_full;
+    return self::saveDefineToDir($dir,$filename,$defineAjaxPhpFileContent);
+  }  
+  
   /**
    * 保存生成的tpl代码到指定命名规范的文件中    
    * @param string $tablename 表名称  

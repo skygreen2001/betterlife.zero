@@ -72,7 +72,7 @@ $fields
                 }
             }
         }    
-    })   
+    })$relationStore      
 }
 /**
  * View:{$table_comment}显示组件   

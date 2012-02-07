@@ -435,6 +435,7 @@ class AutoCodeService extends AutoCode
                          "            if (\$limit>\$count)\$limit=\$count;\r\n".          
                          "            \$data =parent::queryPage(\$start,\$limit,\$condition);\r\n".   
                          self::enumKey2CommentInExtService($classname,$fieldInfo,"    "). 
+                         self::relationFieldShow($instance_name,$classname,$fieldInfo).
                          "            if (\$data==null)\$data=array();\r\n".          
                          "        }else{\r\n".        
                          "            \$data=array();\r\n".        
@@ -827,6 +828,34 @@ class AutoCodeService extends AutoCode
                 $result.="        if (isset(\${$instance_name}[\"$fieldname\"])&&(\${$instance_name}[\"$fieldname\"]=='1'))\${$instance_name}[\"$fieldname\"]=true; else \${$instance_name}[\"$fieldname\"]=false;\r\n";
             }
         }   
+        return $result;  
+    }
+   
+    /**
+     * 显示关系列
+     * @param mixed $instance_name 实体变量
+     * @param mixed $classname 数据对象列名
+     * @param mixed $fieldInfo 表列信息列表
+     */
+    private static function relationFieldShow($instance_name,$classname,$fieldInfo)
+    {
+        $result="";
+        if (array_key_exists($classname,self::$relation_viewfield)){ 
+            $relationSpecs=self::$relation_viewfield[$classname]; 
+            foreach ($fieldInfo as $fieldname=>$field){
+                if (array_key_exists($fieldname,$relationSpecs)){
+                    $relationShow=$relationSpecs[$fieldname];
+                    foreach ($relationShow as $key=>$value) {
+                        $i_name=$key;
+                        $i_name{0}=strtolower($i_name{0});
+                        $result.="            foreach (\$data as \$$instance_name) {\r\n";
+                        $result.="                \$$i_name=$key::get_by_id(\${$instance_name}->$fieldname);\r\n";
+                        $result.="                \$".$instance_name."['$value']=\${$i_name}->$value;\r\n";
+                        $result.="            }\r\n";    
+                    }                           
+                }    
+            } 
+        }
         return $result;  
     }
     
