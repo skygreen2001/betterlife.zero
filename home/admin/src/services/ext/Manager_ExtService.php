@@ -10,7 +10,18 @@
  */  
 class Manager_ExtService extends Manager 
 {        
+	private static $blogService;
+	/**
+	 * 提供服务:博客
+	 */
+	public static function blogService()
+	{
+		if (self::$blogService==null) {
+			self::$blogService=new ExtServiceBlog();
+		}
+		return self::$blogService;
+	}
 
-             
+			 
 }  
 ?>

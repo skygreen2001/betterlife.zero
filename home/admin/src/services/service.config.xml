@@ -1,47 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <services>
-    <service name="ServiceMenuGroup">  
-        <methods>        
-            <method name="save">
-                <param name="len">1</param>
-                <param name="formHandler">true</param>           
-            </method>    
-            <method name="update">
-                <param name="len">1</param>
-                <param name="formHandler">true</param>           
-            </method>    
-            <method name="delete">
-                <param name="len">1</param>    
-            </method>   
-            <method name="allMenuGroup">
-                <param name="len">0</param>              
-            </method>   
-        </methods>  
-    </service> 
-    
-    <service name="ServiceMenu">
-        <methods>     
-            <method name="save">
-                <param name="len">1</param>
-                <param name="formHandler">true</param>           
-            </method>    
-            <method name="update">
-                <param name="len">1</param>
-                <param name="formHandler">true</param>           
-            </method>    
-            <method name="delete">
-                <param name="len">1</param>    
-            </method>   
-            <method name="getMenusByGroupId">
-                <param name="len">1</param>    
-            </method>  
-            <method name="queryPageMenu">
-                <param name="len">1</param>             
-            </method>   
-            <method name="queryPageMenuForm">
-                <param name="len">1</param>
-                <param name="formHandler">true</param>           
-            </method>
-        </methods>
-    </service> 
+	<service name="ServiceMenuGroup">  
+		<methods>        
+			<method name="save">
+				<param name="len">1</param>
+				<param name="formHandler">true</param>           
+			</method>    
+			<method name="update">
+				<param name="len">1</param>
+				<param name="formHandler">true</param>           
+			</method>    
+			<method name="delete">
+				<param name="len">1</param>    
+			</method>   
+			<method name="allMenuGroup">
+				<param name="len">0</param>              
+			</method>   
+		</methods>  
+	</service> 
+	
+	<service name="ServiceMenu">
+		<methods>     
+			<method name="save">
+				<param name="len">1</param>
+				<param name="formHandler">true</param>           
+			</method>    
+			<method name="update">
+				<param name="len">1</param>
+				<param name="formHandler">true</param>           
+			</method>    
+			<method name="delete">
+				<param name="len">1</param>    
+			</method>   
+			<method name="getMenusByGroupId">
+				<param name="len">1</param>    
+			</method>  
+			<method name="queryPageMenu">
+				<param name="len">1</param>             
+			</method>   
+			<method name="queryPageMenuForm">
+				<param name="len">1</param>
+				<param name="formHandler">true</param>           
+			</method>
+		</methods>
+	</service>   
+
+	<service name="ExtServiceBlog">
+		<methods>
+			<method name="save">
+				<param name="len">1</param>
+				<param name="formHandler">true</param>
+			</method>
+			<method name="update">
+				<param name="len">1</param>
+				<param name="formHandler">true</param>
+			</method>
+			<method name="deleteByIds">
+				<param name="len">1</param>
+			</method>
+			<method name="queryPageBlog">
+				<param name="len">1</param>
+			</method>
+			<method name="exportBlog">
+				<param name="len">1</param>
+			</method>
+		</methods> 
+	</service>    
 </services>

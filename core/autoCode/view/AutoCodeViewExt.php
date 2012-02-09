@@ -32,7 +32,7 @@ class AutoCodeViewExt extends AutoCode
   /**
    * 查询过滤条件字段
    */
-  public static $filter_fieldnames;     
+  public static $filter_fieldnames=array();     
   /**
    * 设置必需的路径
    */
@@ -137,36 +137,42 @@ class AutoCodeViewExt extends AutoCode
    * 生成关系列Ajax请求php文件。
    */
   public static function tableToAjaxPhpDefine()
-  {            
+  {
+          
     echo "<br/><font color='#FF0000'>[生成关系列Ajax请求php文件]</font><br/>";           
     foreach (self::$relation_viewfield as $relation_viewfield) {
         foreach ($relation_viewfield as $key=>$showClasses) {
             foreach ($showClasses as $key=>$value) {
                 $key_i=$key;
                 $key_i{0}=strtolower($key_i{0});
-                $result="<?php \r\n".                                  
-                         "require_once (\"../../../../init.php\"); \r\n".        
-                         "\$pageSize=15;\r\n".      
-                         "\${$value}   = !empty(\$_REQUEST['query'])&&(\$_REQUEST['query']!=\"?\")&&(\$_REQUEST['query']!=\"？\") ? trim(\$_REQUEST['query']) : \"\";\r\n".
-                         "\$condition=array();\r\n".             
-                         "if (!empty(\${$value})){\r\n".
-                         "    \$condition[\"{$value}\"]=\" like '%\${$value}%'\"; \r\n".
-                         "}\r\n".                                     
-                         "\$start=0;\r\n".
-                         "if (isset(\$_REQUEST['start'])){\r\n".
-                         "    \$start=\$_REQUEST['start']+1;\r\n".
-                         "}\r\n".
-                         "\$limit=\$pageSize;\r\n".
-                         "if (isset(\$_REQUEST['limit'])){\r\n".
-                         "    \$limit=\$_REQUEST['limit']; \r\n".
-                         "    \$limit= \$start+\$limit-1;\r\n".
-                         "}\r\n".                             
-                         "\$arr['totalCount']= {$key}::count(\$condition);\r\n".
-                         "\$arr['{$key_i}s']    = {$key}::queryPage(\$start,\$limit,\$condition);\r\n".
-                         "echo json_encode(\$arr);\r\n".
-                         "?>\r\n";   
-                $ajaxName=self::saveoAjaxPhpDefineToDir($key,$result);
-                echo "生成导出Ajax服务类PHP文件完成:$tablename=>$ajaxName".Config_F::SUFFIX_FILE_PHP."!<br/>";             
+                $classname=$key;
+                $classname{0}=strtolower($classname{0});  
+                $filename =$classname.Config_F::SUFFIX_FILE_PHP;  
+                if (!file_exists(self::$ajax_dir_full.$filename)){                  
+                    $result="<?php \r\n".                                  
+                             "require_once (\"../../../../init.php\"); \r\n".        
+                             "\$pageSize=15;\r\n".      
+                             "\${$value}   = !empty(\$_REQUEST['query'])&&(\$_REQUEST['query']!=\"?\")&&(\$_REQUEST['query']!=\"？\") ? trim(\$_REQUEST['query']) : \"\";\r\n".
+                             "\$condition=array();\r\n".             
+                             "if (!empty(\${$value})){\r\n".
+                             "    \$condition[\"{$value}\"]=\" like '%\${$value}%'\"; \r\n".
+                             "}\r\n".                                     
+                             "\$start=0;\r\n".
+                             "if (isset(\$_REQUEST['start'])){\r\n".
+                             "    \$start=\$_REQUEST['start']+1;\r\n".
+                             "}\r\n".
+                             "\$limit=\$pageSize;\r\n".
+                             "if (isset(\$_REQUEST['limit'])){\r\n".
+                             "    \$limit=\$_REQUEST['limit']; \r\n".
+                             "    \$limit= \$start+\$limit-1;\r\n".
+                             "}\r\n".                             
+                             "\$arr['totalCount']= {$key}::count(\$condition);\r\n".
+                             "\$arr['{$key_i}s']    = {$key}::queryPage(\$start,\$limit,\$condition);\r\n".
+                             "echo json_encode(\$arr);\r\n".
+                             "?>\r\n";   
+                    $ajaxName=self::saveoAjaxPhpDefineToDir($key,$result);
+                    echo "生成导出Ajax服务类PHP文件完成:$tablename=>$ajaxName".Config_F::SUFFIX_FILE_PHP."!<br/>";  
+                }           
             }                  
         }              
     }               

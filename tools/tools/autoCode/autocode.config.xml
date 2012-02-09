@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<classes>
+	<class name="Blog">
+		<conditions>
+			<condition>name</condition>
+			<condition>content</condition>             
+		</conditions>
+		<relationShows> 
+			<show local_key="userId" relation_class="User">name</show> 
+		</relationShows> 
+	</class>     
+</classes>
