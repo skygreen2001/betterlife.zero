@@ -1,6 +1,9 @@
-1.��վ��ܷ�����ʽ�������������޷���������Css����Gzip��
-  ��ʾ��
-	���ݱ������
-	�޷���ʾ�����Բ鿴��ҳ�棬��Ϊ��ʹ������Ч���߲�֧�ֵ�ѹ����ʽ��
-��1.��������ļ����е�BOM
-    2.����PHP.ini���zlib output compression���á�
+1.网站框架访问样式不正常，发现无法正常加载Css或者Gzip；
+  提示：
+	内容编码错误
+	无法显示您尝试查看的页面，因为它使用了无效或者不支持的压缩格式。
+答：1.清除所有文件带有的BOM
+	2.反置PHP.ini里的zlib output compression设置。
+	
+2.Mysql数据库列字段名不能为desc关键字。
+	

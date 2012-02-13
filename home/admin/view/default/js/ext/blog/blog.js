@@ -163,13 +163,13 @@ Betterlife.Blog.View={
 				buttons : [ {         
 					text: "",ref : "../saveBtn",scope:this,
 					handler : function() {
-						if (!this.editForm.getForm().isValid()) {
-							return;
-						}
-						editWindow=this; 
 						if (CKEDITOR.instances.content){
 							this.editForm.content.setValue(CKEDITOR.instances.content.getData());
 						}                        
+						if (!this.editForm.getForm().isValid()) {
+							return;
+						}
+						editWindow=this;  
 						if (this.savetype==0){    
 							this.editForm.api.submit=ExtServiceBlog.save;                   
 							this.editForm.getForm().submit({
