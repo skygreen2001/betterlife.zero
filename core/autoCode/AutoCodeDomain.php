@@ -309,7 +309,8 @@ class AutoCodeDomain extends AutoCode
 			}
 		}
 		return $result;   
-	}     
+	}
+	
 	
 	/**
 	 * 在实体数据对象定义中定义枚举类型的显示
@@ -341,7 +342,8 @@ class AutoCodeDomain extends AutoCode
 			}
 		}
 		return $result;   
-	}   
+	}
+	
 
 	/**
 	 *从表名称获取子文件夹的信息。
