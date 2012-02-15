@@ -21,7 +21,7 @@
            <label>用户名</label><br/><input type="text" name="name" /><br/>
            <label>密码</label><br/><input type="password" name="password" /><br/>
         </div>
-        <input type="submit" name="Submit" value="登录" />
+        <input type="submit" name="Submit" value="登录" class="btnSubmit" />
         </form>
         <my:a href="{$url_base}index.php?go=betterlife.auth.register">注册</my:a>
     </div>
