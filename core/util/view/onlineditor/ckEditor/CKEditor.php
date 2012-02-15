@@ -356,9 +356,9 @@ class CKEditor
 	{
 		$out = "<script type=\"text/javascript\">";
 		$out .= "//<![CDATA[\n";
-		$out .= $js;
-		$out .= "\n//]]>";
-		$out .= "</script>\n";
+		$out .= "        ".$js;
+		$out .= "    \n    //]]>";
+		$out .= "    </script>\n";
 
 		return $out;
 	}
@@ -469,7 +469,7 @@ class CKEditor
 			$out .= $this->script("window.CKEDITOR_BASEPATH='". $ckeditorPath ."';");
 		}
 
-		$out .= "<script type=\"text/javascript\" src=\"" . $ckeditorPath . 'ckeditor.js' . $args . "\"></script>\n";
+		$out .= "    <script type=\"text/javascript\" src=\"" . $ckeditorPath . 'ckeditor.js' . $args . "\"></script>\n";
 
 		$extraCode = "";
 		if ($this->timestamp != self::timestamp) {

@@ -208,8 +208,13 @@ class AutoCodeViewExt extends AutoCode
 	{ 
 	  if (self::isNotColumnKeywork($fieldname))
 	  { 
-		$datatype=self::comment_type($field["Type"]);
-		$fields.="                {name: '$fieldname',type: '".$datatype."'";
+		$datatype=self::comment_type($field["Type"]);                             
+		$field_comment=$field["Comment"]; 
+		if (contains($field_comment,array("日期","时间")))
+		{
+			$datatype='date';        
+		}
+		$fields.="                {name: '$fieldname',type: '".$datatype."'"; 
 		if ($datatype=='date')
 		{
 		  $fields.=",dateFormat:'Y-m-d H:i:s'";
@@ -261,7 +266,7 @@ class AutoCodeViewExt extends AutoCode
 	$textareaCkeditor_Replace="";  
 	$textareaCkeditor_Save=""; 
 	$textareaCkeditor_Reset="";
-	$isFileUpload="";
+	$isFileUpload="";     
 	foreach ($fieldInfo as $fieldname=>$field)
 	{        
 	  if (isset($ignord_field)&&($ignord_field==$fieldname)){
@@ -353,7 +358,7 @@ class AutoCodeViewExt extends AutoCode
 			  $flName="name";  
 		  }          
 		  $fieldLabels.="                            {fieldLabel : '$field_comment$fr1',$flName : '$fieldname'$fr2"; 
-		  if ($datatype=='date')
+		  if (($datatype=='date')||contains($field_comment,array("日期","时间")))  
 		  {
 			$fieldLabels.=",xtype : 'datefield',format : \"Y-m-d\"";
 		  }          
@@ -446,9 +451,9 @@ class AutoCodeViewExt extends AutoCode
 		  $field_comment=preg_split("/[\s,]+/", $field_comment);    
 		  $field_comment=$field_comment[0]; 
 		}     
-		$datatype =self::comment_type($field["Type"]);
-		
-		if ($datatype=='date')
+		$datatype =self::comment_type($field["Type"]);    
+		$dateformat=""; 
+		if (($datatype=='date')||contains($field_comment,array("日期","时间")))
 		{
 			$dateformat=":date(\"Y-m-d\")";    
 		}
@@ -498,8 +503,8 @@ class AutoCodeViewExt extends AutoCode
 		  $field_comment=$field_comment[0]; 
 		}           
 		$datatype=self::comment_type($field["Type"]);
-		$columns.="                        {header : '$field_comment',dataIndex : '{$fieldname}'";
-		if ($datatype=='date')
+		$columns.="                        {header : '$field_comment',dataIndex : '{$fieldname}'";  
+		if (($datatype=='date')||contains($field_comment,array("日期","时间"))) 
 		{
 		  $columns.=",renderer:Ext.util.Format.dateRenderer('Y-m-d')";
 		}
@@ -534,7 +539,9 @@ class AutoCodeViewExt extends AutoCode
 		  $fname=$instancename_pre.$fieldname;
 		  $datatype=self::comment_type($field["Type"]);
 		  $filterFields.="                                '{$field_comment}　',";
-		  if ($datatype=='date'){
+
+		  if (($datatype=='date')||contains($field_comment,array("日期","时间")))
+		  {
 			$filterFields.="{xtype : 'datefield',ref: '../$fname',format : \"Y-m-d\"";
 		  }else{
 			$filterFields.="{ref: '../$fname'";
@@ -614,7 +621,7 @@ class AutoCodeViewExt extends AutoCode
 			 "    <div id=\"loading\">\r\n".    
 			 "        <div class=\"loading-indicator\"><img src=\"{$url_base}common/js/ajax/ext/resources/images/extanim32.gif\" width=\"32\" height=\"32\" style=\"margin-right:8px;\" align=\"absmiddle\"/>正在加载中...</div>\r\n".  
 			 "    </div>\r\n". 
-			 "   <div id=\"win1\" class=\"x-hide-display\"></div>\r\n";
+			 "    <div id=\"win1\" class=\"x-hide-display\"></div>\r\n";
 	foreach ($fieldInfo as $fieldname=>$field)
 	{                    
 		if (self::columnIsTextArea($fieldname,$field["Type"]))

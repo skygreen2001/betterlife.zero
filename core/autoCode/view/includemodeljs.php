@@ -108,7 +108,7 @@ $appName.$classname.View={
 						bodyStyle : 'padding:5px 5px 0',align : "center",
 						api : {},
 						defaults : {
-							xtype : 'textfield',anchor:'100%'
+							xtype : 'textfield',anchor:'98%'
 						},
 						items : [ 
 $fieldLabels        
@@ -117,12 +117,12 @@ $fieldLabels
 				],
 				buttons : [ {         
 					text: "",ref : "../saveBtn",scope:this,
-					handler : function() {
-{$textareaCkeditor_Save}                     
+					handler : function() {   
+{$textareaCkeditor_Save}         
 						if (!this.editForm.getForm().isValid()) {
 							return;
 						}
-						editWindow=this;         
+						editWindow=this;                   
 						if (this.savetype==0){    
 							this.editForm.api.submit=ExtService$classname.save;                   
 							this.editForm.getForm().submit({
