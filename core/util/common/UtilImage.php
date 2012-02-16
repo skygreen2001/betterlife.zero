@@ -176,18 +176,19 @@ class UtilImage
 	 * @static
 	 * @access public
 	 +----------------------------------------------------------
-	 * @param string $image  原图
-	 * @param string $type 图像格式
+	 * @param string $image  原图文件名          
 	 * @param string $thumbname 缩略图文件名 example d://abc.jpg 则指向d盘下面
+	 * @param string $type 图像格式.如:jpg,png,gif
 	 * @param string $maxWidth 宽度 若带"%"  则表示比例
 	 * @param string $maxHeight 高度
 	 * @param string $position 缩略图保存目录 //该参数为空
-	 * @param boolean $interlace 启用隔行扫描
+	 * @param boolean $interlace 启用隔行扫描,默认true
+	 * @param boolean $isStrict 是否严格按尺寸来缩放，默认false是取宽高中的最小值成比例缩放
 	 +----------------------------------------------------------
 	 * @return void
 	 +----------------------------------------------------------
 	 */
-	public static function thumb($image,$thumbname,$type='',$maxWidth=200,$maxHeight=50,$interlace=true) 
+	public static function thumb($image,$thumbname,$type='',$maxWidth=200,$maxHeight=50,$interlace=true,$isStrict=false) 
 	{
 		// 获取原图信息
 		$info  = self::getImageInfo($image);
@@ -216,14 +217,19 @@ class UtilImage
 			else
 				$mHeight=$maxHeight;           
 			$scale = min($mWidth/$srcWidth, $mHeight/$srcHeight); // 计算缩放比例
-			if($scale>=1) {
-				// 超过原图大小不再缩略
-				$width   =  $srcWidth;
-				$height  =  $srcHeight;
-			}else {
-				// 缩略图尺寸
-				$width  = (int)($srcWidth*$scale);
-				$height = (int)($srcHeight*$scale);
+			if ($isStrict){
+				$width   =  $mWidth;
+				$height  =  $mHeight;
+			}else{
+				if($scale>=1) {
+					// 超过原图大小不再缩略
+					$width   =  $srcWidth;
+					$height  =  $srcHeight;
+				}else {
+					// 缩略图尺寸
+					$width  = (int)($srcWidth*$scale);
+					$height = (int)($srcHeight*$scale);
+				}
 			}
 
 			// 载入原图
