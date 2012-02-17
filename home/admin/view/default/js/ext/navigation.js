@@ -29,21 +29,21 @@ Bb.Navigaion.AddTab = function(contentPanel, title, html, id) {
 					closable : true
 				}).show();
 	}
-}
+};
 
 /**
  * 页面导航在Tab内嵌一个Ifame组件
  */
 Bb.Navigaion.IFrameComponent = Ext.extend(Ext.BoxComponent, {
-			onRender : function(ct, position) {
-				this.el = ct.createChild({
-							tag : 'iframe',
-							id : 'iframe-' + this.id,
-							frameBorder : 0,
-							src : this.url
-						});
-			}
-		});
+	onRender : function(ct, position) {
+		this.el = ct.createChild({
+					tag : 'iframe',
+					id : 'iframe-' + this.id,
+					frameBorder : 0,
+					src : this.url
+				});
+	}
+});
 
 /**
  * 根据指定的Url在指定的TabPanel组件上添加Tab 【如果已经添加了则激活该Tab】
@@ -101,7 +101,7 @@ Bb.Navigaion.AddTabbyUrl = function(contentPanel, title, url, id) {
 			}).show();
 		}
 	}
-}
+};
 
 /**
  * 改写超链接默认事件，使新打开的页面都显示在指定的TabPanel组件上。

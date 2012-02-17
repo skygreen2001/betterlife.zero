@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menuGroups>
 	<menuGroup id="nav" name="功能区" lang="en" iconCls="nav">
-		<menu name="博客" address="index.php?go=admin.index.blog" />
+		<menu name="博客" address="index.php?go=admin.index.blog" />                                                         
+		<menu name="Stumbleupon" address="http://www.stumbleupon.com/" />  
+		<menu name="cooliris" title="Media browser plug-in, mobile app, gallery builder" address="http://www.cooliris.com/" />  
 		<menu name="CSDN" address="http://www.csdn.net" />
 		<menu name="InfoQ" address="http://www.infoq.com" />
 		<menu name="PHP" address="http://www.php.net" />        
@@ -11,6 +13,7 @@
 		<menu name="C#" address="http://cplus.about.com/" />        
 	</menuGroup>
 	<menuGroup id="navdesign" lang="en" name="展示区" iconCls="navdesign">
+		<menu name="TOPIT" title="审美品位分享的产品" address="http://www.topit.me/" />   
 		<menu name="美图看看" title="美图看看网页版" address="http://xiuxiu.web.meitu.com/main.html" />
 		<menu name="Photoshop Online" address="http://www.photoshop.com/tools" />
 		<menu name="PhotoEditor" title="Pixlr Photo editor" address="http://pixlr.com/editor" />   

@@ -168,6 +168,28 @@ class UtilString extends Util
     public static function utf82gbk($string) 
     {
         return iconv("utf-8","gbk",$string);
+    }  
+     
+    /**
+     * 在线模式:移除js,css里所有的换行，注释和冗余的空格
+     */
+    public static function online_optimize($result)
+    {                             
+        $result=preg_replace("/(\/\/[\s\S]*?([\r]|[\n]))/", "",$result); //去掉js行注释如://   
+        $result=preg_replace("/(\/\*[\s\S]*?\*\/|[\r]|[\n]|[\r\n])/", "",$result);//去掉css注释如:/*   */        
+        $result=str_replace(array("\r\n","	","    ","\r", "\n", "\t"),"",$result);                      
+        /** 移除无需的空格 */        
+        $result = str_replace('{ ', '{', $result);
+        $result = str_replace(' }', '}', $result);
+        $result = str_replace('; ', ';', $result);
+        $result = str_replace(', ', ',', $result);
+        $result = str_replace(' {', '{', $result);
+        $result = str_replace('} ', '}', $result);
+        $result = str_replace(': ', ':', $result);    
+        $result = str_replace(' :', ':', $result);
+        $result = str_replace(' ,', ',', $result);
+        $result = str_replace(' ;', ';', $result);
+        return $result;
     }
                 
     /**
@@ -233,8 +255,8 @@ class UtilString extends Util
         }
         $re['utf-8']   = "/[\x01-\x7f]|[\xc2-\xdf][\x80-\xbf]|[\xe0-\xef][\x80-\xbf]{2}|[\xf0-\xff][\x80-\xbf]{3}/";
         $re['gb2312'] = "/[\x01-\x7f]|[\xb0-\xf7][\xa0-\xfe]/";
-        $re['gbk']	  = "/[\x01-\x7f]|[\x81-\xfe][\x40-\xfe]/";
-        $re['big5']	  = "/[\x01-\x7f]|[\x81-\xfe]([\x40-\x7e]|\xa1-\xfe])/";
+        $re['gbk']      = "/[\x01-\x7f]|[\x81-\xfe][\x40-\xfe]/";
+        $re['big5']      = "/[\x01-\x7f]|[\x81-\xfe]([\x40-\x7e]|\xa1-\xfe])/";
         preg_match_all($re[$charset], $str, $match);
         $slice = join("",array_slice($match[0], $start, $length));
         if($suffix) return $slice."…";
@@ -291,7 +313,7 @@ class UtilString extends Util
             }
         }
         return $str;
-    }
+    } 
 
     /**
      +----------------------------------------------------------<br/>

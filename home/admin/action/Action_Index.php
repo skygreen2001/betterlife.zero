@@ -55,13 +55,13 @@ class Action_Index extends ActionExt
 		$this->loadExtCss("index.css",true);    
 		if ($viewobject)
 		{
-			$this->loadExtJs("index.js");                                                                
+			$this->loadExtJs("index.js",true);                                                                
 			//核心功能:外观展示             
 			$this->loadExtJs("layout.js",true); 
 			//左侧菜单组生成显示
 			UtilJavascript::loadJsContentReady($viewobject,MenuGroup::viewForExtJs());  
 			//核心功能:导航[Tab新建窗口]
-			$this->loadExtJs("navigation.js");  
+			$this->loadExtJs("navigation.js",true);  
 		}
 		else
 		{
@@ -72,13 +72,13 @@ class Action_Index extends ActionExt
 			}else{
 				$module_templateurl_relative="js/ext4/";  
 			}                 
-			UtilJavascript::loadJs($templateurl.$module_templateurl_relative."index.js"); 
+			UtilJavascript::loadJs($templateurl.$module_templateurl_relative."index.js",true); 
 			//核心功能:外观展示
 			UtilJavascript::loadJs($templateurl.$module_templateurl_relative."layout.js",true);              
 			//左侧菜单组生成显示
 			UtilJavascript::loadJsContent(MenuGroup::viewForExtJs());  
 			//核心功能:导航[Tab新建窗口]
-			UtilJavascript::loadJs($templateurl.$module_templateurl_relative."navigation.js");      
+			UtilJavascript::loadJs($templateurl.$module_templateurl_relative."navigation.js",true);      
 		}
 	 }
 }
