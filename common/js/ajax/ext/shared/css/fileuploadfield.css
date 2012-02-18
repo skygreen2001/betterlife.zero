@@ -14,7 +14,7 @@
 .x-form-file-wrap .x-form-file {
 	position: absolute;
 	-moz-opacity: 0;
-/*    filter:alpha(opacity: 0);*/
+	filter:alpha(opacity: 0);/**不能移除，否则在IE6下显示上传的图标会有问题*/
 	opacity: 0;
 	z-index: 2;
 	height: 22px;
