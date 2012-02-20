@@ -273,11 +273,11 @@ Betterlife.Blog.View={
 				this.add(
 					{title: '基本信息',ref:'tabBlogDetail',iconCls:'tabs',
 					 tpl: [
-					  '<div class="viewdoblock">', 
-						 '<div class="entry"><span class="head">会员名 :</span><span class="content">{username}</span></div>',
-						 '<div class="entry"><span class="head">博客名称 :</span><span class="content">{name}</span></div>',
-						 '<div class="entry"><span class="head">博客内容 :</span><span class="content">{content}</span></div>',                      
-					 '</div>' 
+					  '<table class="viewdoblock">', 
+						 '<tr class="entry"><td class="head">会员名</td><td class="content">{username}</td></tr>',
+						 '<tr class="entry"><td class="head">博客名称</td><td class="content">{name}</td></tr>',
+						 '<tr class="entry"><td class="head">博客内容</td><td class="content">{content}</td></tr>',                      
+					 '</table>' 
 					 ]
 					}
 				);

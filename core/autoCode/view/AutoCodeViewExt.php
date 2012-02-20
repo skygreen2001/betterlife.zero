@@ -432,7 +432,7 @@ class AutoCodeViewExt extends AutoCode
 					  $field_comment=$field_comment[0]; 
 					}              
 					foreach ($relationShow as $key=>$value) {
-						$viewdoblock.="                         '<div class=\"entry\"><span class=\"head\">$field_comment :</span><span class=\"content\">{{$value}}</span></div>',\r\n";
+						$viewdoblock.="                         '<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$value}}</td></tr>',\r\n";
 					}          
 				}       
 			}
@@ -459,10 +459,10 @@ class AutoCodeViewExt extends AutoCode
 		}
 		$isImage =self::columnIsImage($fieldname,$field["Comment"]);   
 		if ($isImage){        
-			$viewdoblock.="                         '<div class=\"entry\"><span class=\"head\">{$field_comment}路径 :</span><span class=\"content\">{{$fieldname}}</span></div>',\r\n";
-			$viewdoblock.="                         '<div class=\"entry\"><span class=\"head\">$field_comment :</span><span class=\"content\"><img src=\"upload/images/{{$fieldname}}\" /></span></div>',\r\n";
+			$viewdoblock.="                         '<tr class=\"entry\"><td class=\"head\">{$field_comment}路径</td><td class=\"content\">{{$fieldname}}</td></tr>',\r\n";
+			$viewdoblock.="                         '<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\"><img src=\"upload/images/{{$fieldname}}\" /></td></tr>',\r\n";
 		}else{
-			$viewdoblock.="                         '<div class=\"entry\"><span class=\"head\">$field_comment :</span><span class=\"content\">{{$fieldname}{$dateformat}}</span></div>',\r\n";
+			$viewdoblock.="                         '<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$fieldname}{$dateformat}}</td></tr>',\r\n";
 		}
 	  }
 	}
