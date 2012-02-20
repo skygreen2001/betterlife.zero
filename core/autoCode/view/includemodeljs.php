@@ -224,9 +224,9 @@ $fieldLabels
 				this.add(
 					{title: '基本信息',ref:'tab{$classname}Detail',iconCls:'tabs',
 					 tpl: [
-					  '<div class="viewdoblock">', 
+					  '<table class="viewdoblock">', 
 $viewdoblock                      
-					 '</div>' 
+					 '</table>' 
 					 ]
 					}
 				);
@@ -242,7 +242,7 @@ $viewdoblock
 			constructor : function(config) { 
 				config = Ext.apply({
 					title:"查看{$table_comment}",constrainHeader:true,maximizable: true,minimizable : true, 
-					width : 600,height : 500,minWidth : 450,minHeight : 400,
+					width : 705,height : 500,minWidth : 450,minHeight : 400,
 					layout : 'fit',resizable:true,plain : true,bodyStYle : 'padding:5px;',
 					closeAction : "hide",
 					items:[new $appName.$classname.View.{$classname}View.Tabs({ref:'winTabs',tabPosition:'top'})],
