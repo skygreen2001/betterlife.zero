@@ -137,8 +137,7 @@ class AutoCodeViewExt extends AutoCode
    * 生成关系列Ajax请求php文件。
    */
   public static function tableToAjaxPhpDefine()
-  {
-		  
+  {  
 	echo "<br/><font color='#FF0000'>[生成关系列Ajax请求php文件]</font><br/>";           
 	foreach (self::$relation_viewfield as $relation_viewfield) {
 		foreach ($relation_viewfield as $key=>$showClasses) {
@@ -204,6 +203,7 @@ class AutoCodeViewExt extends AutoCode
 	$instancename=self::getInstancename($tablename);    
 	$fields="";//Ext "store" 中包含的fields
 	$appName=ucfirst($appName);
+	$appName_alias=ucfirst($appName_alias);
 	$relationStore="";//Ext "$relationStore="中关系库Store的定义
 	foreach ($fieldInfo as $fieldname=>$field)
 	{ 
@@ -295,8 +295,8 @@ class AutoCodeViewExt extends AutoCode
 					$fieldLabels.="                            {xtype: 'hidden',name : '$fieldname',id:'$fieldname'},\r\n".
 								  "                            {\r\n".
 								  "                                 fieldLabel : '{$field_comment}',xtype: 'combo',name : '$value',id : '$value',\r\n".
-								  "                                 store:$appName.$classname.Store.{$key}Store,emptyText: '请选择{$field_comment}',itemSelector: 'div.search-item',\r\n".
-								  "                                 loadingText: '查询中...',width: 570, pageSize:$appName.$classname.Config.PageSize,\r\n".
+								  "                                 store:$appName_alias.$classname.Store.{$key}Store,emptyText: '请选择{$field_comment}',itemSelector: 'div.search-item',\r\n".
+								  "                                 loadingText: '查询中...',width: 570, pageSize:$appName_alias.$classname.Config.PageSize,\r\n".
 								  "                                 displayField:'$value',// 显示文本\r\n".
 								  "                                 mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,\r\n".
 								  "                                 forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,\r\n".
@@ -332,7 +332,7 @@ class AutoCodeViewExt extends AutoCode
 		  $fieldLabels.="                            {fieldLabel : '{$table_comment}图片',name : 'imageUpload',ref:'../imageUpload',xtype:'fileuploadfield',\r\n".
 						"                             emptyText: '请上传{$table_comment}图片文件',buttonText: '',accept:'image/*',buttonCfg: {iconCls: 'upload-icon'}";
 		  $textareaCkeditor_Reset.="                        this.imageUpload.setValue(this.{$fieldname}.getValue());\r\n";
-		  $textareaCkeditor_Update.="            $appName.$classname.View.Running.edit_window.imageUpload.setValue($appName.$classname.View.Running.edit_window.{$fieldname}.getValue());\r\n";           
+		  $textareaCkeditor_Update.="            $appName_alias.$classname.View.Running.edit_window.imageUpload.setValue($appName_alias.$classname.View.Running.edit_window.{$fieldname}.getValue());\r\n";           
 		}else
 		{
 		  $datatype=self::comment_type($field["Type"]);
@@ -409,7 +409,7 @@ class AutoCodeViewExt extends AutoCode
 								   "                            this.editForm.$fieldname.setValue(CKEDITOR.instances.$fieldname.getData());\r\n". 
 								   "                        }\r\n";   
 			$textareaCkeditor_Reset.="                        if (CKEDITOR.instances.$fieldname){\r\n".
-									"                            CKEDITOR.instances.$fieldname.setData($appName.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n".                                     
+									"                            CKEDITOR.instances.$fieldname.setData($appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n".                                     
 									"                        }\r\n";                       
 																	
 		  }
