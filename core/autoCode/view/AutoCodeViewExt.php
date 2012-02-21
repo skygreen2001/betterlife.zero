@@ -464,9 +464,12 @@ class AutoCodeViewExt extends AutoCode
 			$dateformat=":date(\"Y-m-d\")";    
 		}
 		$isImage =self::columnIsImage($fieldname,$field["Comment"]);   
+		$column_type=self::column_type($field["Type"]); 
 		if ($isImage){        
 			$viewdoblock.="                         '<tr class=\"entry\"><td class=\"head\">{$field_comment}路径</td><td class=\"content\">{{$fieldname}}</td></tr>',\r\n";
 			$viewdoblock.="                         '<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\"><img src=\"upload/images/{{$fieldname}}\" /></td></tr>',\r\n";
+		}else if ($column_type=='bit'){      
+			$viewdoblock.="                         '<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\"><tpl if=\"{$fieldname} == true\">是</tpl><tpl if=\"{$fieldname} == false\">否</tpl></td></tr>',\r\n";
 		}else{
 			$viewdoblock.="                         '<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$fieldname}{$dateformat}}</td></tr>',\r\n";
 		}
