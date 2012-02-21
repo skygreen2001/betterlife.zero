@@ -215,11 +215,17 @@ class AutoCodeAction extends AutoCode
 				$result.="         \$this->ExtDirectMode();\r\n";
 				$result.="         \$this->ExtUpload();\r\n"; 
 				$result.="         \$this->loadExtJs('$instancename/$instancename.js');\r\n"; 
+				$isFirstTime=true;
 				foreach ($fieldInfo as $fieldname=>$field)
 				{                    
 					if (self::columnIsTextArea($fieldname,$field["Type"]))
 					{
-						$result.="         \$this->view->editorHtml=UtilCKEeditor::loadReplace(\"$fieldname\");\r\n"; 
+						if ($isFirstTime){
+							$result.="         \$this->view->editorHtml=UtilCKEeditor::loadReplace(\"$fieldname\");\r\n"; 
+							$isFirstTime=false;
+						}else{
+							$result.="         \$this->view->editorHtml=UtilCKEeditor::loadReplace(\"$fieldname\",false);\r\n"; 
+						}
 					}   
 				}
 				

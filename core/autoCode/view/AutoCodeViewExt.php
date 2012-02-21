@@ -393,28 +393,33 @@ class AutoCodeViewExt extends AutoCode
 		  if (self::columnIsTextArea($fieldname,$field["Type"]))
 		  {        
 			$fieldLabels.=",xtype : 'textarea',id:'$fieldname',ref:'$fieldname'";  
-			$textareaCkeditor_Replace=",\r\n".
-									  "                    afterrender:function(){\r\n". 
-									  "                        ckeditor_replace(); \r\n".   
-									  "                    }";
-			$textareaCkeditor_Add="            if (CKEDITOR.instances.$fieldname){\r\n".
+			if (empty($textareaCkeditor_Replace)){ 
+				$textareaCkeditor_Replace.="ckeditor_replace(); \r\n";
+			}else{
+				$textareaCkeditor_Replace.="                        ckeditor_replace_$fieldname(); \r\n";                  
+			}
+			$textareaCkeditor_Add.="            if (CKEDITOR.instances.$fieldname){\r\n".
 								  "                CKEDITOR.instances.$fieldname.setData(\"\");\r\n".   
-								  "            }"; 
+								  "            }\r\n"; 
 			$textareaCkeditor_Update.="            if (CKEDITOR.instances.$fieldname){\r\n".
-									 "                CKEDITOR.instances.$fieldname.setData(this.getSelectionModel().getSelected().data.$fieldname); \r\n".   
-									 "            }"; 
-			$textareaCkeditor_Save="                        if (CKEDITOR.instances.$fieldname){\r\n".
+									  "                CKEDITOR.instances.$fieldname.setData(this.getSelectionModel().getSelected().data.$fieldname); \r\n".   
+									  "            }\r\n"; 
+			$textareaCkeditor_Save.="                        if (CKEDITOR.instances.$fieldname){\r\n".
 								   "                            this.editForm.$fieldname.setValue(CKEDITOR.instances.$fieldname.getData());\r\n". 
-								   "                        }";   
+								   "                        }\r\n";   
 			$textareaCkeditor_Reset.="                        if (CKEDITOR.instances.$fieldname){\r\n".
 									"                            CKEDITOR.instances.$fieldname.setData($appName.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n".                                     
-									"                        }";                       
+									"                        }\r\n";                       
 																	
 		  }
 		}
 		$fieldLabels.="},\r\n"; 
 	  }      
 	}
+	$textareaCkeditor_Replace=",\r\n".
+							  "                    afterrender:function(){\r\n". 
+							  "                        $textareaCkeditor_Replace \r\n".   
+							  "                    }";    
 	$fieldLabels=substr($fieldLabels,0,strlen($fieldLabels)-3);  
 	$viewdoblock="";//Ext "Tabs" 中"onAddItems"包含的viewdoblock
 	foreach ($fieldInfo as $fieldname=>$field)
