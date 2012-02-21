@@ -107,13 +107,13 @@ class Gc
 	* 
 	* @var mixed
 	*/
-	public static $upload_url;//="http://localhost/ele/upload/";    
+	public static $upload_url;//="http://localhost/betterlife/upload/";    
 	/**
 	* 上传图片的路径 
 	* 
 	* @var mixed
 	*/
-	public static $upload_path;//="C:\\wamp\\www\\ele\\upload\\";    
+	public static $upload_path;//="C:\\wamp\\www\\betterlife\\upload\\";    
 	//</editor-fold>
 	
 	//<editor-fold desc="开发者使用设置">
@@ -124,6 +124,7 @@ class Gc
 	 * @static
 	 */
 	public static $appName="betterlife";
+	public static $appName_alias="Bb";//应用名的缩写，主要用在后台Extjs生成代码的命名空间缩写
 	
 	/**
 	 * 业务应用部署的根目录<br/>

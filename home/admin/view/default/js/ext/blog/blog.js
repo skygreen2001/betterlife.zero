@@ -1,6 +1,6 @@
 Ext.namespace("Betterlife.Admin.Blog");
-Betterlife = Betterlife.Admin.Blog;
-Betterlife.Blog={
+Bb = Betterlife.Admin.Blog;
+Bb.Blog={
 	/**
 	 * 全局配置
 	 */
@@ -36,18 +36,18 @@ Betterlife.Blog={
 	 * 初始化
 	 */
 	Init:function(){
-		if (Betterlife.Blog.Cookie.get('View.Direction')){
-			Betterlife.Blog.Config.View.Direction=Betterlife.Blog.Cookie.get('View.Direction');
+		if (Bb.Blog.Cookie.get('View.Direction')){
+			Bb.Blog.Config.View.Direction=Bb.Blog.Cookie.get('View.Direction');
 		}
-		if (Betterlife.Blog.Cookie.get('View.IsFix')!=null){
-			Betterlife.Blog.Config.View.IsFix=Betterlife.Blog.Cookie.get('View.IsFix');
+		if (Bb.Blog.Cookie.get('View.IsFix')!=null){
+			Bb.Blog.Config.View.IsFix=Bb.Blog.Cookie.get('View.IsFix');
 		}
 	}
 }; 
 /**
  * Model:数据模型   
  */
-Betterlife.Blog.Store = { 
+Bb.Blog.Store = { 
 	/**
 	 * 博客
 	 */ 
@@ -70,7 +70,7 @@ Betterlife.Blog.Store = {
 		listeners : {    
 			beforeload : function(store, options) {   
 				if (Ext.isReady) {  
-					Ext.apply(options.params, Betterlife.Blog.View.Running.blogGrid.filter);//保证分页也将查询条件带上  
+					Ext.apply(options.params, Bb.Blog.View.Running.blogGrid.filter);//保证分页也将查询条件带上  
 				}
 			}
 		}    
@@ -96,7 +96,7 @@ Betterlife.Blog.Store = {
 /**
  * View:博客显示组件   
  */
-Betterlife.Blog.View={ 
+Bb.Blog.View={ 
 	/**
 	 * 编辑窗口：新建或者修改博客
 	 */        
@@ -137,8 +137,8 @@ Betterlife.Blog.View={
 							{xtype: 'hidden',name : 'userId',id:'userId'},
 							{
 								 fieldLabel : '用户名',xtype: 'combo',name : 'username',id : 'username',
-								 store:Betterlife.Blog.Store.userStore,emptyText: '请选择用户',itemSelector: 'div.search-item',
-								 loadingText: '查询中...',width: 570, pageSize:Betterlife.Blog.Config.PageSize,
+								 store:Bb.Blog.Store.userStore,emptyText: '请选择用户',itemSelector: 'div.search-item',
+								 loadingText: '查询中...',width: 570, pageSize:Bb.Blog.Config.PageSize,
 								 displayField:'name',// 显示文本
 								 mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,
 								 forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,
@@ -175,7 +175,7 @@ Betterlife.Blog.View={
 							this.editForm.getForm().submit({
 								success : function(form, action) {
 									Ext.Msg.alert("提示", "保存成功！");
-									Betterlife.Blog.View.Running.blogGrid.doSelectBlog();
+									Bb.Blog.View.Running.blogGrid.doSelectBlog();
 									form.reset(); 
 									editWindow.hide();
 								},
@@ -188,7 +188,7 @@ Betterlife.Blog.View={
 							this.editForm.getForm().submit({
 								success : function(form, action) {
 									Ext.Msg.alert("提示", "修改成功！");
-									Betterlife.Blog.View.Running.blogGrid.doSelectBlog();
+									Bb.Blog.View.Running.blogGrid.doSelectBlog();
 									form.reset();
 									editWindow.hide();
 								},
@@ -206,14 +206,14 @@ Betterlife.Blog.View={
 				}, {
 					text : "重 置",ref:'../resetBtn',scope:this,
 					handler : function() {  
-						this.editForm.form.loadRecord(Betterlife.Blog.View.Running.blogGrid.getSelectionModel().getSelected());
+						this.editForm.form.loadRecord(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected());
 						if (CKEDITOR.instances.content){
-							CKEDITOR.instances.content.setData(Betterlife.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.content);
+							CKEDITOR.instances.content.setData(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.content);
 						} 
 					}                  
 				}]    
 			}, config);  
-			Betterlife.Blog.View.EditWindow.superclass.constructor.call(this, config);     
+			Bb.Blog.View.EditWindow.superclass.constructor.call(this, config);     
 		}
 	}),
 	/**
@@ -236,13 +236,13 @@ Betterlife.Blog.View={
 					listeners:{
 						beforetabchange:function(tabs,newtab,currentTab){  
 							if (tabs.tabFix==newtab){            
-								if (Betterlife.Blog.View.Running.blogGrid.getSelectionModel().getSelected()==null){
+								if (Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected()==null){
 									Ext.Msg.alert('提示', '请先选择博客！');
 									return false;
 								} 
-								Betterlife.Blog.Config.View.IsShow=1;
-								Betterlife.Blog.View.Running.blogGrid.showBlog();   
-								Betterlife.Blog.View.Running.blogGrid.tvpView.menu.mBind.setChecked(false);
+								Bb.Blog.Config.View.IsShow=1;
+								Bb.Blog.View.Running.blogGrid.showBlog();   
+								Bb.Blog.View.Running.blogGrid.tvpView.menu.mBind.setChecked(false);
 								return false;
 							}
 						}
@@ -251,14 +251,14 @@ Betterlife.Blog.View={
 						{title: '取消固定',ref:'tabFix',iconCls:'icon-fix'}
 					]
 				}, config);
-				Betterlife.Blog.View.BlogView.Tabs.superclass.constructor.call(this, config); 
+				Bb.Blog.View.BlogView.Tabs.superclass.constructor.call(this, config); 
 				this.onAddItems();
 			},
 			/**
 			 * 根据布局调整Tabs的宽度或者高度以及折叠
 			 */
 			enableCollapse:function(){
-				if ((Betterlife.Blog.Config.View.Direction==1)||(Betterlife.Blog.Config.View.Direction==2)){
+				if ((Bb.Blog.Config.View.Direction==1)||(Bb.Blog.Config.View.Direction==2)){
 					this.width =Ext.getBody().getViewSize().width;
 					this.height=Ext.getBody().getViewSize().height/2;
 				}else{
@@ -296,26 +296,26 @@ Betterlife.Blog.View={
 					width : 600,height : 500,minWidth : 450,minHeight : 400,
 					layout : 'fit',resizable:true,plain : true,bodyStYle : 'padding:5px;',
 					closeAction : "hide",
-					items:[new Betterlife.Blog.View.BlogView.Tabs({ref:'winTabs',tabPosition:'top'})],
+					items:[new Bb.Blog.View.BlogView.Tabs({ref:'winTabs',tabPosition:'top'})],
 					listeners: { 
 						minimize:function(w){
 							w.hide();
-							Betterlife.Blog.Config.View.IsShow=0;
-							Betterlife.Blog.View.Running.blogGrid.tvpView.menu.mBind.setChecked(true);
+							Bb.Blog.Config.View.IsShow=0;
+							Bb.Blog.View.Running.blogGrid.tvpView.menu.mBind.setChecked(true);
 						},
 						hide:function(w){
-							Betterlife.Blog.View.Running.blogGrid.tvpView.toggle(false);
+							Bb.Blog.View.Running.blogGrid.tvpView.toggle(false);
 						}   
 					},
 					buttons: [{
 						text: '新增',scope:this,
-						handler : function() {this.hide();Betterlife.Blog.View.Running.blogGrid.addBlog();}
+						handler : function() {this.hide();Bb.Blog.View.Running.blogGrid.addBlog();}
 					},{
 						text: '修改',scope:this,
-						handler : function() {this.hide();Betterlife.Blog.View.Running.blogGrid.updateBlog();}
+						handler : function() {this.hide();Bb.Blog.View.Running.blogGrid.updateBlog();}
 					}]
 				}, config);  
-				Betterlife.Blog.View.BlogView.Window.superclass.constructor.call(this, config);   
+				Bb.Blog.View.BlogView.Window.superclass.constructor.call(this, config);   
 			}        
 		})
 	},
@@ -370,7 +370,7 @@ Betterlife.Blog.View={
 										Ext.Msg.alert('成功', '上传成功');
 										uploadWindow.hide();
 										uploadWindow.uploadForm.upload_file.setValue('');
-										Betterlife.Blog.View.Running.blogGrid.doSelectBlog();
+										Bb.Blog.View.Running.blogGrid.doSelectBlog();
 									},
 									failure : function(form, action) {
 										Ext.Msg.alert('错误', action.result.msg);
@@ -387,7 +387,7 @@ Betterlife.Blog.View={
 						}
 					}]
 				}, config);  
-			Betterlife.Blog.View.UploadWindow.superclass.constructor.call(this, config);     
+			Bb.Blog.View.UploadWindow.superclass.constructor.call(this, config);     
 		}        
 	}),
 	/**
@@ -401,7 +401,7 @@ Betterlife.Blog.View={
 				 */
 				filter:null,
 				region : 'center',
-				store : Betterlife.Blog.Store.blogStore,
+				store : Bb.Blog.Store.blogStore,
 				sm : this.sm,
 				frame : true,trackMouseOver : true,enableColumnMove : true,columnLines : true,
 				loadMask : true,stripeRows : true,headerAsText : false,                
@@ -496,21 +496,21 @@ Betterlife.Blog.View={
 											{text:'下方',group:'mlayout',checked:true ,iconCls:'view-bottom',scope:this,handler:function(){this.onUpDown(2)}}, 
 											{text:'左侧',group:'mlayout',checked:false,iconCls:'view-left',scope:this,handler:function(){this.onUpDown(3)}},
 											{text:'右侧',group:'mlayout',checked:false,iconCls:'view-right',scope:this,handler:function(){this.onUpDown(4)}}, 
-											{text:'隐藏',group:'mlayout',checked:false,iconCls:'view-hide',scope:this,handler:function(){this.hideBlog();Betterlife.Blog.Config.View.IsShow=0;}},'-', 
-											{text: '固定',ref:'mBind',checked: true,scope:this,checkHandler:function(item, checked){this.onBindGrid(item, checked);Betterlife.Blog.Cookie.set('View.IsFix',Betterlife.Blog.Config.View.IsFix);}} 
+											{text:'隐藏',group:'mlayout',checked:false,iconCls:'view-hide',scope:this,handler:function(){this.hideBlog();Bb.Blog.Config.View.IsShow=0;}},'-', 
+											{text: '固定',ref:'mBind',checked: true,scope:this,checkHandler:function(item, checked){this.onBindGrid(item, checked);Bb.Blog.Cookie.set('View.IsFix',Bb.Blog.Config.View.IsFix);}} 
 										]}
 								},'-']}
 					)]
 				},                
 				bbar: new Ext.PagingToolbar({          
-					pageSize: Betterlife.Blog.Config.PageSize,
-					store: Betterlife.Blog.Store.blogStore,
+					pageSize: Bb.Blog.Config.PageSize,
+					store: Bb.Blog.Store.blogStore,
 					scope:this,autoShow:true,displayInfo: true,
 					displayMsg: '当前显示 {0} - {1}条记录/共 {2}条记录。',
 					emptyMsg: "无显示数据",
 					items: [
 						{xtype:'label', text: '每页显示'},
-						{xtype:'numberfield', value:Betterlife.Blog.Config.PageSize,minValue:1,width:35, 
+						{xtype:'numberfield', value:Bb.Blog.Config.PageSize,minValue:1,width:35, 
 							style:'text-align:center',allowBlank: false,
 							listeners:
 							{
@@ -518,11 +518,11 @@ Betterlife.Blog.View={
 									var num = parseInt(newValue);
 									if (isNaN(num) || !num || num<1)
 									{
-										num = Betterlife.Blog.Config.PageSize;
+										num = Bb.Blog.Config.PageSize;
 										Field.setValue(num);
 									}
 									this.ownerCt.pageSize= num;
-									Betterlife.Blog.Config.PageSize = num;
+									Bb.Blog.Config.PageSize = num;
 									this.ownerCt.ownerCt.doSelectBlog();
 								}, 
 								specialKey :function(field,e){
@@ -530,10 +530,10 @@ Betterlife.Blog.View={
 										var num = parseInt(field.getValue());
 										if (isNaN(num) || !num || num<1)
 										{
-											num = Betterlife.Blog.Config.PageSize;
+											num = Bb.Blog.Config.PageSize;
 										}
 										this.ownerCt.pageSize= num;
-										Betterlife.Blog.Config.PageSize = num;
+										Bb.Blog.Config.PageSize = num;
 										this.ownerCt.ownerCt.doSelectBlog();
 									}
 								}
@@ -545,9 +545,9 @@ Betterlife.Blog.View={
 			}, config);
 			//初始化显示博客列表
 			this.doSelectBlog();
-			Betterlife.Blog.View.Grid.superclass.constructor.call(this, config); 
+			Bb.Blog.View.Grid.superclass.constructor.call(this, config); 
 			//创建在Grid里显示的博客信息Tab页
-			Betterlife.Blog.View.Running.viewTabs=new Betterlife.Blog.View.BlogView.Tabs();
+			Bb.Blog.View.Running.viewTabs=new Bb.Blog.View.BlogView.Tabs();
 			this.addListener('rowdblclick', this.onRowDoubleClick);
 		},
 		/**
@@ -566,21 +566,21 @@ Betterlife.Blog.View={
 					this.grid.updateViewBlog();                     
 					if (sm.getCount() != 1){
 						this.grid.hideBlog();
-						Betterlife.Blog.Config.View.IsShow=0;
+						Bb.Blog.Config.View.IsShow=0;
 					}else{
-						if (Betterlife.Blog.View.IsSelectView==1){
-							Betterlife.Blog.View.IsSelectView=0;  
+						if (Bb.Blog.View.IsSelectView==1){
+							Bb.Blog.View.IsSelectView=0;  
 							this.grid.showBlog();   
 						}     
 					}    
 				},
 				rowdeselect: function(sm, rowIndex, record) {  
 					if (sm.getCount() != 1){
-						if (Betterlife.Blog.Config.View.IsShow==1){
-							Betterlife.Blog.View.IsSelectView=1;    
+						if (Bb.Blog.Config.View.IsShow==1){
+							Bb.Blog.View.IsSelectView=1;    
 						}             
 						this.grid.hideBlog();
-						Betterlife.Blog.Config.View.IsShow=0;
+						Bb.Blog.Config.View.IsShow=0;
 					}    
 				}
 			}
@@ -589,13 +589,13 @@ Betterlife.Blog.View={
 		 * 双击选行
 		 */
 		onRowDoubleClick:function(grid, rowIndex, e){  
-			if (!Betterlife.Blog.Config.View.IsShow){
+			if (!Bb.Blog.Config.View.IsShow){
 				this.sm.selectRow(rowIndex);
 				this.showBlog();
 				this.tvpView.toggle(true);
 			}else{
 				this.hideBlog();
-				Betterlife.Blog.Config.View.IsShow=0;
+				Bb.Blog.Config.View.IsShow=0;
 				this.sm.deselectRow(rowIndex);
 				this.tvpView.toggle(false);
 			}
@@ -605,17 +605,17 @@ Betterlife.Blog.View={
 		 */
 		onBindGrid:function(item, checked){ 
 			if (checked){             
-			   Betterlife.Blog.Config.View.IsFix=1; 
+			   Bb.Blog.Config.View.IsFix=1; 
 			}else{ 
-			   Betterlife.Blog.Config.View.IsFix=0;   
+			   Bb.Blog.Config.View.IsFix=0;   
 			}
 			if (this.getSelectionModel().getSelected()==null){
-				Betterlife.Blog.Config.View.IsShow=0;
+				Bb.Blog.Config.View.IsShow=0;
 				return ;
 			}
-			if (Betterlife.Blog.Config.View.IsShow==1){
+			if (Bb.Blog.Config.View.IsShow==1){
 			   this.hideBlog(); 
-			   Betterlife.Blog.Config.View.IsShow=0;
+			   Bb.Blog.Config.View.IsShow=0;
 			}
 			this.showBlog();   
 		},   
@@ -640,16 +640,16 @@ Betterlife.Blog.View={
 				var bcontent = this.topToolbar.bcontent.getValue();
 				this.filter       ={'name':bname,'content':bcontent};
 			}
-			var condition = {'start':0,'limit':Betterlife.Blog.Config.PageSize};
+			var condition = {'start':0,'limit':Bb.Blog.Config.PageSize};
 			Ext.apply(condition,this.filter);
 			ExtServiceBlog.queryPageBlog(condition,function(provider, response) {   
 				if (response.result.data) {   
 					var result           = new Array();
 					result['data']       =response.result.data; 
 					result['totalCount'] =response.result.totalCount;
-					Betterlife.Blog.Store.blogStore.loadData(result); 
+					Bb.Blog.Store.blogStore.loadData(result); 
 				} else {
-					Betterlife.Blog.Store.blogStore.removeAll();                        
+					Bb.Blog.Store.blogStore.removeAll();                        
 					Ext.Msg.alert('提示', '无符合条件的博客！');
 				}
 			});
@@ -660,29 +660,29 @@ Betterlife.Blog.View={
 		 * 1:上方,2:下方,0:隐藏。
 		 */
 		onUpDown:function(viewDirection){
-			Betterlife.Blog.Config.View.Direction=viewDirection; 
+			Bb.Blog.Config.View.Direction=viewDirection; 
 			switch(viewDirection){
 				case 1:
-					this.ownerCt.north.add(Betterlife.Blog.View.Running.viewTabs);
+					this.ownerCt.north.add(Bb.Blog.View.Running.viewTabs);
 					break;
 				case 2:
-					this.ownerCt.south.add(Betterlife.Blog.View.Running.viewTabs);
+					this.ownerCt.south.add(Bb.Blog.View.Running.viewTabs);
 					break;
 				case 3:
-					this.ownerCt.west.add(Betterlife.Blog.View.Running.viewTabs);
+					this.ownerCt.west.add(Bb.Blog.View.Running.viewTabs);
 					break;
 				case 4:
-					this.ownerCt.east.add(Betterlife.Blog.View.Running.viewTabs);
+					this.ownerCt.east.add(Bb.Blog.View.Running.viewTabs);
 					break;    
 			}  
-			Betterlife.Blog.Cookie.set('View.Direction',Betterlife.Blog.Config.View.Direction);
+			Bb.Blog.Cookie.set('View.Direction',Bb.Blog.Config.View.Direction);
 			if (this.getSelectionModel().getSelected()!=null){
-				if ((Betterlife.Blog.Config.View.IsFix==0)&&(Betterlife.Blog.Config.View.IsShow==1)){
+				if ((Bb.Blog.Config.View.IsFix==0)&&(Bb.Blog.Config.View.IsShow==1)){
 					this.showBlog();     
 				}
-				Betterlife.Blog.Config.View.IsFix=1;
-				Betterlife.Blog.View.Running.blogGrid.tvpView.menu.mBind.setChecked(true,true);  
-				Betterlife.Blog.Config.View.IsShow=0;
+				Bb.Blog.Config.View.IsFix=1;
+				Bb.Blog.View.Running.blogGrid.tvpView.menu.mBind.setChecked(true,true);  
+				Bb.Blog.Config.View.IsShow=0;
 				this.showBlog();     
 			}
 		}, 
@@ -692,52 +692,52 @@ Betterlife.Blog.View={
 		showBlog : function(){
 			if (this.getSelectionModel().getSelected()==null){
 				Ext.Msg.alert('提示', '请先选择博客！');
-				Betterlife.Blog.Config.View.IsShow=0;
+				Bb.Blog.Config.View.IsShow=0;
 				this.tvpView.toggle(false);
 				return ;
 			} 
-			if (Betterlife.Blog.Config.View.IsFix==0){
-				if (Betterlife.Blog.View.Running.view_window==null){
-					Betterlife.Blog.View.Running.view_window=new Betterlife.Blog.View.BlogView.Window();
+			if (Bb.Blog.Config.View.IsFix==0){
+				if (Bb.Blog.View.Running.view_window==null){
+					Bb.Blog.View.Running.view_window=new Bb.Blog.View.BlogView.Window();
 				}
-				if (Betterlife.Blog.View.Running.view_window.hidden){
-					Betterlife.Blog.View.Running.view_window.show();
-					Betterlife.Blog.View.Running.view_window.winTabs.hideTabStripItem(Betterlife.Blog.View.Running.view_window.winTabs.tabFix);   
+				if (Bb.Blog.View.Running.view_window.hidden){
+					Bb.Blog.View.Running.view_window.show();
+					Bb.Blog.View.Running.view_window.winTabs.hideTabStripItem(Bb.Blog.View.Running.view_window.winTabs.tabFix);   
 					this.updateViewBlog();
 					this.tvpView.toggle(true);
-					Betterlife.Blog.Config.View.IsShow=1;
+					Bb.Blog.Config.View.IsShow=1;
 				}else{
 					this.hideBlog();
-					Betterlife.Blog.Config.View.IsShow=0;
+					Bb.Blog.Config.View.IsShow=0;
 				}
 				return;
 			}
-			switch(Betterlife.Blog.Config.View.Direction){
+			switch(Bb.Blog.Config.View.Direction){
 				case 1:
-					if (!this.ownerCt.north.items.contains(Betterlife.Blog.View.Running.viewTabs)){
-						this.ownerCt.north.add(Betterlife.Blog.View.Running.viewTabs);
+					if (!this.ownerCt.north.items.contains(Bb.Blog.View.Running.viewTabs)){
+						this.ownerCt.north.add(Bb.Blog.View.Running.viewTabs);
 					}
 					break;
 				case 2:
-					if (!this.ownerCt.south.items.contains(Betterlife.Blog.View.Running.viewTabs)){
-						this.ownerCt.south.add(Betterlife.Blog.View.Running.viewTabs);
+					if (!this.ownerCt.south.items.contains(Bb.Blog.View.Running.viewTabs)){
+						this.ownerCt.south.add(Bb.Blog.View.Running.viewTabs);
 					}
 					break;
 				case 3:
-					if (!this.ownerCt.west.items.contains(Betterlife.Blog.View.Running.viewTabs)){
-						this.ownerCt.west.add(Betterlife.Blog.View.Running.viewTabs);
+					if (!this.ownerCt.west.items.contains(Bb.Blog.View.Running.viewTabs)){
+						this.ownerCt.west.add(Bb.Blog.View.Running.viewTabs);
 					}
 					break;
 				case 4:
-					if (!this.ownerCt.east.items.contains(Betterlife.Blog.View.Running.viewTabs)){
-						this.ownerCt.east.add(Betterlife.Blog.View.Running.viewTabs);
+					if (!this.ownerCt.east.items.contains(Bb.Blog.View.Running.viewTabs)){
+						this.ownerCt.east.add(Bb.Blog.View.Running.viewTabs);
 					}
 					break;    
 			}  
 			this.hideBlog();
-			if (Betterlife.Blog.Config.View.IsShow==0){
-				Betterlife.Blog.View.Running.viewTabs.enableCollapse();  
-				switch(Betterlife.Blog.Config.View.Direction){
+			if (Bb.Blog.Config.View.IsShow==0){
+				Bb.Blog.View.Running.viewTabs.enableCollapse();  
+				switch(Bb.Blog.Config.View.Direction){
 					case 1:
 						this.ownerCt.north.show();
 						break;
@@ -753,9 +753,9 @@ Betterlife.Blog.View={
 				}  
 				this.updateViewBlog();
 				this.tvpView.toggle(true);
-				Betterlife.Blog.Config.View.IsShow=1;
+				Bb.Blog.Config.View.IsShow=1;
 			}else{
-				Betterlife.Blog.Config.View.IsShow=0;
+				Bb.Blog.Config.View.IsShow=0;
 			}
 			this.ownerCt.doLayout();
 		},
@@ -767,8 +767,8 @@ Betterlife.Blog.View={
 			this.ownerCt.south.hide();
 			this.ownerCt.west.hide();   
 			this.ownerCt.east.hide(); 
-			if (Betterlife.Blog.View.Running.view_window!=null){
-				Betterlife.Blog.View.Running.view_window.hide();
+			if (Bb.Blog.View.Running.view_window!=null){
+				Bb.Blog.View.Running.view_window.hide();
 			}            
 			this.tvpView.toggle(false);
 			this.ownerCt.doLayout();
@@ -777,46 +777,46 @@ Betterlife.Blog.View={
 		 * 更新当前博客显示信息
 		 */
 		updateViewBlog : function() {
-			if (Betterlife.Blog.View.Running.view_window!=null){
-				Betterlife.Blog.View.Running.view_window.winTabs.tabBlogDetail.update(this.getSelectionModel().getSelected().data);
+			if (Bb.Blog.View.Running.view_window!=null){
+				Bb.Blog.View.Running.view_window.winTabs.tabBlogDetail.update(this.getSelectionModel().getSelected().data);
 			}
-			Betterlife.Blog.View.Running.viewTabs.tabBlogDetail.update(this.getSelectionModel().getSelected().data);
+			Bb.Blog.View.Running.viewTabs.tabBlogDetail.update(this.getSelectionModel().getSelected().data);
 		},
 		/**
 		 * 新建博客
 		 */
 		addBlog : function() {  
-			if (Betterlife.Blog.View.Running.edit_window==null){   
-				Betterlife.Blog.View.Running.edit_window=new Betterlife.Blog.View.EditWindow();   
+			if (Bb.Blog.View.Running.edit_window==null){   
+				Bb.Blog.View.Running.edit_window=new Bb.Blog.View.EditWindow();   
 			}     
-			Betterlife.Blog.View.Running.edit_window.resetBtn.setVisible(false);
-			Betterlife.Blog.View.Running.edit_window.saveBtn.setText('保 存');
-			Betterlife.Blog.View.Running.edit_window.setTitle('添加博客');
-			Betterlife.Blog.View.Running.edit_window.savetype=0;
-			Betterlife.Blog.View.Running.edit_window.id.setValue("");
+			Bb.Blog.View.Running.edit_window.resetBtn.setVisible(false);
+			Bb.Blog.View.Running.edit_window.saveBtn.setText('保 存');
+			Bb.Blog.View.Running.edit_window.setTitle('添加博客');
+			Bb.Blog.View.Running.edit_window.savetype=0;
+			Bb.Blog.View.Running.edit_window.id.setValue("");
 			if (CKEDITOR.instances.content){
 				CKEDITOR.instances.content.setData("");
 			}            
-			Betterlife.Blog.View.Running.edit_window.show();   
-			Betterlife.Blog.View.Running.edit_window.maximize();               
+			Bb.Blog.View.Running.edit_window.show();   
+			Bb.Blog.View.Running.edit_window.maximize();               
 		},   
 		/**
 		 * 编辑博客时先获得选中的博客信息
 		 */
 		updateBlog : function() {
-			if (Betterlife.Blog.View.Running.edit_window==null){   
-				Betterlife.Blog.View.Running.edit_window=new Betterlife.Blog.View.EditWindow();   
+			if (Bb.Blog.View.Running.edit_window==null){   
+				Bb.Blog.View.Running.edit_window=new Bb.Blog.View.EditWindow();   
 			}            
-			Betterlife.Blog.View.Running.edit_window.saveBtn.setText('修 改');
-			Betterlife.Blog.View.Running.edit_window.resetBtn.setVisible(true);
-			Betterlife.Blog.View.Running.edit_window.setTitle('修改博客');
-			Betterlife.Blog.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
-			Betterlife.Blog.View.Running.edit_window.savetype=1;
+			Bb.Blog.View.Running.edit_window.saveBtn.setText('修 改');
+			Bb.Blog.View.Running.edit_window.resetBtn.setVisible(true);
+			Bb.Blog.View.Running.edit_window.setTitle('修改博客');
+			Bb.Blog.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
+			Bb.Blog.View.Running.edit_window.savetype=1;
 			if (CKEDITOR.instances.content){
 				CKEDITOR.instances.content.setData(this.getSelectionModel().getSelected().data.content); 
 			}            
-			Betterlife.Blog.View.Running.edit_window.show();    
-			Betterlife.Blog.View.Running.edit_window.maximize();                  
+			Bb.Blog.View.Running.edit_window.show();    
+			Bb.Blog.View.Running.edit_window.maximize();                  
 		},        
 		/**
 		 * 删除博客
@@ -853,10 +853,10 @@ Betterlife.Blog.View={
 		 * 导入博客
 		 */
 		importBlog : function() { 
-			if (Betterlife.Blog.View.current_uploadWindow==null){   
-				Betterlife.Blog.View.current_uploadWindow=new Betterlife.Blog.View.UploadWindow();   
+			if (Bb.Blog.View.current_uploadWindow==null){   
+				Bb.Blog.View.current_uploadWindow=new Bb.Blog.View.UploadWindow();   
 			}     
-			Betterlife.Blog.View.current_uploadWindow.show();
+			Bb.Blog.View.current_uploadWindow.show();
 		}                
 	}),
 	/**
@@ -864,24 +864,24 @@ Betterlife.Blog.View={
 	 */
 	Panel:Ext.extend(Ext.form.FormPanel,{
 		constructor : function(config) {
-			Betterlife.Blog.View.Running.blogGrid=new Betterlife.Blog.View.Grid();           
-			if (Betterlife.Blog.Config.View.IsFix==0){
-				Betterlife.Blog.View.Running.blogGrid.tvpView.menu.mBind.setChecked(false,true);  
+			Bb.Blog.View.Running.blogGrid=new Bb.Blog.View.Grid();           
+			if (Bb.Blog.Config.View.IsFix==0){
+				Bb.Blog.View.Running.blogGrid.tvpView.menu.mBind.setChecked(false,true);  
 			}
 			config = Ext.apply({ 
 				region : 'center',layout : 'fit', frame:true,
 				items: {
 					layout:'border',
 					items:[
-						Betterlife.Blog.View.Running.blogGrid, 
+						Bb.Blog.View.Running.blogGrid, 
 						{region:'north',ref:'north',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true},
-						{region:'south',ref:'south',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true,items:[Betterlife.Blog.View.Running.viewTabs]}, 
+						{region:'south',ref:'south',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true,items:[Bb.Blog.View.Running.viewTabs]}, 
 						{region:'west',ref:'west',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true}, 
 						{region:'east',ref:'east',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true} 
 					]
 				}
 			}, config);   
-			Betterlife.Blog.View.Panel.superclass.constructor.call(this, config);  
+			Bb.Blog.View.Panel.superclass.constructor.call(this, config);  
 		}        
 	}),
 	/**
@@ -911,23 +911,23 @@ Betterlife.Blog.View={
  */
 Ext.onReady(function(){
 	Ext.QuickTips.init();
-	Ext.state.Manager.setProvider(Betterlife.Blog.Cookie);
+	Ext.state.Manager.setProvider(Bb.Blog.Cookie);
 	Ext.Direct.addProvider(Ext.app.REMOTING_API);     
-	Betterlife.Blog.Init();
+	Bb.Blog.Init();
 	/**
 	 * 博客数据模型获取数据Direct调用
 	 */        
-	Betterlife.Blog.Store.blogStore.proxy=new Ext.data.DirectProxy({ 
+	Bb.Blog.Store.blogStore.proxy=new Ext.data.DirectProxy({ 
 		api: {read:ExtServiceBlog.queryPageBlog}
 	});   
 	/**
 	 * 博客页面布局
 	 */
-	Betterlife.Blog.Viewport = new Ext.Viewport({
+	Bb.Blog.Viewport = new Ext.Viewport({
 		layout : 'border',
-		items : [new Betterlife.Blog.View.Panel()]
+		items : [new Bb.Blog.View.Panel()]
 	});
-	Betterlife.Blog.Viewport.doLayout();    
+	Bb.Blog.Viewport.doLayout();    
 	setTimeout(function(){
 		Ext.get('loading').remove();
 		Ext.get('loading-mask').fadeOut({

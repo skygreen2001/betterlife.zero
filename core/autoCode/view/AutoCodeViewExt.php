@@ -186,6 +186,7 @@ class AutoCodeViewExt extends AutoCode
    */
   public static function tableToViewJsDefine($tablename,$tableInfoList,$fieldInfo)
   {
+	$appName_alias=Gc::$appName_alias;
 	$appName=Gc::$appName;
 	if ($tableInfoList!=null&&count($tableInfoList)>0&&  array_key_exists("$tablename", $tableInfoList))
 	{
@@ -392,11 +393,11 @@ class AutoCodeViewExt extends AutoCode
 		  } 
 		  if (self::columnIsTextArea($fieldname,$field["Type"]))
 		  {        
-			$fieldLabels.=",xtype : 'textarea',id:'$fieldname',ref:'$fieldname'";  
+			$fieldLabels.=",xtype : 'textarea',id:'$fieldname',ref:'$fieldname'"; 
 			if (empty($textareaCkeditor_Replace)){ 
 				$textareaCkeditor_Replace.="ckeditor_replace(); \r\n";
 			}else{
-				$textareaCkeditor_Replace.="                        ckeditor_replace_$fieldname(); \r\n";                  
+				$textareaCkeditor_Replace.="                        ckeditor_replace_$fieldname(); \r\n";  				
 			}
 			$textareaCkeditor_Add.="            if (CKEDITOR.instances.$fieldname){\r\n".
 								  "                CKEDITOR.instances.$fieldname.setData(\"\");\r\n".   
