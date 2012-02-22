@@ -45,7 +45,7 @@
 		<div>
 			<font color="{$color|default:'white'}">{$message|default:""}</font><br/>
 			<h2>提交新评论</h2>                      
-			<form name="commentForm" method="POST">
+			<form name="commentForm" method="post">
 				我要发言: <br/><input type="hidden" name="id" value="{$post.id}"/>
 				{*<textarea name="comment" id="comment" style="width:700px;height:300px;visibility:hidden;"></textarea><br/>*}
 				{$editorHtml}<br/>     

@@ -30,7 +30,7 @@ div{
 	margin:15px;
 }
 
-div .post {
+div .block {
 	margin-top:10px;
 	border:1px solid #cfcfcf;
 	width:600px;
@@ -114,3 +114,55 @@ label {
 br {
 	clear:left;
 }
+
+/** 数据对象模板显示样式 */ 
+.block {
+	margin-top:10px;
+	border:1px solid #cfcfcf;
+	width:600px;
+	padding:10px;
+}
+.viewdoblock {  
+	width          : 98%;
+	border-collapse: collapse;      
+	margin         : 10px;         
+	border-left    : 1px solid #99BBE8; 
+	border-right   : 1px solid #99BBE8; 
+	border-top     : 5px solid #ccc; 
+	border-bottom  : 5px solid #ccc; 
+}
+.viewdoblock .entry{      
+	font-size:14px;   
+}
+.viewdoblock span{   
+}           
+.viewdoblock .head{   
+	width      :32%;             
+	text-align :right;
+	font-weight:bold;  
+	line-height        : 1.5em;    
+	padding-right      : 5px;    
+	border             : 1px solid #ccc ;          
+	border-bottom-width: 0px;   
+	border-left-width  : 0px;   
+}
+.viewdoblock .header{  
+	text-align :center;
+	font-weight:bold;  
+	line-height        : 1.5em;    
+	padding-right      : 5px;    
+	border             : 1px solid #ccc ;          
+	border-bottom-width: 0px;   
+	border-left-width  : 0px;   
+}
+.viewdoblock .content{    
+	line-height :1.5em;  
+	padding-left:20px;
+	border      : 1px solid #ccc ;    
+	border-bottom-width: 0px;   
+	border-right-width : 0px;    
+} 
+.viewdoblock .edit{
+	width: 800px;
+}
+/* END */

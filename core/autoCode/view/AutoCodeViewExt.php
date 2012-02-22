@@ -214,6 +214,9 @@ class AutoCodeViewExt extends AutoCode
 		if (contains($field_comment,array("日期","时间")))
 		{
 			$datatype='date';        
+		}            
+		if ($datatype=='enum'){
+			$datatype='string';
 		}
 		$fields.="                {name: '$fieldname',type: '".$datatype."'"; 
 		if ($datatype=='date')

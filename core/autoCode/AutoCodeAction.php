@@ -202,7 +202,8 @@ class AutoCodeAction extends AutoCode
 		$category  = Gc::$appName;              
 		$package   = self::$package_front;
 		$classname = self::getClassname($tablename);
-		$instancename=self::getInstancename($tablename);  
+		$instancename=self::getInstancename($tablename);
+		$appname_alias=strtolower(Gc::$appName_alias);  
 		$author    = self::$author;
 		switch (self::$type) {
 			case 2:  
@@ -252,16 +253,58 @@ class AutoCodeAction extends AutoCode
 						 "class Action_$classname extends Action\r\n".  
 						 "{\r\n".
 						 "    /**\r\n".
-						 "     * {$table_comment}列表页面\r\n".
+						 "     * {$table_comment}列表\r\n".
 						 "     */\r\n".
 						 "    public function lists()\r\n".
-						 "    {\r\n".
-						 "    }\r\n".
+						 "    {\r\n".               
+						 "        if (\$this->isDataHave(UtilPage::\$linkUrl_pageFlag)){\r\n". 
+						 "          \$nowpage=\$this->data[UtilPage::\$linkUrl_pageFlag];  \r\n".  
+						 "        }else{   \r\n". 
+						 "          \$nowpage=1; \r\n". 
+						 "        }\r\n". 
+						 "        \$count={$classname}::count();\r\n". 
+						 "        \${$appname_alias}_page=UtilPage::init(\$nowpage,\$count);\r\n". 
+						 "        \$this->view->count{$classname}s=\$count;\r\n". 
+						 "        \${$instancename}s = {$classname}::queryPage(\${$appname_alias}_page->getStartPoint(),\${$appname_alias}_page->getEndPoint());\r\n".
+						 "        \$this->view->set(\"{$instancename}s\",\${$instancename}s);\r\n". 
+						 "    }\r\n".           
 						 "    /**\r\n".
-						 "     * {$table_comment}详情页面\r\n".
+						 "     * 查看{$table_comment}\r\n".
 						 "     */\r\n".
 						 "    public function view()\r\n".
 						 "    {\r\n".
+						 "        \${$instancename}Id=\$this->data[\"id\"]; \r\n".       
+						 "        \${$instancename} = {$classname}::get_by_id(\${$instancename}Id); \r\n".          
+						 "        \$this->view->set(\"{$instancename}\",\${$instancename});\r\n".          
+						 "    }\r\n".     
+						 "    /**\r\n".
+						 "     * 编辑{$table_comment}\r\n".
+						 "     */\r\n".
+						 "    public function edit()\r\n".
+						 "    {\r\n".
+						 "        if (!empty(\$_POST)) {\r\n".       
+						 "            \${$instancename} = \$this->model->{$classname};\r\n".
+						 "            \$id= \${$instancename}->getId(); \r\n".         
+						 "            if (!empty(\$id)){\r\n".
+						 "              \${$instancename}->update(); \r\n".      
+						 "            }else{\r\n".
+						 "              \$id=\${$instancename}->save();  \r\n".         
+						 "            }\r\n".
+						 "            \$this->redirect(\"{$instancename}\",\"view\",\"id=\$id\");\r\n".                                     
+						 "        }else{\r\n".
+						 "            \${$instancename}Id=\$this->data[\"id\"];\r\n".                                                                                       
+						 "            \${$instancename} = {$classname}::get_by_id(\${$instancename}Id);\r\n".
+						 "            \$this->view->set(\"{$instancename}\",\${$instancename}); \r\n".                                                                                       
+						 "        }\r\n".                                                                                                                               
+						 "    }\r\n".
+						 "    /**\r\n".
+						 "     * 删除{$table_comment}\r\n".
+						 "     */\r\n".
+						 "    public function delete()\r\n".
+						 "    {\r\n".
+						 "        \${$instancename}Id=\$this->data[\"id\"]; \r\n".       
+						 "        \$isDelete = {$classname}::deleteByID(\${$instancename}Id); \r\n".          
+						 "        \$this->redirect(\"{$instancename}\",\"lists\",\$this->data);\r\n".          
 						 "    }\r\n".
 						 "}\r\n\r\n"; 
 				$result.="?>";  

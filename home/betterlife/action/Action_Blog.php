@@ -18,13 +18,13 @@ class Action_Blog extends Action
 
 		$count=Blog::count();
 		$bb_page=UtilPage::init($nowpage,$count); 
-		$posts = Blog::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());     
-		if(!$posts) {
+		$blogs = Blog::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());     
+		if(!$blogs) {
 			$this->redirect("blog","write");
 		}else {
 			$view=new View_Blog($this);
-			$view->posts=$posts;
-			$view->countPosts=$count;            
+			$view->blogs=$blogs;
+			$view->countBlogs=$count;            
 			$this->view->viewObject=$view;
 		}
 	}
@@ -110,11 +110,11 @@ class Action_Blog extends Action
 */
 class View_Blog extends ViewObject
 { 
-   public $post;   
-   public $posts;
-   public $countPosts;
-   public function count_comments($post_id){
-	 return Comment::count("blogId=".$post_id);   
+   public $blog;   
+   public $blogs;
+   public $countBlogs;
+   public function count_comments($blog_id){
+	 return Comment::count("blogId=".$blog_id);   
    }
 }
 ?>

@@ -9,101 +9,270 @@
  */
 class AutoCodeViewDefault extends AutoCode
 {
-    /**
-     * 表示层所在的目录
-     */
-    public static $view_core;
-    /**
-     * 表示层完整的保存路径
-     */
-    public static $view_dir_full;
-    /**
-     * 设置必需的路径
-     */
-    public static function pathset()
-    {    
-        self::$app_dir=Gc::$appName;               
-        self::$view_dir_full=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR.Config_F::VIEW_VIEW.DIRECTORY_SEPARATOR.Gc::$self_theme_dir.DIRECTORY_SEPARATOR.Config_F::VIEW_CORE.DIRECTORY_SEPARATOR;
-    }   
-                  
-    /**
-     * 自动生成代码-前端默认的表示层
-     */
-    public static function AutoCode()
-    {
-        self::pathset();
-        $tableList=Manager_Db::newInstance()->dbinfo()->tableList();
-        $fieldInfos=array();
-        foreach ($tableList as $tablename){
-            $fieldInfoList=Manager_Db::newInstance()->dbinfo()->fieldInfoList($tablename); 
-            foreach($fieldInfoList as $fieldname=>$field){
-                $fieldInfos[$tablename][$fieldname]["Field"]=$field["Field"];
-                $fieldInfos[$tablename][$fieldname]["Type"]=$field["Type"];
-                $fieldInfos[$tablename][$fieldname]["Comment"]=$field["Comment"];
-                if ($field["Null"]=='NO'){
-                    $fieldInfos[$tablename][$fieldname]["IsPermitNull"]=false; 
-                }else{
-                    $fieldInfos[$tablename][$fieldname]["IsPermitNull"]=true;   
-                }
-            }
-        }
-        $tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
-        echo UtilCss::form_css()."\r\n";
-        foreach ($fieldInfos as $tablename=>$fieldInfo){
-            $defineTplFileContent=self::tableToViewTplDefine($tablename,$tableInfoList,$fieldInfo);
-            if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($defineTplFileContent)){
-                $filename="lists".Config_F::SUFFIX_FILE_TPL; 
-                $tplName=self::saveTplDefineToDir($tablename,$defineTplFileContent,$filename);
-                echo "生成导出完成:$tablename=>$tplName!<br/>";  
-                $filename="view".Config_F::SUFFIX_FILE_TPL; 
-                $tplName=self::saveTplDefineToDir($tablename,$defineTplFileContent,$filename);
-            echo "生成导出完成:$tablename=>$tplName!<br/>";  
-            }else{
-                echo $defineTplFileContent."<br/>";
-            }
-        } 
-    }
+	/**
+	 * 表示层所在的目录
+	 */
+	public static $view_core;
+	/**
+	 * 表示层完整的保存路径
+	 */
+	public static $view_dir_full;	
+	/**
+	 * View生成tpl所在的应用名称，默认同网站应用的名称                          
+	 */
+	public static $appName;
+	/**
+	 * 设置必需的路径
+	 */
+	public static function pathset()
+	{    
+		self::$app_dir=Gc::$appName;              
+		self::$view_dir_full=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR.Config_F::VIEW_VIEW.DIRECTORY_SEPARATOR.Gc::$self_theme_dir.DIRECTORY_SEPARATOR.Config_F::VIEW_CORE.DIRECTORY_SEPARATOR;
+		if (empty(self::$appName)){
+			self::$appName=Gc::$appName;
+		}
+	}   
+				  
+	/**
+	 * 自动生成代码-前端默认的表示层
+	 */
+	public static function AutoCode()
+	{
+		self::pathset();
+		$tableList=Manager_Db::newInstance()->dbinfo()->tableList();
+		$fieldInfos=array();
+		foreach ($tableList as $tablename){
+			$fieldInfoList=Manager_Db::newInstance()->dbinfo()->fieldInfoList($tablename); 
+			foreach($fieldInfoList as $fieldname=>$field){
+				$fieldInfos[$tablename][$fieldname]["Field"]=$field["Field"];
+				$fieldInfos[$tablename][$fieldname]["Type"]=$field["Type"];
+				$fieldInfos[$tablename][$fieldname]["Comment"]=$field["Comment"];
+				if ($field["Null"]=='NO'){
+					$fieldInfos[$tablename][$fieldname]["IsPermitNull"]=false; 
+				}else{
+					$fieldInfos[$tablename][$fieldname]["IsPermitNull"]=true;   
+				}
+			}
+		}
+		$tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
+		echo UtilCss::form_css()."\r\n";
+		foreach ($fieldInfos as $tablename=>$fieldInfo){
+			$tpl_listsContent=self::tpl_lists($tablename,$tableInfoList,$fieldInfo);             
+			$filename="lists".Config_F::SUFFIX_FILE_TPL; 
+			$tplName=self::saveTplDefineToDir($tablename,$tpl_listsContent,$filename);
+			echo "生成导出完成:$tablename=>$tplName!<br/>";  
+			
+			$tpl_viewContent=self::tpl_view($tablename,$tableInfoList,$fieldInfo);  
+			$filename="view".Config_F::SUFFIX_FILE_TPL; 
+			$tplName=self::saveTplDefineToDir($tablename,$tpl_viewContent,$filename);
+			echo "生成导出完成:$tablename=>$tplName!<br/>";    
+			
+			$tpl_editContent=self::tpl_edit($tablename,$tableInfoList,$fieldInfo);  
+			$filename="edit".Config_F::SUFFIX_FILE_TPL; 
+			$tplName=self::saveTplDefineToDir($tablename,$tpl_editContent,$filename);
+			echo "生成导出完成:$tablename=>$tplName!<br/>";    
+		} 
+	}
 
-    /**
-     * 用户输入需求
-     */
-    public static function UserInput()
-    {
-        return parent::UserInput("默认生成前台所需的表示层页面[用于前台]的输出文件路径参数");  
-    }
+	/**
+	 * 用户输入需求
+	 */
+	public static function UserInput()
+	{
+		return parent::UserInput("默认生成前台所需的表示层页面[用于前台]的输出文件路径参数");  
+	} 
 
-    /**
-     * 将表列定义转换成使用ExtJs生成的表示层tpl文件定义的内容
-     * @param string $tablename 表名
-     * @param array $tableInfoList 表信息列表
-     * @param array $fieldInfo 表列信息列表
-     */
-    private static function tableToViewTplDefine($tablename,$tableInfoList,$fieldInfo)
-    {        
-        if ($tableInfoList!=null&&count($tableInfoList)>0&&  array_key_exists("$tablename", $tableInfoList)){
-            $table_comment=$tableInfoList[$tablename]["Comment"];
-        }else{
-            $table_comment="$tablename";
-        }   
-        $result="{extends file=\"\$templateDir/layout/normal/layout.tpl\"}\r\n".
-                "{block name=body}\r\n".
-                "$table_comment\r\n".
-                "{/block}";     
-        return $result;
-    }
+	/**
+	 * 将表列定义转换成表示层列表页面tpl文件定义的内容
+	 * @param string $tablename 表名
+	 * @param array $tableInfoList 表信息列表
+	 * @param array $fieldInfo 表列信息列表
+	 */
+	private static function tpl_lists($tablename,$tableInfoList,$fieldInfo)
+	{        
+		if ($tableInfoList!=null&&count($tableInfoList)>0&&  array_key_exists("$tablename", $tableInfoList)){
+			$table_comment=$tableInfoList[$tablename]["Comment"];
+		}else{
+			$table_comment="$tablename";
+		} 
+		$appname=self::$appName;  
+		$classname=self::getClassname($tablename);
+		$instancename=self::getInstancename($tablename);  
+		$fieldNameAndComments=array();                                                  		
+		foreach ($fieldInfo as $fieldname=>$field)
+		{                                                                                                                                                                                   
+			$field_comment=$field["Comment"];  
+			if (contain($field_comment,"\r")||contain($field_comment,"\n"))
+			{
+				$field_comment=preg_split("/[\s,]+/", $field_comment);    
+				$field_comment=$field_comment[0]; 
+			}   
+			$fieldNameAndComments[$fieldname]=$field_comment;   
+		}
+		$headers="";
+		$contents="";
+		foreach ($fieldNameAndComments as $key=>$value) {
+			if (self::isNotColumnKeywork($key)){
+				$headers.="            <th class=\"header\">$value</th>\r\n"; 			
+				$contents.="            <td class=\"content\">{\${$instancename}.$key}</td>\r\n";
+			}
+		}
+		if (!empty($headers)&&(strlen($headers)>2)){
+			$headers=substr($headers,0,strlen($headers)-2);
+			$contents=substr($contents,0,strlen($contents)-2);
+		}
+		$result = <<<LISTS
+<div class="block">  
+	<div><h1>{$table_comment}列表(共计{\$count{$classname}s}个)</h1></div>     
+	<table class="viewdoblock">
+		<tr class="entry">
+$headers                                  
+			<th class="header">操作</th>
+		</tr>       
+		{foreach item={$instancename} from=\${$instancename}s}     
+		<tr class="entry">                            
+$contents
+			<td class="content"><my:a href="{\$url_base}index.php?go={$appname}.{$instancename}.view&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{\$url_base}index.php?go={$appname}.{$instancename}.edit&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{\$url_base}index.php?go={$appname}.{$instancename}.delete&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}">删除</my:a></td>
+		</tr> 
+		{/foreach}                                                           
+	</table> 
+	&nbsp;&nbsp;<my:page src='{\$url_base}index.php?go={$appname}.{$instancename}.lists' /><br/>   
+	<div align="center"><my:a href='{\$url_base}index.php?go={$appname}.{$instancename}.edit&pageNo={\$smarty.get.pageNo|default:"1"}'>新建</my:a></div>    
+</div>
+LISTS;
+		$result=self::tableToViewTplDefine($result);
+		return $result;
+	}
+	
+	/**
+	 * 将表列定义转换成表示层列表页面tpl文件定义的内容
+	 * @param string $tablename 表名
+	 * @param array $tableInfoList 表信息列表
+	 * @param array $fieldInfo 表列信息列表
+	 */
+	private static function tpl_edit($tablename,$tableInfoList,$fieldInfo)
+	{     
+		if ($tableInfoList!=null&&count($tableInfoList)>0&&  array_key_exists("$tablename", $tableInfoList)){
+			$table_comment=$tableInfoList[$tablename]["Comment"];
+		}else{
+			$table_comment="$tablename";
+		} 
+		$appname=self::$appName;  
+		$classname=self::getClassname($tablename);
+		$instancename=self::getInstancename($tablename);  
+		$fieldNameAndComments=array();                                                          
+		foreach ($fieldInfo as $fieldname=>$field)
+		{                                                                                                                                                                                   
+			$field_comment=$field["Comment"];  
+			if (contain($field_comment,"\r")||contain($field_comment,"\n"))
+			{
+				$field_comment=preg_split("/[\s,]+/", $field_comment);    
+				$field_comment=$field_comment[0]; 
+			}   
+			$fieldNameAndComments[$fieldname]=$field_comment;   
+		}
+		$headerscontents="";  
+		$idColumnName="id";
+		foreach ($fieldNameAndComments as $key=>$value) {
+			$idColumnName=DataObjectSpec::getRealIDColumnName($classname);
+			if (self::isNotColumnKeywork($key)&&($idColumnName!=$key)){
+				$headerscontents.="        <tr class=\"entry\"><td class=\"head\">$value</th><td class=\"content\"><input type=\"text\" class=\"edit\" name=\"$key\" value=\"{\${$instancename}.$key}\"/></td></tr>\r\n";  
+			}
+		}
+		if (!empty($headerscontents)&&(strlen($headerscontents)>2)){
+			$headerscontents=substr($headerscontents,0,strlen($headerscontents)-2);   
+		}
+		$result = <<<EDIT
+ <div class="block">  
+	<div><h1>编辑{$table_comment}</h1></div>
+	<form name="{$instancename}Form" method="post"><input type="hidden" name="$idColumnName" value="{\${$instancename}.$idColumnName}"/>           
+	<table class="viewdoblock">                                                                                                                 
+$headerscontents       
+		<tr class="entry"><td class="content" colspan="2" align="center"><input type="submit" value="提交" class="btnSubmit" /></td></tr>
+	</table>
+	</form>                                                            
+	<div align="center"><my:a href='{\$url_base}index.php?go=$appname.{$instancename}.lists&pageNo={\$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{\$url_base}index.php?go=$appname.{$instancename}.view&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}'>查看{$table_comment}</my:a></div>    
+</div>
+EDIT;
+		$result=self::tableToViewTplDefine($result);
+		return $result;
+	}
 
-    /**
-     * 保存生成的tpl代码到指定命名规范的文件中       
-     * @param string $tablename 表名称    
-     * @param string $filename 文件名称
-     * @param string $defineTplFileContent 生成的代码 
-     */
-    private static function saveTplDefineToDir($tablename,$defineTplFileContent,$filename)
-    { 
-        $package =self::getInstancename($tablename);  
-        $dir=self::$view_dir_full.$package.DIRECTORY_SEPARATOR;
-        return self::saveDefineToDir($dir,$filename,$defineTplFileContent);
-    }
+	/**
+	 * 将表列定义转换成表示层列表页面tpl文件定义的内容
+	 * @param string $tablename 表名
+	 * @param array $tableInfoList 表信息列表
+	 * @param array $fieldInfo 表列信息列表
+	 */
+	private static function tpl_view($tablename,$tableInfoList,$fieldInfo)
+	{        
+		   
+		if ($tableInfoList!=null&&count($tableInfoList)>0&&  array_key_exists("$tablename", $tableInfoList)){
+			$table_comment=$tableInfoList[$tablename]["Comment"];
+		}else{
+			$table_comment="$tablename";
+		} 
+		$appname=self::$appName;  
+		$classname=self::getClassname($tablename);
+		$instancename=self::getInstancename($tablename);  
+		$fieldNameAndComments=array();                                                          
+		foreach ($fieldInfo as $fieldname=>$field)
+		{                                                                                                                                                                                   
+			$field_comment=$field["Comment"];  
+			if (contain($field_comment,"\r")||contain($field_comment,"\n"))
+			{
+				$field_comment=preg_split("/[\s,]+/", $field_comment);    
+				$field_comment=$field_comment[0]; 
+			}   
+			$fieldNameAndComments[$fieldname]=$field_comment;   
+		}            
+		$headerscontents="";  
+		foreach ($fieldNameAndComments as $key=>$value) {
+			if (self::isNotColumnKeywork($key)){
+				$headerscontents.="        <tr class=\"entry\"><td class=\"head\">$value</th><td class=\"content\">{\$$instancename.$key}</td></tr> \r\n";   
+			}
+		}
+		if (!empty($headerscontents)&&(strlen($headerscontents)>2)){
+			$headerscontents=substr($headerscontents,0,strlen($headerscontents)-2);  
+		}       
+		$result = <<<VIEW
+<div class="block">  
+	<div><h1>查看{$table_comment}</h1></div>     
+	<table class="viewdoblock">   
+$headerscontents         
+	</table>                                                            
+	<div align="center"><my:a href='{$url_base}index.php?go=$appname.{$instancename}.lists&pageNo={\$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{$url_base}index.php?go=$appname.{$instancename}.edit&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}'>修改{$table_comment}</my:a></div>    
+</div>
+VIEW;
+		$result=self::tableToViewTplDefine($result);
+		return $result;
+	}	
+	
+	/**
+	 * 将表列定义转换成表示层tpl文件定义的内容 
+	 * @param array $contents 页面内容
+	 */
+	private static function tableToViewTplDefine($contents)
+	{   
+		$result="{extends file=\"\$templateDir/layout/normal/layout.tpl\"}\r\n".
+				"{block name=body}\r\n".
+				"$contents\r\n".
+				"{/block}";     
+		return $result;
+	}  
+
+	/**
+	 * 保存生成的tpl代码到指定命名规范的文件中       
+	 * @param string $tablename 表名称    
+	 * @param string $filename 文件名称
+	 * @param string $defineTplFileContent 生成的代码 
+	 */
+	private static function saveTplDefineToDir($tablename,$defineTplFileContent,$filename)
+	{ 
+		$package =self::getInstancename($tablename);  
+		$dir=self::$view_dir_full.$package.DIRECTORY_SEPARATOR;
+		return self::saveDefineToDir($dir,$filename,$defineTplFileContent);
+	}
 }
 
 ?>
