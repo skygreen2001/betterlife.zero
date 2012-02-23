@@ -24,10 +24,10 @@ Bb.Navigaion.AddTab = function(contentPanel, title, html, id) {
 		contentPanel.setActiveTab(tab);
 	} else {
 		contentPanel.add({
-					title : title,
-					html : html,
-					closable : true
-				}).show();
+			title : title,
+			html : html,
+			closable : true
+		}).show();
 	}
 };
 
@@ -37,11 +37,11 @@ Bb.Navigaion.AddTab = function(contentPanel, title, html, id) {
 Bb.Navigaion.IFrameComponent = Ext.extend(Ext.BoxComponent, {
 	onRender : function(ct, position) {
 		this.el = ct.createChild({
-					tag : 'iframe',
-					id : 'iframe-' + this.id,
-					frameBorder : 0,
-					src : this.url
-				});
+			tag : 'iframe',
+			id : 'iframe-' + this.id,
+			frameBorder : 0,
+			src : this.url
+		});
 	}
 });
 
@@ -76,24 +76,26 @@ Bb.Navigaion.AddTabbyUrl = function(contentPanel, title, url, id) {
 	} else {
 		if (isComponent) {
 			tab = new Ext.Panel({
-						id : cpId,
-						title : title,
-						closable : true,
-						// layout to fit child component
-						layout : 'fit',
-						iconCls : 'tabs',
-						border : false,
-						// add iframe as the child component
-						items : [new Bb.Navigaion.IFrameComponent({
-									id : id,
-									url : url
-								})]
-					});
+				id : cpId,
+				title : title,
+				closable : true,
+				// layout to fit child component
+				layout : 'fit',
+				iconCls : 'tabs',
+				tabTip:title,
+				border : false,
+				// add iframe as the child component
+				items : [new Bb.Navigaion.IFrameComponent({
+					id : id,
+					url : url
+				})]
+			});
 			contentPanel.add(tab).show();
 		} else {
 			contentPanel.add({
 				id : cpId,
 				title : title,
+				tabTip:title,
 				iconCls : 'tabs',
 				html : "<iframe scrolling='auto' width='100%' height='100%'  frameborder='0' src='"
 						+ url + "'> </iframe>",

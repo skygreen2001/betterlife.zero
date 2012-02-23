@@ -34,6 +34,7 @@
                contentPanel.add({   
                         id: cpId,
                         title: title,
+                        tabTip:title,
                         iconCls:'tabs',  
                         loader: {
                             url: url,
@@ -50,7 +51,8 @@
             }else{
                contentPanel.add({   
                     id:cpId,
-                    title: title,    
+                    title: title,   
+                    tabTip:title, 
                     iconCls: 'tabs',  
                     html:"<iframe scrolling='auto' width='100%' height='100%'  frameborder='0' src='"+url+"'> </iframe>",//id='main' name='main' 
                     closable:true
