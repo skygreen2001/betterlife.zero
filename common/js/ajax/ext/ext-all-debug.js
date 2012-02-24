@@ -30340,7 +30340,7 @@ Ext.TabPanel = Ext.extend(Ext.Panel,  {
                 inner = Ext.fly(li).child('.x-tab-strip-inner', true),
                 tw = li.offsetWidth,
                 iw = inner.offsetWidth;
-            inner.style.width = (each - (tw-iw)) + 'px';
+            if(this.tabWidth!=='auto'){inner.style.width = (each - (tw-iw)) + 'px';}else{inner.style.width ='auto';}
         }
     },
 
