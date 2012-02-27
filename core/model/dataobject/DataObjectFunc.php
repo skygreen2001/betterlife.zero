@@ -245,10 +245,10 @@
 	}
 	
 	/**
-	* 由标识删除指定ID数据对象
-	* @param string classname 数据对象类名  
-	* @param mixed $id 数据对象编号
-	*/
+	 * 由标识删除指定ID数据对象
+	 * @param string classname 数据对象类名  
+	 * @param mixed $id 数据对象编号
+	 */
 	public static function deleteByID($classname,$id)
 	{
 		if (is_numeric($id)){        
@@ -271,14 +271,14 @@
 	}
 		
 	/**
-	* 根据主键删除多条记录  
-	* @param string classname 数据对象类名  
-	* @param array|string $ids 数据对象编号
-	*  形式如下:
-	*  1.array:array(1,2,3,4,5)
-	*  2.字符串:1,2,3,4
-	*/
-	public function deleteByIds($classname,$ids)
+	 * 根据主键删除多条记录  
+	 * @param string classname 数据对象类名  
+	 * @param array|string $ids 数据对象编号
+	 *  形式如下:
+	 *  1.array:array(1,2,3,4,5)
+	 *  2.字符串:1,2,3,4
+	 */
+	public static function deleteByIds($classname,$ids)
 	{
 	   $data=false;                 
 	   if (!empty($ids)) {        
@@ -313,7 +313,31 @@
 				return DataObject::dao()->sqlExecute($sQuery); 
 			} 
 	   }
-	}     
+	}   
+		
+	/**
+	 * 根据条件删除多条记录  
+	 * @param string classname 数据对象类名  
+	 * @param mixed $filter 查询条件，在where后的条件<br/>
+	 * 示例如下：<br/>
+	 *      0."id=1,name='sky'"<br/>
+	 *      1.array("id=1","name='sky'")<br/>
+	 *      2.array("id"=>"1","name"=>"sky")<br/>
+	 *      3.允许对象如new User(id="1",name="green");<br/>
+	 * 默认:SQL Where条件子语句。如："(id=1 and name='sky') or (name like 'sky')"<br/>
+	 */
+	public static function deleteBy($classname,$filter)
+	{                              
+	   if (!empty($filter)) {        
+			$tablename=Config_Db::orm($classname);          
+			$_SQL=new Crud_Sql_Delete();
+			$_SQL->isPreparedStatement=false;  
+			$sQuery= $_SQL->deletefrom($tablename)->where($filter)->result();
+			return DataObject::dao()->sqlExecute($sQuery);   
+	   }else{
+			return false;
+	   }
+	}    
 	//</editor-fold>   
 	
 	//<editor-fold defaultstate="collapsed" desc="其他">     

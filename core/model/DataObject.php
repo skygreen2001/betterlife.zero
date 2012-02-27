@@ -363,7 +363,22 @@ abstract class DataObject extends Object implements ArrayAccess
 	{
 		return DataObjectFunc::deleteByIds(get_called_class(),$ids);  
 	} 
-
+	  
+   /**
+	* 根据条件删除多条记录                                                                                                 
+	* @param mixed $filter 查询条件，在where后的条件<br/>
+	* 示例如下：<br/>
+	*      0."id=1,name='sky'"<br/>
+	*      1.array("id=1","name='sky'")<br/>
+	*      2.array("id"=>"1","name"=>"sky")<br/>
+	*      3.允许对象如new User(id="1",name="green");<br/>
+	* 默认:SQL Where条件子语句。如："(id=1 and name='sky') or (name like 'sky')"<br/>
+	*/
+	public static function deleteBy($filter)
+	{
+		return DataObjectFunc::deleteBy(get_called_class(),$filter);  
+	} 
+	
 	/**
 	 * 删除当前对象
 	 * @return boolen 是否删除成功；true为操作正常
