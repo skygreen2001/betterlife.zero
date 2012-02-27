@@ -6959,17 +6959,17 @@ body.x-body-masked .x-window-plain .x-window-mc {
 .view-right { background-image: url(ajax/ext/resources/images/new/viewright.gif) !important;}
 .view-hide { background-image: url(ajax/ext/resources/images/new/viewhide.gif) !important;}
 
-.page{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left 0px !important;}
-.page_add{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -20px !important;}
-.page_edit{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -40px !important;}
-.page_delete{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -60px !important;}
-.page_find{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -80px !important;}
-.page_gear{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -100px !important;}
-.page_attach{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -120px !important;}
-.page_link{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -140px !important;}
-.page_goto{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -160px !important;}
-.page_key{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -180px !important;}
-.page_save{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -200px !important;}
-.page_refresh{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -220px !important;}
-.page_excel{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -240px !important;}
-.page_word{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -260px !important;}
+.page{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -2px !important;}
+.page_add{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -22px !important;}
+.page_edit{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -42px !important;}
+.page_delete{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -62px !important;}
+.page_find{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -82px !important;}
+.page_gear{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -102px !important;}
+.page_attach{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -122px !important;}
+.page_link{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -142px !important;}
+.page_goto{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -162px !important;}
+.page_key{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -182px !important;}
+.page_save{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -202px !important;}
+.page_refresh{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -222px !important;}
+.page_excel{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -242px !important;}
+.page_word{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -262px !important;}
