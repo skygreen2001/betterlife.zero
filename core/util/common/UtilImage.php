@@ -161,6 +161,8 @@ class UtilImage
 			//ImageString($thumbImg,2,5,5,"ThinkPHP",$gray);
 			// 生成图片
 			$imageFun = 'image'.($type=='jpg'?'jpeg':$type);
+			$dim_file_dir=dirname($dim_file);
+			UtilFileSystem::createDir($dim_file_dir);   
 			$imageFun($dim,$dim_file);
 			imagedestroy($dim);
 			imagedestroy($srcImg);
@@ -261,6 +263,8 @@ class UtilImage
 			//ImageString($thumbImg,2,5,5,"ThinkPHP",$gray);
 			// 生成图片
 			$imageFun = 'image'.($type=='jpg'?'jpeg':$type);
+			$image_dir=dirname($thumbname);
+			UtilFileSystem::createDir($image_dir);
 			$imageFun($thumbImg,$thumbname);
 			imagedestroy($thumbImg);
 			imagedestroy($srcImg);
@@ -351,6 +355,7 @@ class UtilImage
 	 */
 	public static function buildImageVerify($length=4,$mode=1,$type='png',$width=48,$height=22,$verifyName='verify') 
 	{
+		session_start();
 		$randval = UtilString::rand_string($length,$mode);
 		$_SESSION[$verifyName]= md5($randval);
 		$width = ($length*10+10)>$width?$length*10+10:$width;

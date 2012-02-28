@@ -6942,6 +6942,10 @@ body.x-body-masked .x-window-plain .x-window-mc {
 	margin-left:4px;
 	padding-left:20px;
 }
+.labelfield {
+    background-image: none;
+    border: medium none;
+}
 .icon-updown{background: url(ajax/ext/resources/images/new/icon_page.gif) no-repeat left -222px !important;}
 .icon-fix { background-image:url(ajax/ext/resources/images/new/icon_fix.png) !important; background-repeat: no-repeat; }
 .icon-reverse { background-image:url(ajax/ext/resources/images/new/reverse.png) !important; background-repeat: no-repeat; }

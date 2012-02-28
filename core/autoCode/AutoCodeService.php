@@ -339,7 +339,7 @@ class AutoCodeService extends AutoCode
 			$result.=" * @subpackage ext\r\n";
 		}  
 		$result.=" * @author $author\r\n".
-				 " */\r\n";     
+				 " */\r\n";               
 		switch (self::$type) {
 			case 3:
 				$result.="class Ext$service_classname extends ServiceBasic\r\n{\r\n"; 
@@ -352,8 +352,15 @@ class AutoCodeService extends AutoCode
 				$result.="    public function save(\$$instance_name)\r\n".
 						 "    {\r\n".
 						 self::bit2BoolInExtService($instance_name,$fieldInfo).
-						 self::imageUploadInExtService($instance_name,$fieldInfo).
-						 "        \$data=parent::save(\$$instance_name);\r\n".     
+						 self::imageUploadInExtService($instance_name,$fieldInfo).                          
+						 "        if (is_array(\$$instance_name)){\r\n".                           
+						 "            \${$instance_name}Obj=new $classname(\$$instance_name);\r\n".
+						 "        }\r\n". 
+						 "        if (\${$instance_name}Obj instanceof $classname){\r\n".                
+						 "            \$data=\${$instance_name}Obj->save();\r\n".  
+						 "        }else{\r\n".  
+						 "            \$data=false;\r\n".  
+						 "        }\r\n".  
 						 "        return array(\r\n".
 						 "            'success' => true,\r\n".   
 						 "            'data'    => \$data\r\n". 
@@ -369,8 +376,15 @@ class AutoCodeService extends AutoCode
 						 "    {\r\n".
 						 self::bit2BoolInExtService($instance_name,$fieldInfo).
 						 self::enumComment2KeyInExtService($instance_name,$fieldInfo,$tablename).  
-						 self::imageUploadInExtService($instance_name,$fieldInfo).   
-						 "        \$data=parent::update(\$$instance_name);\r\n". 
+						 self::imageUploadInExtService($instance_name,$fieldInfo).  
+						 "        if (is_array(\$$instance_name)){\r\n".                           
+						 "            \${$instance_name}Obj=new $classname(\$$instance_name);\r\n".
+						 "        }\r\n". 
+						 "        if (\${$instance_name}Obj instanceof $classname){\r\n".     
+						 "            \$data=\${$instance_name}Obj->update();\r\n". 
+						 "        }else{\r\n".  
+						 "            \$data=false;\r\n".  
+						 "        }\r\n". 
 						 "        return array(\r\n".
 						 "            'success' => true,\r\n".   
 						 "            'data'    => \$data\r\n". 
@@ -389,7 +403,7 @@ class AutoCodeService extends AutoCode
 						 "     */\r\n";
 				$result.="    public function deleteByIds(\$ids)\r\n".
 						 "    {\r\n". 
-						 "        \$data=parent::deleteByIds(\$ids);\r\n".     
+						 "        \$data=$classname::deleteByIds(\$ids);\r\n".     
 						 "        return array(\r\n".
 						 "            'success' => true,\r\n".   
 						 "            'data'    => \$data\r\n". 
@@ -430,10 +444,10 @@ class AutoCodeService extends AutoCode
 						 "            }\r\n".         
 						 "            \$condition=implode(\" and \",\$conditionArr);\r\n". 
 						 "        }\r\n".  
-						 "        \$count=parent::count(\$condition);\r\n".       
+						 "        \$count=$classname::count(\$condition);\r\n".       
 						 "        if (\$count>0){\r\n".          
 						 "            if (\$limit>\$count)\$limit=\$count;\r\n".          
-						 "            \$data =parent::queryPage(\$start,\$limit,\$condition);\r\n".   
+						 "            \$data =$classname::queryPage(\$start,\$limit,\$condition);\r\n".   
 						 self::enumKey2CommentInExtService($classname,$fieldInfo,"    "). 
 						 self::relationFieldShow($instance_name,$classname,$fieldInfo).
 						 "            if (\$data==null)\$data=array();\r\n".          
@@ -497,7 +511,7 @@ class AutoCodeService extends AutoCode
 						 "     */\r\n".
 						 "    public function export{$classname}(\$filter=null)\r\n".
 						 "    {\r\n".
-						 "        \$data=parent::get(\$filter);\r\n".
+						 "        \$data=$classname::get(\$filter);\r\n".
 						 self::enumKey2CommentInExtService($classname,$fieldInfo).   
 						 "        \$arr_output_header= self::fieldsMean({$classname}::tablename()); \r\n".
 						 "        unset(\$arr_output_header['updateTime']);\r\n".

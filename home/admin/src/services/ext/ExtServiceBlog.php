@@ -19,7 +19,14 @@ class ExtServiceBlog extends ServiceBasic
 	 */
 	public function save($blog)
 	{
-		$data=parent::save($blog);
+		if (is_array($blog)){
+			$blogObj=new Blog($blog);
+		}
+		if ($blogObj instanceof Blog){
+			$data=$blogObj->save();
+		}else{
+			$data=false;
+		}
 		return array(
 			'success' => true,
 			'data'    => $data
@@ -33,7 +40,14 @@ class ExtServiceBlog extends ServiceBasic
 	 */
 	public function update($blog)
 	{
-		$data=parent::update($blog);
+		if (is_array($blog)){
+			$blogObj=new Blog($blog);
+		}
+		if ($blogObj instanceof Blog){
+			$data=$blogObj->update();
+		}else{
+			$data=false;
+		}
 		return array(
 			'success' => true,
 			'data'    => $data
@@ -50,7 +64,7 @@ class ExtServiceBlog extends ServiceBasic
 	 */
 	public function deleteByIds($ids)
 	{
-		$data=parent::deleteByIds($ids);
+		$data=Blog::deleteByIds($ids);
 		return array(
 			'success' => true,
 			'data'    => $data
@@ -91,13 +105,13 @@ class ExtServiceBlog extends ServiceBasic
 			}
 			$condition=implode(" and ",$conditionArr);
 		}
-		$count=parent::count($condition);
+		$count=Blog::count($condition);
 		if ($count>0){
 			if ($limit>$count)$limit=$count;
-			$data =parent::queryPage($start,$limit,$condition);
+			$data =Blog::queryPage($start,$limit,$condition);
 			foreach ($data as $blog) {
 				$user=User::get_by_id($blog->userId);
-				$blog['username']=$user->name;
+				$blog['name']=$user->name;
 			}
 			if ($data==null)$data=array();
 		}else{
@@ -159,7 +173,7 @@ class ExtServiceBlog extends ServiceBasic
 	 */
 	public function exportBlog($filter=null)
 	{
-		$data=parent::get($filter);
+		$data=Blog::get($filter);
 		$arr_output_header= self::fieldsMean(Blog::tablename()); 
 		unset($arr_output_header['updateTime']);
 		unset($arr_output_header['commitTime']);
