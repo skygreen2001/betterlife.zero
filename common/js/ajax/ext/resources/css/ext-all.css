@@ -6906,11 +6906,11 @@ body.x-body-masked .x-window-plain .x-window-mc {
 	background-image:url(ajax/ext/resources/images/default/slider/slider-v-thumb.png);
 }.x-window-dlg .ext-mb-text,
 .x-window-dlg .x-window-header-text {
-	font-size:12px;
+	font-size:13px;
 }
 
 .x-window-dlg .ext-mb-textarea {
-	font:normal 12px tahoma,arial,helvetica,sans-serif;
+	font:normal 13px tahoma,arial,helvetica,sans-serif;
 }
 
 .x-window-dlg .x-msg-box-wait {
