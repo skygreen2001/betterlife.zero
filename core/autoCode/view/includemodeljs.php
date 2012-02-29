@@ -299,7 +299,7 @@ $viewdoblock
 						scope:this,
 						handler : function() {
 							uploadWindow           =this;
-							validationExpression   =/\w+(.xlsx|.XLSX|.xls|.XLS)$/;
+							validationExpression   =/([\u4E00-\u9FA5]|\w)+(.xlsx|.XLSX|.xls|.XLS)$/;/**允许中文名*/
 							var isValidExcelFormat = new RegExp(validationExpression);
 							var result             = isValidExcelFormat.test(this.uploadForm.upload_file.getValue());
 							if (!result){

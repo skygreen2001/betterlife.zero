@@ -163,9 +163,9 @@ class UtilFileSystem extends Util
 	 */
 	public static function uploadFile($_FILES,$uploadPath,$uploadFieldName="upload_file")
 	{                             
-		if ($_FILES[$uploadFieldName]["size"] < intval(ini_get("upload_max_filesize") * 1024000)) {
+		if ($_FILES[$uploadFieldName]["size"] < intval(ini_get("upload_max_filesize") * 1024000 * 2)) {
 			if ($_FILES[$uploadFieldName]["error"] > 0) {
-				return array('success' => false, 'msg' => $_FILES[$uploadFieldName]["error"]);
+				return array('success' => false, 'msg' =>  '文件太大！文件大小不能超过2M！');
 			} else {
 				//获得临时文件名
 				$tmptail = end(explode('.', $_FILES[$uploadFieldName]["name"])); 
