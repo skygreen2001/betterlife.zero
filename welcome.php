@@ -11,15 +11,15 @@
 <title>BetterLife CMS开源框架后台管理</title>
 <style type="text/css">
 html, body {
-    font:normal 12px SimSun,sans-serif;
-    margin:0;
-    padding:0;
-    border:0 none;
-    overflow:hidden;
-    height:100%;
+	font:normal 12px SimSun,sans-serif;
+	margin:0;
+	padding:0;
+	border:0 none;
+	overflow:hidden;
+	height:100%;
 }
 p {
-    margin:5px;
+	margin:5px;
 }
 .en-head{
    font:bold 0.8em Arial,verdana,Geneva,Helvetica,sans-serif; 
@@ -29,11 +29,11 @@ p {
 }
 
 a {
-    color: #1E4176;
+	color: #1E4176;
 }
 a:link {
-    color: #1E4176;
-    text-decoration: none;
+	color: #1E4176;
+	text-decoration: none;
 }
 
 a:visited {
@@ -42,22 +42,22 @@ a:visited {
 }
 
 a:hover {
-    text-decoration: underline;
-    color: #15428b;
+	text-decoration: underline;
+	color: #15428b;
 }
 h1{
-    font:bold 200% STXingkai;
-    margin-top: 200px;
+	font:bold 200% STXingkai;
+	margin-top: 200px;
 }
 div#content{
-    border-style:outset;
-    border-color: black;
-    border-width: thin;    
-    font-size: 14px;
-    width: 300px;
-    height: 150px;
-    padding-top:50px;
-    margin-top: 20px;
+	border-style:outset;
+	border-color: black;
+	border-width: thin;    
+	font-size: 14px;
+	width: 300px;
+	height: 150px;
+	padding-top:50px;
+	margin-top: 20px;
 }
 </style>
 <link rel="icon" href="favicon.ico" mce_href="favicon.ico" type="image/x-icon"> 
@@ -66,10 +66,10 @@ div#content{
 <?php require_once ("Gc.php"); ?>         
 <h1 align="center">欢迎来到<span class="en-head">BetterLife CMS</span>开源框架</h1>
 <div align="center">
-    <div id="content" align="center">
-        <p><a href="<?php echo Gc::$url_base?>index.php?go=betterlife.auth.login" target="_blank">网站前台</a></p>
-        <p><a href="<?php echo Gc::$url_base?>index.php?go=admin.index.index" target="_blank">网站后台</a></p> 
-    </div>
+	<div id="content" align="center">
+		<p><a href="<?php echo Gc::$url_base?>index.php?go=betterlife.auth.login">网站前台</a></p>
+		<p><a href="<?php echo Gc::$url_base?>index.php?go=admin.index.index">网站后台</a></p> 
+	</div>
 </div>
 </body>
 </html>
