@@ -365,7 +365,9 @@ class AutoCodeViewExt extends AutoCode
 		  if (($datatype=='date')||contains($field_comment,array("日期","时间")))  
 		  {
 			$fieldLabels.=",xtype : 'datefield',format : \"Y-m-d\"";
-		  }          
+		  }elseif (($column_type=='int')||($datatype=='float')){  
+			$fieldLabels.=",xtype : 'numberfield'";  
+		  }   
 		  if ($column_type=='bit')
 		  {
 			$fieldLabels.=",xtype : 'combo',mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,allowBlank : false,\r\n".
