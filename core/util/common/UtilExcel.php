@@ -118,22 +118,15 @@ class UtilExcel extends Util
                 return null;
             }
             
-            $tempcol=$allColumn;
-            
+            $num_tempcol=alphatonumber($allColumn);     
+            $currentColumn='A';
+            $num_currentColumn=alphatonumber($currentColumn);    
             //从Excel文档中获取头信息
-            for($currentColumn='A';$currentColumn<=$tempcol;$currentColumn++)
-            {
-                if(strlen($allColumn)>1&&$currentColumn!='Z')
-                {
-                    $tempcol='Z';
-                }
-                elseif(strlen($allColumn)>1&&$currentColumn=='Z')
-                {
-                    $currentColumn='AA';
-                }
-                $address=$currentColumn."1";                                        
-                $header[]=trim($currentSheet->getCell($address)->getValue());
-            }
+            for($num_currentColumn;$num_currentColumn<=$num_tempcol;$num_currentColumn++){ 
+                $address=$currentColumn."1";                                         
+                $header[]=trim($currentSheet->getCell($address)->getValue()); 
+                $currentColumn++;    
+            }       
             $arr_import_header=array_flip($arr_import_header);
             foreach ($header as $value) { 
                 $arr_head[]=$arr_import_header[$value];             
@@ -142,18 +135,14 @@ class UtilExcel extends Util
             //从Excel文档中获取所有内容
             for($currentRow=2,$i=1;$currentRow<=$allRow;$currentRow++,$i++)
             {
-                for($currentColumn='A';$currentColumn<=$tempcol;$currentColumn++)
-                {
-                    if(strlen($allColumn)>1&&$currentColumn!='Z')
-                    {
-                        $tempcol='Z';
-                    }
-                    elseif(strlen($allColumn)>1&&$currentColumn=='Z')
-                    {
-                        $currentColumn='AA';
-                    }
+                $num_tempcol=alphatonumber($allColumn);     
+                $currentColumn='A';
+                $num_currentColumn=alphatonumber($currentColumn);   
+                for($num_currentColumn;$num_currentColumn<=$num_tempcol;$num_currentColumn++)
+                {                                  
                     $address=$currentColumn.$currentRow;                                        
                     $result[$i][]=trim($currentSheet->getCell($address)->getValue());
+                    ++$currentColumn;       
                 }
             }
             
