@@ -94,7 +94,7 @@
 	/**  
 	 * 对应数据对象的updateProperties方法
 	 * @param string classname 数据对象类名  
-	 * @param string $sql_id 需删除数据的ID编号或者ID编号的Sql语句<br/>        
+	 * @param string $sql_id 需更新数据的ID编号或者ID编号的Sql语句<br/>        
 	 * 示例如下：<br/>          
 	 *     $sql_ids:<br/>
 	 *         1.1,2,3<br/>
