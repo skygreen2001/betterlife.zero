@@ -111,7 +111,7 @@ class ExtServiceBlog extends ServiceBasic
 			$data =Blog::queryPage($start,$limit,$condition);
 			foreach ($data as $blog) {
 				$user=User::get_by_id($blog->userId);
-				$blog['name']=$user->name;
+				$blog['username']=$user->name;
 			}
 			if ($data==null)$data=array();
 		}else{
