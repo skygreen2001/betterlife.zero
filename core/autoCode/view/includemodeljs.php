@@ -139,9 +139,10 @@ $fieldLabels
 						}else{
 							this.editForm.api.submit=ExtService$classname.update;
 							this.editForm.getForm().submit({
-								success : function(form, action) {
-									Ext.Msg.alert("提示", "修改成功！");
-									$appName_alias.$classname.View.Running.{$instancename}Grid.doSelect$classname();
+								success : function(form, action) {                                                  
+									Ext.Msg.show({title:'提示',msg: '修改成功！',buttons: {yes: '确定'},fn: function(){       
+										$appName_alias.$classname.View.Running.{$instancename}Grid.bottomToolbar.doRefresh(); 
+									}});                                       
 									form.reset();
 									editWindow.hide();
 								},
