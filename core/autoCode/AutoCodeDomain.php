@@ -273,11 +273,46 @@ class AutoCodeDomain extends AutoCode
 				$result.= "    //</editor-fold>\r\n";            
 				break;
 		}    
+		$result.=self::domainDataobjectSpec($fieldInfo,$tablename); 
 		$result.=self::domainEnumPropertyShow($fieldInfo,$tablename); 
 		$result.=self::domainEnumShow($fieldInfo,$tablename);
 		$result.="}\r\n";    
 		$result.="?>";
 		return $result;
+	}
+	
+	/**
+	 * 不符合规范的表定义需要用规格在数据文件里进行说明
+	 * 1.移除默认字段:commitTime,updateTime
+	 */
+	private static function domainDataobjectSpec($fieldInfo,$tablename)
+	{     
+		$result="";
+		$table_keyfield=array("commitTime","updateTime");
+		$removefields=array();
+		foreach ($table_keyfield as $keyfield) {                                    
+			if (!array_key_exists($keyfield,$fieldInfo)){     
+				$removefields[]=$keyfield; 
+			}   
+		}  
+		$removeStr="";
+		foreach ($removefields as $removefield) {
+			$removeStr.="            '$removefield',\r\n";
+		}  
+		if (!empty($removeStr)){           
+			$removeStr=substr($removeStr,0,strlen($removeStr)-3);
+			$result.="    /**\r\n".
+					 "     * 规格说明\r\n".
+					 "     * 表中不存在的默认列定义:".implode(",",$removefields)."\r\n". 
+					 "     * @var mixed\r\n". 
+					 "     */\r\n".
+					 "    public \$field_spec=array(\r\n".
+					 "        EnumDataSpec::REMOVE=>array(\r\n".
+					 $removeStr."\r\n".
+					 "        )\r\n". 
+					 "    );\r\n";  
+		}
+		return $result;    
 	}
 	
 	/**
@@ -309,8 +344,7 @@ class AutoCodeDomain extends AutoCode
 			}
 		}
 		return $result;   
-	}
-	
+	}     	
 	
 	/**
 	 * 在实体数据对象定义中定义枚举类型的显示
@@ -342,15 +376,15 @@ class AutoCodeDomain extends AutoCode
 			}
 		}
 		return $result;   
-	}
-	
+	}     	
 
 	/**
 	 *从表名称获取子文件夹的信息。
 	 * @param string $tablename 
 	 * @return string 返回对象所在的Package名 
 	 */
-	private static function getPackage($tablename){  
+	private static function getPackage($tablename)
+	{  
 		$pacre=str_replace(Config_Db::$table_prefix, "", $tablename);
 		$pacre=str_replace(Config_Db::TABLENAME_RELATION,Config_Db::TABLENAME_DIR_RELATION, $pacre);      
 		$package=str_replace("_", ".", $pacre);
