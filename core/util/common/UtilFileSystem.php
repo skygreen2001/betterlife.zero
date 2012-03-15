@@ -11,13 +11,16 @@ class UtilFileSystem extends Util
 {
 	/**
 	 * 移除数据中的BOM头，它一般是看不见的，但php或html文件有BOM头会影响显示，在头部总有删除不掉的空行。
-	 * @param string $data 数据
+	 * @param string|array $data 内容数据|文件名称 (数组)  
 	 * @return type 
 	 */
 	public static function removeBom($data)
 	{
 		if(is_array($data)){
 			foreach($data as $k=>$v){
+				if (is_file($v)){   
+					$v = file_get_contents($v);
+				}     
 				$charset[1] = substr($v, 0, 1);
 				$charset[2] = substr($v, 1, 1);
 				$charset[3] = substr($v, 2, 1);
@@ -27,6 +30,9 @@ class UtilFileSystem extends Util
 			}
 		}
 		else{
+			if (is_file($data)){   
+				$data = file_get_contents($data);
+			}            
 			$charset[1] = substr($data, 0, 1);
 			$charset[2] = substr($data, 1, 1);
 			$charset[3] = substr($data, 2, 1);
