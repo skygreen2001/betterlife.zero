@@ -187,8 +187,9 @@ Bb.Blog.View={
                             this.editForm.api.submit=ExtServiceBlog.update;
                             this.editForm.getForm().submit({
                                 success : function(form, action) {
-                                    Ext.Msg.alert("提示", "修改成功！");
-                                    Bb.Blog.View.Running.blogGrid.doSelectBlog();
+                                    Ext.Msg.show({title:'提示',msg: '修改成功！',buttons: {yes: '确定'},fn: function(){
+                                        Bb.Blog.View.Running.blogGrid.bottomToolbar.doRefresh();
+                                    }});                                        
                                     form.reset();
                                     editWindow.hide();
                                 },
