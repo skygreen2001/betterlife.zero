@@ -143,6 +143,7 @@ class Gc
 	public static $module_names=array(
 			"admin",    
 			"betterlife",
+			"model",
 			"business",
 	);
 	

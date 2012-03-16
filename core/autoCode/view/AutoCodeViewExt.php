@@ -71,6 +71,7 @@ class AutoCodeViewExt extends AutoCode
 	  self::$class_comments[$classname]=$tableInfoList[$tablename]["Comment"];      
 	}                                                                      
 	echo UtilCss::form_css()."\r\n";
+	echo "<font color='#FF0000'>采用ExtJs框架生成后端Js文件导出:</font><br/>";   
 	foreach ($fieldInfos as $tablename=>$fieldInfo){
 	  $defineJsFileContent=self::tableToViewJsDefine($tablename,$tableInfoList,$fieldInfo);
 	  if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($defineJsFileContent)){
@@ -81,6 +82,7 @@ class AutoCodeViewExt extends AutoCode
 	  }       
 	} 
 
+	echo "<font color='#FF0000'>生成后端tpl模板显示文件导出:</font><br/>";  
 	foreach ($fieldInfos as $tablename=>$fieldInfo){      
 	  $defineTplFileContent=self::tableToViewTplDefine($fieldInfo);
 	  if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($defineTplFileContent)){
@@ -89,8 +91,7 @@ class AutoCodeViewExt extends AutoCode
 	  }else{
 		echo $defineTplFileContent."<br/>";
 	  }   
-	}  
-	
+	}   
 	self::tableToAjaxPhpDefine();
 							 
 	/**

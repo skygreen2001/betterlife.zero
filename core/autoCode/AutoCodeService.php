@@ -61,7 +61,18 @@ class AutoCodeService extends AutoCode
 		}
 		
 		$tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
-		echo UtilCss::form_css()."\r\n";           
+		echo UtilCss::form_css()."\r\n";  
+		switch (self::$type) {
+		   case 1:     
+			 echo "<font color='#FF0000'>生成继承具有标准方法的Service文件导出:</font><br/>";   
+			 break;
+		   case 2:
+			 echo "<font color='#FF0000'>标准方法的Service文件导出:</font><br/>";   
+			 break;
+		   case 3:
+			 echo "<font color='#FF0000'>生成ExtJs框架使用的Service【后台】文件导出:</font><br/>";   		
+			 break;
+		}         
 		foreach($tableList as $tablename){     
 			$definePhpFileContent=self::tableToServiceDefine($tablename,$tableInfoList,$fieldInfos); 
 			if (isset($definePhpFileContent)&&(!empty($definePhpFileContent))){
@@ -123,7 +134,7 @@ class AutoCodeService extends AutoCode
 			self::saveDefineToDir(self::$service_dir_full,"Manager_Service.php",$e_result);  
 			  
 			echo  "新生成的Manager_Service文件路径:<font color='#0000FF'>".self::$service_dir_full."Manager_Service.php</font><br /><br /><br />";
-/*            $section_define=str_replace(" ","&nbsp;",$section_define); 
+			/*            $section_define=str_replace(" ","&nbsp;",$section_define); 
 			$section_define=str_replace("\r\n","<br />",$section_define); 
 			echo  $section_define.'<br/>';
 			$section_content=str_replace(" ","&nbsp;",$section_content);  
@@ -180,7 +191,7 @@ class AutoCodeService extends AutoCode
 			$e_result.="?>";              
 			self::saveDefineToDir(self::$service_dir_full.self::$ext_dir.DIRECTORY_SEPARATOR,"Manager_ExtService.php",$e_result);                                                                     
 			echo  "新生成的Manager_ExtService文件路径:<font color='#0000FF'>".self::$service_dir_full.self::$ext_dir.DIRECTORY_SEPARATOR,"Manager_ExtService.php</font><br /><br/>";
-/*            $section_define=str_replace(" ","&nbsp;",$section_define); 
+			/*            $section_define=str_replace(" ","&nbsp;",$section_define); 
 			$section_define=str_replace("\r\n","<br />",$section_define);  
 			echo  $section_define.'<br/>';
 			$section_content=str_replace(" ","&nbsp;",$section_content); 
@@ -264,7 +275,7 @@ class AutoCodeService extends AutoCode
 					 "</services>\r\n";                                                                                                                       
 			self::saveDefineToDir(self::$service_dir_full,"service.config.xml",$e_result);   
 			echo  "新生成的service.config.xml文件路径:<font color='#0000FF'>".self::$service_dir_full,"service.config.xml</font><br /><br /><br /><br />";
-/*            $section_content=str_replace(" ","&nbsp;",$section_content);    
+			/*            $section_content=str_replace(" ","&nbsp;",$section_content);    
 			$section_content=str_replace("<","&lt;",$section_content); 
 			$section_content=str_replace(">","&gt;",$section_content); 
 			$section_content=str_replace("\r\n","<br />",$section_content); 

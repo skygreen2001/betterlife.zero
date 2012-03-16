@@ -8,7 +8,13 @@
  * @author skygreen skygreen2001@gmail.com
  */
 class AutoCodeViewDefault extends AutoCode
-{
+{      
+	/**
+	 * 表示层生成定义的方式<br/>              
+	 * 0.生成前台所需的表示层页面。<br/> 
+	 * 1.生成标准的增删改查模板所需的表示层页面。<br/>
+	 */
+	public static $type;
 	/**
 	 * 表示层所在的目录
 	 */
@@ -25,12 +31,21 @@ class AutoCodeViewDefault extends AutoCode
 	 * 设置必需的路径
 	 */
 	public static function pathset()
-	{    
-		self::$app_dir=Gc::$appName;              
+	{          
+		switch (self::$type) {
+		   case 0:
+			 self::$app_dir=Gc::$appName;           
+			 if (empty(self::$appName)){
+				self::$appName=Gc::$appName;
+			 }
+			 break;
+		   case 1:
+			 self::$app_dir="model";
+			 self::$appName="model";
+			 break;          
+		}    
 		self::$view_dir_full=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR.Config_F::VIEW_VIEW.DIRECTORY_SEPARATOR.Gc::$self_theme_dir.DIRECTORY_SEPARATOR.Config_F::VIEW_CORE.DIRECTORY_SEPARATOR;
-		if (empty(self::$appName)){
-			self::$appName=Gc::$appName;
-		}
+
 	}   
 				  
 	/**
@@ -56,30 +71,43 @@ class AutoCodeViewDefault extends AutoCode
 		}
 		$tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
 		echo UtilCss::form_css()."\r\n";
-		foreach ($fieldInfos as $tablename=>$fieldInfo){
-			$tpl_listsContent=self::tpl_lists($tablename,$tableInfoList,$fieldInfo);             
-			$filename="lists".Config_F::SUFFIX_FILE_TPL; 
-			$tplName=self::saveTplDefineToDir($tablename,$tpl_listsContent,$filename);
-			echo "生成导出完成:$tablename=>$tplName!<br/>";  
-			
-			$tpl_viewContent=self::tpl_view($tablename,$tableInfoList,$fieldInfo);  
-			$filename="view".Config_F::SUFFIX_FILE_TPL; 
-			$tplName=self::saveTplDefineToDir($tablename,$tpl_viewContent,$filename);
-			echo "生成导出完成:$tablename=>$tplName!<br/>";    
-			
-			$tpl_editContent=self::tpl_edit($tablename,$tableInfoList,$fieldInfo);  
-			$filename="edit".Config_F::SUFFIX_FILE_TPL; 
-			$tplName=self::saveTplDefineToDir($tablename,$tpl_editContent,$filename);
-			echo "生成导出完成:$tablename=>$tplName!<br/>";    
-		} 
+		switch (self::$type) {
+		   case 0:
+				echo "<font color='#FF0000'>生成前台所需的表示层页面:</font><br/>";                   
+				self::createModelIndexFile($tableInfoList);     
+				self::createFrontModelPages($tableInfoList,$fieldInfos);
+			 break;
+		   case 1:   
+				echo "<font color='#FF0000'>生成标准的增删改查模板表示层页面:</font><br/>"; 
+				self::createModelIndexFile($tableInfoList);									   
+				foreach ($fieldInfos as $tablename=>$fieldInfo){
+					$tpl_listsContent=self::tpl_lists($tablename,$tableInfoList,$fieldInfo);             
+					$filename="lists".Config_F::SUFFIX_FILE_TPL; 
+					$tplName=self::saveTplDefineToDir($tablename,$tpl_listsContent,$filename);
+					echo "生成导出完成:$tablename=>$tplName!<br/>"; 
+					$tpl_viewContent=self::tpl_view($tablename,$tableInfoList,$fieldInfo);  
+					$filename="view".Config_F::SUFFIX_FILE_TPL; 
+					$tplName=self::saveTplDefineToDir($tablename,$tpl_viewContent,$filename);
+					echo "生成导出完成:$tablename=>$tplName!<br/>";  
+					$tpl_editContent=self::tpl_edit($tablename,$tableInfoList,$fieldInfo);  
+					$filename="edit".Config_F::SUFFIX_FILE_TPL; 
+					$tplName=self::saveTplDefineToDir($tablename,$tpl_editContent,$filename);
+					echo "生成导出完成:$tablename=>$tplName!<br/>";    
+				}
+			 break;          
+		}    
 	}
 
 	/**
 	 * 用户输入需求
 	 */
 	public static function UserInput()
-	{
-		return parent::UserInput("默认生成前台所需的表示层页面[用于前台]的输出文件路径参数");  
+	{           
+		$inputArr=array(
+			"0"=>"生成前台所需的表示层页面。",
+			"1"=>"生成标准的增删改查模板所需的表示层页面。"
+		);    
+		return parent::UserInput("默认生成前台所需的表示层页面[用于前台]的输出文件路径参数",$inputArr);  
 	} 
 
 	/**
@@ -92,6 +120,10 @@ class AutoCodeViewDefault extends AutoCode
 	{        
 		if ($tableInfoList!=null&&count($tableInfoList)>0&&  array_key_exists("$tablename", $tableInfoList)){
 			$table_comment=$tableInfoList[$tablename]["Comment"];
+			if (contain($table_comment,"\r")||contain($table_comment,"\n")){
+				$table_comment=preg_split("/[\s,]+/", $table_comment);    
+				$table_comment=$table_comment[0]; 
+			}            
 		}else{
 			$table_comment="$tablename";
 		} 
@@ -132,18 +164,18 @@ $headers
 		{foreach item={$instancename} from=\${$instancename}s}     
 		<tr class="entry">                            
 $contents
-			<td class="content"><my:a href="{\$url_base}index.php?go={$appname}.{$instancename}.view&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{\$url_base}index.php?go={$appname}.{$instancename}.edit&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{\$url_base}index.php?go={$appname}.{$instancename}.delete&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}">删除</my:a></td>
+			<td class="btnCol"><my:a href="{\$url_base}index.php?go={$appname}.{$instancename}.view&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{\$url_base}index.php?go={$appname}.{$instancename}.edit&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{\$url_base}index.php?go={$appname}.{$instancename}.delete&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}">删除</my:a></td>
 		</tr> 
 		{/foreach}                                                           
 	</table> 
 	&nbsp;&nbsp;<my:page src='{\$url_base}index.php?go={$appname}.{$instancename}.lists' /><br/>   
-	<div align="center"><my:a href='{\$url_base}index.php?go={$appname}.{$instancename}.edit&pageNo={\$smarty.get.pageNo|default:"1"}'>新建</my:a></div>    
+	<div align="center"><my:a href='{\$url_base}index.php?go={$appname}.{$instancename}.edit&pageNo={\$smarty.get.pageNo|default:"1"}'>新建</my:a>|<my:a href='{\$url_base}index.php?go={$appname}.index.index'>返回首页</my:a></div>    
 </div>
 LISTS;
 		$result=self::tableToViewTplDefine($result);
 		return $result;
 	}
-	
+
 	/**
 	 * 将表列定义转换成表示层列表页面tpl文件定义的内容
 	 * @param string $tablename 表名
@@ -154,6 +186,10 @@ LISTS;
 	{     
 		if ($tableInfoList!=null&&count($tableInfoList)>0&&  array_key_exists("$tablename", $tableInfoList)){
 			$table_comment=$tableInfoList[$tablename]["Comment"];
+			if (contain($table_comment,"\r")||contain($table_comment,"\n")){
+				$table_comment=preg_split("/[\s,]+/", $table_comment);    
+				$table_comment=$table_comment[0]; 
+			}            
 		}else{
 			$table_comment="$tablename";
 		} 
@@ -208,10 +244,14 @@ EDIT;
 	{        
 		   
 		if ($tableInfoList!=null&&count($tableInfoList)>0&&  array_key_exists("$tablename", $tableInfoList)){
-			$table_comment=$tableInfoList[$tablename]["Comment"];
+			$table_comment=$tableInfoList[$tablename]["Comment"];   
+			if (contain($table_comment,"\r")||contain($table_comment,"\n")){
+				$table_comment=preg_split("/[\s,]+/", $table_comment);    
+				$table_comment=$table_comment[0]; 
+			}            
 		}else{
 			$table_comment="$tablename";
-		} 
+		}              
 		$appname=self::$appName;  
 		$classname=self::getClassname($tablename);
 		$instancename=self::getInstancename($tablename);  
@@ -250,7 +290,7 @@ VIEW;
 	
 	/**
 	 * 将表列定义转换成表示层tpl文件定义的内容 
-	 * @param array $contents 页面内容
+	 * @param string $contents 页面内容
 	 */
 	private static function tableToViewTplDefine($contents)
 	{   
@@ -260,12 +300,79 @@ VIEW;
 				"{/block}";     
 		return $result;
 	}  
-
+			
+	/**
+	 * 生成标准的增删改查模板Action文件需生成首页访问所有生成的链接 
+	 * @param array $tableInfoList 表信息列表
+	 */
+	private static function createModelIndexFile($tableInfoList)
+	{
+		$tpl_content="    <div><h1>这是首页列表(共计数据对象".count($tableInfoList)."个)</h1></div>\r\n";
+		$result="";  
+		$appname=self::$appName;   
+		if ($tableInfoList!=null&&count($tableInfoList)>0){     
+			foreach ($tableInfoList as $tablename=>$tableInfo){   
+				$table_comment=$tableInfoList[$tablename]["Comment"]; 
+				if (contain($table_comment,"\r")||contain($table_comment,"\n")){
+					$table_comment=preg_split("/[\s,]+/", $table_comment);    
+					$table_comment=$table_comment[0]; 
+				}					 
+				$instancename=self::getInstancename($tablename); 
+				$result.="        <tr class=\"entry\"><td class=\"content\"><a href=\"{\$url_base}index.php?go={$appname}.{$instancename}.lists\">{$table_comment}</a></td></tr>\r\n";
+			}   
+		}    
+		$tpl_content.="    <table class=\"viewdoblock\" style=\"width: 500px;\">\r\n".        
+					 $result.      
+					 "    </table>\r\n".    
+					 "        \r\n";  
+		$tpl_content=self::tableToViewTplDefine($tpl_content); 
+		$filename="index".Config_F::SUFFIX_FILE_TPL;      
+		$dir=self::$view_dir_full."index".DIRECTORY_SEPARATOR;    
+		return self::saveDefineToDir($dir,$filename,$tpl_content); 
+	}		
+	
+	/**
+	 * 生成前台所需的表示层页面
+	 * @param array $tableInfoList 表信息列表
+	 * @param array $fieldInfos 表列信息列表
+	 */
+	private static function createFrontModelPages($tableInfoList,$fieldInfos)
+	{
+		foreach ($fieldInfos as $tablename=>$fieldInfo){  
+			if ($tableInfoList!=null&&count($tableInfoList)>0&&  array_key_exists("$tablename", $tableInfoList)){
+				$table_comment=$tableInfoList[$tablename]["Comment"];
+				if (contain($table_comment,"\r")||contain($table_comment,"\n")){
+					$table_comment=preg_split("/[\s,]+/", $table_comment);    
+					$table_comment=$table_comment[0]; 
+				}            
+			}else{
+				$table_comment="$tablename";
+			}         
+			$appname=self::$appName;                   
+			$instancename=self::getInstancename($tablename);
+			$link="    <div align=\"center\"><my:a href=\"{\$url_base}index.php?go={$appname}.{$instancename}.view\">查看</my:a>|<my:a href=\"{\$url_base}index.php?go={$appname}.{$instancename}.edit\">修改</my:a>";
+			$back_index="    <my:a href='{\$url_base}index.php?go={$appname}.index.index'>返回首页</my:a></div>";      
+			$tpl_content=self::tableToViewTplDefine("    <div><h1>".$table_comment."列表</h1></div><br/>\r\n{$link}<br/>\r\n{$back_index}");             
+			$filename="lists".Config_F::SUFFIX_FILE_TPL; 
+			$tplName=self::saveTplDefineToDir($tablename,$tpl_content,$filename);
+			echo "生成导出完成:$tablename=>$tplName!<br/>";       
+			$link="     <div align=\"center\"><my:a href=\"{\$url_base}index.php?go={$appname}.{$instancename}.lists\">返回列表</my:a>";              
+			$tpl_content=self::tableToViewTplDefine("    <div><h1>查看".$table_comment."</h1></div><br/>\r\n{$link}<br/>\r\n{$back_index}");                
+			$filename="view".Config_F::SUFFIX_FILE_TPL; 
+			$tplName=self::saveTplDefineToDir($tablename,$tpl_content,$filename);
+			echo "生成导出完成:$tablename=>$tplName!<br/>";  
+			$tpl_content=self::tableToViewTplDefine("    <div><h1>编辑".$table_comment."</h1></div><br/>\r\n{$link}<br/>\r\n{$back_index}");                                     
+			$filename="edit".Config_F::SUFFIX_FILE_TPL; 
+			$tplName=self::saveTplDefineToDir($tablename,$tpl_content,$filename);
+			echo "生成导出完成:$tablename=>$tplName!<br/>";    
+		}
+	}
+					
 	/**
 	 * 保存生成的tpl代码到指定命名规范的文件中       
-	 * @param string $tablename 表名称    
-	 * @param string $filename 文件名称
+	 * @param string $tablename 表名称      
 	 * @param string $defineTplFileContent 生成的代码 
+	 * @param string $filename 文件名称
 	 */
 	private static function saveTplDefineToDir($tablename,$defineTplFileContent,$filename)
 	{ 

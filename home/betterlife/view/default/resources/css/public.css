@@ -118,8 +118,7 @@ br {
 /** 数据对象模板显示样式 */ 
 .block {
 	margin-top:10px;
-	border:1px solid #cfcfcf;
-	width:600px;
+	border:1px solid #cfcfcf;  
 	padding:10px;
 }
 .viewdoblock {  
@@ -154,10 +153,18 @@ br {
 	border             : 1px solid #ccc ;          
 	border-bottom-width: 0px;   
 	border-left-width  : 0px;   
-}
+}   
 .viewdoblock .content{    
-	line-height :1.5em;  
+	line-height :1.5em;    
 	padding-left:20px;
+	border      : 1px solid #ccc ;    
+	border-bottom-width: 0px;   
+	border-right-width : 0px;    
+} 
+.viewdoblock .btnCol{  
+	width:100px;     
+	text-align :center;
+	line-height :1.5em;  
 	border      : 1px solid #ccc ;    
 	border-bottom-width: 0px;   
 	border-right-width : 0px;    

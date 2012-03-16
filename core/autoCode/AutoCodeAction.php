@@ -11,7 +11,8 @@ class AutoCodeAction extends AutoCode
 {
 	/**
 	 * 控制器生成定义的方式<br/>
-	 * 1.前端Action，继承基本Action。<br/> 
+	 * 0.前端Action，继承基本Action。<br/> 
+	 * 1.生成标准的增删改查模板Action，继承基本Action。<br/> 
 	 * 2.后端Action，继承ActionExt。<br/>
 	 */
 	public static $type;
@@ -47,11 +48,17 @@ class AutoCodeAction extends AutoCode
 	 */
 	public static function AutoCode()
 	{         
-		if (self::$type==2){
-			self::$app_dir="admin";
-		}else{
-			self::$app_dir=Gc::$appName;
-		}    
+		switch (self::$type) {
+		   case 0:
+			 self::$app_dir=Gc::$appName;
+			 break;
+		   case 1:
+			 self::$app_dir="model";
+			 break;
+		   case 2:
+			 self::$app_dir="admin"; 
+			 break;
+		}         
 		self::$action_dir_full=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR.self::$action_dir.DIRECTORY_SEPARATOR;
 		if (!UtilString::is_utf8(self::$action_dir_full)){
 			self::$action_dir_full=UtilString::gbk2utf8(self::$action_dir_full);    
@@ -159,13 +166,20 @@ class AutoCodeAction extends AutoCode
 					 " * @author $author\r\n".
 					 " */\r\n".  
 					 "class Action_Upload extends ActionExt\r\n".  
-					 "{\r\n".self::$echo_upload."}";   
+					 "{\r\n".self::$echo_upload."}\r\n".   
+					 "?>";   
 			self::saveDefineToDir(self::$action_dir_full,"Action_Upload.php",$e_result);   
 			echo  "新生成的Action_Upload文件路径:<font color='#0000FF'>".self::$action_dir_full."Action_Upload.php</font><br />";
 /*            self::$echo_upload=str_replace(" ","&nbsp;",self::$echo_upload);      
 			self::$echo_upload=str_replace("\r\n","<br />",self::$echo_upload);    
 			echo self::$echo_upload;  */  
 		}      
+		/**
+		 * 生成标准的增删改查模板Action文件需生成首页访问所有生成的链接
+		 */
+		if ((self::$type==1)||(self::$type==0)){
+			self::createModelIndexFile();	
+		}
 	}
 
 	/**
@@ -174,7 +188,8 @@ class AutoCodeAction extends AutoCode
 	public static function UserInput()
 	{
 		$inputArr=array(
-			"1"=>"前端Action，继承基本Action。",
+			"0"=>"前端Action，继承基本Action。",
+			"1"=>"生成标准的增删改查模板Action，继承基本Action。", 
 			"2"=>"后端Action，继承ActionExt"
 		);    
 		parent::UserInput("需要定义生成控制器Action类的输出文件路径参数",$inputArr);  
@@ -230,7 +245,8 @@ class AutoCodeAction extends AutoCode
 					}   
 				}
 				
-				$result.="     }\r\n\r\n";       
+				$result.="     }\r\n\r\n";      
+				$result.="?>";   
 				self::$echo_result.=$result;  
 				$result_upload ="    /**\r\n".                        
 						 "     * 上传数据对象:{$table_comment}数据文件\r\n".  
@@ -241,7 +257,7 @@ class AutoCodeAction extends AutoCode
 						 "    }\r\n\r\n";  
 				self::$echo_upload.=$result_upload;                
 				return "";
-			default:                
+			case 1:                  
 				$result.="/**\r\n".
 						 " +---------------------------------------<br/>\r\n".
 						 " * 控制器:$table_comment<br/>\r\n".
@@ -309,10 +325,84 @@ class AutoCodeAction extends AutoCode
 						 "}\r\n\r\n"; 
 				$result.="?>";  
 				break;
+			default:                
+				$result.="/**\r\n".
+						 " +---------------------------------------<br/>\r\n".
+						 " * 控制器:$table_comment<br/>\r\n".
+						 " +---------------------------------------\r\n".
+						 " * @category $category\r\n".
+						 " * @package $package\r\n".
+						 " * @author $author\r\n".
+						 " */\r\n".  
+						 "class Action_$classname extends Action\r\n".  
+						 "{\r\n".
+						 "    /**\r\n".
+						 "     * {$table_comment}列表\r\n".
+						 "     */\r\n".
+						 "    public function lists()\r\n".
+						 "    {\r\n".               
+						 "        \r\n".  
+						 "    }\r\n".           
+						 "    /**\r\n".
+						 "     * 查看{$table_comment}\r\n".
+						 "     */\r\n".
+						 "    public function view()\r\n".
+						 "    {\r\n".
+						 "        \r\n".                        
+						 "    }\r\n".     
+						 "    /**\r\n".
+						 "     * 编辑{$table_comment}\r\n".
+						 "     */\r\n".
+						 "    public function edit()\r\n".
+						 "    {\r\n".
+						 "        \r\n".     
+						 "    }\r\n".
+						 "    /**\r\n".
+						 "     * 删除{$table_comment}\r\n".
+						 "     */\r\n".
+						 "    public function delete()\r\n".
+						 "    {\r\n".
+						 "        \r\n".                            
+						 "    }\r\n".
+						 "}\r\n\r\n"; 
+				$result.="?>";  
+				break;
 		}             
 		return $result;
 	}
 
+	/**
+	 * 生成标准的增删改查模板Action文件需生成首页访问所有生成的链接 
+	 */
+	private static function createModelIndexFile()
+	{
+		$category  = Gc::$appName;              
+		$package   = self::$package_front; 
+		$author    = self::$author;
+		$result="<?php\r\n".
+				 "/**\r\n".
+				 " +---------------------------------------<br/>\r\n".
+				 " * 控制器:首页导航<br/>\r\n".
+				 " +---------------------------------------\r\n".
+				 " * @category $category\r\n".
+				 " * @package $package\r\n".
+				 " * @author $author\r\n".
+				 " */\r\n".  
+				 "class Action_Index extends Action\r\n".  
+				 "{\r\n".
+				 "    /**\r\n".
+				 "     * 首页:网站所有页面列表\r\n".
+				 "     */\r\n".
+				 "    public function index()\r\n".
+				 "    {\r\n".               
+				 "        \r\n".  
+				 "    }\r\n".   
+				 "}\r\n\r\n".
+				 "?>";    
+	   
+		self::saveDefineToDir(self::$action_dir_full,"Action_Index.php",$result);                          
+	}
+	
 	/**
 	 * 保存生成的代码到指定命名规范的文件中 
 	 * @param string $tablename 表名称
