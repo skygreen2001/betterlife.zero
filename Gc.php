@@ -166,7 +166,15 @@ class Gc
 	 * @var string
 	 * @static
 	 */
-	public static $self_theme_dir="default";                                                               
+	public static $self_theme_dir="default";        
+	/**
+	 * 每个模块可以定义自己显示的模板名
+	 * 如过没有定义，则使用$self_theme_dir默认定义的名称，一般都是default 
+	 * @var mixed
+	 */
+	public static $self_theme_dir_every=array(
+		'betterlife'=>'ria'	
+	);                                                       
 
 	/**
 	 * URL访问模式,可选参数0、1、2、3,代表以下四种模式：<br/>
