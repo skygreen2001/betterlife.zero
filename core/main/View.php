@@ -74,7 +74,11 @@ class View {
 	public function __construct($moduleName,$templatefile=null) {
 		$this->moduleName=$moduleName;    
 		self::init_view_global();
-		$this->initTemplate(Gc::$template_mode,$templatefile);
+		if (isset(Gc::$template_mode_every)&&array_key_exists($this->moduleName,Gc::$template_mode_every)){            
+			$this->initTemplate(Gc::$template_mode_every[$this->moduleName],$templatefile);
+		}else{                       
+			$this->initTemplate(Gc::$template_mode,$templatefile);
+		}          
 		if (!empty(self::$view_global)) {
 			foreach (self::$view_global as $key=>$value) {
 				$this->template_set($key, $value);
@@ -132,6 +136,14 @@ class View {
 
 	public function __set($property, $value) {
 		if (property_exists($this,$property)) {
+			if ((!empty($property))&&($property=='viewObject')&&
+				!empty($this->viewObject->js_ready)&&array_key_exists('js_ready',$value)){
+			   $value->js_ready= $this->viewObject->js_ready.$value->js_ready; 
+			}              
+			if ((!empty($property))&&($property=='viewObject')&&
+				!empty($this->viewObject->css_ready)&&array_key_exists('css_ready',$value)){
+			   $value->css_ready= $this->viewObject->css_ready.$value->css_ready; 
+			}
 			$this->$property=$value;
 		} else {
 			$this->set($property,$value);
@@ -312,8 +324,12 @@ class View {
 	 * 设置模板认知的变量
 	 */
 	public function template_set($key,$value,$template_mode=null) {
-		if (empty($template_mode)) {
-			$template_mode=Gc::$template_mode;
+		if (empty($template_mode)) {            
+			if (isset(Gc::$template_mode_every)&&array_key_exists($this->moduleName,Gc::$template_mode_every)){            
+				$template_mode=Gc::$template_mode_every[$this->moduleName];
+			}else{                                 
+				$template_mode=Gc::$template_mode;
+			}               
 		}
 		switch ($template_mode) {
 			case self::TEMPLATE_MODE_NONE:

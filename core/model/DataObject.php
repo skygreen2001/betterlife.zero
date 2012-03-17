@@ -27,7 +27,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	/**
 	* @var enum $id_name_strategy ID名称定义的策略
 	*/
-	public static $idname_strategy=EnumIDNameStrategy::ID;    
+	public static $idname_strategy=EnumIDNameStrategy::TABLENAME_ID;    
 	/**
 	* ID名称中的连接符。<br/>
 	* ID名称定义的策略为TABLENAME_ID有效。
@@ -37,7 +37,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	/**
 	* @var enum $foreignid_name_strategy Foreign ID名称定义的策略
 	*/
-	public static $foreignid_name_strategy=EnumForeignIDNameStrategy::TABLENAMEID;    
+	public static $foreignid_name_strategy=EnumForeignIDNameStrategy::TABLENAME_ID;    
 	/**
 	* Foreign ID名称中的连接符。<br/>
 	* Foreign ID名称定义的策略为TABLENAME_ID有效。

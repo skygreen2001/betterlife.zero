@@ -3,7 +3,8 @@
 <div class="block">  
 	<div><h1>查看用户详细信息</h1></div>     
 	<table class="viewdoblock">   
-        <tr class="entry"><td class="head">用户编号</th><td class="content">{$userdetail.userId}</td></tr> 
+        <tr class="entry"><td class="head">标识</th><td class="content">{$userdetail.userdetail_id}</td></tr> 
+        <tr class="entry"><td class="head">用户标识</th><td class="content">{$userdetail.user_id}</td></tr> 
         <tr class="entry"><td class="head">邮件地址</th><td class="content">{$userdetail.email}</td></tr> 
         <tr class="entry"><td class="head">手机号码</th><td class="content">{$userdetail.cellphone}</td></tr>          
 	</table>                                                            

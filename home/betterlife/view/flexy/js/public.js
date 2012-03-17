@@ -20,7 +20,7 @@ $(function() {
 		$(this).css("background-color","#000");  
 		$(this).css("border","1px solid green");
 	})           	
-});   
+});
 
 /**
  * 添加在线编辑器KindEditor 

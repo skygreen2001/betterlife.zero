@@ -72,7 +72,7 @@ class CheckBOMTask
 		   return ("<font color=red>BOM found.</font>");
 		}
 	  }else{
-		if (self::$isRemoveBom) return ("BOM Not Found."); else return ""; 
+		//if (self::$isRemoveBom) return ("BOM Not Found."); else return ""; 
 	  }                                                    
 	}
 

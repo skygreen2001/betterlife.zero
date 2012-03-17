@@ -4,72 +4,42 @@
  * 通知<br/>
  +---------------------------------------
  * @category betterlife
- * @package domain.msg
- * @author skygreen
+ * @package msg
+ * @author skygreen skygreen2001@gmail.com
  */
-class Notice extends DataObject {
+class Notice extends DataObject
+{
     //<editor-fold defaultstate="collapsed" desc="定义部分">
+    /**
+     * 编号
+     * @var int
+     * @access public
+     */
+    public $notice_id;
     /**
      * 管理员编号
      * @var int
-     * @access private 
+     * @access public
      */
-    private $senderId;
-
+    public $user_id;
     /**
      * 分类
      * @var string
-     * @access private 
+     * @access public
      */
-    private $group;
-
+    public $group;
     /**
      * 标题
      * @var string
-     * @access private 
+     * @access public
      */
-    private $title;
-
+    public $title;
     /**
      * 通知内容
      * @var string
-     * @access private 
+     * @access public
      */
-    private $content;
-    //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="setter和getter">
-    public function setSenderId($senderId){
-        $this->senderId=$senderId;
-    }
-
-    public function getSenderId(){
-        return $this->senderId;
-    }
-
-    public function setGroup($group){
-        $this->group=$group;
-    }
-
-    public function getGroup(){
-        return $this->group;
-    }
-
-    public function setTitle($title){
-        $this->title=$title;
-    }
-
-    public function getTitle(){
-        return $this->title;
-    }
-
-    public function setContent($content){
-        $this->content=$content;
-    }
-
-    public function getContent(){
-        return $this->content;
-    }
+    public $content;
     //</editor-fold>
 }
 ?>

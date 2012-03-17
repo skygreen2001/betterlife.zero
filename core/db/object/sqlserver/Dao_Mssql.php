@@ -109,7 +109,7 @@ class Dao_Mssql extends Dao implements IDaoNormal{
         }
         try {
             $_SQL=new Crud_Sql_Insert();
-            $object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::STRING));
+            $object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::TIMESTAMP));
             if (Config_Db::$db==EnumDbSource::DB_SQLSERVER&&
                     ((trim(strtoupper(Gc::$encoding))==Config_C::CHARACTER_UTF_8)||(trim(strtolower(Gc::$encoding))==Config_C::CHARACTER_UTF8))) {
                 $this->saParams=UtilObject::object_to_array($object,false,array(Config_C::CHARACTER_UTF_8=>Config_C::CHARACTER_GBK));

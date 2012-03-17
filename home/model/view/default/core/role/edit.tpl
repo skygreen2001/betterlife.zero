@@ -2,9 +2,9 @@
 {block name=body}
  <div class="block">  
 	<div><h1>编辑角色</h1></div>
-	<form name="roleForm" method="post"><input type="hidden" name="id" value="{$role.id}"/>           
+	<form name="roleForm" method="post"><input type="hidden" name="role_id" value="{$role.role_id}"/>           
 	<table class="viewdoblock">                                                                                                                 
-        <tr class="entry"><td class="head">角色名称</th><td class="content"><input type="text" class="edit" name="name" value="{$role.name}"/></td></tr>       
+        <tr class="entry"><td class="head">角色名称</th><td class="content"><input type="text" class="edit" name="role_name" value="{$role.role_name}"/></td></tr>       
 		<tr class="entry"><td class="content" colspan="2" align="center"><input type="submit" value="提交" class="btnSubmit" /></td></tr>
 	</table>
 	</form>                                                            

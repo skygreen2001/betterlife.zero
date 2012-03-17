@@ -101,7 +101,7 @@ class Dao_Php5 extends Dao implements IDaoNormal {
             return $autoid;
         }
         $_SQL=new Crud_Sql_Insert();
-        $object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::STRING));
+        $object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::TIMESTAMP));
         $this->saParams=UtilObject::object_to_array($object);
         foreach ($this->saParams as $key=>&$value) {
             $value=$this->escape($value);

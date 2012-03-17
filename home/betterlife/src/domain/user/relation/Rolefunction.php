@@ -1,45 +1,45 @@
 <?php
 /**
  +---------------------------------------<br/>
- * 角色拥有功能关系表<br/>
+ * 角色拥有功能<br/>
+ * 角色拥有功能<br/>
  +---------------------------------------
  * @category betterlife
- * @package domain.user.relation
- * @author skygreen
+ * @package user.relation
+ * @author skygreen skygreen2001@gmail.com
  */
-class Rolefunction extends DataObject {
+class Rolefunction extends DataObject
+{
     //<editor-fold defaultstate="collapsed" desc="定义部分">
     /**
-     * 角色编号
+     * 标识
      * @var int
-     * @access private 
+     * @access public
      */
-    private $roleId;
-
+    public $rolefunction_id;
     /**
-     * 功能编号
+     * 角色标识
      * @var int
-     * @access private 
+     * @access public
      */
-    private $functionId;
+    public $role_id;
+    /**
+     * 功能标识
+     * @var int
+     * @access public
+     */
+    public $function_id;
     //</editor-fold>
-
-    //<editor-fold defaultstate="collapsed" desc="setter和getter">
-    public function setRoleId($roleId){
-        $this->roleId=$roleId;
-    }
-
-    public function getRoleId(){
-        return $this->roleId;
-    }
-
-    public function setFunctionId($functionId){
-        $this->functionId=$functionId;
-    }
-
-    public function getFunctionId(){
-        return $this->functionId;
-    }
-    //</editor-fold>
+    /**
+     * 规格说明
+     * 表中不存在的默认列定义:commitTime,updateTime
+     * @var mixed
+     */
+    public $field_spec=array(
+        EnumDataSpec::REMOVE=>array(
+            'commitTime',
+            'updateTime'
+        )
+    );
 }
 ?>

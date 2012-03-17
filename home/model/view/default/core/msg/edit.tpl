@@ -2,7 +2,7 @@
 {block name=body}
  <div class="block">  
 	<div><h1>编辑消息</h1></div>
-	<form name="msgForm" method="post"><input type="hidden" name="id" value="{$msg.id}"/>           
+	<form name="msgForm" method="post"><input type="hidden" name="msg_id" value="{$msg.msg_id}"/>           
 	<table class="viewdoblock">                                                                                                                 
         <tr class="entry"><td class="head">发送者</th><td class="content"><input type="text" class="edit" name="senderId" value="{$msg.senderId}"/></td></tr>
         <tr class="entry"><td class="head">接收者</th><td class="content"><input type="text" class="edit" name="receiverId" value="{$msg.receiverId}"/></td></tr>

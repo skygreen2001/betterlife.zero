@@ -4,34 +4,37 @@
  * 博客<br/>
  +---------------------------------------
  * @category betterlife
- * @package domain.core
- * @author skygreen
+ * @package core
+ * @author skygreen skygreen2001@gmail.com
  */
-class Blog extends DataObject {
-	
+class Blog extends DataObject
+{
 	//<editor-fold defaultstate="collapsed" desc="定义部分">
 	/**
-	 * 用户编号
+	 * 标识
 	 * @var int
-	 * @access private 
+	 * @access public
 	 */
-	private $userId;
-
+	public $blog_id;
+	/**
+	 * 用户标识
+	 * @var int
+	 * @access public
+	 */
+	public $user_id;
 	/**
 	 * 博客名称
 	 * @var string
-	 * @access private 
+	 * @access public
 	 */
-	private $name;
-
+	public $blog_name;
 	/**
 	 * 博客内容
 	 * @var string
-	 * @access private 
+	 * @access public
 	 */
-	private $content;
-	//</editor-fold>
-	
+	public $content;
+	//</editor-fold>       
 	static $has_many=array(
 	  "comments"=>"Comment"
 	);
@@ -40,51 +43,28 @@ class Blog extends DataObject {
 	  "user"=>"User"
 	);
 	
-	//<editor-fold defaultstate="collapsed" desc="setter和getter">
-	public function setUserId($userId){
-		$this->userId=$userId;
-	}
-
-	public function getUserId(){
-		return $this->userId;
-	}
-
-	public function setName($name){
-		$this->name=$name;
-	}
-
-	public function getName(){
-		return $this->name;
-	}
-
-	public function setContent($content){
-		$this->content=$content;
-	}
-
-	public function getContent(){
-		return $this->content;
-	}
-	//</editor-fold>
-	
-	public function getNameShow() {
+	/**
+	 * 数据库使用SqlServer，需使用字符转换:GBK->UTF8
+	 */
+	public function getBlog_nameShow() {
 		$name=UtilString::gbk2utf8($this->name);         
 		return $name;   
 	}
 	
+	/**
+	 * 数据库使用SqlServer，需使用字符转换:GBK->UTF8
+	 */
 	public function getContentShow() {
 		$content=UtilString::gbk2utf8($this->content);         
 		return $content;
 	}    
-	
-	public function getCommitTimeShow(){
-		return date("Y-m-d H:i",strtotime($this->commitTime)); 
-	}
+					 
 	/**
 	* 当前登录用户是否可编辑该博客
 	* @return bool true 可以
 	*/
 	public function canEdit(){
-		if (HttpSession::get("userid")==$this->userId) {
+		if (HttpSession::get("user_id")==$this->user_id) {
 			return true;
 		}       
 		return false;
@@ -95,10 +75,10 @@ class Blog extends DataObject {
 	* @return bool true 可以
 	*/
 	public function canDelete(){
-		if (HttpSession::get("userid")==$this->userId) {
+		if (HttpSession::get("user_id")==$this->user_id) {
 			return true;
 		}       
 		return false;
-	}
+	}   
 }
 ?>

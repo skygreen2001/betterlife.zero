@@ -4,6 +4,7 @@
 	<div><h1>消息列表(共计{$countMsgs}个)</h1></div>     
 	<table class="viewdoblock">
 		<tr class="entry">
+            <th class="header">标识</th>
             <th class="header">发送者</th>
             <th class="header">接收者</th>
             <th class="header">发送者名称</th>
@@ -14,6 +15,7 @@
 		</tr>       
 		{foreach item=msg from=$msgs}     
 		<tr class="entry">                            
+            <td class="content">{$msg.msg_id}</td>
             <td class="content">{$msg.senderId}</td>
             <td class="content">{$msg.receiverId}</td>
             <td class="content">{$msg.senderName}</td>

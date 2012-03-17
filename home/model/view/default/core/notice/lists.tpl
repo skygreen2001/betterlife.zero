@@ -4,6 +4,7 @@
 	<div><h1>通知列表(共计{$countNotices}个)</h1></div>     
 	<table class="viewdoblock">
 		<tr class="entry">
+            <th class="header">编号</th>
             <th class="header">管理员编号</th>
             <th class="header">分类</th>
             <th class="header">标题</th>
@@ -12,7 +13,8 @@
 		</tr>       
 		{foreach item=notice from=$notices}     
 		<tr class="entry">                            
-            <td class="content">{$notice.senderId}</td>
+            <td class="content">{$notice.notice_id}</td>
+            <td class="content">{$notice.user_id}</td>
             <td class="content">{$notice.group}</td>
             <td class="content">{$notice.title}</td>
             <td class="content">{$notice.content}</td>

@@ -149,7 +149,7 @@ class Dal_Mdb2 extends Dal implements IDal
         try {
             $_SQL=new Crud_Sql_Insert();
             $_SQL->isPreparedStatement=true;
-            $object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::STRING));           
+            $object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::TIMESTAMP));           
             $this->saParams=UtilObject::object_to_array($object);
             $this->sQuery=$_SQL->insert($this->classname)->values($this->saParams)->result();
              if (!empty($this->saParams)) {

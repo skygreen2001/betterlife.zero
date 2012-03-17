@@ -1,5 +1,24 @@
 <?php
 /**
+ * 在线编辑器的类型 
+ */
+class EnumOnlineEditorType extends Enum
+{
+	/**
+	 * @link http://ckeditor.com/ 
+	 */
+	const CKEDITOR=1;
+	/**
+	 * @link http://www.kindsoft.net/ 
+	 */
+	const KINDEDITOR=2;
+	/**
+	 * @link http://xheditor.com/
+	 */
+	const XHEDITOR=3;
+}
+
+/**
  +----------------------------------------------<br/>
  * 所有控制器的父类<br/>
  * class_alias("Action","Controller");<br/>
@@ -14,6 +33,14 @@ class Action extends Object
 	 * 规范要求：所有控制器要求的前缀
 	 */
 	const ROUTINE_CLASS_PREFIX="Action_";
+	/**
+	 * 在线编辑器,参考:EnumOnlineEditorType
+	 * 1.CKEditor
+	 * 2.KindEditor
+	 * 3.xhEditor
+	 * @var mixed
+	 */
+	public $online_editor=3;
 	/**
 	 * 访问应用名  
 	 * @var string
@@ -40,7 +67,7 @@ class Action extends Object
 	 */
 	protected $extras;
 	/**
-	 * 是否在请求内部重导向-》跳转
+	 * 是否在请求内部重导向->跳转
 	 * @var bool 
 	 */
 	public $isRedirected=false;
@@ -249,6 +276,35 @@ class Action extends Object
 		}
 		$this->isRedirected=true;
 	}
+	
+	/**
+	 * 加载在线编辑器 
+	 * @param string $form_name Form name 名称
+	 * @param string $textarea_name Input为Textarea的名称name
+	 * @param string $content 内容
+	 */
+	public function load_onlineditor($form_name="postForm",$textarea_name="content",$content="")
+	{
+		switch ($this->online_editor) {
+		   case EnumOnlineEditorType::CKEDITOR:
+				$this->view->editorHtml=UtilCKEeditor::editorHtml($textarea_name,$content); 
+				$this->view->online_editor="CKEditor";
+			 break;
+		   case EnumOnlineEditorType::KINDEDITOR:
+				$viewObject=$this->view->viewObject; 
+				if(empty($viewObject))
+				{
+					$this->view->viewObject=new ViewObject();
+				}
+				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/kindeditor.js"); 
+				$this->view->online_editor="KindEditor";
+			 break;  
+		   case EnumOnlineEditorType::XHEDITOR:                                                                                       
+				UtilXheditor::loadReady($textarea_name,$form_name,$this->view->viewObject); 
+				$this->view->online_editor="xhEditor";  
+			 break; 
+		}                                                
+	} 
 }
 
 ?>

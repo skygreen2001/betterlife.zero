@@ -157,24 +157,7 @@ class Gc
 	 */
 	public static $moudle_exclude_subpackage=array(
 			"view",
-	);     
-		 
-	/**
-	 * 开发者自定义当前使用模板目录名<br/>
-	 * 示例：D:\wamp\www\betterlife\home\betterlife\view\default<br/>
-	 *       default即自定义当前使用模板目录名 
-	 * @var string
-	 * @static
-	 */
-	public static $self_theme_dir="default";        
-	/**
-	 * 每个模块可以定义自己显示的模板名
-	 * 如过没有定义，则使用$self_theme_dir默认定义的名称，一般都是default 
-	 * @var mixed
-	 */
-	public static $self_theme_dir_every=array(
-		'betterlife'=>'ria'	
-	);                                                       
+	);                                                            
 
 	/**
 	 * URL访问模式,可选参数0、1、2、3,代表以下四种模式：<br/>
@@ -218,7 +201,31 @@ class Gc
 	 * @static
 	 */
 	public static $template_mode=1;  
-	
+	/**
+	 * 每个模块可以定义自己的模板模式
+	 * 如过没有定义，则使用$template_mode默认定义的名称，一般都是1:Smarty 
+	 * @var mixed
+	 */
+	public static $template_mode_every=array(
+		//'betterlife'=>5    
+	);   
+	/**
+	 * 开发者自定义当前使用模板目录名<br/>
+	 * 示例：D:\wamp\www\betterlife\home\betterlife\view\default<br/>
+	 *       default即自定义当前使用模板目录名 
+	 * @var string
+	 * @static
+	 */
+	public static $self_theme_dir="default";        
+	/**
+	 * 每个模块可以定义自己显示的模板名
+	 * 如过没有定义，则使用$self_theme_dir默认定义的名称，一般都是default 
+	 * @var mixed
+	 */
+	public static $self_theme_dir_every=array(
+		//'betterlife'=>'flexy'    
+	);    
+
 	/**
 	* 模板文件后缀名称<br/>
 	* 一般为.tpl,.php,.html,.htm;<br/>

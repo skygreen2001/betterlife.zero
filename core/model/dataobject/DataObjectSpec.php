@@ -169,11 +169,7 @@ class EnumDataSpec extends Enum{
 	/**
 	 * 数据对象外键名称定义，如无定义，则按默认规则查找指定外键。
 	 */
-	const FOREIGN_ID="foreign_id";    
-	/**
-	 * 数据对象类型定义
-	 */
-	const DATATYPE="datatype";
+	const FOREIGN_ID="foreign_id";  
 }
 //</editor-fold>
 
@@ -279,17 +275,11 @@ class DataObjectSpec
 			if (isset($field_spec)){
 				if (isset($field_spec[EnumDataSpec::REMOVE])&&isset($object_field_spec[EnumDataSpec::REMOVE])){
 					$remove_spec=array_merge($field_spec[EnumDataSpec::REMOVE],$object_field_spec[EnumDataSpec::REMOVE]);
-				}
-				if (isset($field_spec[EnumDataSpec::DATATYPE])&&isset($object_field_spec[EnumDataSpec::DATATYPE])){
-					$datatype_spec=array_merge($field_spec[EnumDataSpec::DATATYPE],$object_field_spec[EnumDataSpec::DATATYPE]);
-				}
+				}             
 				$field_spec=array_merge($field_spec,$object_field_spec);  
 				if (isset($remove_spec)){
 					$field_spec[EnumDataSpec::REMOVE]=$remove_spec;
-				}
-				if (isset($datatype_spec)){
-					$field_spec[EnumDataSpec::DATATYPE]=$datatype_spec;
-				}
+				}            
 			}else{
 				$field_spec=$object_field_spec;
 			}

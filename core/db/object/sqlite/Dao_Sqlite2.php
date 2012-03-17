@@ -84,7 +84,7 @@ class Dao_Sqlite2 extends Dao implements IDaoNormal {
         }
         try {
             $_SQL=new Crud_Sql_Insert();
-            $object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::STRING));
+            $object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::TIMESTAMP));
             $this->saParams=UtilObject::object_to_array($object);
             $this->filterViewProperties($this->saParams);
             $this->sQuery=$_SQL->insert($this->classname)->values($this->saParams)->result();

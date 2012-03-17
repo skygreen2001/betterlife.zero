@@ -2,11 +2,11 @@
 <classes>
 	<class name="Blog">
 		<conditions>
-			<condition>name</condition>
+			<condition>blog_name</condition>
 			<condition>content</condition>             
 		</conditions>
 		<relationShows> 
-			<show local_key="userId" relation_class="User">name</show> 
+			<show local_key="user_id" relation_class="User">username</show> 
 		</relationShows> 
 	</class>     
 </classes>

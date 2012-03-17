@@ -2,11 +2,11 @@
 {block name=body}
  <div class="block">  
 	<div><h1>编辑评论</h1></div>
-	<form name="commentForm" method="post"><input type="hidden" name="id" value="{$comment.id}"/>           
+	<form name="commentForm" method="post"><input type="hidden" name="comment_id" value="{$comment.comment_id}"/>           
 	<table class="viewdoblock">                                                                                                                 
-        <tr class="entry"><td class="head">评论者编号</th><td class="content"><input type="text" class="edit" name="userId" value="{$comment.userId}"/></td></tr>
+        <tr class="entry"><td class="head">评论者标识</th><td class="content"><input type="text" class="edit" name="user_id" value="{$comment.user_id}"/></td></tr>
         <tr class="entry"><td class="head">评论</th><td class="content"><input type="text" class="edit" name="comment" value="{$comment.comment}"/></td></tr>
-        <tr class="entry"><td class="head">博客编号</th><td class="content"><input type="text" class="edit" name="blogId" value="{$comment.blogId}"/></td></tr>       
+        <tr class="entry"><td class="head">博客标识</th><td class="content"><input type="text" class="edit" name="blog_id" value="{$comment.blog_id}"/></td></tr>       
 		<tr class="entry"><td class="content" colspan="2" align="center"><input type="submit" value="提交" class="btnSubmit" /></td></tr>
 	</table>
 	</form>                                                            

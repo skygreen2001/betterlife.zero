@@ -3,6 +3,7 @@
 <div class="block">  
 	<div><h1>查看消息</h1></div>     
 	<table class="viewdoblock">   
+        <tr class="entry"><td class="head">标识</th><td class="content">{$msg.msg_id}</td></tr> 
         <tr class="entry"><td class="head">发送者</th><td class="content">{$msg.senderId}</td></tr> 
         <tr class="entry"><td class="head">接收者</th><td class="content">{$msg.receiverId}</td></tr> 
         <tr class="entry"><td class="head">发送者名称</th><td class="content">{$msg.senderName}</td></tr> 

@@ -4,17 +4,19 @@
 	<div><h1>用户所属部门列表(共计{$countDepartments}个)</h1></div>     
 	<table class="viewdoblock">
 		<tr class="entry">
+            <th class="header">编号</th>
             <th class="header">部门名称</th>
             <th class="header">管理者</th>
             <th class="header">预算</th>
             <th class="header">实际开销</th>
-            <th class="header">部门人员预估平均工资</th>
-            <th class="header">部门人员实际平均工资</th>                                  
+            <th class="header">预估平均工资</th>
+            <th class="header">实际工资</th>                                  
 			<th class="header">操作</th>
 		</tr>       
 		{foreach item=department from=$departments}     
 		<tr class="entry">                            
-            <td class="content">{$department.name}</td>
+            <td class="content">{$department.department_id}</td>
+            <td class="content">{$department.department_name}</td>
             <td class="content">{$department.manager}</td>
             <td class="content">{$department.budget}</td>
             <td class="content">{$department.actualexpenses}</td>

@@ -2,9 +2,9 @@
 {block name=body}
  <div class="block">  
 	<div><h1>编辑用户详细信息</h1></div>
-	<form name="userdetailForm" method="post"><input type="hidden" name="id" value="{$userdetail.id}"/>           
+	<form name="userdetailForm" method="post"><input type="hidden" name="userdetail_id" value="{$userdetail.userdetail_id}"/>           
 	<table class="viewdoblock">                                                                                                                 
-        <tr class="entry"><td class="head">用户编号</th><td class="content"><input type="text" class="edit" name="userId" value="{$userdetail.userId}"/></td></tr>
+        <tr class="entry"><td class="head">用户标识</th><td class="content"><input type="text" class="edit" name="user_id" value="{$userdetail.user_id}"/></td></tr>
         <tr class="entry"><td class="head">邮件地址</th><td class="content"><input type="text" class="edit" name="email" value="{$userdetail.email}"/></td></tr>
         <tr class="entry"><td class="head">手机号码</th><td class="content"><input type="text" class="edit" name="cellphone" value="{$userdetail.cellphone}"/></td></tr>       
 		<tr class="entry"><td class="content" colspan="2" align="center"><input type="submit" value="提交" class="btnSubmit" /></td></tr>

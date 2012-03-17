@@ -22,17 +22,17 @@ class Action_Functions extends Action
         $count=Functions::count();
         $bb_page=UtilPage::init($nowpage,$count);
         $this->view->countFunctionss=$count;
-        $Functionss = Functions::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
-        $this->view->set("Functionss",$Functionss);
+        $functionss = Functions::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+        $this->view->set("functionss",$functionss);
     }
     /**
      * 查看功能信息
      */
     public function view()
     {
-        $FunctionsId=$this->data["id"]; 
-        $Functions = Functions::get_by_id($FunctionsId); 
-        $this->view->set("Functions",$Functions);
+        $functionsId=$this->data["id"]; 
+        $functions = Functions::get_by_id($functionsId); 
+        $this->view->set("functions",$functions);
     }
     /**
      * 编辑功能信息
@@ -40,18 +40,18 @@ class Action_Functions extends Action
     public function edit()
     {
         if (!empty($_POST)) {
-            $Functions = $this->model->Functions;
-            $id= $Functions->getId(); 
+            $functions = $this->model->Functions;
+            $id= $functions->getId(); 
             if (!empty($id)){
-              $Functions->update(); 
+              $functions->update(); 
             }else{
-              $id=$Functions->save();  
+              $id=$functions->save();  
             }
-            $this->redirect("Functions","view","id=$id");
+            $this->redirect("functions","view","id=$id");
         }else{
-            $FunctionsId=$this->data["id"];
-            $Functions = Functions::get_by_id($FunctionsId);
-            $this->view->set("Functions",$Functions); 
+            $functionsId=$this->data["id"];
+            $functions = Functions::get_by_id($functionsId);
+            $this->view->set("functions",$functions); 
         }
     }
     /**
@@ -59,9 +59,9 @@ class Action_Functions extends Action
      */
     public function delete()
     {
-        $FunctionsId=$this->data["id"]; 
-        $isDelete = Functions::deleteByID($FunctionsId); 
-        $this->redirect("Functions","lists",$this->data);
+        $functionsId=$this->data["id"]; 
+        $isDelete = Functions::deleteByID($functionsId); 
+        $this->redirect("functions","lists",$this->data);
     }
 }
 

@@ -4,68 +4,65 @@
  * 评论<br/>
  +---------------------------------------
  * @category betterlife
- * @package domain.core
- * @author skygreen
+ * @package core
+ * @author skygreen skygreen2001@gmail.com
  */
-class Comment extends DataObject {
-    
-    //<editor-fold defaultstate="collapsed" desc="定义部分">
-    /**
-     * 评论者编号
-     * @var int
-     * @access private 
-     */
-    private $userId;
+class Comment extends DataObject
+{
+	//<editor-fold defaultstate="collapsed" desc="定义部分">
+	/**
+	 * 标识
+	 * @var int
+	 * @access public
+	 */
+	public $comment_id;
+	/**
+	 * 评论者标识
+	 * @var int
+	 * @access public
+	 */
+	public $user_id;
+	/**
+	 * 评论
+	 * @var string
+	 * @access public
+	 */
+	public $comment;
+	/**
+	 * 博客标识
+	 * @var int
+	 * @access public
+	 */
+	public $blog_id;
+	//</editor-fold>
 
-    /**
-     * 评论
-     * @var string
-     * @access private 
-     */
-    private $comment;
+	static $belong_has_one=array(
+	  "user"=>"User"
+	);   
 
-    /**
-     * 博客编号
-     * @var int
-     * @access private 
-     */
-    private $blogId;
-    //</editor-fold>
-
-
-    static $belong_has_one=array(
-      "user"=>"User"
-    );
-
-    //<editor-fold defaultstate="collapsed" desc="setter和getter">
-    public function setUserId($userId){
-        $this->userId=$userId;
-    }
-
-    public function getUserId(){
-        return $this->userId;
-    }
-
-    public function setComment($comment){
-        $this->comment=$comment;
-    }
-
-    public function getComment(){
-        return $this->comment;
-    }
-
-    public function setBlogId($blogId){
-        $this->blogId=$blogId;
-    }
-
-    public function getBlogId(){
-        return $this->blogId;
-    }
-    //</editor-fold>
-
-    public function getCommitTime() {
-        return date("Y-m-d H:i",strtotime($this->commitTime));
-    }    
-
+					 
+	/**
+	* 当前登录用户是否可编辑该评论
+	* @return bool true 可以
+	*/
+	public function canEdit(){
+		if (HttpSession::get("user_id")==$this->user_id) {
+			return true;
+		}       
+		return false;
+	}
+	
+	/**
+	* 当前登录用户是否可删除该评论
+	* @return bool true 可以
+	*/
+	public function canDelete(){
+		if (HttpSession::get("user_id")==$this->user_id) {
+			return true;
+		}       
+		return false;
+	}   
+	
+	
 }
 ?>

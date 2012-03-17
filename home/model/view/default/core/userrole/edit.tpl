@@ -2,10 +2,10 @@
 {block name=body}
  <div class="block">  
 	<div><h1>编辑用户角色</h1></div>
-	<form name="userroleForm" method="post"><input type="hidden" name="id" value="{$userrole.id}"/>           
+	<form name="userroleForm" method="post"><input type="hidden" name="userrole_id" value="{$userrole.userrole_id}"/>           
 	<table class="viewdoblock">                                                                                                                 
-        <tr class="entry"><td class="head">用户编号</th><td class="content"><input type="text" class="edit" name="userId" value="{$userrole.userId}"/></td></tr>
-        <tr class="entry"><td class="head">角色编号</th><td class="content"><input type="text" class="edit" name="roleId" value="{$userrole.roleId}"/></td></tr>       
+        <tr class="entry"><td class="head">用户标识</th><td class="content"><input type="text" class="edit" name="user_id" value="{$userrole.user_id}"/></td></tr>
+        <tr class="entry"><td class="head">角色标识</th><td class="content"><input type="text" class="edit" name="role_id" value="{$userrole.role_id}"/></td></tr>       
 		<tr class="entry"><td class="content" colspan="2" align="center"><input type="submit" value="提交" class="btnSubmit" /></td></tr>
 	</table>
 	</form>                                                            

@@ -105,7 +105,7 @@ class Dao_Postgres extends Dao implements IDaoNormal {
             $_SQL=new Crud_Sql_Insert();
             $_SQL->type_rep=1;
             $_SQL->isPreparedStatement=true;
-            $object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::STRING));
+            $object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::TIMESTAMP));
             $this->saParams=UtilObject::object_to_array($object);
             $this->filterViewProperties($this->saParams);
             foreach ($this->saParams as $key=>&$value) {

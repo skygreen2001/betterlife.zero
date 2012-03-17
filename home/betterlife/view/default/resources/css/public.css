@@ -6,7 +6,7 @@ html,body {
 	border:0 none;
 	overflow:auto;
 	line-height:1.5em;
-	margin:5px 0 0;
+	margin:2px 0 0;
 	padding:0;
 }
 
@@ -27,7 +27,7 @@ p {
 }
 
 div{
-	margin:15px;
+	margin:8px;
 }
 
 div .block {
