@@ -6,7 +6,8 @@
  * 数据对象可重载对默认关键字的定义
  +---------------------------------------<br/>
  */
-class EnumDataObjectDefaultKeyword extends Enum{
+class EnumDataObjectDefaultKeyword extends Enum
+{
 	/**
 	 * 自定义列规格说明的名称。<br/>
 	 * 在具体的数据对象里需要用该名称声明列规格说明。它需要定义为public static的Access属性。<br/>
@@ -51,7 +52,8 @@ class EnumDataObjectDefaultKeyword extends Enum{
  * @package core.model
  * @author skygreen
  */
-class EnumTableRelation extends Enum{
+class EnumTableRelation extends Enum
+{
 	/**
 	* 一对一关联
 	*/
@@ -82,7 +84,8 @@ class EnumTableRelation extends Enum{
  * @package core.model
  * @author skygreen
  */
-class EnumColumnNameDefault extends Enum{
+class EnumColumnNameDefault extends Enum
+{
 	/**
 	 * 数据对象的唯一标识
 	 */
@@ -105,7 +108,8 @@ class EnumColumnNameDefault extends Enum{
  * @package core.model
  * @author skygreen
  */
-class EnumIDNameStrategy extends Enum{
+class EnumIDNameStrategy extends Enum
+{
   /**
 	* 无策略<br/>
 	* 说明：需要在数据对象类里定义$field_spec；说明ID别名。
@@ -136,7 +140,8 @@ class EnumIDNameStrategy extends Enum{
  * @package core.model
  * @author skygreen
  */
-class EnumForeignIDNameStrategy extends Enum{
+class EnumForeignIDNameStrategy extends Enum
+{
 	/**
 	* ID名称为:对象名+'id'<br/>
 	* 如果对象名为User,则ID名称为:userid【头字母大小写均可】
@@ -157,7 +162,8 @@ class EnumForeignIDNameStrategy extends Enum{
  * @package core.model
  * @author skygreen
  */
-class EnumDataSpec extends Enum{   
+class EnumDataSpec extends Enum
+{   
 	/**
 	 * 数据对象定义中需要移除的列
 	 */

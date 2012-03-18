@@ -329,8 +329,7 @@ class MenuGroup extends Viewable
 	{
 		$uri=dirname(__FILE__).DIRECTORY_SEPARATOR.self::CONFIG_MENU_FILE;
 		$menuConfigs=UtilXmlSimple::fileXmlToObject($uri);   
-		$result="
-				Bb.Layout.LeftMenuGroups= [";
+		$result=Gc::$appName_alias.".Layout.LeftMenuGroups= [\r\n";
 		if ($menuConfigs!=null)
 		{
 			foreach ($menuConfigs as $menuGroup) 
@@ -339,40 +338,21 @@ class MenuGroup extends Viewable
 				$isShow=true;  
 				if (isset($attributes->show)&&$attributes->show=='false')$isShow=false;
 				if ($isShow) {
-					$result.="{
-						contentEl:'$attributes->id',
-						title:'$attributes->name',
-						border: false,
-						iconCls: '$attributes->iconCls'},";
+					$result.="          {\r\n".
+							 "              contentEl:'$attributes->id',\r\n".
+							 "              title:'$attributes->name',\r\n".
+							 "              border: false,\r\n".
+							 "              iconCls: '$attributes->iconCls'\r\n".
+							 "          },\r\n";
 				} 
 			}
 		}
 		$result=substr($result,0,strlen($result)-1);
-		$result.="];";  
+		$result.="          ];";  
 		if (Gc::$is_online_optimize){                                                         
 			$result=UtilString::online_optimize($result);
 		}
 		return $result;
-				
-//       $result="
-//                bb.Layout.LeftMenuGroups= [{
-//                    contentEl: 'nav',
-//                    title: '导航区',
-//                    border: false,
-//                    iconCls: 'nav' // see the HEAD section for style used
-//                }, {
-//                    title: '设计',
-//                    contentEl: 'navdesign', 
-//                    border: false,
-//                    iconCls: 'navdesign'
-//                }, {
-//                    title: '系统设置',    
-//                    html: '<p>暂无.</p>',
-//                    border: false,
-//                    iconCls: 'settings'
-//                }];
-//        ";
-//        return $result;
 	}
 }
 ?>

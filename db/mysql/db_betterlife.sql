@@ -21,7 +21,7 @@ DROP TABLE IF EXISTS `bb_core_blog`;
 CREATE TABLE `bb_core_blog` (
   `blog_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '标识',
   `user_id` int(11) NOT NULL COMMENT '用户标识',
-  `blog_name` varchar(200) DEFAULT NULL COMMENT '博客名称',
+  `blog_name` varchar(200) DEFAULT NULL COMMENT '博客标题',
   `content` varchar(500) DEFAULT NULL COMMENT '博客内容',
   `commitTime` int(11) DEFAULT NULL COMMENT '创建时间',
   `updateTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',

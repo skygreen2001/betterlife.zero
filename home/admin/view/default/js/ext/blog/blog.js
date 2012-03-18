@@ -57,11 +57,11 @@ Bb.Blog.Store = {
 			successProperty: 'success',  
 			root: 'data',remoteSort: true,                
 			fields : [
-                {name: 'blog_id',type: 'int'},
-                {name: 'user_id',type: 'int'},
-                {name: 'username',type: 'string'},
-                {name: 'blog_name',type: 'string'},
-                {name: 'content',type: 'string'}
+				{name: 'blog_id',type: 'int'},
+				{name: 'user_id',type: 'int'},
+				{name: 'username',type: 'string'},
+				{name: 'blog_name',type: 'string'},
+				{name: 'content',type: 'string'}
 			]}         
 		),
 		writer: new Ext.data.JsonWriter({
@@ -75,23 +75,23 @@ Bb.Blog.Store = {
 			}
 		}    
 	}),
-    /**
-     * 用户
-     */
-    userStore : new Ext.data.Store({
-        proxy: new Ext.data.HttpProxy({
-            url: 'home/admin/src/httpdata/user.php'
-        }),
-        reader: new Ext.data.JsonReader({
-            root: 'users',
-            autoLoad: true,
-            totalProperty: 'totalCount',
-            id: 'user_id'
-        }, [
-            {name: 'user_id', mapping: 'user_id'}, 
-            {name: 'username', mapping: 'username'} 
-        ])
-    })      
+	/**
+	 * 用户
+	 */
+	userStore : new Ext.data.Store({
+		proxy: new Ext.data.HttpProxy({
+			url: 'home/admin/src/httpdata/user.php'
+		}),
+		reader: new Ext.data.JsonReader({
+			root: 'users',
+			autoLoad: true,
+			totalProperty: 'totalCount',
+			id: 'user_id'
+		}, [
+			{name: 'user_id', mapping: 'user_id'}, 
+			{name: 'username', mapping: 'username'} 
+		])
+	})      
 };
 /**
  * View:博客显示组件   
@@ -119,10 +119,10 @@ Bb.Blog.View={
 					beforehide:function(){
 						this.editForm.form.getEl().dom.reset();                    
 					},
-                    afterrender:function(){
-                        ckeditor_replace(); 
+					afterrender:function(){
+						ckeditor_replace(); 
  
-                    }  
+					}  
 				},
 				items : [ 
 					new Ext.form.FormPanel({   
@@ -134,40 +134,40 @@ Bb.Blog.View={
 							xtype : 'textfield',anchor:'98%'
 						},
 						items : [ 
-                            {xtype: 'hidden',  name : 'blog_id',ref:'../blog_id'},
-                            {xtype: 'hidden',name : 'user_id',id:'user_id'},
-                            {
-                                 fieldLabel : '用户标识',xtype: 'combo',name : 'username',id : 'username',
-                                 store:Bb.Blog.Store.userStore,emptyText: '请选择用户标识',itemSelector: 'div.search-item',
-                                 loadingText: '查询中...',width: 570, pageSize:Bb.Blog.Config.PageSize,
-                                 displayField:'username',// 显示文本
-                                 mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,
-                                 forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,
-                                 tpl:new Ext.XTemplate(
-                                            '<tpl for="."><div class="search-item">',
-                                                '<h3>{username}</h3>',
-                                            '</div></tpl>'
-                                 ),
-                                 onSelect:function(record,index){
-                                     if(this.fireEvent('beforeselect', this, record, index) !== false){
-                                        Ext.getCmp("user_id").setValue(record.data.user_id);
-                                        Ext.getCmp("username").setValue(record.data.username);
-                                        this.collapse();
-                                     }
-                                 }
-                            },
-                            {fieldLabel : '博客名称',name : 'blog_name'},
-                            {fieldLabel : '博客内容',name : 'content',xtype : 'textarea',id:'content',ref:'content'}        
+							{xtype: 'hidden',  name : 'blog_id',ref:'../blog_id'},
+							{xtype: 'hidden',name : 'user_id',id:'user_id'},
+							{
+								 fieldLabel : '用户名称',xtype: 'combo',name : 'username',id : 'username',
+								 store:Bb.Blog.Store.userStore,emptyText: '请选择用户',itemSelector: 'div.search-item',
+								 loadingText: '查询中...',width: 570, pageSize:Bb.Blog.Config.PageSize,
+								 displayField:'username',// 显示文本
+								 mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,
+								 forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,
+								 tpl:new Ext.XTemplate(
+											'<tpl for="."><div class="search-item">',
+												'<h3>{username}</h3>',
+											'</div></tpl>'
+								 ),
+								 onSelect:function(record,index){
+									 if(this.fireEvent('beforeselect', this, record, index) !== false){
+										Ext.getCmp("user_id").setValue(record.data.user_id);
+										Ext.getCmp("username").setValue(record.data.username);
+										this.collapse();
+									 }
+								 }
+							},
+							{fieldLabel : '博客标题',name : 'blog_name'},
+							{fieldLabel : '博客内容',name : 'content',xtype : 'textarea',id:'content',ref:'content'}        
 						]
 					})                
 				],
 				buttons : [ {         
 					text: "",ref : "../saveBtn",scope:this,
 					handler : function() {   
-                        if (CKEDITOR.instances.content){
-                            this.editForm.content.setValue(CKEDITOR.instances.content.getData());
-                        }
-         
+						if (CKEDITOR.instances.content){
+							this.editForm.content.setValue(CKEDITOR.instances.content.getData());
+						}
+		 
 						if (!this.editForm.getForm().isValid()) {
 							return;
 						}
@@ -210,9 +210,9 @@ Bb.Blog.View={
 					text : "重 置",ref:'../resetBtn',scope:this,
 					handler : function() {  
 						this.editForm.form.loadRecord(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected());
-                        if (CKEDITOR.instances.content){
-                            CKEDITOR.instances.content.setData(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.content);
-                        }
+						if (CKEDITOR.instances.content){
+							CKEDITOR.instances.content.setData(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.content);
+						}
  
 					}                  
 				}]    
@@ -277,9 +277,9 @@ Bb.Blog.View={
 					{title: '基本信息',ref:'tabBlogDetail',iconCls:'tabs',
 					 tpl: [
 					  '<table class="viewdoblock">', 
-                         '<tr class="entry"><td class="head">用户标识</td><td class="content">{username}</td></tr>',
-                         '<tr class="entry"><td class="head">博客名称</td><td class="content">{blog_name}</td></tr>',
-                         '<tr class="entry"><td class="head">博客内容</td><td class="content">{content}</td></tr>',                      
+						 '<tr class="entry"><td class="head">用户名称</td><td class="content">{username}</td></tr>',
+						 '<tr class="entry"><td class="head">博客标题</td><td class="content">{blog_name}</td></tr>',
+						 '<tr class="entry"><td class="head">博客内容</td><td class="content">{content}</td></tr>',                      
 					 '</table>' 
 					 ]
 					}
@@ -417,9 +417,9 @@ Bb.Blog.View={
 					},
 					columns : [
 						this.sm,        
-                        {header : '用户标识',dataIndex : 'username'},
-                        {header : '博客名称',dataIndex : 'blog_name'},
-                        {header : '博客内容',dataIndex : 'content'}                                 
+						{header : '用户名称',dataIndex : 'username'},
+						{header : '博客标题',dataIndex : 'blog_name'},
+						{header : '博客内容',dataIndex : 'content'}                                 
 					]
 				}),                       
 				tbar : {
@@ -435,8 +435,8 @@ Bb.Blog.View={
 							   xtype : 'textfield'
 							},
 							items : [
-                                '博客名称　',{ref: '../bblog_name'},'&nbsp;&nbsp;',
-                                '博客内容　',{ref: '../bcontent'},'&nbsp;&nbsp;',                                
+								'博客标题',{ref: '../bblog_name'},'&nbsp;&nbsp;',
+								'博客内容',{ref: '../bcontent'},'&nbsp;&nbsp;',                                
 								{
 									xtype : 'button',text : '查询',scope: this, 
 									handler : function() {
@@ -446,8 +446,8 @@ Bb.Blog.View={
 								{
 									xtype : 'button',text : '重置',scope: this,
 									handler : function() {
-                                        this.topToolbar.bblog_name.setValue("");
-                                        this.topToolbar.bcontent.setValue("");                                        
+										this.topToolbar.bblog_name.setValue("");
+										this.topToolbar.bcontent.setValue("");                                        
 										this.filter={};
 										this.doSelectBlog();
 									}
@@ -639,9 +639,9 @@ Bb.Blog.View={
 		 */
 		doSelectBlog : function() {
 			if (this.topToolbar){
-                var bblog_name = this.topToolbar.bblog_name.getValue();
-                var bcontent = this.topToolbar.bcontent.getValue();
-                this.filter       ={'blog_name':bblog_name,'content':bcontent};
+				var bblog_name = this.topToolbar.bblog_name.getValue();
+				var bcontent = this.topToolbar.bcontent.getValue();
+				this.filter       ={'blog_name':bblog_name,'content':bcontent};
 			}
 			var condition = {'start':0,'limit':Bb.Blog.Config.PageSize};
 			Ext.apply(condition,this.filter);
@@ -797,10 +797,10 @@ Bb.Blog.View={
 			Bb.Blog.View.Running.edit_window.setTitle('添加博客');
 			Bb.Blog.View.Running.edit_window.savetype=0;
 			Bb.Blog.View.Running.edit_window.blog_id.setValue("");
-            if (CKEDITOR.instances.content){
-                CKEDITOR.instances.content.setData("");
-            }
-            
+			if (CKEDITOR.instances.content){
+				CKEDITOR.instances.content.setData("");
+			}
+			
 			Bb.Blog.View.Running.edit_window.show();   
 			Bb.Blog.View.Running.edit_window.maximize();               
 		},   
@@ -816,10 +816,10 @@ Bb.Blog.View={
 			Bb.Blog.View.Running.edit_window.setTitle('修改博客');
 			Bb.Blog.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
 			Bb.Blog.View.Running.edit_window.savetype=1;
-            if (CKEDITOR.instances.content){
-                CKEDITOR.instances.content.setData(this.getSelectionModel().getSelected().data.content); 
-            }
-            
+			if (CKEDITOR.instances.content){
+				CKEDITOR.instances.content.setData(this.getSelectionModel().getSelected().data.content); 
+			}
+			
 			Bb.Blog.View.Running.edit_window.show();    
 			Bb.Blog.View.Running.edit_window.maximize();                  
 		},        
