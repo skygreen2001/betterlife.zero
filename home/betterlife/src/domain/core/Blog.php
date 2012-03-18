@@ -79,6 +79,14 @@ class Blog extends DataObject
 			return true;
 		}       
 		return false;
-	}   
+	}     
+	
+	/**
+	 * 返回计算当前博客的评论数
+	 * @param mixed $blog_id    
+	 */
+	public function count_comments(){
+		return Comment::count("blog_id=".$this->blog_id);     
+	}    
 }
 ?>

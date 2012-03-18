@@ -37,7 +37,8 @@ class Comment extends DataObject
 	//</editor-fold>
 
 	static $belong_has_one=array(
-	  "user"=>"User"
+	  "user"=>"User",
+	  "blog"=>"Blog"    
 	);   
 
 					 

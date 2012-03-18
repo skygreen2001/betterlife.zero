@@ -40,7 +40,7 @@ class Action extends Object
 	 * 3.xhEditor
 	 * @var mixed
 	 */
-	public $online_editor=3;
+	public $online_editor=1;
 	/**
 	 * 访问应用名  
 	 * @var string
@@ -299,7 +299,12 @@ class Action extends Object
 				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/kindeditor.js"); 
 				$this->view->online_editor="KindEditor";
 			 break;  
-		   case EnumOnlineEditorType::XHEDITOR:                                                                                       
+		   case EnumOnlineEditorType::XHEDITOR:   
+				$viewObject=$this->view->viewObject; 
+				if(empty($viewObject))
+				{
+					$this->view->viewObject=new ViewObject();
+				}                                                                                               
 				UtilXheditor::loadReady($textarea_name,$form_name,$this->view->viewObject); 
 				$this->view->online_editor="xhEditor";  
 			 break; 

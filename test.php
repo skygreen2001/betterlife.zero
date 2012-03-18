@@ -3,11 +3,11 @@ require_once ("init.php");
 //$blogs=Blog::select('name,content');
 //print_r($blogs);                                                  
 
-print_r(User::get(array(name=> "like '%ad%'")));
+print_r(User::get(array(name=> "like '%ad%'")));    
 
 //$serverCache=Manager_Cache::singleton()->server(EnumCacheDriverType::REDIS);
 //$serverCache->TestRun();
-                    
+					
 //EnumCacheDriverType::REDIS
 //print_r(SystemService::doLibrarySelect(array("name"=>"m")));                                             
 //LogMe::log("我在想事情呢！等等我");       
@@ -21,7 +21,7 @@ print_r(User::get(array(name=> "like '%ad%'")));
 //            ->where('$name => strlen($name) < 5')
 //            ->select('$name'); 
 //print_r($result);
-            
+			
 //加载配置            
 //$xml=UtilConfig::Instance();
 //$xml->load(Gc::$nav_root_path."core\\util\\config\\xml\\"."setting.xml");

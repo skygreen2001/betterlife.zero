@@ -8,5 +8,25 @@
 		<relationShows> 
 			<show local_key="user_id" relation_class="User">username</show> 
 		</relationShows> 
-	</class>     
+		<has_many>
+			<class name="Comment">comments<class>
+		</has_many>
+		<belong_has_one>  
+			<class name="User">user</class>
+		</belong_has_one> 
+	</class>   
+	<class name="Comment">         
+		<conditions>
+			<condition>comment</condition>  
+		</conditions> 
+		<relationShows> 
+			<show local_key="user_id" relation_class="User">username</show> 
+			<show local_key="blog_id" relation_class="Blog">blog_name</show> 
+		</relationShows> 
+		<belong_has_one>  
+			<class name="User">user</class>
+			<class name="Blog">blog</class>
+		</belong_has_one> 
+	
+	</class>       
 </classes>
