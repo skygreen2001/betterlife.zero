@@ -41,21 +41,21 @@ class User extends DataObject
 	 * @var array
 	 */
 	static $has_one=array(    
-		"userDetail"=> "Userdetail",            
+		"userDetail"=> "Userdetail"            
 	);
 
 	static $belong_has_one=array(    
-		"department"=> "Department",            
+		"department"=> "Department"            
 	);
 
 	
 	static $many_many=array(
-	   "roles"=>"Role",
+	   "roles"=>"Role"
 	);
 	
-	public function getNameShow() {
-		$name=UtilString::gbk2utf8($this->name);    
-		return $name;
+	public function getUsernameShow() {
+		$username=UtilString::gbk2utf8($this->username);    
+		return $username;
 	}
 }
 ?>

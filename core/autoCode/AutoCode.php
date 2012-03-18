@@ -29,7 +29,7 @@ class AutoCode extends Object
 	 * 数据对象关系显示字段 
 	 * @var mixed
 	 */
-	public static $relation_viewfield;  
+	public static $relation_viewfield;      
 	/**
 	 * 获取类和注释的说明 
 	 */
@@ -130,8 +130,7 @@ class AutoCode extends Object
 		}
 		return $length; 
 	}
-	
-	
+			
 	/**
 	 * 保存生成的代码到指定命名规范的文件中 
 	 * @param string $dir 保存路径

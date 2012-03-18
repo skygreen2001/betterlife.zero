@@ -26,6 +26,14 @@ class AutoCodeDomain extends AutoCode
 	 */
 	public static $enumClass;
 	/**
+	 * 所有的数据对象关系:<br/>
+	 * 一对一，一对多，多对多<br/>
+	 * 包括*.has_one,belong_has_one,has_many,many_many,belongs_many_many. <br/> 
+	 * 参考说明:EnumTableRelation
+	 * @var mixed
+	 */
+	public static $relation_all; 
+	/**
 	 * 数据对象生成定义的方式<br/>
 	 * 1.所有的列定义的对象属性都是private,同时定义setter和getter方法。
 	 * 2.所有的列定义的对象属性都是public。
@@ -274,6 +282,7 @@ class AutoCodeDomain extends AutoCode
 				break;
 		}    
 		$result.=self::domainDataobjectSpec($fieldInfo,$tablename); 
+		$result.=self::domainDataobjectRelationSpec($fieldInfo,$classname); 
 		$result.=self::domainEnumPropertyShow($fieldInfo,$tablename); 
 		$result.=self::domainEnumShow($fieldInfo,$tablename);
 		$result.="}\r\n";    
@@ -282,8 +291,112 @@ class AutoCodeDomain extends AutoCode
 	}
 	
 	/**
+	 * 生成数据对象之间关系规范定义<br/> 
+	 * 所有的数据对象关系:<br/>
+	 * 一对一，一对多，多对多<br/>
+	 * 包括*.has_one,belong_has_one,has_many,many_many,belongs_many_many. <br/> 
+	 * 参考说明:EnumTableRelation   
+	 * @param array $fieldInfo 表列信息列表  
+	 * @param string $classname 数据对象类名称         
+	 */
+	private static function domainDataobjectRelationSpec($fieldInfo,$classname)
+	{
+		$result="";
+		$relationSpec=AutoCodeDomain::$relation_all[$classname]; 
+		
+		//导出一对一关系规范定义(如果存在)
+		if (array_key_exists("has_one",$relationSpec))
+		{
+			$has_one=$relationSpec["has_one"];
+			$has_one_effect="";
+			foreach ($has_one as $key=>$value) {
+			   $has_one_effect.="        \"$value\"=>\"$key\",\r\n";
+			}
+			if (!empty($has_one_effect)) $has_one_effect=substr($has_one_effect,0,strlen($has_one_effect)-3);
+			$result.="\r\n".
+					"    /**\r\n".
+					"     * 一对一关系\r\n".                                               
+					"     */\r\n".
+					"    static \$has_one=array(\r\n".
+					$has_one_effect."\r\n".
+					"    );\r\n";
+		}    		
+		//导出从属一对一关系规范定义(如果存在)
+		if (array_key_exists("belong_has_one",$relationSpec))
+		{
+			$belong_has_one=$relationSpec["belong_has_one"];
+			$belong_has_one_effect="";
+			foreach ($belong_has_one as $key=>$value) {
+			   $belong_has_one_effect.="        \"$value\"=>\"$key\",\r\n";
+			}
+			if (!empty($belong_has_one_effect)) $belong_has_one_effect=substr($belong_has_one_effect,0,strlen($belong_has_one_effect)-3);
+			$result.="\r\n".
+					"    /**\r\n".
+					"     * 从属一对一关系\r\n".                                               
+					"     */\r\n".
+					"    static \$belong_has_one=array(\r\n".
+					$belong_has_one_effect."\r\n".
+					"    );\r\n";
+		}   
+		//导出一对多关系规范定义(如果存在)
+		if (array_key_exists("has_many",$relationSpec))
+		{
+			$has_many=$relationSpec["has_many"];
+			$has_many_effect="";
+			foreach ($has_many as $key=>$value) {
+			   $has_many_effect.="        \"$value\"=>\"$key\",\r\n";
+			}
+			if (!empty($has_many_effect)) $has_many_effect=substr($has_many_effect,0,strlen($has_many_effect)-3);
+			$result.="\r\n".
+					"    /**\r\n".
+					"     * 一对多关系\r\n".                                               
+					"     */\r\n".
+					"    static \$has_many=array(\r\n".
+					$has_many_effect."\r\n".
+					"    );\r\n";
+		}   
+		//导出多对多关系规范定义(如果存在)                                       
+		if (array_key_exists("many_many",$relationSpec))
+		{
+			$many_many=$relationSpec["many_many"];
+			$many_many_effect="";
+			foreach ($many_many as $key=>$value) {
+			   $many_many_effect.="        \"$value\"=>\"$key\",\r\n";
+			}
+			if (!empty($many_many_effect)) $many_many_effect=substr($many_many_effect,0,strlen($many_many_effect)-3);
+			$result.="\r\n".
+					"    /**\r\n".
+					"     * 多对多关系\r\n".                                               
+					"     */\r\n".
+					"    static \$many_many=array(\r\n".
+					$many_many_effect."\r\n".
+					"    );\r\n";
+		}   
+		//导出从属于多对多关系规范定义(如果存在)
+		if (array_key_exists("belongs_many_many",$relationSpec))
+		{
+			$belongs_many_many=$relationSpec["belongs_many_many"];
+			$belongs_many_many_effect="";
+			foreach ($belongs_many_many as $key=>$value) {
+			   $belongs_many_many_effect.="        \"$value\"=>\"$key\",\r\n";
+			}
+			if (!empty($belongs_many_many_effect)) $belongs_many_many_effect=substr($belongs_many_many_effect,0,strlen($belongs_many_many_effect)-3);
+			$result.="\r\n".
+					"    /**\r\n".
+					"     * 从属于多对多关系\r\n".                                               
+					"     */\r\n".
+					"    static \$belongs_many_many=array(\r\n".
+					$belongs_many_many_effect."\r\n".
+					"    );\r\n";
+		}   		
+		return $result;
+	}    
+	
+	/**
 	 * 不符合规范的表定义需要用规格在数据文件里进行说明
 	 * 1.移除默认字段:commitTime,updateTime
+	 * @param array $fieldInfo 表列信息列表    
+	 * @param string $tablename 表名称  
 	 */
 	private static function domainDataobjectSpec($fieldInfo,$tablename)
 	{     
@@ -317,7 +430,8 @@ class AutoCodeDomain extends AutoCode
 	
 	/**
 	 * 在实体数据对象定义中定义枚举类型的显示
-	 * @param array $fieldInfo 表列信息列表      
+	 * @param array $fieldInfo 表列信息列表     
+	 * @param string $tablename 表名称   
 	 */
 	private static function domainEnumShow($fieldInfo,$tablename)
 	{
@@ -349,6 +463,7 @@ class AutoCodeDomain extends AutoCode
 	/**
 	 * 在实体数据对象定义中定义枚举类型的显示
 	 * @param array $fieldInfo 表列信息列表      
+	 * @param string $tablename 表名称  
 	 */
 	private static function domainEnumPropertyShow($fieldInfo,$tablename)
 	{
@@ -380,7 +495,7 @@ class AutoCodeDomain extends AutoCode
 
 	/**
 	 *从表名称获取子文件夹的信息。
-	 * @param string $tablename 
+	 * @param string $tablename 表名称    
 	 * @return string 返回对象所在的Package名 
 	 */
 	private static function getPackage($tablename)
