@@ -363,7 +363,7 @@ class Gc
 			$baseurl.=($baseDir == '\\' ? '' : $baseDir).'/';
 			
 			if (strpos(strtolower($baseurl),strtolower("common/js"))!== false) {
-				$baseurl=str_replace("common/js/","",$baseurl);     
+				$baseurl=substr($baseurl,0,stripos($baseurl,"common/js"));
 			}
 			Gc::$url_base=$baseurl;
 			Gc::$attachment_url=Gc::$url_base;

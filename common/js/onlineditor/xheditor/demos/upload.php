@@ -7,7 +7,7 @@
  * @site http://xheditor.com/
  * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
  * 
- * @Version: 0.9.5 (build 110315)
+ * @Version: 0.9.6 (build 111027)
  * 
  * 注1：本程序仅为演示用，请您务必根据自己需求进行相应修改，或者重开发
  * 注2：本程序特别针对HTML5上传，加入了特殊处理
@@ -15,7 +15,7 @@
 header('Content-Type: text/html; charset=UTF-8');
 //*****************start:modify by skygreen**************************
 require_once("../../../../../init.php");
-$urlbase=UtilNet::urlbase();                             
+$urlbase=UtilNet::urlbase(); 
 //*****************end  :modify by skygreen**************************
 $inputName='filedata';//表单文件域name
 $attachDir='upload';//上传文件保存路径，结尾不要带/
@@ -28,21 +28,19 @@ ini_set('date.timezone','Asia/Shanghai');//时区
 
 $err = "";
 $msg = "''";
-
 //*****************start:modify by skygreen**************************
 $tempPath=Gc::$nav_root_path.$attachDir.'/'.date("YmdHis").mt_rand(10000,99999).'.tmp';
 $tempPath=str_replace("/","\\",$tempPath);
 $tempPath_dir=dirname($tempPath);
 if (!file_exists($tempPath_dir)){
-    UtilFileSystem::createDir($tempPath_dir);    
+	UtilFileSystem::createDir($tempPath_dir);    
 }
 //*****************end  :modify by skygreen**************************
-
 $localName='';
 
 if(isset($_SERVER['HTTP_CONTENT_DISPOSITION'])&&preg_match('/attachment;\s+name="(.+?)";\s+filename="(.+?)"/i',$_SERVER['HTTP_CONTENT_DISPOSITION'],$info)){//HTML5上传
 	file_put_contents($tempPath,file_get_contents("php://input"));
-	$localName=$info[2];
+	$localName=urldecode($info[2]);
 }
 else{//标准表单式上传
 	$upfile=@$_FILES[$inputName];
@@ -97,11 +95,11 @@ if($err==''){
 				case 1: $attachSubDir = 'day_'.date('ymd'); break;
 				case 2: $attachSubDir = 'month_'.date('ym'); break;
 				case 3: $attachSubDir = 'ext_'.$extension; break;
-			}
-            //*****************start:modify by skygreen**************************
-			$attachDir = Gc::$nav_root_path.$attachDir.'/'.$attachSubDir;                
-            $attachDir=str_replace("\\","/",$attachDir);
-            //*****************end  :modify by skygreen**************************
+			}            
+			//*****************start:modify by skygreen**************************
+			$attachDir = Gc::$nav_root_path.$attachDir.'/'.$attachSubDir;            
+			$attachDir=str_replace("\\","/",$attachDir);
+			//*****************end  :modify by skygreen**************************
 			if(!is_dir($attachDir))
 			{
 				@mkdir($attachDir, 0777);
@@ -109,22 +107,21 @@ if($err==''){
 			}
 			PHP_VERSION < '4.2.0' && mt_srand((double)microtime() * 1000000);
 			$newFilename=date("YmdHis").mt_rand(1000,9999).'.'.$extension;
-			$targetPath = $attachDir.'/'.$newFilename;     
+			$targetPath = $attachDir.'/'.$newFilename;
+			
 			rename($tempPath,$targetPath);
-			@chmod($targetPath,0755); 
-            //*****************start:modify by skygreen**************************
-            $targetPath=str_replace("/","\\",$targetPath);      
-            //*****************end  :modify by skygreen**************************   
-                 
-			$targetPath=jsonString($targetPath);          
-
-            //*****************start:modify by skygreen**************************
-            $targetPath=str_replace("\\\\","\\",$targetPath);   
-            $targetPath=str_replace(Gc::$nav_root_path,"",$targetPath);          
-            $targetPath=str_replace("\\","/",$targetPath);                                    
+			@chmod($targetPath,0755);            
+			//*****************start:modify by skygreen**************************
+			$targetPath=str_replace("/","\\",$targetPath);      
+			//*****************end  :modify by skygreen************************** 
+			$targetPath=jsonString($targetPath);            
+			//*****************start:modify by skygreen**************************
+			$targetPath=str_replace("\\\\","\\",$targetPath);   
+			$targetPath=str_replace(Gc::$nav_root_path,"",$targetPath);          
+			$targetPath=str_replace("\\","/",$targetPath);                                    
 			if($immediate=='1')$targetPath='!'.$urlbase.$targetPath;
 			//*****************end  :modify by skygreen**************************
-            if($msgType==1)$msg="'$targetPath'";
+			if($msgType==1)$msg="'$targetPath'";
 			else $msg="{'url':'".$targetPath."','localname':'".jsonString($localName)."','id':'1'}";//id参数固定不变，仅供演示，实际项目中可以是数据库ID
 		}
 	}

@@ -9,7 +9,9 @@ html,body {
 	margin:2px 0 0;
 	padding:0;
 }
-
+.contentBox{
+	margin:8px;
+}
 .en-head {
 	font:bold .8em Geneva,Arial,Helvetica,sans-serif;
 }
@@ -24,10 +26,6 @@ table {
 
 p {
 	margin:5px;
-}
-
-div{
-	margin:8px;
 }
 
 div .block {
@@ -80,19 +78,25 @@ blockquote {
 	margin:2px;
 	padding:5px;
 }
-
-input {
+form {
+	margin: 0;
+}
+textarea {
+	display: block;
+}
+.inputNormal {
 	border:1px solid #FFF;
 	text-align:center;
-	width:200px;
 	height:28px;
 	line-height:28px;
 	background:gray;
 	color:#FFF;
 	background-color:gray;
+	width:200px;  
+	border:1px solid gray;  
 }
-  
 .btnSubmit{
+	margin-top:5px;
 	width:100px;
 	height:32px;
 	color:#FFF;
@@ -102,14 +106,6 @@ input {
 	border:1px solid;
 	border-color:#696 #363 #363 #696;
 } 
-
-label {
-	vertical-align:middle;
-	width:150px;
-	height:35px;
-	text-align:right;
-	margin:2px 4px 6px;
-}
 
 br {
 	clear:left;

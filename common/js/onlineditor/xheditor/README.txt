@@ -10,7 +10,7 @@
    下载地址：http://xheditor.com/download
 
 2. 解压压缩文件，将其中的xheditor-zh-cn.min.js以及xheditor_emot、xheditor_plugins和xheditor_skin三个文件夹上传到网站相应目录
-	注：如果您网站中没有使用jQuery框架，也请一并上传jquery文件夹中的jquery-1.4.2.min.js
+	注：如果您网站中没有使用jQuery框架，也请一并上传jquery文件夹中的jquery-1.4.4.min.js
 
 3. 在相应html文件的</head>之前添加
 <script type="text/javascript" src="http://static.xxx.com/js/jquery.js"></script>
@@ -32,7 +32,7 @@ $('#elm1').xheditor()；
 $('#elm1').xheditor(false)；
 
 
-重要说明：2种初始化方法只能选择其中一种，不能混合使用，优先级分别是：方法1>方法2，例如用了方法1，方法2就无法使用了
+重要说明：2种初始化方法只能选择其中一种，不能混合使用，优先级分别是：class初始化>JS初始化，如果页面中使用了class初始化模式，JS初始化代码就无效了
 
 
 更多帮助信息，请查看在线技术手册：http://xheditor.com/manual

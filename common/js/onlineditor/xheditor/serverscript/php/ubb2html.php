@@ -68,7 +68,8 @@ function ubb2html($sUBB)
 	$sHtml=preg_replace('/\[url\s*=\s*([^\]"]+?)(?:"[^\]]*?)?\s*\]\s*([\s\S]*?)\s*\[\/url\]/i','<a href="$1">$2</a>',$sHtml);
 	$sHtml=preg_replace('/\[email\]\s*(((?!")[\s\S])+?)(?:"[\s\S]*?)?\s*\[\/email\]/i','<a href="mailto:$1">$1</a>',$sHtml);
 	$sHtml=preg_replace('/\[email\s*=\s*([^\]"]+?)(?:"[^\]]*?)?\s*\]\s*([\s\S]+?)\s*\[\/email\]/i','<a href="mailto:$1">$2</a>',$sHtml);
-	$sHtml=preg_replace("/\[quote\]([\s\S]*?)\[\/quote\]/i",'<blockquote>$1</blockquote>',$sHtml);
+	$sHtml=preg_replace("/\[quote\]/i",'<blockquote>',$sHtml);
+	$sHtml=preg_replace("/\[\/quote\]/i",'</blockquote>',$sHtml);
 	if(!$bUbb2htmlFunctionInit){
 	function getFlash($match)
 	{

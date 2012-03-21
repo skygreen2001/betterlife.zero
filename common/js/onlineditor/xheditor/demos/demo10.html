@@ -4,14 +4,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>xhEditor demo10 : showIframeModal接口的iframe文件上传</title>
 <link rel="stylesheet" href="common.css" type="text/css" media="screen" />
-<script type="text/javascript" src="../jquery/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="../xheditor-1.1.9-zh-cn.min.js"></script>
+<script type="text/javascript" src="../jquery/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="../xheditor-1.1.13-zh-cn.min.js"></script>
 <script type="text/javascript">
 $(pageInit);
 function pageInit()
 {
-	$('#elm1').xheditor({skin:'vista',upLinkUrl:"!uploadgui.php",upImgUrl:"!uploadgui.php",upFlashUrl:"!uploadgui.php",upMediaUrl:"!uploadgui.php",shortcuts:{'ctrl+enter':submitForm}});
-	$('#elm2').xheditor({skin:'vista',upLinkUrl:"!{editorRoot}xheditor_plugins/multiupload/multiupload.html?uploadurl={editorRoot}demos/upload.php%3Fimmediate%3D1&ext=附件文件(*.zip;*.rar;*.txt)",upImgUrl:'!{editorRoot}xheditor_plugins/multiupload/multiupload.html?uploadurl={editorRoot}demos/upload.php%3Fimmediate%3D1&ext=图片文件(*.jpg;*.jpeg;*.gif;*.png)',upFlashUrl:'!{editorRoot}xheditor_plugins/multiupload/multiupload.html?uploadurl={editorRoot}demos/upload.php%3Fimmediate%3D1&ext=Flash动画(*.swf)',upMediaUrl:'!{editorRoot}xheditor_plugins/multiupload/multiupload.html?uploadurl={editorRoot}demos/upload.php%3Fimmediate%3D1&ext=多媒体文件(*.wmv;*.avi;*.wma;*.mp3;*.mid)',shortcuts:{'ctrl+enter':submitForm}});
+	$.extend(xheditor.settings,{skin:'vista',shortcuts:{'ctrl+enter':submitForm}});//修改默认设置
+	$('#elm1').xheditor({upLinkUrl:"!uploadgui.php",upImgUrl:"!uploadgui.php",upFlashUrl:"!uploadgui.php",upMediaUrl:"!uploadgui.php"});
+	$('#elm2').xheditor({upLinkUrl:"!{editorRoot}xheditor_plugins/multiupload/multiupload.html?uploadurl={editorRoot}demos/upload.php%3Fimmediate%3D1&ext=附件文件(*.zip;*.rar;*.txt)",upImgUrl:'!{editorRoot}xheditor_plugins/multiupload/multiupload.html?uploadurl={editorRoot}demos/upload.php%3Fimmediate%3D1&ext=图片文件(*.jpg;*.jpeg;*.gif;*.png)',upFlashUrl:'!{editorRoot}xheditor_plugins/multiupload/multiupload.html?uploadurl={editorRoot}demos/upload.php%3Fimmediate%3D1&ext=Flash动画(*.swf)',upMediaUrl:'!{editorRoot}xheditor_plugins/multiupload/multiupload.html?uploadurl={editorRoot}demos/upload.php%3Fimmediate%3D1&ext=多媒体文件(*.wmv;*.avi;*.wma;*.mp3;*.mid)'});
 }
 function submitForm(){$('#frmDemo').submit();}
 </script>

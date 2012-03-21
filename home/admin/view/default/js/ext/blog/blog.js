@@ -26,7 +26,11 @@ Bb.Blog={
 			 * 是否固定显示博客信息页(或者打开新窗口)
 			 */
 			IsFix:0          
-		}
+		},
+		/**
+		 *  
+		 */
+		OnlineEditor:1
 	},
 	/**
 	 * Cookie设置
@@ -120,13 +124,22 @@ Bb.Blog.View={
 						this.editForm.form.getEl().dom.reset();                    
 					},
 					afterrender:function(){
-						ckeditor_replace(); 
- 
+						switch (Bb.Blog.Config.OnlineEditor)
+						{
+							case 2:
+								Bb.Blog.View.EditWindow.KindEditor = KindEditor.create('textarea[name="content"]',{width:'98%',minHeith:'350px', filterMode:true});
+								break
+							case 3:
+								pageInit("content");
+								break
+							default:
+								ckeditor_replace(); 
+						}
 					}  
 				},
 				items : [ 
 					new Ext.form.FormPanel({   
-						ref:'editForm',layout:'form',
+						ref:'editForm',layout:'form',formId:'editForm',
 						labelWidth : 100,autoWidth : true,labelAlign : "center",
 						bodyStyle : 'padding:5px 5px 0',align : "center",
 						api : {},
@@ -163,11 +176,21 @@ Bb.Blog.View={
 				],
 				buttons : [ {         
 					text: "",ref : "../saveBtn",scope:this,
-					handler : function() {   
-						if (CKEDITOR.instances.content){
-							this.editForm.content.setValue(CKEDITOR.instances.content.getData());
+					handler : function() { 
+						switch (Bb.Blog.Config.OnlineEditor)
+						{
+							case 2:
+								if (Bb.Blog.View.EditWindow.KindEditor){
+									this.editForm.content.setValue(Bb.Blog.View.EditWindow.KindEditor.html());
+								}
+								break
+							case 3:
+								break
+							default:                        
+								if (CKEDITOR.instances.content){
+									this.editForm.content.setValue(CKEDITOR.instances.content.getData());
+								}
 						}
-		 
 						if (!this.editForm.getForm().isValid()) {
 							return;
 						}
@@ -210,9 +233,20 @@ Bb.Blog.View={
 					text : "重 置",ref:'../resetBtn',scope:this,
 					handler : function() {  
 						this.editForm.form.loadRecord(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected());
-						if (CKEDITOR.instances.content){
-							CKEDITOR.instances.content.setData(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.content);
-						}
+						switch (Bb.Blog.Config.OnlineEditor)
+						{
+							case 2:
+								if (Bb.Blog.View.EditWindow.KindEditor){
+									Bb.Blog.View.EditWindow.KindEditor.html(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.content);
+								}
+								break
+							case 3:
+								break
+							default:                   
+								if (CKEDITOR.instances.content){
+									CKEDITOR.instances.content.setData(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.content);
+								}
+						}     
  
 					}                  
 				}]    
@@ -419,7 +453,7 @@ Bb.Blog.View={
 						this.sm,        
 						{header : '用户名称',dataIndex : 'username'},
 						{header : '博客标题',dataIndex : 'blog_name'},
-						{header : '博客内容',dataIndex : 'content'}                                 
+						{header : '博客内容',dataIndex : 'content',width:450}                                 
 					]
 				}),                       
 				tbar : {
@@ -797,8 +831,19 @@ Bb.Blog.View={
 			Bb.Blog.View.Running.edit_window.setTitle('添加博客');
 			Bb.Blog.View.Running.edit_window.savetype=0;
 			Bb.Blog.View.Running.edit_window.blog_id.setValue("");
-			if (CKEDITOR.instances.content){
-				CKEDITOR.instances.content.setData("");
+			switch (Bb.Blog.Config.OnlineEditor)
+			{
+				case 2:
+					if (Bb.Blog.View.EditWindow.KindEditor){
+						Bb.Blog.View.EditWindow.KindEditor.html("");
+					}
+					break
+				case 3:
+					break
+				default:
+					if (CKEDITOR.instances.content){
+						CKEDITOR.instances.content.setData("");
+					}
 			}
 			
 			Bb.Blog.View.Running.edit_window.show();   
@@ -816,8 +861,19 @@ Bb.Blog.View={
 			Bb.Blog.View.Running.edit_window.setTitle('修改博客');
 			Bb.Blog.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
 			Bb.Blog.View.Running.edit_window.savetype=1;
-			if (CKEDITOR.instances.content){
-				CKEDITOR.instances.content.setData(this.getSelectionModel().getSelected().data.content); 
+			switch (Bb.Blog.Config.OnlineEditor)
+			{
+				case 2:
+					if (Bb.Blog.View.EditWindow.KindEditor){
+						Bb.Blog.View.EditWindow.KindEditor.html(this.getSelectionModel().getSelected().data.content);
+					}
+					break
+				case 3:
+					break
+				default:            
+					if (CKEDITOR.instances.content){
+						CKEDITOR.instances.content.setData(this.getSelectionModel().getSelected().data.content); 
+					}
 			}
 			
 			Bb.Blog.View.Running.edit_window.show();    

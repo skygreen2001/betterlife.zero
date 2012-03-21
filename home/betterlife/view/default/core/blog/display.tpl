@@ -1,6 +1,6 @@
 {extends file="$templateDir/layout/normal/layout.tpl"}
 {block name=body} 
-	<div>
+	<div class="contentBox">
 		<b><my:a href="{$url_base}index.php?go=betterlife.auth.logout">退出</my:a></b><br/><br/>
 		<b>共计{$countBlogs} 篇博客</b>
 		{if $blogs}

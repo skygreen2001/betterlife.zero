@@ -93,6 +93,52 @@ class ActionExt extends Action
 	}
 	
 	/**
+	 * 加载在线编辑器 
+	 * @param array|string $textarea_names Input为Textarea的名称name[一个页面可以有多个Textarea]
+	 * @param string $content 内容
+	 */
+	public function load_onlineditor($textarea_names="content")
+	{
+		switch ($this->online_editor) {
+		   case EnumOnlineEditorType::CKEDITOR:
+				if (is_array($textarea_names)&&(count($textarea_names)>0)){
+					$this->view->editorHtml=UtilCKEeditor::loadReplace($textarea_names[0]);
+					for($i=0;$i<count($textarea_names);$i++){
+						$this->view->editorHtml.=UtilCKEeditor::loadReplace($textarea_names[i],false);
+					}
+				}else{
+					$this->view->editorHtml=UtilCKEeditor::loadReplace($textarea_names);
+				}
+				$this->view->online_editor="CKEditor";
+			 break;
+		   case EnumOnlineEditorType::KINDEDITOR:
+				$viewObject=$this->view->viewObject; 
+				if(empty($viewObject))
+				{
+					$this->view->viewObject=new ViewObject();
+				}
+				if (UtilAjax::$IsDebug){
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/kindeditor.js"); 
+				}else{
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/kindeditor-min.js"); 
+				}
+				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/lang/zh_CN.js"); 
+				$this->view->online_editor="KindEditor";
+			 break;  
+		   case EnumOnlineEditorType::XHEDITOR:   
+				$viewObject=$this->view->viewObject; 
+				if(empty($viewObject))
+				{
+					$this->view->viewObject=new ViewObject();
+				}               
+				UtilAjaxJquery::load("1.7.1",$this->view->viewObject);
+				UtilXheditor::loadXheditorCssAndJsFunction($this->view->viewObject); 
+				$this->view->online_editor="xhEditor";  
+			 break; 
+		} 
+	}
+	
+	/**
 	 * Ext请求返回 Response
 	 * @param mixed $response  
 	 * @param mixed $isFormAndIsUpload

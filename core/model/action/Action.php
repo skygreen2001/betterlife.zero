@@ -279,11 +279,11 @@ class Action extends Object
 	
 	/**
 	 * 加载在线编辑器 
-	 * @param string $form_name Form name 名称
 	 * @param string $textarea_name Input为Textarea的名称name
 	 * @param string $content 内容
+	 * @param string $form_name Form name 名称
 	 */
-	public function load_onlineditor($form_name="postForm",$textarea_name="content",$content="")
+	public function load_onlineditor($textarea_name="content",$content="",$form_name=null)
 	{
 		switch ($this->online_editor) {
 		   case EnumOnlineEditorType::CKEDITOR:
@@ -296,7 +296,12 @@ class Action extends Object
 				{
 					$this->view->viewObject=new ViewObject();
 				}
-				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/kindeditor.js"); 
+				if (UtilAjax::$IsDebug){
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/kindeditor.js"); 
+				}else{
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/kindeditor-min.js"); 
+				}
+				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/lang/zh_CN.js"); 
 				$this->view->online_editor="KindEditor";
 			 break;  
 		   case EnumOnlineEditorType::XHEDITOR:   
@@ -305,7 +310,7 @@ class Action extends Object
 				{
 					$this->view->viewObject=new ViewObject();
 				}                                                                                               
-				UtilXheditor::loadReady($textarea_name,$form_name,$this->view->viewObject); 
+				UtilXheditor::loadReady($textarea_name,$this->view->viewObject,$form_name); 
 				$this->view->online_editor="xhEditor";  
 			 break; 
 		}                                                

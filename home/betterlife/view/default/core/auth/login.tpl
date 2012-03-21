@@ -1,12 +1,12 @@
 {extends file="$templateDir/layout/normal/layout.tpl"}
 {block name=body}
-	<div align="center">
+	<div class="contentBox" align="center">
 		<form method="POST">
 		<h1>请登录</h1>
 		<font color="red">{$message}</font>
 		<div>           
-		   <label>用户名</label><br/><input type="text" name="username" /><br/>
-		   <label>密码</label><br/><input type="password" name="password" /><br/>
+		   <label>用户名</label><br/><input class="inputNormal" type="text" name="username" /><br/>
+		   <label>密码</label><br/><input class="inputNormal" type="password" name="password" /><br/>
 		</div>
 		<input type="submit" name="Submit" value="登录" class="btnSubmit" />
 		</form>

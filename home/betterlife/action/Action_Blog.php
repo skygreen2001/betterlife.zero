@@ -64,7 +64,7 @@ class Action_Blog extends Action
 			$this->view->viewObject=$view;                                                                     
 		}                 
 		//加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。                                                            
-		$this->load_onlineditor("postForm","content",$content);          
+		$this->load_onlineditor("content",$content,"postForm");          
 	}
 	/**
 	 * 删除博客

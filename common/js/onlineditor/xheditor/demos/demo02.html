@@ -4,18 +4,19 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>xhEditor demo2 : 自定义按钮</title>
 <link rel="stylesheet" href="common.css" type="text/css" media="screen" />
-<script type="text/javascript" src="../jquery/jquery-1.4.2.min.js"></script>
-<script type="text/javascript" src="../xheditor-1.1.9-zh-cn.min.js"></script>
+<script type="text/javascript" src="../jquery/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="../xheditor-1.1.13-zh-cn.min.js"></script>
 <script type="text/javascript">
 $(pageInit);
 function pageInit()
 {
-	$('#elm1').xheditor({tools:'full',shortcuts:{'ctrl+enter':submitForm}});
-	$('#elm2').xheditor({tools:'mfull',shortcuts:{'ctrl+enter':submitForm}});
-	$('#elm3').xheditor({tools:'simple',shortcuts:{'ctrl+enter':submitForm}});
-	$('#elm4').xheditor({tools:'mini',shortcuts:{'ctrl+enter':submitForm}});
-	$('#elm5').xheditor({tools:'Cut,Copy,Paste,Pastetext,|,Source,Fullscreen,About',shortcuts:{'ctrl+enter':submitForm}});
-	$('#elm6').xheditor({tools:'Cut,Copy,Paste,Pastetext,/,Source,Fullscreen,About',shortcuts:{'ctrl+enter':submitForm}});
+	$.extend(xheditor.settings,{shortcuts:{'ctrl+enter':submitForm}});
+	$('#elm1').xheditor({tools:'full'});
+	$('#elm2').xheditor({tools:'mfull'});
+	$('#elm3').xheditor({tools:'simple'});
+	$('#elm4').xheditor({tools:'mini'});
+	$('#elm5').xheditor({tools:'Cut,Copy,Paste,Pastetext,|,Source,Fullscreen,About'});
+	$('#elm6').xheditor({tools:'Cut,Copy,Paste,Pastetext,/,Source,Fullscreen,About'});
 }
 function submitForm(){$('#frmDemo').submit();}
 </script>

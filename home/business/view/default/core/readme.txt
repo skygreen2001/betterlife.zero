@@ -1,0 +1,1 @@
+smarty模板文件都放置在这里。具体实现可参考betterlife，admin的实现方式。
