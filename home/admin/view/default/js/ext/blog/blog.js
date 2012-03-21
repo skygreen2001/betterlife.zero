@@ -30,7 +30,7 @@ Bb.Blog={
 		/**
 		 *  
 		 */
-		OnlineEditor:1
+		OnlineEditor:3
 	},
 	/**
 	 * Cookie设置
@@ -180,16 +180,13 @@ Bb.Blog.View={
 						switch (Bb.Blog.Config.OnlineEditor)
 						{
 							case 2:
-								if (Bb.Blog.View.EditWindow.KindEditor){
-									this.editForm.content.setValue(Bb.Blog.View.EditWindow.KindEditor.html());
-								}
+								if (Bb.Blog.View.EditWindow.KindEditor)this.editForm.content.setValue(Bb.Blog.View.EditWindow.KindEditor.html());
 								break
 							case 3:
+								if (xhEditor)this.editForm.content.setValue(xhEditor.getSource());
 								break
 							default:                        
-								if (CKEDITOR.instances.content){
-									this.editForm.content.setValue(CKEDITOR.instances.content.getData());
-								}
+								if (CKEDITOR.instances.content)this.editForm.content.setValue(CKEDITOR.instances.content.getData());
 						}
 						if (!this.editForm.getForm().isValid()) {
 							return;
@@ -468,9 +465,30 @@ Bb.Blog.View={
 							defaults : {
 							   xtype : 'textfield'
 							},
-							items : [
-								'博客标题',{ref: '../bblog_name'},'&nbsp;&nbsp;',
-								'博客内容',{ref: '../bcontent'},'&nbsp;&nbsp;',                                
+							items : [                                
+								'用户名称 ','&nbsp;&nbsp;',{ref: '../buser_id',xtype:'hidden',name : 'user_id',id:'buser_id'},
+								{
+									 xtype: 'combo',name : 'username',id : 'busername',
+									 store:Bb.Blog.Store.userStore,emptyText: '请选择用户',itemSelector: 'div.search-item',
+									 loadingText: '查询中...',width:280,pageSize:Bb.Blog.Config.PageSize,
+									 displayField:'username',// 显示文本
+									 mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,
+									 forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,
+									 tpl:new Ext.XTemplate(
+												'<tpl for="."><div class="search-item">',
+													'<h3>{username}</h3>',
+												'</div></tpl>'
+									 ),
+									 onSelect:function(record,index){
+										 if(this.fireEvent('beforeselect', this, record, index) !== false){
+											Ext.getCmp("buser_id").setValue(record.data.user_id);
+											Ext.getCmp("busername").setValue(record.data.username);
+											this.collapse();
+										 }
+									 }
+								},'&nbsp;&nbsp;',
+								'博客标题 ','&nbsp;&nbsp;',{ref: '../bblog_name'},'&nbsp;&nbsp;',
+								'博客内容 ','&nbsp;&nbsp;',{ref: '../bcontent'},'&nbsp;&nbsp;',                                
 								{
 									xtype : 'button',text : '查询',scope: this, 
 									handler : function() {
@@ -673,9 +691,10 @@ Bb.Blog.View={
 		 */
 		doSelectBlog : function() {
 			if (this.topToolbar){
+				var buser_id = this.topToolbar.buser_id.getValue();
 				var bblog_name = this.topToolbar.bblog_name.getValue();
 				var bcontent = this.topToolbar.bcontent.getValue();
-				this.filter       ={'blog_name':bblog_name,'content':bcontent};
+				this.filter       ={'user_id':buser_id,'blog_name':bblog_name,'content':bcontent};
 			}
 			var condition = {'start':0,'limit':Bb.Blog.Config.PageSize};
 			Ext.apply(condition,this.filter);
@@ -869,6 +888,7 @@ Bb.Blog.View={
 					}
 					break
 				case 3:
+					if (xhEditor)xhEditor.setSource(this.getSelectionModel().getSelected().data.content);
 					break
 				default:            
 					if (CKEDITOR.instances.content){

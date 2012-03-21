@@ -2,6 +2,7 @@
 <classes>
 	<class name="Blog">
 		<conditions>
+			<condition relation_class="User" show_name="username">user_id</condition>
 			<condition>blog_name</condition>
 			<condition>content</condition>             
 		</conditions>

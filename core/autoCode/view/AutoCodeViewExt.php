@@ -294,7 +294,11 @@ class AutoCodeViewExt extends AutoCode
                             {
                                 $field_comment=preg_split("/[\s,]+/", $field_comment);    
                                 $field_comment=$field_comment[0]; 
-                            }                          
+                            }                    
+                            if ($field_comment){
+                                $field_comment=str_replace('标识',"",$field_comment);
+                                $field_comment=str_replace('编号',"",$field_comment);      
+                            }
                             $key{0}=strtolower($key{0});
                             $fieldLabels.="                              {xtype: 'hidden',name : '$fieldname',id:'$fieldname'},\r\n".
                                           "                              {\r\n".
@@ -359,7 +363,11 @@ class AutoCodeViewExt extends AutoCode
                         $flName="hiddenName";
                     }else{
                         $flName="name";  
-                    }          
+                    }                      
+                    if ($field_comment){
+                        $field_comment=str_replace('标识',"",$field_comment);
+                        $field_comment=str_replace('编号',"",$field_comment);      
+                    }                          
                     $fieldLabels.="                              {fieldLabel : '$field_comment$fr1',$flName : '$fieldname'$fr2"; 
                     if (($datatype=='date')||contains($field_comment,array("日期","时间")))  
                     {
@@ -440,7 +448,11 @@ class AutoCodeViewExt extends AutoCode
                             {
                                 $field_comment=preg_split("/[\s,]+/", $field_comment);    
                                 $field_comment=$field_comment[0]; 
-                            }              
+                            }                    
+                            if ($field_comment){
+                                $field_comment=str_replace('标识',"",$field_comment);
+                                $field_comment=str_replace('编号',"",$field_comment);      
+                            }            
                             foreach ($relationShow as $key=>$value) {
                                 $viewdoblock.="                         '<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$value}}</td></tr>',\r\n";
                             }          
@@ -460,7 +472,11 @@ class AutoCodeViewExt extends AutoCode
                 {
                     $field_comment=preg_split("/[\s,]+/", $field_comment);    
                     $field_comment=$field_comment[0]; 
-                }     
+                }                  
+                if ($field_comment){
+                    $field_comment=str_replace('标识',"",$field_comment);
+                    $field_comment=str_replace('编号',"",$field_comment);      
+                }                     
                 $datatype =self::comment_type($field["Type"]);    
                 $dateformat=""; 
                 if (($datatype=='date')||contains($field_comment,array("日期","时间")))
@@ -494,7 +510,11 @@ class AutoCodeViewExt extends AutoCode
                             {
                                 $field_comment=preg_split("/[\s,]+/", $field_comment);    
                                 $field_comment=$field_comment[0]; 
-                            }              
+                            }                          
+                            if ($field_comment){
+                                $field_comment=str_replace('标识',"",$field_comment);
+                                $field_comment=str_replace('编号',"",$field_comment);      
+                            }                                  
                             foreach ($relationShow as $key=>$value) {
                                 $columns.="                          {header : '$field_comment',dataIndex : '{$value}'},\r\n";
                             }
@@ -514,7 +534,11 @@ class AutoCodeViewExt extends AutoCode
                 {
                     $field_comment=preg_split("/[\s,]+/", $field_comment);    
                     $field_comment=$field_comment[0]; 
-                }           
+                }                  
+                if ($field_comment){
+                    $field_comment=str_replace('标识',"",$field_comment);
+                    $field_comment=str_replace('编号',"",$field_comment);      
+                }    
                 $datatype=self::comment_type($field["Type"]);
                 $columns.="                          {header : '$field_comment',dataIndex : '{$fieldname}'";  
                 if (($datatype=='date')||contains($field_comment,array("日期","时间"))) 
