@@ -145,7 +145,8 @@ class AutoCodeAction extends AutoCode
 						 " * @author $author\r\n".
 						 " */\r\n".  
 						 "class $action_name extends ActionExt\r\n".  
-						 "{\r\n".$e_index.self::$echo_result."}";                        
+						 "{\r\n".$e_index.self::$echo_result."}\r\n".     
+						 "?>";                        
 				self::saveDefineToDir(self::$action_dir_full,"$action_name.php",$e_result); 
 				echo  "新生成的$action_name文件路径:<font color='#0000FF'>".self::$action_dir_full."$action_name.php</font><br />";  
 			}                                                              
@@ -244,9 +245,7 @@ class AutoCodeAction extends AutoCode
 						}
 					}   
 				}
-				
 				$result.="     }\r\n\r\n";      
-				$result.="?>";   
 				self::$echo_result.=$result;  
 				$result_upload ="    /**\r\n".                        
 						 "     * 上传数据对象:{$table_comment}数据文件\r\n".  
