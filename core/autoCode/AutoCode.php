@@ -250,11 +250,15 @@ class AutoCode extends Object
 						   ); 
 					   } 
 					}else{
-					   $enum_columnDefine[]=array(
+						if (contain($part_arr[1],"-")){
+							$cn_en_arr=explode("-",$part_arr[1]);
+							$part_arr[1]=$cn_en_arr[0];
+						}
+						$enum_columnDefine[]=array(
 							'name'=>strtolower($part_arr[0]),
 							'value'=>strtolower($part_arr[0]),
 							'comment'=>$part_arr[1]
-					   ); 
+						); 
 					}
 				}
 			}  
