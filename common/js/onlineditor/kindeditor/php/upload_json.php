@@ -7,17 +7,18 @@
  * 
  */
 
-require_once 'JSON.php';
-
-$php_path = dirname(__FILE__) . '/';
-$php_url = dirname($_SERVER['PHP_SELF']) . '/';
-
-
-
+//*****************start:modify by skygreen**************************
+require_once("../../../../../init.php");
+$php_path = Gc::$upload_path."userfiles".DIRECTORY_SEPARATOR;
+if (!is_dir($php_path)){
+	UtilFileSystem::createDir($php_path);    
+}
+$php_url = Gc::$upload_url."userfiles/";
 //文件保存目录路径
-$save_path = $php_path . '../attached/';
+$save_path = $php_path;
 //文件保存目录URL
-$save_url = $php_url . '../attached/';
+$save_url = $php_url;
+//*****************end  :modify by skygreen**************************
 //定义允许上传的文件扩展名
 $ext_arr = array(
 	'image' => array('gif', 'jpg', 'jpeg', 'png', 'bmp'),
@@ -59,7 +60,7 @@ if (empty($_FILES) === false) {
 		alert("上传文件大小超过限制。");
 	}
 	//检查目录名
-	$dir_name = empty($_GET['dir']) ? 'image' : trim($_GET['dir']);
+	$dir_name = empty($_GET['dir']) ? 'images' : trim($_GET['dir']);
 	if (empty($ext_arr[$dir_name])) {
 		alert("目录名不正确。");
 	}
@@ -74,6 +75,7 @@ if (empty($_FILES) === false) {
 	}
 	//创建文件夹
 	if ($dir_name !== '') {
+		if ($dir_name=='image')$dir_name='images';
 		$save_path .= $dir_name . "/";
 		$save_url .= $dir_name . "/";
 		if (!file_exists($save_path)) {
