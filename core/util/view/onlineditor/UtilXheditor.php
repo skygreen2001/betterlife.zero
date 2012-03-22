@@ -12,6 +12,7 @@ class UtilXheditor extends Util
 {                       
 	/**
 	 * 预加载xhEditor的样式和JS 库
+	 * @param string $textarea_id Input为Textarea的名称name
 	 * @param string $textarea_id 在线编辑器所在的内容编辑区域TextArea的ID
 	 * @param ViewObject $viewobject 表示层显示对象,只在Web框架中使用    
 	 * @param string form_id  在线编辑器所在的Form的ID                 
@@ -74,16 +75,17 @@ class UtilXheditor extends Util
 	private static function loadJs($textarea_id,$viewObject=null,$form_id=null)
 	{
 		UtilJavascript::loadJsReady($viewObject, "common/js/onlineditor/xheditor/xheditor-1.1.13-zh-cn.min.js"); 
-		self::loadJsFunction($viewObject,$form_id);
+		self::loadJsFunction($textarea_id,$viewObject,$form_id);
 		UtilJavascript::loadJsContentReady($viewObject,"$(function(){pageInit('$textarea_id');});");
 	}  
 	
 	/**
 	 * 预加载xhEditor的JS函数
+	 * @param string $textarea_id 在线编辑器所在的内容编辑区域TextArea的ID
 	 * @param ViewObject $viewobject 表示层显示对象,只在Web框架中使用    
 	 * @param string form_id  在线编辑器所在的Form的ID                 
 	 */
-	private static function loadJsFunction($viewObject=null,$form_id=null,$configString="")
+	private static function loadJsFunction($textarea_id,$viewObject=null,$form_id=null,$configString="")
 	{        
 		$shortcut="";
 		$formsubmit="";
@@ -92,7 +94,7 @@ class UtilXheditor extends Util
 			$formsubmit="function submitForm(){\$('#".$form_id."').submit();}";
 		}
 		UtilJavascript::loadJsContentReady($viewObject,"
-			var xhEditor;
+			var xhEditor_{$textarea_id};
 			function pageInit(textarea_id)
 			{
 				var plugins={  
@@ -101,7 +103,7 @@ class UtilXheditor extends Util
 						_this.showIframeModal('Google 地图','".Gc::$url_base."common/js/onlineditor/xheditor/demos/googlemap/googlemap.html',function(v){_this.pasteHTML('<img src=\"'+v+'\" />');},538,404);
 					}}
 				};  
-				xhEditor=$('#'+textarea_id).xheditor({inlineStyle:false,{$configString}showBlocktag:true,upLinkUrl:'".Gc::$url_base."common/js/onlineditor/xheditor/demos/upload.php?immediate=1',upImgUrl:'".Gc::$url_base."common/js/onlineditor/xheditor/demos/upload.php?immediate=1',upFlashUrl:'".Gc::$url_base."common/js/onlineditor/xheditor/common/js/onlineditor/xheditor/demos/upload.php?immediate=1',upMediaUrl:'".Gc::$url_base."common/js/onlineditor/xheditor/demos/upload.php?immediate=1',localUrlTest:/^https?:\/\/[^\/]*?(xheditor\.com)\//i,remoteImgSaveUrl:'".Gc::$url_base."common/js/onlineditor/xheditor/demos/saveremoteimg.php',emots:{
+				xhEditor_{$textarea_id}=$('#'+textarea_id).xheditor({inlineStyle:false,{$configString}showBlocktag:true,upLinkUrl:'".Gc::$url_base."common/js/onlineditor/xheditor/demos/upload.php?immediate=1',upImgUrl:'".Gc::$url_base."common/js/onlineditor/xheditor/demos/upload.php?immediate=1',upFlashUrl:'".Gc::$url_base."common/js/onlineditor/xheditor/common/js/onlineditor/xheditor/demos/upload.php?immediate=1',upMediaUrl:'".Gc::$url_base."common/js/onlineditor/xheditor/demos/upload.php?immediate=1',localUrlTest:/^https?:\/\/[^\/]*?(xheditor\.com)\//i,remoteImgSaveUrl:'".Gc::$url_base."common/js/onlineditor/xheditor/demos/saveremoteimg.php',emots:{
 						msn:{name:'MSN',count:40,width:22,height:22,line:8},
 						pidgin:{name:'Pidgin',width:22,height:25,line:8,list:{smile:'微笑',cute:'可爱',wink:'眨眼',laugh:'大笑',victory:'胜利',sad:'伤心',cry:'哭泣',angry:'生气',shout:'大骂',curse:'诅咒',devil:'魔鬼',blush:'害羞',tongue:'吐舌头',envy:'羡慕',cool:'耍酷',kiss:'吻',shocked:'惊讶',sweat:'汗',sick:'生病',bye:'再见',tired:'累',sleepy:'睡了',question:'疑问',rose:'玫瑰',gift:'礼物',coffee:'咖啡',music:'音乐',soccer:'足球',good:'赞同',bad:'反对',love:'心',brokenheart:'伤心'}},
 						ipb:{name:'IPB',width:20,height:25,line:8,list:{smile:'微笑',joyful:'开心',laugh:'笑',biglaugh:'大笑',w00t:'欢呼',wub:'欢喜',depres:'沮丧',sad:'悲伤',cry:'哭泣',angry:'生气',devil:'魔鬼',blush:'脸红',kiss:'吻',surprised:'惊讶',wondering:'疑惑',unsure:'不确定',tongue:'吐舌头',cool:'耍酷',blink:'眨眼',whistling:'吹口哨',glare:'轻视',pinch:'捏',sideways:'侧身',sleep:'睡了',sick:'生病',ninja:'忍者',bandit:'强盗',police:'警察',angel:'天使',magician:'魔法师',alien:'外星人',heart:'心动'}}
@@ -113,14 +115,15 @@ class UtilXheditor extends Util
 	
 	/**
 	 * 预加载xhEditor的JS函数
+	 * @param string $textarea_id 在线编辑器所在的内容编辑区域TextArea的ID
 	 * @param ViewObject $viewobject 表示层显示对象,只在Web框架中使用    
 	 * @param string form_id  在线编辑器所在的Form的ID                 
 	 */    
-	public static function loadXheditorCssAndJsFunction($viewObject=null,$form_id=null)
+	public static function loadXheditorCssAndJsFunction($textarea_id,$viewObject=null,$form_id=null)
 	{
 		self::loadcss($viewObject);
 		UtilJavascript::loadJsReady($viewObject, "common/js/onlineditor/xheditor/xheditor-1.1.13-zh-cn.min.js"); 
-		self::loadJsFunction($viewObject,$form_id,"width:'98%',height:350,"); 
+		self::loadJsFunction($textarea_id,$viewObject,$form_id,"width:'98%',height:350,"); 
 	}
 }   
 ?>

@@ -99,7 +99,7 @@ $appName_alias.$classname.View={
                 listeners:{
                     beforehide:function(){
                         this.editForm.form.getEl().dom.reset();                    
-                    }{$textareaCkeditor_Replace}  
+                    }{$textareaOnlineditor_Replace}  
                 },
                 items : [ 
                     new Ext.form.FormPanel({   
@@ -118,7 +118,7 @@ $fieldLabels
                 buttons : [ {         
                     text: "",ref : "../saveBtn",scope:this,
                     handler : function() {   
-{$textareaCkeditor_Save}         
+{$textareaOnlineditor_Save}         
                         if (!this.editForm.getForm().isValid()) {
                             return;
                         }
@@ -161,7 +161,7 @@ $fieldLabels
                     text : "重 置",ref:'../resetBtn',scope:this,
                     handler : function() {  
                         this.editForm.form.loadRecord($appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected());
-{$textareaCkeditor_Reset} 
+{$textareaOnlineditor_Reset} 
                     }                  
                 }]    
             }, config);  
@@ -738,7 +738,7 @@ $filterfilter
             $appName_alias.$classname.View.Running.edit_window.setTitle('添加{$table_comment}');
             $appName_alias.$classname.View.Running.edit_window.savetype=0;
             $appName_alias.$classname.View.Running.edit_window.$tableFieldIdName.setValue("");
-{$textareaCkeditor_Add}            
+{$textareaOnlineditor_Add}            
             $appName_alias.$classname.View.Running.edit_window.show();   
             $appName_alias.$classname.View.Running.edit_window.maximize();               
         },   
@@ -754,7 +754,7 @@ $filterfilter
             $appName_alias.$classname.View.Running.edit_window.setTitle('修改{$table_comment}');
             $appName_alias.$classname.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
             $appName_alias.$classname.View.Running.edit_window.savetype=1;
-{$textareaCkeditor_Update}            
+{$textareaOnlineditor_Update}            
             $appName_alias.$classname.View.Running.edit_window.show();    
             $appName_alias.$classname.View.Running.edit_window.maximize();                  
         },        

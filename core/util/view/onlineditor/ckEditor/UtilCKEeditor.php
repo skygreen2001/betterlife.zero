@@ -98,12 +98,8 @@ class UtilCKEeditor extends Util
 		$config['toolbarStartupExpanded'] = true;
 		$config['startupOutlineBlocks'] = true;    
 		$config['removeDialogTabs'] = 'image:Link;image:advanced';    
-		$jsContent= "var editor_$textarea_id = CKEDITOR.replace('".$textarea_id."', ".$CKEditor->jsEncode($config).");";   
-		if ($isLoadCkFinder){
-			$suffix_cr="";    
-		}else{
-			$suffix_cr="_$textarea_id";
-		}              
+		$jsContent= "var editor_$textarea_id = CKEDITOR.replace('".$textarea_id."', ".$CKEditor->jsEncode($config).");";  
+		$suffix_cr="_$textarea_id";
 		$jsContent="\r\n". 
 				   "        function ckeditor_replace$suffix_cr()\r\n".
 				   "        {\r\n".   

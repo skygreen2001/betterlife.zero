@@ -264,176 +264,21 @@ class AutoCodeViewExt extends AutoCode
             }
         }        
         $fields=substr($fields,0,strlen($fields)-3);  
-        $fieldLabels="";//Ext "EditWindow"里items的fieldLabels
-        $tableFieldIdName;       
-        $textareaCkeditor_Add="";
-        $textareaCkeditor_Update="";  
-        $textareaCkeditor_Replace="";  
-        $textareaCkeditor_Save=""; 
-        $textareaCkeditor_Reset="";
-        $isFileUpload="";     
-        foreach ($fieldInfo as $fieldname=>$field)
-        {        
-            if (isset($ignord_field)&&($ignord_field==$fieldname)){
-                continue;
-            }     
-            if (self::isNotColumnKeywork($fieldname))
-            {      
-                if (array_key_exists($classname,self::$relation_viewfield)){
-                    $relationSpecs=self::$relation_viewfield[$classname]; 
-                    if (array_key_exists($fieldname,$relationSpecs)){
-                        $relationShow=$relationSpecs[$fieldname];
-                        foreach ($relationShow as $key=>$value) {     
-                            if (!array_key_exists($value,$fieldInfo)){
-                                $field_comment=$field["Comment"];    
-                            }else{                         
-                                $field_comment=$fieldInfo[$value]["Comment"];  
-                                $ignord_field=$value; 
-                            } 
-                            if (contain($field_comment,"\r")||contain($field_comment,"\n"))
-                            {
-                                $field_comment=preg_split("/[\s,]+/", $field_comment);    
-                                $field_comment=$field_comment[0]; 
-                            }                    
-                            if ($field_comment){
-                                $field_comment=str_replace('标识',"",$field_comment);
-                                $field_comment=str_replace('编号',"",$field_comment);      
-                            }
-                            $key{0}=strtolower($key{0});
-                            $fieldLabels.="                              {xtype: 'hidden',name : '$fieldname',id:'$fieldname'},\r\n".
-                                          "                              {\r\n".
-                                          "                                 fieldLabel : '{$field_comment}',xtype: 'combo',name : '$value',id : '$value',\r\n".
-                                          "                                 store:$appName_alias.$classname.Store.{$key}Store,emptyText: '请选择{$field_comment}',itemSelector: 'div.search-item',\r\n".
-                                          "                                 loadingText: '查询中...',width: 570, pageSize:$appName_alias.$classname.Config.PageSize,\r\n".
-                                          "                                 displayField:'$value',// 显示文本\r\n".
-                                          "                                 mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,\r\n".
-                                          "                                 forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,\r\n".
-                                          "                                 tpl:new Ext.XTemplate(\r\n".
-                                          "                                            '<tpl for=\".\"><div class=\"search-item\">',\r\n".
-                                          "                                                '<h3>{{$value}}</h3>',\r\n".
-                                          "                                            '</div></tpl>'\r\n".
-                                          "                                 ),\r\n".
-                                          "                                 onSelect:function(record,index){\r\n".
-                                          "                                     if(this.fireEvent('beforeselect', this, record, index) !== false){\r\n".
-                                          "                                        Ext.getCmp(\"$fieldname\").setValue(record.data.$fieldname);\r\n".
-                                          "                                        Ext.getCmp(\"$value\").setValue(record.data.$value);\r\n".
-                                          "                                        this.collapse();\r\n".
-                                          "                                       }\r\n".
-                                          "                                   }\r\n".
-                                          "                              },\r\n".
-                                          "";  
-                        }
-                        continue;
-                    }      
-                }  
-                  
-                $column_type=self::column_type($field["Type"]);
-                $isImage =self::columnIsImage($fieldname,$field["Comment"]);        
-                if ($fieldname==self::keyIDColumn($classname))
-                {
-                    $tableFieldIdName=$fieldname;  
-                    $fieldLabels.="                              {xtype: 'hidden',  name : '$fieldname',ref:'../$fieldname'"; 
-                }else if ($isImage){
-                    $isFileUpload="fileUpload: true,";  
-                    $tableFieldIdName=$fieldname;  
-                    $fieldLabels.="                              {xtype: 'hidden',  name : '$fieldname',ref:'../$fieldname'},\r\n"; 
-                    $fieldLabels.="                              {fieldLabel : '{$table_comment}图片',name : 'imageUpload',ref:'../imageUpload',xtype:'fileuploadfield',\r\n".
-                                "                             emptyText: '请上传{$table_comment}图片文件',buttonText: '',accept:'image/*',buttonCfg: {iconCls: 'upload-icon'}";
-                    $textareaCkeditor_Reset.="                        this.imageUpload.setValue(this.{$fieldname}.getValue());\r\n";
-                    $textareaCkeditor_Update.="            $appName_alias.$classname.View.Running.edit_window.imageUpload.setValue($appName_alias.$classname.View.Running.edit_window.{$fieldname}.getValue());\r\n";           
-                }else{
-                    $datatype=self::comment_type($field["Type"]);
-                    $field_comment=$field["Comment"];  
-                    if (contain($field_comment,"\r")||contain($field_comment,"\n"))
-                    {
-                        $field_comment=preg_split("/[\s,]+/", $field_comment);    
-                        $field_comment=$field_comment[0]; 
-                    }                    
-                    if (!$field["IsPermitNull"])
-                    {
-                        $fr1="(<font color=red>*</font>)";
-                        $fr2=",allowBlank : false";
-                    }else{  
-                        $fr1="";
-                        $fr2=""; 
-                    } 
-                    //当使用form.getForm().submit()方式提交时，服务器得到的请求字段中的值总是combobox实际显示的值，也就是displayField:'text'的值;
-                    //将name属性修改为hiddenName，便会将value值提交给服务器 
-                    if (($column_type=='enum')||($column_type=='bit')){
-                        $flName="hiddenName";
-                    }else{
-                        $flName="name";  
-                    }                      
-                    if ($field_comment){
-                        $field_comment=str_replace('标识',"",$field_comment);
-                        $field_comment=str_replace('编号',"",$field_comment);      
-                    }                          
-                    $fieldLabels.="                              {fieldLabel : '$field_comment$fr1',$flName : '$fieldname'$fr2"; 
-                    if (($datatype=='date')||contains($field_comment,array("日期","时间")))  
-                    {
-                        $fieldLabels.=",xtype : 'datefield',format : \"Y-m-d\"";
-                    }elseif (($column_type=='int')||($datatype=='float')){  
-                        $fieldLabels.=",xtype : 'numberfield'";  
-                    }   
-                    if ($column_type=='bit')
-                    {
-                        $fieldLabels.=",xtype : 'combo',mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,allowBlank : false,\r\n".
-                                  "                                store : new Ext.data.SimpleStore({\r\n".
-                                  "                                        fields : ['value', 'text'],\r\n".
-                                  "                                        data : [['0', '否'], ['1', '是']]\r\n".
-                                  "                                  }),emptyText: '请选择$field_comment',\r\n".
-                                  "                                valueField : 'value',// 值\r\n".
-                                  "                                displayField : 'text'// 显示文本\r\n                            ";
-                    }
-                    if ($column_type=='enum')
-                    { 
-                        $enum_columnDefine=self::enumDefines($field["Comment"]);  
-                        $fieldLabels.=",xtype : 'combo',mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,allowBlank : false,\r\n".
-                                      "                                store : new Ext.data.SimpleStore({\r\n".
-                                      "                                        fields : ['value', 'text'],\r\n".
-                                      "                                        data : [";  
-                        $enumArr=array();              
-                        foreach ($enum_columnDefine as $enum_column) 
-                          {
-                              $enumArr[]="['".$enum_column["value"]."', '".$enum_column["comment"]."']";  
-                          }                                         
-                        $fieldLabels.=implode(",",$enumArr);              
-                        $fieldLabels.="]\r\n".
-                                      "                                  }),emptyText: '请选择$field_comment',\r\n".
-                                      "                                valueField : 'value',// 值\r\n".
-                                      "                                displayField : 'text'// 显示文本\r\n                            ";  
-                    } 
-                    if (self::columnIsTextArea($fieldname,$field["Type"]))
-                    {        
-                        $fieldLabels.=",xtype : 'textarea',id:'$fieldname',ref:'$fieldname'"; 
-                        if (empty($textareaCkeditor_Replace)){ 
-                            $textareaCkeditor_Replace.="ckeditor_replace(); \r\n";
-                        }else{
-                            $textareaCkeditor_Replace.="                        ckeditor_replace_$fieldname(); \r\n";                  
-                        }
-                        $textareaCkeditor_Add.="            if (CKEDITOR.instances.$fieldname){\r\n".
-                                              "                CKEDITOR.instances.$fieldname.setData(\"\");\r\n".   
-                                              "              }\r\n"; 
-                        $textareaCkeditor_Update.="            if (CKEDITOR.instances.$fieldname){\r\n".
-                                                  "                CKEDITOR.instances.$fieldname.setData(this.getSelectionModel().getSelected().data.$fieldname); \r\n".   
-                                                  "              }\r\n"; 
-                        $textareaCkeditor_Save.="                        if (CKEDITOR.instances.$fieldname){\r\n".
-                                               "                            this.editForm.$fieldname.setValue(CKEDITOR.instances.$fieldname.getData());\r\n". 
-                                               "                          }\r\n";   
-                        $textareaCkeditor_Reset.="                        if (CKEDITOR.instances.$fieldname){\r\n".
-                                                "                            CKEDITOR.instances.$fieldname.setData($appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n".                                     
-                                                "                          }\r\n";                       
-                                                                    
-                    }
-                }
-                $fieldLabels.="},\r\n"; 
-            }      
-        }
-        $textareaCkeditor_Replace=",\r\n".
-                                  "                    afterrender:function(){\r\n". 
-                                  "                        $textareaCkeditor_Replace \r\n".   
-                                  "                      }";    
-        $fieldLabels=substr($fieldLabels,0,strlen($fieldLabels)-3);  
+
+        //获取Ext "EditWindow"里items的fieldLabels
+        $editWindowVars=self::model_fieldLables($appName_alias,$classname,$fieldInfo);
+        $fieldLabels=$editWindowVars["fieldLabels"];
+        $isFileUpload=$editWindowVars["isFileUpload"];
+
+        $textarea_Vars=self::model_textareaOnlineEditor($appName_alias,$classname,$instancename,$fieldInfo);
+        $tableFieldIdName=$textarea_Vars["tableFieldIdName"];
+        $textareaOnlineditor_Replace=$textarea_Vars["textareaOnlineditor_Replace"];
+        $textareaOnlineditor_Add=$textarea_Vars["textareaOnlineditor_Add"];
+        $textareaOnlineditor_Update=$textarea_Vars["textareaOnlineditor_Update"];
+        $textareaOnlineditor_Save=$textarea_Vars["textareaOnlineditor_Save"];
+        $textareaOnlineditor_Reset=$textarea_Vars["textareaOnlineditor_Reset"];
+
+
         $viewdoblock="";//Ext "Tabs" 中"onAddItems"包含的viewdoblock
         foreach ($fieldInfo as $fieldname=>$field)
         {       
@@ -674,6 +519,292 @@ class AutoCodeViewExt extends AutoCode
         return $result;
     }   
     
+
+    /**
+     * 获取Ext "EditWindow"里items的fieldLabels
+     */
+    private static function model_fieldLables($appName_alias,$classname,$fieldInfo)
+    {
+        $result=array();
+        $fieldLabels="";//Ext "EditWindow"里items的fieldLabels
+     
+        foreach ($fieldInfo as $fieldname=>$field)
+        {        
+            if (isset($ignord_field)&&($ignord_field==$fieldname)){
+                continue;
+            }     
+            if (self::isNotColumnKeywork($fieldname))
+            {      
+                if (array_key_exists($classname,self::$relation_viewfield)){
+                    $relationSpecs=self::$relation_viewfield[$classname]; 
+                    if (array_key_exists($fieldname,$relationSpecs)){
+                        $relationShow=$relationSpecs[$fieldname];
+                        foreach ($relationShow as $key=>$value) {     
+                            if (!array_key_exists($value,$fieldInfo)){
+                                $field_comment=$field["Comment"];    
+                            }else{                         
+                                $field_comment=$fieldInfo[$value]["Comment"];  
+                                $ignord_field=$value; 
+                            } 
+                            if (contain($field_comment,"\r")||contain($field_comment,"\n"))
+                            {
+                                $field_comment=preg_split("/[\s,]+/", $field_comment);    
+                                $field_comment=$field_comment[0]; 
+                            }                    
+                            if ($field_comment){
+                                $field_comment=str_replace('标识',"",$field_comment);
+                                $field_comment=str_replace('编号',"",$field_comment);      
+                            }
+                            $key{0}=strtolower($key{0});
+                            $fieldLabels.="                              {xtype: 'hidden',name : '$fieldname',id:'$fieldname'},\r\n".
+                                          "                              {\r\n".
+                                          "                                 fieldLabel : '{$field_comment}',xtype: 'combo',name : '$value',id : '$value',\r\n".
+                                          "                                 store:$appName_alias.$classname.Store.{$key}Store,emptyText: '请选择{$field_comment}',itemSelector: 'div.search-item',\r\n".
+                                          "                                 loadingText: '查询中...',width: 570, pageSize:$appName_alias.$classname.Config.PageSize,\r\n".
+                                          "                                 displayField:'$value',// 显示文本\r\n".
+                                          "                                 mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,\r\n".
+                                          "                                 forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,\r\n".
+                                          "                                 tpl:new Ext.XTemplate(\r\n".
+                                          "                                            '<tpl for=\".\"><div class=\"search-item\">',\r\n".
+                                          "                                                '<h3>{{$value}}</h3>',\r\n".
+                                          "                                            '</div></tpl>'\r\n".
+                                          "                                 ),\r\n".
+                                          "                                 onSelect:function(record,index){\r\n".
+                                          "                                     if(this.fireEvent('beforeselect', this, record, index) !== false){\r\n".
+                                          "                                        Ext.getCmp(\"$fieldname\").setValue(record.data.$fieldname);\r\n".
+                                          "                                        Ext.getCmp(\"$value\").setValue(record.data.$value);\r\n".
+                                          "                                        this.collapse();\r\n".
+                                          "                                       }\r\n".
+                                          "                                   }\r\n".
+                                          "                              },\r\n".
+                                          "";  
+                        }
+                        continue;
+                    }      
+                }  
+                  
+                $column_type=self::column_type($field["Type"]);
+                $isImage =self::columnIsImage($fieldname,$field["Comment"]);        
+                if ($fieldname==self::keyIDColumn($classname))
+                { 
+                    $fieldLabels.="                              {xtype: 'hidden',  name : '$fieldname',ref:'../$fieldname'"; 
+                }else if ($isImage){
+                    $result["isFileUpload"]="fileUpload: true,";  
+                    $fieldLabels.="                              {xtype: 'hidden',  name : '$fieldname',ref:'../$fieldname'},\r\n"; 
+                    $fieldLabels.="                              {fieldLabel : '{$table_comment}图片',name : 'imageUpload',ref:'../imageUpload',xtype:'fileuploadfield',\r\n".
+                                "                             emptyText: '请上传{$table_comment}图片文件',buttonText: '',accept:'image/*',buttonCfg: {iconCls: 'upload-icon'}";
+                }else{                  
+                    $datatype=self::comment_type($field["Type"]);
+                    $field_comment=$field["Comment"];  
+                    if (contain($field_comment,"\r")||contain($field_comment,"\n"))
+                    {
+                        $field_comment=preg_split("/[\s,]+/", $field_comment);    
+                        $field_comment=$field_comment[0]; 
+                    }                    
+                    if (!$field["IsPermitNull"])
+                    {
+                        $fr1="(<font color=red>*</font>)";
+                        $fr2=",allowBlank : false";
+                    }else{  
+                        $fr1="";
+                        $fr2=""; 
+                    } 
+                    //当使用form.getForm().submit()方式提交时，服务器得到的请求字段中的值总是combobox实际显示的值，也就是displayField:'text'的值;
+                    //将name属性修改为hiddenName，便会将value值提交给服务器 
+                    if (($column_type=='enum')||($column_type=='bit')){
+                        $flName="hiddenName";
+                    }else{
+                        $flName="name";  
+                    }                      
+                    if ($field_comment){
+                        $field_comment=str_replace('标识',"",$field_comment);
+                        $field_comment=str_replace('编号',"",$field_comment);      
+                    }                          
+                    $fieldLabels.="                              {fieldLabel : '$field_comment$fr1',$flName : '$fieldname'$fr2"; 
+                    if (($datatype=='date')||contains($field_comment,array("日期","时间")))  
+                    {
+                        $fieldLabels.=",xtype : 'datefield',format : \"Y-m-d\"";
+                    }elseif (($column_type=='int')||($datatype=='float')){  
+                        $fieldLabels.=",xtype : 'numberfield'";  
+                    }   
+                    if ($column_type=='bit')
+                    {
+                        $fieldLabels.=",xtype : 'combo',mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,allowBlank : false,\r\n".
+                                  "                                store : new Ext.data.SimpleStore({\r\n".
+                                  "                                        fields : ['value', 'text'],\r\n".
+                                  "                                        data : [['0', '否'], ['1', '是']]\r\n".
+                                  "                                  }),emptyText: '请选择$field_comment',\r\n".
+                                  "                                valueField : 'value',// 值\r\n".
+                                  "                                displayField : 'text'// 显示文本\r\n                            ";
+                    }
+                    if ($column_type=='enum')
+                    { 
+                        $enum_columnDefine=self::enumDefines($field["Comment"]);  
+                        $fieldLabels.=",xtype : 'combo',mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,allowBlank : false,\r\n".
+                                      "                                store : new Ext.data.SimpleStore({\r\n".
+                                      "                                        fields : ['value', 'text'],\r\n".
+                                      "                                        data : [";  
+                        $enumArr=array();              
+                        foreach ($enum_columnDefine as $enum_column) 
+                        {
+                            $enumArr[]="['".$enum_column["value"]."', '".$enum_column["comment"]."']";  
+                        }                                         
+                        $fieldLabels.=implode(",",$enumArr);              
+                        $fieldLabels.="]\r\n".
+                                      "                                  }),emptyText: '请选择$field_comment',\r\n".
+                                      "                                valueField : 'value',// 值\r\n".
+                                      "                                displayField : 'text'// 显示文本\r\n                            ";  
+                    } 
+                    if (self::columnIsTextArea($fieldname,$field["Type"]))
+                    {        
+                        $fieldLabels.=",xtype : 'textarea',id:'$fieldname',ref:'$fieldname'";
+                    }
+                }
+                $fieldLabels.="},\r\n"; 
+            }      
+        }
+        $fieldLabels=substr($fieldLabels,0,strlen($fieldLabels)-3);  
+        $result["fieldLabels"]=$fieldLabels;
+        return $fieldLabels;        
+    }
+
+    /**
+     * 获取Ext "Textarea" 转换成在线编辑器
+     */
+    private static function model_textareaOnlineEditor($appName_alias,$classname,$instancename,$fieldInfo)
+    {
+        $result=array();      
+        $textareaOnlineditor_Replace="";
+        $textareaOnlineditor_Add="";
+        $textareaOnlineditor_Update="";    
+        $textareaOnlineditor_Save=""; 
+        $textareaOnlineditor_Reset="";
+
+        $textareaOnlineditor_Replace_array=array("ckEditor"=>'',"kindEditor"=>'',"xhEditor"=>''); 
+        $textareaOnlineditor_Add_array=array("ckEditor"=>'',"kindEditor"=>'',"xhEditor"=>''); 
+        $textareaOnlineditor_Update_array=array("ckEditor"=>'',"kindEditor"=>'',"xhEditor"=>'');     
+        $textareaOnlineditor_Save_array=array("ckEditor"=>'',"kindEditor"=>'',"xhEditor"=>''); 
+        $textareaOnlineditor_Reset_array=array("ckEditor"=>'',"kindEditor"=>'',"xhEditor"=>''); 
+        $reset_img="";
+        $add_img="";
+        $update_img="";        
+        foreach ($fieldInfo as $fieldname=>$field)
+        {       
+            if (self::isNotColumnKeywork($fieldname))
+            {      
+                $column_type=self::column_type($field["Type"]);
+                $isImage =self::columnIsImage($fieldname,$field["Comment"]);                  
+                if ($fieldname==self::keyIDColumn($classname))
+                {
+                    $result["tableFieldIdName"]=$fieldname;       
+                }if ($isImage){
+                    $reset_img.="                        this.{$fieldname}Upload.setValue(this.{$fieldname}.getValue());\r\n";
+                    $add_img.="            $appName_alias.$classname.View.Running.edit_window.{$fieldname}Upload.setValue(\"\");\r\n";   
+                    $update_img.="            $appName_alias.$classname.View.Running.edit_window.{$fieldname}Upload.setValue($appName_alias.$classname.View.Running.edit_window.{$fieldname}.getValue());\r\n";           
+                }else{                  
+                    $datatype=self::comment_type($field["Type"]);
+                    $field_comment=$field["Comment"];  
+                    if (contain($field_comment,"\r")||contain($field_comment,"\n"))
+                    {
+                        $field_comment=preg_split("/[\s,]+/", $field_comment);    
+                        $field_comment=$field_comment[0]; 
+                    }      
+                    if ($field_comment){
+                        $field_comment=str_replace('标识',"",$field_comment);
+                        $field_comment=str_replace('编号',"",$field_comment);      
+                    }                    
+
+                    if (self::columnIsTextArea($fieldname,$field["Type"]))
+                    {         
+                        $textareaOnlineditor_Replace_array["ckEditor"].="                                ckeditor_replace_$fieldname(); \r\n";  
+                        $textareaOnlineditor_Replace_array["kindEditor"].="                                $appName_alias.$classname.View.EditWindow.KindEditor_$fieldname = KindEditor.create('textarea[name=\"$fieldname\"]',{width:'98%',minHeith:'350px', filterMode:true});\r\n";
+                        $textareaOnlineditor_Replace_array["xhEditor"].="                                pageInit(\"$fieldname\");\r\n";
+
+                        $textareaOnlineditor_Add_array["ckEditor"].="                    if (CKEDITOR.instances.$fieldname) CKEDITOR.instances.$fieldname.setData(\"\");\r\n"; 
+                        $textareaOnlineditor_Add_array["kindEditor"].="                    if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname) $appName_alias.$classname.View.EditWindow.KindEditor_{$fieldname}.html(\"\");\r\n";
+
+                        $textareaOnlineditor_Update_array["ckEditor"].="                    if (CKEDITOR.instances.$fieldname) CKEDITOR.instances.$fieldname.setData(this.getSelectionModel().getSelected().data.$fieldname); \r\n"; 
+                        $textareaOnlineditor_Update_array["kindEditor"].="                    if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname) $appName_alias.$classname.View.EditWindow.KindEditor_$fieldname.html(this.getSelectionModel().getSelected().data.$fieldname);\r\n";
+                        $textareaOnlineditor_Update_array["xhEditor"].="                    if (xhEditor_$fieldname)xhEditor_$fieldname.setSource(this.getSelectionModel().getSelected().data.$fieldname);\r\n";
+
+                        $textareaOnlineditor_Save_array["ckEditor"].="                                if (CKEDITOR.instances.$fieldname) this.editForm.$fieldname.setValue(CKEDITOR.instances.$fieldname.getData());\r\n";
+                        $textareaOnlineditor_Save_array["kindEditor"].="                                if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname)this.editForm.$fieldname.setValue($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname.html());\r\n";
+                        $textareaOnlineditor_Save_array["xhEditor"].="                                if (xhEditor_$fieldname)this.editForm.$fieldname.setValue(xhEditor_$fieldname.getSource());\r\n";
+
+                        $textareaOnlineditor_Reset_array["ckEditor"].="                                if (CKEDITOR.instances.$fieldname) CKEDITOR.instances.$fieldname.setData($appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n";   
+                        $textareaOnlineditor_Reset_array["kindEditor"].="                                if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname) $appName_alias.$classname.View.EditWindow.KindEditor_$fieldname.html($appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n";
+                    }
+                }
+            }      
+        }
+        $textareaOnlineditor_Replace=",\r\n".
+                                  "                    afterrender:function(){\r\n". 
+                                  "                        switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
+                                  "                        {\r\n".
+                                  "                            case 2:\r\n".                                  
+                                  $textareaOnlineditor_Replace_array["kindEditor"].
+                                  "                                break\r\n".
+                                  "                            case 3:\r\n".
+                                  $textareaOnlineditor_Replace_array["xhEditor"].
+                                  "                                break\r\n".                                  
+                                  "                            default:\r\n".
+                                  $textareaOnlineditor_Replace_array["ckEditor"].  
+                                  "                        }\r\n".
+                                  "                    }";    
+        $textareaOnlineditor_Add=$add_img.
+                                  "            switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
+                                  "            {\r\n".
+                                  "                case 2:\r\n".
+                                  $textareaOnlineditor_Add_array["kindEditor"].
+                                  "                    break\r\n".
+                                  "                case 3:\r\n".
+                                  "                    break\r\n".
+                                  "                default:\r\n".
+                                  $textareaOnlineditor_Add_array["ckEditor"].
+                                  "            }\r\n";
+        $textareaOnlineditor_Update=$update_img.
+                                  "            switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
+                                  "            {\r\n".
+                                  "                case 2:\r\n".
+                                  $textareaOnlineditor_Update_array["kindEditor"].
+                                  "                    break\r\n".
+                                  "                case 3:\r\n".
+                                  $textareaOnlineditor_Update_array["xhEditor"].
+                                  "                    break\r\n".
+                                  "                default:\r\n".
+                                  $textareaOnlineditor_Update_array["ckEditor"].
+                                  "            }\r\n";
+        $textareaOnlineditor_Save="                        switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
+                                  "                        {\r\n".
+                                  "                            case 2:\r\n".
+                                  $textareaOnlineditor_Save_array["kindEditor"].
+                                  "                                break\r\n".
+                                  "                            case 3:\r\n".
+                                  $textareaOnlineditor_Save_array["xhEditor"].
+                                  "                                break\r\n".
+                                  "                            default:\r\n".
+                                  $textareaOnlineditor_Save_array["ckEditor"].
+                                  "                        }\r\n";
+        $textareaOnlineditor_Reset=$reset_img.
+                                  "                        switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
+                                  "                        {\r\n".
+                                  "                            case 2:\r\n".
+                                  $textareaOnlineditor_Reset_array["kindEditor"].
+                                  "                                break\r\n".
+                                  "                            case 3:\r\n".
+                                  "                                break\r\n".
+                                  "                            default:\r\n".
+                                  $textareaOnlineditor_Reset_array["ckEditor"].
+                                  "                        }\r\n";
+
+        $result["textareaOnlineditor_Replace"]=$textareaOnlineditor_Replace;
+        $result["textareaOnlineditor_Add"]=$textareaOnlineditor_Add;
+        $result["textareaOnlineditor_Update"]=$textareaOnlineditor_Update;    
+        $result["textareaOnlineditor_Save"]=$textareaOnlineditor_Save; 
+        $result["textareaOnlineditor_Reset"]=$textareaOnlineditor_Reset;
+        return $result;        
+    }
+
     /**
      * 获取数据对象的ID列名称
      * @param mixed $dataobject 数据对象实体|对象名称

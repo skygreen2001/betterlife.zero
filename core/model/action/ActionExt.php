@@ -94,20 +94,19 @@ class ActionExt extends Action
 	
 	/**
 	 * 加载在线编辑器 
-	 * @param array|string $textarea_names Input为Textarea的名称name[一个页面可以有多个Textarea]
-	 * @param string $content 内容
+	 * @param array|string $textarea_ids Input为Textarea的名称name[一个页面可以有多个Textarea]
 	 */
-	public function load_onlineditor($textarea_names="content")
+	public function load_onlineditor($textarea_ids="content")
 	{
 		switch ($this->online_editor) {
 		   case EnumOnlineEditorType::CKEDITOR:
-				if (is_array($textarea_names)&&(count($textarea_names)>0)){
-					$this->view->editorHtml=UtilCKEeditor::loadReplace($textarea_names[0]);
-					for($i=0;$i<count($textarea_names);$i++){
-						$this->view->editorHtml.=UtilCKEeditor::loadReplace($textarea_names[i],false);
+				if (is_array($textarea_ids)&&(count($textarea_ids)>0)){
+					$this->view->editorHtml=UtilCKEeditor::loadReplace($textarea_ids[0]);
+					for($i=0;$i<count($textarea_ids);$i++){
+						$this->view->editorHtml.=UtilCKEeditor::loadReplace($textarea_ids[i],false);
 					}
 				}else{
-					$this->view->editorHtml=UtilCKEeditor::loadReplace($textarea_names);
+					$this->view->editorHtml=UtilCKEeditor::loadReplace($textarea_ids);
 				}
 				$this->view->online_editor="CKEditor";
 			 break;
@@ -132,7 +131,13 @@ class ActionExt extends Action
 					$this->view->viewObject=new ViewObject();
 				}               
 				UtilAjaxJquery::load("1.7.1",$this->view->viewObject);
-				UtilXheditor::loadXheditorCssAndJsFunction($this->view->viewObject); 
+				if (is_array($textarea_ids)&&(count($textarea_ids)>0)){
+					for($i=0;$i<count($textarea_ids);$i++){                
+						UtilXheditor::loadXheditorCssAndJsFunction($textarea_ids[i],$this->view->viewObject); 
+					}
+				}else{
+					UtilXheditor::loadXheditorCssAndJsFunction($textarea_ids,$this->view->viewObject); 
+				}
 				$this->view->online_editor="xhEditor";  
 			 break; 
 		} 
