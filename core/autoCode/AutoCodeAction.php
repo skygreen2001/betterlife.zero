@@ -231,20 +231,21 @@ class AutoCodeAction extends AutoCode
                 $result.="         \$this->init();\r\n"; 
                 $result.="         \$this->ExtDirectMode();\r\n";
                 $result.="         \$this->ExtUpload();\r\n"; 
-                $result.="         \$this->loadExtJs('$instancename/$instancename.js');\r\n"; 
-                $isFirstTime=true;
+                $result.="         \$this->loadExtJs('$instancename/$instancename.js');\r\n";
+                $text_area_fieldname=array(); 
                 foreach ($fieldInfo as $fieldname=>$field)
                 {                    
                     if (self::columnIsTextArea($fieldname,$field["Type"]))
                     {
-                        if ($isFirstTime){
-                            $result.="         \$this->view->editorHtml=UtilCKEeditor::loadReplace(\"$fieldname\");\r\n"; 
-                            $isFirstTime=false;
-                        }else{
-                            $result.="         \$this->view->editorHtml=UtilCKEeditor::loadReplace(\"$fieldname\",false);\r\n"; 
-                        }
+                        $text_area_fieldname[]="'".$fieldname."'";
                     }   
                 }
+                if (count($text_area_fieldname)==1){  
+                    $result.="         \$this->load_onlineditor('{$fieldname}');\r\n"; 
+                }else if (count($text_area_fieldname)>1){
+                    $fieldnames=implode(",", $text_area_fieldname);
+                    $result.="         \$this->load_onlineditor(array({$fieldnames}));\r\n"; 
+                }        
                 $result.="     }\r\n\r\n";      
                 self::$echo_result.=$result;  
                 $result_upload ="    /**\r\n".                        

@@ -28,7 +28,8 @@ Bb.Blog={
 			IsFix:0          
 		},
 		/**
-		 *  
+		 * 在线编辑器类型。
+		 * 1:CkEditor,2:KindEditor,3:xhEditor 
 		 */
 		OnlineEditor:1
 	},
@@ -130,7 +131,7 @@ Bb.Blog.View={
 								Bb.Blog.View.EditWindow.KindEditor_content = KindEditor.create('textarea[name="content"]',{width:'98%',minHeith:'350px', filterMode:true});
 								break
 							case 3:
-								pageInit("content");
+								pageInit_content();
 								break
 							default:
 								ckeditor_replace_content(); 

@@ -718,7 +718,7 @@ class AutoCodeViewExt extends AutoCode
                     {         
                         $textareaOnlineditor_Replace_array["ckEditor"].="                                ckeditor_replace_$fieldname(); \r\n";  
                         $textareaOnlineditor_Replace_array["kindEditor"].="                                $appName_alias.$classname.View.EditWindow.KindEditor_$fieldname = KindEditor.create('textarea[name=\"$fieldname\"]',{width:'98%',minHeith:'350px', filterMode:true});\r\n";
-                        $textareaOnlineditor_Replace_array["xhEditor"].="                                pageInit(\"$fieldname\");\r\n";
+                        $textareaOnlineditor_Replace_array["xhEditor"].="                                pageInit_$fieldname();\r\n";
 
                         $textareaOnlineditor_Add_array["ckEditor"].="                    if (CKEDITOR.instances.$fieldname) CKEDITOR.instances.$fieldname.setData(\"\");\r\n"; 
                         $textareaOnlineditor_Add_array["kindEditor"].="                    if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname) $appName_alias.$classname.View.EditWindow.KindEditor_{$fieldname}.html(\"\");\r\n";

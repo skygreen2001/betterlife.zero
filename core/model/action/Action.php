@@ -315,6 +315,20 @@ class Action extends Object
 			 break; 
 		}                                                
 	} 
+	
+	/**
+	 * 在Action所有的方法执行之前可以执行的方法
+	 */
+	public function beforeAction()
+	{
+	}
+	
+	/**
+	 * 在Action所有的方法执行之后可以执行的方法 
+	 */
+	public function afterAction()
+	{
+	}
 }
 
 ?>
