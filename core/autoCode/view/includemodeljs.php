@@ -28,7 +28,12 @@ $appName_alias.$classname={
              * 是否固定显示{$table_comment}信息页(或者打开新窗口)
              */
             IsFix:0          
-        }
+        },
+        /**
+         * 在线编辑器类型。
+         * 1:CkEditor,2:KindEditor,3:xhEditor 
+         */
+        OnlineEditor:1
     },
     /**
      * Cookie设置

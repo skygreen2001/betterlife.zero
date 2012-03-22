@@ -103,7 +103,7 @@ class ActionExt extends Action
 				if (is_array($textarea_ids)&&(count($textarea_ids)>0)){
 					$this->view->editorHtml=UtilCKEeditor::loadReplace($textarea_ids[0]);
 					for($i=0;$i<count($textarea_ids);$i++){
-						$this->view->editorHtml.=UtilCKEeditor::loadReplace($textarea_ids[i],false);
+						$this->view->editorHtml.=UtilCKEeditor::loadReplace($textarea_ids[$i],false);
 					}
 				}else{
 					$this->view->editorHtml=UtilCKEeditor::loadReplace($textarea_ids);
@@ -131,12 +131,15 @@ class ActionExt extends Action
 					$this->view->viewObject=new ViewObject();
 				}               
 				UtilAjaxJquery::load("1.7.1",$this->view->viewObject);
+				UtilXheditor::loadcss($this->view->viewObject);
+				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/xheditor/xheditor-1.1.13-zh-cn.min.js"); 
+				UtilXheditor::loadJsPlugin($this->view->viewObject);
 				if (is_array($textarea_ids)&&(count($textarea_ids)>0)){
 					for($i=0;$i<count($textarea_ids);$i++){                
-						UtilXheditor::loadXheditorCssAndJsFunction($textarea_ids[i],$this->view->viewObject); 
+						UtilXheditor::loadJsFunction($textarea_ids[$i],$this->view->viewObject,null,"width:'98%',height:350,"); 
 					}
 				}else{
-					UtilXheditor::loadXheditorCssAndJsFunction($textarea_ids,$this->view->viewObject); 
+					UtilXheditor::loadJsFunction($textarea_ids,$this->view->viewObject,null,"width:'98%',height:350,"); 
 				}
 				$this->view->online_editor="xhEditor";  
 			 break; 
@@ -157,6 +160,20 @@ class ActionExt extends Action
 		} else {
 			echo json_encode($response);
 		}
-	}         
+	}    
+	
+	/**
+	 * 在Action所有的方法执行之前可以执行的方法
+	 */
+	public function beforeAction()
+	{
+	}
+	
+	/**
+	 * 在Action所有的方法执行之后可以执行的方法 
+	 */
+	public function afterAction()
+	{
+	}   
 }
 ?>

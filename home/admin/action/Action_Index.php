@@ -31,7 +31,6 @@ class Action_Index extends ActionExt
 		 $this->ExtUpload();
 		 $this->loadExtJs('blog/blog.js');
 		 $this->load_onlineditor('content');
-		 //$this->view->editorHtml=UtilCKEeditor::loadReplace("content");
 	 }
 	 
 	 /**
