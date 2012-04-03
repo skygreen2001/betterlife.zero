@@ -288,6 +288,9 @@ class AutoCode extends Object
 	 */
 	protected static function columnIsImage($column_name,$column_comment)
 	{
+		if (contain($column_name,"id")){
+			return false;
+		}
 		if ((contain($column_name,"image"))||(contain($column_name,"img"))||(contain($column_name,"ico"))||(contain($column_name,"logo"))||(contain($column_name,"pic"))){
 			return true;    
 		}  

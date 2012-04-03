@@ -784,8 +784,8 @@ class AutoCodeService extends AutoCode
 		foreach ($fieldInfo as $fieldname=>$field){
 			$isImage =self::columnIsImage($fieldname,$field["Comment"]);
 			if ($isImage){                                           
-				$result.="        if (!empty(\$_FILES)&&!empty(\$_FILES[\"imageUpload\"][\"name\"])){\r\n".
-						 "            \$result=\$this->uploadImg(\$_FILES);\r\n".
+				$result.="        if (!empty(\$_FILES)&&!empty(\$_FILES[\"{$fieldname}Upload\"][\"name\"])){\r\n".
+						 "            \$result=\$this->uploadImg(\$_FILES,\"{$fieldname}Upload\",\"{$fieldname}\");\r\n".
 						 "            if (\$result&&(\$result['success']==true)){\r\n".   
 						 "                if (array_key_exists('file_name',\$result)){ \r\n".
 						 "                    \${$instance_name}[\"{$fieldname}\"]= \$result['file_name'];\r\n".            
@@ -807,24 +807,25 @@ class AutoCodeService extends AutoCode
 	 */
 	private static function imageUploadFunctionInExtService($instance_name,$fieldInfo,$object_desc)
 	{
-		$result="";   
+		$result="";  
+		$onlyonce=true; 
 		foreach ($fieldInfo as $fieldname=>$field){
 			$isImage =self::columnIsImage($fieldname,$field["Comment"]);
-			if ($isImage){                                            
+			if ($isImage&&$onlyonce){                                            
 				$result.="\r\n".
 						 "    /**\r\n".
 						 "     * 上传{$object_desc}图片文件\r\n".
 						 "     */\r\n".     
-						 "    public function uploadImg(\$_FILES)\r\n".
+						 "    public function uploadImg(\$_FILES,\$uploadFlag,\$upload_dir)\r\n".
 						 "    {\r\n". 
 						 "        \$diffpart=date(\"YmdHis\");\r\n".
 						 "        \$result=\"\";\r\n". 
-						 "        if (!empty(\$_FILES[\"imageUpload\"])&&!empty(\$_FILES[\"imageUpload\"][\"name\"])){\r\n".
-						 "            \$tmptail = end(explode('.', \$_FILES[\"imageUpload\"][\"name\"]));\r\n". 
-						 "            \$uploadPath =GC::\$upload_path.\"images\\\\{$instance_name}\\\\\$diffpart.\$tmptail\";\r\n".
-						 "            \$result     =UtilFileSystem::uploadFile(\$_FILES,\$uploadPath,\"imageUpload\");\r\n". 
+						 "        if (!empty(\$_FILES[\$uploadFlag])&&!empty(\$_FILES[\$uploadFlag][\"name\"])){\r\n".
+						 "            \$tmptail = end(explode('.', \$_FILES[\$uploadFlag][\"name\"]));\r\n". 
+						 "            \$uploadPath =GC::\$upload_path.\"images\\\\{$instance_name}\\\\\$upload_dir\\\\\$diffpart.\$tmptail\";\r\n".
+						 "            \$result     =UtilFileSystem::uploadFile(\$_FILES,\$uploadPath,\$uploadFlag);\r\n". 
 						 "            if (\$result&&(\$result['success']==true)){\r\n".
-						 "                \$result['file_name']=\"{$instance_name}/\$diffpart.\$tmptail\";\r\n".    
+						 "                \$result['file_name']=\"{$instance_name}/\$upload_dir/\$diffpart.\$tmptail\";\r\n".    
 						 "            }else{\r\n".                     
 						 "                return array(\r\n".                     
 						 "                    'success' => true,\r\n".                     
@@ -834,6 +835,7 @@ class AutoCodeService extends AutoCode
 						 "        }\r\n".                                
 						 "        return \$result;\r\n".                                             
 						 "    }\r\n";
+				$onlyonce=false;
 			}
 		}   
 		return $result; 
