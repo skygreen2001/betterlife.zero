@@ -374,7 +374,7 @@ $columns
                     },
                     items : [                        
                         new Ext.Toolbar({
-                            width : 100,
+                            enableOverflow: true,width : 100,
                             defaults : {
                                xtype : 'textfield'
                             },
