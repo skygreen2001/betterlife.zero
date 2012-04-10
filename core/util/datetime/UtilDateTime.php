@@ -20,13 +20,15 @@ class EnumDateTimeFORMAT extends Enum
 
 /**
  +---------------------------------<br/>
- * 功能:处理文件目录相关的事宜方法。<br/>
+ * 功能:处理通用的日期时间方法。<br/>
  +---------------------------------
  * @category betterlife
  * @package util.common
+ * @subpackage datetime
  * @author skygreen
  */
-class UtilDateTime extends Util {    
+class UtilDateTime extends Util 
+{    
 	/**
 	 * 标准日期时间格式：年-月-日 时:分:秒
 	 */
