@@ -230,9 +230,7 @@ $viewdoblock
                      ]
                     }
                 );
-                this.add(
-                    {title: '其他',iconCls:'tabs'}
-                );
+$relationViewAdds         
             }       
         }),
         /**
@@ -267,7 +265,7 @@ $viewdoblock
                 $appName_alias.$classname.View.{$classname}View.Window.superclass.constructor.call(this, config);   
             }        
         })
-    },
+    },$relationClassesView
     /**
      * 窗口：批量上传{$table_comment}
      */        
@@ -699,7 +697,7 @@ $filterdoSelect
                 $appName_alias.$classname.Config.View.IsShow=1;
             }else{
                 $appName_alias.$classname.Config.View.IsShow=0;
-            }
+            }{$viewRelationDoSelect}
             this.ownerCt.doLayout();
         },
         /**
@@ -830,7 +828,7 @@ $filterdoSelect
         /**
          * 当前{$table_comment}Grid对象
          */
-        {$instancename}Grid:null,  
+        {$instancename}Grid:null,{$relationViewGrids}  
         /**
          * 显示{$table_comment}信息及关联信息列表的Tab页
          */

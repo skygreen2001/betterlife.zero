@@ -33,7 +33,16 @@ class AutoCodeViewExt extends AutoCode
 	 * 查询过滤条件字段
 	 */
 	public static $filter_fieldnames=array();    
-   
+	/**
+	 * 所有表信息
+	 * @var mixed
+	 */
+	private static $tableInfoList;
+	/**
+	 * 所有表列信息
+	 * @var mixed
+	 */
+	private static $fieldInfos;
 	/**
 	 * 设置必需的路径
 	 */
@@ -55,7 +64,8 @@ class AutoCodeViewExt extends AutoCode
 		self::pathset();
 		$tableList=Manager_Db::newInstance()->dbinfo()->tableList();
 		$fieldInfos=array();
-		$tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
+		$tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList();
+		self::$tableInfoList=$tableInfoList;  
 		foreach ($tableList as $tablename){
 			$fieldInfoList=Manager_Db::newInstance()->dbinfo()->fieldInfoList($tablename); 
 			foreach($fieldInfoList as $fieldname=>$field){
@@ -70,7 +80,8 @@ class AutoCodeViewExt extends AutoCode
 			}   
 			$classname=self::getClassname($tablename); 
 			self::$class_comments[$classname]=$tableInfoList[$tablename]["Comment"];      
-		}                                                                      
+		}           
+		self::$fieldInfos=$fieldInfos;                                                           
 		echo UtilCss::form_css()."\r\n";
 		echo "<font color='#FF0000'>采用ExtJs框架生成后端Js文件导出:</font><br/>";   
 		foreach ($fieldInfos as $tablename=>$fieldInfo){
@@ -205,10 +216,14 @@ class AutoCodeViewExt extends AutoCode
 		$appName=ucfirst($appName); 
 		$appName_alias=ucfirst($appName_alias);
 		//Ext "store" 中包含的fields
-		$storeInfo=self::model_fields($classname,$fieldInfo);
+		$storeInfo=self::model_fields($classname,$instancename,$fieldInfo);
 		$fields=$storeInfo['fields'];
 		//Ext "$relationStore="中关系库Store的定义
 		$relationStore=$storeInfo['relationStore'];
+		$relationClassesView=$storeInfo['relationClassesView'];
+		$relationViewAdds=$storeInfo['relationViewAdds'];
+		$relationViewGrids=$storeInfo['relationViewGrids'];
+		$viewRelationDoSelect=$storeInfo['viewRelationDoSelect'];
 
 		//获取Ext "EditWindow"里items的fieldLabels
 		$editWindowVars=self::model_fieldLables($appName_alias,$classname,$fieldInfo);
@@ -245,10 +260,11 @@ class AutoCodeViewExt extends AutoCode
 	/**
 	 * 获取Ext "Store"里的fields
 	 */
-	private static function model_fields($classname,$fieldInfo)
+	private static function model_fields($classname,$instancename,$fieldInfo)
 	{        
 		$fields="";//Ext "store" 中包含的fields
 		$relationStore="";//Ext "$relationStore="中关系库Store的定义
+		$relationClassesView="";//Ext 关系表的显示定义
 		foreach ($fieldInfo as $fieldname=>$field)
 		{ 
 			if (self::isNotColumnKeywork($fieldname))
@@ -268,9 +284,11 @@ class AutoCodeViewExt extends AutoCode
 					$fields.=",dateFormat:'Y-m-d H:i:s'";
 				}
 				$fields.="},\r\n";     
-				if (array_key_exists($classname,self::$relation_viewfield)){
+				if (array_key_exists($classname,self::$relation_viewfield))
+				{
 					$relationSpecs=self::$relation_viewfield[$classname];  
-					if (array_key_exists($fieldname,$relationSpecs)){
+					if (array_key_exists($fieldname,$relationSpecs))
+					{
 						$relationShow=$relationSpecs[$fieldname];
 						foreach ($relationShow as $key=>$value) {  
 							$realId=DataObjectSpec::getRealIDColumnName($key);
@@ -311,12 +329,184 @@ class AutoCodeViewExt extends AutoCode
 							}                  
 						}  
 					}    
-				}        
+				}     
 			}
 		}        
 		$fields=substr($fields,0,strlen($fields)-3);  
 		$result['fields']=$fields;
+		
+		$relationViewDefine=self::relationViewDefine($classname,$instancename,$relationStore);
+		$relationStore=$relationViewDefine['relationStore'];
+		$relationClassesView=$relationViewDefine['one2many'];
+		$relationViewAdds=$relationViewDefine['relationViewAdds'];
+		$relationViewGrids=$relationViewDefine['relationViewGrids'];
+		$viewRelationDoSelect=$relationViewDefine['viewRelationDoSelect'];
 		$result['relationStore']=$relationStore;
+		$result['relationClassesView']=$relationClassesView;
+		$result['relationViewAdds']=$relationViewAdds;
+		$result['relationViewGrids']=$relationViewGrids;
+		$result['viewRelationDoSelect']="\r\n".$viewRelationDoSelect;
+		return $result;
+	}
+	
+	/**
+	 * 关系显示定义 
+	 */
+	private static function relationViewDefine($classname,$instancename,$relationStore)
+	{
+		$relationSpec=AutoCodeDomain::$relation_all[$classname];
+		$relationClassesView="";
+		$appName_alias=Gc::$appName_alias;
+		$relationViewAdds="";  
+		$relationViewGrids="";
+		$viewRelationDoSelect="";                                               
+		//导出一对多关系规范定义(如果存在)
+		if (array_key_exists("has_many",$relationSpec))
+		{
+			$has_many=$relationSpec["has_many"];
+			foreach ($has_many as $key=>$value) 
+			{
+				$current_classname=$key;
+				$key{0}=strtolower($key{0});
+				$tablename=self::getTablename($current_classname);
+				$current_instancename=self::getInstancename($tablename); 
+				
+				
+				$relation_classcomment=self::getClassComments($current_classname);
+				$relation_classcomment=str_replace("关系表","",$relation_classcomment); 
+				if (contain($relation_classcomment,"\r")||contain($relation_classcomment,"\n")){
+					$relation_classcomment=preg_split("/[\s,]+/", $relation_classcomment);    
+					$relation_classcomment=$relation_classcomment[0]; 
+				}   
+				$relationViewAdds.="                    {title: '$relation_classcomment',iconCls:'tabs',tabWidth:150,\r\n".
+								  "                     items:[$appName_alias.$classname.View.Running.{$current_instancename}Grid]\r\n".
+								  "                    },\r\n";  
+				$relationViewGrids.="        /**\r\n".
+									"         * 当前{$relation_classcomment}Grid对象\r\n".
+									"         */\r\n".
+									"        {$current_instancename}Grid:null,\r\n";  
+				$viewRelationDoSelect.="            $appName_alias.$classname.View.Running.{$current_instancename}Grid.doSelect{$current_classname}();\r\n";                 
+				if (!contain($relationStore,"{$key}Store"))
+				{
+					$fieldInfo=self::$fieldInfos[$tablename];
+					$fields_relation="";
+					foreach ($fieldInfo as $fieldname=>$field)
+					{
+						$datatype=self::comment_type($field["Type"]);                             
+						$field_comment=$field["Comment"]; 
+						if (contains($field_comment,array("日期","时间")))
+						{
+							$datatype='date';        
+						}            
+						if ($datatype=='enum'){
+							$datatype='string';
+						}
+						$fields_relation.="                  {name: '$fieldname',type: '".$datatype."'"; 
+						if ($datatype=='date')
+						{
+							$fields_relation.=",dateFormat:'Y-m-d H:i:s'";
+						}
+						$fields_relation.="},\r\n";   
+					}
+					$fields_relation=substr($fields_relation,0,strlen($fields_relation)-3); 
+					
+					$relation_classcomment=self::getClassComments($current_classname);
+					$relation_classcomment=str_replace("关系表","",$relation_classcomment); 
+					if (contain($relation_classcomment,"\r")||contain($relation_classcomment,"\n")){
+						$relation_classcomment=preg_split("/[\s,]+/", $relation_classcomment);    
+						$relation_classcomment=$relation_classcomment[0]; 
+					}                       
+					$relationStore.=",\r\n".
+									"    /**\r\n".  
+									"     * {$relation_classcomment}\r\n".
+									"     */\r\n".
+									"    {$key}Store:new Ext.data.Store({\r\n".  
+									"        reader: new Ext.data.JsonReader({\r\n".
+									"            totalProperty: 'totalCount',\r\n".
+									"            successProperty: 'success',\r\n".
+									"            root: 'data',remoteSort: true,\r\n".
+									"            fields : [\r\n".
+									"$fields_relation\r\n".
+									"            ]}\r\n".
+									"        ),\r\n".
+									"        writer: new Ext.data.JsonWriter({\r\n".
+									"            encode: false \r\n".
+									"        })\r\n".
+									"    })"; 
+				}       
+				
+				if (!contain($relationClassesView,"{$current_classname}View"))
+				{
+					if (self::$tableInfoList!=null&&count(self::$tableInfoList)>0&&  array_key_exists("$tablename", self::$tableInfoList))
+					{
+						$table_comment12n=self::$tableInfoList[$tablename]["Comment"];
+						$table_comment12n=str_replace("关系表","",$table_comment12n); 
+						if (contain($table_comment12n,"\r")||contain($table_comment12n,"\n")){
+							$table_comment12n=preg_split("/[\s,]+/", $table_comment12n);    
+							$table_comment12n=$table_comment12n[0]; 
+						}
+					}else{
+						$table_comment12n=$tablename;
+					} 
+					$realId=DataObjectSpec::getRealIDColumnName($classname);                    
+					$columns_relation="";					
+					$fieldInfo=self::$fieldInfos[$tablename];
+					foreach ($fieldInfo as $fieldname=>$field)
+					{
+						if (!self::isNotColumnKeywork($fieldname))
+						{
+						   continue; 
+						}
+						if ($fieldname==self::keyIDColumn($current_classname))
+						{ 
+							continue;
+						}
+						$field_comment=$field["Comment"];  
+						if (contain($field_comment,"\r")||contain($field_comment,"\n"))
+						{
+							$field_comment=preg_split("/[\s,]+/", $field_comment);    
+							$field_comment=$field_comment[0]; 
+						}                  
+						if ($field_comment){
+							$field_comment=str_replace('标识',"",$field_comment);
+							$field_comment=str_replace('编号',"",$field_comment);     
+							$field_comment=str_replace('主键',"",$field_comment);   
+						}    
+						$datatype=self::comment_type($field["Type"]);
+						$columns_relation.="                          {header : '$field_comment',dataIndex : '{$fieldname}'";  
+						if (($datatype=='date')||contains($field_comment,array("日期","时间"))) 
+						{
+							$columns_relation.=",renderer:Ext.util.Format.dateRenderer('Y-m-d')";
+						}
+					
+						$column_type=self::column_type($field["Type"]); 
+						if ($column_type=='bit'){
+							$columns_relation.=",renderer:function(value){if (value == true) {return \"是\";}else{return \"否\";}}";  
+						}
+						$columns_relation.="},\r\n";
+					}
+					$columns_relation=substr($columns_relation,0,strlen($columns_relation)-3); 
+					include("one2many.php");
+					$relationClassesView.="\r\n".$jsOne2ManyContent;
+				}
+						   
+			}
+		}
+		$result['relationStore']=$relationStore;   
+		if (empty($relationClassesView)){
+			$relationViewAdds.="                    {title: '其他',iconCls:'tabs'}\r\n";							  
+		}else{
+			$relationViewAdds=substr($relationViewAdds,0,strlen($relationViewAdds)-3);
+		}
+		$relationViewAdds="                this.add(\r\n".
+						  $relationViewAdds."\r\n".
+						  "                );\r\n";
+		$result['one2many']=$relationClassesView;
+		$result['relationViewAdds']=$relationViewAdds;
+		$relationViewGrids=substr($relationViewGrids,0,strlen($relationViewGrids)-2);
+		$result['relationViewGrids']="\r\n".$relationViewGrids;
+		$viewRelationDoSelect=substr($viewRelationDoSelect,0,strlen($viewRelationDoSelect)-2);
+		$result['viewRelationDoSelect']=$viewRelationDoSelect;
 		return $result;
 	}
 
@@ -970,7 +1160,7 @@ class AutoCodeViewExt extends AutoCode
 	 * @param string $tablename 表名称  
 	 * @param string $defineTplFileContent 生成的代码 
 	 */
-  private static function saveTplDefineToDir($tablename,$defineTplFileContent)
+	private static function saveTplDefineToDir($tablename,$defineTplFileContent)
 	{ 
 		$filename =self::getInstancename($tablename).Config_F::SUFFIX_FILE_TPL;  
 		$dir      =self::$view_core.Gc::$appName.DIRECTORY_SEPARATOR;
