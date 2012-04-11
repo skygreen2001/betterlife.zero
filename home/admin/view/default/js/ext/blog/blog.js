@@ -96,7 +96,28 @@ Bb.Blog.Store = {
 			{name: 'user_id', mapping: 'user_id'}, 
 			{name: 'username', mapping: 'username'} 
 		])
-	})      
+	}),
+	/**
+	 * 评论
+	 */
+	commentStore:new Ext.data.Store({
+		reader: new Ext.data.JsonReader({
+			totalProperty: 'totalCount',
+			successProperty: 'success',
+			root: 'data',remoteSort: true,
+			fields : [
+				  {name: 'comment_id',type: 'int'},
+				  {name: 'user_id',type: 'int'},
+				  {name: 'username',type: 'string'},
+				  {name: 'comment',type: 'string'},
+				  {name: 'blog_id',type: 'int'},
+				  {name: 'blog_name',type: 'string'}
+			]}
+		),
+		writer: new Ext.data.JsonWriter({
+			encode: false 
+		})
+	})            
 };
 /**
  * View:博客显示组件   
@@ -262,7 +283,8 @@ Bb.Blog.View={
 					activeTab: 1, tabPosition:"bottom",resizeTabs : true,     
 					header:false,enableTabScroll : true,tabWidth:'auto', margins : '0 3 3 0',
 					defaults : {
-						autoScroll : true
+						autoScroll : true,
+						layout:'fit'
 					},
 					listeners:{
 						beforetabchange:function(tabs,newtab,currentTab){  
@@ -283,6 +305,7 @@ Bb.Blog.View={
 					]
 				}, config);
 				Bb.Blog.View.BlogView.Tabs.superclass.constructor.call(this, config); 
+				Bb.Blog.View.Running.commentGrid=new Bb.Blog.View.CommentView.Grid(); 
 				this.onAddItems();
 			},
 			/**
@@ -313,8 +336,10 @@ Bb.Blog.View={
 					}
 				);
 				this.add(
-					{title: '其他',iconCls:'tabs'}
-				);
+					{title: '评论',iconCls:'tabs',tabWidth:150,
+					 items:[Bb.Blog.View.Running.commentGrid]
+					}
+				);         
 			}       
 		}),
 		/**
@@ -348,6 +373,57 @@ Bb.Blog.View={
 				}, config);  
 				Bb.Blog.View.BlogView.Window.superclass.constructor.call(this, config);   
 			}        
+		})
+	},
+	/**
+	 * 视图：评论列表
+	 */
+	CommentView:{
+		/**
+		 * 视图：评论列表
+		 */
+		Grid:Ext.extend(Ext.grid.GridPanel, {
+			constructor : function(config) {
+				config = Ext.apply({
+					store : Bb.Blog.Store.commentStore,
+					frame : true,trackMouseOver : true,enableColumnMove : true,columnLines : true,
+					loadMask : true,stripeRows : true,headerAsText : false,                
+					defaults : {
+						autoScroll : true
+					},
+					cm : new Ext.grid.ColumnModel({
+						defaults:{
+							width:120,sortable : true
+						},
+						columns : [
+						  {header : '评论者',dataIndex : 'username'},
+						  {header : '评论',dataIndex : 'comment'}                             
+						]
+					})
+				}, config);
+				Bb.Blog.View.CommentView.Grid.superclass.constructor.call(this, config); 
+			},             
+			/**
+			 * 查询符合条件的合同订单
+			 */
+			doSelectComment : function() {
+				if (Bb.Blog.View.Running.blogGrid&&Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected()){
+					var blog_id = Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.blog_id;
+					var condition = {'blog_id':blog_id};
+					ExtServiceComment.queryPageComment(condition,function(provider, response) { 
+						if (response.result){  
+							if (response.result.data) {   
+								var result           = new Array();
+								result['data']       =response.result.data; 
+								Bb.Blog.Store.commentStore.loadData(result); 
+							} else {
+								Bb.Blog.Store.commentStore.removeAll();                        
+								Ext.Msg.alert('提示', '无符合条件的合同订单！');
+							}
+						}
+					});
+				}
+			}
 		})
 	},
 	/**
@@ -810,6 +886,7 @@ Bb.Blog.View={
 			}else{
 				Bb.Blog.Config.View.IsShow=0;
 			}
+			Bb.Blog.View.Running.commentGrid.doSelectComment();
 			this.ownerCt.doLayout();
 		},
 		/**
@@ -961,6 +1038,10 @@ Bb.Blog.View={
 		 * 当前博客Grid对象
 		 */
 		blogGrid:null,  
+		/**
+		 * 当前评论Grid对象
+		 */
+		commentGrid:null,  
 		/**
 		 * 显示博客信息及关联信息列表的Tab页
 		 */

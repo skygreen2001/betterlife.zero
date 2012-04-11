@@ -182,7 +182,8 @@ $fieldLabels
                     activeTab: 1, tabPosition:"bottom",resizeTabs : true,     
                     header:false,enableTabScroll : true,tabWidth:'auto', margins : '0 3 3 0',
                     defaults : {
-                        autoScroll : true
+                        autoScroll : true,
+                        layout:'fit'
                     },
                     listeners:{
                         beforetabchange:function(tabs,newtab,currentTab){  
@@ -202,7 +203,7 @@ $fieldLabels
                         {title:'+',tabTip:'取消固定',ref:'tabFix',iconCls:'icon-fix'}
                     ]
                 }, config);
-                $appName_alias.$classname.View.{$classname}View.Tabs.superclass.constructor.call(this, config); 
+                $appName_alias.$classname.View.{$classname}View.Tabs.superclass.constructor.call(this, config);{$relationViewGridInit} 
                 this.onAddItems();
             },
             /**
@@ -229,8 +230,7 @@ $viewdoblock
                      '</table>' 
                      ]
                     }
-                );
-$relationViewAdds         
+                );$relationViewAdds         
             }       
         }),
         /**

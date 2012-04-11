@@ -65,5 +65,27 @@
 				<param name="len">1</param>
 			</method>
 		</methods> 
-	</service>    
+	</service>   
+	<service name="ExtServiceComment">
+		<methods>
+			<method name="save">
+				<param name="len">1</param>
+				<param name="formHandler">true</param>
+			</method>
+			<method name="update">
+				<param name="len">1</param>
+				<param name="formHandler">true</param>
+			</method>
+			<method name="deleteByIds">
+				<param name="len">1</param>
+			</method>
+			<method name="queryPageComment">
+				<param name="len">1</param>
+			</method>
+			<method name="exportComment">
+				<param name="len">1</param>
+			</method>
+		</methods> 
+	</service>
+ 
 </services>

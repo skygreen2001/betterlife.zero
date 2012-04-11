@@ -224,6 +224,7 @@ class AutoCodeViewExt extends AutoCode
 		$relationViewAdds=$storeInfo['relationViewAdds'];
 		$relationViewGrids=$storeInfo['relationViewGrids'];
 		$viewRelationDoSelect=$storeInfo['viewRelationDoSelect'];
+		$relationViewGridInit=$storeInfo['relationViewGridInit'];
 
 		//获取Ext "EditWindow"里items的fieldLabels
 		$editWindowVars=self::model_fieldLables($appName_alias,$classname,$fieldInfo);
@@ -341,11 +342,15 @@ class AutoCodeViewExt extends AutoCode
 		$relationViewAdds=$relationViewDefine['relationViewAdds'];
 		$relationViewGrids=$relationViewDefine['relationViewGrids'];
 		$viewRelationDoSelect=$relationViewDefine['viewRelationDoSelect'];
+		$relationViewGridInit=$relationViewDefine['relationViewGridInit'];
+		
 		$result['relationStore']=$relationStore;
 		$result['relationClassesView']=$relationClassesView;
 		$result['relationViewAdds']=$relationViewAdds;
 		$result['relationViewGrids']=$relationViewGrids;
 		$result['viewRelationDoSelect']="\r\n".$viewRelationDoSelect;
+		
+		$result['relationViewGridInit']="\r\n".$relationViewGridInit;
 		return $result;
 	}
 	
@@ -359,7 +364,8 @@ class AutoCodeViewExt extends AutoCode
 		$appName_alias=Gc::$appName_alias;
 		$relationViewAdds="";  
 		$relationViewGrids="";
-		$viewRelationDoSelect="";                                               
+		$viewRelationDoSelect="";  
+		$relationViewGridInit="";                                             
 		//导出一对多关系规范定义(如果存在)
 		if (array_key_exists("has_many",$relationSpec))
 		{
@@ -385,13 +391,15 @@ class AutoCodeViewExt extends AutoCode
 									"         * 当前{$relation_classcomment}Grid对象\r\n".
 									"         */\r\n".
 									"        {$current_instancename}Grid:null,\r\n";  
-				$viewRelationDoSelect.="            $appName_alias.$classname.View.Running.{$current_instancename}Grid.doSelect{$current_classname}();\r\n";                 
+				$viewRelationDoSelect.="            $appName_alias.$classname.View.Running.{$current_instancename}Grid.doSelect{$current_classname}();\r\n";     
+				$relationViewGridInit.="                $appName_alias.$classname.View.Running.{$current_instancename}Grid=new $appName_alias.$classname.View.{$current_classname}View.Grid();\r\n";            
 				if (!contain($relationStore,"{$key}Store"))
 				{
 					$fieldInfo=self::$fieldInfos[$tablename];
 					$fields_relation="";
 					foreach ($fieldInfo as $fieldname=>$field)
 					{
+						if (!self::isNotColumnKeywork($fieldname))continue;
 						$datatype=self::comment_type($field["Type"]);                             
 						$field_comment=$field["Comment"]; 
 						if (contains($field_comment,array("日期","时间")))
@@ -494,19 +502,21 @@ class AutoCodeViewExt extends AutoCode
 		}
 		$result['relationStore']=$relationStore;   
 		if (empty($relationClassesView)){
-			$relationViewAdds.="                    {title: '其他',iconCls:'tabs'}\r\n";							  
+			$relationViewAdds.="                    {title: '其他',iconCls:'tabs'}";							  
 		}else{
 			$relationViewAdds=substr($relationViewAdds,0,strlen($relationViewAdds)-3);
 		}
 		$relationViewAdds="                this.add(\r\n".
 						  $relationViewAdds."\r\n".
-						  "                );\r\n";
+						  "                );";
 		$result['one2many']=$relationClassesView;
-		$result['relationViewAdds']=$relationViewAdds;
+		$result['relationViewAdds']="\r\n".$relationViewAdds;
 		$relationViewGrids=substr($relationViewGrids,0,strlen($relationViewGrids)-2);
 		$result['relationViewGrids']="\r\n".$relationViewGrids;
 		$viewRelationDoSelect=substr($viewRelationDoSelect,0,strlen($viewRelationDoSelect)-2);
 		$result['viewRelationDoSelect']=$viewRelationDoSelect;
+		$relationViewGridInit=substr($relationViewGridInit,0,strlen($relationViewGridInit)-2);
+		$result['relationViewGridInit']=$relationViewGridInit;
 		return $result;
 	}
 
