@@ -10,7 +10,7 @@ $(function() {
 		$(this).css("color","#FFF");          
 		$(this).css("background-color","gray");  
 		$(this).css("border","1px solid gray");
-	})
+	});
 	$(".btnSubmit").hover(function(){
 		$(this).css("color","#000");          
 		$(this).css("background-color","#FFF");   
@@ -19,5 +19,5 @@ $(function() {
 		$(this).css("color","#FFF");          
 		$(this).css("background-color","#000");  
 		$(this).css("border","1px solid green");
-	})           	
+	});           	
 });
