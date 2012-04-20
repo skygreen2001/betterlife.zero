@@ -10,6 +10,32 @@
  */
 class Action_Index extends ActionExt
 {
+	/**
+	 * 控制器:登录
+	 */    
+	public function login()
+	{
+		if(HttpSession::isHave('admin_id')) {
+			$this->redirect("index","index");
+		}
+		$this->loadCss("resources/css/login.css");  
+		UtilJavascript::loadJsReady($this->view->viewObject,Gc::$url_base."common/js/ajax/jquery/jquery-1.7.1.js");
+		$this->loadJs("js/login.js");   
+		if (!empty($_POST)) {     
+			if (HttpSession::get("validate")!= md5($this->data["validate"])){
+				$this->view->set("message","图形验证码输入错误");
+				return;
+			}            
+			$admin = $this->model->Admin;
+			$admindata = Admin::get($admin);
+			if (empty($admindata)) {
+				$this->view->set("message","用户名或者密码错误");
+			}else {
+				HttpSession::set('admin_id',$admindata[0]->admin_id);
+				$this->redirect("index","index");
+			}
+		}
+	}
 	 /**
 	  * 控制器:首页
 	  */
@@ -21,6 +47,26 @@ class Action_Index extends ActionExt
 		 $this->view->menuGroups=MenuGroup::all();
 	 }
 	 
+	/**
+	 * 控制器:登出
+	 */    
+	public function logout()
+	{
+	  HttpSession::remove("admin_id");
+	  $this->redirect("index","login");
+	}
+
+	 /**
+	  * 控制器:系统管理人员
+	  */
+	 public function admin()
+	 {
+		 $this->init();
+		 $this->ExtDirectMode();
+		 $this->ExtUpload();
+		 $this->loadExtJs('admin/admin.js');
+	 }
+	
 	 /**
 	  * 控制器:博客
 	  */

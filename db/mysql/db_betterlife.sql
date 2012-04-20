@@ -1,4 +1,4 @@
-/*
+﻿/*
 Navicat MySQL Data Transfer
 
 Source Server         : localhost
@@ -3731,3 +3731,23 @@ CREATE TABLE `bb_user_userdetail` (
 -- Records of bb_user_userdetail
 -- ----------------------------
 INSERT INTO `bb_user_userdetail` VALUES ('1', '2', 'skygreen_2001@hotmail.com', '13917320293', '1331953386', '2012-03-17 11:03:51');
+
+-- ----------------------------
+-- Table structure for `bb_user_admin`
+-- ----------------------------
+DROP TABLE IF EXISTS `bb_user_admin`;
+CREATE TABLE `bb_user_admin` (
+  `admin_id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(200) NOT NULL COMMENT '用户名',
+  `realname` varchar(200) DEFAULT NULL COMMENT '真实姓名',
+  `password` varchar(45) NOT NULL COMMENT '密码',
+  `roleid` enum('0','1','2','3') DEFAULT '2' COMMENT '系统管理员扮演角色。\n0:超级管理员-superadmin\n1:管理人员-manager\n2:运维人员-normal\n3:合作伙伴-partner\n\n\n',
+  `commitTime` int(11) DEFAULT NULL COMMENT '创建时间',
+  `updateTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`admin_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='系统管理人员';
+
+-- ----------------------------
+-- Records of bb_user_admin
+-- ----------------------------
+INSERT INTO `bb_user_admin` VALUES ('1', 'admin', 'admin', 'admin', '2', '1334818587', '2012-04-19 14:57:11');

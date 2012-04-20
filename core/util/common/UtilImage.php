@@ -369,6 +369,52 @@ class UtilImage
 		$b = Array(225,236,166,125);
 		$key = mt_rand(0,3);
 
+		$backColor=  imagecolorallocate($im,64,64,64);
+		$borderColor = imagecolorallocate($im, 100, 100, 100);                    //边框色
+		$pointColor = imagecolorallocate($im,mt_rand(0,255),mt_rand(0,255),mt_rand(0,255));                 //点颜色
+
+		@imagefilledrectangle($im, 0, 0, $width - 1, $height - 1, $backColor);
+		@imagerectangle($im, 0, 0, $width-1, $height-1, $borderColor);
+		$stringColor = imagecolorallocate($im,255,255,255);
+		// 干扰
+		for($i=0;$i<$length;$i++) {
+			imagestring($im,5,$i*10+5,mt_rand(1,8),$randval{$i}, $stringColor);
+		}
+		self::output($im,$type);
+	}
+	
+	/**
+	 +----------------------------------------------------------<br/>
+	 * 生成图像验证码<br/>
+	 +----------------------------------------------------------
+	 * @static
+	 * @access public
+	 +----------------------------------------------------------
+	 * @param string $length  位数
+	 * @param string $mode  类型
+	 * @param string $type 图像格式
+	 * @param string $width  宽度
+	 * @param string $height  高度
+	 +----------------------------------------------------------
+	 * @return string
+	 +----------------------------------------------------------
+	 */
+	public static function buildImageVerifyAdvanced($length=4,$mode=1,$type='png',$width=48,$height=22,$verifyName='verify') 
+	{
+		session_start();
+		$randval = UtilString::rand_string($length,$mode);
+		$_SESSION[$verifyName]= md5($randval);
+		$width = ($length*10+10)>$width?$length*10+10:$width;
+		if ( $type!='gif' && function_exists('imagecreatetruecolor')) {
+			$im = @imagecreatetruecolor($width,$height);
+		}else {
+			$im = @imagecreate($width,$height);
+		}
+		$r = Array(225,255,255,223);
+		$g = Array(225,236,237,255);
+		$b = Array(225,236,166,125);
+		$key = mt_rand(0,3);
+
 		$backColor = imagecolorallocate($im, $r[$key],$g[$key],$b[$key]);    //背景色（随机）
 		$borderColor = imagecolorallocate($im, 100, 100, 100);                    //边框色
 		$pointColor = imagecolorallocate($im,mt_rand(0,255),mt_rand(0,255),mt_rand(0,255));                 //点颜色

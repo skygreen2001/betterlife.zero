@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menuGroups>
 	<menuGroup id="nav" name="功能区" lang="en" iconCls="nav">
-		<menu name="博客" address="index.php?go=admin.index.blog" />                                                         
+		<menu name="系统管理人员" address="index.php?go=admin.index.admin" />
+		<menu name="博客" address="index.php?go=admin.index.blog" />   
+	</menuGroup>
+	<menuGroup id="navdesign" lang="en" name="程序员区" iconCls="navdesign">   
 		<menu name="Stumbleupon" address="http://www.stumbleupon.com/" />  
 		<menu name="cooliris" title="Media browser plug-in, mobile app, gallery builder" address="http://www.cooliris.com/" />  
 		<menu name="CSDN" address="http://www.csdn.net" />
@@ -17,6 +20,7 @@
 		<menu name="美图看看" title="美图看看网页版" address="http://xiuxiu.web.meitu.com/main.html" />
 		<menu name="Photoshop Online" address="http://www.photoshop.com/tools" />
 		<menu name="PhotoEditor" title="Pixlr Photo editor" address="http://pixlr.com/editor" />   
+		<menu name="Google Gravity" title="Google Gravity" address="http://mrdoob.com/projects/chromeexperiments/google_gravity/" />   
 	</menuGroup>
 	<menuGroup id="navSystem" name="系统设置" iconCls="settings">
 		<menu name="菜单管理" address="index.php?go=admin.system.menumanager" />

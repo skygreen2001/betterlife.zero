@@ -87,5 +87,26 @@
 			</method>
 		</methods> 
 	</service>
+	<service name="ExtServiceAdmin">
+		<methods>
+			<method name="save">
+				<param name="len">1</param>
+				<param name="formHandler">true</param>
+			</method>
+			<method name="update">
+				<param name="len">1</param>
+				<param name="formHandler">true</param>
+			</method>
+			<method name="deleteByIds">
+				<param name="len">1</param>
+			</method>
+			<method name="queryPageAdmin">
+				<param name="len">1</param>
+			</method>
+			<method name="exportAdmin">
+				<param name="len">1</param>
+			</method>
+		</methods> 
+	</service>
  
 </services>

@@ -16,6 +16,11 @@
 			<relationclass name="User">user</relationclass>
 		</belong_has_one> 
 	</class>   
+	<class name="Admin">
+		<conditions>
+			<condition>username</condition>
+		</conditions>
+	</class>
 	<class name="Comment">         
 		<conditions>
 			<condition>comment</condition>  

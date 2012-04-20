@@ -167,6 +167,9 @@ class ActionExt extends Action
 	 */
 	public function beforeAction()
 	{
+		if(($this->data["go"]!="admin.index.login")&&!HttpSession::isHave('admin_id')) {
+			$this->redirect("index","login");
+		}
 	}
 	
 	/**

@@ -12,6 +12,7 @@ class Manager_ExtService extends Manager
 {        
 	private static $blogService;
 	private static $commentService;
+	private static $adminService;
 	/**
 	 * 提供服务:博客
 	 */
@@ -33,6 +34,18 @@ class Manager_ExtService extends Manager
 		}
 		return self::$commentService;
 	}
+
+	/**
+	 * 提供服务:系统管理人员
+	 */
+	public static function adminService()
+	{
+		if (self::$adminService==null) {
+			self::$adminService=new ExtServiceAdmin();
+		}
+		return self::$adminService;
+	}
+
 
 			 
 }  
