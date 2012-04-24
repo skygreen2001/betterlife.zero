@@ -707,7 +707,7 @@ class AutoCodeViewExt extends AutoCode
 				if ($fieldname==self::keyIDColumn($classname))
 				{
 					$result["tableFieldIdName"]=$fieldname;       
-				}if ($isImage){
+				}else if ($isImage){
 					$reset_img.="                        this.{$fieldname}Upload.setValue(this.{$fieldname}.getValue());\r\n";
 					$add_img.="            $appName_alias.$classname.View.Running.edit_window.{$fieldname}Upload.setValue(\"\");\r\n";   
 					$update_img.="            $appName_alias.$classname.View.Running.edit_window.{$fieldname}Upload.setValue($appName_alias.$classname.View.Running.edit_window.{$fieldname}.getValue());\r\n";           
