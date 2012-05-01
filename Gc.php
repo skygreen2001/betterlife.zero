@@ -225,7 +225,11 @@ class Gc
 	public static $self_theme_dir_every=array(
 		//'betterlife'=>'flexy'    
 	);    
-
+	/**
+	 * 是否与Ucenter的用户中心进行整合 
+	 * @var mixed
+	 */    
+	public static $is_ucenter_integration=true;
 	/**
 	* 模板文件后缀名称<br/>
 	* 一般为.tpl,.php,.html,.htm;<br/>

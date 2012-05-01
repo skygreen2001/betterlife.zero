@@ -3699,7 +3699,8 @@ CREATE TABLE `bb_user_user` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '标识',
   `department_id` int(11) NOT NULL COMMENT '部门标识',
   `username` varchar(200) NOT NULL COMMENT '用户名',
-  `password` varchar(200) DEFAULT NULL COMMENT '用户密码',
+  `password` varchar(200) DEFAULT NULL COMMENT '用户密码',  
+  `email` varchar(450) DEFAULT NULL COMMENT '邮箱地址',
   `commitTime` int(11) DEFAULT NULL COMMENT '提交时间',
   `updateTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`user_id`,`department_id`),
@@ -3709,8 +3710,8 @@ CREATE TABLE `bb_user_user` (
 -- ----------------------------
 -- Records of bb_user_user
 -- ----------------------------
-INSERT INTO `bb_user_user` VALUES ('1', '1', 'admin', '21232f297a57a5a743894a0e4a801fc3', '1331953415', '2012-03-17 11:03:51');
-INSERT INTO `bb_user_user` VALUES ('2', '1', 'china', 'edbd0effac3fcc98e725920a512881e0', '1331953421', '2012-03-17 11:03:51');
+INSERT INTO `bb_user_user` VALUES ('1', '1', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'skygreen2001@gmail.com','1331953415', '2012-03-17 11:03:51');
+INSERT INTO `bb_user_user` VALUES ('2', '1', 'china', 'edbd0effac3fcc98e725920a512881e0', 'skygreen2001@sina.com', '1331953421', '2012-03-17 11:03:51');
 
 -- ----------------------------
 -- Table structure for `bb_user_userdetail`

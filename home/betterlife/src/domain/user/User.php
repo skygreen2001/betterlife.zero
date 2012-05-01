@@ -34,6 +34,12 @@ class User extends DataObject
 	 * @access public
 	 */
 	public $password;
+	/**
+	 * 邮箱地址
+	 * @var string
+	 * @access public
+	 */
+	public $email;
 	//</editor-fold>
 	
 	/**

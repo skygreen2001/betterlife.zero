@@ -186,7 +186,11 @@ class Action extends Object
 	*/
    public function redirect_url($url)
    {
-	 header("Location:".$url);  
+	   if (contain($url,"http://")){
+		   header("Location:".$url); 
+	   }else{
+		   header("Location:http://".$url); 
+	   }
    }  
 													 
 	/**
