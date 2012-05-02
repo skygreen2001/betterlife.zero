@@ -8,8 +8,12 @@ class Action_Blog extends Action
 	* 显示博客列表
 	*/
 	public function display() 
-	{                     
-		$user = HttpSession::get('user_id');     
+	{   
+		if (HttpSession::isHave("IsSyncUcenterOtherApp")&&isset($this->data["uid"])){
+			$this->uc_sync_login($this->data["uid"]);
+		}     
+		$user = HttpSession::get('user_id');   
+		if (!$user)  
 		if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){          
 		  $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];
 		}else{
@@ -79,6 +83,33 @@ class Action_Blog extends Action
 			$comment->delete();
 		}
 		$this->redirect("blog","display",$this->data);       
+	}
+	
+	/**
+	 * 与Ucenter的其他应用同步登录，实现单点登录 
+	 */
+	private function uc_sync_login($uid)
+	{
+		if (Gc::$is_ucenter_integration){
+			$uc_client_path= Gc::$nav_root_path."data".DIRECTORY_SEPARATOR.'uc_client'.DIRECTORY_SEPARATOR.'client.php';     
+			include_once Gc::$nav_root_path.'api'.DIRECTORY_SEPARATOR.'config.inc.php';
+			include_once($uc_client_path);
+			if($uid > 0) {
+				if(empty($this->view->viewObject))
+				{
+					$this->view->viewObject=new ViewObject();
+				}     
+				//LogMe::log('登录成功');
+				UtilJavascript::loadJsContentReady($this->view->viewObject,uc_user_synlogin($uid));
+				HttpSession::remove("IsSyncUcenterOtherApp");   
+			} elseif($uid == -1) {
+				//LogMe::log('用户不存在,或者被删除');
+			} elseif($uid == -2) {
+				//LogMe::log('密码错');
+			} else {
+				//LogMe::log('未定义');
+			}
+		}
 	}
 }
 

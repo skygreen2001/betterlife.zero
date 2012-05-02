@@ -3751,4 +3751,4 @@ CREATE TABLE `bb_user_admin` (
 -- ----------------------------
 -- Records of bb_user_admin
 -- ----------------------------
-INSERT INTO `bb_user_admin` VALUES ('1', 'admin', 'admin', 'admin', '2', '1334818587', '2012-04-19 14:57:11');
+INSERT INTO `bb_user_admin` VALUES ('1', 'admin', 'admin', 'admin', '1', '1334818587', '2012-04-19 14:57:11');

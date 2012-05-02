@@ -81,7 +81,8 @@ else
 	}
 }
 
-class uc_note {
+class uc_note 
+{
 	private $db = '';
 	private $tablepre = '';
 	private $appdir = '';
@@ -112,101 +113,6 @@ class uc_note {
 		return API_RETURN_SUCCEED;
 	}
 	
-	public function deleteuser($get, $post) 
-	{
-		global $_SGLOBAL;
-		
-		if(!API_DELETEUSER) {
-			return API_RETURN_FORBIDDEN;
-		}
-	
-		//note 用户删除 API 接口
-		include_once S_ROOT.'./source/function_delete.php';
-	
-		//获得用户
-		$uids = $get['ids'];
-		$query = $_SGLOBAL['db']->query("SELECT uid FROM ".tname('member')." WHERE uid IN ($uids)");
-		while ($value = $_SGLOBAL['db']->fetch_array($query)) {
-			deletespace($value['uid'], 1);
-		}
-		return API_RETURN_SUCCEED;
-	}
-	
-	public function renameuser($get, $post) 
-	{
-		global $_SGLOBAL;
-		
-		if(!API_RENAMEUSER) {
-			return API_RETURN_FORBIDDEN;
-		}
-	
-		//编辑用户
-		$old_username = $get['oldusername'];
-		$new_username = $get['newusername'];
-	
-		$_SGLOBAL['db']->query("UPDATE ".tname('member')." SET username='$new_username' WHERE username='$old_username'");
-		$_SGLOBAL['db']->query("UPDATE ".tname('thread')." SET username='$new_username' WHERE username='$old_username'");
-		$_SGLOBAL['db']->query("UPDATE ".tname('tagspace')." SET username='$new_username' WHERE username='$old_username'");
-		$_SGLOBAL['db']->query("UPDATE ".tname('space')." SET username='$new_username' WHERE username='$old_username'");
-		$_SGLOBAL['db']->query("UPDATE ".tname('session')." SET username='$new_username' WHERE username='$old_username'");
-		$_SGLOBAL['db']->query("UPDATE ".tname('post')." SET username='$new_username' WHERE username='$old_username'");
-		$_SGLOBAL['db']->query("UPDATE ".tname('poke')." SET fromusername='$new_username' WHERE fromusername='$old_username'");
-		$_SGLOBAL['db']->query("UPDATE ".tname('notification')." SET author='$new_username' WHERE author='$old_username'");
-		$_SGLOBAL['db']->query("UPDATE ".tname('friend')." SET fusername='$new_username' WHERE fusername='$old_username'");
-		$_SGLOBAL['db']->query("UPDATE ".tname('feed')." SET username='$new_username' WHERE username='$old_username'");
-		$_SGLOBAL['db']->query("UPDATE ".tname('doing')." SET username='$new_username' WHERE username='$old_username'");
-		$_SGLOBAL['db']->query("UPDATE ".tname('comment')." SET author='$new_username' WHERE author='$old_username'");
-		$_SGLOBAL['db']->query("UPDATE ".tname('blog')." SET username='$new_username' WHERE username='$old_username'");
-		$_SGLOBAL['db']->query("UPDATE ".tname('album')." SET username='$new_username' WHERE username='$old_username'");
-		$_SGLOBAL['db']->query("UPDATE ".tname('share')." SET username='$new_username' WHERE username='$old_username'");
-		$_SGLOBAL['db']->query("UPDATE ".tname('poll')." SET username='$new_username' WHERE username='$old_username'");
-		$_SGLOBAL['db']->query("UPDATE ".tname('event')." SET username='$new_username' WHERE username='$old_username'");
-	
-		return API_RETURN_SUCCEED;
-	}
-	
-	public function gettag($get, $post) 
-	{
-		global $_SGLOBAL;
-		
-		if(!API_GETTAG) {
-			return API_RETURN_FORBIDDEN;
-		}
-	
-		$name = trim($get['id']);
-		if(empty($name) || !preg_match('/^([\x7f-\xff_-]|\w)+$/', $name) || strlen($name) > 20) {
-			return API_RETURN_FAILED;
-		}
-	
-		$tag = $_SGLOBAL['db']->fetch_array($_SGLOBAL['db']->query("SELECT * FROM ".tname('tag')." WHERE tagname='$name'"));
-		if($tag['closed']) {
-			return API_RETURN_FAILED;
-		}
-	
-		$PHP_SELF = $_SERVER['PHP_SELF'] ? $_SERVER['PHP_SELF'] : $_SERVER['SCRIPT_NAME'];
-		$siteurl = 'http://'.$_SERVER['HTTP_HOST'].preg_replace("/\/+(api)?\/*$/i", '', substr($PHP_SELF, 0, strrpos($PHP_SELF, '/'))).'/';
-	
-		$query = $_SGLOBAL['db']->query("SELECT b.*
-			FROM ".tname('tagblog')." tb, ".tname('blog')." b
-			WHERE b.blogid=tb.blogid AND tb.tagid='$tag[tagid]' AND b.friend=0
-			ORDER BY b.dateline DESC
-			LIMIT 0,10");
-		$bloglist = array();
-		while($value = $_SGLOBAL['db']->fetch_array($query)) {
-			$bloglist[] = array(
-				'subject' => $value['subject'],
-				'uid' => $value['uid'],
-				'username' => $value['username'],
-				'dateline' => $value['dateline'],
-				'url' => $siteurl."space.php?uid=$value[uid]&amp;do=blog&amp;id=$value[blogid]",
-				'spaceurl' => $siteurl."space.php?uid=$value[uid]"
-			);
-		}
-	
-		$return = array($name, $bloglist);
-		return $this->_serialize($return, 1);
-	}
-	
 	/**
 	 * 如果应用程序需要和其他应用程序进行同步登录，此部分代码负责标记指定用户的登录状态。
 	 * 输入的参数放在 $get['uid'] 中，值为用户 ID。此接口为通知接口，无输出内容。同步登录需使用 P3P 标准。
@@ -227,8 +133,13 @@ class uc_note {
 	
 		$cookietime = 31536000;
 		$uid = intval($get['uid']);
-		$user=User::get_by_id($uid);
-		
+		$user=User::get_by_id($uid);        
+		/**
+		 * Session初始化
+		 */
+		if(Gc::$session_auto_start){
+		   HttpSession::init();
+		}  
 		if($user) {
 			HttpSession::set('user_id',$uid);
 			//设置cookie
@@ -249,7 +160,13 @@ class uc_note {
 		
 		if(!API_SYNLOGOUT) {
 			return API_RETURN_FORBIDDEN;
-		}
+		}        
+		/**
+		 * Session初始化
+		 */
+		if(Gc::$session_auto_start){
+		   HttpSession::init();
+		}  
 		HttpSession::remove("user_id");	
 		//note 同步登出 API 接口
 		obclean();
@@ -267,198 +184,13 @@ class uc_note {
 	
 		$username = $get['username'];
 		$newpw = md5(time().rand(100000, 999999));
-		$_SGLOBAL['db']->query("UPDATE ".tname('member')." SET password='$newpw' WHERE username='$username'");
-	
-		return API_RETURN_SUCCEED;
-	}
-	
-	public function updatebadwords($get, $post) 
-	{
-		global $_SGLOBAL;
 		
-		if(!API_UPDATEBADWORDS) {
-			return API_RETURN_FORBIDDEN;
-		}
-	
-		$data = array();
-		if(is_array($post)) {
-			foreach($post as $k => $v) {
-				$data['findpattern'][$k] = $v['findpattern'];
-				$data['replace'][$k] = $v['replacement'];
-			}
-		}
-		$cachefile = S_ROOT.'./uc_client/data/cache/badwords.php';
-		$fp = fopen($cachefile, 'w');
-		$s = "<?php\r\n";
-		$s .= '$_CACHE[\'badwords\'] = '.var_export($data, TRUE).";\r\n";
-		fwrite($fp, $s);
-		fclose($fp);
-	
-		return API_RETURN_SUCCEED;
-	}
-	
-	public function updatehosts($get, $post) 
-	{
-		global $_SGLOBAL;
-		
-		if(!API_UPDATEHOSTS) {
-			return API_RETURN_FORBIDDEN;
-		}
-	
-		$cachefile = S_ROOT.'./uc_client/data/cache/hosts.php';
-		$fp = fopen($cachefile, 'w');
-		$s = "<?php\r\n";
-		$s .= '$_CACHE[\'hosts\'] = '.var_export($post, TRUE).";\r\n";
-		fwrite($fp, $s);
-		fclose($fp);
-	
-		return API_RETURN_SUCCEED;
-	}
-	
-	public function updateapps($get, $post) 
-	{
-		global $_SGLOBAL;
-		
-		if(!API_UPDATEAPPS) {
-			return API_RETURN_FORBIDDEN;
-		}
-	
-		$UC_API = '';
-		if($post['UC_API']) {
-			$UC_API = $post['UC_API'];
-			unset($post['UC_API']);
-		}
-		
-		$cachefile = S_ROOT.'./uc_client/data/cache/apps.php';
-		$fp = fopen($cachefile, 'w');
-		$s = "<?php\r\n";
-		$s .= '$_CACHE[\'apps\'] = '.var_export($post, TRUE).";\r\n";
-		fwrite($fp, $s);
-		fclose($fp);
-		
-		//配置文件
-		if($UC_API && is_writeable(S_ROOT.'./config.php')) {
-			$configfile = trim(file_get_contents(S_ROOT.'./config.php'));
-			$configfile = substr($configfile, -2) == '?>' ? substr($configfile, 0, -2) : $configfile;
-			$configfile = preg_replace("/define\('UC_API',\s*'.*?'\);/i", "define('UC_API', '$UC_API');", $configfile);
-			if($fp = @fopen(S_ROOT.'./config.php', 'w')) {
-				@fwrite($fp, trim($configfile));
-				@fclose($fp);
-			}
+		$user=User::get_one(array('username'=>$username));
+		if ($user){
+			$user->password=md5($newpw);
+			$user->update();
 		}
 		return API_RETURN_SUCCEED;
-	}
-	
-	public function updateclient($get, $post) 
-	{
-		global $_SGLOBAL;
-		
-		if(!API_UPDATECLIENT) {
-			return API_RETURN_FORBIDDEN;
-		}
-	
-		$cachefile = S_ROOT.'./uc_client/data/cache/settings.php';
-		$fp = fopen($cachefile, 'w');
-		$s = "<?php\r\n";
-		$s .= '$_CACHE[\'settings\'] = '.var_export($post, TRUE).";\r\n";
-		fwrite($fp, $s);
-		fclose($fp);
-	
-		return API_RETURN_SUCCEED;
-	}
-
-	public function updatecredit($get, $post) 
-	{
-		global $_SGLOBAL;
-		
-		if(!API_UPDATECREDIT) {
-			return API_RETURN_FORBIDDEN;
-		}
-	
-		$amount = $get['amount'];
-		$uid = intval($get['uid']);
-	
-		$_SGLOBAL['db']->query("UPDATE ".tname('space')." SET credit=credit+'$amount' WHERE uid='$uid'");
-	
-		return API_RETURN_SUCCEED;
-	}
-	
-	public function getcredit($get, $post) 
-	{
-		global $_SGLOBAL;
-		
-		if(!API_GETCREDIT) {
-			return API_RETURN_FORBIDDEN;
-		}
-	
-		$uid = intval($get['uid']);
-		$credit = getcount('space', array('uid'=>$uid), 'credit');
-		return $credit;
-	}
-	
-	public function getcreditsettings($get, $post) 
-	{
-		global $_SGLOBAL;
-		
-		if(!API_GETCREDITSETTINGS) {
-			return API_RETURN_FORBIDDEN;
-		}
-	
-		$credits = array();
-		$credits[1] = array(lang('credit'), lang('credit_unit'));
-	
-		return $this->_serialize($credits);
-	}
-	
-	public function updatecreditsettings($get, $post) 
-	{
-		global $_SGLOBAL;
-		
-		if(!API_UPDATECREDITSETTINGS) {
-			return API_RETURN_FORBIDDEN;
-		}
-	
-		$outextcredits = array();
-	
-		foreach($get['credit'] as $appid => $credititems) {
-			if($appid == UC_APPID) {
-				foreach($credititems as $value) {
-					$outextcredits[$value['appiddesc'].'|'.$value['creditdesc']] = array(
-						'creditsrc' => $value['creditsrc'],
-						'title' => $value['title'],
-						'unit' => $value['unit'],
-						'ratio' => $value['ratio']
-					);
-				}
-			}
-		}
-	
-		$cachefile = S_ROOT.'./uc_client/data/cache/creditsettings.php';
-		$fp = fopen($cachefile, 'w');
-		$s = "<?php\r\n";
-		$s .= '$_CACHE[\'creditsettings\'] = '.var_export($outextcredits, TRUE).";\r\n";
-		fwrite($fp, $s);
-		fclose($fp);
-	
-		return API_RETURN_SUCCEED;
-	}
-	
-	public function addfeed($get, $post) 
-	{
-		global $_SGLOBAL;
-		
-		if(!API_ADDFEED) {
-			return API_RETURN_FORBIDDEN;
-		}
-		
-		$_SGLOBAL['supe_uid'] = intval($post['uid']);
-		$_SGLOBAL['supe_username'] = trim($post['username']);
-		
-		$images = array($post['image_1'],$post['image_2'],$post['image_3'],$post['image_4']);
-		$image_links = array($post['image_1_link'],$post['image_2_link'],$post['image_3_link'],$post['image_4_link']);
-		
-		include_once(S_ROOT.'./source/function_cp.php');
-		return feed_add($post['icon'], $post['title_template'], $post['title_data'], $post['body_template'], $post['body_data'], $post['body_general'], $images, $image_links, $post['target_ids'], '', $post['appid']);
 	}
 }
 

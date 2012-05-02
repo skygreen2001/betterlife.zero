@@ -325,6 +325,11 @@ class Action extends Object
 	 */
 	public function beforeAction()
 	{
+		if (contain($this->data["go"],"betterlife")){
+			if(($this->data["go"]!="betterlife.auth.login")&&!HttpSession::isHave('user_id')) {
+				$this->redirect("auth","login");
+			}
+		}
 	}
 	
 	/**
