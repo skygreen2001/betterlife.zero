@@ -11,18 +11,22 @@
 class Action_Auth extends Action 
 {
 	/**
-	* 退出
-	*/       
+	 * 退出
+	 */       
 	public function logout() 
 	{
-	  HttpSession::remove("user_id");
-	  $this->redirect("auth","login");
+		HttpSession::remove("user_id");	  
+		if (Gc::$is_ucenter_integration){   
+			HttpSession::set("IsSyncLogout",true);
+		}
+		$this->redirect("auth","login");
 	}
 
 	/**
-	* 登录
-	*/
-	public function login() {
+	 * 登录
+	 */
+	public function login() 
+	{
 		$this->view->set("message","");
 		if(HttpSession::isHave('user_id')) {
 			$this->redirect("blog","display");
@@ -33,15 +37,17 @@ class Action_Auth extends Action
 			if (empty($userdata)) {
 				$this->view->set("message","用户名或者密码错误");
 			}else {
+				$uid=$this->uc_login($user);
 				HttpSession::set('user_id',$userdata[0]->user_id);
-				$this->redirect("blog","display");
+				$this->redirect("blog","display","uid=".$uid);
 			}
 		}
+		$this->uc_logout();
 	}
 
 	/**
-	* 注册
-	*/
+	 * 注册
+	 */
 	public function register() 
 	{       
 		if(!empty($_POST)) {
@@ -49,8 +55,8 @@ class Action_Auth extends Action
 			$userdata=User::get(array("username"=>$user->username));
 			if (empty($userdata)) {
 				$pass=$user->getPassword();
-				$user->setPassword(md5($user->getPassword()));
 				$this->uc_register($user);
+				$user->setPassword(md5($user->getPassword()));
 				$user->save();
 				HttpSession::set('user_id',$user->id);
 				$this->redirect("blog","display");                                                               
@@ -71,7 +77,8 @@ class Action_Auth extends Action
 			include_once Gc::$nav_root_path.'api'.DIRECTORY_SEPARATOR.'config.inc.php';
 			include_once($uc_client_path);
 			$newuid=uc_user_register($user->username, $user->password, $user->email);
-			if($newuid <= 0) {
+			if($newuid <= 0) 
+			{
 				if($newuid == -1) {
 					LogMe::log('Ucenter[register]:user_name_is_not_legitimate');
 				} elseif($newuid == -2) {
@@ -87,7 +94,9 @@ class Action_Auth extends Action
 				} else {
 					LogMe::log('Ucenter[register]:register_error');
 				}
-			}else{
+			}
+			else
+			{
 				$user_exists=User::get_by_id($newuid);
 				if (!$user_exists){
 					$user->setId($newuid);
@@ -95,6 +104,43 @@ class Action_Auth extends Action
 			}
 		}
 	}
-
+	
+	/**
+	 * Ucenter的登录 
+	 */
+	private function uc_login($user)
+	{
+		if (Gc::$is_ucenter_integration){
+			$uc_client_path= Gc::$nav_root_path."data".DIRECTORY_SEPARATOR.'uc_client'.DIRECTORY_SEPARATOR.'client.php';     
+			include_once Gc::$nav_root_path.'api'.DIRECTORY_SEPARATOR.'config.inc.php';
+			include_once($uc_client_path);
+			list($uid, $username, $password, $email) = uc_user_login($user->username, $user->password);
+			HttpSession::set("IsSyncUcenterOtherApp",true);
+			return $uid;
+		}
+		return null;
+	}
+	
+	/**
+	 * Ucenter的登出
+	 */
+	private function uc_logout() 
+	{
+		if (HttpSession::isHave("IsSyncLogout"))
+		{
+			if (Gc::$is_ucenter_integration){   
+				$uc_client_path= Gc::$nav_root_path."data".DIRECTORY_SEPARATOR.'uc_client'.DIRECTORY_SEPARATOR.'client.php';     
+				include_once Gc::$nav_root_path.'api'.DIRECTORY_SEPARATOR.'config.inc.php';
+				include_once($uc_client_path);    
+				if(empty($this->view->viewObject))
+				{
+					$this->view->viewObject=new ViewObject();
+				}     
+				//LogMe::log('登录成功');
+				UtilJavascript::loadJsContentReady($this->view->viewObject,uc_user_synlogout());
+			}
+			HttpSession::remove("IsSyncLogout");
+		}
+	}
 }
 ?>

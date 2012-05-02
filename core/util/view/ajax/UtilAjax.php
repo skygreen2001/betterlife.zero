@@ -237,9 +237,13 @@ class UtilAjax extends Util
 	 */   
 	public static function loadJsContentSentence($jsContent)
 	{
-		$result="    <script type=\"text/javascript\">\r\n";
-		$result.="        ".$jsContent."\r\n";
-		$result.="    </script>\r\n";
+		if (!contain($jsContent,"<script")){
+			$result="    <script type=\"text/javascript\">\r\n";
+			$result.="        ".$jsContent."\r\n";
+			$result.="    </script>\r\n";
+		}else{
+			$result.=$jsContent;
+		}
 		return $result;
 	}    
 }

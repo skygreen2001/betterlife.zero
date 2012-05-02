@@ -4,12 +4,10 @@ $_CACHE['settings'] = array (
   'censoremail' => '',
   'censorusername' => '',
   'dateformat' => 'y-n-j',
-  'doublee' => '0',
+  'doublee' => '1',
   'nextnotetime' => '0',
   'timeoffset' => '28800',
-  'privatepmthreadlimit' => '25',
-  'chatpmthreadlimit' => '30',
-  'chatpmmemberlimit' => '35',
+  'pmlimit1day' => '100',
   'pmfloodctrl' => '15',
   'pmcenter' => '1',
   'sendpmseccode' => '1',
@@ -26,6 +24,9 @@ $_CACHE['settings'] = array (
   'mailusername' => '1',
   'mailsilent' => '1',
   'version' => '1.6.0',
+  'privatepmthreadlimit' => '25',
+  'chatpmthreadlimit' => '30',
+  'chatpmmemberlimit' => '35',
 );
 
 ?>
