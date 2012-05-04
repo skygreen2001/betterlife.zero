@@ -1,0 +1,63 @@
+body{
+	font-size:15px; 
+	font-family:"宋体",Verdana, Arial; 
+}
+.title{
+	font-size: 24px;
+}
+.content{
+	width:860px;
+	height:250px; 
+	margin-left:250px;
+	margin-top:130px;
+	border:solid 1px #ccc;
+}
+.left{
+	width:450px; 
+	height:250px;
+}
+.leftContent{
+	border-right: solid 1px #ccc;
+}
+.right{
+	width: 300px;
+	height:250px;
+}
+
+.logoLeft{
+	vertical-align:middle;
+}
+.inputNormal {
+	border:1px solid #FFF;
+	text-align:center;
+	height:28px;
+	line-height:28px;
+	background:gray;
+	color:#FFF;
+	background-color:gray;
+	width:200px;  
+	border:1px solid gray;  
+}
+.inputVerify {
+	border:1px solid #FFF;
+	text-align:center;
+	height:18px;
+	line-height:18px;
+	background:gray;
+	color:#FFF;
+	background-color:gray;
+	width:80px;  
+	margin-right: 2px;
+	border:1px solid gray;  
+}
+.btnSubmit{
+	margin-top:5px;
+	width:180px;
+	height:32px;
+	color:#FFF;
+	cursor:pointer;
+	font:bold 84% SimSun,helvetica,sans-serif;
+	background-color:#000;
+	border:1px solid;
+	border-color:#696 #363 #363 #696;
+} 
