@@ -40,7 +40,8 @@ class UtilDateTime extends Util
 	/**
 	 * 设置当前为中国时区的时间。
 	 */
-	public static function ChinaTime(){
+	public static function ChinaTime()
+	{
 	   date_default_timezone_set('Asia/Shanghai');
 	}
 	
@@ -70,7 +71,8 @@ class UtilDateTime extends Util
 	 * @param int $timestamp 时间戳
 	 * @return string 日期时间格式年-月-日 时:分:秒
 	 */
-	public static function timestampToDateTime($timestamp,$format=self::TIMEFORMAT_YMDHIS){
+	public static function timestampToDateTime($timestamp,$format=self::TIMEFORMAT_YMDHIS)
+	{
 		return date($format, $timestamp);
 	}
 	
@@ -79,7 +81,8 @@ class UtilDateTime extends Util
 	 * @param string $str 日期时间格式年-月-日 时:分:秒
 	 * @return 时间戳
 	 */
-	public static function dateToTimestamp($str=''){      
+	public static function dateToTimestamp($str='')
+	{      
 		if (empty($str)){
 			$str=self::now();
 		}
@@ -106,7 +109,8 @@ class UtilDateTime extends Util
 	 * @throws ThinkExecption
 	 +----------------------------------------------------------
 	 */
-	public static function isLeapYear($year='') {
+	public static function isLeapYear($year='') 
+	{
 		if(empty($year)) {
 			$year = $this->year;
 		}
@@ -129,7 +133,8 @@ class UtilDateTime extends Util
 	 * @throws ThinkExecption
 	 +----------------------------------------------------------
 	 */
-	public static function magicInfo($year,$month,$day,$type="SX") {
+	public static function magicInfo($year,$month,$day,$type="SX") 
+	{
 		$result = '';
 		$m      =   $month;
 		$y      =   $year;

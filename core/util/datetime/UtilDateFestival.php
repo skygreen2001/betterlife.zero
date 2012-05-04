@@ -39,7 +39,7 @@ class UtilDateFestival extends Util
 	 +----------------------------------------------------------<br/> 
 	 * @param string $year 年。如:2012     
 	 */
-	public static function newyear($year)
+	public static function chineseNewyear($year)
 	{
 		
 	}
@@ -50,7 +50,7 @@ class UtilDateFestival extends Util
 	 * @param date $date 日期
 	 * @return bool 是否是春节
 	 */
-	public static function isNewyear($date)
+	public static function isChineseNewyear($date)
 	{
 	}
 
