@@ -35,7 +35,7 @@ $_SGLOBAL = array();
 //获取时间
 $_SGLOBAL['timestamp'] = time();
 
-if(defined('IN_UC')) 
+/*if(defined('IN_UC')) 
 {
 	global $_SGLOBAL;
 	include_once S_ROOT.'.'.DIRECTORY_SEPARATOR.'api'.DIRECTORY_SEPARATOR.'config.inc.php';
@@ -49,7 +49,7 @@ if(defined('IN_UC'))
 	}
 } 
 else 
-{
+{*/
 	error_reporting(0);
 	set_magic_quotes_runtime(0);
 	defined('MAGIC_QUOTES_GPC') || define('MAGIC_QUOTES_GPC', get_magic_quotes_gpc());
@@ -73,15 +73,15 @@ else
 	$post = xml_unserialize(file_get_contents('php://input'));
 
 	if(in_array($get['action'], array('test', 'deleteuser', 'renameuser', 'gettag', 'synlogin', 'synlogout', 'updatepw', 'updatebadwords', 'updatehosts', 'updateapps', 'updateclient', 'updatecredit', 'getcredit', 'getcreditsettings', 'updatecreditsettings', 'addfeed'))) {
-		$uc_note = new uc_note();
-		echo $uc_note->$get['action']($get, $post);
+		$ucApp = new UcApp();
+		echo $ucApp->$get['action']($get, $post);
 		exit();
 	} else {
 		exit(API_RETURN_FAILED);
 	}
-}
+//}
 
-class uc_note 
+class UcApp 
 {
 	private $db = '';
 	private $tablepre = '';
@@ -101,7 +101,7 @@ class uc_note
 		return xml_unserialize($s);
 	}
 
-	public function uc_note() {
+	public function UcApp() {
 		global $_SGLOBAL;
 		$this->appdir = substr(dirname(__FILE__), 0, -3);
 		$this->db = $_SGLOBAL['db'];
