@@ -603,10 +603,16 @@ class AutoCodeViewExt extends AutoCode
                 { 
                     $fieldLabels.="                              {xtype: 'hidden',  name : '$fieldname',ref:'../$fieldname'"; 
                 }else if ($isImage){
+                    $field_comment=$field["Comment"];  
+                    if (contain($field_comment,"\r")||contain($field_comment,"\n"))
+                    {
+                        $field_comment=preg_split("/[\s,]+/", $field_comment);    
+                        $field_comment=$field_comment[0]; 
+                    }    
                     $result["isFileUpload"]="fileUpload: true,";  
                     $fieldLabels.="                              {xtype: 'hidden',  name : '$fieldname',ref:'../$fieldname'},\r\n"; 
-                    $fieldLabels.="                              {fieldLabel : '{$table_comment}图片',name : '{$fieldname}Upload',ref:'../{$fieldname}Upload',xtype:'fileuploadfield',\r\n".
-                                "                             emptyText: '请上传{$table_comment}图片文件',buttonText: '',accept:'image/*',buttonCfg: {iconCls: 'upload-icon'}";
+                    $fieldLabels.="                              {fieldLabel : '{$field_comment}',name : '{$fieldname}Upload',ref:'../{$fieldname}Upload',xtype:'fileuploadfield',\r\n".
+                                "                             emptyText: '请上传{$field_comment}文件',buttonText: '',accept:'image/*',buttonCfg: {iconCls: 'upload-icon'}";
                 }else{                  
                     $datatype=self::comment_type($field["Type"]);
                     $field_comment=$field["Comment"];  
