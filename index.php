@@ -1,4 +1,5 @@
-<?php                 
+<?php      
+date_default_timezone_set('Asia/Shanghai');              
 /**
  * 这个文件是BetterLife CMS 的Bootstrap
  */                          

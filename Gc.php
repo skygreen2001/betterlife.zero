@@ -307,7 +307,7 @@ class Gc
 		 * 一般来讲，日志都通过log记录，由本配置决定它在哪里打印出来。<br/>
 		 * 可通过邮件发送重要日志，可在数据库或者文件中记录日志。也可以通过Firebug显示日志。
 		 */
-		"logType"=>EnumLogType::BROWSER,
+		"logType"=>EnumLogType::FILE,
 		/**
 		 * 允许记录的日志级别
 		 */

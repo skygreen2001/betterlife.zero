@@ -4,7 +4,7 @@
 		<menu name="系统管理人员" address="index.php?go=admin.index.admin" />
 		<menu name="博客" address="index.php?go=admin.index.blog" />   
 	</menuGroup>
-	<menuGroup id="navdesign" lang="en" name="程序员区" iconCls="navdesign">   
+	<menuGroup id="navProgram" lang="en" name="程序员区" iconCls="settings">   
 		<menu name="Stumbleupon" address="http://www.stumbleupon.com/" />  
 		<menu name="cooliris" title="Media browser plug-in, mobile app, gallery builder" address="http://www.cooliris.com/" />  
 		<menu name="CSDN" address="http://www.csdn.net" />
@@ -20,6 +20,10 @@
 		<menu name="美图看看" title="美图看看网页版" address="http://xiuxiu.web.meitu.com/main.html" />
 		<menu name="Photoshop Online" address="http://www.photoshop.com/tools" />
 		<menu name="PhotoEditor" title="Pixlr Photo editor" address="http://pixlr.com/editor" />   
+		<menu name="菜单管理" address="http://www.lifevc.com" />
+		<menu name="人人小站" address="http://zhan.renren.com" />
+		<menu name="CREATE YOUR FREE STUNNING WEBSITE" address="http://www.wix.com" />
+		<menu name="关注前端与用户体验" address="http://stylechen.com/" />
 		<menu name="Google Gravity" title="Google Gravity" address="http://mrdoob.com/projects/chromeexperiments/google_gravity/" />   
 	</menuGroup>
 	<menuGroup id="navSystem" name="系统设置" iconCls="settings">
@@ -36,7 +40,8 @@
 		<menu name="淘宝" title="淘宝开放平台" address="http://open.taobao.com/" />
 		<menu name="百度" title="开发者平台" address="http://dev.baidu.com/" />        
 	</menuGroup>    
-	<menuGroup id="navWebDev" lang="en" name="Web优化工具" iconCls="navdesign" show="false">
+	<menuGroup id="navWebDev" lang="en" name="Web优化工具" iconCls="navdesign" show="true">
+		<menu name="JSFIDDLE" title="mootools shell, easy test you snippets before implementing" address="http://jsfiddle.net/" />    
 		<menu name="CSS compatibility" title="CSS contents and browser compatibility" address="http://www.quirksmode.org/css/contents.html" /> 
 		<menu name="Browsershots" title="浏览器兼容性测试，跨平台浏览器测试 - Browsershots" address="http://browsershots.org" /> 
 		<menu name="HtmlTidy" title="Html Tidy online" address="http://infohound.net/tidy/" /> 

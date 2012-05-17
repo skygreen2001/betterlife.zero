@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  name:计划任务名称，对应计划任务类名名称为:[name(头字母大写)+Task]
+  interval:轮询周期，单位是秒
+  cycle:轮询方式
+		custom:自定义的以当前时间为下次到期时间
+		daily :每日定点
+		weekly:每周定点
+		monthly:每月定点
+		
+-->
+<tasks>
+	<task name="festival" status="open" cycle="custom" interval="60" />
+	<task name="goodslist" status="close" cycle="daily" interval="3600" hour="12" minute="0"/>
+	<task name="cleanup" status="close" cycle="weekly" interval="3600" day="Tuesday" hour="2" minute="0"/>
+	<task name="statistic" status="close" cycle="monthly" interval="3600" day="15" hour="17" minute="30"/>
+</tasks>
