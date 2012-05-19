@@ -27,11 +27,11 @@ class Action_Index extends ActionExt
 				return;
 			}            
 			$admin = $this->model->Admin;
-			$admindata = Admin::get($admin);
+			$admindata = Admin::get_one($admin);
 			if (empty($admindata)) {
 				$this->view->set("message","用户名或者密码错误");
 			}else {
-				HttpSession::set('admin_id',$admindata[0]->admin_id);
+				HttpSession::set('admin_id',$admindata->admin_id);
 				$this->redirect("index","index");
 			}
 		}

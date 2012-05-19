@@ -11,7 +11,7 @@
 			</tr>  
 			<tr>
 				<td><div id="toolbar"></div></td>
-				<td><span style="float:right; font-size: 14px; margin-top: 15px;margin-right: 10px;color: #CCC"><a href="{$url_base}index.php?go=admin.index.logout" style="padding:5px">退出</a></span></td>
+				<td><span style="float:right; font-size: 14px; margin-top: 0;margin-right: 10px;color: #CCC"><a href="{$url_base}index.php?go=admin.index.logout" style="padding:5px">退出</a></span></td>
 			</tr>
 		</table>
 	</div>

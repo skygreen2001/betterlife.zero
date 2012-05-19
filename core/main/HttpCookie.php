@@ -23,7 +23,19 @@ class HttpCookie
 			setcookie($key,$value,$expire);
 		}
 	}
-		
+			
+	/**
+	 * 一次在Cookie中添加多个指定$key的值
+	 * @param array $key_values 键值代表cookie里的名称值
+	 * @param int $expire 过期时间。最小单位是秒，30天=60*60*24*30
+	 */
+	public static function sets($key_values,$expire=0)
+	{
+		foreach ($key_values as $key=>$value) {
+			self::set($key,$value,$expire);
+		}
+	}
+	
 	/**
 	 * 在Cookie中获取指定$key的值
 	 * @param mixed $key
@@ -40,6 +52,24 @@ class HttpCookie
 			}
 		}
 		return "";
+	}       
+	 
+	/**
+	 * 一次在Cookie中获取多个指定$key的值
+	 * @param mixed $keys 多个键值
+	 * @param mixed $returnType: 0-字符串，1-数组;默认返回字符串，
+	 * @return 返回cookie值
+	 */
+	public static function gets($keys,$returnType=0)
+	{
+		$result=array();
+		if ($keys&&is_array($keys)&&(count($keys)>0))
+		{
+			foreach ($keys as $key) {
+				$result[$key]=self::get($key,$returnType);
+			}
+		}            
+		return $result;
 	}
 }
 ?>

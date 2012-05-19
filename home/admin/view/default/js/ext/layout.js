@@ -12,11 +12,12 @@ Bb.Layout = {
 		region : 'north',
 		contentEl : 'header',
 		id : 'header-panel',
-		height : 120,
+		height : 80,
+		collapsible : true,
 		collapseMode : 'mini',
+		header:false,// 是否显示标题栏
 		split : true,
 		layout : 'fit',
-		collapsible : true,
 		autoShow : true,
 		title : '',
 		margins : '0 0 1 0'
