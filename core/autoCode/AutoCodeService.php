@@ -876,15 +876,17 @@ class AutoCodeService extends AutoCode
                         $realId=DataObjectSpec::getRealIDColumnName($key);
                         $show_fieldname=$value;
                         if ($realId!=$fieldname){
-                            if (contain($fieldname,"_id")){
-                                $fieldname=str_replace("_id","",$fieldname);
-                            }
-                            $show_fieldname.="_".$fieldname;                         
+                            $show_fieldname.="_".$fieldname;  
+                            if (contain($show_fieldname,"_id")){
+                                $show_fieldname=str_replace("_id","",$show_fieldname);
+                            }                       
                         }
                         $i_name=$key;
                         $i_name{0}=strtolower($i_name{0});
-                        $result.="                \${$i_name}_instance=$key::get_by_id(\${$instance_name}->$fieldname);\r\n";
-                        $result.="                \$".$instance_name."['$show_fieldname']=\${$i_name}_instance->$value;\r\n";
+                        $result.="                if (\${$instance_name}->$fieldname){\r\n";                        
+                        $result.="                    \${$i_name}_instance=$key::get_by_id(\${$instance_name}->$fieldname);\r\n";
+                        $result.="                    \$".$instance_name."['$show_fieldname']=\${$i_name}_instance->$value;\r\n";
+                        $result.="                }\r\n";                        
                     }                           
                 }    
             }

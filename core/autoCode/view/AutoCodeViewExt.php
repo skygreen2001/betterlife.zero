@@ -564,11 +564,13 @@ class AutoCodeViewExt extends AutoCode
                             $realId=DataObjectSpec::getRealIDColumnName($key);
                             if (empty($realId))$realId=$fieldname;
                             $show_name_diff=$value;
-                            if (contain($fieldname,"_id")){
-                                $fieldname=str_replace("_id","",$fieldname);
+
+                            if ($realId!=$fieldname){
+                                if (contain($fieldname,"_id")){
+                                    $fieldname=str_replace("_id","",$fieldname);
+                                }
+                                $show_name_diff.="_".$fieldname;
                             }
-                            if ($realId!=$fieldname)$show_name_diff.="_".$fieldname;
-                            
                             $key{0}=strtolower($key{0});                            
                             $fieldLabels.="                              {xtype: 'hidden',name : '$fieldname',id:'$fieldname'},\r\n".
                                           "                              {\r\n".
@@ -871,10 +873,12 @@ class AutoCodeViewExt extends AutoCode
                             foreach ($relationShow as $key=>$value) {
                                 $realId=DataObjectSpec::getRealIDColumnName($key);
                                 $show_fieldname=$value;
-                                if (contain($fieldname,"_id")){
-                                    $fieldname=str_replace("_id","",$fieldname);
+                                if ($realId!=$fieldname){
+                                    if (contain($fieldname,"_id")){
+                                        $fieldname=str_replace("_id","",$fieldname);
+                                    }
+                                    $show_fieldname.="_".$fieldname; 
                                 }
-                                if ($realId!=$fieldname)$show_fieldname.="_".$fieldname; 
                                 $viewdoblock.="                         '<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$show_fieldname}}</td></tr>',\r\n";
                             }          
                         }       
@@ -949,10 +953,12 @@ class AutoCodeViewExt extends AutoCode
                             foreach ($relationShow as $key=>$value) {
                                 $realId=DataObjectSpec::getRealIDColumnName($key);
                                 $show_fieldname=$value;
-                                if (contain($fieldname,"_id")){
-                                    $fieldname=str_replace("_id","",$fieldname);
+                                if ($realId!=$fieldname){
+                                    if (contain($fieldname,"_id")){
+                                        $fieldname=str_replace("_id","",$fieldname);
+                                    }
+                                    $show_fieldname.="_".$fieldname; 
                                 }
-                                if ($realId!=$fieldname)$show_fieldname.="_".$fieldname; 
                                 $columns.="                          {header : '$field_comment',dataIndex : '{$show_fieldname}'},\r\n";
                             }
                         }

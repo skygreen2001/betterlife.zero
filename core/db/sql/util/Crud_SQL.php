@@ -315,7 +315,11 @@ abstract class Crud_SQL {
 			$filterc=each($param);
 			if (is_string($filterc["value"])&&strpos($filterc["value"],"=")!==false) {
 				$f_values=array_values($param);
-				foreach ($f_values as $value) {
+				foreach ($f_values as $key=>$value) {
+					if (is_int($key)&&((substr_count($value,"=")>1))){
+						$result[]=$value;
+						continue;
+					}
 					if ((strlen($value)>0)&&($value{0}=='(')&&($value{strlen($value)-1}==')')){
 						$value=substr($value,1,strlen($value)-2); 
 					}
