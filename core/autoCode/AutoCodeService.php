@@ -875,11 +875,12 @@ class AutoCodeService extends AutoCode
                     foreach ($relationShow as $key=>$value) {
                         $realId=DataObjectSpec::getRealIDColumnName($key);
                         $show_fieldname=$value;
-                        if (contain($fieldname,"_id")){
-                            $fieldname=str_replace("_id","",$fieldname);
+                        if ($realId!=$fieldname){
+                            if (contain($fieldname,"_id")){
+                                $fieldname=str_replace("_id","",$fieldname);
+                            }
+                            $show_fieldname.="_".$fieldname;                         
                         }
-                        if ($realId!=$fieldname)$show_fieldname.="_".$fieldname;                         
-                        
                         $i_name=$key;
                         $i_name{0}=strtolower($i_name{0});
                         $result.="                \${$i_name}_instance=$key::get_by_id(\${$instance_name}->$fieldname);\r\n";
