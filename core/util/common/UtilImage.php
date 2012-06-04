@@ -378,7 +378,7 @@ class UtilImage
 		$stringColor = imagecolorallocate($im,255,255,255);
 		// 干扰
 		for($i=0;$i<$length;$i++) {
-			imagestring($im,5,$i*10+5,mt_rand(1,8),$randval{$i}, $stringColor);
+			imagestring($im,9,$i*10+9,mt_rand(1,8),$randval{$i}, $stringColor);
 		}
 		self::output($im,$type);
 	}

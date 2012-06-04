@@ -2,31 +2,22 @@
  * 解决IE6 Css样式input[type=submit]兼容性的问题 
  */
 $(function() {                                  
-	$(".inputNormal").hover(function(){
+	var inputHover = function() { 
+		oldBgColor = $(this).css("background-color");
 		$(this).css("color","#000");          
 		$(this).css("background-color","#FFF");   
-		$(this).css("border","1px solid green"); 
-	},function(){        
+		$(this).css("border","1px solid green");  
+	};
+	var inputUnHover = function() { 
 		$(this).css("color","#FFF");          
-		$(this).css("background-color","gray");  
+		if (this.type=="submit"){
+			$(this).css("background-color","#000");
+		}else{
+			$(this).css("background-color","gray");
+		}
 		$(this).css("border","1px solid gray");
-	});
-	$(".inputVerify").hover(function(){
-		$(this).css("color","#000");          
-		$(this).css("background-color","#FFF");   
-		$(this).css("border","1px solid green"); 
-	},function(){        
-		$(this).css("color","#FFF");          
-		$(this).css("background-color","gray");  
-		$(this).css("border","1px solid gray");
-	});    
-	$(".btnSubmit").hover(function(){
-		$(this).css("color","#000");          
-		$(this).css("background-color","#FFF");   
-		$(this).css("border","1px solid green"); 
-	},function(){
-		$(this).css("color","#FFF");          
-		$(this).css("background-color","#000");  
-		$(this).css("border","1px solid green");
-	});               
+	};
+	$(".inputNormal,.inputVerify,.btnSubmit").focusin(inputHover);
+	$(".inputNormal,.inputVerify,.btnSubmit").focusout(inputUnHover);    
+	$(".inputNormal,.inputVerify,.btnSubmit").hover(inputHover,inputUnHover);            
 });

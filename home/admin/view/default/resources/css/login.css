@@ -2,6 +2,23 @@ body{
 	font-size:15px; 
 	font-family:"宋体",Verdana, Arial; 
 }
+a {
+	color: #000;
+}
+a:link {
+	color: #000;
+	text-decoration: none;
+}
+
+a:visited {
+	color: #000;
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+	color: #F00;
+}
 .title{
 	font-size: 24px;
 }
@@ -28,36 +45,38 @@ body{
 	vertical-align:middle;
 }
 .inputNormal {
-	border:1px solid #FFF;
+	border-radius: 6px 6px 6px 6px;
 	text-align:center;
 	height:28px;
 	line-height:28px;
 	background:gray;
 	color:#FFF;
 	background-color:gray;
-	width:200px;  
+	width:160px;  
+	margin-left: 12px;
 	border:1px solid gray;  
 }
 .inputVerify {
-	border:1px solid #FFF;
 	text-align:center;
-	height:18px;
-	line-height:18px;
+	height:24px;
+	line-height:24px;
 	background:gray;
 	color:#FFF;
 	background-color:gray;
-	width:80px;  
+	width:100px;  
+	margin-left: 6px;
 	margin-right: 2px;
 	border:1px solid gray;  
 }
 .btnSubmit{
 	margin-top:5px;
-	width:180px;
-	height:32px;
+	width:126px;
+	height:38px;
 	color:#FFF;
 	cursor:pointer;
 	font:bold 84% SimSun,helvetica,sans-serif;
 	background-color:#000;
 	border:1px solid;
 	border-color:#696 #363 #363 #696;
+	border-radius: 6px 6px 6px 6px;
 } 
