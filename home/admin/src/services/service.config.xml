@@ -109,4 +109,25 @@
 		</methods> 
 	</service>
  
+	<service name="ExtServiceUser">
+		<methods>
+			<method name="save">
+				<param name="len">1</param>
+				<param name="formHandler">true</param>
+			</method>
+			<method name="update">
+				<param name="len">1</param>
+				<param name="formHandler">true</param>
+			</method>
+			<method name="deleteByIds">
+				<param name="len">1</param>
+			</method>
+			<method name="queryPageUser">
+				<param name="len">1</param>
+			</method>
+			<method name="exportUser">
+				<param name="len">1</param>
+			</method>
+		</methods> 
+	</service>
 </services>

@@ -66,6 +66,17 @@ class Action_Index extends ActionExt
 		 $this->ExtUpload();
 		 $this->loadExtJs('admin/admin.js');
 	 }
+	 
+	 /**
+	  * 控制器:用户
+	  */
+	 public function user()
+	 {
+		 $this->init();
+		 $this->ExtDirectMode();
+		 $this->ExtUpload();
+		 $this->loadExtJs('user/user.js');
+	 }
 	
 	 /**
 	  * 控制器:博客

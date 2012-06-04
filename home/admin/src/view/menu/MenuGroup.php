@@ -347,7 +347,7 @@ class MenuGroup extends Viewable
 				} 
 			}
 		}
-		$result=substr($result,0,strlen($result)-1);
+		$result=substr($result,0,strlen($result)-3);
 		$result.="          ];";  
 		if (Gc::$is_online_optimize){                                                         
 			$result=UtilString::online_optimize($result);

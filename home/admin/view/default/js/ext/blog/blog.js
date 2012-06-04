@@ -332,7 +332,7 @@ Bb.Blog.View={
 					{title: '基本信息',ref:'tabBlogDetail',iconCls:'tabs',
 					 tpl: [
 					  '<table class="viewdoblock">', 
-						 '<tr class="entry"><td class="head">用户名称</td><td class="content">{username}</td></tr>',
+						 '<tr class="entry"><td class="head">用户名称</td><td class="content"><a style="cursor:pointer;" onclick="Bb.Blog.Function.openLinkUser();">{username}</a></td></tr>',
 						 '<tr class="entry"><td class="head">博客标题</td><td class="content">{blog_name}</td></tr>',
 						 '<tr class="entry"><td class="head">博客内容</td><td class="content">{content}</td></tr>', 
 						 '<tr class="entry"><td class="head">创建时间</td><td class="content">{commitTime:date("Y-m-d H:i")}</td></tr>',  
@@ -403,7 +403,7 @@ Bb.Blog.View={
 						},
 						columns : [
 						  {header : '评论者',dataIndex : 'username'},
-						  {header : '评论',dataIndex : 'comment'},
+						  {header : '评论',dataIndex : 'comment',width:450},
 						  {header : '评论时间',dataIndex : 'commitTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i')},  
 						  {header : '更新时间',dataIndex : 'updateTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i')}
 						]
@@ -533,7 +533,7 @@ Bb.Blog.View={
 						{header : '博客标题',dataIndex : 'blog_name'},
 						{header : '博客内容',dataIndex : 'content',width:450},
 						{header : '创建时间',dataIndex : 'commitTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i')},  
-						{header : '更新时间',dataIndex : 'updateTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i')},  
+						{header : '更新时间',dataIndex : 'updateTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i')} 
 					]
 				}),                       
 				tbar : {
@@ -1075,6 +1075,12 @@ Bb.Blog.View={
 		view_window:null                         
 	}    
 };
+
+Bb.Blog.Function={
+	openLinkUser:function(){
+		parent.Bb.Navigaion.AddTabbyUrl(parent.Ext.getCmp('centerPanel'),'用户',"index.php?go=admin.index.user","users"); 
+	}
+}
 /**
  * Controller:主程序
  */

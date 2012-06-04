@@ -10,7 +10,7 @@ Bb.Config={
 	IsTabHeaderShow:true
 };
 
-Ext.onReady(function(){    
+Ext.onReady(function(){
 	Ext.QuickTips.init();   
 	// NOTE: This is an example showing simple state management. During development,
 	// it is generally best to disable state management as dynamically-generated ids
@@ -32,13 +32,13 @@ Ext.onReady(function(){
 		  //Bb.Layout.RightPanel           
 		]
 	});
-	Bb.Layout.Init();    
-	Bb.Viewport.doLayout();   
+	Bb.Layout.Init();  
+	Bb.Viewport.doLayout(); 
 	setTimeout(function(){
 		Ext.get('loading').remove();
 		Ext.get('loading-mask').fadeOut({remove:true});
 	}, 250);
-	
+		
 	//让浏览器的后退前进跟从Tab访问的历史记录
 	Ext.History.init();    
 	

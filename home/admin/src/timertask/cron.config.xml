@@ -10,7 +10,7 @@
 		
 -->
 <tasks>
-	<task name="festival" status="open" cycle="custom" interval="60" due_time="1338793305" last_time="1338793245"/>
+	<task name="festival" status="open" cycle="custom" interval="60" due_time="1338802449" last_time="1338802389"/>
 	<task name="goodslist" status="close" cycle="daily" interval="3600" hour="12" minute="0"/>
 	<task name="cleanup" status="close" cycle="weekly" interval="3600" day="Tuesday" hour="2" minute="0"/>
 	<task name="statistic" status="close" cycle="monthly" interval="3600" day="15" hour="17" minute="30"/>
