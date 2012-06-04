@@ -66,7 +66,9 @@ Bb.Blog.Store = {
 				{name: 'user_id',type: 'int'},
 				{name: 'username',type: 'string'},
 				{name: 'blog_name',type: 'string'},
-				{name: 'content',type: 'string'}
+				{name: 'content',type: 'string'},
+				{name: 'commitTime',type: 'date',dateFormat:'Y-m-d H:i:s'},
+				{name: 'updateTime',type: 'date',dateFormat:'Y-m-d H:i:s'}
 			]}         
 		),
 		writer: new Ext.data.JsonWriter({
@@ -111,7 +113,9 @@ Bb.Blog.Store = {
 				  {name: 'username',type: 'string'},
 				  {name: 'comment',type: 'string'},
 				  {name: 'blog_id',type: 'int'},
-				  {name: 'blog_name',type: 'string'}
+				  {name: 'blog_name',type: 'string'},
+				  {name: 'commitTime',type: 'date',dateFormat:'Y-m-d H:i:s'},
+				  {name: 'updateTime',type: 'date',dateFormat:'Y-m-d H:i:s'}
 			]}
 		),
 		writer: new Ext.data.JsonWriter({
@@ -330,7 +334,9 @@ Bb.Blog.View={
 					  '<table class="viewdoblock">', 
 						 '<tr class="entry"><td class="head">用户名称</td><td class="content">{username}</td></tr>',
 						 '<tr class="entry"><td class="head">博客标题</td><td class="content">{blog_name}</td></tr>',
-						 '<tr class="entry"><td class="head">博客内容</td><td class="content">{content}</td></tr>',                      
+						 '<tr class="entry"><td class="head">博客内容</td><td class="content">{content}</td></tr>', 
+						 '<tr class="entry"><td class="head">创建时间</td><td class="content">{commitTime:date("Y-m-d H:i")}</td></tr>',  
+						 '<tr class="entry"><td class="head">更新时间</td><td class="content">{updateTime:date("Y-m-d H:i")}</td></tr>',  
 					 '</table>' 
 					 ]
 					}
@@ -397,7 +403,9 @@ Bb.Blog.View={
 						},
 						columns : [
 						  {header : '评论者',dataIndex : 'username'},
-						  {header : '评论',dataIndex : 'comment'}                             
+						  {header : '评论',dataIndex : 'comment'},
+						  {header : '评论时间',dataIndex : 'commitTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i')},  
+						  {header : '更新时间',dataIndex : 'updateTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i')}
 						]
 					})
 				}, config);
@@ -523,7 +531,9 @@ Bb.Blog.View={
 						this.sm,        
 						{header : '用户名称',dataIndex : 'username'},
 						{header : '博客标题',dataIndex : 'blog_name'},
-						{header : '博客内容',dataIndex : 'content',width:450}                                 
+						{header : '博客内容',dataIndex : 'content',width:450},
+						{header : '创建时间',dataIndex : 'commitTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i')},  
+						{header : '更新时间',dataIndex : 'updateTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i')},  
 					]
 				}),                       
 				tbar : {
@@ -636,6 +646,15 @@ Bb.Blog.View={
 					scope:this,autoShow:true,displayInfo: true,
 					displayMsg: '当前显示 {0} - {1}条记录/共 {2}条记录。',
 					emptyMsg: "无显示数据",
+					listeners:{
+					  change:function(thisbar,pagedata){
+						if (Bb.Blog.Config.View.IsShow==1){
+							Bb.Blog.View.IsSelectView=1;
+						}      
+						this.ownerCt.hideBlog();
+						Bb.Blog.Config.View.IsShow=0;        
+					  }  
+					},
 					items: [
 						{xtype:'label', text: '每页显示'},
 						{xtype:'numberfield', value:Bb.Blog.Config.PageSize,minValue:1,width:35, 

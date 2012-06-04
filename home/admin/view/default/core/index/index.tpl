@@ -4,6 +4,13 @@
 	<div id="loading">
 		<div class="loading-indicator"><img src="{$url_base}common/js/ajax/ext/resources/images/extanim32.gif" width="32" height="32" style="margin-right:8px;" align="absmiddle"/>正在加载中...</div>
 	</div>
+	<!-- Ext.History所需的form  begin-->  
+		<form id="history-form" class="x-hidden">    
+			 <input type="hidden" id="x-history-field" />    
+				<iframe id="x-history-frame">    
+			 </iframe>    
+		</form>   
+	<!-- Ext.History所需的form  end --> 
 	<div id="header" class='x-hide-display'>
 		<table>
 			<tr>

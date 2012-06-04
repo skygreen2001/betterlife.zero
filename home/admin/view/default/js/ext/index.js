@@ -37,5 +37,25 @@ Ext.onReady(function(){
 	setTimeout(function(){
 		Ext.get('loading').remove();
 		Ext.get('loading-mask').fadeOut({remove:true});
-	}, 250);        
+	}, 250);
+	
+	//让浏览器的后退前进跟从Tab访问的历史记录
+	Ext.History.init();    
+	
+	// Handle this change event in order to restore the UI to the appropriate history state
+	Ext.History.on('change', function(token){
+		if(token){
+			var parts = token.split(tokenDelimiter);
+			var tabPanel = Ext.getCmp(parts[0]);
+			var tabId = parts[1];
+			
+			tabPanel.show();
+			tabPanel.setActiveTab(tabId);
+		}else{
+			// This is the initial default state.  Necessary if you navigate starting from the
+			// page without any existing history token params and go back to the start state.
+			tp.setActiveTab(0);
+			tp.getItem(0).setActiveTab(0);
+		}
+	});      
 });

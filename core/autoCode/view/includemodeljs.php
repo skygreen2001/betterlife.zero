@@ -451,6 +451,15 @@ $filterReset
                     scope:this,autoShow:true,displayInfo: true,
                     displayMsg: '当前显示 {0} - {1}条记录/共 {2}条记录。',
                     emptyMsg: "无显示数据",
+                    listeners:{
+                        change:function(thisbar,pagedata){
+                            if ($appName_alias.$classname.Config.View.IsShow==1){
+                                $appName_alias.$classname.View.IsSelectView=1;    
+                            }             
+                            this.ownerCt.hide$classname();
+                            $appName_alias.$classname.Config.View.IsShow=0;                            
+                        }
+                    },                    
                     items: [
                         {xtype:'label', text: '每页显示'},
                         {xtype:'numberfield', value:$appName_alias.$classname.Config.PageSize,minValue:1,width:35, 

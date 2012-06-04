@@ -222,7 +222,7 @@ class DataObjectSpec
 		//EnumColumnNameDefault::ID=>'id',
 		//EnumColumnNameDefault::COMMITTIME=>'commitTime',
 		EnumDataSpec::REMOVE=>array(
-			'updateTime'
+			//'updateTime'
 		),
 		EnumDataSpec::MANY_MANY_TABLE=>array(
 			//多对多关系类名=>多对多关系表名

@@ -103,7 +103,7 @@ class UtilCKEeditor extends Util
 		$jsContent="\r\n". 
 				   "        function ckeditor_replace$suffix_cr()\r\n".
 				   "        {\r\n".   
-				   "            ".$jsContent.
+				   "            ".$jsContent."\r\n".
 				   "            CKFinder.setupCKEditor(null,\"".Gc::$url_base."common/js/onlineditor/ckfinder/\");\r\n".
 				   "".
 				   "        }\r\n";                                                        

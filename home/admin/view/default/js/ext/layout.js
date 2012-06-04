@@ -1,6 +1,10 @@
 Ext.namespace("Betterlife.Admin");
 
 Bb = Betterlife.Admin;
+
+// Needed if you want to handle history for multiple components in the same page.
+var tokenDelimiter = ':';
+
 /**
  * 页面布局格局
  */
@@ -128,7 +132,11 @@ Bb.Layout = {
 		listeners:{
 			render: function() {                                                                          
 				Ext.getBody().on("contextmenu", Ext.emptyFn, null, {preventDefault: true});  
-			}
+			},
+			tabchange: function(tabPanel, tab){  
+				//tabs切换时修改浏览器hash  
+				Ext.History.add(tabPanel.id + tokenDelimiter + tab.id);  
+			} 
 		},
 		items : [{
 				contentEl : 'centerArea',

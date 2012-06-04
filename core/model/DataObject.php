@@ -57,11 +57,11 @@ abstract class DataObject extends Object implements ArrayAccess
 	/**
 	 * @var int 记录创建的时间timestamp 
 	 */
-	protected $commitTime;
+	public $commitTime;
 	/**
 	 * @var int 记录最后更新的时间，当表中无该字段时，一般用commitTime记录最后更新的时间。
 	 */
-	protected $updateTime;    
+	public $updateTime;    
 	/**
 	 * @var IDao 当前使用的数据库调用对象
 	 */
