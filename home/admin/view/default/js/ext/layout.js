@@ -134,8 +134,10 @@ Bb.Layout = {
 				Ext.getBody().on("contextmenu", Ext.emptyFn, null, {preventDefault: true});  
 			},
 			tabchange: function(tabPanel, tab){  
-				//tabs切换时修改浏览器hash  
-				Ext.History.add(tabPanel.id + tokenDelimiter + tab.id);  
+				if (tab){
+					//tabs切换时修改浏览器hash  
+					Ext.History.add(tabPanel.id + tokenDelimiter + tab.id);  
+				}
 			} 
 		},
 		items : [{

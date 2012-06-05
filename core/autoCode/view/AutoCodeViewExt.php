@@ -62,6 +62,19 @@ class AutoCodeViewExt extends AutoCode
     public static function AutoCode()
     {
         self::pathset();
+        //加载生成实体数据对象的目录路径，以便生成代码中数据对象的ID名称
+        $dirs_root=UtilFileSystem::getAllDirsInDriectory(self::$save_dir.DIRECTORY_SEPARATOR.Gc::$appName.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR.self::$domain_dir.DIRECTORY_SEPARATOR);
+        set_include_path(get_include_path().PATH_SEPARATOR.join(PATH_SEPARATOR, $dirs_root));
+        $files = new AppendIterator();
+        foreach ($dirs_root as $dir) {
+            $tmp=new ArrayObject(UtilFileSystem::getAllFilesInDirectory($dir));
+            if (isset($tmp)) $files->append($tmp->getIterator());
+        }
+
+        foreach ($files as $file) {
+            Initializer::$coreFiles[Config_F::ROOT_CORE][basename($file,Initializer::SUFFIX_FILE_PHP)]=$file;
+        }        
+        
         $tableList=Manager_Db::newInstance()->dbinfo()->tableList();
         $fieldInfos=array();
         $tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList();
