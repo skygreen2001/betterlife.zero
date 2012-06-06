@@ -31,6 +31,7 @@ Bb.Layout = {
 	 */
 	LeftPanel : [{
 		region : 'west',
+		ref:'west',
 		id : 'west-panel', // see Ext.getCmp() below
 		title : '功能区',
 		collapseMode : 'mini',
@@ -110,7 +111,7 @@ Bb.Layout = {
 	 */
 	CenterPanel : new Ext.TabPanel({
 		region : 'center', // a center region is ALWAYS required for border layout
-		id : 'centerPanel',
+		id : 'centerPanel',ref:'center',
 		deferredRender : false,
 		activeTab : 1, // first tab initially active
 		resizeTabs : true, // turn on tab resizing
@@ -176,25 +177,20 @@ Bb.Layout = {
 	 * Layout初始化 
 	 */
 	Init : function() {      
-		Ext.getCmp('west-panel').add(Bb.Layout.LeftMenuGroups);
-		Ext.getCmp('west-panel').doLayout();                                                 
+		Bb.Viewport.west.add(Bb.Layout.LeftMenuGroups);
+		Bb.Viewport.west.doLayout();                                                 
 		if (Ext.get('hideit')) {
 			Ext.get('hideit').on('click', function() {
-				// get a reference to the Panel that was created with id =
-				// 'west-panel'
-				var w = Ext.getCmp('west-panel');
-				// expand or collapse that Panel based on its collapsed
-				// property state
-				if (w.collapsed) {
+				if (Bb.Viewport.west.collapsed) {
 					Ext.get('hideit').update('隐藏左侧');
-					w.expand();
+					Bb.Viewport.west.expand();
 				} else {
 					Ext.get('hideit').update('显示左侧');
-					w.collapse();
+					Bb.Viewport.west.collapse();
 				}
 			});
 		}
-		var navEs = Ext.get('west-panel').select('a');
+		var navEs = Bb.Viewport.west.el.select('a');
 		navEs.on('click', Bb.Navigaion.HyperlinkClicked);
 		navEs.on('contextmenu',Bb.Navigaion.OnContextMenu);
 	}     

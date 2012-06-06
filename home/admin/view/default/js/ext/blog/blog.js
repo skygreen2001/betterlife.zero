@@ -1078,7 +1078,12 @@ Bb.Blog.View={
 
 Bb.Blog.Function={
 	openLinkUser:function(){
-		parent.Bb.Navigaion.AddTabbyUrl(parent.Ext.getCmp('centerPanel'),'用户',"index.php?go=admin.index.user","users"); 
+		var targeturl="index.php?go=admin.index.user";
+		if (parent.Bb.Navigaion){
+			parent.Bb.Navigaion.AddTabbyUrl(parent.Ext.getCmp('centerPanel'),'用户',targeturl,"users"); 
+		}else{
+			window.open(targeturl);
+		}
 	}
 }
 /**
