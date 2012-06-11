@@ -1,9 +1,15 @@
-1.ÎªÁË½â¾öTabPanelµÄtabWidth='auto'ÔÚIE6ÀïµÄbug£¬ÐÞ¸ÄÁËExtJS¿âµÄÔ­ÎÄ¼þ£º
+ï»¿1.ä¸ºäº†è§£å†³TabPanelçš„tabWidth='auto'åœ¨IE6é‡Œçš„bugï¼Œä¿®æ”¹äº†ExtJSåº“çš„åŽŸæ–‡ä»¶ï¼š
   ext-all.js
-  Ô­Îª£ºo.style.width=(l-(g-d))+"px"
-  ÏÖÎª£ºif(this.tabWidth!=='auto'){o.style.width=(l-(g-d))+"px";}else{o.style.width ='auto';}
+************Ext-3.3***************************
+  åŽŸä¸ºï¼šo.style.width=(l-(g-d))+"px"
+  çŽ°ä¸ºï¼šif(this.tabWidth!=='auto'){o.style.width=(l-(g-d))+"px";}else{o.style.width ='auto';}
+
+************Ext-3.4***************************
+  åŽŸä¸ºï¼šn.style.width=(k-(g-d))+"px"
+  çŽ°ä¸ºï¼šif(this.tabWidth!=='auto'){n.style.width=(k-(g-d))+"px";}else{n.style.width ='auto';}
+
   ext-all-debug.js
   ext-all-debug-w-comments.js
-  Ô­Îª£ºinner.style.width = (each - (tw-iw)) + 'px';
-  ÏÖÎª£ºif(this.tabWidth!=='auto'){inner.style.width = (each - (tw-iw)) + 'px';}else{inner.style.width ='auto';}
+  åŽŸä¸ºï¼šinner.style.width = (each - (tw-iw)) + 'px';
+  çŽ°ä¸ºï¼šif(this.tabWidth!=='auto'){inner.style.width = (each - (tw-iw)) + 'px';}else{inner.style.width ='auto';}
 
