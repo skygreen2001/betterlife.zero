@@ -35,12 +35,7 @@ Bb.Navigaion = {
 	 */
 	IFrameComponent : Ext.extend(Ext.BoxComponent, {
 		onRender : function(ct, position) {
-			this.el = ct.createChild({
-				tag : 'iframe',
-				id : 'iframe-' + this.id,
-				frameBorder : 0,
-				src : this.url
-			});
+			this.el = ct.createChild({tag : 'iframe',id : this.id,frameBorder : 0,src : this.url});
 		}
 	}),
 	/**
@@ -64,7 +59,7 @@ Bb.Navigaion = {
 			centerArea.setHeight(contentPanel.getHeight());
 			centerArea.setWidth(contentPanel.getWidth());
 			centerArea
-					.update("<iframe scrolling='auto' width='100%' height='100%'  frameborder='0' src='"
+					.update("<iframe id='frm"+id+"' name='frm"+id+"' scrolling='auto' width='100%' height='100%'  frameborder='0' src='"
 							+ url + "'> </iframe>");
 			contentPanel.setTitle(title, "tabs");
 			return;
@@ -84,10 +79,7 @@ Bb.Navigaion = {
 					tabTip:title,
 					border : false,
 					// add iframe as the child component
-					items : [new Bb.Navigaion.IFrameComponent({
-						id : id,
-						url : url
-					})]
+					items : [new Bb.Navigaion.IFrameComponent({id: "frm"+id,url : url})]
 				});
 				contentPanel.add(tab).show();
 			} else {
@@ -97,7 +89,7 @@ Bb.Navigaion = {
 					tabTip:title,
 					url:url,
 					iconCls : 'tabs',
-					html : "<iframe scrolling='auto' width='100%' height='100%'  frameborder='0' src='"
+					html : "<iframe id='frm"+id+"' name='frm"+id+"' scrolling='auto' width='100%' height='100%'  frameborder='0' src='"
 							+ url + "'> </iframe>",
 					closable : true
 				}).show();
