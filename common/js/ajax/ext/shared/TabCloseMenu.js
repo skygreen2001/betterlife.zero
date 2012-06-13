@@ -57,6 +57,7 @@ Ext.ux.TabCloseMenu = Ext.extend(Object, {
 	//public
 	init : function(tabs){     
 		this.tabs = tabs;    
+		tabs.tabCloseMenu=this;  
 		tabs.on({
 			scope: this,
 			contextmenu: this.onContextMenu,

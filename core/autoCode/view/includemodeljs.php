@@ -706,7 +706,7 @@ $filterdoSelect
                 $appName_alias.$classname.Config.View.IsShow=1;
             }else{
                 $appName_alias.$classname.Config.View.IsShow=0;
-            }{$viewRelationDoSelect}
+            }
             this.ownerCt.doLayout();
         },
         /**
@@ -726,7 +726,7 @@ $filterdoSelect
         /**
          * 更新当前{$table_comment}显示信息
          */
-        updateView$classname : function() {
+        updateView$classname : function() {{$viewRelationDoSelect}
             if ($appName_alias.$classname.View.Running.view_window!=null){
                 $appName_alias.$classname.View.Running.view_window.winTabs.tab{$classname}Detail.update(this.getSelectionModel().getSelected().data);
             }

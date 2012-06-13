@@ -905,7 +905,6 @@ Bb.Blog.View={
 			}else{
 				Bb.Blog.Config.View.IsShow=0;
 			}
-			Bb.Blog.View.Running.commentGrid.doSelectComment();
 			this.ownerCt.doLayout();
 		},
 		/**
@@ -926,6 +925,7 @@ Bb.Blog.View={
 		 * 更新当前博客显示信息
 		 */
 		updateViewBlog : function() {
+			Bb.Blog.View.Running.commentGrid.doSelectComment();
 			if (Bb.Blog.View.Running.view_window!=null){
 				Bb.Blog.View.Running.view_window.winTabs.tabBlogDetail.update(this.getSelectionModel().getSelected().data);
 			}
