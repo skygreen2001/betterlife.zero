@@ -33,7 +33,6 @@
 	</div>
 	{/foreach}
 	<div id="centerArea" class="x-hide-display">
-		<br/><br/><br/><br/><br/><br/><br/><br/><br/>
 		<div align="center">        
 			<h1>欢迎来到<span class="en-head">BetterLife CMS</span>后台管理中心</h1><br/><br/>
 			<h2 id="content-head">推荐开发工具:</h2>

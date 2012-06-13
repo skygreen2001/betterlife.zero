@@ -34,12 +34,17 @@ Ext.ux.TabCloseMenu = Ext.extend(Object, {
 	closeAllTabsText: '关闭所有',//'Close All Tabs'
 	
 	/**
-	 *  
 	 * Chrome:在新标签页中打开链接(T)  
 	 * IE:在新选项卡中打开(W)  
 	 * Firefox:在新标签页中打开(T) 
 	 */
 	openInNewIETabText:'在新标签页中打开',
+	/**
+	 * Chrome:在新标签页中打开链接(T)  
+	 * IE:在新选项卡中打开(W)  
+	 * Firefox:在新标签页中打开(T) 
+	 */
+	refreshTabText:'刷新',
 	
 	/**
 	 * @cfg {Boolean} showCloseAll
@@ -130,6 +135,12 @@ Ext.ux.TabCloseMenu = Ext.extend(Object, {
 					handler: this.onOpenInNewIETab
 				});
 			}
+			items.push({
+				itemId: 'refreshTab',
+				text: this.refreshTabText,
+				scope: this,
+				handler: this.onRefreshTab
+			});       
 			this.menu = new Ext.menu.Menu({
 				items: items
 			});
@@ -151,6 +162,15 @@ Ext.ux.TabCloseMenu = Ext.extend(Object, {
 	
 	onOpenInNewIETab:function(){  
 		window.open(this.tabs.activeTab.url,"_blank");   
+	},
+	
+	onRefreshTab:function(){
+		if (window.frames){
+			var frames_id="frm"+this.tabs.activeTab.id.replace(/cp-/, "");
+			if (Ext.get(frames_id)){
+				Ext.get(frames_id).dom.src=this.tabs.activeTab.url;
+			}
+		}
 	},
 	
 	doClose : function(excludeActive){

@@ -142,18 +142,21 @@ Bb.Layout = {
 			} 
 		},
 		items : [{
+				id:"cp-index",
 				contentEl : 'centerArea',
 				title : '首页',
+				html : "<iframe id='frmindex' name='frmindex' frameborder='0' src='index.php?go=admin.index.index'></iframe>",
 				url   : 'index.php?go=admin.index.index',
 				iconCls : 'tabs',
 				autoScroll : true
 			},{
 				title : '查询',
-				html : "<a id='hideit' href='#'>隐藏左侧</a><iframe scrolling='auto' width='100%' height='100%'  frameborder='0' src='http:/"+"/www.baidu.com'> </iframe>",
+				id:"cp-search",
+				html : "<a id='hideit' href='#'>隐藏左侧</a><iframe id='frmsearch' name='frmsearch' width='100%' height='100%'  frameborder='0' src='http:/"+"/www.baidu.com'> </iframe>",
 				closable : true,
 				url   : 'http://www.baidu.com',
 				iconCls : 'tabs',
-				autoScroll : true
+				autoScroll : false
 			}]
 	}),
 	/**
