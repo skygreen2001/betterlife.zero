@@ -61,7 +61,9 @@ Bb.Admin.Store = {
 				  {name: 'username',type: 'string'},
 				  {name: 'realname',type: 'string'},
 				  {name: 'password',type: 'string'},
-				  {name: 'roleid',type: 'string'}
+				  {name: 'roletype',type: 'string'},
+				  {name: 'roleid',type: 'int'},
+				  {name: 'seescope',type: 'string'}
 			]}         
 		),
 		writer: new Ext.data.JsonWriter({
@@ -116,12 +118,19 @@ Bb.Admin.View={
 							  {xtype: 'hidden',  name : 'admin_id',ref:'../admin_id'},
 							  {fieldLabel : '用户名(<font color=red>*</font>)',name : 'username',allowBlank : false},
 							  {fieldLabel : '真实姓名',name : 'realname'},
-							  {fieldLabel : '密码(<font color=red>*</font>)',name : 'password',allowBlank : false},
-							  {fieldLabel : '系统管理员扮演角色',hiddenName : 'roleid',xtype : 'combo',mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,allowBlank : false,
+							  {fieldLabel : '密码(<font color=red>*</font>)',name : 'password',inputType: 'password',allowBlank : false},
+							  {fieldLabel : '扮演角色',hiddenName : 'roletype',xtype : 'combo',mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,allowBlank : false,
 								store : new Ext.data.SimpleStore({
 										fields : ['value', 'text'],
 										data : [['0', '超级管理员'],['1', '管理人员'],['2', '运维人员'],['3', '合作伙伴']]
 								  }),emptyText: '请选择系统管理员扮演角色',
+								valueField : 'value',// 值
+								displayField : 'text'// 显示文本
+							}, {fieldLabel : '视野',hiddenName : 'seescope',xtype : 'combo',mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,allowBlank : false,
+								store : new Ext.data.SimpleStore({
+										fields : ['value', 'text'],
+										data : [['0', '只能查看自己的信息'],['1', '查看所有的信息']]
+								  }),emptyText: '请选择视野',
 								valueField : 'value',// 值
 								displayField : 'text'// 显示文本
 							}        
@@ -243,7 +252,8 @@ Bb.Admin.View={
 						 '<tr class="entry"><td class="head">用户名</td><td class="content">{username}</td></tr>',
 						 '<tr class="entry"><td class="head">真实姓名</td><td class="content">{realname}</td></tr>',
 						 '<tr class="entry"><td class="head">密码</td><td class="content">{password}</td></tr>',
-						 '<tr class="entry"><td class="head">系统管理员扮演角色</td><td class="content">{roleid}</td></tr>',                      
+						 '<tr class="entry"><td class="head">扮演角色</td><td class="content">{roletype}</td></tr>',
+						 '<tr class="entry"><td class="head">视野</td><td class="content">{seescope}</td></tr>',                      
 					 '</table>' 
 					 ]
 					}
@@ -312,7 +322,8 @@ Bb.Admin.View={
 						this.sm,        
 						  {header : '用户名',dataIndex : 'username'},
 						  {header : '真实姓名',dataIndex : 'realname'},
-						  {header : '系统管理员扮演角色',dataIndex : 'roleid'}                                 
+						  {header : '扮演角色',dataIndex : 'roletype'},
+						  {header : '视野',dataIndex : 'seescope'}                            
 					]
 				}),                       
 				tbar : {
@@ -328,7 +339,17 @@ Bb.Admin.View={
 							   xtype : 'textfield'
 							},
 							items : [
-								'用户名 ','&nbsp;&nbsp;',{ref: '../ausername'},'&nbsp;&nbsp;',   
+								'用户名 ','&nbsp;&nbsp;',{ref: '../ausername'},'&nbsp;&nbsp;', 
+								'真实姓名 ','&nbsp;&nbsp;',{ref: '../arealname'},'&nbsp;&nbsp;',
+								'扮演角色','&nbsp;&nbsp;',{ref: '../aroletype',xtype : 'combo',mode : 'local',
+									triggerAction : 'all',lazyRender : true,editable: false,
+									store : new Ext.data.SimpleStore({
+										fields : ['value', 'text'],
+										data : [['0', '超级管理员'],['1', '管理人员'],['2', '运维人员'],['3', '合作伙伴'],['4', '供应商'],['5', '渠道商']]
+									  }),
+									valueField : 'value',// 值
+									displayField : 'text'// 显示文本
+								},  
 								{
 									xtype : 'button',text : '查询',scope: this, 
 									handler : function() {
@@ -338,7 +359,9 @@ Bb.Admin.View={
 								{
 									xtype : 'button',text : '重置',scope: this,
 									handler : function() {
-										
+										this.topToolbar.ausername.setValue("");
+										this.topToolbar.arealname.setValue("");
+										this.topToolbar.aroletype.setValue("");  
 										this.filter={};
 										this.doSelectAdmin();
 									}
@@ -521,7 +544,9 @@ Bb.Admin.View={
 		doSelectAdmin : function() {
 			if (this.topToolbar){
 				var ausername = this.topToolbar.ausername.getValue();
-				this.filter       ={'username':ausername};
+				var arealname = this.topToolbar.arealname.getValue();
+				var aroletype = this.topToolbar.aroletype.getValue();
+				this.filter       ={'username':ausername,'realname':arealname,'roletype':aroletype};
 			}
 			var condition = {'start':0,'limit':Bb.Admin.Config.PageSize};
 			Ext.apply(condition,this.filter);

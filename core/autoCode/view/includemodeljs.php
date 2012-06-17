@@ -44,6 +44,9 @@ $appName_alias.$classname={
         if ($appName_alias.$classname.Cookie.get('View.IsFix')!=null){
             $appName_alias.$classname.Config.View.IsFix=$appName_alias.$classname.Cookie.get('View.IsFix');
         }
+        if (Ext.util.Cookies.get('OnlineEditor')!=null){
+            $appName_alias.$classname.Config.OnlineEditor=parseInt(Ext.util.Cookies.get('OnlineEditor'));
+        }
     }
 }; 
 /**
@@ -241,7 +244,7 @@ $viewdoblock
                 config = Ext.apply({
                     title:"查看{$table_comment}",constrainHeader:true,maximizable: true,minimizable : true, 
                     width : 705,height : 500,minWidth : 450,minHeight : 400,
-                    layout : 'fit',resizable:true,plain : true,bodyStYle : 'padding:5px;',
+                    layout : 'fit',resizable:true,plain : true,bodyStyle : 'padding:5px;',
                     closeAction : "hide",
                     items:[new $appName_alias.$classname.View.{$classname}View.Tabs({ref:'winTabs',tabPosition:'top'})],
                     listeners: { 
@@ -274,7 +277,7 @@ $viewdoblock
             config = Ext.apply({     
                 title : '批量{$table_comment}上传',
                 width : 400,height : 110,minWidth : 300,minHeight : 100,
-                layout : 'fit',plain : true,bodyStYle : 'padding:5px;',buttonAlign : 'center',
+                layout : 'fit',plain : true,bodyStyle : 'padding:5px;',buttonAlign : 'center',
                 closeAction : "hide",
                 items : [
                     new Ext.form.FormPanel({

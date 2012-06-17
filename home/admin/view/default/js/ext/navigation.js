@@ -4,7 +4,7 @@ Bb = Betterlife.Admin;
 /**
  * 导航功能
  */
-Bb.Navigaion = { 
+Bb.Navigation = { 
 	/**
 	 * 在指定的TabPanel组件上添加Tab 【如果已经添加了则激活该Tab】
 	 * 
@@ -79,7 +79,7 @@ Bb.Navigaion = {
 					tabTip:title,
 					border : false,
 					// add iframe as the child component
-					items : [new Bb.Navigaion.IFrameComponent({id: "frm"+id,url : url})]
+					items : [new Bb.Navigation.IFrameComponent({id: "frm"+id,url : url})]
 				});
 				contentPanel.add(tab).show();
 			} else {
@@ -108,7 +108,7 @@ Bb.Navigaion = {
 		} else {
 			title = linkTarget.text;
 		}
-		Bb.Navigaion.AddTabbyUrl(Ext.getCmp('centerPanel'), title, linkTarget.href,
+		Bb.Navigation.AddTabbyUrl(Ext.getCmp('centerPanel'), title, linkTarget.href,
 				linkTarget.id);
 	},
 	OnContextMenu:function(e, item){  

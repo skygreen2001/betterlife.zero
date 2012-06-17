@@ -74,7 +74,11 @@ class UtilXheditor extends Util
 	 */    
 	private static function loadJs($textarea_id,$viewObject=null,$form_id=null)
 	{
-		UtilJavascript::loadJsReady($viewObject, "common/js/onlineditor/xheditor/xheditor-1.1.13-zh-cn.min.js"); 
+		if (UtilAjax::$IsDebug){
+			UtilJavascript::loadJsReady($viewObject, "common/js/onlineditor/xheditor/xheditor-1.1.13-zh-cn.js"); 
+		}else{
+			UtilJavascript::loadJsReady($viewObject, "common/js/onlineditor/xheditor/xheditor-1.1.13-zh-cn.min.js"); 
+		}
 		self::loadJsPlugin($viewObject);
 		self::loadJsFunction($textarea_id,$viewObject,$form_id);
 		UtilJavascript::loadJsContentReady($viewObject,"$(function(){pageInit_{$textarea_id}();});");

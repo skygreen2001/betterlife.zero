@@ -4,7 +4,7 @@
   <head>
 {include file="$templateDir/layout/normal/header.tpl"}
   <link rel="icon" href="favicon.ico" mce_href="favicon.ico" type="image/x-icon">   
-  <link rel="stylesheet" type="text/css" href="{$template_url}resources/css/public.css" />
+	<link rel="stylesheet" type="text/css" href="{$template_url}resources/css/public.css" />
 {$viewObject->css_ready|default:""}
 {$viewObject->js_ready|default:""}
   {* 此处原为本应用框架加载Ext必须加载的文件。先已通过Gzip动态加载生成。*}

@@ -47,6 +47,9 @@ Bb.Blog={
 		if (Bb.Blog.Cookie.get('View.IsFix')!=null){
 			Bb.Blog.Config.View.IsFix=Bb.Blog.Cookie.get('View.IsFix');
 		}
+		if (Ext.util.Cookies.get('OnlineEditor')!=null){
+			Bb.Blog.Config.OnlineEditor=parseInt(Ext.util.Cookies.get('OnlineEditor'));
+		}
 	}
 }; 
 /**
@@ -332,7 +335,7 @@ Bb.Blog.View={
 					{title: '基本信息',ref:'tabBlogDetail',iconCls:'tabs',
 					 tpl: [
 					  '<table class="viewdoblock">', 
-						 '<tr class="entry"><td class="head">用户名称</td><td class="content"><a style="cursor:pointer;" onclick="Bb.Blog.Function.openLinkUser();">{username}</a></td></tr>',
+						 '<tr class="entry"><td class="head">用户名称</td><td class="content"><a style="cursor:pointer;" onclick="Bb.Blog.Function.openLinkUser({user_id});">{username}</a></td></tr>',
 						 '<tr class="entry"><td class="head">博客标题</td><td class="content">{blog_name}</td></tr>',
 						 '<tr class="entry"><td class="head">博客内容</td><td class="content">{content}</td></tr>', 
 						 '<tr class="entry"><td class="head">创建时间</td><td class="content">{commitTime:date("Y-m-d H:i")}</td></tr>',  
@@ -356,7 +359,7 @@ Bb.Blog.View={
 				config = Ext.apply({
 					title:"查看博客",constrainHeader:true,maximizable: true,minimizable : true, 
 					width : 705,height : 500,minWidth : 450,minHeight : 400,
-					layout : 'fit',resizable:true,plain : true,bodyStYle : 'padding:5px;',
+					layout : 'fit',resizable:true,plain : true,bodyStyle : 'padding:5px;',
 					closeAction : "hide",
 					items:[new Bb.Blog.View.BlogView.Tabs({ref:'winTabs',tabPosition:'top'})],
 					listeners: { 
@@ -442,7 +445,7 @@ Bb.Blog.View={
 			config = Ext.apply({     
 				title : '批量博客上传',
 				width : 400,height : 110,minWidth : 300,minHeight : 100,
-				layout : 'fit',plain : true,bodyStYle : 'padding:5px;',buttonAlign : 'center',
+				layout : 'fit',plain : true,bodyStyle : 'padding:5px;',buttonAlign : 'center',
 				closeAction : "hide",
 				items : [
 					new Ext.form.FormPanel({
@@ -1077,10 +1080,10 @@ Bb.Blog.View={
 };
 
 Bb.Blog.Function={
-	openLinkUser:function(){
-		var targeturl="index.php?go=admin.index.user";
-		if (parent.Bb.Navigaion){
-			parent.Bb.Navigaion.AddTabbyUrl(parent.Ext.getCmp('centerPanel'),'用户',targeturl,"users"); 
+	openLinkUser:function(user_id){
+		var targeturl="index.php?go=admin.view.user&user_id="+user_id;
+		if (parent.Bb.Navigation){
+			parent.Bb.Layout.Function.OpenWindow(targeturl); 
 		}else{
 			window.open(targeturl);
 		}

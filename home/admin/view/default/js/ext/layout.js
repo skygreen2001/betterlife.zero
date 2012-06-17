@@ -1,10 +1,5 @@
 Ext.namespace("Betterlife.Admin");
-
 Bb = Betterlife.Admin;
-
-// Needed if you want to handle history for multiple components in the same page.
-var tokenDelimiter = ':';
-
 /**
  * 页面布局格局
  */
@@ -13,38 +8,153 @@ Bb.Layout = {
 	 * 布局：页面头部
 	 */
 	HeaderPanel : [{
-		region : 'north',
-		contentEl : 'header',
-		id : 'header-panel',
-		height : 80,
-		collapsible : true,
-		collapseMode : 'mini',
-		header:false,// 是否显示标题栏
-		split : true,
-		layout : 'fit',
-		autoShow : true,
-		title : '',
-		margins : '0 0 1 0'
+		region:'north',id:'header-panel',ref:'head',//contentEl:'header',
+		header:false,collapsible:true,collapseMode : 'mini',split : true,height:27*3,
+		tbar:{
+			xtype : 'container',layout : 'anchor',
+			height : 27*3,style:'font-size:14px',
+			items : [                        
+				new Ext.Toolbar({ 
+					height : 27,ref:'menus',
+					items:[
+						{text: '', ref:'../../file',iconCls : 'logo',
+							menu: {
+								xtype:'menu',items: [
+								  /*{text:'新建',handler:function(){}},
+									{text:'导入',handler:function(){}}, 
+									{text:'导出',handler:function(){}},*/
+									{text:'关闭所有',handler:function(){
+										Bb.Viewport.center.tabCloseMenu.onCloseAll();
+									}}, '-', 
+									{text: '退出',iconCls : 'icon-quit',ref:'exit',handler:function(){
+										window.location.href="index.php?go=admin.index.logout";
+									}} 
+								]
+							}
+						},{text: '显示', ref:'../../view',iconCls : 'page',
+							menu: {
+								xtype:'menu',items: [
+									'-',
+									{text:'工具栏',checked:true,ref:'toolbar',checkHandler:function(){
+										if (Bb.Viewport.head.view.menu.toolbar.checked){
+											Bb.Viewport.head.topToolbar.toolbar.show();
+											Bb.Viewport.head.topToolbar.setHeight(27*3);
+											Bb.Viewport.head.setHeight(27*3);
+										}else{
+											Bb.Viewport.head.topToolbar.toolbar.hide();
+											Bb.Viewport.head.topToolbar.setHeight(27);
+											Bb.Viewport.head.setHeight(27);
+										}
+										Bb.Viewport.head.syncHeight();
+										Bb.Viewport.doLayout();
+									}},
+									{text:'导航栏',checked:true,ref:'nav',checkHandler:function(){
+										if (Bb.Viewport.head.view.menu.nav.checked){
+											Bb.Viewport.west.expand();
+										}else{
+											Bb.Viewport.west.collapse();
+										}
+									}},
+									{text:'在线编辑器',ref:'onlineditor',menu:{
+										items: [ {
+											text: '默认【ckEditor】',
+											checked: true,value:"1",
+											group: 'onlineditor',
+											checkHandler: function(item, checked){Bb.Layout.Function.onOnlineditorCheck(item, checked);}
+										},{
+											text: 'KindEditor',
+											checked: false,value:"2",
+											group: 'onlineditor',
+											checkHandler: function(item, checked){Bb.Layout.Function.onOnlineditorCheck(item, checked);}
+										}, {
+											text: 'xHeditor',
+											checked: false,value:"3",
+											group: 'onlineditor',
+											checkHandler: function(item, checked){Bb.Layout.Function.onOnlineditorCheck(item, checked);}
+										}]
+									}},                                    
+									'-',
+									{text: '全屏  [F11]',checked:false,ref:'full',checkHandler:function(){
+										/**
+										 * 全屏模式支持:
+										 * 支持HTML5,Firefor和Chrome高级版本支持
+										 * http://css.dzone.com/articles/pragmatic-introduction-html5
+										 * https://developer.mozilla.org/en/DOM/Using_full-screen_mode*/
+										if (Bb.Viewport.head.view.menu.full.checked){
+											var docElm = document.documentElement;
+											if (docElm.requestFullscreen) {
+											   docElm.requestFullscreen();
+											}
+											else if (docElm.mozRequestFullScreen) {
+											   docElm.mozRequestFullScreen();
+											}
+											else if (docElm.webkitRequestFullScreen) {
+											   docElm.webkitRequestFullScreen();
+											}
+										}else{
+											if (document.exitFullscreen) {
+											   document.exitFullscreen();
+											}
+											else if (document.mozCancelFullScreen) {
+											   document.mozCancelFullScreen();
+											}
+											else if (document.webkitCancelFullScreen) {
+												document.webkitCancelFullScreen();
+											}else{
+											}
+										}
+									}} 
+								]
+							}
+						},{text: '博客', ref:'../../blog',iconCls : 'page',
+							menu: {
+								xtype:'menu',items: [
+									{text:'添加',ref:'addBlog',handler:function(){
+										Bb.Navigation.AddTabbyUrl(Bb.Layout.CenterPanel,"博客","index.php?go=admin.index.blog","blog");
+									}},
+									{text:'管理',ref:'blogs',handler:function(){
+										Bb.Navigation.AddTabbyUrl(Bb.Layout.CenterPanel,"博客","index.php?go=admin.index.blog","blog");
+									}} 
+								]
+							}
+						},{text: '帮助', ref:'../../help',iconCls : 'page',
+							menu: {
+								xtype:'menu',items: [
+									{text:'帮助手册',handler:function(){}},
+									{text:'在线帮助',handler:function(){}}, 
+									{text:'在线升级',handler:function(){}},
+									{text:'关于...',handler:function(){}} 
+								]
+							}
+						},'-',{text: '退出', iconCls : 'icon-quit',ref:'../../exit',handler:function(){
+							window.location.href="index.php?go=admin.index.logout";
+						}},new Ext.Toolbar.Fill(),'-',{text: "",ref:'../../operator',handler:function(){
+							Bb.Layout.Function.OpenWindow("index.php?go=admin.view.admin&admin_id="+Bb.Config.Admin_id);
+						}}]
+				}), 
+				new Ext.Toolbar({
+					height:54,ref:'toolbar',
+					items : [
+						{xtype: 'buttongroup',title: '博客管理',columns: 2,defaults: {scale: 'small'},                         
+						 items: [{text: '添加',iconCls: 'page',ref:"../addBlog",handler:function(){
+								Bb.Navigation.AddTabbyUrl(Bb.Layout.CenterPanel,"博客","index.php?go=admin.index.blog","blog");
+							}},
+							{text: '管理',iconCls: 'page',ref:"../blogs",handler:function(){
+								Bb.Navigation.AddTabbyUrl(Bb.Layout.CenterPanel,"博客","index.php?go=admin.index.blog","blog");
+							}}
+						 ]}]
+				})
+		  ]}
 	}],   
 	/**
 	 * 布局:页面左部
 	 */
 	LeftPanel : [{
-		region : 'west',
-		ref:'west',
-		id : 'west-panel', // see Ext.getCmp() below
-		title : '功能区',
-		collapseMode : 'mini',
-		split : true,
-		width : 200,
-		minSize : 100,
-		maxSize : 400,
-		collapsible : true,
-		margins : '0 0 3 3',
-		layout : {
-			type : 'accordion',
-			animate : true
-		}
+		region : 'west',ref:'west',id : 'west-panel',
+		title : '功能区',collapseMode : 'mini',collapsible : true,
+		split : true,width : 200,minSize : 100,
+		maxSize : 400,margins : '0 0 3 3',
+		layout : {type : 'accordion',animate : true}
 	}],      
 	/**
 	 * 布局:页面右部 
@@ -126,10 +236,8 @@ Bb.Layout = {
 			// Ext.ux.AddTaBbutton,
 			new Ext.ux.TabCloseMenu(),// Tab标题头右键菜单选项生成
 			// Tab标题头右侧下拉选择指定页面
-			new Ext.ux.TabScrollerMenu({
-				maxText : 15,
-				pageSize : 5
-			})],
+			new Ext.ux.TabScrollerMenu({maxText : 15,pageSize : 5})
+		],
 		listeners:{
 			render: function() {                                                                          
 				Ext.getBody().on("contextmenu", Ext.emptyFn, null, {preventDefault: true});  
@@ -137,7 +245,7 @@ Bb.Layout = {
 			tabchange: function(tabPanel, tab){  
 				if (tab){
 					//tabs切换时修改浏览器hash  
-					Ext.History.add(tabPanel.id + tokenDelimiter + tab.id);  
+					Ext.History.add(tabPanel.id + Bb.Config.TokenDelimiter + tab.id);  
 				}
 			} 
 		},
@@ -162,7 +270,7 @@ Bb.Layout = {
 	 * 布局:页面内容区,无标题栏
 	 */
 	CenterPanel_NoTabs : [{
-		region : 'center',
+		region : 'center',ref:'center',
 		contentEl : 'centerArea',
 		id : 'centerPanel',
 		height : '100%',
@@ -180,7 +288,10 @@ Bb.Layout = {
 	 */
 	Init : function() {      
 		Bb.Viewport.west.add(Bb.Layout.LeftMenuGroups);
-		Bb.Viewport.west.doLayout();                                                 
+		Bb.Viewport.west.doLayout();    
+		//顶部导航区不可拖动，否则顶部下方会有空白
+		Bb.Viewport.layout.north.split.el.dom.style.cursor="inherit";
+		Bb.Viewport.layout.north.split.dd.lock();                                             
 		if (Ext.get('hideit')) {
 			Ext.get('hideit').on('click', function() {
 				if (Bb.Viewport.west.collapsed) {
@@ -193,8 +304,39 @@ Bb.Layout = {
 			});
 		}
 		var navEs = Bb.Viewport.west.el.select('a');
-		navEs.on('click', Bb.Navigaion.HyperlinkClicked);
-		navEs.on('contextmenu',Bb.Navigaion.OnContextMenu);
-	}     
+		navEs.on('click', Bb.Navigation.HyperlinkClicked);
+		navEs.on('contextmenu',Bb.Navigation.OnContextMenu);
+		if (Bb.Viewport.head.operator)Bb.Viewport.head.operator.setText(Bb.Config.Operator);        
+		//设置当前在线编辑器的菜单选项
+		if (Bb.Viewport.head.view){
+			var onlineditorItems=Bb.Viewport.head.view.menu.onlineditor.menu.items.items;        
+			Ext.each(onlineditorItems, function(item) {
+			  //console.log(item.value);
+			  if (item.value==Bb.Config.OnlineEditor){
+				  item.checked=true;
+			  }else{
+				  item.checked=false;
+			  }
+			});
+		}
+	},
+	Function:{
+		onOnlineditorCheck:function(item, checked){
+			if (checked){
+				Ext.util.Cookies.set('OnlineEditor',item.value);
+			}
+		},
+		/**
+		 * 在主界面打开窗口
+		 * 参数有两个，默认为可重复打开窗口，当第二个参数为true，始终只打开一个窗口
+		 */
+		OpenWindow:function(url){
+			var IsOnlyOneWindow=arguments[1]?arguments[1]:true;
+			if (IsOnlyOneWindow){
+				url=url+"&ow=true";
+			}
+			Ext.get("frmview").dom.src=url;  
+		}
+	}
 };     
 

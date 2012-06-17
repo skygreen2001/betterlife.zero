@@ -32,10 +32,12 @@ class Action_Index extends ActionExt
 				$this->view->set("message","用户名或者密码错误");
 			}else {
 				HttpSession::set('admin_id',$admindata->admin_id);
+				HttpCookie::sets(array("admin_id"=>$admindata->admin_id,"operator"=>$admindata->username,'roletype'=>$admindata->roletype,'roleid'=>$admindata->roleid));
 				$this->redirect("index","index");
 			}
 		}
 	}
+	
 	 /**
 	  * 控制器:首页
 	  */
@@ -88,17 +90,6 @@ class Action_Index extends ActionExt
 		 $this->ExtUpload();
 		 $this->loadExtJs('blog/blog.js');
 		 $this->load_onlineditor('content');
-	 }
-	 
-	 /**
-	  * 初始化，加载Css和Javascript库。
-	  */
-	 private function init()
-	 {
-		 //初始化加载Css和Javascript库
-		 $this->view->viewObject=new ViewObject();
-		 UtilCss::loadExt($this->view->viewObject,UtilAjaxExtjs::$ext_version);
-		 UtilAjaxExtjs::loadUI($this->view->viewObject,UtilAjaxExtjs::$ext_version);         
 	 }
 	 
 	 /**

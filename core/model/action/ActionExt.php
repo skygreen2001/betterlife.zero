@@ -132,7 +132,11 @@ class ActionExt extends Action
 				}               
 				UtilAjaxJquery::load("1.7.1",$this->view->viewObject);
 				UtilXheditor::loadcss($this->view->viewObject);
-				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/xheditor/xheditor-1.1.13-zh-cn.min.js"); 
+				if (UtilAjax::$IsDebug){
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/xheditor/xheditor-1.1.13-zh-cn.js"); 
+				}else{
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/xheditor/xheditor-1.1.13-zh-cn.min.js");  
+				}
 				UtilXheditor::loadJsPlugin($this->view->viewObject);
 				if (is_array($textarea_ids)&&(count($textarea_ids)>0)){
 					for($i=0;$i<count($textarea_ids);$i++){                
@@ -171,6 +175,9 @@ class ActionExt extends Action
 			if(($this->data["go"]!="admin.index.login")&&($this->data["go"]!="admin.".Gc::$appName.".login")&&!HttpSession::isHave('admin_id')) {
 				$this->redirect("index","login");
 			}
+			if (HttpCookie::get("OnlineEditor")){
+				$this->online_editor=HttpCookie::get("OnlineEditor");
+			}
 		}
 	}
 	
@@ -180,5 +187,16 @@ class ActionExt extends Action
 	public function afterAction()
 	{
 	}   
+	 
+	/**
+	 * 初始化，加载Css和Javascript库。
+	 */
+	protected function init()
+	{
+		//初始化加载Css和Javascript库
+		$this->view->viewObject=new ViewObject();
+		UtilCss::loadExt($this->view->viewObject,UtilAjaxExtjs::$ext_version);
+		UtilAjaxExtjs::loadUI($this->view->viewObject,UtilAjaxExtjs::$ext_version);         
+	}
 }
 ?>
