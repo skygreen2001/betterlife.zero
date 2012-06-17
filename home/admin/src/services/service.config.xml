@@ -106,6 +106,9 @@
 			<method name="exportAdmin">
 				<param name="len">1</param>
 			</method>
+			<method name="viewAdmin">
+				<param name="len">1</param>
+			</method>
 		</methods> 
 	</service>
  
@@ -126,6 +129,9 @@
 				<param name="len">1</param>
 			</method>
 			<method name="exportUser">
+				<param name="len">1</param>
+			</method>
+			<method name="viewUser">
 				<param name="len">1</param>
 			</method>
 		</methods> 

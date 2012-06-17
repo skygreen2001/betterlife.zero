@@ -3,27 +3,27 @@
 class_exists("Service")||require("../init.php");
 /**
  +---------------------------------------<br/>
- * 服务类:系统管理人员<br/>
+ * 服务类:用户<br/>
  +---------------------------------------
  * @category betterlife
  * @package admin.services
  * @subpackage ext
  * @author skygreen skygreen2001@gmail.com
  */
-class ExtServiceAdmin extends ServiceBasic
+class ExtServiceUser extends ServiceBasic
 {
 	/**
-	 * 保存数据对象:系统管理人员
-	 * @param array|DataObject $admin
+	 * 保存数据对象:用户
+	 * @param array|DataObject $user
 	 * @return int 保存对象记录的ID标识号
 	 */
-	public function save($admin)
+	public function save($user)
 	{
-		if (is_array($admin)){
-			$adminObj=new Admin($admin);
+		if (is_array($user)){
+			$userObj=new User($user);
 		}
-		if ($adminObj instanceof Admin){
-			$data=$adminObj->save();
+		if ($userObj instanceof User){
+			$data=$userObj->save();
 		}else{
 			$data=false;
 		}
@@ -34,23 +34,17 @@ class ExtServiceAdmin extends ServiceBasic
 	}
 
 	/**
-	 * 更新数据对象 :系统管理人员
-	 * @param array|DataObject $admin
+	 * 更新数据对象 :用户
+	 * @param array|DataObject $user
 	 * @return boolen 是否更新成功；true为操作正常
 	 */
-	public function update($admin)
+	public function update($user)
 	{
-		if (!EnumRoletype::isEnumValue($admin["roletype"])){
-			$admin["roletype"]=EnumRoletype::roletypeByShow($admin["roletype"]);
+		if (is_array($user)){
+			$userObj=new User($user);
 		}
-		if (!EnumSeescope::isEnumValue($admin["seescope"])){
-			$admin["seescope"]=EnumSeescope::seescopeByShow($admin["seescope"]);
-		}
-		if (is_array($admin)){
-			$adminObj=new Admin($admin);
-		}
-		if ($adminObj instanceof Admin){
-			$data=$adminObj->update();
+		if ($userObj instanceof User){
+			$data=$userObj->update();
 		}else{
 			$data=false;
 		}
@@ -61,7 +55,7 @@ class ExtServiceAdmin extends ServiceBasic
 	}
 
 	/**
-	 * 根据主键删除数据对象:系统管理人员的多条数据记录
+	 * 根据主键删除数据对象:用户的多条数据记录
 	 * @param array|string $ids 数据对象编号
 	 * 形式如下:
 	 * 1.array:array(1,2,3,4,5)
@@ -70,7 +64,7 @@ class ExtServiceAdmin extends ServiceBasic
 	 */
 	public function deleteByIds($ids)
 	{
-		$data=Admin::deleteByIds($ids);
+		$data=User::deleteByIds($ids);
 		return array(
 			'success' => true,
 			'data'    => $data
@@ -78,13 +72,13 @@ class ExtServiceAdmin extends ServiceBasic
 	}
 
 	/**
-	 * 数据对象:系统管理人员分页查询
+	 * 数据对象:用户分页查询
 	 * @param stdclass $formPacket  查询条件对象
 	 * 必须传递分页参数：start:分页开始数，默认从0开始
 	 *                   limit:分页查询数，默认10个。
-	 * @return 数据对象:系统管理人员分页查询列表
+	 * @return 数据对象:用户分页查询列表
 	 */
-	public function queryPageAdmin($formPacket=null)
+	public function queryPageUser($formPacket=null)
 	{
 		$start=1;
 		$limit=10;
@@ -111,13 +105,15 @@ class ExtServiceAdmin extends ServiceBasic
 			}
 			$condition=implode(" and ",$conditionArr);
 		}
-		$count=Admin::count($condition);
+		$count=User::count($condition);
 		if ($count>0){
 			if ($limit>$count)$limit=$count;
-			$data =Admin::queryPage($start,$limit,$condition);
-			if ((!empty($data))&&(count($data)>0))
-			{
-				Admin::propertyShow($data,array('roletype','seescope'));
+			$data =User::queryPage($start,$limit,$condition);
+			foreach ($data as $user) {
+				if ($user->department_id){
+					$department_instance=Department::get_by_id($user->department_id);
+					$user['department_name']=$department_instance->department_name;
+				}
 			}
 			if ($data==null)$data=array();
 		}else{
@@ -132,31 +128,32 @@ class ExtServiceAdmin extends ServiceBasic
 	
 	/**
 	 * 根据管理员标识显示管理员信息 
-	 * @param mixed $viewId 管理员标识
+	 * @param mixed $viewId
 	 */
-	public function viewAdmin($viewId)
+	public function viewUser($viewId)
 	{
 		if (!empty($viewId)){
-			$admin=Admin::get_by_id($viewId);
-			if (!empty($admin))
+			$user=User::get_by_id($viewId);
+			if (!empty($user))
 			{
-				$admin->roletypeShow=$admin->getRoletypeShow();
-				$admin->seescope=$admin->getSeescopeShow();
+				if ($user->department_id){
+					$department_instance=Department::get_by_id($user->department_id);
+					$user['department_name']=$department_instance->department_name;
+				}                
 			}
 			return array(
 				'success' => true,
-				'data'    => $admin
+				'data'    => $user
 			);
 		}
 		return array(
 			'success' => false,
-			'msg'     => "无法查找到需查看的管理员信息！"
+			'msg'     => "无法查找到需查看的用户信息！"
 		);
 	}
 
-
 	/**
-	 * 批量上传系统管理人员
+	 * 批量上传用户
 	 * @param mixed $upload_file <input name="upload_file" type="file">
 	 */
 	public function import($_FILES)
@@ -164,31 +161,25 @@ class ExtServiceAdmin extends ServiceBasic
 		$diffpart=date("YmdHis");
 		if (!empty($_FILES["upload_file"])){
 			$tmptail = end(explode('.', $_FILES["upload_file"]["name"]));
-			$uploadPath =GC::$attachment_path."admin\\import\\admin$diffpart.$tmptail";
+			$uploadPath =GC::$attachment_path."user\\import\\user$diffpart.$tmptail";
 			$result     =UtilFileSystem::uploadFile($_FILES,$uploadPath);
 			if ($result&&($result['success']==true)){
 				if (array_key_exists('file_name',$result)){
-					$arr_import_header = self::fieldsMean(Admin::tablename());
+					$arr_import_header = self::fieldsMean(User::tablename());
 					$data              = UtilExcel::exceltoArray($uploadPath,$arr_import_header);
 					$result=false;
-					foreach ($data as $admin) {
-						$admin=new Admin($admin);
-						if (!EnumRoletype::isEnumValue($admin["roletype"])){
-							$admin["roletype"]=EnumRoletype::roletypeByShow($admin["roletype"]);
-						}
-						if (!EnumSeescope::isEnumValue($admin["seescope"])){
-							$admin["seescope"]=EnumSeescope::seescopeByShow($admin["seescope"]);
-						}
-						$admin_id=$admin->getId();
-						if (!empty($admin_id)){
-							$hadAdmin=Admin::get_by_id($admin->getId());
-							if ($hadAdmin!=null){
-								$result=$admin->update();
+					foreach ($data as $user) {
+						$user=new User($user);
+						$user_id=$user->getId();
+						if (!empty($user_id)){
+							$hadUser=User::get_by_id($user->getId());
+							if ($hadUser!=null){
+								$result=$user->update();
 							}else{
-								$result=$admin->save();
+								$result=$user->save();
 							}
 						}else{
-							$result=$admin->save();
+							$result=$user->save();
 						}
 					}
 				}else{
@@ -205,24 +196,20 @@ class ExtServiceAdmin extends ServiceBasic
 	}
 
 	/**
-	 * 导出系统管理人员
+	 * 导出用户
 	 * @param mixed $filter
 	 */
-	public function exportAdmin($filter=null)
+	public function exportUser($filter=null)
 	{
-		$data=Admin::get($filter);
-		if ((!empty($data))&&(count($data)>0))
-		{
-			Admin::propertyShow($data,array('roleid'));
-		}
-		$arr_output_header= self::fieldsMean(Admin::tablename()); 
+		$data=User::get($filter);
+		$arr_output_header= self::fieldsMean(User::tablename()); 
 		unset($arr_output_header['updateTime']);
 		unset($arr_output_header['commitTime']);
 		$diffpart=date("YmdHis");
-		$outputFileName=Gc::$attachment_path."admin\\export\\admin$diffpart.xls"; 
+		$outputFileName=Gc::$attachment_path."user\\export\\user$diffpart.xls"; 
 		UtilFileSystem::createDir(dirname($outputFileName)); 
 		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false); 
-		$downloadPath  =Gc::$attachment_url."admin/export/admin$diffpart.xls"; 
+		$downloadPath  =Gc::$attachment_url."user/export/user$diffpart.xls"; 
 		return array(
 			'success' => true,
 			'data'    => $downloadPath

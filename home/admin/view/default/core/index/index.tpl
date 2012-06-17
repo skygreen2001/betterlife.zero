@@ -3,14 +3,7 @@
 	<div id="loading-mask"></div>
 	<div id="loading">
 		<div class="loading-indicator"><img src="{$url_base}common/js/ajax/ext/resources/images/extanim32.gif" width="32" height="32" style="margin-right:8px;" align="absmiddle"/>正在加载中...</div>
-	</div>
-	<!-- Ext.History所需的form  begin-->  
-		<form id="history-form" class="x-hidden">    
-			 <input type="hidden" id="x-history-field" />    
-				<iframe id="x-history-frame">    
-			 </iframe>    
-		</form>   
-	<!-- Ext.History所需的form  end --> 
+	</div>> 
 	<div id="header" class='x-hide-display'>
 		<table>
 			<tr>
@@ -26,7 +19,7 @@
 	<div id='{$menuGroup.id}' class="x-hide-display">
 	  {if ($menuGroup.lang neq "")}<div class="{$menuGroup.lang}">{/if}
 		{foreach item=menu from=$menuGroup.menus} 
-		<p><a href="{$menu.address}" title="{$menu.title|default:$menu.name}" {if ($menu.lang neq "")}class="menuIcon {$menu.lang}"{else}class="menuIcon"{/if}>{$menu.name}</a></p>{/foreach}
+		<p><a id="{$menu.id}" href="{$menu.address}" title="{$menu.title|default:$menu.name}" {if ($menu.lang neq "")}class="menuIcon {$menu.lang}"{else}class="menuIcon"{/if}>{$menu.name}</a></p>{/foreach}
 
 	  {if ($menuGroup.lang neq "")}</div>{/if}
 
@@ -47,4 +40,12 @@
 	<div id="south" class="x-hide-display">
 		<p>这是状态栏位</p>
 	</div>
+	<!-- Ext.History所需的form  begin-->  
+		<form id="history-form" class="x-hidden">    
+			 <input type="hidden" id="x-history-field" />    
+				<iframe id="x-history-frame">    
+			 </iframe>    
+		</form>   
+	<!-- Ext.History所需的form  end -->
+	<div id="viewFrame"><iframe id="frmview" name="frmview" width="0" height="0" /></div>
 {/block}

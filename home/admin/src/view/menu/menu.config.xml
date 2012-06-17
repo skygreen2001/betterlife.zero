@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menuGroups>
 	<menuGroup id="nav" name="功能区" lang="en" iconCls="nav">
-		<menu name="系统管理人员" address="index.php?go=admin.index.admin" />
-		<menu name="博客" address="index.php?go=admin.index.blog" />   
-		<menu name="用户" address="index.php?go=admin.index.user" />
+		<menu id="admin" name="系统管理人员" address="index.php?go=admin.index.admin" />
+		<menu id="blog" name="博客" address="index.php?go=admin.index.blog" />   
+		<menu id="user" name="用户" address="index.php?go=admin.index.user" />
 	</menuGroup>
 	<menuGroup id="navProgram" lang="en" name="程序员区" iconCls="settings">   
 		<menu name="Stumbleupon" address="http://www.stumbleupon.com/" />  

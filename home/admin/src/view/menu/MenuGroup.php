@@ -172,6 +172,7 @@ class MenuGroup extends Viewable
 				   {
 					   $attributes=$menuItem->attributes();
 					   $menu=new Menu();
+					   $menu->setId($attributes->id."");
 					   $menu->setName($attributes->name."");
 					   $address=$attributes->address;
 					   if (!startWith($address, "http")){

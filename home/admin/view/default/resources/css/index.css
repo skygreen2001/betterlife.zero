@@ -18,10 +18,12 @@ html,body {
 	font-family:verdana,Geneva,Helvetica,Arial,sans-serif;
 }
 
-table {
+/*table {
 	width:100%;
+}*/
+.logo {
+	background-image:url(ico/logo.png)!important;
 }
-
 .settings {
 	background-image:url(ico/folder_wrench.png)!important;
 }
