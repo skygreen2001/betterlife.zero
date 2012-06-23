@@ -31,8 +31,14 @@ Bb.Layout = {
 									}} 
 								]
 							}
-						},{text: '显示', ref:'../../view',iconCls : 'page',
-							menu: {
+						},{text: '显示', ref:'../../view',iconCls : 'page',handler:function(){
+								var headerPanel=this.ownerCt.ownerCt.ownerCt;
+								if(window.outerHeight==screen.height && window.outerWidth==screen.width){ 
+									headerPanel.view.menu.full.setChecked(true);
+								}else{
+									headerPanel.view.menu.full.setChecked(false);
+								}
+							},menu: {
 								xtype:'menu',items: [
 									'-',
 									{text:'工具栏',checked:true,ref:'toolbar',checkHandler:function(){
@@ -75,34 +81,7 @@ Bb.Layout = {
 									}},                                    
 									'-',
 									{text: '全屏  [F11]',checked:false,ref:'full',checkHandler:function(){
-										/**
-										 * 全屏模式支持:
-										 * 支持HTML5,Firefor和Chrome高级版本支持
-										 * http://css.dzone.com/articles/pragmatic-introduction-html5
-										 * https://developer.mozilla.org/en/DOM/Using_full-screen_mode*/
-										if (Bb.Viewport.head.view.menu.full.checked){
-											var docElm = document.documentElement;
-											if (docElm.requestFullscreen) {
-											   docElm.requestFullscreen();
-											}
-											else if (docElm.mozRequestFullScreen) {
-											   docElm.mozRequestFullScreen();
-											}
-											else if (docElm.webkitRequestFullScreen) {
-											   docElm.webkitRequestFullScreen();
-											}
-										}else{
-											if (document.exitFullscreen) {
-											   document.exitFullscreen();
-											}
-											else if (document.mozCancelFullScreen) {
-											   document.mozCancelFullScreen();
-											}
-											else if (document.webkitCancelFullScreen) {
-												document.webkitCancelFullScreen();
-											}else{
-											}
-										}
+										Bb.Layout.Function.FullScreen();
 									}} 
 								]
 							}
@@ -336,6 +315,74 @@ Bb.Layout = {
 				url=url+"&ow=true";
 			}
 			Ext.get("frmview").dom.src=url;  
+		},
+		/**
+		 * 全屏模式支持:
+		 * 支持HTML5,Firefor和Chrome高级版本支持
+		 * http://css.dzone.com/articles/pragmatic-introduction-html5
+		 * https://developer.mozilla.org/en/DOM/Using_full-screen_mode*/
+		FullScreen:function(){
+			var isIEPrompt=true;
+			if (arguments[0]==false)isIEPrompt=false;
+			if (Bb.Viewport.head.view.menu.full.checked){
+				var docElm = document.documentElement;
+				if (docElm.requestFullscreen) {
+				   docElm.requestFullscreen();
+				}
+				else if (docElm.mozRequestFullScreen) {
+				   docElm.mozRequestFullScreen();
+				}
+				else if (docElm.webkitRequestFullScreen) {
+				   docElm.webkitRequestFullScreen();
+				}
+				else if (typeof window.ActiveXObject !== "undefined"){
+					try
+					{
+						var wscript = new ActiveXObject("WScript.Shell");
+						if (wscript !== null) {
+							wscript.SendKeys("{F11}");
+						}
+					}
+					catch(err)
+					{
+					   if(!((window.outerHeight==screen.height && window.outerWidth==screen.width))){  
+						   if (isIEPrompt){
+								Ext.Msg.alert('提示', 'IE浏览器请使用快捷键:F11');
+						   }
+						   Bb.Viewport.head.view.menu.full.setChecked(false); 
+						   return;
+					   }
+					}
+				}
+			}else{
+				if (document.exitFullscreen) {
+				   document.exitFullscreen();
+				}
+				else if (document.mozCancelFullScreen) {
+				   document.mozCancelFullScreen();
+				}
+				else if (document.webkitCancelFullScreen) {
+					document.webkitCancelFullScreen();
+				}else{
+					try
+					{
+						var wscript = new ActiveXObject("WScript.Shell");
+						if (wscript !== null) {
+							wscript.SendKeys("{F11}");
+						}
+					}
+					catch(err)
+					{
+						
+						if((window.outerHeight==screen.height && window.outerWidth==screen.width)){ 
+							if (isIEPrompt){
+								Ext.Msg.alert('提示', 'IE浏览器请使用快捷键:F11');
+							}
+						}
+						return;
+					}
+				}
+			}            
 		}
 	}
 };     
