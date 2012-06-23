@@ -23,7 +23,7 @@
 		<menu name="PhotoEditor" title="Pixlr Photo editor" address="http://pixlr.com/editor" />   
 		<menu name="菜单管理" address="http://www.lifevc.com" />
 		<menu name="人人小站" address="http://zhan.renren.com" />
-		<menu name="CREATE YOUR FREE STUNNING WEBSITE" address="http://www.wix.com" />
+		<menu name="WIX" title="CREATE YOUR FREE STUNNING WEBSITE" address="http://www.wix.com" />
 		<menu name="关注前端与用户体验" address="http://stylechen.com/" />
 		<menu name="Google Gravity" title="Google Gravity" address="http://mrdoob.com/projects/chromeexperiments/google_gravity/" />   
 	</menuGroup>
