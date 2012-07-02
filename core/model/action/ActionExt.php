@@ -102,7 +102,7 @@ class ActionExt extends Action
 		   case EnumOnlineEditorType::CKEDITOR:
 				if (is_array($textarea_ids)&&(count($textarea_ids)>0)){
 					$this->view->editorHtml=UtilCKEeditor::loadReplace($textarea_ids[0]);
-					for($i=0;$i<count($textarea_ids);$i++){
+					for($i=1;$i<count($textarea_ids);$i++){
 						$this->view->editorHtml.=UtilCKEeditor::loadReplace($textarea_ids[$i],false);
 					}
 				}else{

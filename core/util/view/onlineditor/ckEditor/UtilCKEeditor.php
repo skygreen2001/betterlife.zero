@@ -91,7 +91,7 @@ class UtilCKEeditor extends Util
 		   array("Font", "FontSize", "TextColor", "BGColor"),
 		   array(  '-', 'Bold', 'Italic', 'Underline', 'Strike' ),
 		   array("JustifyLeft", "JustifyCenter", "JustifyRight"),
-		   array( 'Link', 'Unlink','Image', 'Source', 'Maximize' )
+		   array( 'Link', 'Unlink','Table','Image','Source', 'Maximize' )
 		);
 		//$config['width'] = 640;
 		//$config['resize_enabled'] = false;   
