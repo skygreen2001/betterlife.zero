@@ -1,5 +1,5 @@
 Ext.namespace("Betterlife.Admin.User");
-Bb = Betterlife.Admin.User;
+Bb = Betterlife.Admin;
 Bb.User={
 	/**
 	 * 全局配置

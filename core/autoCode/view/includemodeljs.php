@@ -1,7 +1,7 @@
 <?php
 $jsContent=<<<JSCONTENT
 Ext.namespace("$appName.Admin.$classname");
-$appName_alias = $appName.Admin.$classname;
+$appName_alias = $appName.Admin;
 $appName_alias.$classname={
     /**
      * 全局配置

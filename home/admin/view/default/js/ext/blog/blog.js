@@ -1,5 +1,5 @@
 Ext.namespace("Betterlife.Admin.Blog");
-Bb = Betterlife.Admin.Blog;
+Bb = Betterlife.Admin;
 Bb.Blog={
 	/**
 	 * 全局配置
