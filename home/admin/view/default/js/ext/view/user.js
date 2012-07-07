@@ -51,7 +51,7 @@ BbView.User.View={
 BbView.User.Function={
 	openLinkListUsers:function(){
 		var targeturl="index.php?go=admin.index.user&user_id="+BbView.User.user_id;
-		if (parent.Bb.Navigation){
+		if (parent.Bb){
 			parent.Bb.Navigation.AddTabbyUrl(parent.Ext.getCmp('centerPanel'),'用户',targeturl,"user"); 
 		}else{
 			window.open(targeturl);
@@ -83,7 +83,7 @@ Ext.onReady(function(){
 	}
 	if (BbView.User.ViewUserWindow){
 		BbView.User.ViewUserWindow.show();
-		BbView.User.userid=user_id;
+		BbView.User.user_id=user_id;
 		ExtServiceUser.viewUser(user_id,function(provider, response) {   
 			if (response.result.data) BbView.User.ViewUserWindow.dataview.update(response.result.data);
 			else {

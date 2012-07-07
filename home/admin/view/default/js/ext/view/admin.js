@@ -52,7 +52,7 @@ BbView.Admin.View={
 BbView.Admin.Function={
 	openLinkListAdmins:function(){
 		var targeturl="index.php?go=admin.index.admin";
-		if (parent.Bb.Navigation){
+		if (parent.Bb){
 			parent.Bb.Navigation.AddTabbyUrl(parent.Ext.getCmp('centerPanel'),'系统管理人员',targeturl,"admin"); 
 		}else{
 			window.open(targeturl);

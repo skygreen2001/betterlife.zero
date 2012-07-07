@@ -338,7 +338,7 @@ class AutoCodeViewExt extends AutoCode
                                                     "            root: '{$key}s',\r\n".
                                                     "            autoLoad: true,\r\n".
                                                     "            totalProperty: 'totalCount',\r\n".
-                                                    "            id: '$realId'\r\n".
+                                                    "            idProperty: '$realId'\r\n".
                                                     "          }, [\r\n".
                                                     "              {name: '$realId', mapping: '$realId'}, \r\n".
                                                     "              {name: '$value', mapping: '$value'} \r\n".
@@ -585,28 +585,28 @@ class AutoCodeViewExt extends AutoCode
                                 $show_name_diff.="_".$fieldname;
                             }
                             $key{0}=strtolower($key{0});                            
-                            $fieldLabels.="                              {xtype: 'hidden',name : '$fieldname',id:'$fieldname'},\r\n".
+                            $fieldLabels.="                              {xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'},\r\n".
                                           "                              {\r\n".
-                                          "                                 fieldLabel : '{$field_comment}',xtype: 'combo',name : '$show_name_diff',id : '$show_name_diff',\r\n".
+                                          "                                 fieldLabel : '{$field_comment}',xtype: 'combo',name : '$show_name_diff',ref : '../$show_name_diff',\r\n".
                                           "                                 store:$appName_alias.$classname.Store.{$key}Store,emptyText: '请选择{$field_comment}',itemSelector: 'div.search-item',\r\n".
                                           "                                 loadingText: '查询中...',width: 570, pageSize:$appName_alias.$classname.Config.PageSize,\r\n".
-                                          "                                 displayField:'$value',// 显示文本\r\n".
+                                          "                                 displayField:'$value',grid:this,\r\n".
                                           "                                 mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,\r\n".
                                           "                                 forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,\r\n".
                                           "                                 tpl:new Ext.XTemplate(\r\n".
-                                          "                                            '<tpl for=\".\"><div class=\"search-item\">',\r\n".
-                                          "                                                '<h3>{{$value}}</h3>',\r\n".
-                                          "                                            '</div></tpl>'\r\n".
+                                          "                                     '<tpl for=\".\"><div class=\"search-item\">',\r\n".
+                                          "                                         '<h3>{{$value}}</h3>',\r\n".
+                                          "                                     '</div></tpl>'\r\n".
                                           "                                 ),\r\n".
                                           "                                 onSelect:function(record,index){\r\n".
                                           "                                     if(this.fireEvent('beforeselect', this, record, index) !== false){\r\n".
-                                          "                                        Ext.getCmp(\"$fieldname\").setValue(record.data.$realId);\r\n".
-                                          "                                        Ext.getCmp(\"$show_name_diff\").setValue(record.data.$value);\r\n".
+                                          "                                        this.grid.$fieldname.setValue(record.data.$realId);\r\n".
+                                          "                                        this.grid.$show_name_diff.setValue(record.data.$value);\r\n".
                                           "                                        this.collapse();\r\n".
-                                          "                                       }\r\n".
-                                          "                                   }\r\n".
+                                          "                                     }\r\n".
+                                          "                                 }\r\n".
                                           "                              },\r\n".
-                                          "";  
+                                          ""; 
                         }
                         continue;
                     }      
@@ -665,21 +665,22 @@ class AutoCodeViewExt extends AutoCode
                     }   
                     if ($column_type=='bit')
                     {
-                        $fieldLabels.=",xtype : 'combo',mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,allowBlank : false,\r\n".
-                                  "                                store : new Ext.data.SimpleStore({\r\n".
-                                  "                                        fields : ['value', 'text'],\r\n".
-                                  "                                        data : [['0', '否'], ['1', '是']]\r\n".
-                                  "                                  }),emptyText: '请选择$field_comment',\r\n".
-                                  "                                valueField : 'value',// 值\r\n".
-                                  "                                displayField : 'text'// 显示文本\r\n                            ";
+                        $fieldLabels.="\r\n                                 ,xtype : 'combo',mode : 'local',triggerAction : 'all',\r\n".
+                                  "                                 lazyRender : true,editable: false,allowBlank : false,\r\n".
+                                  "                                 store : new Ext.data.SimpleStore({\r\n".
+                                  "                                     fields : ['value', 'text'],\r\n".
+                                  "                                     data : [['0', '否'], ['1', '是']]\r\n".
+                                  "                                 }),emptyText: '请选择$field_comment',\r\n".
+                                  "                                 valueField : 'value',displayField : 'text'\r\n                              ";
                     }
                     if ($column_type=='enum')
                     { 
                         $enum_columnDefine=self::enumDefines($field["Comment"]);  
-                        $fieldLabels.=",xtype : 'combo',mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,allowBlank : false,\r\n".
+                        $fieldLabels.=",xtype : 'combo',\r\n".
+                                      "                                mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,allowBlank : false,\r\n".
                                       "                                store : new Ext.data.SimpleStore({\r\n".
-                                      "                                        fields : ['value', 'text'],\r\n".
-                                      "                                        data : [";  
+                                      "                                    fields : ['value', 'text'],\r\n".
+                                      "                                    data : ["; 
                         $enumArr=array();              
                         foreach ($enum_columnDefine as $enum_column) 
                         {
@@ -687,9 +688,8 @@ class AutoCodeViewExt extends AutoCode
                         }                                         
                         $fieldLabels.=implode(",",$enumArr);              
                         $fieldLabels.="]\r\n".
-                                      "                                  }),emptyText: '请选择$field_comment',\r\n".
-                                      "                                valueField : 'value',// 值\r\n".
-                                      "                                displayField : 'text'// 显示文本\r\n                            ";  
+                                      "                                }),emptyText: '请选择$field_comment',\r\n".
+                                      "                                valueField : 'value',displayField : 'text'\r\n                              "; 
                     } 
                     if (self::columnIsTextArea($fieldname,$field["Type"]))
                     {        
@@ -1059,9 +1059,8 @@ class AutoCodeViewExt extends AutoCode
                                 "                                    store : new Ext.data.SimpleStore({\r\n".
                                 "                                        fields : ['value', 'text'],\r\n".
                                 "                                        data : [['0', '否'], ['1', '是']]\r\n".
-                                "                                      }),\r\n".
-                                "                                    valueField : 'value',// 值\r\n".
-                                "                                    displayField : 'text'// 显示文本\r\n".
+                                "                                    }),\r\n".
+                                "                                    valueField : 'value',displayField : 'text'\r\n".
                                 "                                ";
                     }                
                     if ($column_type=='enum')
@@ -1079,51 +1078,34 @@ class AutoCodeViewExt extends AutoCode
                         }                                         
                         $filterFields.=implode(",",$enumArr);   
                         $filterFields.="]\r\n".
-                                "                                      }),\r\n".
-                                "                                    valueField : 'value',// 值\r\n".
-                                "                                    displayField : 'text'// 显示文本\r\n".
+                                "                                    }),\r\n".
+                                "                                    valueField : 'value',displayField : 'text'\r\n".
                                 "                                ";
                     }
                     
                     if ($filterwords["relation_show"]){
                         if (array_key_exists($fieldname, $filterwords["relation_show"])){                            
                             $con_relation_class=$filterwords["relation_show"][$fieldname]["relation_class"];
-                            $realId=DataObjectSpec::getRealIDColumnName($con_relation_class);
-                            if (empty($realId))$realId=$fieldname;
                             $show_name         =$filterwords["relation_show"][$fieldname]["show_name"];
-                            $show_name_diff=$show_name;
-                            if ($realId!=$fieldname)$show_name_diff.="_".$fieldname;
-                            $con_pre=strtolower($classname{0}); 
-                            $con_fname=$con_pre.$show_name;
-                            $con_fname_diff=$con_fname;
-                            if ($realId!=$fieldname)$con_fname_diff.="_".$fieldname;
                             $field_comment=str_replace('标识',"",$field_comment);
                             $field_comment=str_replace('编号',"",$field_comment);                            
                             $field_comment=str_replace('主键',"",$field_comment);  
                             $store_con_relation_class=$con_relation_class;
                             $store_con_relation_class[0]=strtolower($store_con_relation_class[0]);
                             $storeName="$appName_alias.$classname.Store.".$store_con_relation_class."Store";
-                            $filterFields.=",xtype:'hidden',name : '{$fieldname}',id:'{$fname}'},\r\n".   
-                                          "                                {\r\n". 
-                                          "                                     xtype: 'combo',name : '{$show_name_diff}',id : '{$con_fname_diff}',\r\n".
-                                          "                                     store:{$storeName},emptyText: '请选择{$field_comment}',itemSelector: 'div.search-item',\r\n".
+                            $filterFields.=",xtype: 'combo',\r\n".
+                                          "                                     store:{$storeName},hiddenName : '{$fieldname}',\r\n".
+                                          "                                     emptyText: '请选择{$field_comment}',itemSelector: 'div.search-item',\r\n".
                                           "                                     loadingText: '查询中...',width:280,pageSize:$appName_alias.$classname.Config.PageSize,\r\n". 
-                                          "                                     displayField:'{$show_name}',// 显示文本\r\n".
+                                          "                                     displayField:'{$show_name}',valueField:'{$fieldname}',\r\n".
                                           "                                     mode: 'remote',editable:true,minChars: 1,autoSelect :true,typeAhead: false,\r\n".
                                           "                                     forceSelection: true,triggerAction: 'all',resizable:true,selectOnFocus:true,\r\n".
                                           "                                     tpl:new Ext.XTemplate(\r\n".
                                           "                                                '<tpl for=\".\"><div class=\"search-item\">',\r\n".
                                           "                                                    '<h3>{{$show_name}}</h3>',\r\n".
                                           "                                                '</div></tpl>'\r\n".
-                                          "                                     ),\r\n".
-                                          "                                     onSelect:function(record,index){\r\n".
-                                          "                                         if(this.fireEvent('beforeselect', this, record, index) !== false){\r\n".
-                                          "                                            Ext.getCmp(\"{$fname}\").setValue(record.data.{$realId});\r\n".
-                                          "                                            Ext.getCmp(\"{$con_fname_diff}\").setValue(record.data.{$show_name});\r\n".
-                                          "                                            this.collapse();\r\n".
-                                          "                                         }\r\n".
-                                          "                                     }\r\n".
-                                          "                                ";                      
+                                          "                                     )\r\n".
+                                          "                                ";                       
                         }
                     }
                           
