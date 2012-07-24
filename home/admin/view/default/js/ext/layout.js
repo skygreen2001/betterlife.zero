@@ -133,7 +133,10 @@ Bb.Layout = {
 		title : '功能区',collapseMode : 'mini',collapsible : true,
 		split : true,width : 200,minSize : 100,
 		maxSize : 400,margins : '0 0 3 3',
-		layout : {type : 'accordion',animate : true}
+		layout : {
+			type : 'accordion',animate : true,
+			activeOnTop: true
+		}
 	}],      
 	/**
 	 * 布局:页面右部 
