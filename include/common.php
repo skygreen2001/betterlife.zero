@@ -1,8 +1,22 @@
 <?php
+
+/**
+ *  直接执行SQL语句
+ *
+ * @param mixed $sql SQL查询语句
+ * @param string|class $object 需要生成注入的对象实体|类名称
+ * @return array 返回数组
+ */
+function sqlExecute($sqlstring,$object=null)
+{
+    return Manager_Db::newInstance()->currentdao()->sqlExecute($sqlstring,$object);
+}
+
 /**
  * 设置处理所有未捕获异常的用户定义函数
  */
-function e_me($exception) {
+function e_me($exception) 
+{
     ExceptionMe::recordUncatchedException($exception);
     e_view();
 }
@@ -10,7 +24,8 @@ function e_me($exception) {
 /**
  * 显示异常处理缩写表示
  */
-function e_view() {
+function e_view() 
+{
     if (Gc::$dev_debug_on) {
         echo ExceptionMe::showMessage(ExceptionMe::VIEW_TYPE_HTML_TABLE);
     }
@@ -21,7 +36,8 @@ function e_view() {
  * @param mixed $subject
  * @param mixed $needle
  */
-function contain($subject,$needle) {
+function contain($subject,$needle) 
+{
     if (empty($subject))return false;
     if (strpos(strtolower($subject),strtolower($needle))!== false) {
         return true;
@@ -55,7 +71,8 @@ function contains($subject,$array)
  * @param bool $strict 是否严格区分字母大小写
  * @return bool true:是，false:否。
  */
-function startWith($haystack, $needle,$strict=true) {
+function startWith($haystack, $needle,$strict=true) 
+{
     if (!$strict){
         $haystack=strtoupper($haystack);
         $needle=strtoupper($needle);
@@ -70,7 +87,8 @@ function startWith($haystack, $needle,$strict=true) {
  * @param bool $strict 是否严格区分字母大小写
  * @return bool true:是，false:否。
  */
-function endWith($haystack, $needle,$strict=true){ 
+function endWith($haystack, $needle,$strict=true)
+{ 
     if (!$strict){
         $haystack=strtoupper($haystack);
         $needle=strtoupper($needle);
@@ -83,7 +101,8 @@ function endWith($haystack, $needle,$strict=true){
 * @link http://www.adobe.com/cn/devnet/flex/articles/flex_php_05.html
 * @param mixed $var
 */
-function logMe($var) {
+function logMe($var) 
+{
     $filename = dirname(__FILE__) . '/__log.txt';            
     if (!$handle = fopen($filename, 'a')) {
         echo "Cannot open file ($filename)";
