@@ -62,12 +62,12 @@ class Action_Blog extends Action
 				$blog=Blog::get_by_id($blog_id); 
 				$view->blog=$blog;
 				if ($blog){
-					$content=$blog->content;                                                                                  
+					$content=$blog->content;   
 				}                               
 			}                             
 			$this->view->viewObject=$view;                                                                     
 		}                 
-		//加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。                                                            
+		//加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。 
 		$this->load_onlineditor("content",$content,"postForm");          
 	}
 	/**

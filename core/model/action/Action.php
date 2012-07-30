@@ -40,7 +40,7 @@ class Action extends Object
 	 * 3.xhEditor
 	 * @var mixed
 	 */
-	public $online_editor=1;
+	public $online_editor=EnumOnlineEditorType::XHEDITOR;
 	/**
 	 * 访问应用名  
 	 * @var string
@@ -281,17 +281,63 @@ class Action extends Object
 		$this->isRedirected=true;
 	}
 	
+//	/**
+//	 * 加载在线编辑器 
+//	 * @param string $textarea_name Input为Textarea的名称name
+//	 * @param string $content 内容
+//	 * @param string $form_name Form name 名称
+//	 */
+//	public function load_onlineditor($textarea_name="content",$content="",$form_name=null)
+//	{
+//		switch ($this->online_editor) {
+//		   case EnumOnlineEditorType::CKEDITOR:
+//				$this->view->editorHtml=UtilCKEeditor::editorHtml($textarea_name,$content); 
+//				$this->view->online_editor="CKEditor";
+//			 break;
+//		   case EnumOnlineEditorType::KINDEDITOR:
+//				$viewObject=$this->view->viewObject; 
+//				if(empty($viewObject))
+//				{
+//					$this->view->viewObject=new ViewObject();
+//				}
+//				if (UtilAjax::$IsDebug){
+//					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/kindeditor.js"); 
+//				}else{
+//					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/kindeditor-min.js"); 
+//				}
+//				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/lang/zh_CN.js"); 
+//				$this->view->online_editor="KindEditor";
+//			 break;  
+//		   case EnumOnlineEditorType::XHEDITOR:   
+//				$viewObject=$this->view->viewObject; 
+//				if(empty($viewObject))
+//				{
+//					$this->view->viewObject=new ViewObject();
+//				}                                                                                               
+//				UtilXheditor::loadReady($textarea_name,$this->view->viewObject,$form_name); 
+//				$this->view->online_editor="xhEditor";  
+//			 break; 
+//		}                                                
+//	} 
+//	
+//	
+		
 	/**
 	 * 加载在线编辑器 
-	 * @param string $textarea_name Input为Textarea的名称name
-	 * @param string $content 内容
-	 * @param string $form_name Form name 名称
+	 * @param array|string $textarea_ids Input为Textarea的名称name[一个页面可以有多个Textarea]
 	 */
-	public function load_onlineditor($textarea_name="content",$content="",$form_name=null)
+	public function load_onlineditor($textarea_ids="content")
 	{
 		switch ($this->online_editor) {
 		   case EnumOnlineEditorType::CKEDITOR:
-				$this->view->editorHtml=UtilCKEeditor::editorHtml($textarea_name,$content); 
+				if (is_array($textarea_ids)&&(count($textarea_ids)>0)){
+					$this->view->editorHtml=UtilCKEeditor::loadReplace($textarea_ids[0]);
+					for($i=1;$i<count($textarea_ids);$i++){
+						$this->view->editorHtml.=UtilCKEeditor::loadReplace($textarea_ids[$i],false);
+					}
+				}else{
+					$this->view->editorHtml=UtilCKEeditor::loadReplace($textarea_ids);
+				}
 				$this->view->online_editor="CKEditor";
 			 break;
 		   case EnumOnlineEditorType::KINDEDITOR:
@@ -313,12 +359,29 @@ class Action extends Object
 				if(empty($viewObject))
 				{
 					$this->view->viewObject=new ViewObject();
-				}                                                                                               
-				UtilXheditor::loadReady($textarea_name,$this->view->viewObject,$form_name); 
+				}               
+				UtilAjaxJquery::load("1.7.1",$this->view->viewObject);
+				UtilXheditor::loadcss($this->view->viewObject);
+				if (UtilAjax::$IsDebug){
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/xheditor/xheditor-1.1.13-zh-cn.js"); 
+				}else{
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/xheditor/xheditor-1.1.13-zh-cn.min.js");  
+				}
+				UtilXheditor::loadJsPlugin($this->view->viewObject);
+				if (is_array($textarea_ids)&&(count($textarea_ids)>0)){
+					for($i=0;$i<count($textarea_ids);$i++){                
+						UtilXheditor::loadJsFunction($textarea_ids[$i],$this->view->viewObject,null,"width:'98%',height:350,"); 
+					}
+				}else{
+					UtilXheditor::loadJsFunction($textarea_ids,$this->view->viewObject,null,"width:'98%',height:350,"); 
+				}
 				$this->view->online_editor="xhEditor";  
 			 break; 
-		}                                                
-	} 
+		} 
+	}
+	
+	
+	
 	
 	/**
 	 * 在Action所有的方法执行之前可以执行的方法
