@@ -6,7 +6,7 @@
 		<tr class="entry">
             <th class="header">标识</th>
             <th class="header">用户标识</th>
-            <th class="header">博客名称</th>
+            <th class="header">博客标题</th>
             <th class="header">博客内容</th>                                  
 			<th class="header">操作</th>
 		</tr>       

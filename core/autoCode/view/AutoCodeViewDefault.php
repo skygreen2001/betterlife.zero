@@ -196,25 +196,59 @@ LISTS;
 		$appname=self::$appName;  
 		$classname=self::getClassname($tablename);
 		$instancename=self::getInstancename($tablename);  
-		$fieldNameAndComments=array();                                                          
+		$fieldNameAndComments=array();  
+		$text_area_fieldname=array();                                                                 
 		foreach ($fieldInfo as $fieldname=>$field)
-		{                                                                                                                                                                                   
+		{                              
 			$field_comment=$field["Comment"];  
 			if (contain($field_comment,"\r")||contain($field_comment,"\n"))
 			{
 				$field_comment=preg_split("/[\s,]+/", $field_comment);    
 				$field_comment=$field_comment[0]; 
 			}   
-			$fieldNameAndComments[$fieldname]=$field_comment;   
+			if (self::columnIsTextArea($fieldname,$field["Type"]))
+			{
+				$text_area_fieldname[$fieldname]=$field_comment;
+			}else{                
+				$fieldNameAndComments[$fieldname]=$field_comment;   
+			}
 		}
 		$headerscontents="";  
 		$idColumnName="id";
+		
 		foreach ($fieldNameAndComments as $key=>$value) {
 			$idColumnName=DataObjectSpec::getRealIDColumnName($classname);
 			if (self::isNotColumnKeywork($key)&&($idColumnName!=$key)){
-				$headerscontents.="        <tr class=\"entry\"><td class=\"head\">$value</th><td class=\"content\"><input type=\"text\" class=\"edit\" name=\"$key\" value=\"{\${$instancename}.$key}\"/></td></tr>\r\n";  
+				$headerscontents.="        <tr class=\"entry\"><td class=\"head\">$value</th><td class=\"content\"><input type=\"text\" class=\"edit\" name=\"$key\" value=\"{\${$instancename}.$key}\"/></td></tr>\r\n";    
 			}
 		}
+
+		if (count($text_area_fieldname)>=1){
+			$kindEditor_prepare="    ";
+			$ckeditor_prepare="    ";
+			$xhEditor_prepare="    ";
+			foreach ($text_area_fieldname as $key=>$value) {
+				$headerscontents.="        <tr class=\"entry\"><td class=\"head\">$value</th><td class=\"content\">\r\n".
+								  "        <textarea id=\"$key\" name=\"$key\" style=\"width:93%;height:300px;visibility:hidden;\">{\${$instancename}.$key}</textarea>\r\n".
+								  "        </td></tr>\r\n";
+				$kindEditor_prepare.="showHtmlEditor(\"$key\");";	
+				$ckeditor_prepare.="ckeditor_replace_$key();";		
+				$xhEditor_prepare.="pageInit_$key();";        	  
+			}
+									 
+			$textareapreparesentence = <<<EDIT
+ {if (\$online_editor=='KindEditor')}<script>
+ $kindEditor_prepare</script>{/if}
+ {if (\$online_editor=='CKEditor')}
+ {\$editorHtml}
+ <script>$(function(){
+$ckeditor_prepare});</script>
+ {/if}
+ {if (\$online_editor=='xhEditor')}<script>\$(function(){
+$xhEditor_prepare});</script>
+ {/if}
+EDIT;
+		} 
 		if (!empty($headerscontents)&&(strlen($headerscontents)>2)){
 			$headerscontents=substr($headerscontents,0,strlen($headerscontents)-2);   
 		}
@@ -222,7 +256,7 @@ LISTS;
  <div class="block">  
 	<div><h1>编辑{$table_comment}</h1></div>
 	<form name="{$instancename}Form" method="post"><input type="hidden" name="$idColumnName" value="{\${$instancename}.$idColumnName}"/>           
-	<table class="viewdoblock">                                                                                                                 
+	<table class="viewdoblock"> 
 $headerscontents       
 		<tr class="entry"><td class="content" colspan="2" align="center"><input type="submit" value="提交" class="btnSubmit" /></td></tr>
 	</table>
@@ -230,6 +264,9 @@ $headerscontents
 	<div align="center"><my:a href='{\$url_base}index.php?go=$appname.{$instancename}.lists&pageNo={\$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{\$url_base}index.php?go=$appname.{$instancename}.view&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}'>查看{$table_comment}</my:a></div>    
 </div>
 EDIT;
+		if (count($text_area_fieldname)>=1){
+			$result=$textareapreparesentence."\r\n".$result;
+		}
 		$result=self::tableToViewTplDefine($result);
 		return $result;
 	}

@@ -3,7 +3,7 @@
  <div class="block">  
 	<div><h1>编辑用户所属部门</h1></div>
 	<form name="departmentForm" method="post"><input type="hidden" name="department_id" value="{$department.department_id}"/>           
-	<table class="viewdoblock">                                                                                                                 
+	<table class="viewdoblock"> 
         <tr class="entry"><td class="head">部门名称</th><td class="content"><input type="text" class="edit" name="department_name" value="{$department.department_name}"/></td></tr>
         <tr class="entry"><td class="head">管理者</th><td class="content"><input type="text" class="edit" name="manager" value="{$department.manager}"/></td></tr>
         <tr class="entry"><td class="head">预算</th><td class="content"><input type="text" class="edit" name="budget" value="{$department.budget}"/></td></tr>

@@ -52,6 +52,8 @@ class Action_Functions extends Action
             $functionsId=$this->data["id"];
             $functions = Functions::get_by_id($functionsId);
             $this->view->set("functions",$functions); 
+            //加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。
+            $this->load_onlineditor('url');
         }
     }
     /**

@@ -52,6 +52,8 @@ class Action_Comment extends Action
             $commentId=$this->data["id"];
             $comment = Comment::get_by_id($commentId);
             $this->view->set("comment",$comment); 
+            //加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。
+            $this->load_onlineditor('comment');
         }
     }
     /**

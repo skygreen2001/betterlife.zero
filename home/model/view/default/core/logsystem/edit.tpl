@@ -3,7 +3,7 @@
  <div class="block">  
 	<div><h1>编辑系统日志</h1></div>
 	<form name="logsystemForm" method="post"><input type="hidden" name="logsystem_id" value="{$logsystem.logsystem_id}"/>           
-	<table class="viewdoblock">                                                                                                                 
+	<table class="viewdoblock"> 
         <tr class="entry"><td class="head">日志记录时间</th><td class="content"><input type="text" class="edit" name="logtime" value="{$logsystem.logtime}"/></td></tr>
         <tr class="entry"><td class="head">分类</th><td class="content"><input type="text" class="edit" name="ident" value="{$logsystem.ident}"/></td></tr>
         <tr class="entry"><td class="head">优先级</th><td class="content"><input type="text" class="edit" name="priority" value="{$logsystem.priority}"/></td></tr>

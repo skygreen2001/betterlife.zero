@@ -52,6 +52,8 @@ class Action_Notice extends Action
             $noticeId=$this->data["id"];
             $notice = Notice::get_by_id($noticeId);
             $this->view->set("notice",$notice); 
+            //加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。
+            $this->load_onlineditor('content');
         }
     }
     /**

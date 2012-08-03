@@ -3,7 +3,7 @@
  <div class="block">  
 	<div><h1>编辑用户日志</h1></div>
 	<form name="loguserForm" method="post"><input type="hidden" name="loguser_id" value="{$loguser.loguser_id}"/>           
-	<table class="viewdoblock">                                                                                                                 
+	<table class="viewdoblock"> 
         <tr class="entry"><td class="head">用户标识</th><td class="content"><input type="text" class="edit" name="user_id" value="{$loguser.user_id}"/></td></tr>
         <tr class="entry"><td class="head">类型</th><td class="content"><input type="text" class="edit" name="userType" value="{$loguser.userType}"/></td></tr>
         <tr class="entry"><td class="head">日志详情</th><td class="content"><input type="text" class="edit" name="content" value="{$loguser.content}"/></td></tr>       
