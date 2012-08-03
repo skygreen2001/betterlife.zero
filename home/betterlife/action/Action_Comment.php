@@ -37,7 +37,7 @@ class Action_Comment extends Action
 			$content=$comment->comment;  
 			$this->view->content=$content;                                                   
 		}                                               													 
-		$this->load_onlineditor("comment",$content,"commentForm");                                                			         
+		$this->load_onlineditor("comment");                                                			         
 	}
 	/**
 	 * 删除博客

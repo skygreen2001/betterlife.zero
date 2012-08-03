@@ -1,27 +1,19 @@
 {extends file="$templateDir/layout/normal/layout.tpl"}
 {block name=body}   
  {if ($online_editor=='KindEditor')}<script>showHtmlEditor("content");//KindEditor 加载语句</script>{/if}
+ {if ($online_editor=='KindEditor')}<script>showHtmlEditor("blog_name");//KindEditor 加载语句</script>{/if}
  {if ($online_editor=='CKEditor')}
  {$editorHtml}
- <script>
- $(function(){
-	 ckeditor_replace_blog_name();
-	 ckeditor_replace_content();
-	 if (CKEDITOR.instances.blog_name)CKEDITOR.instances.blog_name.setData("{$blog.blog_name}");
-	 if (CKEDITOR.instances.content)CKEDITOR.instances.content.setData("{$blog.content}");
- });
+ <script>$(function(){
+	ckeditor_replace_blog_name();ckeditor_replace_content();});
  </script>
  {/if}
  {if ($online_editor=='xhEditor')}
- <script>
- $(function(){
-	pageInit_blog_name();
-	pageInit_content();
- });
+ <script>$(function(){
+	pageInit_blog_name();pageInit_content();});
  </script>
  {/if}
  
- {if ($online_editor=='KindEditor')}<script>showHtmlEditor("blog_name");//KindEditor 加载语句</script>{/if}
  <div class="block">  
 	<div><h1>编辑博客</h1></div>
 	<form name="blogForm" method="post"><input type="hidden" name="blog_id" value="{$blog.blog_id}"/>           

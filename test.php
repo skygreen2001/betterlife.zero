@@ -1,9 +1,10 @@
 <?php
 require_once ("init.php");
 //$blogs=Blog::select('name,content');
-//print_r($blogs);                                                  
+//print_r($blogs);            
+UtilBarCode::upc_a("12207201213");                                      
 
-print_r(User::get(array(username=> "like '%ad%'")));    
+//print_r(User::get(array(username=> "like '%ad%'")));    
 //$serverCache=Manager_Cache::singleton()->server(EnumCacheDriverType::REDIS);
 //$serverCache->TestRun();
 					
