@@ -209,7 +209,10 @@ class EnumDataSpec extends Enum
  *                   主表类外键名称：【主表类名+Id】，关系表类外键名称：【关系表类名+Id】<br/>
  * 说明：$field_spec_default为默认的数据对象的列规格说明，它全局的定义了当前应用的列规格说明；<br/>
  *      数据对象定义需定义字段：public $field_spec，它定义了当前数据对象的列规格说明。 
- * @static
+ * @category betterlife
+ * @package core.model
+ * @subpackage dataobject
+ * @author skygreen
  */
 class DataObjectSpec
 {

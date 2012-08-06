@@ -1,9 +1,13 @@
 <?php
-  /**
-  * 数据对象常用的一些方法。
-  */
-  class DataObjectFunc
-  {
+/**
+ * 数据对象常用的一些方法。
+ * @category betterlife
+ * @package core.model
+ * @subpackage dataobject
+ * @author skygreen
+ */
+class DataObjectFunc
+{
 	//<editor-fold defaultstate="collapsed" desc="魔术方法">
 	/**
 	* 对应数据对象的__call方法
@@ -444,5 +448,5 @@
 	   return json_encode($object_arr);
 	}    
 	//</editor-fold>     
-  }
+}
 ?>
