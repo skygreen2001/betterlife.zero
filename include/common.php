@@ -1,15 +1,24 @@
 <?php
-
 /**
- *  直接执行SQL语句
- *
+ * 直接执行SQL语句
  * @param mixed $sql SQL查询语句
- * @param string|class $object 需要生成注入的对象实体|类名称
- * @return array 返回数组
+ * @param string|class|bool $object 需要生成注入的对象实体|类名称
+ * @return array 默认返回数组,如果$object指定数据对象，返回指定数据对象列表，$object=true，返回stdClass列表。
  */
 function sqlExecute($sqlstring,$object=null)
 {
-    return Manager_Db::newInstance()->currentdao()->sqlExecute($sqlstring,$object);
+	if ($object){
+		if (is_bool($object))$object=null;
+		return Manager_Db::newInstance()->currentdao()->sqlExecute($sqlstring,$object);
+	}else{
+		$lists=Manager_Db::newInstance()->currentdao()->sqlExecute($sqlstring,$object);
+		if ($lists){
+			foreach ($lists as $key=>$data) {
+				$lists[$key]=(array) $data;
+			}
+		}
+		return $lists;
+	}
 }
 
 /**
@@ -17,8 +26,8 @@ function sqlExecute($sqlstring,$object=null)
  */
 function e_me($exception) 
 {
-    ExceptionMe::recordUncatchedException($exception);
-    e_view();
+	ExceptionMe::recordUncatchedException($exception);
+	e_view();
 }
 
 /**
@@ -26,9 +35,9 @@ function e_me($exception)
  */
 function e_view() 
 {
-    if (Gc::$dev_debug_on) {
-        echo ExceptionMe::showMessage(ExceptionMe::VIEW_TYPE_HTML_TABLE);
-    }
+	if (Gc::$dev_debug_on) {
+		echo ExceptionMe::showMessage(ExceptionMe::VIEW_TYPE_HTML_TABLE);
+	}
 }
  
 /**
@@ -38,12 +47,12 @@ function e_view()
  */
 function contain($subject,$needle) 
 {
-    if (empty($subject))return false;
-    if (strpos(strtolower($subject),strtolower($needle))!== false) {
-        return true;
-    }else {
-        return false;
-    }
+	if (empty($subject))return false;
+	if (strpos(strtolower($subject),strtolower($needle))!== false) {
+		return true;
+	}else {
+		return false;
+	}
 }
 
 /**
@@ -53,15 +62,15 @@ function contain($subject,$needle)
  */
 function contains($subject,$array) 
 {
-    $result=false;
-    if (!empty($array)&&is_array($array)){
-        foreach ($array as $element){
-          if (contain($subject,$element)){
-              return true;
-          }  
-        }
-    }   
-    return $result;
+	$result=false;
+	if (!empty($array)&&is_array($array)){
+		foreach ($array as $element){
+		  if (contain($subject,$element)){
+			  return true;
+		  }  
+		}
+	}   
+	return $result;
 }
 
 /**
@@ -73,11 +82,11 @@ function contains($subject,$array)
  */
 function startWith($haystack, $needle,$strict=true) 
 {
-    if (!$strict){
-        $haystack=strtoupper($haystack);
-        $needle=strtoupper($needle);
-    }
-    return strpos($haystack, $needle) === 0;
+	if (!$strict){
+		$haystack=strtoupper($haystack);
+		$needle=strtoupper($needle);
+	}
+	return strpos($haystack, $needle) === 0;
 } 
 
 /**
@@ -89,11 +98,11 @@ function startWith($haystack, $needle,$strict=true)
  */
 function endWith($haystack, $needle,$strict=true)
 { 
-    if (!$strict){
-        $haystack=strtoupper($haystack);
-        $needle=strtoupper($needle);
-    }    
-    return (strpos(strrev($haystack), strrev($needle)) === 0);   
+	if (!$strict){
+		$haystack=strtoupper($haystack);
+		$needle=strtoupper($needle);
+	}    
+	return (strpos(strrev($haystack), strrev($needle)) === 0);   
 }
    
 /**
@@ -103,18 +112,18 @@ function endWith($haystack, $needle,$strict=true)
 */
 function logMe($var) 
 {
-    $filename = dirname(__FILE__) . '/__log.txt';            
-    if (!$handle = fopen($filename, 'a')) {
-        echo "Cannot open file ($filename)";
-        return;
-    }
-    
-    $toSave = var_export($var, true);
-    fwrite($handle, "[" . date("y-m-d H:i:s") . "]");
-    fwrite($handle, "\n");
-    fwrite($handle, $toSave);
-    fwrite($handle, "\n");
-    fclose($handle);
+	$filename = dirname(__FILE__) . '/__log.txt';            
+	if (!$handle = fopen($filename, 'a')) {
+		echo "Cannot open file ($filename)";
+		return;
+	}
+	
+	$toSave = var_export($var, true);
+	fwrite($handle, "[" . date("y-m-d H:i:s") . "]");
+	fwrite($handle, "\n");
+	fwrite($handle, $toSave);
+	fwrite($handle, "\n");
+	fclose($handle);
 }       
    
 /**
@@ -124,11 +133,11 @@ function logMe($var)
  */
 function print_pre($s,$isEcho=false)
 {
-    if ($isEcho){
-        print "<pre>";print_r($s);print "</pre>";    
-    }else{
-        return "<pre>".var_export($s,true)."</pre>";
-    }
+	if ($isEcho){
+		print "<pre>";print_r($s);print "</pre>";    
+	}else{
+		return "<pre>".var_export($s,true)."</pre>";
+	}
 }
 
 ?>
