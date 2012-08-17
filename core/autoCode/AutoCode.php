@@ -9,6 +9,7 @@
  */
 class AutoCode extends Object
 {
+	public static $isNoOutputCss=true;
 	/**
 	 * 开发者
 	 */    
@@ -25,10 +26,10 @@ class AutoCode extends Object
 	 * 生成源码[services|domain]所在目录名称
 	 */
 	public static $dir_src="src";
-    /**
-     *实体数据对象类文件所在的路径 
-     */
-    public static $domain_dir="domain"; 
+	/**
+	 *实体数据对象类文件所在的路径 
+	 */
+	public static $domain_dir="domain"; 
 	/**
 	 * 数据对象关系显示字段 
 	 * @var mixed

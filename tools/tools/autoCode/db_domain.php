@@ -23,7 +23,10 @@ if (isset($_REQUEST["save_dir"])&&!empty($_REQUEST["save_dir"]))
 			//**********************end  :导出数据对象之间关系规范定义*************************
 		} 
 	} 
+	AutoCodeFoldHelper::foldEffectReady();
+	AutoCodeFoldHelper::foldbeforedomain();    
 	AutoCodeDomain::AutoCode();
+	AutoCodeFoldHelper::foldafterdomain();
 }  else {
 	AutoCodeDomain::UserInput();
 }

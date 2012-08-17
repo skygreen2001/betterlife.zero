@@ -61,16 +61,23 @@ class AutoCodeService extends AutoCode
 		}
 		
 		$tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
-		echo UtilCss::form_css()."\r\n";  
+		if (self::$isNoOutputCss) echo UtilCss::form_css()."\r\n";  
+
 		switch (self::$type) {
 		   case 1:     
-			 echo "<font color='#FF0000'>生成继承具有标准方法的Service文件导出:</font><br/>";   
+			 AutoCodeFoldHelper::foldEffectCommon("Content_23");
+			 echo "<font color='#FF0000'>生成继承具有标准方法的Service文件导出:</font></a>";  
+			 echo '<div id="Content_23" style="display:none;">'; 
 			 break;
-		   case 2:
-			 echo "<font color='#FF0000'>标准方法的Service文件导出:</font><br/>";   
+		   case 2:        
+			 AutoCodeFoldHelper::foldEffectCommon("Content_21");             
+			 echo "<font color='#FF0000'>标准方法的Service文件导出:</font></a>";   
+			 echo '<div id="Content_21" style="display:none;">';
 			 break;
 		   case 3:
-			 echo "<font color='#FF0000'>生成ExtJs框架使用的Service【后台】文件导出:</font><br/>";           
+			 AutoCodeFoldHelper::foldEffectCommon("Content_22");  			 
+			 echo "<font color='#FF0000'>生成ExtJs框架使用的Service【后台】文件导出:</font></a>";
+			 echo '<div id="Content_22" style="display:none;">';           
 			 break;
 		}         
 		foreach($tableList as $tablename){     
@@ -82,6 +89,7 @@ class AutoCodeService extends AutoCode
 			   echo $definePhpFileContent."<br/>";
 			}         
 		}
+		echo '</div><br>';
 		$category  = Gc::$appName;                 
 		$author    = self::$author;
 		$package   = self::$package;
@@ -90,7 +98,7 @@ class AutoCodeService extends AutoCode
 			/**
 			 * 需要在管理类Manager_Service.php里添加的代码       
 			 */
-			echo "<br/><font color='#FF0000'>[需要在管理类Manager_Service里添加没有的代码]</font><br />";      
+			echo "<font color='#FF0000'>[需要在管理类Manager_Service里添加没有的代码]</font><br />";      
 			$section_define="";
 			$section_content="";
 			foreach($tableList as $tablename){  
@@ -133,7 +141,7 @@ class AutoCodeService extends AutoCode
 			$e_result.="?>";                                                                                      
 			self::saveDefineToDir(self::$service_dir_full,"Manager_Service.php",$e_result);  
 			  
-			echo  "新生成的Manager_Service文件路径:<font color='#0000FF'>".self::$service_dir_full."Manager_Service.php</font><br /><br /><br />";
+			echo  "新生成的Manager_Service文件路径:<font color='#0000FF'>".self::$service_dir_full."Manager_Service.php</font><br />";
 			/*            $section_define=str_replace(" ","&nbsp;",$section_define); 
 			$section_define=str_replace("\r\n","<br />",$section_define); 
 			echo  $section_define.'<br/>';
@@ -190,7 +198,7 @@ class AutoCodeService extends AutoCode
 					 "{\r\n".$section_define."\r\n".$section_content."}\r\n"; 
 			$e_result.="?>";              
 			self::saveDefineToDir(self::$service_dir_full.self::$ext_dir.DIRECTORY_SEPARATOR,"Manager_ExtService.php",$e_result);                                                                     
-			echo  "新生成的Manager_ExtService文件路径:<font color='#0000FF'>".self::$service_dir_full.self::$ext_dir.DIRECTORY_SEPARATOR,"Manager_ExtService.php</font><br /><br/>";
+			echo  "新生成的Manager_ExtService文件路径:<font color='#0000FF'>".self::$service_dir_full.self::$ext_dir.DIRECTORY_SEPARATOR,"Manager_ExtService.php</font><br />";
 			/*            $section_define=str_replace(" ","&nbsp;",$section_define); 
 			$section_define=str_replace("\r\n","<br />",$section_define);  
 			echo  $section_define.'<br/>';
@@ -274,7 +282,7 @@ class AutoCodeService extends AutoCode
 					 $section_content.  
 					 "</services>\r\n";                                                                                                                       
 			self::saveDefineToDir(self::$service_dir_full,"service.config.xml",$e_result);   
-			echo  "新生成的service.config.xml文件路径:<font color='#0000FF'>".self::$service_dir_full,"service.config.xml</font><br /><br /><br /><br />";
+			echo  "新生成的service.config.xml文件路径:<font color='#0000FF'>".self::$service_dir_full,"service.config.xml</font><br />";
 			/*            $section_content=str_replace(" ","&nbsp;",$section_content);    
 			$section_content=str_replace("<","&lt;",$section_content); 
 			$section_content=str_replace(">","&gt;",$section_content); 

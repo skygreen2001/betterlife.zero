@@ -74,9 +74,15 @@ class AutoCodeAction extends AutoCode
 		   }
 		}     
 		$tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
-		echo UtilCss::form_css()."\r\n"; 
+		if (self::$isNoOutputCss) echo UtilCss::form_css()."\r\n"; 
 		self::$echo_result="";
 		self::$echo_upload="";
+		 
+		if(self::$type==0) {
+			 AutoCodeFoldHelper::foldbeforeaction0();
+		}else if(self::$type==1) {
+			 AutoCodeFoldHelper::foldbeforeaction1();
+		}     
 		foreach ($fieldInfos as $tablename=>$fieldInfo){  
 		   $definePhpFileContent=self::tableToActionDefine($tablename,$tableInfoList,$fieldInfo);
 		   if (!empty($definePhpFileContent)){
@@ -87,7 +93,13 @@ class AutoCodeAction extends AutoCode
 				   echo $definePhpFileContent."<br/>";
 			   }
 		   }
-		}               
+		}   
+				
+		if(self::$type==0) {
+			 echo '</div><br/>';
+		}else if(self::$type==1) {
+			 echo '</div>';   
+		}     	
 		$category_cap=Gc::$appName;
 		$category_cap{0}=ucfirst($category_cap{0});
 		if (self::$type==2){                                                       
