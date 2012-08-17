@@ -70,15 +70,20 @@ class AutoCodeViewDefault extends AutoCode
 			}
 		}
 		$tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
-		echo UtilCss::form_css()."\r\n";
+		if (self::$isNoOutputCss) echo UtilCss::form_css()."\r\n";
 		switch (self::$type) {
 		   case 0:
-				echo "<font color='#FF0000'>生成前台所需的表示层页面:</font><br/>";                   
+				AutoCodeFoldHelper::foldEffectCommon("Content_41");  
+				echo "<font color='#FF0000'>生成前台所需的表示层页面:</font></a>";   
+				echo '<div id="Content_41" style="display:none;">';                
 				self::createModelIndexFile($tableInfoList);     
 				self::createFrontModelPages($tableInfoList,$fieldInfos);
+				echo "</div><br>";
 			 break;
 		   case 1:   
-				echo "<font color='#FF0000'>生成标准的增删改查模板表示层页面:</font><br/>"; 
+				AutoCodeFoldHelper::foldEffectCommon("Content_42");  
+				echo "<font color='#FF0000'>生成标准的增删改查模板表示层页面:</font></a>"; 
+				echo '<div id="Content_42" style="display:none;">';
 				self::createModelIndexFile($tableInfoList);									   
 				foreach ($fieldInfos as $tablename=>$fieldInfo){
 					$tpl_listsContent=self::tpl_lists($tablename,$tableInfoList,$fieldInfo);             
@@ -94,6 +99,7 @@ class AutoCodeViewDefault extends AutoCode
 					$tplName=self::saveTplDefineToDir($tablename,$tpl_editContent,$filename);
 					echo "生成导出完成:$tablename=>$tplName!<br/>";    
 				}
+				echo "</div><br>";
 			 break;          
 		}    
 	}
