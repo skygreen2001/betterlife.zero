@@ -10,6 +10,11 @@
 class Dispatcher 
 {
 	/**
+	 * 是否输出返回静态页面信息
+	 * @var bool
+	 */
+	public static $isOutputStatic=false;
+	/**
 	 * WEB URL的转发
 	 * @global Action $app
 	 * @param Router $router
@@ -43,8 +48,13 @@ class Dispatcher
 			if ($current_action->isRedirected) {
 				$isValidRequet=true;
 				//break;
-			}else{
-				self::output($moduleName,$router,$current_action);
+			}else{				
+				$output=self::output($moduleName,$router,$current_action);
+				if (self::$isOutputStatic){
+					return $output;
+				}else{
+					echo $output;
+				}
 				$isValidRequet=true;
 			//break;
 			}
@@ -127,7 +137,7 @@ class Dispatcher
 		}
 		$view->output($templateFile,$view->templateMode(),$current_action);
 		$output = ob_get_clean();
-		echo $output;
+		return $output;
 	}
 	
 	/**

@@ -247,8 +247,8 @@ class View {
 			case self::TEMPLATE_MODE_SMARTY:
 				$this->templateMode=self::TEMPLATE_MODE_SMARTY;
 				$this->template = new Smarty;
-				$this->template->template_dir =  $this->template_dir;
-				$this->template->compile_dir =  $template_tmp_dir."templates_c".DIRECTORY_SEPARATOR;
+				$this->template->template_dir =  Gc::$nav_root_path.$this->template_dir;
+				$this->template->compile_dir =  Gc::$nav_root_path.$template_tmp_dir."templates_c".DIRECTORY_SEPARATOR;
 				$this->template->config_dir =  $template_tmp_dir."configs".DIRECTORY_SEPARATOR;
 				$this->template->cache_dir =  $template_tmp_dir."cache".DIRECTORY_SEPARATOR;
 				$this->template->compile_check = true;
