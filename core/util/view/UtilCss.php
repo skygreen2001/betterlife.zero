@@ -29,7 +29,7 @@ class UtilCss extends Util
 	 * $value css文件名
 	 * @var array 
 	 */
-	private static $CssLoaded=array();   
+	public static $CssLoaded=array();   
 	
 	const CSS_REPORT_TABLE="report";
 	/**
