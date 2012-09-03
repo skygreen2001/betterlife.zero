@@ -95,6 +95,15 @@ class Dispatcher
 		 */
 		$templateFile=$controller.DIRECTORY_SEPARATOR.$action;
 		$view = Loader::load(Loader::CLASS_VIEW,$moduleName,$templateFile);
+		
+		if (self::$isOutputStatic){
+			if (($view!=null)&&($view->viewObject!=null)){
+				$view->viewObject->css_ready="";
+				$view->viewObject->js_ready="";
+			}
+			UtilAjax::$JsLoaded=array();
+			UtilCss::$CssLoaded=array();
+		}
 		$current_action->setView($view);
 		ob_end_clean();
 		if (method_exists($current_action,$action)){

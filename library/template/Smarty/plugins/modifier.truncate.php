@@ -1,11 +1,4 @@
-<?php
-/**
- * Smarty plugin
- *
- * @package Smarty
- * @subpackage PluginsModifier
- */
- 
+<?php 
 /**
  * Smarty truncate modifier plugin
  * 已解决在Linux服务器上中文乱码的问题
@@ -29,6 +22,16 @@ function smarty_modifier_truncate($string, $length = 80, $etc = '...',
 								  $break_words = false, $middle = false)
 {
 	if ($length == 0)return '';
+	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {  
+		return windows_smarty_modifier_truncate($string, $length, $etc, $break_words, $middle);  
+	} else {  
+		return linux_smarty_modifier_truncate($string, $length, $etc, $break_words, $middle);  
+	}  
+}
+
+function linux_smarty_modifier_truncate($string, $length = 80, $etc = '...',
+	$break_words = false, $middle = false)
+{
 	if (mystrlen($string) > $length) {
 		$length -= min($length, mystrlen($etc));
 		if (!$break_words && !$middle) {
@@ -43,6 +46,43 @@ function smarty_modifier_truncate($string, $length = 80, $etc = '...',
 		return $string;
 	}
 }
+
+function windows_smarty_modifier_truncate($string, $length = 80, $etc = '...',
+	$break_words = false, $middle = false)
+{
+	if (is_callable('mb_strlen')) {
+		if (mb_detect_encoding($string, 'UTF-8, ISO-8859-1') === 'UTF-8') {
+			// $string has utf-8 encoding
+			if (mb_strlen($string) > $length) {
+				$length -= min($length, mb_strlen($etc));
+				if (!$break_words && !$middle) {
+					$string = preg_replace('/\s+?(\S+)?$/u', '', mb_substr($string, 0, $length + 1));
+				} 
+				if (!$middle) {
+					return mb_substr($string, 0, $length) . $etc;
+				} else {
+					return mb_substr($string, 0, $length / 2) . $etc . mb_substr($string, - $length / 2);
+				} 
+			} else {
+				return $string;
+			} 
+		} 
+	} 
+	// $string has no utf-8 encoding
+	if (strlen($string) > $length) {
+		$length -= min($length, strlen($etc));
+		if (!$break_words && !$middle) {
+			$string = preg_replace('/\s+?(\S+)?$/', '', substr($string, 0, $length + 1));
+		} 
+		if (!$middle) {
+			return substr($string, 0, $length) . $etc;
+		} else {
+			return substr($string, 0, $length / 2) . $etc . substr($string, - $length / 2);
+		} 
+	} else {
+		return $string;
+	} 
+} 
 
 function mysubstr($str, $start, $len) {
 	$step=is_utf8($str)?2:1;
@@ -83,6 +123,5 @@ function is_utf8($string) {
 	   | \xF4[\x80-\x8F][\x80-\xBF]{2}    # plane 16
    )*$%xs', $string);
 }
-
 
 ?>

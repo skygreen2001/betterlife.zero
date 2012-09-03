@@ -25,9 +25,7 @@ if (Gc::$dev_profile_on){
 	Profiler::mark("生成首页");
 	echo "/".str_repeat("*",40).UtilDateTime::now().":生成首页".str_repeat("*",40)."<br/>";
 }
-$htmlcontent=runphp("model.index.index");
-file_put_contents($html_dir."index.html",$htmlcontent);
-
+createOneStaticHtmlPage("model.index.index",$html_dir."index.html");
 if (Gc::$dev_profile_on){
 	Profiler::unmark("生成首页");
 }
@@ -36,6 +34,29 @@ if (Gc::$dev_profile_on){
 	Profiler::show();
 }
 echo "全部静态页面生成！";
+
+/**
+ * 生成单个静态的页面 
+ * @param mixed $go
+ * @param mixed $htmlfilename
+ */
+function createOneStaticHtmlPage($go,$htmlfilename,$go_param=null)
+{
+	$htmlcontent=runphp($go,$go_param); 
+	$htmlcontent=replaceProductDetailLink($htmlcontent);
+	file_put_contents($htmlfilename,$htmlcontent);    
+}
+
+/**
+ * 替换商品详情链接
+ */
+function replaceProductDetailLink($content)
+{
+	if (!empty($content)){
+		$content=preg_replace("/index.php[?]go=model.blog.view&blog_id=(\d+)/i","html/blog_\\1.html",$content);
+	}
+	return $content;
+}
 
 /**
  * 运行动态php程序代码
