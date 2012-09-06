@@ -565,6 +565,15 @@ abstract class DataObject extends Object implements ArrayAccess
 	{
 		return self::dao()->count(get_called_class(), $filter);
 	}
+	
+	/**
+	 * 数据对象标识最大值  
+	 * @return int 数据对象标识最大值<br/>
+	 */
+	public static function max()
+	{
+		return DataObjectFunc::max(get_called_class());
+	}
 
 	/**
 	 * 对象分页

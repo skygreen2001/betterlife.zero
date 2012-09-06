@@ -342,6 +342,33 @@ class DataObjectFunc
 			return false;
 	   }
 	}    
+							
+	/**  
+	 * 对应数据对象的max方法
+	 * @param string classname 数据对象类名     
+	 * @return int 数据对象标识最大值<br/>
+	 */    
+	public static function max($classname)
+	{
+		$tablename=Config_Db::orm($classname);
+		$_SQL=new Crud_Sql_Select();
+		
+		if (is_string($classname)) {
+			if (class_exists($classname)) {
+				$classname=new $classname();
+			}
+		} 
+		if ($classname instanceof DataObject){
+			$idColumn=DataObjectSpec::getRealIDColumnName($classname);
+		}  
+		if (isset($idColumn)){    
+			$max_string="max($idColumn)";             
+			$sQuery=$_SQL->select($max_string)->from($tablename)->result();
+			return DataObject::dao()->sqlExecute($sQuery); 
+		}else{
+			return -1;
+		}
+	}
 	//</editor-fold>   
 	
 	//<editor-fold defaultstate="collapsed" desc="其他">     
