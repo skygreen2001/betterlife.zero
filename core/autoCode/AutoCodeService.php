@@ -489,7 +489,7 @@ class AutoCodeService extends AutoCode
 						 "        \$diffpart=date(\"YmdHis\");\r\n".
 						 "        if (!empty(\$_FILES[\"upload_file\"])){\r\n".
 						 "            \$tmptail = end(explode('.', \$_FILES[\"upload_file\"][\"name\"]));\r\n".
-						 "            \$uploadPath =GC::\$attachment_path.\"{$instance_name}\\\\import\\\\{$instance_name}\$diffpart.\$tmptail\";\r\n".
+						 "            \$uploadPath =GC::\$attachment_path.\"{$instance_name}\".DIRECTORY_SEPARATOR.\"import\".DIRECTORY_SEPARATOR.\"{$instance_name}\$diffpart.\$tmptail\";\r\n".
 						 "            \$result     =UtilFileSystem::uploadFile(\$_FILES,\$uploadPath);\r\n".
 						 "            if (\$result&&(\$result['success']==true)){\r\n".
 						 "                if (array_key_exists('file_name',\$result)){\r\n".
@@ -536,7 +536,7 @@ class AutoCodeService extends AutoCode
 						 "        unset(\$arr_output_header['updateTime']);\r\n".
 						 "        unset(\$arr_output_header['commitTime']);\r\n".
 						 "        \$diffpart=date(\"YmdHis\");\r\n".
-						 "        \$outputFileName=Gc::\$attachment_path.\"{$instance_name}\\\\export\\\\{$instance_name}\$diffpart.xls\"; \r\n".
+						 "        \$outputFileName=Gc::\$attachment_path.\"{$instance_name}\".DIRECTORY_SEPARATOR.\"export\".DIRECTORY_SEPARATOR.\"{$instance_name}\$diffpart.xls\"; \r\n".
 						 "        UtilFileSystem::createDir(dirname(\$outputFileName)); \r\n".
 						 "        UtilExcel::arraytoExcel(\$arr_output_header,\$data,\$outputFileName,false); \r\n".
 						 "        \$downloadPath  =Gc::\$attachment_url.\"{$instance_name}/export/{$instance_name}\$diffpart.xls\"; \r\n".
