@@ -96,11 +96,17 @@ class Dal_Pdo extends Dal  implements IDal
 					$result[]=$c;
 				}
 			}else {
-				$c=new stdClass();
-				foreach($row as $key => $val) {
-					$c->{$key} = $val;
+				if (count($row)==1){
+					foreach($row as $key => $val) {
+						$result[] = $val;
+					}
+				}else{
+					$c=new stdClass();
+					foreach($row as $key => $val) {
+						$c->{$key} = $val;
+					}
+					$result[] = $c;
 				}
-				$result[] = $c;
 			}
 		}
 		$result=  $this->getValueIfOneValue($result);

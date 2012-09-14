@@ -71,11 +71,17 @@ class Dao_Sqlite3 extends Dao implements IDaoNormal {
 					$result[]=$c;
 				}
 			}else {
-				$c=new stdClass();
-				foreach($currentrow as $key => $val) {
-					$c->{$key} = $val;
+				if (count($currentrow)==1){
+					foreach($currentrow as $key => $val) {
+						$result[] = $val;
+					}
+				}else{
+					$c=new stdClass();
+					foreach($currentrow as $key => $val) {
+						$c->{$key} = $val;
+					}
+					$result[] = $c;
 				}
-				$result[] = $c;
 			}
 		}
 		if (count($result)==0) {
