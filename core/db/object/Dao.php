@@ -196,7 +196,7 @@ abstract class Dao {
 				   $result=$tmp_values[0];
 				}
 			}else{
-				$result=$result[0];
+				if (!($result[0] instanceof DataObject))$result=$result[0];
 			}
 		}
 		return $result;
