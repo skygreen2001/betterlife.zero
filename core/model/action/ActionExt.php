@@ -172,7 +172,7 @@ class ActionExt extends Action
 	public function beforeAction()
 	{
 		if (contain($this->data["go"],"admin")){
-			if(($this->data["go"]!="admin.index.login")&&($this->data["go"]!="admin.".Gc::$appName.".login")&&!HttpSession::isHave('admin_id')) {
+			if(($this->data["go"]!="admin.index.login")&&($this->data["go"]!="admin.".Gc::$appName.".login")&&!HttpSession::isHave(Gc::$appName_alias.'admin_id')) {
 				$this->redirect("index","login");
 			}
 			if (HttpCookie::get("OnlineEditor")){

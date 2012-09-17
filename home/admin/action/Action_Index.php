@@ -15,7 +15,7 @@ class Action_Index extends ActionExt
 	 */    
 	public function login()
 	{
-		if(HttpSession::isHave('admin_id')) {
+		if(HttpSession::isHave(Gc::$appName_alias.'admin_id')) {
 			$this->redirect("index","index");
 		}
 		$this->loadCss("resources/css/login.css");  
@@ -32,6 +32,7 @@ class Action_Index extends ActionExt
 				$this->view->set("message","用户名或者密码错误");
 			}else {
 				HttpSession::set('admin_id',$admindata->admin_id);
+				HttpSession::set(Gc::$appName_alias.'admin_id',$admindata->admin_id);
 				HttpCookie::sets(array("admin_id"=>$admindata->admin_id,"operator"=>$admindata->username,'roletype'=>$admindata->roletype,'roleid'=>$admindata->roleid));
 				$this->redirect("index","index");
 			}
@@ -55,6 +56,7 @@ class Action_Index extends ActionExt
 	public function logout()
 	{
 	  HttpSession::remove("admin_id");
+	  HttpSession::remove(Gc::$appName_alias."admin_id");
 	  $this->redirect("index","login");
 	}
 

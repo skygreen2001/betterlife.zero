@@ -355,9 +355,9 @@ class UtilImage
 	 */
 	public static function buildImageVerify($length=4,$mode=1,$type='png',$width=48,$height=22,$verifyName='verify') 
 	{
-		session_start();
+		HttpSession::init();
 		$randval = UtilString::rand_string($length,$mode);
-		$_SESSION[$verifyName]= md5($randval);
+		HttpSession::set($verifyName,md5($randval));//存入Session     
 		$width = ($length*10+10)>$width?$length*10+10:$width;
 		if ( $type!='gif' && function_exists('imagecreatetruecolor')) {
 			$im = @imagecreatetruecolor($width,$height);
