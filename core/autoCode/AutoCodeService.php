@@ -448,21 +448,8 @@ class AutoCodeService extends AutoCode
 						 "            \$limit=\$condition['limit']; \r\n". 
 						 "            \$limit=\$start+\$limit-1; \r\n".
 						 "        }\r\n".        
-						 "        unset(\$condition['start'],\$condition['limit']);\r\n".     
-						 "        if (!empty(\$condition)&&(count(\$condition)>0)){\r\n". 
-						 "            \$conditionArr=array();\r\n".                          
-						 "            foreach (\$condition as \$key=>\$value) {\r\n". 
-						 "                if (!UtilString::is_utf8(\$value)){\r\n".         
-						 "                    \$value=UtilString::gbk2utf8(\$value);\r\n". 
-						 "                }\r\n".                          
-						 "                if (is_numeric(\$value)){ \r\n". 
-						 "                    \$conditionArr[]=\$key.\"='\".\$value.\"'\";\r\n".   
-						 "                }else{\r\n". 
-						 "                    \$conditionArr[]=\$key.\" like '%\".\$value.\"%'\"; \r\n".                          
-						 "                }\r\n". 
-						 "            }\r\n".         
-						 "            \$condition=implode(\" and \",\$conditionArr);\r\n". 
-						 "        }\r\n".  
+						 "        unset(\$condition['start'],\$condition['limit']);\r\n". 
+						 "        \$condition=\$this->filtertoCondition(\$condition);\r\n".    
 						 "        \$count=$classname::count(\$condition);\r\n".       
 						 "        if (\$count>0){\r\n".          
 						 "            if (\$limit>\$count)\$limit=\$count;\r\n".          
@@ -530,6 +517,7 @@ class AutoCodeService extends AutoCode
 						 "     */\r\n".
 						 "    public function export{$classname}(\$filter=null)\r\n".
 						 "    {\r\n".
+						 "        if (\$filter)\$filter=\$this->filtertoCondition(\$filter);\r\n".
 						 "        \$data=$classname::get(\$filter);\r\n".
 						 self::enumKey2CommentInExtService($classname,$fieldInfo).   
 						 "        \$arr_output_header= self::fieldsMean({$classname}::tablename()); \r\n".

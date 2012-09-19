@@ -91,20 +91,7 @@ class ExtServiceComment extends ServiceBasic
 			$limit=$start+$limit-1; 
 		}
 		unset($condition['start'],$condition['limit']);
-		if (!empty($condition)&&(count($condition)>0)){
-			$conditionArr=array();
-			foreach ($condition as $key=>$value) {
-				if (!UtilString::is_utf8($value)){
-					$value=UtilString::gbk2utf8($value);
-				}
-				if (is_numeric($value)){ 
-					$conditionArr[]=$key."=".$value;
-				}else{
-					$conditionArr[]=$key." like '%".$value."%'"; 
-				}
-			}
-			$condition=implode(" and ",$conditionArr);
-		}
+		$condition=$this->filtertoCondition($condition);
 		$count=Comment::count($condition);
 		if ($count>0){
 			if ($limit>$count)$limit=$count;
@@ -179,6 +166,7 @@ class ExtServiceComment extends ServiceBasic
 	 */
 	public function exportComment($filter=null)
 	{
+		if ($filter)$filter=$this->filtertoCondition($filter);
 		$data=Comment::get($filter);
 		$arr_output_header= self::fieldsMean(Comment::tablename()); 
 		unset($arr_output_header['updateTime']);
