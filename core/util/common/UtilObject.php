@@ -170,6 +170,33 @@ class UtilObject extends Util {
 			return null;
 		}
 	}
-	
+
+	/**
+	 * 从源对象|数组复制属性到目标对象|数组
+	 * @param array|object $dest 目标对象|数组 
+	 * @param array|object $source 源对象|数组
+	 */
+	public static function copyProperties($dest,$source)
+	{
+		if ($dest){
+			if (is_array($source)||is_object($source)){
+				foreach ($source as $key=>$value) {
+					if (is_array($dest)){
+						if (array_key_exists($key,$dest))
+						{
+							$dest[$key]=$value;
+						}
+					}else if(is_object($dest)){
+						if (property_exists($dest,$key))
+						{                        
+							$dest->$key=$value;
+						}
+					}
+				}
+			}
+			return $dest;
+		}
+		return $source;        
+	}
 }
 ?>
