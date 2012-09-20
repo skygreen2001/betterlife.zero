@@ -7,7 +7,8 @@
  * @package util.common
  * @author skygreen
  */
-class UtilObject extends Util {
+class UtilObject extends Util 
+{
 	
 	//<editor-fold defaultstate="collapsed" desc="object and xml">
 	/**
@@ -176,7 +177,7 @@ class UtilObject extends Util {
 	 * @param array|object $dest 目标对象|数组 
 	 * @param array|object $source 源对象|数组
 	 */
-	public static function copyProperties($dest,$source)
+	public static function copyProperties(&$dest,$source)
 	{
 		if ($dest){
 			if (is_array($source)||is_object($source)){
