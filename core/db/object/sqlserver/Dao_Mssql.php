@@ -28,7 +28,8 @@ class Dao_Mssql extends Dao implements IDaoNormal{
 	 * @param string $dbname 
 	 * @return mixed 数据库连接
 	 */
-	public function connect($host=null,$port=null,$username=null,$password=null,$dbname=null) { 
+	public function connect($host=null,$port=null,$username=null,$password=null,$dbname=null) 
+	{ 
 		$connecturl=Config_Mssql::connctionurl($host,$port);
 	   
 		if (!isset($username)){
@@ -56,7 +57,8 @@ class Dao_Mssql extends Dao implements IDaoNormal{
 	/**
 	 * 执行预编译SQL语句      
 	 */
-	private function executeSQL() {
+	private function executeSQL() 
+	{
 		if (!empty($this->sQuery)){         
 			if (Config_Db::$debug_show_sql){                                    
 				LogMe::log("SQL:".$this->sQuery);  
@@ -74,7 +76,8 @@ class Dao_Mssql extends Dao implements IDaoNormal{
 	 * @param string $object 需要转换成的对象实体|类名称
 	 * @return 转换成的对象实体列表
 	 */
-	private function getResultToObjects($object) {
+	private function getResultToObjects($object) 
+	{
 		$result=array();
 		if(!mssql_num_rows($this->result)){
 		   return null;
@@ -110,7 +113,8 @@ class Dao_Mssql extends Dao implements IDaoNormal{
 	 * @param Object $object
 	 * @return int 保存对象记录的ID标识号
 	 */
-	public function save($object){
+	public function save($object)
+	{
 		$autoId=-1;//新建对象插入数据库记录失败
 		if (!$this->validObjectParameter($object)) {
 			return $autoId;
@@ -146,7 +150,8 @@ class Dao_Mssql extends Dao implements IDaoNormal{
 	 * @param int $id
 	 * @return Object
 	 */
-	public function delete($object){
+	public function delete($object)
+	{
 		$result=false;
 		if (!$this->validObjectParameter($object)) {
 			return $result;
@@ -172,7 +177,8 @@ class Dao_Mssql extends Dao implements IDaoNormal{
 	 * @param Object $object
 	 * @return Object
 	 */
-	public function update($object){
+	public function update($object)
+	{
 		$result=false;
 		if (!$this->validObjectParameter($object)) {
 			return $result;
@@ -227,7 +233,8 @@ class Dao_Mssql extends Dao implements IDaoNormal{
 	 *    0,10
 	 * @return 对象列表数组
 	 */
-	public function get($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null){
+	public function get($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null)
+	{
 		$result=null;
 		try {
 			if (!$this->validParameter($object)) {
@@ -266,7 +273,8 @@ class Dao_Mssql extends Dao implements IDaoNormal{
 	 *      2.name desc;
 	 * @return 单个对象实体
 	 */
-	public function get_one($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID){
+	public function get_one($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)
+	{
 		$result=null;
 		try {
 			if (!$this->validParameter($object)) {
@@ -299,7 +307,8 @@ class Dao_Mssql extends Dao implements IDaoNormal{
 	 * @param string $id
 	 * @return 对象
 	 */
-	public function get_by_id($object, $id){
+	public function get_by_id($object, $id)
+	{
 		$result=null;
 		try {
 			if (!$this->validParameter($object)) {
@@ -332,7 +341,8 @@ class Dao_Mssql extends Dao implements IDaoNormal{
 	 *  1.执行查询语句返回对象数组
 	 *  2.执行更新和删除SQL语句返回执行成功与否的true|null
 	 */
-	public function sqlExecute($sqlstring,$object=null){
+	public function sqlExecute($sqlstring,$object=null)
+	{
 		$result=null;
 		try {
 			if (Config_Db::$db==EnumDbSource::DB_SQLSERVER&&((trim(strtoupper(Gc::$encoding))==Config_C::CHARACTER_UTF_8)||(trim(strtolower(Gc::$encoding))==Config_C::CHARACTER_UTF8))) {
@@ -388,7 +398,8 @@ class Dao_Mssql extends Dao implements IDaoNormal{
 	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
 	 * @return 对象总计数
 	 */
-	public function count($object, $filter=null){
+	public function count($object, $filter=null)
+	{
 		$result=null;
 		try {
 			if (!$this->validParameter($object)) {
@@ -431,7 +442,8 @@ class Dao_Mssql extends Dao implements IDaoNormal{
 	 *      1.id asc;
 	 *      2.name desc;
 	 */
-	public function queryPage($object,$startPoint,$endPoint,$filter=null,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID){
+	public function queryPage($object,$startPoint,$endPoint,$filter=null,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)
+	{
 		try {
 			if (!$this->validParameter($object)) {
 				return null;
