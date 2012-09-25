@@ -316,14 +316,14 @@ $viewdoblock
                                 });
                                 this.uploadForm.getForm().submit({
                                     url : 'index.php?go=admin.upload.upload$classname',
-                                    success : function(form, action) {
+                                    success : function(form, response) {
                                         Ext.Msg.alert('成功', '上传成功');
                                         uploadWindow.hide();
                                         uploadWindow.uploadForm.upload_file.setValue('');
                                         $appName_alias.$classname.View.Running.{$instancename}Grid.doSelect$classname();
                                     },
-                                    failure : function(form, action) {
-                                        Ext.Msg.alert('错误', action.result.msg);
+                                    failure : function(form, response) {
+                                        Ext.Msg.alert('错误', response.result.data);
                                     }
                                 });
                             }

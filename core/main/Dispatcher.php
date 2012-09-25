@@ -51,6 +51,7 @@ class Dispatcher
 			}else{				
 				$output=self::output($moduleName,$router,$current_action);
 				if (self::$isOutputStatic){
+					$output=render_tag($output);
 					return $output;
 				}else{
 					echo $output;
