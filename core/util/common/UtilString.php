@@ -31,8 +31,17 @@ class UtilString extends Util
 	public static function has_unsafeword($str)
 	{
 		return preg_match('/~!@#\\$%\\^&\\*\\(\\)\\+=\\|\\}]{\\[":><\\?;\'\/\\.,/', $str);
-	}    
-
+	}  
+	/**
+	 * 查看字符串是否包含中文 
+	 * @param string $string 查看的字符串 
+	 * @return bool 是否包含中文
+	 */
+	public static function is_chinese($string)
+	{
+		return preg_match("/[\x80-\xff]./", $string);
+	}
+	
 	/**
 	 * 返回中文文字内容的长度。
 	 * @param string $title 中文文字内容

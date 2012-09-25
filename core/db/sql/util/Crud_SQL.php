@@ -134,7 +134,7 @@ abstract class Crud_SQL {
 					$detailStr=$clause[0];
 					if (contain($detailStr, self::SQL_OR)||
 						contain($detailStr, self::SQL_LIKE)||
-						contain($detailStr, " (")){
+						contain($detailStr, "(")){
 						$this->whereClause=$detailStr;
 						return $this;
 					}
@@ -301,7 +301,7 @@ abstract class Crud_SQL {
 		if (is_string($param)) {
 			if (contain($param, self::SQL_OR)||
 				contain($param, self::SQL_LIKE)||
-				contain($param, " (")){
+				contain($param, "(")){
 				return $param;
 			} else{           
 				if (contain($param,",")){          

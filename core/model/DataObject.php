@@ -491,7 +491,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * @param string $limit 分页数目:同Mysql limit语法
 	 * 示例如下：<br/>
 	 *    0,10<br/>
-	 * @return 对象列表数组
+	 * @return 查询列数组，当只有一个值的时候如select count(表名_id)，自动从数组中转换出来值字符串
 	 */
 	public static function select($columns,$filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null)
 	{
