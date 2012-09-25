@@ -94,20 +94,20 @@ class UtilFileSystem extends Util
 			LogMe::log("创建文件:".$filename."失败！");
 		}
 		fclose($cFile);     
-	}    
+	}   
 	
 	/**
-	 * 移除文件夹。<br/>
-	 * 前提是该目录下没有子目录。
+	 * 移除文件夹<br/>
+	 * 参考rmdir，但是包括删除文件夹下所有包含的文件和子文件夹，慎用！
 	 * @param string $path 文件路径
 	 */
-	public static function remove_folder($path)
+	public static function rmdir($path)
 	{
 		if(($handle = opendir($path))){
 			while (false !==($file = readdir($handle))){
 				if($file!='.' && $file!='..'){
-					if(is_dir($file)){
-						self::remove_floder($path.DIRECTORY_SEPARATOR.$file);
+					if(is_dir($path.DIRECTORY_SEPARATOR.$file)){
+						self::rmdir($path.DIRECTORY_SEPARATOR.$file);
 					}else{
 						@unlink($path.DIRECTORY_SEPARATOR.$file);
 					}
@@ -380,7 +380,17 @@ class UtilFileSystem extends Util
 	private static function charsetConvert($path) 
 	{
 		return iconv("UTF-8", "GBK", $path);
-	}
+	}    
+	
+	/**
+	 * 获取文件扩展名
+	 * @param mixed $filename
+	 * @return mixed
+	 */
+	public static function fileExtension($filename)
+	{
+		return pathinfo($filename, PATHINFO_EXTENSION);
+	}  
 }
 //print_r(UtilFileSystem::getAllFilesInDirectory("D:\\wamp\\www"));
 ?>

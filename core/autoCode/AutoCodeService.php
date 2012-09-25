@@ -818,7 +818,7 @@ class AutoCodeService extends AutoCode
 						 "        \$result=\"\";\r\n". 
 						 "        if (!empty(\$_FILES[\$uploadFlag])&&!empty(\$_FILES[\$uploadFlag][\"name\"])){\r\n".
 						 "            \$tmptail = end(explode('.', \$_FILES[\$uploadFlag][\"name\"]));\r\n". 
-						 "            \$uploadPath =GC::\$upload_path.\"images\".DIRECTORY_SEPARATOR.\"{$instance_name}\".DIRECTORY_SEPARATOR.\$upload_dir.DIRECTORY_SEPARATOR.\$diffpart.\$tmptail;\r\n".
+						 "            \$uploadPath =GC::\$upload_path.\"images\".DIRECTORY_SEPARATOR.\"{$instance_name}\".DIRECTORY_SEPARATOR.\$upload_dir.DIRECTORY_SEPARATOR.\$diffpart.\".\".\$tmptail;\r\n".
 						 "            \$result     =UtilFileSystem::uploadFile(\$_FILES,\$uploadPath,\$uploadFlag);\r\n". 
 						 "            if (\$result&&(\$result['success']==true)){\r\n".
 						 "                \$result['file_name']=\"{$instance_name}/\$upload_dir/\$diffpart.\$tmptail\";\r\n".    
