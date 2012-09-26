@@ -382,5 +382,84 @@ class ServiceBasic extends Service implements IServiceBasic
 		}
 		return $condition;
 	}
+	
+	/**
+	 * 批量上传图片 
+	 * @param mixed $_FILES 上传文件服务器变量
+	 * @param mixed $upload_field_name 上传文件的input的name
+	 * @param mixed $class_name 数据对象类名
+	 * @param mixed $classname_comment 数据对象类名注释简介
+	 * @param mixed $img_column_name 数据对象指定图像列名
+	 * @return array 上传图片反馈信息 
+	 */
+	public function batchUploadImages($_FILES,$upload_field_name,$class_name,$classname_comment,$img_column_name)
+	{
+		$class_instance_name=strtolower($class_name);
+		if (!empty($_FILES)&&!empty($_FILES[$upload_field_name]["name"]))
+		{    
+			//上传压缩文件并解压
+			$filename   = date("YmdHis");
+			$upload_dir = GC::$upload_path."images".DIRECTORY_SEPARATOR.$instance_name.DIRECTORY_SEPARATOR;
+			$upload_zip_dir=$upload_dir."zip".DIRECTORY_SEPARATOR;
+			$tmptail    = end(explode('.', $_FILES[$upload_field_name]["name"]));
+			$uploadPath = $upload_zip_dir.$filename.".".$tmptail;   
+			UtilFileSystem::createDir($upload_zip_dir);
+			$IsUploadSucc=move_uploaded_file($_FILES[$upload_field_name]["tmp_name"], $uploadPath);
+			$zip = new ZipArchive;
+			$res = $zip->open($uploadPath);
+			if ($res === TRUE) {
+				$zip->extractTo($upload_zip_dir);
+				$zip->close();
+			} else {
+				return array('success' => false,'data'    => '上传压缩文件无法解压，查看是否压缩文件不正确！');
+			}
+			//与数据对象的图片路径信息列比对，如果是中文名同名，转换成拼音名文件存储并更新数据库信息；
+			//如果是英文字母和数字则保持原名称并覆盖同名文件。如果没有找到同名文件，提示信息未找到的文件。
+			$allImageFiles=UtilFileSystem::getAllFilesInDirectory($upload_zip_dir,array("jpg","png","gif","JPG","PNG","GIF"));
+			$info_noneed="";$info_failed="";
+			foreach ($allImageFiles as $imgFile) {
+				$extension=UtilFileSystem::fileExtension($imgFile);
+				$query_imgFile=UtilString::gbk2utf8(basename($imgFile,".".$extension));                
+				$img_object=call_user_func("$class_name::get_one","$img_column_name like '%$query_imgFile%'");
+				//$class_name::get_one("$img_column_name like '%$query_imgFile%'");
+				$imgFile=basename($imgFile);
+				if ($img_object){
+					if (UtilString::is_chinese($query_imgFile)){
+						$image_name=UtilPinyin::translate($query_imgFile);
+						$img_object->{$img_column_name}=$instance_name."/".$image_name.".".$extension;
+						$img_object->update();
+					}
+					if (!copy($upload_zip_dir.$imgFile, $upload_dir.$image_name.".".$extension)) {
+						$info_failed.= "上传文件失败:".$uploadPath.$imgFile."<br/>";
+					}
+				}else{                   
+					if (UtilString::is_chinese($query_imgFile)){
+						$image_name=UtilPinyin::translate($query_imgFile);
+						$img_object=call_user_func("$class_name::get_one","$img_column_name like '%$image_name%'");
+						//Product::get_one("$img_column_name like '%$image_name%'");
+						if ($img_object){
+							if (!copy($upload_zip_dir.$imgFile, $upload_dir.$image_name.".".$extension)) {
+								$info_failed.= "上传文件失败:".$uploadPath.$imgFile."<br/>";
+							}
+						}else{
+							$info_noneed.="上传文件".$imgFile."在记录中不存在！<br/>";
+						}
+					}else{
+						$info_noneed.="上传文件".$imgFile."在记录中不存在！<br/>";
+					}
+				}
+			}
+			if (!empty($info_noneed)){
+				$info_noneed="请先批量上传$classname_comment数据(Excel文档格式)，并在图片列中指定图片文件名！<br/>".$info_noneed;
+			}
+			//删除压缩文件目录
+			$isRmSucc=UtilFileSystem::rmdir($upload_zip_dir);
+		}
+		if ((empty($info_noneed))&&(empty($info_failed))){
+			return array('success' => true,'data' => true); 
+		}else{
+			return array('success' => false,'data' => $info_noneed.$info_failed); 
+		}
+	}
 }
 ?>
