@@ -312,6 +312,7 @@ class AutoCodeViewExt extends AutoCode
 				}            
 				if ($datatype=='enum'){
 					$datatype='string';
+					$fields.="                  {name: '{$fieldname}Show',type: '".$datatype."'},\r\n";
 				}
 				$fields.="                  {name: '$fieldname',type: '".$datatype."'"; 
 				if ($datatype=='date')
@@ -950,6 +951,8 @@ class AutoCodeViewExt extends AutoCode
 					$viewdoblock.="                         '<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\"><img src=\"upload/images/{{$fieldname}}\" /></td></tr>',\r\n";
 				}else if ($column_type=='bit'){      
 					$viewdoblock.="                         '<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\"><tpl if=\"{$fieldname} == true\">是</tpl><tpl if=\"{$fieldname} == false\">否</tpl></td></tr>',\r\n";
+				}else if ($datatype=='enum'){
+					$viewdoblock.="                         '<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$fieldname}Show}</td></tr>',\r\n";
 				}else{
 					$viewdoblock.="                         '<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$fieldname}{$dateformat}}</td></tr>',\r\n";
 				}
@@ -1018,7 +1021,11 @@ class AutoCodeViewExt extends AutoCode
 					$field_comment=str_replace('主键',"",$field_comment);   
 				}    
 				$datatype=self::comment_type($field["Type"]);
-				$columns.="                          {header : '$field_comment',dataIndex : '{$fieldname}'";  
+				if ($datatype=='enum'){
+					$columns.="                          {header : '{$field_comment}',dataIndex : '{$fieldname}Show'"; 
+				}else{
+					$columns.="                          {header : '$field_comment',dataIndex : '{$fieldname}'";  
+				}
 				if (($datatype=='date')||contains($field_comment,array("日期","时间"))) 
 				{
 					$columns.=",renderer:Ext.util.Format.dateRenderer('Y-m-d')";

@@ -61,8 +61,10 @@ Bb.Admin.Store = {
 				  {name: 'username',type: 'string'},
 				  {name: 'realname',type: 'string'},
 				  {name: 'password',type: 'string'},
+				  {name: 'roletypeShow',type: 'string'},
 				  {name: 'roletype',type: 'string'},
 				  {name: 'roleid',type: 'int'},
+				  {name: 'seescopeShow',type: 'string'},
 				  {name: 'seescope',type: 'string'}
 			]}         
 		),
@@ -252,8 +254,8 @@ Bb.Admin.View={
 						 '<tr class="entry"><td class="head">用户名</td><td class="content">{username}</td></tr>',
 						 '<tr class="entry"><td class="head">真实姓名</td><td class="content">{realname}</td></tr>',
 						 '<tr class="entry"><td class="head">密码</td><td class="content">{password}</td></tr>',
-						 '<tr class="entry"><td class="head">扮演角色</td><td class="content">{roletype}</td></tr>',
-						 '<tr class="entry"><td class="head">视野</td><td class="content">{seescope}</td></tr>',                      
+						 '<tr class="entry"><td class="head">扮演角色</td><td class="content">{roletypeShow}</td></tr>',
+						 '<tr class="entry"><td class="head">视野</td><td class="content">{seescopeShow}</td></tr>',                      
 					 '</table>' 
 					 ]
 					}
@@ -322,8 +324,8 @@ Bb.Admin.View={
 						this.sm,        
 						  {header : '用户名',dataIndex : 'username'},
 						  {header : '真实姓名',dataIndex : 'realname'},
-						  {header : '扮演角色',dataIndex : 'roletype'},
-						  {header : '视野',dataIndex : 'seescope'}                            
+						  {header : '扮演角色',dataIndex : 'roletypeShow'},
+						  {header : '视野',dataIndex : 'seescopeShow'}                            
 					]
 				}),                       
 				tbar : {
