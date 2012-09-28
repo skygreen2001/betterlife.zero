@@ -183,7 +183,7 @@ class AutoCodeAction extends AutoCode
 					 "?>";   
 			self::saveDefineToDir(self::$action_dir_full,"Action_Upload.php",$e_result);   
 			echo  "新生成的Action_Upload文件路径:<font color='#0000FF'>".self::$action_dir_full."Action_Upload.php</font><br />";
-/*            self::$echo_upload=str_replace(" ","&nbsp;",self::$echo_upload);      
+			/*            self::$echo_upload=str_replace(" ","&nbsp;",self::$echo_upload);      
 			self::$echo_upload=str_replace("\r\n","<br />",self::$echo_upload);    
 			echo self::$echo_upload;  */  
 		}      
@@ -260,13 +260,30 @@ class AutoCodeAction extends AutoCode
 				}        
 				$result.="     }\r\n\r\n";      
 				self::$echo_result.=$result;  
-				$result_upload ="    /**\r\n".                        
-						 "     * 上传数据对象:{$table_comment}数据文件\r\n".  
-						 "     */\r\n".  
-						 "    public function upload{$classname}()\r\n".  
-						 "    {\r\n".                         
-						 "        return self::ExtResponse(Manager_ExtService::{$instancename}Service()->import(\$_FILES)); \r\n".  
-						 "    }\r\n\r\n";  
+				$result_upload = "    /**\r\n".                        
+								 "     * 上传数据对象:{$table_comment}数据文件\r\n".  
+								 "     */\r\n".  
+								 "    public function upload{$classname}()\r\n".  
+								 "    {\r\n".                         
+								 "        return self::ExtResponse(Manager_ExtService::{$instancename}Service()->import(\$_FILES)); \r\n".  
+								 "    }\r\n\r\n";  
+				//批量上传图片               
+				foreach ($fieldInfo as $fieldname=>$field)
+				{                    
+					if (self::columnIsImage($fieldname,$field["Comment"]))
+					{
+						$fieldname_funcname=$fieldname;
+						$fieldname_funcname{0}=strtoupper($fieldname_funcname);
+						$imgs_upload= "    /**\r\n".                        
+									  "     * 批量上传{$table_comment}图片:$fieldname\r\n".  
+									  "     */\r\n".  
+									  "    public function upload{$classname}{$fieldname_funcname}s()\r\n".  
+									  "    {\r\n".                         
+									  "        return self::ExtResponse(Manager_ExtService::{$instancename}Service()->import(\$_FILES,\"upload_$fieldname_files\",\"{$classname}\",\"{$table_comment}\",\"$fieldname\"); \r\n".  
+									  "    }\r\n\r\n";  
+						$result_upload .= $imgs_upload;
+					}   
+				}
 				self::$echo_upload.=$result_upload;                
 				return "";
 			case 1:                  

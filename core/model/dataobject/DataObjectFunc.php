@@ -381,47 +381,29 @@ class DataObjectFunc
 	{                                   
 		if (!empty($class_name))
 		{
-			$class_property_name=array($class_name);         
+			$class_property_names=array();//$class_name         
 			if (is_string($property_name))
 			{        
-				$class_property_name[]=$property_name; 
+				$class_property_names[]=$property_name; 
 			}
 			else if (is_array($property_name))
 			{                                           
-				$class_property_name=array_merge($class_property_name,$property_name);
+				$class_property_names=$property_name;
 			}
 			if (is_array($data)&&(count($data)>0)){  
-				foreach ($data as $record){          
-					array_walk($record, array("DataObjectFunc",'property_alter'),$class_property_name); 
+				foreach ($data as $record){ 
+					foreach ($class_property_names as $property_name) {
+						$record->{$property_name."Show"}=call_user_func($class_name."::".$property_name."Show",$record->$property_name);
+					}
 				}
 			}else if (is_object($data)){
-				unset($class_property_name[0]);
-				foreach ($class_property_name as $property_name)
-				{              
-					$data->$property_name=call_user_func($class_name."::".$property_name."show",$property_name);
+				foreach ($class_property_names as $property_name)
+				{           
+					$data->{$property_name."Show"}=call_user_func($class_name."::".$property_name."Show",$data->$property_name);
 				}
 			}
-		}            
+		}                     
 	}   
-	
-	/**
-	* 替换值为描述 
-	* @param mixed $item
-	* @param mixed $key
-	* @param mixed $class_property_name
-	*/
-	private static function property_alter(&$item,$key,$class_property_name)
-	{      
-		$enum_name= $class_property_name[0];
-		unset($class_property_name[0]);
-		foreach ($class_property_name as $property_name)
-		{                                                                    
-			if (is_string($key)&&($key===$property_name)){
-				$static_method_name= $property_name."Show"; 
-				$item=call_user_func($enum_name."::".$static_method_name,$item);
-			}
-		}
-	}    
 	
 	/**
 	* 输出显示DataObject对象<br/>

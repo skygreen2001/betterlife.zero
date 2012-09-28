@@ -40,12 +40,6 @@ class ExtServiceAdmin extends ServiceBasic
 	 */
 	public function update($admin)
 	{
-		if (!EnumRoletype::isEnumValue($admin["roletype"])){
-			$admin["roletype"]=EnumRoletype::roletypeByShow($admin["roletype"]);
-		}
-		if (!EnumSeescope::isEnumValue($admin["seescope"])){
-			$admin["seescope"]=EnumSeescope::seescopeByShow($admin["seescope"]);
-		}
 		if (is_array($admin)){
 			$adminObj=new Admin($admin);
 		}

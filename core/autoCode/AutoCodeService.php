@@ -394,7 +394,7 @@ class AutoCodeService extends AutoCode
 				$result.="    public function update(\$$instance_name)\r\n".
 						 "    {\r\n".
 						 self::bit2BoolInExtService($instance_name,$fieldInfo).
-						 self::enumComment2KeyInExtService($instance_name,$fieldInfo,$tablename).  
+						 //self::enumComment2KeyInExtService($instance_name,$fieldInfo,$tablename).  
 						 self::imageUploadInExtService($instance_name,$fieldInfo).  
 						 "        if (is_array(\$$instance_name)){\r\n".                           
 						 "            \${$instance_name}Obj=new $classname(\$$instance_name);\r\n".

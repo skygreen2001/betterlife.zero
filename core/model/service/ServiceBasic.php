@@ -394,7 +394,7 @@ class ServiceBasic extends Service implements IServiceBasic
 	 */
 	public function batchUploadImages($_FILES,$upload_field_name,$class_name,$classname_comment,$img_column_name)
 	{
-		$class_instance_name=strtolower($class_name);
+		$instance_name=strtolower($class_name);
 		if (!empty($_FILES)&&!empty($_FILES[$upload_field_name]["name"]))
 		{    
 			//上传压缩文件并解压
