@@ -279,7 +279,7 @@ class AutoCodeAction extends AutoCode
 									  "     */\r\n".  
 									  "    public function upload{$classname}{$fieldname_funcname}s()\r\n".  
 									  "    {\r\n".                         
-									  "        return self::ExtResponse(Manager_ExtService::{$instancename}Service()->import(\$_FILES,\"upload_$fieldname_files\",\"{$classname}\",\"{$table_comment}\",\"$fieldname\"); \r\n".  
+									  "        return self::ExtResponse(Manager_ExtService::{$instancename}Service()->batchUploadImages(\$_FILES,\"upload_{$fieldname}_files\",\"{$classname}\",\"{$table_comment}\",\"$fieldname\")); \r\n".  
 									  "    }\r\n\r\n";  
 						$result_upload .= $imgs_upload;
 					}   

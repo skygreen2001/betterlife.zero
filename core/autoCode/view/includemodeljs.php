@@ -337,7 +337,7 @@ $viewdoblock
                 }, config);  
             $appName_alias.$classname.View.UploadWindow.superclass.constructor.call(this, config);     
         }        
-    }),
+    })$batchUploadImagesWinow
     /**
      * 视图：{$table_comment}列表
      */
@@ -419,11 +419,16 @@ $filterReset
                                     handler : function() {
                                         this.delete$classname();
                                     }
-                                },'-',{
-                                    text : '导入',iconCls : 'icon-import', 
+                                },'-',{                                                                       
+                                    xtype:'tbsplit',text: '导入', iconCls : 'icon-import',  
                                     handler : function() {
                                         this.import$classname();
-                                    }
+                                    },    
+                                    menu: {
+                                        xtype:'menu',plain:true,
+                                        items: [
+                                            {text:'批量导入{$table_comment}',iconCls : 'icon-import',scope:this,handler:function(){this.import$classname()}}$menu_uploadImg
+                                        ]}
                                 },'-',{
                                     text : '导出',iconCls : 'icon-export', 
                                     handler : function() { 
@@ -804,7 +809,7 @@ $filterdoSelect
                 $appName_alias.$classname.View.current_uploadWindow=new $appName_alias.$classname.View.UploadWindow();   
             }     
             $appName_alias.$classname.View.current_uploadWindow.show();
-        }                
+        }$openBatchUploadImagesWindow                
     }),
     /**
      * 核心内容区
