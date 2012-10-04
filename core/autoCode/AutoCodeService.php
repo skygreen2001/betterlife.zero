@@ -32,6 +32,11 @@ class AutoCodeService extends AutoCode
 	 * 3.生成ExtJs框架使用的Service【后台】。
 	 */
 	public static $type;
+	/**
+	 * 所有表列信息
+	 * @var mixed
+	 */
+	private static $fieldInfos;
 
 	/**
 	 * 自动生成代码-服务类
@@ -59,6 +64,7 @@ class AutoCodeService extends AutoCode
 			   $fieldInfos[$tablename][$fieldname]["Comment"]=$field["Comment"];
 		   }
 		}
+		self::$fieldInfos=$fieldInfos;   
 		
 		$tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
 		if (self::$isNoOutputCss) echo UtilCss::form_css()."\r\n";  
@@ -75,7 +81,7 @@ class AutoCodeService extends AutoCode
 			 echo '<div id="Content_21" style="display:none;">';
 			 break;
 		   case 3:
-			 AutoCodeFoldHelper::foldEffectCommon("Content_22");  			 
+			 AutoCodeFoldHelper::foldEffectCommon("Content_22");               
 			 echo "<font color='#FF0000'>生成ExtJs框架使用的Service【后台】文件导出:</font></a>";
 			 echo '<div id="Content_22" style="display:none;">';           
 			 break;
@@ -865,6 +871,7 @@ class AutoCodeService extends AutoCode
 		$result="";
 		if (array_key_exists($classname,self::$relation_viewfield)){ 
 			$relationSpecs=self::$relation_viewfield[$classname]; 
+            $isTreeLevelHad=false;
 			foreach ($fieldInfo as $fieldname=>$field){
 				if (array_key_exists($fieldname,$relationSpecs)){
 					$relationShow=$relationSpecs[$fieldname];
@@ -883,7 +890,34 @@ class AutoCodeService extends AutoCode
 						$result.="                if (\${$instance_name}->$fieldname){\r\n";                        
 						$result.="                    \${$i_name}_instance=$key::get_by_id(\${$instance_name}->$fieldname);\r\n";
 						$result.="                    \$".$instance_name."['$show_fieldname']=\${$i_name}_instance->$value;\r\n";
-						$result.="                }\r\n";                        
+						$result.="                }\r\n";   
+						$fieldInfos=self::$fieldInfos[self::getTablename($key)];
+                        if (!$isTreeLevelHad){
+                            if (array_key_exists("parent_id",$fieldInfos)&&array_key_exists("level",$fieldInfos)){
+                                $classNameField="name";
+                                if (array_key_exists($i_name."_name",$fieldInfos))$className=$i_name."_name";
+                                if (array_key_exists($i_name."Name",$fieldInfos))$className=$i_name."Name";
+                                if (array_key_exists($i_name."name",$fieldInfos))$className=$i_name."name";
+                                $result.="                if (\${$i_name}_instance){\r\n".
+                                         "                    \$level=\${$i_name}_instance->level;\r\n".
+                                         "                    \${$i_name}ShowAll=\${$i_name}_instance->$classNameField;\r\n".
+                                         "                    switch (\$level) {\r\n".
+                                         "                       case 2:\r\n".
+                                         "                         \${$i_name}=$key::get_by_id(\${$i_name}_instance->parent_id);\r\n".
+                                         "                         \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
+                                         "                         break;\r\n".
+                                         "                       case 3:\r\n".
+                                         "                         \${$i_name}=$key::get_by_id(\${$i_name}_instance->parent_id);\r\n".
+                                         "                         \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
+                                         "                         \${$i_name}=$key::get_by_id(\${$i_name}->parent_id);\r\n".
+                                         "                         \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
+                                         "                         break;\r\n".
+                                         "                    }\r\n".
+                                         "                    \${$instance_name}[\"{$i_name}ShowAll\"]=\${$i_name}ShowAll;\r\n".
+                                         "                }\r\n";
+                                $isTreeLevelHad=true;
+                            }
+                        }				 
 					}                           
 				}    
 			}

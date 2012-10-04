@@ -287,6 +287,7 @@ class AutoCodeDomain extends AutoCode
 		$result.=self::domainDataobjectRelationSpec($fieldInfo,$classname); 
 		$result.=self::domainEnumPropertyShow($fieldInfo,$tablename); 
 		$result.=self::domainEnumShow($fieldInfo,$tablename);
+		$result.=self::domainTreeLevelDefine($fieldInfo,$classname);
 		$result.="}\r\n";    
 		$result.="?>";
 		return $result;
@@ -494,6 +495,49 @@ class AutoCodeDomain extends AutoCode
 		}
 		return $result;   
 	}         
+
+	/**
+	 * 只有带有目录树数据模型的数据对象定义中才拥有的方法
+	 * @param array $fieldInfo 表列信息列表      
+	 * @param string $classname 当前类名称  
+	 */
+	private static function domainTreeLevelDefine($fieldInfo,$classname)
+	{
+		$result="\r\n";
+		if (array_key_exists("countChild",$fieldInfo)){
+			$realId=DataObjectSpec::getRealIDColumnName($classname);
+			$result.="    /**\r\n".
+					 "     * 计算所有的子元素数量并存储\r\n".	
+					 "     */\r\n".
+					 "    public static function allCountChild()\r\n".    
+					 "    {\r\n".
+					 "        \$max_id=$classname::max();\r\n".    
+					 "        for(\$i=1;\$i<=\$max_id;\$i++){\r\n".
+					 "            \$countChild=$classname::select(\"count(*)\",\"parent_id=\".\$i);\r\n".    
+					 "            $classname::updateBy(\"$realId=\".\$i,\"countChild=\".\$countChild);\r\n".
+					 "        }\r\n".    
+					 "    }\r\n\r\n";
+		}
+		if (array_key_exists("level",$fieldInfo)){
+			$result.="    /**\r\n".
+					 "     * 最高的层次，默认为3 \r\n".    
+					 "     */\r\n".
+					 "    public static function maxlevel()\r\n".    
+					 "    {\r\n".   
+					 "        return 3;//return $classname::select(\"max(level)\");\r\n".
+					 "    }\r\n\r\n";
+		}
+		if (array_key_exists("region_type",$fieldInfo)){
+			$result.="    /**\r\n".
+					 "     * 最高的层次，默认为3 \r\n".    
+					 "     */\r\n".
+					 "    public static function maxlevel()\r\n".    
+					 "    {\r\n".   
+					 "        return 3;//return $classname::select(\"max(region_type)\");\r\n".
+					 "    }\r\n\r\n";
+		}
+		return $result; 
+	}
 
 	/**
 	 *从表名称获取子文件夹的信息。

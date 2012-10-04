@@ -42,6 +42,11 @@ class AutoCodeAction extends AutoCode
 	* @var string
 	*/
 	public static $echo_upload="";
+	/**
+	 * 所有表列信息
+	 * @var mixed
+	 */
+	private static $fieldInfos;
 	
 	/**
 	 * 自动生成代码-控制器
@@ -72,7 +77,9 @@ class AutoCodeAction extends AutoCode
 			   $fieldInfos[$tablename][$fieldname]["Type"]=$field["Type"];
 			   $fieldInfos[$tablename][$fieldname]["Comment"]=$field["Comment"];
 		   }
-		}     
+		} 
+		self::$fieldInfos=$fieldInfos;      
+		
 		$tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
 		if (self::$isNoOutputCss) echo UtilCss::form_css()."\r\n"; 
 		self::$echo_result="";
@@ -99,7 +106,7 @@ class AutoCodeAction extends AutoCode
 			 echo '</div><br/>';
 		}else if(self::$type==1) {
 			 echo '</div>';   
-		}     	
+		}         
 		$category_cap=Gc::$appName;
 		$category_cap{0}=ucfirst($category_cap{0});
 		if (self::$type==2){                                                       
@@ -243,6 +250,20 @@ class AutoCodeAction extends AutoCode
 				$result.="         \$this->init();\r\n"; 
 				$result.="         \$this->ExtDirectMode();\r\n";
 				$result.="         \$this->ExtUpload();\r\n"; 
+				$relationSpecs=self::$relation_viewfield[$classname];
+				foreach ($fieldInfo as $fieldname=>$field)
+				{                
+					if (array_key_exists($fieldname,$relationSpecs)){
+						$relationShow=$relationSpecs[$fieldname];
+						foreach ($relationShow as $key=>$value) {                            
+							$fieldInfos=self::$fieldInfos[self::getTablename($key)];
+							if (array_key_exists("parent_id",$fieldInfos)){
+								$result.="         \$this->loadExtComponent(\"ComboBoxTree.js\");\r\n"; 
+                                break 2;
+							}
+						}
+					}
+				}
 				$result.="         \$this->loadExtJs('$instancename/$instancename.js');\r\n";
 				$text_area_fieldname=array(); 
 				foreach ($fieldInfo as $fieldname=>$field)
