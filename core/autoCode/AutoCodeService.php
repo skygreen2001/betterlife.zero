@@ -869,7 +869,7 @@ class AutoCodeService extends AutoCode
 				if (array_key_exists($fieldname,$relationSpecs)){
 					$relationShow=$relationSpecs[$fieldname];
 					foreach ($relationShow as $key=>$value) {
-						$realId=DataObjectSpec::getRealIDColumnName($key);
+						$realId=DataObjectSpec::getRealIDColumnName($key);                        
 						$show_fieldname=$value;
 						if ($realId!=$fieldname){
 							$show_fieldname.="_".$fieldname;  
@@ -877,6 +877,7 @@ class AutoCodeService extends AutoCode
 								$show_fieldname=str_replace("_id","",$show_fieldname);
 							}                       
 						}
+						if ($show_fieldname=="name")$show_fieldname=strtolower($key)."_".$value;
 						$i_name=$key;
 						$i_name{0}=strtolower($i_name{0});
 						$result.="                if (\${$instance_name}->$fieldname){\r\n";                        
