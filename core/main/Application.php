@@ -33,7 +33,10 @@
 		   /**
 			* 启动计划任务定时运行 
 			*/
-		   Cron::run();                  
+		   
+		   if (class_exists("Cron")){ 
+				Cron::run();           
+		   }       
 		   if (!empty($environment)){
 				foreach ($environment as $key=>$value){
 					if (isset(Gc::$$key)){
