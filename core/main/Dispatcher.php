@@ -112,6 +112,7 @@ class Dispatcher
 				$current_action->beforeAction();	
 			}
 			$current_action->$action();
+			if (get_class($current_action)=="Action_Ajax")die();    
 			if (method_exists($current_action,"afterAction")){
 				$current_action->afterAction();   
 			}
