@@ -36,7 +36,8 @@
 		   
 		   if (class_exists("Cron")){ 
 				Cron::run();           
-		   }       
+		   }      
+			
 		   if (!empty($environment)){
 				foreach ($environment as $key=>$value){
 					if (isset(Gc::$$key)){
