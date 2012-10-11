@@ -45,6 +45,25 @@ if (isset($_REQUEST["save_dir"])&&!empty($_REQUEST["save_dir"]))
 				}                                                                                                            
 				AutoCodeViewExt::$relation_viewfield[$classname]=$relation_viewfields;
 			}
+			
+			$redundancy_table_field_obj=$dataobject->redundancy->table;
+			if (!empty($redundancy_table_field_obj)){
+				$redundancy_table_fields=array();
+				foreach ($redundancy_table_field_obj as $redundancy_table) {
+					$attributes=$redundancy_table->attributes(); 
+					$table_name=$attributes->name."";
+					$redundancy_field_obj=$redundancy_table->field;
+					foreach ($redundancy_field_obj as $redundancy_field) {
+						$attributes=$redundancy_field->attributes(); 
+						$field_name=$attributes->name."";
+						$field_come=$attributes->come."";
+						if (empty($field_come)) $field_come=$field_name;
+						$redundancy_table_fields[$table_name][$field_name]=$field_come;
+					}
+				}
+				AutoCodeViewExt::$redundancy_table_fields[$classname]=$redundancy_table_fields;
+			}
+			
 			//**********************start:导出数据对象之间关系规范定义*************************       
 			relation_specification_create($classname,$dataobject);
 			//**********************end  :导出数据对象之间关系规范定义*************************

@@ -34,7 +34,12 @@ class AutoCode extends Object
 	 * 数据对象关系显示字段 
 	 * @var mixed
 	 */
-	public static $relation_viewfield;      
+	public static $relation_viewfield;  
+	/**
+	 * 数据对象引用另一个数据对象同样值的冗余字段 
+	 * @var mixed
+	 */
+	public static $redundancy_table_fields;    
 	/**
 	 * 获取类和注释的说明 
 	 */

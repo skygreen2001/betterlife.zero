@@ -286,12 +286,12 @@ class AutoCodeViewExt extends AutoCode
     public static function tableToViewJsDefine($tablename,$fieldInfo)
     {
         $appName_alias=Gc::$appName_alias;
+        $appName_alias=ucfirst($appName_alias);
         $appName=Gc::$appName;        
         $table_comment=self::tableCommentKey($tablename);   
         $classname=self::getClassname($tablename);
         $instancename=self::getInstancename($tablename);   
         $appName=ucfirst($appName); 
-        $appName_alias=ucfirst($appName_alias);
         //Ext "store" 中包含的fields
         $storeInfo=self::model_fields($classname,$instancename,$fieldInfo);
         $fields=$storeInfo['fields'];
@@ -347,6 +347,9 @@ class AutoCodeViewExt extends AutoCode
     
     /**
      * 获取Ext "Store"里的fields
+     * @param string $classname 数据对象类名
+     * @param string $instance_name 实体变量 
+     * @param array $fieldInfo 表列信息列表  
      */
     private static function model_fields($classname,$instancename,$fieldInfo)
     {        
@@ -476,6 +479,7 @@ class AutoCodeViewExt extends AutoCode
     
     /**
      * 关系显示定义 
+     * @param string $classname 数据对象类名
      */
     private static function relationViewDefine($classname,$instancename,$relationStore)
     {
@@ -622,6 +626,8 @@ class AutoCodeViewExt extends AutoCode
 
     /**
      * 获取Ext "EditWindow"里items的fieldLabels
+     * @param string $classname 数据对象类名
+     * @param array $fieldInfo 表列信息列表  
      */
     private static function model_fieldLables($appName_alias,$classname,$fieldInfo)
     {
@@ -629,8 +635,21 @@ class AutoCodeViewExt extends AutoCode
         $fieldLabels="";//Ext "EditWindow"里items的fieldLabels
         $treeLevelVisible_Add   ="";
         $treeLevelVisible_Update="";
+        $isRedundancyCurrentHad=false;
+        $redundancy_table_fields=self::$redundancy_table_fields[$classname];
         foreach ($fieldInfo as $fieldname=>$field)
         {        
+            if ($redundancy_table_fields){
+                if (!$isRedundancyCurrentHad){
+                    $redundancy_fields=array();   
+                    foreach ($redundancy_table_fields as $redundancy_table_field) {
+                        $redundancy_fields=array_merge($redundancy_fields,$redundancy_table_field);
+                    }     
+                    $isRedundancyCurrentHad=true;
+                }
+                if (array_key_exists($fieldname, $redundancy_fields))continue;
+            }
+
             if (isset($ignord_field)&&($ignord_field==$fieldname)){
                 continue;
             }     
@@ -810,6 +829,8 @@ class AutoCodeViewExt extends AutoCode
 
     /**
      * 获取Ext "Textarea" 转换成在线编辑器
+     * @param string $classname 数据对象类名
+     * @param array $fieldInfo 表列信息列表  
      */
     private static function model_textareaOnlineEditor($appName_alias,$classname,$instancename,$fieldInfo)
     {
@@ -829,7 +850,9 @@ class AutoCodeViewExt extends AutoCode
         $reset_img="";
         $add_img="";
         $update_img="";     
-        $has_textarea=false;   
+        $has_textarea=false; 
+        $isRedundancyCurrentHad=false;  
+        $redundancy_table_fields=self::$redundancy_table_fields[$classname];
         foreach ($fieldInfo as $fieldname=>$field)
         {       
             if (self::isNotColumnKeywork($fieldname))
@@ -840,9 +863,20 @@ class AutoCodeViewExt extends AutoCode
                 {
                     $result["tableFieldIdName"]=$fieldname;       
                 }else if ($isImage){
+                    if ($redundancy_table_fields){
+                        if (!$isRedundancyCurrentHad){
+                            $redundancy_fields=array();   
+                            foreach ($redundancy_table_fields as $redundancy_table_field) {
+                                $redundancy_fields=array_merge($redundancy_fields,$redundancy_table_field);
+                            }     
+                            $isRedundancyCurrentHad=true;
+                        }
+                        if (array_key_exists($fieldname, $redundancy_fields))continue;
+                    }
                     $reset_img.="                        this.{$fieldname}Upload.setValue(this.{$fieldname}.getValue());\r\n";
                     $add_img.="            $appName_alias.$classname.View.Running.edit_window.{$fieldname}Upload.setValue(\"\");\r\n";   
                     $update_img.="            $appName_alias.$classname.View.Running.edit_window.{$fieldname}Upload.setValue($appName_alias.$classname.View.Running.edit_window.{$fieldname}.getValue());\r\n";           
+
                 }else{                  
                     $datatype=self::comment_type($field["Type"]);
                     $field_comment=$field["Comment"];  
@@ -955,6 +989,8 @@ class AutoCodeViewExt extends AutoCode
 
     /**
      * Ext "Tabs" 中"onAddItems"包含的viewdoblock
+     * @param string $classname 数据对象类名
+     * @param array $fieldInfo 表列信息列表   
      */
     private static function model_viewblock($classname,$fieldInfo)
     {
@@ -1033,6 +1069,8 @@ class AutoCodeViewExt extends AutoCode
 
     /**
      * 获取Ext "Grid" 中包含的columns
+     * @param string $classname 数据对象类名
+     * @param array $fieldInfo 表列信息列表   
      */
     private static function model_columns($classname,$fieldInfo)
     {
@@ -1110,6 +1148,9 @@ class AutoCodeViewExt extends AutoCode
      * 获取Ext "Grid" 中"tbar"包含的items中的items<br/>
      * 获取重置语句<br/>
      * 获取查询中的语句<br/>
+     * @param string $classname 数据对象类名
+     * @param string $instance_name 实体变量    
+     * @param array $fieldInfo 表列信息列表   
      */
     private static function model_filters($appName_alias,$classname,$instancename,$fieldInfo)
     {
@@ -1212,7 +1253,12 @@ class AutoCodeViewExt extends AutoCode
         return $result;
     }
 
-
+    /**
+     * 批量上传图片
+     * @param string $classname 数据对象类名
+     * @param string $instance_name 实体变量    
+     * @param array $fieldInfo 表列信息列表
+     */
     private static function model_upload($appName_alias,$classname,$instancename,$fieldInfo)
     {
         $menu_uploadImg=",\r\n";
@@ -1220,11 +1266,22 @@ class AutoCodeViewExt extends AutoCode
         $openBatchUploadImagesWindow=",\r\n";
         $isImage_once=false;
         $uploadServiceUrl=",\r\n";
+
         $moreImageUploads="if ($appName_alias.$classname.View.Running.batchUploadImagesWindow==null){\r\n".
                           "                $appName_alias.$classname.View.Running.batchUploadImagesWindow=new $appName_alias.$classname.View.BatchUploadImagesWindow();\r\n".
                           "            }\r\n";
+        $isRedundancyCurrentHad=false;
+        $redundancy_table_fields=self::$redundancy_table_fields[$classname];
         foreach ($fieldInfo as $fieldname=>$field)
-        {
+        {            
+            if (!$isRedundancyCurrentHad){
+                $redundancy_fields=array();   
+                foreach ($redundancy_table_fields as $redundancy_table_field) {
+                    $redundancy_fields=array_merge($redundancy_fields,$redundancy_table_field);
+                }     
+                $isRedundancyCurrentHad=true;
+            }
+            if (array_key_exists($fieldname, $redundancy_fields))continue;
             $isImage =self::columnIsImage($fieldname,$field["Comment"]);  
             $field_comment=$field["Comment"];
             $field_comment=self::columnCommentKey($field_comment,$fieldname);
