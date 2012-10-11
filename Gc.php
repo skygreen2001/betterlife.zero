@@ -375,7 +375,7 @@ class Gc
 				$same_part=explode(DIRECTORY_SEPARATOR,Gc::$nav_root_path);
 				if ($same_part&&(count($same_part)>2)){
 					$same_part=$same_part[count($same_part)-2];
-					Gc::$attachment_url=substr(Gc::$attachment_url,0,(strpos(Gc::$attachment_url,$same_part)+strlen($same_part)+1))."attachment/";
+					Gc::$attachment_url=substr(Gc::$attachment_url,0,(strpos(Gc::$attachment_url,$same_part."/")+strlen($same_part)+1))."attachment/";
 				}    
 			}
 			if (empty(Gc::$upload_url)){
@@ -383,7 +383,7 @@ class Gc
 				$same_part=explode(DIRECTORY_SEPARATOR,Gc::$nav_root_path);
 				if ($same_part&&(count($same_part)>2)){
 					$same_part=$same_part[count($same_part)-2];
-					Gc::$upload_url=substr(Gc::$upload_url,0,(strpos(Gc::$upload_url,$same_part)+strlen($same_part)+1))."upload/";
+					Gc::$upload_url=substr(Gc::$upload_url,0,(strpos(Gc::$upload_url,$same_part."/")+strlen($same_part)+1))."upload/";
 				}  
 			}            
 		}     

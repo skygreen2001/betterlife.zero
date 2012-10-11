@@ -114,7 +114,7 @@ $appName_alias.$classname.View={
                             xtype : 'textfield',anchor:'98%'
                         },
                         items : [ 
-$fieldLabels        
+$fieldLabels
                         ]
                     })                
                 ],
