@@ -529,11 +529,10 @@ class AutoCodeService extends AutoCode
                          "        \$data=$classname::get(\$filter);\r\n".
                          self::enumKey2CommentInExtService($classname,$fieldInfo).   
                          "        \$arr_output_header= self::fieldsMean({$classname}::tablename()); \r\n".
-                         "        unset(\$arr_output_header['updateTime']);\r\n".
-                         "        unset(\$arr_output_header['commitTime']);\r\n".
+                         self::relationFieldOutput($instance_name,$classname,$fieldInfo).
+                         "        unset(\$arr_output_header['updateTime'],\$arr_output_header['commitTime']);\r\n".
                          "        \$diffpart=date(\"YmdHis\");\r\n".
                          "        \$outputFileName=Gc::\$attachment_path.\"{$instance_name}\".DIRECTORY_SEPARATOR.\"export\".DIRECTORY_SEPARATOR.\"{$instance_name}\$diffpart.xls\"; \r\n".
-                         "        UtilFileSystem::createDir(dirname(\$outputFileName)); \r\n".
                          "        UtilExcel::arraytoExcel(\$arr_output_header,\$data,\$outputFileName,false); \r\n".
                          "        \$downloadPath  =Gc::\$attachment_url.\"{$instance_name}/export/{$instance_name}\$diffpart.xls\"; \r\n".
                          "        return array(\r\n".
@@ -940,10 +939,12 @@ class AutoCodeService extends AutoCode
                         if ($show_fieldname=="name")$show_fieldname=strtolower($key)."_".$value;
                         $i_name=$key;
                         $i_name{0}=strtolower($i_name{0});
-                        $result.="                if (\${$instance_name}->$fieldname){\r\n";                        
-                        $result.="                    \${$i_name}_instance=$key::get_by_id(\${$instance_name}->$fieldname);\r\n";
-                        $result.="                    \$".$instance_name."['$show_fieldname']=\${$i_name}_instance->$value;\r\n";
-                        $result.="                }\r\n";   
+                        if (!array_key_exists("$show_fieldname",$fieldInfo)){
+                            $result.="                if (\${$instance_name}->$fieldname){\r\n";                        
+                            $result.="                    \${$i_name}_instance=$key::get_by_id(\${$instance_name}->$fieldname);\r\n";
+                            $result.="                    \$".$instance_name."['$show_fieldname']=\${$i_name}_instance->$value;\r\n";
+                            $result.="                }\r\n";   
+                        }
                         $fieldInfos=self::$fieldInfos[self::getTablename($key)];
                         if (!$isTreeLevelHad){
                             if (array_key_exists("parent_id",$fieldInfos)&&array_key_exists("level",$fieldInfos)){
@@ -979,6 +980,83 @@ class AutoCodeService extends AutoCode
         }
         return $result;  
     }
+
+    /**
+     * 导出关系列，将标识转换成易读的文字
+     * @param mixed $instance_name 实体变量
+     * @param mixed $classname 数据对象列名
+     * @param mixed $fieldInfo 表列信息列表
+     */
+    private static function relationFieldOutput($instance_name,$classname,$fieldInfo)
+    {
+        $result="";
+        if (array_key_exists($classname,self::$relation_viewfield)){ 
+            $relationSpecs=self::$relation_viewfield[$classname]; 
+            $isTreeLevelHad=false;
+            foreach ($fieldInfo as $fieldname=>$field){
+                if (array_key_exists($fieldname,$relationSpecs)){
+                    $relationShow=$relationSpecs[$fieldname];
+                    foreach ($relationShow as $key=>$value) {
+                        $realId=DataObjectSpec::getRealIDColumnName($key);                        
+                        $show_fieldname=$value;
+                        if ($realId!=$fieldname){
+                            $show_fieldname.="_".$fieldname;  
+                            if (contain($show_fieldname,"_id")){
+                                $show_fieldname=str_replace("_id","",$show_fieldname);
+                            }                       
+                        }
+                        if ($show_fieldname=="name")$show_fieldname=strtolower($key)."_".$value;
+                        $i_name=$key;
+                        $i_name{0}=strtolower($i_name{0});
+                        if (!array_key_exists("$show_fieldname",$fieldInfo)){
+                            $result.="            if (\${$instance_name}->$fieldname){\r\n";                        
+                            $result.="                \${$i_name}_instance=$key::get_by_id(\${$instance_name}->$fieldname);\r\n";
+                            $result.="                \$".$instance_name."['$fieldname']=\${$i_name}_instance->$value;\r\n";
+                            $result.="            }\r\n";   
+                        }else{
+                            $result.="            unset(\$arr_output_header[\"$fieldname\"]);\r\n";   
+                        }
+                        $fieldInfos=self::$fieldInfos[self::getTablename($key)];
+                        if (!$isTreeLevelHad){
+                            if (array_key_exists("parent_id",$fieldInfos)&&array_key_exists("level",$fieldInfos)){
+                                $classNameField="name";
+                                if (array_key_exists($i_name."_name",$fieldInfos))$className=$i_name."_name";
+                                if (array_key_exists($i_name."Name",$fieldInfos))$className=$i_name."Name";
+                                if (array_key_exists($i_name."name",$fieldInfos))$className=$i_name."name";
+                                $field_comment=$field["Comment"];  
+                                $field_comment=self::columnCommentKey($field_comment,$fieldname);
+                                $result.="            if (\${$i_name}_instance){\r\n".
+                                         "                \$level=\${$i_name}_instance->level;\r\n".
+                                         "                \${$i_name}ShowAll=\${$i_name}_instance->$classNameField;\r\n".
+                                         "                switch (\$level) {\r\n".
+                                         "                   case 2:\r\n".
+                                         "                     \${$i_name}=$key::get_by_id(\${$i_name}_instance->parent_id);\r\n".
+                                         "                     \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
+                                         "                     break;\r\n".
+                                         "                   case 3:\r\n".
+                                         "                     \${$i_name}=$key::get_by_id(\${$i_name}_instance->parent_id);\r\n".
+                                         "                     \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
+                                         "                     \${$i_name}=$key::get_by_id(\${$i_name}->parent_id);\r\n".
+                                         "                     \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
+                                         "                     break;\r\n".
+                                         "                }\r\n".
+                                         "                \${$instance_name}[\"{$i_name}ShowAll\"]=\${$i_name}ShowAll;\r\n".
+                                         "                \$pos=UtilArray::keyPosition(\$arr_output_header,\"$fieldname\");\r\n".
+                                         "                UtilArray::insert(\$arr_output_header,\$pos+1,array('{$i_name}ShowAll'=>\"{$field_comment}[全]\"));\r\n".
+                                         "            }\r\n";
+                                $isTreeLevelHad=true;
+                            }
+                        }                 
+                    }                           
+                }    
+            }
+            $result="        foreach (\$data as \$$instance_name) {\r\n".$result.
+                    "        }\r\n";   
+        }
+        return $result; 
+
+    }
+
     
     /**
      * 将表列为枚举类型的列用户能阅读的注释文字内容转换成需要存储在数据库里的值 

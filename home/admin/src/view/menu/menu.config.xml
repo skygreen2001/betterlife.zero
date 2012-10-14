@@ -31,7 +31,8 @@
 		<menu name="菜单管理" address="index.php?go=admin.system.menumanager" />
 		<menu name="资源库管理" title="第三方库加载" address="index.php?go=admin.system.librarymanager" />
 		<menu name="模块管理" title="功能模块加载" address="index.php?go=admin.system.modulemanager" />        
-		<menu name="监控宝" title="监测网站故障、发送告警短信和邮件，并分析网站性能趋势" address="http://www.jiankongbao.com/" />        
+		<menu name="监控宝" title="监测网站故障、发送告警短信和邮件，并分析网站性能趋势" address="http://www.jiankongbao.com/" />               
+		<menu name="网站安全监测" title="360网站安全监测" address="http://webscan.360.cn/" />  
 		<menu name="性能探测器" title="性能探针Probe，查看服务器性能" address="index.php?go=admin.system.probe" />
 	</menuGroup>    
 	<menuGroup id="navDev" name="开发者园地" iconCls="nav">
