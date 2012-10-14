@@ -20,7 +20,8 @@ class UtilExcel extends Util
 	* @param bool $isDirectDownload 是否直接下载。默认是否，保存到本地文件路径 
 	*/
 	public static function arraytoExcel($arr_output_header,$excelarr,$outputFileName=null,$isDirectDownload=false,$isExcel2007=false)
-	{                                    
+	{                   
+		UtilFileSystem::createDir(dirname($outputFileName));                  
 		$objActSheet=array ();                                     
 		$objExcel=new PHPExcel();   
 		if ($isExcel2007){
@@ -33,13 +34,39 @@ class UtilExcel extends Util
 					
 		//获取表内容
 		$i=0;
-		foreach($excelarr as $record)
-		{      
+		if (!empty($excelarr)){
+			foreach($excelarr as $record)
+			{      
+				$column='A';
+				foreach($arr_output_header as $key=>$value)
+				{
+					if($i==0)
+					{
+						if ($column>'A')$value=str_replace(array('标识','编号','主键'),"",$value);
+						$objActsheet->setCellValue($column."1",$value);   
+						$objActsheet->setCellValue($column."2",$record->$key);
+						$j=2;
+					}
+					else                  
+					{
+						$objActsheet->setCellValue($column.$i,$record->$key);
+					}
+					$column++;
+				}
+				if($j==2)
+				{
+					$i=2;
+					$j=0;
+				}
+				$i++;
+			}
+		}else{
 			$column='A';
 			foreach($arr_output_header as $key=>$value)
 			{
 				if($i==0)
 				{
+					if ($column>'A') $value=str_replace(array('标识','编号','主键'),"",$value);
 					$objActsheet->setCellValue($column."1",$value);   
 					$objActsheet->setCellValue($column."2",$record->$key);
 					$j=2;
@@ -49,17 +76,11 @@ class UtilExcel extends Util
 					$objActsheet->setCellValue($column.$i,$record->$key);
 				}
 				$column++;
-			}
-			if($j==2)
-			{
-				$i=2;
-				$j=0;
-			}
-			$i++;
+			}    
 		}
 		if (empty($outputFileName)){
 			$outputFileName=date("YmdHis").".xlsx";    
-		}      
+		}                  
 																   
 		if ($isDirectDownload){
 			header("Content-Type: application/force-download");

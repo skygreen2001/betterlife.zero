@@ -34,11 +34,6 @@ class AutoCodeViewExt extends AutoCode
      */
     public static $filter_fieldnames=array();    
     /**
-     * 所有表信息
-     * @var mixed
-     */
-    private static $tableInfoList;
-    /**
      * 所有表列信息
      * @var mixed
      */
@@ -1027,8 +1022,9 @@ class AutoCodeViewExt extends AutoCode
                                         $isTreelevelViewInfoHad=true;
                                     }    
                                 }
-
-                                $viewdoblock.="                         '<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$show_fieldname}}$show_TreelevelViewInfo</td></tr>',\r\n";
+                                if (!array_key_exists("$show_fieldname",$fieldInfo)){
+                                    $viewdoblock.="                         '<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$show_fieldname}}$show_TreelevelViewInfo</td></tr>',\r\n";
+                                }
                             }          
                         }     
                     }
@@ -1097,14 +1093,18 @@ class AutoCodeViewExt extends AutoCode
                                 if ($show_fieldname=="name"){
                                     $show_fieldname=strtolower($key)."_".$show_fieldname;
                                 }
-                                $columns.="                          {header : '$field_comment',dataIndex : '{$show_fieldname}'},\r\n";
+                                if (!array_key_exists("$show_fieldname",$fieldInfo)){
+                                    $columns.="                          {header : '$field_comment',dataIndex : '{$show_fieldname}'},\r\n";
+                                }
                             }
                         }else{
                             if ($value=="name"){
                                 $field_comment=$field["Comment"];  
                                 $field_comment=self::columnCommentKey($field_comment,$fieldname);   
-                                $show_fieldname= strtolower($key)."_".$value;
-                                $columns.="                          {header : '$field_comment',dataIndex : '{$show_fieldname}'},\r\n";
+                                $show_fieldname= strtolower($key)."_".$value;                                
+                                if (!array_key_exists("$show_fieldname",$fieldInfo)){
+                                    $columns.="                          {header : '$field_comment',dataIndex : '{$show_fieldname}'},\r\n";
+                                }
                             }
                             
                         }
@@ -1400,49 +1400,6 @@ BATCHUPLOADIMAGES;
         $result["openBatchUploadImagesWindow"]   =$openBatchUploadImagesWindow;   
         $result["batchUploadImagesWinow"]   =$batchUploadImagesWinow;   
         return $result;
-    }
-
-    /**
-     * 获取表注释第一行关键词说明
-     */
-    private static function tableCommentKey($tablename)
-    {
-        if (self::$tableInfoList!=null&&count(self::$tableInfoList)>0&&  array_key_exists("$tablename", self::$tableInfoList))
-        {
-            $table_comment=self::$tableInfoList[$tablename]["Comment"];
-            $table_comment=str_replace("关系表","",$table_comment); 
-            if (contain($table_comment,"\r")||contain($table_comment,"\n")){
-                $table_comment=preg_split("/[\s,]+/", $table_comment);    
-                $table_comment=$table_comment[0]; 
-            }
-        }else{
-            $table_comment=$tablename;
-        }    
-        return $table_comment;
-    }
-
-    /**
-     * 获取列注释第一行关键词说明
-     * @param mixed $field_comment 列注释
-     * @param mixed $default 默认返回值
-     * @return mixed
-     */
-    private static function columnCommentKey($field_comment,$default="")
-    {
-        if (empty($field_comment)){
-            return $default;
-        }
-        if (contain($field_comment,"\r")||contain($field_comment,"\n"))
-        {
-            $field_comment=preg_split("/[\s,]+/", $field_comment);    
-            $field_comment=$field_comment[0]; 
-        }      
-        if ($field_comment){
-            $field_comment=str_replace('标识',"",$field_comment);
-            $field_comment=str_replace('编号',"",$field_comment);  
-            $field_comment=str_replace('主键',"",$field_comment);      
-        }                    
-        return $field_comment;
     }
 
     /**
