@@ -32,11 +32,6 @@ class AutoCodeService extends AutoCode
      * 3.生成ExtJs框架使用的Service【后台】。
      */
     public static $type;
-    /**
-     * 所有表列信息
-     * @var mixed
-     */
-    private static $fieldInfos;
 
     /**
      * 自动生成代码-服务类
@@ -52,21 +47,8 @@ class AutoCodeService extends AutoCode
             self::$service_dir_full=UtilString::gbk2utf8(self::$service_dir_full);    
         }   
         self::$service_dir_full=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR.self::$service_dir.DIRECTORY_SEPARATOR;
+        self::init();
         
-        $tableList=Manager_Db::newInstance()->dbinfo()->tableList(); 
-        
-        $fieldInfos=array();
-        foreach ($tableList as $tablename){
-           $fieldInfoList=Manager_Db::newInstance()->dbinfo()->fieldInfoList($tablename); 
-           foreach($fieldInfoList as $fieldname=>$field){
-               $fieldInfos[$tablename][$fieldname]["Field"]=$field["Field"];
-               $fieldInfos[$tablename][$fieldname]["Type"]=$field["Type"];
-               $fieldInfos[$tablename][$fieldname]["Comment"]=$field["Comment"];
-           }
-        }
-        self::$fieldInfos=$fieldInfos;   
-        
-        $tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
         if (self::$isNoOutputCss) echo UtilCss::form_css()."\r\n";  
 
         switch (self::$type) {
@@ -86,8 +68,8 @@ class AutoCodeService extends AutoCode
              echo '<div id="Content_22" style="display:none;">';           
              break;
         }         
-        foreach($tableList as $tablename){     
-            $definePhpFileContent=self::tableToServiceDefine($tablename,$tableInfoList,$fieldInfos); 
+        foreach(self::$tableList as $tablename){     
+            $definePhpFileContent=self::tableToServiceDefine($tablename); 
             if (isset($definePhpFileContent)&&(!empty($definePhpFileContent))){
                $classname=self::saveServiceDefineToDir($tablename,$definePhpFileContent);
                echo "生成导出完成:$tablename=>$classname!<br/>";   
@@ -107,18 +89,9 @@ class AutoCodeService extends AutoCode
             echo "<font color='#FF0000'>[需要在管理类Manager_Service里添加没有的代码]</font><br />";      
             $section_define="";
             $section_content="";
-            foreach($tableList as $tablename){  
-                $classname=self::getClassname($tablename);             
-                if ($tableInfoList!=null&&count($tableInfoList)>0&&array_key_exists("$tablename", $tableInfoList)){
-                    $table_comment=$tableInfoList[$tablename]["Comment"];
-                    $table_comment=str_replace("关系表","",$table_comment); 
-                    if (contain($table_comment,"\r")||contain($table_comment,"\n")){
-                        $table_comment=preg_split("/[\s,]+/", $table_comment);    
-                        $table_comment=$table_comment[0]; 
-                    }  
-                }else{
-                    $table_comment="$classname";
-                }    
+            foreach(self::$tableList as $tablename){  
+                $table_comment=self::tableCommentKey($tablename);
+                $classname=self::getClassname($tablename);
                 $classname{0} = strtolower($classname{0});  
                 $service_classname=self::getServiceClassname($tablename); 
                 $section_define .="    private static \$".$classname."Service;\r\n";  
@@ -163,18 +136,9 @@ class AutoCodeService extends AutoCode
             echo "<br/><font color='#FF0000'>[需要在管理类Manager_ExtService里添加没有的代码]</font><br/>";      
             $section_define="";
             $section_content="";
-            foreach($tableList as $tablename){  
-                $classname=self::getClassname($tablename);             
-                if ($tableInfoList!=null&&count($tableInfoList)>0&&array_key_exists("$tablename", $tableInfoList)){
-                    $table_comment=$tableInfoList[$tablename]["Comment"];
-                    $table_comment=str_replace("关系表","",$table_comment); 
-                    if (contain($table_comment,"\r")||contain($table_comment,"\n")){
-                        $table_comment=preg_split("/[\s,]+/", $table_comment);    
-                        $table_comment=$table_comment[0]; 
-                    }          
-                }else{
-                    $table_comment="$classname";
-                }    
+            foreach(self::$tableList as $tablename){  
+                $table_comment=self::tableCommentKey($tablename);   
+                $classname=self::getClassname($tablename);    
                 $classname{0} = strtolower($classname{0});  
                 $service_classname=self::getServiceClassname($tablename); 
                 $section_define .="    private static \$".$classname."Service;\r\n";  
@@ -216,7 +180,7 @@ class AutoCodeService extends AutoCode
              */
             echo "<font color='#FF0000'>[需要在Ext Direct 服务配置文件:service.config.xml里添加没有的代码]</font><br/>";  
             $section_content="";
-            foreach($tableList as $tablename){ 
+            foreach(self::$tableList as $tablename){ 
                 $classname=self::getClassname($tablename);  
                 $section_content.="    <service name=\"ExtService{$classname}\">\r\n". 
                                   "        <methods>\r\n".       
@@ -313,37 +277,26 @@ class AutoCodeService extends AutoCode
     /**
      * 将表列定义转换成数据对象Php文件定义的内容
      * @param string $tablename 表名
-     * @param array $tableInfoList 表信息列表
      * @param array $fieldInfos 表列信息列表
      */
-    private static function tableToServiceDefine($tablename,$tableInfoList,$fieldInfos)
+    private static function tableToServiceDefine($tablename)
     {
-        if (array_key_exists($tablename,$fieldInfos)){
-            $fieldInfo=$fieldInfos[$tablename];
+        if (array_key_exists($tablename,self::$fieldInfos)){
+            $fieldInfo=self::$fieldInfos[$tablename];
         }else{
-            $fieldInfo=$fieldInfos;
+            $fieldInfo=self::$fieldInfos;
         }
         $result            ="<?php\r\n";
         $classname         =self::getClassname($tablename);
         $instance_name     =self::getInstancename($tablename); 
         $service_classname =self::getServiceClassname($tablename);
         $object_desc       ="";
-        if ($tableInfoList!=null&&count($tableInfoList)>0&&array_key_exists("$tablename", $tableInfoList))
+        $object_desc=self::tableCommentKey($tablename);
+        if (self::$tableInfoList!=null&&count(self::$tableInfoList)>0&&array_key_exists("$tablename", self::$tableInfoList))
         {
-            $object_desc   =$tableInfoList[$tablename]["Comment"];
-            $object_desc=str_replace("关系表","",$object_desc); 
-            if (contain($object_desc,"\r")||contain($object_desc,"\n")){
-                $object_desc=preg_split("/[\s,]+/", $object_desc);    
-                $object_desc=$object_desc[0]; 
-            }           
-            $table_comment ="服务类:".$object_desc;                     
-            //$table_comment =str_replace("\n","\r\n * ",$table_comment); 
-            //if (endWith($table_comment,"\r\n * ")){
-               //$table_comment=substr($table_comment,0,strlen($table_comment)-5);
-            //}                                                         
+            $table_comment ="服务类:".$object_desc;    
         }else
         {
-            $object_desc   =$classname;
             $table_comment ="关于服务类$classname的描述";
         }    
         $category = Gc::$appName;
@@ -945,13 +898,10 @@ class AutoCodeService extends AutoCode
                             $result.="                    \$".$instance_name."['$show_fieldname']=\${$i_name}_instance->$value;\r\n";
                             $result.="                }\r\n";   
                         }
-                        $fieldInfos=self::$fieldInfos[self::getTablename($key)];
+                        $fieldInfo=self::$fieldInfos[self::getTablename($key)];
                         if (!$isTreeLevelHad){
-                            if (array_key_exists("parent_id",$fieldInfos)&&array_key_exists("level",$fieldInfos)){
-                                $classNameField="name";
-                                if (array_key_exists($i_name."_name",$fieldInfos))$className=$i_name."_name";
-                                if (array_key_exists($i_name."Name",$fieldInfos))$className=$i_name."Name";
-                                if (array_key_exists($i_name."name",$fieldInfos))$className=$i_name."name";
+                            if (array_key_exists("parent_id",$fieldInfo)&&array_key_exists("level",$fieldInfo)){
+                                $classNameField=self::getShowFieldNameByClassname($key);
                                 $result.="                if (\${$i_name}_instance){\r\n".
                                          "                    \$level=\${$i_name}_instance->level;\r\n".
                                          "                    \${$i_name}ShowAll=\${$i_name}_instance->$classNameField;\r\n".
@@ -1019,10 +969,7 @@ class AutoCodeService extends AutoCode
                         $fieldInfos=self::$fieldInfos[self::getTablename($key)];
                         if (!$isTreeLevelHad){
                             if (array_key_exists("parent_id",$fieldInfos)&&array_key_exists("level",$fieldInfos)){
-                                $classNameField="name";
-                                if (array_key_exists($i_name."_name",$fieldInfos))$className=$i_name."_name";
-                                if (array_key_exists($i_name."Name",$fieldInfos))$className=$i_name."Name";
-                                if (array_key_exists($i_name."name",$fieldInfos))$className=$i_name."name";
+                                $classNameField=self::getShowFieldNameByClassname($key);
                                 $field_comment=$field["Comment"];  
                                 $field_comment=self::columnCommentKey($field_comment,$fieldname);
                                 $result.="            if (\${$i_name}_instance){\r\n".

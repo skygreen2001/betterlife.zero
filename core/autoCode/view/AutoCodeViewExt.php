@@ -34,11 +34,6 @@ class AutoCodeViewExt extends AutoCode
      */
     public static $filter_fieldnames=array();    
     /**
-     * 所有表列信息
-     * @var mixed
-     */
-    private static $fieldInfos;
-    /**
      * 设置必需的路径
      */
     public static function pathset()
@@ -69,32 +64,12 @@ class AutoCodeViewExt extends AutoCode
         foreach ($files as $file) {
             Initializer::$coreFiles[Config_F::ROOT_CORE][basename($file,Initializer::SUFFIX_FILE_PHP)]=$file;
         }        
-        
-        $tableList=Manager_Db::newInstance()->dbinfo()->tableList();
-        $fieldInfos=array();
-        $tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList();
-        self::$tableInfoList=$tableInfoList;  
-        foreach ($tableList as $tablename){
-            $fieldInfoList=Manager_Db::newInstance()->dbinfo()->fieldInfoList($tablename); 
-            foreach($fieldInfoList as $fieldname=>$field){
-                $fieldInfos[$tablename][$fieldname]["Field"]=$field["Field"];
-                $fieldInfos[$tablename][$fieldname]["Type"]=$field["Type"];
-                $fieldInfos[$tablename][$fieldname]["Comment"]=$field["Comment"];          
-                if ($field["Null"]=='NO'){
-                    $fieldInfos[$tablename][$fieldname]["IsPermitNull"]=false; 
-                }else{
-                    $fieldInfos[$tablename][$fieldname]["IsPermitNull"]=true;   
-                }
-            }   
-            $classname=self::getClassname($tablename); 
-            self::$class_comments[$classname]=$tableInfoList[$tablename]["Comment"];      
-        }           
-        self::$fieldInfos=$fieldInfos;                                                           
+        self::init();                                                              
         if (self::$isNoOutputCss) echo UtilCss::form_css()."\r\n";        
         AutoCodeFoldHelper::foldEffectCommon("Content_51");  
         echo "<font color='#FF0000'>采用ExtJs框架生成后端Js文件导出:</font></a>";   
         echo '<div id="Content_51" style="display:none;">';
-        foreach ($fieldInfos as $tablename=>$fieldInfo){
+        foreach (self::$fieldInfos as $tablename=>$fieldInfo){
             $defineJsFileContent=self::tableToViewJsDefine($tablename,$fieldInfo);
             if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($defineJsFileContent)){
                 $jsName=self::saveJsDefineToDir($tablename,$defineJsFileContent);
@@ -107,7 +82,7 @@ class AutoCodeViewExt extends AutoCode
         AutoCodeFoldHelper::foldEffectCommon("Content_52");              
         echo "<font color='#FF0000'>生成后端tpl模板显示文件导出:</font></a>";  
         echo '<div id="Content_52" style="display:none;">';
-        foreach ($fieldInfos as $tablename=>$fieldInfo){      
+        foreach (self::$fieldInfos as $tablename=>$fieldInfo){      
             $defineTplFileContent=self::tableToViewTplDefine($fieldInfo);
             if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($defineTplFileContent)){
                 $tplName=self::saveTplDefineToDir($tablename,$defineTplFileContent);
@@ -163,14 +138,14 @@ class AutoCodeViewExt extends AutoCode
         foreach (self::$relation_viewfield as $relation_viewfield) {
             foreach ($relation_viewfield as $key=>$showClasses) {
                 foreach ($showClasses as $key=>$value) {
-                    $fieldInfos=self::$fieldInfos[self::getTablename($key)];
+                    $fieldInfo=self::$fieldInfos[self::getTablename($key)];
                     $key{0}=strtolower($key{0});
                     $filename =$key.Config_F::SUFFIX_FILE_PHP;  
                     if (!file_exists(self::$ajax_dir_full.$filename)){  
                         $isNeedCreate=true;
                         break 3;
                     }
-                    if (array_key_exists("parent_id",$fieldInfos)){
+                    if (array_key_exists("parent_id",$fieldInfo)){
                         $filename =$key."Tree".Config_F::SUFFIX_FILE_PHP;  
                         if (!file_exists(self::$ajax_dir_full.$filename)){ 
                             $isNeedCreate=true;
@@ -193,11 +168,12 @@ class AutoCodeViewExt extends AutoCode
                         $classname=$key;
                         $classname{0}=strtolower($classname{0});  
                         
-                        $fieldInfos=self::$fieldInfos[self::getTablename($key)];
-                        if (array_key_exists("parent_id",$fieldInfos)){
+                        $fieldInfo=self::$fieldInfos[self::getTablename($key)];
+                        if (array_key_exists("parent_id",$fieldInfo)){
                             $filename =$key_i."Tree".Config_F::SUFFIX_FILE_PHP;  
                             if (!file_exists(self::$ajax_dir_full.$filename)){ 
                                 $realId=DataObjectSpec::getRealIDColumnName($classname);
+                                $showname=self::getShowFieldNameByClassname($key);
                                 $result="<?php \r\n".                                  
                                          "require_once (\"../../../../init.php\"); \r\n".        
                                          "\$node=\$_REQUEST[\"id\"];\r\n".      
@@ -213,17 +189,17 @@ class AutoCodeViewExt extends AutoCode
                                          "    \$maxLevel={$key}::maxlevel();\r\n".
                                          "    foreach (\${$key_i}s as \${$key_i}){\r\n".
                                          "        \$trees.=\"{\r\n".
-                                         "            'text': '\${$key_i}->name',\r\n".
+                                         "            'text': '\${$key_i}->{$showname}',\r\n".
                                          "            'id': '\${$key_i}->$realId',\r\n".                             
                                          "            'level':'\${$key_i}->level',\";\r\n".
                                          "        if (\${$key_i}->level==\$maxLevel){\r\n".
                                          "            \$trees.=\"'leaf':true,'cls': 'file'\";\r\n".
                                          "        }else{\r\n".
                                          "            \$trees.=\"'cls': 'folder'\"; \r\n".
-                                         "            if (isset(\${$key_i}->countChild)){\r\n".
-                                         "                if (\${$key_i}->countChild==0){\r\n".
-                                         "                    \$trees.=\",'leaf':true\"; \r\n".
-                                         "                }\r\n".
+                                         "        }\r\n".
+                                         "        if (isset(\${$key_i}->countChild)){\r\n".
+                                         "            if (\${$key_i}->countChild==0){\r\n".
+                                         "                \$trees.=\",'leaf':true\"; \r\n".
                                          "            }\r\n".
                                          "        }\r\n".
                                          "        \$trees.=\"},\"; \r\n".
@@ -403,7 +379,7 @@ class AutoCodeViewExt extends AutoCode
                                     }
                                 }
                             }
-                            $relation_classcomment=self::getClassComments($key);
+                            $relation_classcomment=self::$class_comments[$key];
                             $relation_classcomment=str_replace("关系表","",$relation_classcomment); 
                             if (contain($relation_classcomment,"\r")||contain($relation_classcomment,"\n")){
                                 $relation_classcomment=preg_split("/[\s,]+/", $relation_classcomment);    
@@ -411,10 +387,10 @@ class AutoCodeViewExt extends AutoCode
                             }   
 
                             if ($classname!=$key){
-                                $fieldInfos=self::$fieldInfos[self::getTablename($key)];
+                                $fieldInfo=self::$fieldInfos[self::getTablename($key)];
                                 $key{0}=strtolower($key{0});
                                 if (!$isTreelevelStoreHad){
-                                    if (array_key_exists("parent_id",$fieldInfos)){
+                                    if (array_key_exists("parent_id",$fieldInfo)){
                                         $fields.="                  {name: '{$key}ShowAll',type: 'string'},\r\n"; 
                                         $isTreelevelStoreHad=true;
                                     }    
@@ -437,7 +413,7 @@ class AutoCodeViewExt extends AutoCode
                                                     "            idProperty: '$realId'\r\n".
                                                     "          }, [\r\n".
                                                     "              {name: '$realId', mapping: '$realId'}, \r\n";
-                                    if (array_key_exists("level",$fieldInfos)){     
+                                    if (array_key_exists("level",$fieldInfo)){     
                                         $showLevel=strtolower($key)."_level";           
                                         $relationStore.="              {name: '$showLevel', mapping: 'level'}, \r\n";
                                     }
@@ -496,7 +472,7 @@ class AutoCodeViewExt extends AutoCode
                 $tablename=self::getTablename($current_classname);
                 $current_instancename=self::getInstancename($tablename); 
                 
-                $relation_classcomment=self::getClassComments($current_classname);
+                $relation_classcomment=self::$class_comments[$current_classname];
                 $relation_classcomment=str_replace("关系表","",$relation_classcomment); 
                 if (contain($relation_classcomment,"\r")||contain($relation_classcomment,"\n")){
                     $relation_classcomment=preg_split("/[\s,]+/", $relation_classcomment);    
@@ -520,6 +496,21 @@ class AutoCodeViewExt extends AutoCode
                         if (!self::isNotColumnKeywork($fieldname))continue;
                         $datatype=self::comment_type($field["Type"]);                             
                         $field_comment=$field["Comment"]; 
+                        $isMoreShowAll=false;
+                        if (contain($fieldname,"_id")){
+                            $maybe_classname=str_replace("_id","",$fieldname);
+                            $maybe_classname{0}=strtoupper($maybe_classname{0});
+                            if (class_exists($maybe_classname))
+                            { 
+                                $fieldname=self::getShowFieldNameByClassname($maybe_classname);
+                                if ($fieldname=="name")$fieldname=strtolower($maybe_classname)."_".$fieldname;
+                                $datatype="string";
+                                $fieldInfo_maybe=self::$fieldInfos[self::getTablename($maybe_classname)];
+                                if (array_key_exists("parent_id",$fieldInfo_maybe)&&array_key_exists("level",$fieldInfo_maybe)){
+                                    $isMoreShowAll=true;
+                                }
+                            }  
+                        }                        
                         if (contains($field_comment,array("日期","时间")))
                         {
                             $datatype='date';        
@@ -533,10 +524,15 @@ class AutoCodeViewExt extends AutoCode
                             $fields_relation.=",dateFormat:'Y-m-d H:i:s'";
                         }
                         $fields_relation.="},\r\n";   
+                        if ($isMoreShowAll){
+                            $i_name=$maybe_classname;
+                            $i_name{0}=strtolower($i_name{0});
+                            $fields_relation.="                  {name: '{$i_name}ShowAll',type: '".$datatype."'},\r\n";                             
+                        }
                     }
                     $fields_relation=substr($fields_relation,0,strlen($fields_relation)-3); 
                     
-                    $relation_classcomment=self::getClassComments($current_classname);
+                    $relation_classcomment=self::$class_comments[$current_classname];
                     $relation_classcomment=str_replace("关系表","",$relation_classcomment); 
                     if (contain($relation_classcomment,"\r")||contain($relation_classcomment,"\n")){
                         $relation_classcomment=preg_split("/[\s,]+/", $relation_classcomment);    
@@ -577,9 +573,25 @@ class AutoCodeViewExt extends AutoCode
                         { 
                             continue;
                         }
+                        if ($realId==$fieldname) continue;
+                        
                         $field_comment=$field["Comment"];  
                         $field_comment=self::columnCommentKey($field_comment,$fieldname);
                         $datatype=self::comment_type($field["Type"]);
+                        $isMoreShowAll=false;
+                        if (contain($fieldname,"_id")){
+                            $maybe_classname=str_replace("_id","",$fieldname);
+                            $maybe_classname{0}=strtoupper($maybe_classname{0});
+                            if (class_exists($maybe_classname))
+                            { 
+                                $fieldname=self::getShowFieldNameByClassname($maybe_classname);
+                                if ($fieldname=="name")$fieldname=strtolower($maybe_classname)."_".$fieldname;
+                                $fieldInfo_maybe=self::$fieldInfos[self::getTablename($maybe_classname)];
+                                if (array_key_exists("parent_id",$fieldInfo_maybe)&&array_key_exists("level",$fieldInfo_maybe)){
+                                    $isMoreShowAll=true;
+                                }
+                            }    
+                        }                        
                         $columns_relation.="                          {header : '$field_comment',dataIndex : '{$fieldname}'";  
                         if (($datatype=='date')||contains($field_comment,array("日期","时间"))) 
                         {
@@ -591,6 +603,11 @@ class AutoCodeViewExt extends AutoCode
                             $columns_relation.=",renderer:function(value){if (value == true) {return \"是\";}else{return \"否\";}}";  
                         }
                         $columns_relation.="},\r\n";
+                        if ($isMoreShowAll){
+                            $i_name=$maybe_classname;
+                            $i_name{0}=strtolower($i_name{0});
+                            $columns_relation.="                          {header : '{$field_comment}[全]',dataIndex :'{$i_name}ShowAll'},\r\n"; 
+                        }
                     }
                     $columns_relation=substr($columns_relation,0,strlen($columns_relation)-3); 
                     include("one2many.php");
@@ -679,9 +696,9 @@ class AutoCodeViewExt extends AutoCode
                                 }
                                 $show_name_diff.="_".$fieldname;
                             }
-                            $fieldInfos=self::$fieldInfos[self::getTablename($key)];
+                            $fieldInfo=self::$fieldInfos[self::getTablename($key)];
                             $key{0}=strtolower($key{0});    
-                            if (array_key_exists("parent_id",$fieldInfos)){
+                            if (array_key_exists("parent_id",$fieldInfo)){
                                 $treeLevelVisible_Add="\r\n            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(false);\r\n".
                                                       "            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(false);\r\n";
                                 $treeLevelVisible_Update="\r\n            if (this.getSelectionModel().getSelected().data.{$key}ShowAll){\r\n".                      
@@ -1013,10 +1030,10 @@ class AutoCodeViewExt extends AutoCode
                                 if ($show_fieldname=="name"){
                                     $show_fieldname= strtolower($key)."_".$value;
                                 }
-                                $fieldInfos=self::$fieldInfos[self::getTablename($key)];
+                                $fieldInfo=self::$fieldInfos[self::getTablename($key)];
                                 $show_TreelevelViewInfo="";
                                 if (!$isTreelevelViewInfoHad){
-                                    if (array_key_exists("parent_id",$fieldInfos)){
+                                    if (array_key_exists("parent_id",$fieldInfo)){
                                         $key{0}=strtolower($key{0});
                                         $show_TreelevelViewInfo="<tpl if=\"$show_fieldname\">({{$key}ShowAll})</tpl>";
                                         $isTreelevelViewInfoHad=true;
