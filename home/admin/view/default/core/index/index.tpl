@@ -3,7 +3,7 @@
 	<div id="loading-mask"></div>
 	<div id="loading">
 		<div class="loading-indicator"><img src="{$url_base}common/js/ajax/ext/resources/images/extanim32.gif" width="32" height="32" style="margin-right:8px;" align="absmiddle"/>正在加载中...</div>
-	</div>> 
+	</div>
 	<div id="header" class='x-hide-display'>
 		<table>
 			<tr>
@@ -40,12 +40,6 @@
 	<div id="south" class="x-hide-display">
 		<p>这是状态栏位</p>
 	</div>
-	<!-- Ext.History所需的form  begin-->  
-		<form id="history-form" class="x-hidden">    
-			 <input type="hidden" id="x-history-field" />    
-				<iframe id="x-history-frame">    
-			 </iframe>    
-		</form>   
-	<!-- Ext.History所需的form  end -->
+	<!-- Ext.History所需的form  begin--><form id="history-form" class="x-hidden"><input type="hidden" id="x-history-field" /><iframe id="x-history-frame" /></form><!-- Ext.History所需的form  end -->
 	<div id="viewFrame"><iframe id="frmview" name="frmview" width="0" height="0" /></div>
 {/block}
