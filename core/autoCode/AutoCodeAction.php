@@ -223,7 +223,15 @@ class AutoCodeAction extends AutoCode
                 $result.="         \$this->init();\r\n"; 
                 $result.="         \$this->ExtDirectMode();\r\n";
                 $result.="         \$this->ExtUpload();\r\n"; 
-                $relationSpecs=self::$relation_viewfield[$classname];
+                $relationSpecs=self::$relation_viewfield[$classname];                
+                $redundancy_table_fields=self::$redundancy_table_fields[$classname];
+                $redundancy_fields=array();  
+                $isNeedTextarea=true;
+                if ($redundancy_table_fields){ 
+                    foreach ($redundancy_table_fields as $redundancy_table_field) {
+                        $redundancy_fields=array_merge($redundancy_fields,$redundancy_table_field);
+                    }     
+                }      
                 foreach ($fieldInfo as $fieldname=>$field)
                 {                
                     if (array_key_exists($fieldname,$relationSpecs)){
@@ -236,22 +244,27 @@ class AutoCodeAction extends AutoCode
                             }
                         }
                     }
+                    if (!empty($redundancy_fields)){
+                        if (array_key_exists($fieldname, $redundancy_fields))$isNeedTextarea=false;
+                    }
                 }
                 $result.="         \$this->loadExtJs('$instancename/$instancename.js');\r\n";
-                $text_area_fieldname=array(); 
-                foreach ($fieldInfo as $fieldname=>$field)
-                {                    
-                    if (self::columnIsTextArea($fieldname,$field["Type"]))
-                    {
-                        $text_area_fieldname[]="'".$fieldname."'";
-                    }   
+                if ($isNeedTextarea){
+                    $text_area_fieldname=array(); 
+                    foreach ($fieldInfo as $fieldname=>$field)
+                    {                    
+                        if (self::columnIsTextArea($fieldname,$field["Type"]))
+                        {
+                            $text_area_fieldname[]="'".$fieldname."'";
+                        }   
+                    }
+                    if (count($text_area_fieldname)==1){  
+                        $result.="         \$this->load_onlineditor({$text_area_fieldname[0]});\r\n"; 
+                    }else if (count($text_area_fieldname)>1){
+                        $fieldnames=implode(",", $text_area_fieldname);
+                        $result.="         \$this->load_onlineditor(array({$fieldnames}));\r\n"; 
+                    }        
                 }
-                if (count($text_area_fieldname)==1){  
-                    $result.="         \$this->load_onlineditor({$text_area_fieldname[0]});\r\n"; 
-                }else if (count($text_area_fieldname)>1){
-                    $fieldnames=implode(",", $text_area_fieldname);
-                    $result.="         \$this->load_onlineditor(array({$fieldnames}));\r\n"; 
-                }        
                 $result.="     }\r\n\r\n";      
                 self::$echo_result.=$result;  
                 $result_upload = "    /**\r\n".                        

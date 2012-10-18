@@ -43,10 +43,7 @@ $appName_alias.$classname={
         }
         if ($appName_alias.$classname.Cookie.get('View.IsFix')!=null){
             $appName_alias.$classname.Config.View.IsFix=$appName_alias.$classname.Cookie.get('View.IsFix');
-        }
-        if (Ext.util.Cookies.get('OnlineEditor')!=null){
-            $appName_alias.$classname.Config.OnlineEditor=parseInt(Ext.util.Cookies.get('OnlineEditor'));
-        }
+        }$textareaOnlineditor_Init_func
     }
 }; 
 /**

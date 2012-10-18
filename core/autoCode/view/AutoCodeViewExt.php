@@ -290,6 +290,7 @@ class AutoCodeViewExt extends AutoCode
         $textareaOnlineditor_Save=$textarea_Vars["textareaOnlineditor_Save"];
         $textareaOnlineditor_Reset=$textarea_Vars["textareaOnlineditor_Reset"];
         $textareaOnlineditor_Init=$textarea_Vars["textareaOnlineditor_Init"];
+        $textareaOnlineditor_Init_func=$textarea_Vars["textareaOnlineditor_Init_func"];
 
         //Ext "Tabs" 中"onAddItems"包含的viewdoblock
         $viewdoblock=self::model_viewblock($classname,$fieldInfo);
@@ -729,10 +730,12 @@ class AutoCodeViewExt extends AutoCode
                                               "                                      },\r\n".
                                               "                                      {xtype:'displayfield',value:'所选{$field_comment}:',ref: '{$key}ShowLabel'},{xtype:'displayfield',ref:'{$key}ShowAll',name:'{$key}ShowAll',flex:1,ref: '{$key}ShowValue'}]\r\n".
                                               "                              },\r\n"; 
-                            }else{                                
+                            }else{           
+                                $show_name_diff_name= $show_name_diff;                 
+                                if ($show_name_diff=="title")$show_name_diff=$key."_".$show_name_diff;
                                 $fieldLabels.="                              {xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'},\r\n".
                                               "                              {\r\n".
-                                              "                                 fieldLabel : '{$field_comment}',xtype: 'combo',name : '$show_name_diff',ref : '../$show_name_diff',\r\n".
+                                              "                                 fieldLabel : '{$field_comment}',xtype: 'combo',name : '$show_name_diff_name',ref : '../$show_name_diff',\r\n".
                                               "                                 store:$appName_alias.$classname.Store.{$key}Store,emptyText: '请选择{$field_comment}',itemSelector: 'div.search-item',\r\n".
                                               "                                 loadingText: '查询中...',width: 570, pageSize:$appName_alias.$classname.Config.PageSize,\r\n".
                                               "                                 displayField:'$value',grid:this,\r\n".
@@ -799,7 +802,7 @@ class AutoCodeViewExt extends AutoCode
                     if ($column_type=='bit')
                     {
                         $fieldLabels.="\r\n                                 ,xtype : 'combo',mode : 'local',triggerAction : 'all',\r\n".
-                                  "                                 lazyRender : true,editable: false,allowBlank : false,\r\n".
+                                  "                                 lazyRender : true,editable: false,allowBlank : false,valueNotFoundText:'否',\r\n".
                                   "                                 store : new Ext.data.SimpleStore({\r\n".
                                   "                                     fields : ['value', 'text'],\r\n".
                                   "                                     data : [['0', '否'], ['1', '是']]\r\n".
@@ -853,6 +856,7 @@ class AutoCodeViewExt extends AutoCode
         $textareaOnlineditor_Save=""; 
         $textareaOnlineditor_Reset="";
         $textareaOnlineditor_Init="";
+        $textareaOnlineditor_Init_func="";
 
         $textareaOnlineditor_Replace_array=array("ckEditor"=>'',"kindEditor"=>'',"xhEditor"=>''); 
         $textareaOnlineditor_Add_array=array("ckEditor"=>'',"kindEditor"=>'',"xhEditor"=>''); 
@@ -896,6 +900,16 @@ class AutoCodeViewExt extends AutoCode
 
                     if (self::columnIsTextArea($fieldname,$field["Type"]))
                     {         
+                        if ($redundancy_table_fields){
+                            if (!$isRedundancyCurrentHad){
+                                $redundancy_fields=array();   
+                                foreach ($redundancy_table_fields as $redundancy_table_field) {
+                                    $redundancy_fields=array_merge($redundancy_fields,$redundancy_table_field);
+                                }     
+                                $isRedundancyCurrentHad=true;
+                            }
+                            if (array_key_exists($fieldname, $redundancy_fields))continue;
+                        }
                         $has_textarea=true;
                         $textareaOnlineditor_Replace_array["ckEditor"].="                                ckeditor_replace_$fieldname(); \r\n";  
                         $textareaOnlineditor_Replace_array["kindEditor"].="                                $appName_alias.$classname.View.EditWindow.KindEditor_$fieldname = KindEditor.create('textarea[name=\"$fieldname\"]',{width:'98%',minHeith:'350px', filterMode:true});\r\n";
@@ -926,6 +940,10 @@ class AutoCodeViewExt extends AutoCode
                                       "         * 配合Action的变量配置\$online_editor\r\n".
                                       "         */\r\n".
                                       "        OnlineEditor:1";
+            $textareaOnlineditor_Init_func="\r\n".
+                                      "        if (Ext.util.Cookies.get('OnlineEditor')!=null){\r\n".
+                                      "            $appName_alias.$classname.Config.OnlineEditor=parseInt(Ext.util.Cookies.get('OnlineEditor'));\r\n".
+                                      "        }\r\n";
             $textareaOnlineditor_Replace=",\r\n".
                                       "                    afterrender:function(){\r\n". 
                                       "                        switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
@@ -996,6 +1014,7 @@ class AutoCodeViewExt extends AutoCode
         $result["textareaOnlineditor_Save"]=$textareaOnlineditor_Save; 
         $result["textareaOnlineditor_Reset"]=$textareaOnlineditor_Reset;
         $result["textareaOnlineditor_Init"]=$textareaOnlineditor_Init;
+        $result["textareaOnlineditor_Init_func"]=$textareaOnlineditor_Init_func;
         return $result;        
     }
 
@@ -1233,19 +1252,42 @@ class AutoCodeViewExt extends AutoCode
                             $store_con_relation_class=$con_relation_class;
                             $store_con_relation_class[0]=strtolower($store_con_relation_class[0]);
                             $storeName="$appName_alias.$classname.Store.".$store_con_relation_class."Store";
-                            $filterFields.=",xtype: 'combo',\r\n".
-                                          "                                     store:{$storeName},hiddenName : '{$fieldname}',\r\n".
-                                          "                                     emptyText: '请选择{$field_comment}',itemSelector: 'div.search-item',\r\n".
-                                          "                                     loadingText: '查询中...',width:280,pageSize:$appName_alias.$classname.Config.PageSize,\r\n". 
-                                          "                                     displayField:'{$show_name}',valueField:'{$fieldname}',\r\n".
-                                          "                                     mode: 'remote',editable:true,minChars: 1,autoSelect :true,typeAhead: false,\r\n".
-                                          "                                     forceSelection: true,triggerAction: 'all',resizable:true,selectOnFocus:true,\r\n".
-                                          "                                     tpl:new Ext.XTemplate(\r\n".
-                                          "                                                '<tpl for=\".\"><div class=\"search-item\">',\r\n".
-                                          "                                                    '<h3>{{$show_name}}</h3>',\r\n".
-                                          "                                                '</div></tpl>'\r\n".
-                                          "                                     )\r\n".
-                                          "                                ";                       
+                            $fieldInfo_relationshow=self::$fieldInfos[self::getTablename($con_relation_class)];
+                            if (array_key_exists("parent_id",$fieldInfo_relationshow)){
+                                $fieldname=self::getShowFieldNameByClassname($con_relation_class);
+                                $fsname=$instancename_pre.$fieldname;
+                                $con_relation_class{0}=strtolower($con_relation_class{0});
+                                $filterFields.=", xtype:'hidden'},{\r\n".
+                                               "                                      xtype:'combotree', ref:'../{$fsname}',grid:this,\r\n".
+                                               "                                      emptyText: '请选择{$field_comment}',canFolderSelect:false,flex:1,editable:false,\r\n".
+                                               "                                      tree: new Ext.tree.TreePanel({\r\n".
+                                               "                                          dataUrl: 'home/admin/src/httpdata/{$con_relation_class}Tree.php',\r\n".
+                                               "                                          root: {nodeType: 'async'},border: false,rootVisible: false,\r\n".
+                                               "                                          listeners: {\r\n".
+                                               "                                              beforeload: function(n) {if (n) {this.getLoader().baseParams.id = n.attributes.id;}}\r\n".
+                                               "                                          }\r\n".
+                                               "                                      }),\r\n".
+                                               "                                      onSelect: function(cmb, node) {\r\n".
+                                               "                                          this.grid.topToolbar.{$fname}.setValue(node.attributes.id);\r\n".
+                                               "                                          this.setValue(node.attributes.text);\r\n".
+                                               "                                      }\r\n".
+                                               "                                "; 
+                            }else{                 
+                                $filterFields.=",xtype: 'combo',\r\n".
+                                              "                                     store:{$storeName},hiddenName : '{$fieldname}',\r\n".
+                                              "                                     emptyText: '请选择{$field_comment}',itemSelector: 'div.search-item',\r\n".
+                                              "                                     loadingText: '查询中...',width:280,pageSize:$appName_alias.$classname.Config.PageSize,\r\n". 
+                                              "                                     displayField:'{$show_name}',valueField:'{$fieldname}',\r\n".
+                                              "                                     mode: 'remote',editable:true,minChars: 1,autoSelect :true,typeAhead: false,\r\n".
+                                              "                                     forceSelection: true,triggerAction: 'all',resizable:true,selectOnFocus:true,\r\n".
+                                              "                                     tpl:new Ext.XTemplate(\r\n".
+                                              "                                                '<tpl for=\".\"><div class=\"search-item\">',\r\n".
+                                              "                                                    '<h3>{{$show_name}}</h3>',\r\n".
+                                              "                                                '</div></tpl>'\r\n".
+                                              "                                     )\r\n".
+                                              "                                ";  
+                                
+                            }    
                         }
                     }
                           
