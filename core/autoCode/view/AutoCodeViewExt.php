@@ -388,10 +388,10 @@ class AutoCodeViewExt extends AutoCode
                             }   
 
                             if ($classname!=$key){
-                                $fieldInfo=self::$fieldInfos[self::getTablename($key)];
+                                $fieldInfo_relationshow=self::$fieldInfos[self::getTablename($key)];
                                 $key{0}=strtolower($key{0});
                                 if (!$isTreelevelStoreHad){
-                                    if (array_key_exists("parent_id",$fieldInfo)){
+                                    if (array_key_exists("parent_id",$fieldInfo_relationshow)){
                                         $fields.="                  {name: '{$key}ShowAll',type: 'string'},\r\n"; 
                                         $isTreelevelStoreHad=true;
                                     }    
@@ -414,7 +414,7 @@ class AutoCodeViewExt extends AutoCode
                                                     "            idProperty: '$realId'\r\n".
                                                     "          }, [\r\n".
                                                     "              {name: '$realId', mapping: '$realId'}, \r\n";
-                                    if (array_key_exists("level",$fieldInfo)){     
+                                    if (array_key_exists("level",$fieldInfo_relationshow)){     
                                         $showLevel=strtolower($key)."_level";           
                                         $relationStore.="              {name: '$showLevel', mapping: 'level'}, \r\n";
                                     }
@@ -697,9 +697,9 @@ class AutoCodeViewExt extends AutoCode
                                 }
                                 $show_name_diff.="_".$fieldname;
                             }
-                            $fieldInfo=self::$fieldInfos[self::getTablename($key)];
+                            $fieldInfo_relationshow=self::$fieldInfos[self::getTablename($key)];
                             $key{0}=strtolower($key{0});    
-                            if (array_key_exists("parent_id",$fieldInfo)){
+                            if (array_key_exists("parent_id",$fieldInfo_relationshow)){
                                 $treeLevelVisible_Add="\r\n            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(false);\r\n".
                                                       "            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(false);\r\n";
                                 $treeLevelVisible_Update="\r\n            if (this.getSelectionModel().getSelected().data.{$key}ShowAll){\r\n".                      
@@ -1049,10 +1049,10 @@ class AutoCodeViewExt extends AutoCode
                                 if ($show_fieldname=="name"){
                                     $show_fieldname= strtolower($key)."_".$value;
                                 }
-                                $fieldInfo=self::$fieldInfos[self::getTablename($key)];
+                                $fieldInfo_relationshow=self::$fieldInfos[self::getTablename($key)];
                                 $show_TreelevelViewInfo="";
                                 if (!$isTreelevelViewInfoHad){
-                                    if (array_key_exists("parent_id",$fieldInfo)){
+                                    if (array_key_exists("parent_id",$fieldInfo_relationshow)){
                                         $key{0}=strtolower($key{0});
                                         $show_TreelevelViewInfo="<tpl if=\"$show_fieldname\">({{$key}ShowAll})</tpl>";
                                         $isTreelevelViewInfoHad=true;
