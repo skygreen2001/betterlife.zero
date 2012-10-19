@@ -330,6 +330,7 @@ class AutoCodeService extends AutoCode
                 $result.="    public function save(\$$instance_name)\r\n".
                          "    {\r\n".
                          self::bit2BoolInExtService($instance_name,$fieldInfo).
+                         self::dataTimeConvert($instance_name,$fieldInfo).
                          self::imageUploadInExtService($classname,$instance_name,$fieldInfo). 
                          self::redundancy_table_fields($classname,$instance_name,$fieldInfo).                         
                          "        if (is_array(\$$instance_name)){\r\n".                           
@@ -354,7 +355,7 @@ class AutoCodeService extends AutoCode
                 $result.="    public function update(\$$instance_name)\r\n".
                          "    {\r\n".
                          self::bit2BoolInExtService($instance_name,$fieldInfo).
-                         //self::enumComment2KeyInExtService($instance_name,$fieldInfo,$tablename).  
+                         self::dataTimeConvert($instance_name,$fieldInfo). 
                          self::imageUploadInExtService($classname,$instance_name,$fieldInfo).  
                          self::redundancy_table_fields($classname,$instance_name,$fieldInfo). 
                          "        if (is_array(\$$instance_name)){\r\n".                           
@@ -864,7 +865,25 @@ class AutoCodeService extends AutoCode
         }   
         return $result;  
     }
-   
+
+    /**
+     * 如果是日期时间存储成int的timestamp值，需要进行类型转换
+     */   
+    private static function dataTimeConvert($instance_name,$fieldInfo)
+    {
+        $result="";   
+        foreach ($fieldInfo as $fieldname=>$field){
+            $datatype =self::column_type($field["Type"]);
+            $field_comment=$field["Comment"];  
+            if (($datatype=='int')&&(contains($field_comment,array("日期","时间"))||contains($field_comment,array("date","time")))) 
+            {                                    
+                $result.="        if (isset(\${$instance_name}[\"$fieldname\"]))\${$instance_name}[\"$fieldname\"]=UtilDateTime::dateToTimestamp(\${$instance_name}[\"$fieldname\"]);\r\n";
+            }
+        }   
+        return $result;  
+
+    }
+
     /**
      * 显示关系列
      * @param mixed $instance_name 实体变量
@@ -878,6 +897,12 @@ class AutoCodeService extends AutoCode
             $relationSpecs=self::$relation_viewfield[$classname]; 
             $isTreeLevelHad=false;
             foreach ($fieldInfo as $fieldname=>$field){
+                $datatype =self::column_type($field["Type"]);
+                $field_comment=$field["Comment"];  
+                if (($datatype=='int')&&(contains($field_comment,array("日期","时间"))||contains($field_comment,array("date","time")))) 
+                {                                    
+                    $result.="                if (\${$instance_name}->{$fieldname})\${$instance_name}[\"$fieldname\"]=UtilDateTime::timestampToDateTime(\${$instance_name}->{$fieldname});\r\n";
+                }
                 if (array_key_exists($fieldname,$relationSpecs)){
                     $relationShow=$relationSpecs[$fieldname];
                     foreach ($relationShow as $key=>$value) {

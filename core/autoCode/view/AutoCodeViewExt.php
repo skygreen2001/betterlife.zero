@@ -515,7 +515,8 @@ class AutoCodeViewExt extends AutoCode
                         if (contains($field_comment,array("日期","时间")))
                         {
                             $datatype='date';        
-                        }            
+                        }      
+                        $datatype_origin=$datatype;      
                         if ($datatype=='enum'){
                             $datatype='string';
                         }
@@ -524,7 +525,11 @@ class AutoCodeViewExt extends AutoCode
                         {
                             $fields_relation.=",dateFormat:'Y-m-d H:i:s'";
                         }
-                        $fields_relation.="},\r\n";   
+                        $fields_relation.="},\r\n";  
+                        if ($datatype_origin=='enum'){
+                            $fieldname=$fieldname."Show";
+                            $fields_relation.="                  {name: '$fieldname',type: '".$datatype."'},\r\n"; 
+                        }
                         if ($isMoreShowAll){
                             $i_name=$maybe_classname;
                             $i_name{0}=strtolower($i_name{0});
@@ -592,7 +597,10 @@ class AutoCodeViewExt extends AutoCode
                                     $isMoreShowAll=true;
                                 }
                             }    
-                        }                        
+                        }          
+                        if ($datatype=='enum'){
+                            $fieldname=$fieldname."Show";
+                        }              
                         $columns_relation.="                          {header : '$field_comment',dataIndex : '{$fieldname}'";  
                         if (($datatype=='date')||contains($field_comment,array("日期","时间"))) 
                         {

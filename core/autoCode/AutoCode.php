@@ -333,7 +333,7 @@ class AutoCode extends Object
     protected static function columnIsTextArea($column_name,$column_type)
     {        
         if (((self::column_length($column_type)>=500)&&(!contain($column_name,"images"))&&(!contain($column_name,"link"))&&(!contain($column_name,"ico")))
-             ||(contain($column_name,"intro"))||(contain($column_name,"memo"))||(self::column_type($column_type)=='text')||(self::column_type($column_type)=='longtext')){  //&&(!contain($column_name,"addr"))
+             ||(contain($column_name,"intro"))||(contain($column_name,"memo"))||(contain($column_name,"content"))||(self::column_type($column_type)=='text')||(self::column_type($column_type)=='longtext')){  //&&(!contain($column_name,"addr"))
            return true;
         }else{
            return false;
