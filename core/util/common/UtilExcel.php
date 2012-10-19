@@ -154,6 +154,10 @@ class UtilExcel extends Util
 			}       
 			$arr_import_header=array_flip($arr_import_header);
 			foreach ($header as $value) { 
+				$key_words=array('标识','编号','主键');
+				foreach ($key_words as $key_word) {
+					if (array_key_exists($value.$key_word,$arr_import_header))$value=$value.$key_word; 
+				}
 				$arr_head[]=$arr_import_header[$value];             
 			}
 			
