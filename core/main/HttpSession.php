@@ -37,8 +37,22 @@ class HttpSession
     public static function set($key,$value)
     {
         $_SESSION[$key]= $value;
-    }
+    } 
 
+    /**
+     * 一次在Session中添加多个指定$key的值
+     * @param array $key_values 键值代表Session里的名称值
+     */
+    public static function sets($key_values)
+    {
+        if ($key_values&&is_array($key_values)&&(count($key_values)>0))
+        {
+            foreach ($key_values as $key=>$value) {
+                self::set($key,$value);
+            }
+        }
+    } 
+    
     /**
      * 在Session会话中获取$key的值  
      * 
