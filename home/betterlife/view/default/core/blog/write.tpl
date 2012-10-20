@@ -17,9 +17,9 @@
 		<br/><font color="{$color}">{$message|nl2br|default:''}</font><br/>
 		<form name="postForm" method="POST">
 			博文名:<br/>
-			<input type="text" class="inputNormal" style="width: 620px;" name="blog_name" value="{$blog.blog_name}"/><br/>
+			<input type="text" class="inputNormal" style="width: 620px; margin-left: 0px;text-align: left;" name="blog_name" value="{$blog.blog_name}"/><br/>
 			内容: <br/>  
-			<textarea id="content" name="content" style="width:700px;height:300px;visibility:hidden;">{$blog.content}</textarea><br/> 
+			<textarea id="content" name="content" style="width:600px;height:300px;visibility:hidden;">{$blog.content}</textarea><br/> 
 			<input type="submit" value="提交" class="btnSubmit" />
 		</form>
 	</div>

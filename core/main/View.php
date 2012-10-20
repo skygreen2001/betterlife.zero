@@ -62,6 +62,7 @@ class View {
 		self::$view_global=array(
 			"url_base"=> Gc::$url_base,
 			"encoding"=> Gc::$encoding,
+			"site_name"=> Gc::$site_name,
 			"template_url"=>$this->template_url_dir(),
 			"templateDir"=> Gc::$nav_root_path.$this->getTemplate_View_Dir($this->moduleName),
 		);

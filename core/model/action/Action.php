@@ -389,7 +389,7 @@ class Action extends Object
 	public function beforeAction()
 	{
 		if (contain($this->data["go"],Gc::$appName)){
-			if(($this->data["go"]!=Gc::$appName.".auth.login")&&!HttpSession::isHave('user_id')) {
+			if(($this->data["go"]!=Gc::$appName.".auth.register")&&($this->data["go"]!=Gc::$appName.".auth.login")&&!HttpSession::isHave('user_id')) {
 				$this->redirect("auth","login");
 			}
 		}
