@@ -1,7 +1,7 @@
 <?php
 /**
  +---------------------------------<br/>
- * 控制器:网站后台管理首页<br/>
+ * 控制器:网站后台管理首页|登录|登出<br/>
  +---------------------------------
  * @category betterlife
  * @package  web.back.admin 
@@ -59,40 +59,6 @@ class Action_Index extends ActionExt
 	  HttpSession::remove(Gc::$appName_alias."admin_id");
 	  $this->redirect("index","login");
 	}
-
-	 /**
-	  * 控制器:系统管理人员
-	  */
-	 public function admin()
-	 {
-		 $this->init();
-		 $this->ExtDirectMode();
-		 $this->ExtUpload();
-		 $this->loadExtJs('admin/admin.js');
-	 }
-	 
-	 /**
-	  * 控制器:用户
-	  */
-	 public function user()
-	 {
-		 $this->init();
-		 $this->ExtDirectMode();
-		 $this->ExtUpload();
-		 $this->loadExtJs('user/user.js');
-	 }
-	
-	 /**
-	  * 控制器:博客
-	  */
-	 public function blog()
-	 {
-		 $this->init();
-		 $this->ExtDirectMode();
-		 $this->ExtUpload();
-		 $this->loadExtJs('blog/blog.js');
-		 $this->load_onlineditor('content');
-	 }
 	 
 	 /**
 	  * 预加载首页JS定义库。
