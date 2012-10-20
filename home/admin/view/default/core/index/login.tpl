@@ -3,10 +3,10 @@
 	<form method="POST">
 	<table class="content">
 		<tr class="left">
-			<td class="leftContent" align="center"><img src="{$template_url}resources/images/logo.png" class="logoLeft" alt="BetterLife CMS开源框架后台管理" /></td>
+			<td class="leftContent" align="center"><img src="{$template_url}resources/images/logo.png" class="logoLeft" alt="{$site_name}后台管理" /></td>
 			<td class="right">
 				<table class="right">
-					<tr align="center"><td class="title" align="center"><b>BetterLife CMS开源框架后台管理</b></td></tr>
+					<tr align="center"><td class="title" align="center"><b>{$site_name}后台管理</b></td></tr>
 					<tr align="center"><td><font color="#ff0000">{$message|default:''}</font></td></tr>
 					<tr align="center"><td><label>用户名&nbsp;&nbsp;&nbsp;</label><input class="inputNormal" type="text" name="username" /><br/></td></tr>
 					<tr align="center"><td><label>密&nbsp;&nbsp;码&nbsp;&nbsp;&nbsp;</label><input class="inputNormal" type="password" name="password" /><br/></td></tr>

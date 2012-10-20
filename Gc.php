@@ -63,7 +63,7 @@ class Gc
 	 * @var string
 	 * @static
 	 */
-	public static $site_name="Betterlife 网站应用框架";
+	public static $site_name="Betterlife CMS网站框架";
 	/**
 	 * 网站应用的版本
 	 */

@@ -1,14 +1,15 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="zh-CN" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">    
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Lang" content="zh_CN">
 <meta name="author" content="skygreen">
 <meta http-equiv="Reply-to" content="skygreen2001@gmail.com">
-<meta name="description" content="BetterLife CMS开源框架后台管理">
-<meta name="keywords" content="BetterLife CMS开源框架后台管理">
+<meta name="description" content="<?php echo Gc::$site_name?>">
+<meta name="keywords" content="<?php echo Gc::$site_name?>">
 <meta name="creation-date" content="12/01/2010">
 <meta name="revisit-after" content="15 days">
-<title>BetterLife CMS开源框架后台管理</title>
+<title><?php echo Gc::$site_name?></title>
 <style type="text/css">
 html, body {
 	font:normal 12px SimSun,sans-serif;
@@ -64,7 +65,7 @@ div#content{
 </head>
 <body>
 <?php require_once ("Gc.php"); ?>         
-<h1 align="center">欢迎来到<span class="en-head">BetterLife CMS</span>开源框架</h1>
+<h1 align="center">欢迎来到&nbsp;&nbsp;<span class="en-head"><?php echo Gc::$site_name?></span></h1>
 <div align="center">
 	<div id="content" align="center">
 		<p><a href="<?php echo Gc::$url_base?>index.php?go=betterlife.auth.login">网站前台</a></p>
