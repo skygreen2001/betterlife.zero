@@ -60,7 +60,7 @@ Bb.Navigation = {
 			centerArea.setWidth(contentPanel.getWidth());
 			centerArea
 					.update("<iframe id='frm"+id+"' name='frm"+id+"' scrolling='auto' width='100%' height='100%'  frameborder='0' src='"
-							+ url + "' />");
+							+ url + "'></iframe>");
 			contentPanel.setTitle(title, "tabs");
 			return;
 		}
@@ -90,7 +90,7 @@ Bb.Navigation = {
 					url:url,
 					iconCls : 'tabs',
 					html : "<iframe id='frm"+id+"' name='frm"+id+"' scrolling='auto' width='100%' height='100%'  frameborder='0' src='"
-							+ url + "' />",
+							+ url + "'></iframe>",
 					closable : true
 				}).show();
 			}
@@ -108,7 +108,7 @@ Bb.Navigation = {
 		} else {
 			title = linkTarget.text;
 		}
-		Bb.Navigation.AddTabbyUrl(Ext.getCmp('centerPanel'), title, linkTarget.href,
+		Bb.Navigation.AddTabbyUrl(Bb.Viewport.center, title, linkTarget.href,
 				linkTarget.id);
 	},
 	OnContextMenu:function(e, item){  

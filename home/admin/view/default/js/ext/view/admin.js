@@ -51,9 +51,9 @@ BbView.Admin.View={
 
 BbView.Admin.Function={
 	openLinkListAdmins:function(){
-		var targeturl="index.php?go=admin.index.admin";
+		var targeturl="index.php?go=admin.betterlife.admin";
 		if (parent.Bb){
-			parent.Bb.Navigation.AddTabbyUrl(parent.Ext.getCmp('centerPanel'),'系统管理人员',targeturl,"admin"); 
+			parent.Bb.Navigation.AddTabbyUrl(parent.Bb.Viewport.center,'系统管理人员',targeturl,"admin"); 
 		}else{
 			window.open(targeturl);
 		}
@@ -79,7 +79,7 @@ Ext.onReady(function(){
 		if (parent.Bb.Config.ViewOnlyWindow.title=="查看管理员信息"){
 			BbView.Admin.ViewAdminWindow=parent.Bb.Config.ViewOnlyWindow; 
 		}else{
-			Bb.Admin.ViewAdminWindow = new BbView.Admin.View.Window();
+			BbView.Admin.ViewAdminWindow = new BbView.Admin.View.Window();
 			if ((ow==true)&&parent.Bb.Config)parent.Bb.Config.ViewOnlyWindow=BbView.Admin.ViewAdminWindow;
 		}
 	} 

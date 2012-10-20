@@ -50,9 +50,9 @@ BbView.User.View={
 
 BbView.User.Function={
 	openLinkListUsers:function(){
-		var targeturl="index.php?go=admin.index.user&user_id="+BbView.User.user_id;
+		var targeturl="index.php?go=admin.betterlife.user&user_id="+BbView.User.user_id;
 		if (parent.Bb){
-			parent.Bb.Navigation.AddTabbyUrl(parent.Ext.getCmp('centerPanel'),'用户',targeturl,"user"); 
+			parent.Bb.Navigation.AddTabbyUrl(parent.Bb.Viewport.center,'用户',targeturl,"user"); 
 		}else{
 			window.open(targeturl);
 		}

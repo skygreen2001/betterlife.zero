@@ -40,6 +40,8 @@
 	<div id="south" class="x-hide-display">
 		<p>这是状态栏位</p>
 	</div>
-	<!-- Ext.History所需的form  begin--><form id="history-form" class="x-hidden"><input type="hidden" id="x-history-field" /><iframe id="x-history-frame" /></form><!-- Ext.History所需的form  end -->
-	<div id="viewFrame"><iframe id="frmview" name="frmview" width="0" height="0" /></div>
+	<form id="history-form" class="x-hidden">
+		<input type="hidden" id="x-history-field" /><iframe id="x-history-frame"></iframe>
+	</form>
+	<div id="viewFrame"><iframe id="frmview" name="frmview" width="0" height="0"></iframe></div>
 {/block}

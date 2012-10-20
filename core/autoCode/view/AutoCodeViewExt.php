@@ -100,7 +100,7 @@ class AutoCodeViewExt extends AutoCode
         echo "<br/><font color='#FF0000'>[需要在后端admin/src/view/menu目录下菜单配置文件:menu.config.xml里添加没有的代码]</font><br/>";  
         $section_content="";
         $appName=Gc::$appName;
-        foreach($tableList as $tablename){
+        foreach(self::$tableList as $tablename){
             $table_comment=self::tableCommentKey($tablename);
             $instancename=self::getInstancename($tablename);                         
             $section_content.="        <menu name=\"$table_comment\" address=\"index.php?go=admin.$appName.{$instancename}\" />\r\n";
@@ -1510,8 +1510,12 @@ BATCHUPLOADIMAGES;
      */
     private static function saveJsDefineToDir($tablename,$defineJsFileContent)
     { 
-        $filename =self::getInstancename($tablename).Config_F::SUFFIX_FILE_JS;  
-        $dir      =self::$view_js_package.self::getInstancename($tablename).DIRECTORY_SEPARATOR;
+        $filename =self::getInstancename($tablename).Config_F::SUFFIX_FILE_JS;      
+        if (Config_AutoCode::JSFILE_DIRECT_CORE){
+            $dir      =self::$view_js_package.Config_F::VIEW_CORE.DIRECTORY_SEPARATOR;
+        }else{  
+            $dir      =self::$view_js_package.self::getInstancename($tablename).DIRECTORY_SEPARATOR;
+        }
         return self::saveDefineToDir($dir,$filename,$defineJsFileContent);
     }
        

@@ -209,7 +209,7 @@ Bb.Layout = {
 			},{
 				title : '查询',
 				id:"cp-search",
-				html : "<a id='hideit' href='#'>隐藏左侧</a><iframe id='frmsearch' name='frmsearch' width='100%' height='100%'  frameborder='0' src='http:/"+"/www.baidu.com' />",
+				html : "<a id='hideit' href='#'>隐藏左侧</a><iframe id='frmsearch' name='frmsearch' width='100%' height='100%'  frameborder='0' src='http:/"+"/www.baidu.com'></iframe>",
 				closable : true,
 				url   : 'http://www.baidu.com',
 				iconCls : 'tabs',

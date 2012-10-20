@@ -247,8 +247,13 @@ class AutoCodeAction extends AutoCode
                     if (!empty($redundancy_fields)){
                         if (array_key_exists($fieldname, $redundancy_fields))$isNeedTextarea=false;
                     }
+                } 
+                if (Config_AutoCode::JSFILE_DIRECT_CORE){                
+                    $result.="         \$this->loadExtJs('".Config_F::VIEW_CORE."/$instancename.js');\r\n";
+                }else{
+                    $result.="         \$this->loadExtJs('$instancename/$instancename.js');\r\n";
                 }
-                $result.="         \$this->loadExtJs('$instancename/$instancename.js');\r\n";
+
                 if ($isNeedTextarea){
                     $text_area_fieldname=array(); 
                     foreach ($fieldInfo as $fieldname=>$field)
