@@ -100,7 +100,27 @@ class UtilExcel extends Util
             $objWriter->save($outputFileName);  
         }                       
     }       
-
+    
+    /**
+     * Excel 日期时间转换Php认知的日期时间格式
+     * @link http://hi.baidu.com/greenxm/item/80f8f0ce0004bbd297445243
+     * @param mixed $days
+     * @param mixed $time
+     */
+    public static function exceltimtetophp($days,$time=false)
+    {
+        if(is_numeric($days))
+        {
+            $jd = GregorianToJD(1, 1, 1970);
+            $gregorian = JDToGregorian($jd+intval($days)-25569);
+            $myDate = explode('/',$gregorian);
+            $myDateStr= str_pad($myDate[2],4,'0', STR_PAD_LEFT)."-".str_pad($myDate[0],2,'0',STR_PAD_LEFT)."-".str_pad($myDate[1],2,'0', STR_PAD_LEFT).($time?" 00:00:00":'');
+            return $myDateStr;
+        }
+        return $time;
+    }
+        
+    
     /**
      * 从Excel文件获取行数据转换成数组
      * @param ByteArray $byte
@@ -162,8 +182,9 @@ class UtilExcel extends Util
                             break;
                         }
                     }
+                   if (!array_key_exists($value,$arr_import_header))$arr_head[]=$value; 
                 }
-                if (!array_key_exists($value,$arr_head))$arr_head[]=$arr_import_header[$value];             
+                if (!in_array($value,$arr_head)&&array_key_exists($value,$arr_import_header))$arr_head[]=$arr_import_header[$value];             
             }
             
             //从Excel文档中获取所有内容

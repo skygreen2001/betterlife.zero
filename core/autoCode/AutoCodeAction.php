@@ -23,7 +23,11 @@ class AutoCodeAction extends AutoCode
     /**
      * Action完整的保存路径
      */
-    public static $action_dir_full;        
+    public static $action_dir_full;     
+    /**
+     * 表示层Js文件所在的目录
+     */
+    public static $view_js_package;   
     /**
      * 前端Action所在的namespace
      */
@@ -60,6 +64,9 @@ class AutoCodeAction extends AutoCode
              break;
         }         
         self::$action_dir_full=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR.self::$action_dir.DIRECTORY_SEPARATOR;
+        $view_dir_full=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR.Config_F::VIEW_VIEW.DIRECTORY_SEPARATOR.Gc::$self_theme_dir.DIRECTORY_SEPARATOR;
+        self::$view_js_package=$view_dir_full."js".DIRECTORY_SEPARATOR."ext".DIRECTORY_SEPARATOR;  
+
         if (!UtilString::is_utf8(self::$action_dir_full)){
             self::$action_dir_full=UtilString::gbk2utf8(self::$action_dir_full);    
         }     
@@ -96,8 +103,16 @@ class AutoCodeAction extends AutoCode
             echo "<br/><font color='#FF0000'>[需要在【后台】Action_Index或者Action_".$category_cap."里添加没有的代码]</font><br />";
             $category  = Gc::$appName;              
             $package   = self::$package_back;              
-            $author    = self::$author; 
-            $e_index="     /**\r\n".
+            $author    = self::$author;
+            include_once("jsmodel".DIRECTORY_SEPARATOR."overalljs.php");
+            $overalljs_files=array("index.js"=>$jsIndexContent,"layout.js"=>$jsLayoutContent,"navigation.js"=>$jsNavigationContent);
+            foreach ($overalljs_files as $filename=>$content) {
+                if (!file_exists(self::$view_js_package.$filename)){
+                    self::saveDefineToDir(self::$view_js_package,$filename,$content);  
+                }
+            }
+            $e_index=$loginout."\r\n".
+                     "     /**\r\n".
                      "      * 控制器:首页\r\n". 
                      "      */\r\n". 
                      "     public function index()\r\n". 
@@ -106,16 +121,6 @@ class AutoCodeAction extends AutoCode
                      "         \$this->loadIndexJs();\r\n". 
                      "         //加载菜单 \r\n". 
                      "         \$this->view->menuGroups=MenuGroup::all(); \r\n". 
-                     "     }\r\n\r\n".
-                     "     /**\r\n".                    
-                     "      * 初始化，加载Css和Javascript库。\r\n".
-                     "      */ \r\n".                    
-                     "     private function init()\r\n".  
-                     "     {\r\n".                    
-                     "         //初始化加载Css和Javascript库 \r\n".
-                     "         \$this->view->viewObject=new ViewObject();\r\n".                    
-                     "         UtilCss::loadExt(\$this->view->viewObject,UtilAjaxExtjs::\$ext_version);\r\n".    
-                     "         UtilAjaxExtjs::loadUI(\$this->view->viewObject,UtilAjaxExtjs::\$ext_version);\r\n".                    
                      "     }\r\n\r\n".
                      "     /**\r\n".                    
                      "      * 预加载首页JS定义库。\r\n".  
@@ -133,26 +138,30 @@ class AutoCodeAction extends AutoCode
                      "        UtilJavascript::loadJsContentReady(\$viewobject,MenuGroup::viewForExtJs()); \r\n".     
                      "        //核心功能:导航[Tab新建窗口]  \r\n".                                                            
                      "        \$this->loadExtJs(\"navigation.js\",true); \r\n".  
-                     "     }\r\n\r\n";         
-            $action_names=array("Action_Index","Action_".$category_cap); 
-            foreach($action_names as $action_name){
-                $e_result="<?php\r\n".
-                         "/**\r\n".
-                         " +---------------------------------------<br/>\r\n".
-                         " * 控制器:网站后台管理<br/>\r\n".
-                         " +---------------------------------------\r\n".
-                         " * @category $category\r\n".
-                         " * @package $package\r\n".
-                         " * @subpackage action\r\n".
-                         " * @author $author\r\n".
-                         " */\r\n".  
-                         "class $action_name extends ActionExt\r\n".  
-                         "{\r\n".$e_index.self::$echo_result."}\r\n".     
-                         "?>";                        
-                self::saveDefineToDir(self::$action_dir_full,"$action_name.php",$e_result); 
-                echo  "新生成的$action_name文件路径:<font color='#0000FF'>".self::$action_dir_full."$action_name.php</font><br />";  
-            }                                                              
-            
+                     "     }\r\n\r\n";  
+            $action_names=array("Action_Index"=>$e_index,"Action_".$category_cap=>self::$echo_result); 
+            foreach ($action_names as $key => $value) {
+                $isCreate=true;
+                if (($key=="Action_Index")&&(file_exists(self::$action_dir_full.$key.".php")))$isCreate=false;
+                if ($isCreate){  
+                    $e_result="<?php\r\n".
+                             "/**\r\n".
+                             " +---------------------------------------<br/>\r\n".
+                             " * 控制器:网站后台管理<br/>\r\n".
+                             " +---------------------------------------\r\n".
+                             " * @category $category\r\n".
+                             " * @package $package\r\n".
+                             " * @subpackage action\r\n".
+                             " * @author $author\r\n".
+                             " */\r\n".  
+                             "class $key extends ActionExt\r\n".  
+                             "{\r\n".$value."}\r\n".     
+                             "?>"; 
+                    self::saveDefineToDir(self::$action_dir_full,$key.".php",$e_result);   
+                    echo  "新生成的$key文件路径:<font color='#0000FF'>".self::$action_dir_full.$key.".php</font><br />"; 
+                }
+            }  
+
 /*            self::$echo_result=str_replace(" ","&nbsp;",self::$echo_result);      
             self::$echo_result=str_replace("\r\n","<br />",self::$echo_result);    
             echo self::$echo_result;     */

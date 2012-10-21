@@ -470,7 +470,33 @@ abstract class DataObject extends Object implements ArrayAccess
 	public static function decrement($filter=null,$property_name,$decre_value=1)
 	{
 		 return DataObjectFunc::decrement(get_called_class(),$filter,$property_name,$decre_value);          
-	}    
+	}   
+      
+    /**
+     * 由标识判断指定ID数据对象是否存在
+     * @param mixed $id 数据对象编号
+     * @return bool 是否存在
+     */
+    public static function existByID($id)
+    {
+        return DataObjectFunc::existByID(get_called_class(),$id);  
+    }  
+      
+    /**
+     * 由标识判断指定ID数据对象是否存在                                                                                      
+     * @param mixed $filter 查询条件，在where后的条件<br/>
+     * 示例如下：<br/>
+     *      0."id=1,name='sky'"<br/>
+     *      1.array("id=1","name='sky'")<br/>
+     *      2.array("id"=>"1","name"=>"sky")<br/>
+     *      3.允许对象如new User(id="1",name="green");<br/>
+     * 默认:SQL Where条件子语句。如："(id=1 and name='sky') or (name like 'sky')"<br/>
+     * @return bool 是否存在
+     */
+    public static function existBy($filter)
+    {
+        return DataObjectFunc::existBy(get_called_class(),$filter);  
+    }   
 											  
 	/**
 	 * 查询当前对象需显示属性的列表  
