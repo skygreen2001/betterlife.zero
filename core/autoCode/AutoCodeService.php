@@ -398,6 +398,16 @@ class AutoCodeService extends AutoCode
                          "     *                   limit:分页查询数，默认10个。\r\n".
                          "     * @return 数据对象:{$object_desc}分页查询列表\r\n".
                          "     */\r\n";
+                $enumConvert=self::enumKey2CommentInExtService($instance_name,$classname,$fieldInfo,"    "); 
+                $datetimeShow=self::datetimeShow($instance_name,$fieldInfo,"    ");
+                $specialResult=$enumConvert["normal"];
+                $relationField=self::relationFieldShow($instance_name,$classname,$fieldInfo);
+                if ((!empty($relationField))||(!empty($enumConvert["normal"]))){
+                    $specialResult.="            foreach (\$data as \$$instance_name) {\r\n".
+                                    $relationField.
+                                    $datetimeShow.
+                                    "            }\r\n";
+                }
                 $result.="    public function queryPage{$classname}(\$formPacket=null)\r\n".
                          "    {\r\n".                          
                          "        \$start=1;\r\n". 
@@ -415,9 +425,8 @@ class AutoCodeService extends AutoCode
                          "        \$count=$classname::count(\$condition);\r\n".       
                          "        if (\$count>0){\r\n".          
                          "            if (\$limit>\$count)\$limit=\$count;\r\n".          
-                         "            \$data =$classname::queryPage(\$start,\$limit,\$condition);\r\n".   
-                         self::enumKey2CommentInExtService($classname,$fieldInfo,"    "). 
-                         self::relationFieldShow($instance_name,$classname,$fieldInfo).
+                         "            \$data =$classname::queryPage(\$start,\$limit,\$condition);\r\n".
+                         $specialResult.
                          "            if (\$data==null)\$data=array();\r\n".          
                          "        }else{\r\n".        
                          "            \$data=array();\r\n".        
@@ -446,11 +455,13 @@ class AutoCodeService extends AutoCode
                          "                    \$data              = UtilExcel::exceltoArray(\$uploadPath,\$arr_import_header);\r\n".
                          "                    \$result=false;\r\n".
                          "                    foreach (\$data as \${$instance_name}) {\r\n".
+                         self::relationFieldImport($instance_name,$classname,$fieldInfo).
                          "                        \${$instance_name}=new {$classname}(\${$instance_name});\r\n".
-                         self::enumComment2KeyInExtService($instance_name,$fieldInfo,$tablename,"                ").  
+                         self::enumComment2KeyInExtService($instance_name,$fieldInfo,$tablename,"                ").
+                         self::dataTimeConvert($instance_name,$fieldInfo,true).  
                          "                        \${$instance_name}_id=\${$instance_name}->getId();\r\n".
                          "                        if (!empty(\${$instance_name}_id)){\r\n".
-                         "                            \$had{$classname}={$classname}::get_by_id(\${$instance_name}->getId());\r\n".
+                         "                            \$had{$classname}={$classname}::existByID(\${$instance_name}->getId());\r\n".
                          "                            if (\$had{$classname}!=null){\r\n".
                          "                                \$result=\${$instance_name}->update();\r\n".
                          "                            }else{\r\n".
@@ -473,6 +484,18 @@ class AutoCodeService extends AutoCode
                          "        );\r\n".
                          "    }\r\n\r\n";
                 //export
+                $enumConvert=self::enumKey2CommentInExtService($instance_name,$classname,$fieldInfo); 
+                $datetimeShow=self::datetimeShow($instance_name,$fieldInfo);
+                $specialResult=$enumConvert["normal"].
+                                "        \$arr_output_header= self::fieldsMean({$classname}::tablename()); \r\n";
+                $relationFieldOutput=self::relationFieldOutput($instance_name,$classname,$fieldInfo);
+                if ((!empty($relationFieldOutput))||(!empty($enumConvert["normal"]))||(!empty($datetimeShow))){
+                    $specialResult.="        foreach (\$data as \$$instance_name) {\r\n".
+                                    $enumConvert["output"].
+                                    $relationFieldOutput.
+                                    $datetimeShow.
+                                    "        }\r\n";
+                }
                 $result.="    /**\r\n".
                          "     * 导出{$object_desc}\r\n".
                          "     * @param mixed \$filter\r\n".
@@ -481,9 +504,7 @@ class AutoCodeService extends AutoCode
                          "    {\r\n".
                          "        if (\$filter)\$filter=\$this->filtertoCondition(\$filter);\r\n".
                          "        \$data=$classname::get(\$filter);\r\n".
-                         self::enumKey2CommentInExtService($classname,$fieldInfo).   
-                         "        \$arr_output_header= self::fieldsMean({$classname}::tablename()); \r\n".
-                         self::relationFieldOutput($instance_name,$classname,$fieldInfo).
+                         $specialResult.
                          "        unset(\$arr_output_header['updateTime'],\$arr_output_header['commitTime']);\r\n".
                          "        \$diffpart=date(\"YmdHis\");\r\n".
                          "        \$outputFileName=Gc::\$attachment_path.\"{$instance_name}\".DIRECTORY_SEPARATOR.\"export\".DIRECTORY_SEPARATOR.\"{$instance_name}\$diffpart.xls\"; \r\n".
@@ -868,16 +889,25 @@ class AutoCodeService extends AutoCode
 
     /**
      * 如果是日期时间存储成int的timestamp值，需要进行类型转换
+     * @param string $instance_name 实体变量    
+     * @param array $fieldInfo 表列信息列表    
+     * @param bool $isImport 是否导入
      */   
-    private static function dataTimeConvert($instance_name,$fieldInfo)
+    private static function dataTimeConvert($instance_name,$fieldInfo,$isImport=false)
     {
         $result="";   
         foreach ($fieldInfo as $fieldname=>$field){
-            $datatype =self::column_type($field["Type"]);
-            $field_comment=$field["Comment"];  
-            if (($datatype=='int')&&(contains($field_comment,array("日期","时间"))||contains($field_comment,array("date","time")))) 
-            {                                    
-                $result.="        if (isset(\${$instance_name}[\"$fieldname\"]))\${$instance_name}[\"$fieldname\"]=UtilDateTime::dateToTimestamp(\${$instance_name}[\"$fieldname\"]);\r\n";
+            if (self::isNotColumnKeywork($fieldname)){
+                $datatype =self::column_type($field["Type"]);
+                $field_comment=$field["Comment"];  
+                if (($datatype=='int')&&(contains($field_comment,array("日期","时间"))||contains($field_comment,array("date","time")))) 
+                {              
+                    if ($isImport){
+                        $result.="                        if (isset(\${$instance_name}->$fieldname))\${$instance_name}->$fieldname=UtilDateTime::dateToTimestamp(UtilExcel::exceltimtetophp(\${$instance_name}->$fieldname));\r\n";
+                    }else{                   
+                        $result.="        if (isset(\${$instance_name}[\"$fieldname\"]))\${$instance_name}[\"$fieldname\"]=UtilDateTime::dateToTimestamp(\${$instance_name}[\"$fieldname\"]);\r\n";
+                    }
+                }
             }
         }   
         return $result;  
@@ -897,12 +927,6 @@ class AutoCodeService extends AutoCode
             $relationSpecs=self::$relation_viewfield[$classname]; 
             $isTreeLevelHad=false;
             foreach ($fieldInfo as $fieldname=>$field){
-                $datatype =self::column_type($field["Type"]);
-                $field_comment=$field["Comment"];  
-                if (($datatype=='int')&&(contains($field_comment,array("日期","时间"))||contains($field_comment,array("date","time")))) 
-                {                                    
-                    $result.="                if (\${$instance_name}->{$fieldname})\${$instance_name}[\"$fieldname\"]=UtilDateTime::timestampToDateTime(\${$instance_name}->{$fieldname});\r\n";
-                }
                 if (array_key_exists($fieldname,$relationSpecs)){
                     $relationShow=$relationSpecs[$fieldname];
                     foreach ($relationShow as $key=>$value) {
@@ -949,9 +973,7 @@ class AutoCodeService extends AutoCode
                         }                 
                     }                           
                 }    
-            }
-            $result="            foreach (\$data as \$$instance_name) {\r\n".$result.
-                    "            }\r\n";   
+            } 
         }
         return $result;  
     }
@@ -1022,14 +1044,84 @@ class AutoCodeService extends AutoCode
                     }                           
                 }    
             }
-            $result="        foreach (\$data as \$$instance_name) {\r\n".$result.
-                    "        }\r\n";   
         }
         return $result; 
-
     }
 
+    /**
+     * 导入关系列，将标识转换成易读的文字
+     * @param mixed $instance_name 实体变量
+     * @param mixed $classname 数据对象列名
+     * @param mixed $fieldInfo 表列信息列表
+     */
+    private static function relationFieldImport($instance_name,$classname,$fieldInfo)
+    {
+        $result="";
+        if (array_key_exists($classname,self::$relation_viewfield)){ 
+            $relationSpecs=self::$relation_viewfield[$classname]; 
+            $isTreeLevelHad=false;
+            foreach ($fieldInfo as $fieldname=>$field){
+                if (array_key_exists($fieldname,$relationSpecs)){
+                    $relationShow=$relationSpecs[$fieldname];
+                    foreach ($relationShow as $key=>$value) {
+                        $i_name=$key;
+                        $show_fieldname=self::getShowFieldNameByClassname($key);
+                        $i_name{0}=strtolower($i_name{0});
+                        $fieldInfo_relation=self::$fieldInfos[self::getTablename($key)];
+                        if (array_key_exists("parent_id",$fieldInfo_relation)&&array_key_exists("level",$fieldInfo_relation)){
+                            if (!$isTreeLevelHad){
+                                $classNameField=self::getShowFieldNameByClassname($key);
+                                $field_comment=$field["Comment"];  
+                                $field_comment=self::columnCommentKey($field_comment,$fieldname);
+                                $result.="                        if (!is_numeric(\${$instance_name}[\"$fieldname\"])){\r\n".
+                                         "                            \${$i_name}_all=\${$instance_name}[\"{$field_comment}[全]\"];\r\n".
+                                         "                            if (\${$i_name}_all){\r\n".
+                                         "                                \${$i_name}_all_arr=explode(\"->\",\${$i_name}_all);\r\n".
+                                         "                                if (\${$i_name}_all_arr){\r\n".
+                                         "                                    \$level=count(\${$i_name}_all_arr);\r\n".
+                                         "                                    switch (\$level) {\r\n".
+                                         "                                        case 1:\r\n".
+                                         "                                            \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[0],\"level\"=>1));\r\n".
+                                         "                                            if (\${$i_name})\${$instance_name}[\"{$fieldname}\"]=\${$i_name}->{$fieldname};\r\n".
+                                         "                                            break;\r\n".
+                                         "                                        case 2:\r\n".
+                                         "                                            \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[0],\"level\"=>1));\r\n".
+                                         "                                            if (\${$i_name}){\r\n".
+                                         "                                                \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[1],\"level\"=>2,\"parent_id\"=>\${$i_name}->{$fieldname}));\r\n".
+                                         "                                                if (\${$i_name})\${$instance_name}[\"{$fieldname}\"]=\${$i_name}->{$fieldname};\r\n".
+                                         "                                            }\r\n".
+                                         "                                            break;\r\n".
+                                         "                                        case 3:\r\n".
+                                         "                                            \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[0],\"level\"=>1));\r\n".
+                                         "                                            if (\${$i_name}){\r\n".
+                                         "                                                \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[1],\"level\"=>2,\"parent_id\"=>\${$i_name}->{$fieldname}));\r\n".
+                                         "                                                if (\${$i_name}){\r\n".
+                                         "                                                    \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[2],\"level\"=>3,\"parent_id\"=>\${$i_name}->{$fieldname}));\r\n".
+                                         "                                                    if (\${$i_name})\${$instance_name}[\"{$fieldname}\"]=\${$i_name}->{$fieldname};\r\n".
+                                         "                                                }\r\n".
+                                         "                                            }\r\n".                                         
+                                         "                                            break;\r\n".
+                                         "                                       }\r\n".
+                                         "                                  }\r\n".
+                                         "                            }\r\n".
+                                         "                        }\r\n";
+                                $isTreeLevelHad=true;
+                            }
+                        }else{
+                            $result.="                        if (!is_numeric(\${$instance_name}[\"$fieldname\"])){\r\n";                        
+                            $result.="                            \${$i_name}=$key::get_one(\"{$show_fieldname}='\".\${$instance_name}[\"$fieldname\"].\"'\");\r\n";
+                            $result.="                            if (\${$i_name}) \${$instance_name}[\"$fieldname\"]=\${$i_name}->$fieldname;\r\n";
+                            $result.="                        }\r\n"; 
+                        }
+
+                    }                           
+                }    
+            }
+        }
+        return $result; 
+    }
     
+
     /**
      * 将表列为枚举类型的列用户能阅读的注释文字内容转换成需要存储在数据库里的值 
      * @param string $instance_name 实体变量    
@@ -1044,8 +1136,8 @@ class AutoCodeService extends AutoCode
             if ($datatype=='enum'){
                 $enumclassname=self::enumClassName($fieldname,$tablename);    
                 $enum_columnDefine=self::enumDefines($field["Comment"]);
-                $result.=$blankPre."        if (!{$enumclassname}::isEnumValue(\$".$instance_name."[\"".$fieldname."\"])){\r\n".                                          
-                         $blankPre."            \$".$instance_name."["."\"".$fieldname."\""."]=".$enumclassname."::".$fieldname."ByShow(\$".$instance_name."[\"".$fieldname."\"]);\r\n".
+                $result.=$blankPre."        if (!{$enumclassname}::isEnumValue(\$".$instance_name."->".$fieldname.")){\r\n".                                          
+                         $blankPre."            \$".$instance_name."->".$fieldname."=".$enumclassname."::".$fieldname."ByShow(\$".$instance_name."->".$fieldname.");\r\n".
                          $blankPre."        }\r\n";   
             }
         }   
@@ -1058,25 +1150,50 @@ class AutoCodeService extends AutoCode
      * @param array $fieldInfos 表列信息列表
      * @param string $blankPre 空白字符
      */
-    private static function enumKey2CommentInExtService($classname,$fieldInfo,$blankPre="")
+    private static function enumKey2CommentInExtService($instance_name,$classname,$fieldInfo,$blankPre="")
     {   
-        $result="";
+        $result=array("normal"=>"","output"=>"");
         $enumColumns=array();         
         foreach ($fieldInfo as $fieldname=>$field){
             $datatype =self::comment_type($field["Type"]);
             if ($datatype=='enum'){                                        
                 $enumColumns[]="'".$fieldname."'";
+                $result["output"].="            if (\${$instance_name}->{$fieldname}Show){\r\n".     
+                                "                \${$instance_name}['{$fieldname}']=\${$instance_name}->{$fieldname}Show;\r\n".     
+                                "            }\r\n";
             }
-        }        
+        }       
         if (count($enumColumns)>0){
             $enumColumns=implode(",",$enumColumns);
-            $result.=$blankPre."        if ((!empty(\$data))&&(count(\$data)>0))\r\n".  
+            $result["normal"].=$blankPre."        if ((!empty(\$data))&&(count(\$data)>0))\r\n".  
                      $blankPre."        {\r\n".                                                                
                      $blankPre."            $classname::propertyShow(\$data,array($enumColumns));\r\n".
                      $blankPre."        }\r\n";
         }
         return $result;   
     }   
+
+    /**
+     * 时间日期输出显示
+     * @param string $instance_name 实体变量    
+     * @param array $fieldInfos 表列信息列表
+     * @param string $blankPre 空白字符
+     */
+    private static function datetimeShow($instance_name,$fieldInfo,$blankPre="")
+    {
+        $result="";
+        foreach ($fieldInfo as $fieldname=>$field){
+            if (self::isNotColumnKeywork($fieldname)){
+                $datatype =self::column_type($field["Type"]);
+                $field_comment=$field["Comment"];  
+                if (($datatype=='int')&&(contains($field_comment,array("日期","时间"))||contains($field_comment,array("date","time")))) 
+                {                                    
+                    $result.=$blankPre."            if (\${$instance_name}->{$fieldname})\${$instance_name}[\"$fieldname\"]=UtilDateTime::timestampToDateTime(\${$instance_name}->{$fieldname});\r\n";
+                }
+            }
+        }
+        return $result;
+    }
      
     /**
      * 从表名称获取服务的类名。
