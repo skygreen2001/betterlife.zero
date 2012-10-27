@@ -8,7 +8,184 @@
  * @package util.xml
  * @author skygreen
  */
-class UtilXmlDom extends Util{
+class UtilXmlDom extends Util
+{
+
+    private static $xml = null;
+    private static $encoding = 'UTF-8';
+ 
+    /**
+     * Initialize the root XML node [optional]
+     * @param $version
+     * @param $encoding
+     * @param $format_output
+     */
+    public static function init($version = '1.0', $encoding = 'UTF-8', $format_output = true) {
+        self::$xml = new DomDocument($version, $encoding);
+        self::$xml->formatOutput = $format_output;
+        self::$encoding = $encoding;
+    }
+ 
+    /**
+     * 将数组类型转换成xml<br/>
+     * Convert an Array to XML
+     * 原为Array2XML类<br/>
+     * 参考:Array2XML:http://www.lalit.org/lab/convert-php-array-to-xml-with-attributes/<br/>
+     * 在数组里添加@attributes,@value,@cdata;可以添加Xml中Node的属性，值和CDATA<br/>
+     * The main function for converting to an XML document.<br/>
+     * Pass in a multi dimensional array and this recrusively loops through and builds up an XML document.<br/>
+     * 示例：<br/>
+     *     $data=array("id"=>"8","member_id"=>"5","app_name"=>"mall","username"=>"pass","relation"=>array("Role"=>"roleId","Function"=>"functionId"));<br/>
+     *     $data=array("a","b","c","d","e"=>array("a","b","c"));<br/>
+     *     echo UtilArray::array_to_xml($data, 'Member');<br/>
+     * 完整的示例[包括@attributes,@value,@cdata]:<br/>
+     *         $classes=array(
+     *             "class"=>array(
+     *                "conditions"=>array(
+     *                    "condition"=>array(
+     *                       array('@cdata'=>'Stranger in a Strange Land'),
+     *                       array(
+     *                            '@attributes' => array(
+     *                                "relation_class"=>"Blog",
+     *                                 "show_name"=>"title"
+     *                            ),
+     *                            '@value' => "blog_id"
+     *                        ),
+     *                        array(
+     *                            "@value"=>"comment_name"    
+     *                        )
+     *                    )                    
+     *                )
+     *            )
+     *        );
+     * 生成xml如下：<br/>
+     * <?xml version="1.0" encoding="utf-8"?>
+     * <classes>
+     *     <class>
+     *         <conditions>
+     *             <condition>
+     *                 <comment><![CDATA[Stranger in a Strange Land]]></comment>
+     *                 <condition relation_class="Blog" show_name="title">blog_id</condition>
+     *                 <condition>comment_name</condition>
+     *             </condition>
+     *         </conditions>
+     *     </class>
+     * </classes>
+     * @param string $node_name - name of the root node to be converted
+     * @param array $arr - aray to be converterd
+     * @return DomDocument
+     */
+    public static function &array_to_xml($arr=array(),$node_name='data') {
+        $xml = self::getXMLRoot();
+        $xml->appendChild(self::convert($node_name, $arr));
+        self::$xml = null;    // clear the xml node in the class for 2nd time use.
+        $xml->preserveWhiteSpace = false;
+        $xml->formatOutput = true;
+        return $xml->saveXML(); 
+    }
+ 
+    /**
+     * Convert an Array to XML
+     * @param string $node_name - name of the root node to be converted
+     * @param array $arr - aray to be converterd
+     * @return DOMNode
+     */
+    private static function &convert($node_name, $arr=array()) {
+ 
+        //print_arr($node_name);
+        $xml = self::getXMLRoot();
+        $node = $xml->createElement($node_name);
+ 
+        if(is_array($arr)){
+            // get the attributes first.;
+            if(isset($arr['@attributes'])) {
+                foreach($arr['@attributes'] as $key => $value) {
+                    if(!self::isValidTagName($key)) {
+                        throw new Exception('[Array2XML] Illegal character in attribute name. attribute: '.$key.' in node: '.$node_name);
+                    }
+                    $node->setAttribute($key, self::bool2str($value));
+                }
+                unset($arr['@attributes']); //remove the key from the array once done.
+            }
+ 
+            // check if it has a value stored in @value, if yes store the value and return
+            // else check if its directly stored as string
+            if(isset($arr['@value'])) {
+                $node->appendChild($xml->createTextNode(self::bool2str($arr['@value'])));
+                unset($arr['@value']);    //remove the key from the array once done.
+                //return from recursion, as a note with value cannot have child nodes.
+                return $node;
+            } else if(isset($arr['@cdata'])) {
+                $node->appendChild($xml->createCDATASection(self::bool2str($arr['@cdata'])));
+                unset($arr['@cdata']);    //remove the key from the array once done.
+                //return from recursion, as a note with cdata cannot have child nodes.
+                return $node;
+            }
+        }
+ 
+        //create subnodes using recursion
+        if(is_array($arr)){
+            // recurse to get the node for that key
+            foreach($arr as $key=>$value){
+                if(!self::isValidTagName($key)) {
+                    throw new Exception('[Array2XML] Illegal character in tag name. tag: '.$key.' in node: '.$node_name);
+                }
+                if(is_array($value) && is_numeric(key($value))) {
+                    // MORE THAN ONE NODE OF ITS KIND;
+                    // if the new array is numeric index, means it is array of nodes of the same kind
+                    // it should follow the parent key name
+                    foreach($value as $k=>$v){
+                        $node->appendChild(self::convert($key, $v));
+                    }
+                } else {
+                    // ONLY ONE NODE OF ITS KIND
+                    $node->appendChild(self::convert($key, $value));
+                }
+                unset($arr[$key]); //remove the key from the array once done.
+            }
+        }
+ 
+        // after we are done with all the keys in the array (if it is one)
+        // we check if it has any text value, if yes, append it.
+        if(!is_array($arr)) {
+            $node->appendChild($xml->createTextNode(self::bool2str($arr)));
+        }
+ 
+        return $node;
+    }
+ 
+    /*
+     * Get the root XML node, if there isn't one, create it.
+     */
+    private static function getXMLRoot(){
+        if(empty(self::$xml)) {
+            self::init();
+        }
+        return self::$xml;
+    }
+ 
+    /*
+     * Get string representation of boolean value
+     */
+    private static function bool2str($v){
+        //convert boolean to text value.
+        $v = $v === true ? 'true' : $v;
+        $v = $v === false ? 'false' : $v;
+        return $v;
+    }
+ 
+    /*
+     * Check if the tag name or attribute name contains illegal characters
+     * Ref: http://www.w3.org/TR/xml/#sec-common-syn
+     */
+    private static function isValidTagName($tag){
+        $pattern = '/^[a-z_]+[a-z0-9\:\-\.\_]*[^:]*$/i';
+        return preg_match($pattern, $tag, $matches) && $matches[0] == $tag;
+    }    
+    
+    
+    
+    
     /**
      * 示例：采用Dom方式创建html并显示
      */
