@@ -16,6 +16,7 @@ class UtilArray extends Util
      * 在数组里添加@attributes,@value,@cdata;可以添加Xml中Node的属性，值和CDATA<br/>
      * The main function for converting to an XML document.<br/>
      * Pass in a multi dimensional array and this recrusively loops through and builds up an XML document.<br/>
+     * @example 
      * 示例：<br/>
      *     $data=array("id"=>"8","member_id"=>"5","app_name"=>"mall","username"=>"pass","relation"=>array("Role"=>"roleId","Function"=>"functionId"));<br/>
      *     $data=array("a","b","c","d","e"=>array("a","b","c"));<br/>
@@ -117,6 +118,57 @@ class UtilArray extends Util
         $doc->loadXML( $xml->asXML() );
         $doc->formatOutput = true;
         return $doc->saveXML();        
+    }
+    
+    /**
+     * 转换数组保存符合规范的XML到指定的文件
+     * @param array $filename 文件名
+     * @param array $data 符合cml格式的数据
+     * @example 
+     * 示例：<br/>
+     *     $data=array("id"=>"8","member_id"=>"5","app_name"=>"mall","username"=>"pass","relation"=>array("Role"=>"roleId","Function"=>"functionId"));<br/>
+     *     $data=array("a","b","c","d","e"=>array("a","b","c"));<br/>
+     *     echo UtilArray::array_to_xml($data, 'Member');<br/>
+     * 完整的示例[包括@attributes,@value,@cdata]:<br/>
+     *         $classes=array(
+     *             "class"=>array(
+     *                "conditions"=>array(
+     *                    "condition"=>array(
+     *                       array('@cdata'=>'Stranger in a Strange Land'),
+     *                       array(
+     *                            '@attributes' => array(
+     *                                "relation_class"=>"Blog",
+     *                                 "show_name"=>"title"
+     *                            ),
+     *                            '@value' => "blog_id"
+     *                        ),
+     *                        array(
+     *                            "@value"=>"comment_name"    
+     *                        )
+     *                    )                    
+     *                )
+     *            )
+     *        );
+     * 生成xml如下：<br/>
+     * <?xml version="1.0" encoding="utf-8"?>
+     * <classes>
+     *     <class>
+     *         <conditions>
+     *             <condition>
+     *                 <comment><![CDATA[Stranger in a Strange Land]]></comment>
+     *                 <condition relation_class="Blog" show_name="title">blog_id</condition>
+     *                 <condition>comment_name</condition>
+     *             </condition>
+     *         </conditions>
+     *     </class>
+     * </classes>
+     * @param string $rootNodeName - 根节点的名称 - 默认:data.
+     */
+    public static function saveXML($filename,$data,$rootNodeName='data')
+    {
+        $result =UtilArray::array_to_xml($data,$rootNodeName);
+        $result=str_replace("  ","    ",$result);
+        file_put_contents($filename,$result); 
     }
 
     /**

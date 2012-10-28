@@ -70,7 +70,17 @@ class AutoCode extends Object
             self::$tableList=array_keys(self::$tableInfoList);//Manager_Db::newInstance()->dbinfo()->tableList(); 
         }
         if (empty(self::$fieldInfos)){
+            $ignoreTables=array();
             foreach (self::$tableList as $tablename){
+                $classname=self::getClassname($tablename); 
+                if (!contain($tablename,Config_Db::$table_prefix)){
+                    $ignoreTables[]=$tablename;
+                    continue;
+                }
+                if ($classname=="Copy"){
+                    $ignoreTables[]=$tablename;
+                    continue;
+                }
                 $fieldInfoList=Manager_Db::newInstance()->dbinfo()->fieldInfoList($tablename); 
                 foreach($fieldInfoList as $fieldname=>$field){
                     self::$fieldInfos[$tablename][$fieldname]["Field"]=$field["Field"];
@@ -82,9 +92,12 @@ class AutoCode extends Object
                         self::$fieldInfos[$tablename][$fieldname]["IsPermitNull"]=true;   
                     }
                 }   
-                $classname=self::getClassname($tablename); 
                 self::$class_comments[$classname]=self::$tableInfoList[$tablename]["Comment"];      
-            }           
+            }     
+            self::$tableList=array_diff(self::$tableList, $ignoreTables);
+            foreach ($ignoreTables as $tablename) {
+                unset(self::$tableInfoList[$tablename]);
+            } 
         }
     }
     
@@ -417,7 +430,7 @@ class AutoCode extends Object
         $fieldNames=array_keys($fieldInfo);
         foreach ($fieldNames as $fieldname)
         {
-            if (contains($fieldname,array("name","title")))return $fieldname;
+            if (contains($fieldname,array("name","title"))&&(!contain($fieldname,"_id")))return $fieldname;
         }        
         $result="name";
         return $result;

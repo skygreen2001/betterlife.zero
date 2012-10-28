@@ -13,14 +13,65 @@ class UtilXmlDom extends Util
 
     private static $xml = null;
     private static $encoding = 'UTF-8';
- 
+    /**
+     * 转换数组保存符合规范的XML到指定的文件
+     * @param array $filename 文件名
+     * @param array $data 符合cml格式的数据
+     * @example 
+     * 示例：<br/>
+     *     $data=array("id"=>"8","member_id"=>"5","app_name"=>"mall","username"=>"pass","relation"=>array("Role"=>"roleId","Function"=>"functionId"));<br/>
+     *     $data=array("a","b","c","d","e"=>array("a","b","c"));<br/>
+     *     echo UtilArray::array_to_xml($data, 'Member');<br/>
+     * 完整的示例[包括@attributes,@value,@cdata]:<br/>
+     *         $classes=array(
+     *             "class"=>array(
+     *                "conditions"=>array(
+     *                    "condition"=>array(
+     *                       array('@cdata'=>'Stranger in a Strange Land'),
+     *                       array(
+     *                            '@attributes' => array(
+     *                                "relation_class"=>"Blog",
+     *                                 "show_name"=>"title"
+     *                            ),
+     *                            '@value' => "blog_id"
+     *                        ),
+     *                        array(
+     *                            "@value"=>"comment_name"    
+     *                        )
+     *                    )                    
+     *                )
+     *            )
+     *        );
+     * 生成xml如下：<br/>
+     * <?xml version="1.0" encoding="utf-8"?>
+     * <classes>
+     *     <class>
+     *         <conditions>
+     *             <condition>
+     *                 <comment><![CDATA[Stranger in a Strange Land]]></comment>
+     *                 <condition relation_class="Blog" show_name="title">blog_id</condition>
+     *                 <condition>comment_name</condition>
+     *             </condition>
+     *         </conditions>
+     *     </class>
+     * </classes>
+     * @param string $rootNodeName - 根节点的名称 - 默认:data.
+     */
+    public static function saveXML($filename,$data,$rootNodeName='data')
+    {
+        $result =UtilXmlDom::array_to_xml($data,$rootNodeName);
+        $result=str_replace("  ","    ",$result);
+        file_put_contents($filename,$result); 
+    }
+
     /**
      * Initialize the root XML node [optional]
      * @param $version
      * @param $encoding
      * @param $format_output
      */
-    public static function init($version = '1.0', $encoding = 'UTF-8', $format_output = true) {
+    public static function init($version = '1.0', $encoding = 'UTF-8', $format_output = true) 
+    {
         self::$xml = new DomDocument($version, $encoding);
         self::$xml->formatOutput = $format_output;
         self::$encoding = $encoding;
@@ -34,6 +85,7 @@ class UtilXmlDom extends Util
      * 在数组里添加@attributes,@value,@cdata;可以添加Xml中Node的属性，值和CDATA<br/>
      * The main function for converting to an XML document.<br/>
      * Pass in a multi dimensional array and this recrusively loops through and builds up an XML document.<br/>
+     * @example 
      * 示例：<br/>
      *     $data=array("id"=>"8","member_id"=>"5","app_name"=>"mall","username"=>"pass","relation"=>array("Role"=>"roleId","Function"=>"functionId"));<br/>
      *     $data=array("a","b","c","d","e"=>array("a","b","c"));<br/>
@@ -75,7 +127,8 @@ class UtilXmlDom extends Util
      * @param array $arr - aray to be converterd
      * @return DomDocument
      */
-    public static function &array_to_xml($arr=array(),$node_name='data') {
+    public static function &array_to_xml($arr=array(),$node_name='data') 
+    {
         $xml = self::getXMLRoot();
         $xml->appendChild(self::convert($node_name, $arr));
         self::$xml = null;    // clear the xml node in the class for 2nd time use.
@@ -90,7 +143,8 @@ class UtilXmlDom extends Util
      * @param array $arr - aray to be converterd
      * @return DOMNode
      */
-    private static function &convert($node_name, $arr=array()) {
+    private static function &convert($node_name, $arr=array()) 
+    {
  
         //print_arr($node_name);
         $xml = self::getXMLRoot();
@@ -157,7 +211,8 @@ class UtilXmlDom extends Util
     /*
      * Get the root XML node, if there isn't one, create it.
      */
-    private static function getXMLRoot(){
+    private static function getXMLRoot()
+    {
         if(empty(self::$xml)) {
             self::init();
         }
@@ -167,7 +222,8 @@ class UtilXmlDom extends Util
     /*
      * Get string representation of boolean value
      */
-    private static function bool2str($v){
+    private static function bool2str($v)
+    {
         //convert boolean to text value.
         $v = $v === true ? 'true' : $v;
         $v = $v === false ? 'false' : $v;
@@ -178,18 +234,26 @@ class UtilXmlDom extends Util
      * Check if the tag name or attribute name contains illegal characters
      * Ref: http://www.w3.org/TR/xml/#sec-common-syn
      */
-    private static function isValidTagName($tag){
+    private static function isValidTagName($tag)
+    {
         $pattern = '/^[a-z_]+[a-z0-9\:\-\.\_]*[^:]*$/i';
         return preg_match($pattern, $tag, $matches) && $matches[0] == $tag;
     }    
     
-    
-    
+    /**
+     * 仅供测试
+     */
+    public static function main()
+    {
+        UtilXmlDom::sample_html_new();
+        UtilXmlDom::sample_html_update();
+    }
     
     /**
      * 示例：采用Dom方式创建html并显示
      */
-    public static function sample_html_new() {
+    private static function sample_html_new() 
+    {
         $doc = new DOMDocument("1.0","UTF-8");
         $html = $doc->createElement("html");
         $body = $doc->createElement("body");
@@ -208,7 +272,8 @@ class UtilXmlDom extends Util
      *  示例：采用Dom方式修改html并显示
      * 前提条件：需要先运行self::sample_html_new()方法；
      */
-    public static function sample_html_update() {
+    private static function sample_html_update() 
+    {
         $uri = 'c:/xml_dom.xml';
         $document = new DOMDocument();
         $document->loadHTMLFile($uri);// load the content of this URL as HTML
@@ -219,7 +284,5 @@ class UtilXmlDom extends Util
         echo $document->saveHTML();//display the content as HTML
     }
 }
-//UtilXmlDom::sample_html_new();
-//UtilXmlDom::sample_html_update();
 
 ?>
