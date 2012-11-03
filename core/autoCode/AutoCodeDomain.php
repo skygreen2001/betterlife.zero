@@ -22,14 +22,6 @@ class AutoCodeDomain extends AutoCode
      */
     public static $enumClass;
     /**
-     * 所有的数据对象关系:<br/>
-     * 一对一，一对多，多对多<br/>
-     * 包括*.has_one,belong_has_one,has_many,many_many,belongs_many_many. <br/> 
-     * 参考说明:EnumTableRelation
-     * @var mixed
-     */
-    public static $relation_all; 
-    /**
      * 数据对象生成定义的方式<br/>
      * 1.所有的列定义的对象属性都是private,同时定义setter和getter方法。
      * 2.所有的列定义的对象属性都是public。
@@ -291,7 +283,7 @@ class AutoCodeDomain extends AutoCode
     private static function domainDataobjectRelationSpec($fieldInfo,$classname)
     {
         $result="";
-        $relationSpec=AutoCodeDomain::$relation_all[$classname]; 
+        $relationSpec=self::$relation_all[$classname]; 
         
         //导出一对一关系规范定义(如果存在)
         if (array_key_exists("has_one",$relationSpec))

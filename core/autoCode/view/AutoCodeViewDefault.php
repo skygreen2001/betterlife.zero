@@ -335,7 +335,11 @@ VIEW;
      */
     private static function createFrontModelPages()
     {
-        foreach (self::$fieldInfos as $tablename=>$fieldInfo){  
+        foreach (self::$fieldInfos as $tablename=>$fieldInfo){ 
+            if(self::$type==0) {
+                $classname=self::getClassname($tablename);
+                if ($classname=="Admin")continue;
+            }            
             $table_comment=self::tableCommentKey($tablename);
             $appname=self::$appName;                   
             $instancename=self::getInstancename($tablename);

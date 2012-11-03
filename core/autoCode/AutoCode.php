@@ -51,6 +51,14 @@ class AutoCode extends Object
      */
     public static $relation_viewfield;  
     /**
+     * 所有的数据对象关系:<br/>
+     * 一对一，一对多，多对多<br/>
+     * 包括*.has_one,belong_has_one,has_many,many_many,belongs_many_many. <br/> 
+     * 参考说明:EnumTableRelation
+     * @var mixed
+     */
+    public static $relation_all; 
+    /**
      * 数据对象引用另一个数据对象同样值的冗余字段 
      * @var mixed
      */
@@ -383,7 +391,17 @@ class AutoCode extends Object
     }   
 
     /**
+     * 获取数据对象的ID列名称
+     * @param mixed $dataobject 数据对象实体|对象名称
+     */
+    protected static function keyIDColumn($dataobject)
+    {
+        return DataObjectSpec::getRealIDColumnNameStatic($dataobject);  
+    }   
+
+    /**
      * 获取表注释第一行关键词说明
+     * @param string $tablename 表名称
      */
     protected static function tableCommentKey($tablename)
     {
@@ -422,7 +440,8 @@ class AutoCode extends Object
     }
 
     /**
-     * 根据表名获取显示名称
+     * 根据类名获取表代表列显示名称
+     * @param string $classname 数据对象类名
      */  
     protected static function getShowFieldNameByClassname($classname)
     {
@@ -436,6 +455,35 @@ class AutoCode extends Object
         return $result;
     }
 
+    /**
+     * 根据类名判断是不是多对多关系，存在中间表表名
+     * @param string $classname 数据对象类名
+     */
+    protected static function isMany2ManyByClassname($classname)
+    {
+        $tablename=self::getTablename($classname);
+        if (contain($tablename,Config_Db::TABLENAME_RELATION."_")){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 根据类名判断是不是多对多关系，如果存在其他显示字段则需要在显示Tab中显示has_many
+     * @param string $classname 数据对象类名
+     */
+    protected static function isMany2ManyShowHasMany($classname)
+    {
+        if (self::isMany2ManyByClassname($classname))
+        {
+            $fieldInfo=self::$fieldInfos[self::getTablename($classname)];
+            unset($fieldInfo['updateTime'],$fieldInfo['commitTime']);
+            $realId=DataObjectSpec::getRealIDColumnName($classname);   
+            unset($fieldInfo[$realId]);
+            if (count($fieldInfo)==2)return false;
+        }    
+        return true;
+    }
 }    
 
 ?>

@@ -182,6 +182,10 @@ class AutoCodeService extends AutoCode
             $section_content="";
             foreach(self::$tableList as $tablename){ 
                 $classname=self::getClassname($tablename);  
+                $many2manyUpdateXml="";
+                $many2manyQueryPageXml="";
+
+                $many2manyXml=self::many2manyXml($classname);
                 $section_content.="    <service name=\"ExtService{$classname}\">\r\n". 
                                   "        <methods>\r\n".       
                                   "            <method name=\"save\">\r\n". 
@@ -190,14 +194,16 @@ class AutoCodeService extends AutoCode
                                   "            </method>\r\n".       
                                   "            <method name=\"update\">\r\n".       
                                   "                <param name=\"len\">1</param>\r\n". 
-                                  "                <param name=\"formHandler\">true</param>\r\n".       
+                                  "                <param name=\"formHandler\">true</param>\r\n".   
                                   "            </method>\r\n". 
+                                  $many2manyXml["many2manyUpdate"].    
                                   "            <method name=\"deleteByIds\">\r\n". 
                                   "                <param name=\"len\">1</param>\r\n". 
                                   "            </method>\r\n". 
                                   "            <method name=\"queryPage{$classname}\">\r\n". 
                                   "                <param name=\"len\">1</param>\r\n". 
                                   "            </method>\r\n". 
+                                  $many2manyXml["many2manyQueryPageXml"].                                  
                                   "            <method name=\"export{$classname}\">\r\n". 
                                   "                <param name=\"len\">1</param>\r\n". 
                                   "            </method>\r\n". 
@@ -370,7 +376,9 @@ class AutoCodeService extends AutoCode
                          "            'success' => true,\r\n".   
                          "            'data'    => \$data\r\n". 
                          "        ); \r\n".    
-                         "    }\r\n\r\n";     
+                         "    }\r\n\r\n";    
+                //update多对多          
+                $result.=self::many2manyUpdate($classname,$instance_name,$fieldInfo);
                 //uploadImg:有图片的上传图片功能         
                 $result.=self::imageUploadFunctionInExtService($classname,$instance_name,$fieldInfo,$object_desc);                  
                 //deleteByIds         
@@ -395,7 +403,7 @@ class AutoCodeService extends AutoCode
                          "     * 数据对象:{$object_desc}分页查询\r\n". 
                          "     * @param stdclass \$formPacket  查询条件对象\r\n". 
                          "     * 必须传递分页参数：start:分页开始数，默认从0开始\r\n".
-                         "     *                   limit:分页查询数，默认10个。\r\n".
+                         "     *                   limit:分页查询数，默认15个。\r\n".
                          "     * @return 数据对象:{$object_desc}分页查询列表\r\n".
                          "     */\r\n";
                 $enumConvert=self::enumKey2CommentInExtService($instance_name,$classname,$fieldInfo,"    "); 
@@ -411,7 +419,7 @@ class AutoCodeService extends AutoCode
                 $result.="    public function queryPage{$classname}(\$formPacket=null)\r\n".
                          "    {\r\n".                          
                          "        \$start=1;\r\n". 
-                         "        \$limit=10;\r\n".                          
+                         "        \$limit=15;\r\n".                          
                          "        \$condition=UtilObject::object_to_array(\$formPacket);\r\n". 
                          "        if (isset(\$condition['start'])){\r\n".                          
                          "            \$start=\$condition['start']+1;\r\n". 
@@ -437,6 +445,8 @@ class AutoCodeService extends AutoCode
                          "            'data'    => \$data\r\n". 
                          "        ); \r\n".             
                          "    }\r\n\r\n";   
+                //queryPage多对多        
+                $result.=self::many2manyQueryPage($classname,$instance_name,$fieldInfo);
                 //import
                 $result.="    /**\r\n".
                          "     * 批量上传{$object_desc}\r\n".
@@ -815,9 +825,281 @@ class AutoCodeService extends AutoCode
         }
         return $result;
     }
+
+    /**
+     * 生成service.config.xml里多对多调用的方法的配置
+     */
+    private static function many2manyXml($classname)
+    {
+        $result="";
+        $many2manyUpdate="";
+        $many2manyQueryPageXml="";
+        $relationSpec=self::$relation_all[$classname];
+        if (array_key_exists("has_many",$relationSpec))
+        {
+            $has_many=$relationSpec["has_many"];
+            foreach (array_keys($has_many) as $key) 
+            {
+                if (self::isMany2ManyByClassname($key))
+                {
+                    $tablename=self::getTablename($key);
+                    $fieldInfo=self::$fieldInfos[$tablename];
+                    $belong_class="";
+                    foreach (array_keys($fieldInfo) as $fieldname)
+                    {
+                        if (!self::isNotColumnKeywork($fieldname))continue;
+                        if ($fieldname==self::keyIDColumn($key))continue;
+                        if (contain($fieldname,"_id")){
+                            $to_class=str_replace("_id", "", $fieldname);
+                            $to_class{0}=strtoupper($to_class{0});
+                            if (class_exists($to_class)){
+                                if ($to_class!=$classname){
+                                    $belong_class=$to_class;
+                                    $many2manyUpdate.="            <method name=\"update{$classname}{$belong_class}\">\r\n".
+                                                      "                <param name=\"len\">1</param>\r\n".
+                                                      "            </method>\r\n";
+                                    $many2manyQueryPageXml.="            <method name=\"queryPage{$classname}{$belong_class}\">\r\n".
+                                                      "                <param name=\"len\">1</param>\r\n".
+                                                      "            </method>\r\n";
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        $result["many2manyUpdate"]=$many2manyUpdate;
+        $result["many2manyQueryPageXml"]=$many2manyQueryPageXml;
+        return $result;
+    }
+
+    /**
+     * 多对多关系提供提交保存更新中间表方法功能
+     * @param string $classname 数据对象类名
+     * @param string $instance_name 实体变量    
+     * @param array $fieldInfo 表列信息列表
+     */
+    private static function many2manyUpdate($classname,$instance_name,$fieldInfo)
+    {
+        $result="";
+        $relationSpec=self::$relation_all[$classname];
+        if (array_key_exists("has_many",$relationSpec))
+        {
+            $has_many=$relationSpec["has_many"];
+            foreach (array_keys($has_many) as $key) 
+            {
+                if (self::isMany2ManyByClassname($key))
+                {
+                    $tablename=self::getTablename($key);
+                    $fieldInfo=self::$fieldInfos[$tablename];
+                    $middle_instance_name=self::getInstancename($tablename);
+                    $owner_idcolumn="";
+                    $belong_class="";
+                    $belong_idcolumn="";
+                    foreach (array_keys($fieldInfo) as $fieldname)
+                    {
+                        if (!self::isNotColumnKeywork($fieldname))continue;
+                        if ($fieldname==self::keyIDColumn($key))continue;
+                        if (contain($fieldname,"_id")){
+                            $to_class=str_replace("_id", "", $fieldname);
+                            $to_class{0}=strtoupper($to_class{0});
+                            if (class_exists($to_class)){
+                                if ($to_class!=$classname){
+                                    $belong_class=$to_class;
+                                    $belong_idcolumn=$fieldname;
+                                }else{
+                                    $owner_idcolumn=$fieldname;
+                                }
+                            }
+                        }
+                    }
+                    $tablename_owner=self::getTablename($classname);
+                    $comment_owner=self::tableCommentKey($tablename_owner);
+                    $tablename_belong=self::getTablename($belong_class);
+                    $belong_instance_name=self::getInstancename($tablename_belong); 
+                    $comment_belong=self::tableCommentKey($tablename_belong);
+                    $result=<<<MANY2MANYUPDATE
+    /**
+     * 更新数据对象:{$comment_owner}包括{$comment_belong}
+     * @param array|DataObject \$conditions
+     * @return boolen 是否更新成功；true为操作正常
+     */
+    public function update{$classname}{$belong_class}(\$conditions)
+    {
+        \${$owner_idcolumn}=\$conditions->{$owner_idcolumn};
+        \${$belong_instance_name}s=\$conditions->{$belong_instance_name}s;
+        \$success=true;
+        try{
+            foreach(\${$belong_instance_name}s as \${$belong_instance_name}){
+                \${$middle_instance_name}={$key}::get_one(array("$owner_idcolumn"=>\${$owner_idcolumn},"$belong_idcolumn"=>\${$belong_instance_name}->{$belong_idcolumn}));
+                if(\${$middle_instance_name}){
+                    if(!\${$belong_instance_name}->isShow{$belong_class}Check)\${$middle_instance_name}->delete();
+                }else{
+                    if(\${$belong_instance_name}->isShow{$belong_class}Check){
+                        \${$middle_instance_name}=new {$key}(array("$owner_idcolumn"=>\${$owner_idcolumn},"$belong_idcolumn"=>\${$belong_instance_name}->{$belong_idcolumn}));
+                        \${$middle_instance_name}->save();
+                    }
+                }
+            }
+        }catch(Exception \$e){
+            \$success=false;
+        }
+        return array('success' =>\$success); 
+    }          
+
+MANY2MANYUPDATE;
+                }
+            }
+        }
+        return $result;
+    }
     
     /**
+     * 多对多关系提供分页方法功能
+     * @param string $classname 数据对象类名
+     * @param string $instance_name 实体变量    
+     * @param array $fieldInfo 表列信息列表
+     */
+    private static function many2manyQueryPage($classname,$instance_name,$fieldInfo)
+    {
+        $result="";
+        $relationSpec=self::$relation_all[$classname];
+        if (array_key_exists("has_many",$relationSpec))
+        {
+            $has_many=$relationSpec["has_many"];
+            foreach (array_keys($has_many) as $key) 
+            {
+                if (self::isMany2ManyByClassname($key))
+                {
+                    $tablename=self::getTablename($key);
+                    $fieldInfo=self::$fieldInfos[$tablename];
+                    $middle_instance_name=self::getInstancename($tablename);
+                    $owner_idcolumn="";
+                    $belong_class="";
+                    $belong_idcolumn="";
+                    foreach (array_keys($fieldInfo) as $fieldname)
+                    {
+                        if (!self::isNotColumnKeywork($fieldname))continue;
+                        if ($fieldname==self::keyIDColumn($key))continue;
+                        if (contain($fieldname,"_id")){
+                            $to_class=str_replace("_id", "", $fieldname);
+                            $to_class{0}=strtoupper($to_class{0});
+                            if (class_exists($to_class)){
+                                if ($to_class!=$classname){
+                                    $belong_class=$to_class;
+                                    $belong_idcolumn=$fieldname;
+                                }else{
+                                    $owner_idcolumn=$fieldname;
+                                }
+                            }
+                        }
+                    }
+                    $tablename_owner=self::getTablename($classname);
+                    $comment_owner=self::tableCommentKey($tablename_owner);
+                    $tablename_belong=self::getTablename($belong_class);
+                    $belong_instance_name=self::getInstancename($tablename_belong); 
+                    $comment_belong=self::tableCommentKey($tablename_belong);
+                    $belong_fieldInfo=self::$fieldInfos[$tablename_belong];
+                    $enumConvert=self::enumKey2CommentInExtService($belong_instance_name,$belong_class,$belong_fieldInfo,"    "); 
+                    $datetimeShow=self::datetimeShow($belong_instance_name,$belong_fieldInfo,"    ");
+                    $specialResult=$enumConvert["normal"];
+                    $relationField=self::relationFieldShow($belong_instance_name,$belong_class,$belong_fieldInfo);
+                    if ((!empty($relationField))||(!empty($enumConvert["normal"]))){
+                        $specialResult.="foreach (\$data as \$$belong_instance_name) {\r\n".
+                                        $relationField.
+                                        $datetimeShow.
+                                        "                if({$key}::existBy(\"{$owner_idcolumn}=\${$owner_idcolumn} and $belong_idcolumn=\".\${$belong_instance_name}->{$belong_idcolumn})){\r\n".
+                                        "                   \${$belong_instance_name}->isShow{$belong_class}Check=true;\r\n".
+                                        "                }\r\n".
+                                        "            }\r\n";
+                    }
+                    $result=<<<MANY2MANYQUERYPAGE
+    /**
+     * 数据对象:{$comment_owner}包括{$comment_belong}分页查询
+     * @param stdclass \$formPacket  查询条件对象
+     * 必须传递分页参数：start:分页开始数，默认从0开始
+     *                   limit:分页查询数，默认10个。
+     * @return 数据对象:主题包括课程分页查询列表
+     */
+    public function queryPage{$classname}{$belong_class}(\$formPacket=null)
+    {
+        \$start=1;
+        \$limit=15;
+        \${$owner_idcolumn}=\$formPacket->{$owner_idcolumn};
+        \$formPacket->{$owner_idcolumn}=null;
+        \$condition=UtilObject::object_to_array(\$formPacket);
+        /**0:全部,1:已选择,2:未选择*/
+        if (isset(\$condition["selectType"]))\$selectType=\$condition["selectType"];else \$selectType=0;
+        unset(\$condition["selectType"]);
+        if (isset(\$condition['start']))\$start=\$condition['start']+1;
+        if (isset(\$condition['limit']))\$limit=\$start+\$condition['limit']-1; 
+        unset(\$condition['start'],\$condition['limit']);
+        \$condition=\$this->filtertoCondition(\$condition);
+        switch (\$selectType) {
+           case 0:
+             \$count={$belong_class}::count(\$condition);
+             break;
+           case 1:
+             \$sql_child_query="(select $belong_idcolumn from ".{$key}::tablename()." where {$owner_idcolumn}=".\${$owner_idcolumn}.")";
+             \$sql_count="select count(1) from ".{$belong_class}::tablename()." a,\$sql_child_query b where a.{$belong_idcolumn}=b.{$belong_idcolumn} ";
+             if (!empty(\$condition))\$sql_count.=" and ".\$condition;
+             \$count=sqlExecute(\$sql_count);
+             break;
+           case 2:
+             \$sql_child_query=" left join (select $belong_idcolumn from ".{$key}::tablename()." where {$owner_idcolumn}=".\${$owner_idcolumn}.")  b on b.{$belong_idcolumn}=a.{$belong_idcolumn} where b.{$belong_idcolumn} is null ";
+             \$sql_count="select count(1) from ".{$belong_class}::tablename()." a \$sql_child_query ";
+             if (!empty(\$condition))\$sql_count.=" and ".\$condition;
+             \$count=sqlExecute(\$sql_count);
+             break;
+        }
+        
+        if (\$count>0){
+            if (\$limit>\$count)\$limit=\$count;
+            switch (\$selectType) {
+               case 0:
+                   \$data ={$belong_class}::queryPage(\$start,\$limit,\$condition);
+                   break;
+               case 1:
+                   \$sql_child_query="(select $belong_idcolumn from ".{$key}::tablename()." where {$owner_idcolumn}=".\${$owner_idcolumn}.")";
+                   \$sql_data="select a.* from ".{$belong_class}::tablename()." a,\$sql_child_query b where a.{$belong_idcolumn}=b.{$belong_idcolumn} ";
+                   if (!empty(\$condition))\$sql_data.=" and ".\$condition;
+                   if (\$start)\$start=\$start-1;
+                   \$sql_data.=" limit \$start,".(\$limit-\$start+1);
+                   \$data=sqlExecute(\$sql_data,"{$belong_class}");
+                   break;
+               case 2:
+                   \$sql_child_query=" left join (select $belong_idcolumn from ".{$key}::tablename()." where {$owner_idcolumn}=".\${$owner_idcolumn}.")  b on b.{$belong_idcolumn}=a.{$belong_idcolumn} where b.{$belong_idcolumn} is null ";
+                   \$sql_data="select a.* from ".{$belong_class}::tablename()." a \$sql_child_query ";
+                   if (!empty(\$condition))\$sql_data.=" and ".\$condition;
+                   if (\$start)\$start=\$start-1;
+                   \$sql_data.=" limit \$start,".(\$limit-\$start+1);
+                   \$data=sqlExecute(\$sql_data,"{$belong_class}");
+                   break;
+            }
+
+            $specialResult
+            if (\$data==null)\$data=array();
+        }else{
+            \$data=array();
+        }
+        return array(
+            'success' => true,
+            'totalCount'=>\$count,
+            'data'    => \$data
+        ); 
+    }  
+
+
+MANY2MANYQUERYPAGE;
+                }
+            }
+        }
+        return $result;
+    }
+
+    /**
      * 将表列为上传图片路径类型的列提供上传图片的函数,为图片上传功能提供支持 
+     * @param string $classname 数据对象类名
      * @param string $instance_name 实体变量    
      * @param array $fieldInfo 表列信息列表
      * @param string $object_desc     
@@ -911,7 +1193,6 @@ class AutoCodeService extends AutoCode
             }
         }   
         return $result;  
-
     }
 
     /**
@@ -1121,11 +1402,11 @@ class AutoCodeService extends AutoCode
         return $result; 
     }
     
-
     /**
      * 将表列为枚举类型的列用户能阅读的注释文字内容转换成需要存储在数据库里的值 
      * @param string $instance_name 实体变量    
      * @param array $fieldInfos 表列信息列表
+     * @param string $tablename 表名称
      * @param string $blankPre 空白字符
      */    
     private static function enumComment2KeyInExtService($instance_name,$fieldInfo,$tablename,$blankPre="")
@@ -1197,7 +1478,7 @@ class AutoCodeService extends AutoCode
      
     /**
      * 从表名称获取服务的类名。
-     * @param string $tablename
+     * @param string $tablename 表名称
      * @return string 返回对象的类名 
      */
     private static function getServiceClassname($tablename)

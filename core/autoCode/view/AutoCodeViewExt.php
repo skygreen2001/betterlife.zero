@@ -275,6 +275,9 @@ class AutoCodeViewExt extends AutoCode
         $relationViewGrids=$storeInfo['relationViewGrids'];
         $viewRelationDoSelect=$storeInfo['viewRelationDoSelect'];
         $relationViewGridInit=$storeInfo['relationViewGridInit'];
+        $relationM2mMenu=$storeInfo['relationM2mMenu'];
+        $relationM2mShowHide=$storeInfo['relationM2mShowHide'];
+        $relationM2mRunningWindow=$storeInfo['relationM2mRunningWindow'];
 
         //获取Ext "EditWindow"里items的fieldLabels
         $editWindowVars=self::model_fieldLables($appName_alias,$classname,$fieldInfo);
@@ -322,7 +325,7 @@ class AutoCodeViewExt extends AutoCode
     /**
      * 获取Ext "Store"里的fields
      * @param string $classname 数据对象类名
-     * @param string $instance_name 实体变量 
+     * @param string $instancename 实体变量 
      * @param array $fieldInfo 表列信息列表  
      */
     private static function model_fields($classname,$instancename,$fieldInfo)
@@ -331,6 +334,7 @@ class AutoCodeViewExt extends AutoCode
         $relationStore="";//Ext "$relationStore="中关系库Store的定义
         $relationClassesView="";//Ext 关系表的显示定义
         $isTreelevelStoreHad=false;
+        self::$relationStore="";
         foreach ($fieldInfo as $fieldname=>$field)
         { 
             if (self::isNotColumnKeywork($fieldname))
@@ -382,12 +386,7 @@ class AutoCodeViewExt extends AutoCode
                                     }
                                 }
                             }
-                            $relation_classcomment=self::$class_comments[$key];
-                            $relation_classcomment=str_replace("关系表","",$relation_classcomment); 
-                            if (contain($relation_classcomment,"\r")||contain($relation_classcomment,"\n")){
-                                $relation_classcomment=preg_split("/[\s,]+/", $relation_classcomment);    
-                                $relation_classcomment=$relation_classcomment[0]; 
-                            }   
+                            $relation_classcomment=self::relation_classcomment(self::$class_comments[$key]);
 
                             $fieldInfo_relationshow=self::$fieldInfos[self::getTablename($key)];
                             $key{0}=strtolower($key{0});
@@ -397,10 +396,10 @@ class AutoCodeViewExt extends AutoCode
                                     $isTreelevelStoreHad=true;
                                 }    
                             }
-                            if ((!$isTreelevelStoreHad)&&(!contain($relationStore,"{$key}StoreForCombo"))){
+                            if ((!$isTreelevelStoreHad)&&(!contain(self::$relationStore,"{$key}StoreForCombo"))){
                                 $showValue=$value;
                                 if ($value=="name") $showValue=strtolower($key)."_".$value;
-                                $relationStore.=",\r\n".
+                                $relationStore_combo=",\r\n".
                                                 "    /**\r\n".  
                                                 "     * {$relation_classcomment}\r\n".
                                                 "     */\r\n".
@@ -417,11 +416,13 @@ class AutoCodeViewExt extends AutoCode
                                                 "            {name: '$realId', mapping: '$realId'},\r\n";
                                 if (array_key_exists("level",$fieldInfo_relationshow)){     
                                     $showLevel=strtolower($key)."_level";           
-                                    $relationStore.="            {name: '$showLevel', mapping: 'level'},\r\n";
+                                    $relationStore_combo.="            {name: '$showLevel', mapping: 'level'},\r\n";
                                 }
-                                $relationStore.="            {name: '$showValue', mapping: '$value'}\r\n".
+                                $relationStore_combo.="            {name: '$showValue', mapping: '$value'}\r\n".
                                                 "        ])\r\n".
                                                 "    })"; 
+                                $relationStore.=$relationStore_combo;
+                                self::$relationStore.=$relationStore_combo;
                             }      
                         }  
                     }    
@@ -431,6 +432,7 @@ class AutoCodeViewExt extends AutoCode
 
         $fields=substr($fields,0,strlen($fields)-3);  
         $result['fields']=$fields;
+        $result['relationStore_onlyForFieldLabels']=$relationStore;
         $relationViewDefine=self::relationViewDefine($classname,$instancename,$relationStore);
         $relationStore=$relationViewDefine['relationStore'];
         $relationClassesView=$relationViewDefine['one2many'];
@@ -438,14 +440,18 @@ class AutoCodeViewExt extends AutoCode
         $relationViewGrids=$relationViewDefine['relationViewGrids'];
         $viewRelationDoSelect=$relationViewDefine['viewRelationDoSelect'];
         $relationViewGridInit=$relationViewDefine['relationViewGridInit'];
-        
+        $relationM2mMenu=$relationViewDefine['m2mMenu'];
+        $relationM2mShowHide=$relationViewDefine['m2mShowHide'];
+        $relationM2mRunningWindow=$relationViewDefine['m2mRunningWindow'];
         $result['relationStore']=$relationStore;
         $result['relationClassesView']=$relationClassesView;
         $result['relationViewAdds']=$relationViewAdds;
         $result['relationViewGrids']=$relationViewGrids;
         $result['viewRelationDoSelect']="\r\n".$viewRelationDoSelect;
-        
         $result['relationViewGridInit']="\r\n".$relationViewGridInit;
+        $result['relationM2mMenu']=$relationM2mMenu;
+        $result['relationM2mShowHide']=$relationM2mShowHide;
+        $result['relationM2mRunningWindow']=$relationM2mRunningWindow;
         return $result;
     }
     
@@ -455,7 +461,7 @@ class AutoCodeViewExt extends AutoCode
      */
     private static function relationViewDefine($classname,$instancename,$relationStore)
     {
-        $relationSpec=AutoCodeDomain::$relation_all[$classname];
+        $relationSpec=self::$relation_all[$classname];
         $relationClassesView="";
         $appName_alias=Gc::$appName_alias;
         $relationViewAdds="";  
@@ -473,21 +479,19 @@ class AutoCodeViewExt extends AutoCode
                 $tablename=self::getTablename($current_classname);
                 $current_instancename=self::getInstancename($tablename); 
                 
-                $relation_classcomment=self::$class_comments[$current_classname];
-                $relation_classcomment=str_replace("关系表","",$relation_classcomment); 
-                if (contain($relation_classcomment,"\r")||contain($relation_classcomment,"\n")){
-                    $relation_classcomment=preg_split("/[\s,]+/", $relation_classcomment);    
-                    $relation_classcomment=$relation_classcomment[0]; 
-                }   
-                $relationViewAdds.="                  {title: '$relation_classcomment',iconCls:'tabs',tabWidth:150,\r\n".
-                                   "                   items:[$appName_alias.$classname.View.Running.{$current_instancename}Grid]\r\n".
-                                   "                  },\r\n";  
-                $relationViewGrids.="      /**\r\n".
-                                    "       * 当前{$relation_classcomment}Grid对象\r\n".
-                                    "       */\r\n".
-                                    "      {$current_instancename}Grid:null,\r\n";  
-                $viewRelationDoSelect.="          $appName_alias.$classname.View.Running.{$current_instancename}Grid.doSelect{$current_classname}();\r\n";     
-                $relationViewGridInit.="              $appName_alias.$classname.View.Running.{$current_instancename}Grid=new $appName_alias.$classname.View.{$current_classname}View.Grid();\r\n";            
+                $relation_classcomment=self::relation_classcomment(self::$class_comments[$current_classname]);
+                if (self::isMany2ManyShowHasMany($current_classname))
+                {
+                    $relationViewAdds.="                    {title: '$relation_classcomment',iconCls:'tabs',tabWidth:150,\r\n".
+                                       "                     items:[$appName_alias.$classname.View.Running.{$current_instancename}Grid]\r\n".
+                                       "                    },\r\n";  
+                    $relationViewGrids.="        /**\r\n".
+                                        "         * 当前{$relation_classcomment}Grid对象\r\n".
+                                        "         */\r\n".
+                                        "        {$current_instancename}Grid:null,\r\n";  
+                    $viewRelationDoSelect.="            $appName_alias.$classname.View.Running.{$current_instancename}Grid.doSelect{$current_classname}();\r\n";     
+                    $relationViewGridInit.="                $appName_alias.$classname.View.Running.{$current_instancename}Grid=new $appName_alias.$classname.View.{$current_classname}View.Grid();\r\n";            
+                }
                 if (!contain($relationStore,"{$key}Store:"))
                 {
                     $fieldInfo=self::$fieldInfos[$tablename];
@@ -542,40 +546,43 @@ class AutoCodeViewExt extends AutoCode
                         }
                     }
                     $fields_relation=substr($fields_relation,0,strlen($fields_relation)-3); 
-                    
-                    $relation_classcomment=self::$class_comments[$current_classname];
-                    $relation_classcomment=str_replace("关系表","",$relation_classcomment); 
-                    if (contain($relation_classcomment,"\r")||contain($relation_classcomment,"\n")){
-                        $relation_classcomment=preg_split("/[\s,]+/", $relation_classcomment);    
-                        $relation_classcomment=$relation_classcomment[0]; 
-                    }                       
-                    $relationStore.=",\r\n".
-                                    "    /**\r\n".  
-                                    "     * {$relation_classcomment}\r\n".
-                                    "     */\r\n".
-                                    "    {$key}Store:new Ext.data.Store({\r\n".  
-                                    "        reader: new Ext.data.JsonReader({\r\n".
-                                    "            totalProperty: 'totalCount',\r\n".
-                                    "            successProperty: 'success',\r\n".
-                                    "            root: 'data',remoteSort: true,\r\n".
-                                    "            fields : [\r\n".
-                                    "$fields_relation\r\n".
-                                    "            ]}\r\n".
-                                    "        ),\r\n".
-                                    "        writer: new Ext.data.JsonWriter({\r\n".
-                                    "            encode: false \r\n".
-                                    "        }),\r\n".
-                                    "        listeners : {\r\n".
-                                    "            beforeload : function(store, options) {\r\n".
-                                    "                if (Ext.isReady) {\r\n".
-                                    "                    Ext.apply(options.params, $appName_alias.$classname.View.Running.{$current_instancename}Grid.filter);//保证分页也将查询条件带上\r\n".
-                                    "                }\r\n".
-                                    "            }\r\n".
-                                    "        }\r\n".
-                                    "    })"; 
-                }      
+                    if (self::isMany2ManyShowHasMany($current_classname))
+                    {
+                        $relation_classcomment=self::relation_classcomment(self::$class_comments[$current_classname]);
+                        $relationStore.=",\r\n".
+                                        "    /**\r\n".  
+                                        "     * {$relation_classcomment}\r\n".
+                                        "     */\r\n".
+                                        "    {$key}Store:new Ext.data.Store({\r\n".  
+                                        "        reader: new Ext.data.JsonReader({\r\n".
+                                        "            totalProperty: 'totalCount',\r\n".
+                                        "            successProperty: 'success',\r\n".
+                                        "            root: 'data',remoteSort: true,\r\n".
+                                        "            fields : [\r\n".
+                                        "$fields_relation\r\n".
+                                        "            ]}\r\n".
+                                        "        ),\r\n".
+                                        "        writer: new Ext.data.JsonWriter({\r\n".
+                                        "            encode: false \r\n".
+                                        "        }),\r\n".
+                                        "        listeners : {\r\n".
+                                        "            beforeload : function(store, options) {\r\n".
+                                        "                if (Ext.isReady) {\r\n".
+                                        "                    if (!options.params.limit)options.params.limit=$appName_alias.$classname.Config.PageSize;\r\n".
+                                        "                    Ext.apply(options.params, $appName_alias.$classname.View.Running.{$current_instancename}Grid.filter);//保证分页也将查询条件带上\r\n".
+                                        "                }\r\n".
+                                        "            }\r\n".
+                                        "        }\r\n".
+                                        "    })"; 
+                    }
+                }  
                 if (!contain($relationClassesView,"{$current_classname}View"))
-                {                    
+                {           
+                    include("jsmodel".DIRECTORY_SEPARATOR."many2many.php"); 
+                    $result['m2mMenu']=$jsMany2ManyMenu;
+                    $result['m2mShowHide']=$jsMany2ManyShowHide;
+                    $result['m2mRunningWindow']=$jsMany2ManyRunningWindow;
+                    $relationClassesView.=$jsMany2ManyContent;        
                     $table_comment12n=self::tableCommentKey($tablename);
                     $realId=DataObjectSpec::getRealIDColumnName($classname);                    
                     $columns_relation="";                    
@@ -632,9 +639,8 @@ class AutoCodeViewExt extends AutoCode
                     }
                     $columns_relation=substr($columns_relation,0,strlen($columns_relation)-3); 
                     include("jsmodel".DIRECTORY_SEPARATOR."one2many.php");
-                    $relationClassesView.="\r\n".$jsOne2ManyContent;
-                }
-                           
+                    $relationClassesView.=$jsOne2ManyContent;
+                }                           
             }
         }
         $result['relationStore']=$relationStore;   
@@ -794,10 +800,11 @@ class AutoCodeViewExt extends AutoCode
                                             $realId=DataObjectSpec::getRealIDColumnName($key_relation);
                                             $fieldInfo_relationshow=self::$fieldInfos[self::getTablename($key_relation)];
                                             $key_relation{0}=strtolower($key_relation{0});
-                                            if (!contain(self::$relationStore,"{$key}StoreForCombo")){
+                                            if (!contain(self::$relationStore,"{$key}StoreForCombo")){                   
                                                 $showValue=$value;
                                                 if ($value=="name") $showValue=strtolower($key_relation)."_".$value_relation;
-                                                $relationStore.=",\r\n".
+                                                $relation_classcomment=self::relation_classcomment(self::$class_comments[$current_classname]);
+                                                $relationStore_combo=",\r\n".
                                                                 "    /**\r\n".  
                                                                 "     * {$relation_classcomment}\r\n".
                                                                 "     */\r\n".
@@ -814,12 +821,13 @@ class AutoCodeViewExt extends AutoCode
                                                                 "            {name: '$realId', mapping: '$realId'},\r\n";
                                                 if (array_key_exists("level",$fieldInfo_relationshow)){     
                                                     $showLevel=strtolower($key)."_level";           
-                                                    $relationStore.="            {name: '$showLevel', mapping: 'level'},\r\n";
+                                                    $relationStore_combo.="            {name: '$showLevel', mapping: 'level'},\r\n";
                                                 }
-                                                $relationStore.="            {name: '$showValue', mapping: '$value'}\r\n".
+                                                $relationStore_combo.="            {name: '$showValue', mapping: '$value'}\r\n".
                                                                 "        ])\r\n".
                                                                 "    })"; 
-                                                self::$relationStore.=$relationStore;
+                                                $relationStore.=$relationStore_combo;
+                                                self::$relationStore.=$relationStore_combo;
                                             } 
                                          }   
                                     }
@@ -1175,8 +1183,9 @@ class AutoCodeViewExt extends AutoCode
      * 获取Ext "Grid" 中包含的columns
      * @param string $classname 数据对象类名
      * @param array $fieldInfo 表列信息列表   
+     * @param string $blank_pre 空格字符串  
      */
-    private static function model_columns($classname,$fieldInfo)
+    private static function model_columns($classname,$fieldInfo,$blank_pre="")
     {
         $columns="";//Ext "Grid" 中包含的columns
         foreach ($fieldInfo as $fieldname=>$field)
@@ -1202,7 +1211,7 @@ class AutoCodeViewExt extends AutoCode
                                     $show_fieldname=strtolower($key)."_".$show_fieldname;
                                 }
                                 if (!array_key_exists("$show_fieldname",$fieldInfo)){
-                                    $columns.="                        {header : '$field_comment',dataIndex : '{$show_fieldname}'},\r\n";
+                                    $columns.=$blank_pre."                        {header : '$field_comment',dataIndex : '{$show_fieldname}'},\r\n";
                                 }
                             }
                         }else{
@@ -1211,7 +1220,7 @@ class AutoCodeViewExt extends AutoCode
                                 $field_comment=self::columnCommentKey($field_comment,$fieldname);   
                                 $show_fieldname= strtolower($key)."_".$value;                                
                                 if (!array_key_exists("$show_fieldname",$fieldInfo)){
-                                    $columns.="                        {header : '$field_comment',dataIndex : '{$show_fieldname}'},\r\n";
+                                    $columns.=$blank_pre."                        {header : '$field_comment',dataIndex : '{$show_fieldname}'},\r\n";
                                 }
                             }
                             
@@ -1224,7 +1233,7 @@ class AutoCodeViewExt extends AutoCode
             {
                 if ($fieldname==self::keyIDColumn($classname))
                 { 
-                    $columns.="                        {header : '标识',dataIndex : '{$fieldname}',hidden:true},\r\n"; 
+                    $columns.=$blank_pre."                        {header : '标识',dataIndex : '{$fieldname}',hidden:true},\r\n"; 
                     continue;
                 }
                 if (self::columnIsImage($fieldname,$field["Comment"])) continue;
@@ -1233,9 +1242,9 @@ class AutoCodeViewExt extends AutoCode
                 $field_comment=self::columnCommentKey($field_comment,$fieldname);
                 $datatype=self::comment_type($field["Type"]);
                 if ($datatype=='enum'){
-                    $columns.="                        {header : '{$field_comment}',dataIndex : '{$fieldname}Show'"; 
+                    $columns.=$blank_pre."                        {header : '{$field_comment}',dataIndex : '{$fieldname}Show'"; 
                 }else{
-                    $columns.="                        {header : '$field_comment',dataIndex : '{$fieldname}'";  
+                    $columns.=$blank_pre."                        {header : '$field_comment',dataIndex : '{$fieldname}'";  
                 }
                 if (($datatype=='date')||contains($field_comment,array("日期","时间"))) 
                 {
@@ -1259,9 +1268,10 @@ class AutoCodeViewExt extends AutoCode
      * 获取查询中的语句<br/>
      * @param string $classname 数据对象类名
      * @param string $instance_name 实体变量    
-     * @param array $fieldInfo 表列信息列表   
+     * @param array $fieldInfo 表列信息列表     
+     * @param string $blank_pre 空格字符串 
      */
-    private static function model_filters($appName_alias,$classname,$instancename,$fieldInfo)
+    private static function model_filters($appName_alias,$classname,$instancename,$fieldInfo,$blank_pre="")
     {
         $filterFields             ="";//Ext "Grid" 中"tbar"包含的items中的items
         $filterReset              ="";//重置语句
@@ -1270,7 +1280,7 @@ class AutoCodeViewExt extends AutoCode
         {
             $filterwords=self::$filter_fieldnames[$classname];
             $instancename_pre=$instancename{0}; 
-            $filterfilter="                this.filter       ={";
+            $filterfilter=$blank_pre."                this.filter       ={";
             foreach ($fieldInfo as $fieldname=>$field)
             {
                 $field_comment=$field["Comment"];  
@@ -1279,10 +1289,10 @@ class AutoCodeViewExt extends AutoCode
                 {
                     $fname=$instancename_pre.$fieldname;
                     $datatype=self::comment_type($field["Type"]);
-                    $filterFields.="                                '{$field_comment} ','&nbsp;&nbsp;',";
+                    $filterFields.=$blank_pre."                                '{$field_comment} ','&nbsp;&nbsp;',";
                     if (($datatype=='date')||contains($field_comment,array("日期","时间")))
                     {
-                        $filterFields.="{xtype : 'datefield',ref: '../$fname',format : \"Y-m-d\"";
+                        $filterFields.=$blank_pre."{xtype : 'datefield',ref: '../$fname',format : \"Y-m-d\"";
                     }else{
                         $filterFields.="{ref: '../$fname'";
                     }
@@ -1290,22 +1300,22 @@ class AutoCodeViewExt extends AutoCode
                     if ($column_type=='bit')
                     {
                         $filterFields.=",xtype : 'combo',mode : 'local',\r\n".
-                                "                                    triggerAction : 'all',lazyRender : true,editable: false,\r\n".
-                                "                                    store : new Ext.data.SimpleStore({\r\n".
-                                "                                        fields : ['value', 'text'],\r\n".
-                                "                                        data : [['0', '否'], ['1', '是']]\r\n".
-                                "                                    }),\r\n".
-                                "                                    valueField : 'value',displayField : 'text'\r\n".
-                                "                                ";
+                                $blank_pre."                                    triggerAction : 'all',lazyRender : true,editable: false,\r\n".
+                                $blank_pre."                                    store : new Ext.data.SimpleStore({\r\n".
+                                $blank_pre."                                        fields : ['value', 'text'],\r\n".
+                                $blank_pre."                                        data : [['0', '否'], ['1', '是']]\r\n".
+                                $blank_pre."                                    }),\r\n".
+                                $blank_pre."                                    valueField : 'value',displayField : 'text'\r\n".
+                                $blank_pre."                                ";
                     }                
                     if ($column_type=='enum')
                     {
                         $enum_columnDefine=self::enumDefines($field["Comment"]); 
                         $filterFields.=",xtype : 'combo',mode : 'local',\r\n".
-                                "                                    triggerAction : 'all',lazyRender : true,editable: false,\r\n".
-                                "                                    store : new Ext.data.SimpleStore({\r\n".
-                                "                                        fields : ['value', 'text'],\r\n".
-                                "                                        data : [";
+                                $blank_pre."                                    triggerAction : 'all',lazyRender : true,editable: false,\r\n".
+                                $blank_pre."                                    store : new Ext.data.SimpleStore({\r\n".
+                                $blank_pre."                                        fields : ['value', 'text'],\r\n".
+                                $blank_pre."                                        data : [";
                         $enumArr=array();              
                         foreach ($enum_columnDefine as $enum_column) 
                         {
@@ -1313,9 +1323,9 @@ class AutoCodeViewExt extends AutoCode
                         }                                         
                         $filterFields.=implode(",",$enumArr);   
                         $filterFields.="]\r\n".
-                                "                                    }),\r\n".
-                                "                                    valueField : 'value',displayField : 'text'\r\n".
-                                "                                ";
+                                $blank_pre."                                    }),\r\n".
+                                $blank_pre."                                    valueField : 'value',displayField : 'text'\r\n".
+                                $blank_pre."                                ";
                     }
                     
                     if ($filterwords["relation_show"]){
@@ -1331,42 +1341,42 @@ class AutoCodeViewExt extends AutoCode
                                 $fsname=$instancename_pre.$fieldname;
                                 $con_relation_class{0}=strtolower($con_relation_class{0});
                                 $filterFields.=", xtype:'hidden'},{\r\n".
-                                               "                                      xtype:'combotree', ref:'../{$fsname}',grid:this,\r\n".
-                                               "                                      emptyText: '请选择{$field_comment}',canFolderSelect:false,flex:1,editable:false,\r\n".
-                                               "                                      tree: new Ext.tree.TreePanel({\r\n".
-                                               "                                          dataUrl: 'home/admin/src/httpdata/{$con_relation_class}Tree.php',\r\n".
-                                               "                                          root: {nodeType: 'async'},border: false,rootVisible: false,\r\n".
-                                               "                                          listeners: {\r\n".
-                                               "                                              beforeload: function(n) {if (n) {this.getLoader().baseParams.id = n.attributes.id;}}\r\n".
-                                               "                                          }\r\n".
-                                               "                                      }),\r\n".
-                                               "                                      onSelect: function(cmb, node) {\r\n".
-                                               "                                          this.grid.topToolbar.{$fname}.setValue(node.attributes.id);\r\n".
-                                               "                                          this.setValue(node.attributes.text);\r\n".
-                                               "                                      }\r\n".
-                                               "                                "; 
+                                               $blank_pre."                                      xtype:'combotree', ref:'../{$fsname}',grid:this,\r\n".
+                                               $blank_pre."                                      emptyText: '请选择{$field_comment}',canFolderSelect:false,flex:1,editable:false,\r\n".
+                                               $blank_pre."                                      tree: new Ext.tree.TreePanel({\r\n".
+                                               $blank_pre."                                          dataUrl: 'home/admin/src/httpdata/{$con_relation_class}Tree.php',\r\n".
+                                               $blank_pre."                                          root: {nodeType: 'async'},border: false,rootVisible: false,\r\n".
+                                               $blank_pre."                                          listeners: {\r\n".
+                                               $blank_pre."                                              beforeload: function(n) {if (n) {this.getLoader().baseParams.id = n.attributes.id;}}\r\n".
+                                               $blank_pre."                                          }\r\n".
+                                               $blank_pre."                                      }),\r\n".
+                                               $blank_pre."                                      onSelect: function(cmb, node) {\r\n".
+                                               $blank_pre."                                          this.grid.topToolbar.{$fname}.setValue(node.attributes.id);\r\n".
+                                               $blank_pre."                                          this.setValue(node.attributes.text);\r\n".
+                                               $blank_pre."                                      }\r\n".
+                                               $blank_pre."                                "; 
                             }else{                 
                                 $filterFields.=",xtype: 'combo',\r\n".
-                                              "                                     store:{$storeName},hiddenName : '{$fieldname}',\r\n".
-                                              "                                     emptyText: '请选择{$field_comment}',itemSelector: 'div.search-item',\r\n".
-                                              "                                     loadingText: '查询中...',width:280,pageSize:$appName_alias.$classname.Config.PageSize,\r\n". 
-                                              "                                     displayField:'{$show_name}',valueField:'{$fieldname}',\r\n".
-                                              "                                     mode: 'remote',editable:true,minChars: 1,autoSelect :true,typeAhead: false,\r\n".
-                                              "                                     forceSelection: true,triggerAction: 'all',resizable:true,selectOnFocus:true,\r\n".
-                                              "                                     tpl:new Ext.XTemplate(\r\n".
-                                              "                                                '<tpl for=\".\"><div class=\"search-item\">',\r\n".
-                                              "                                                    '<h3>{{$show_name}}</h3>',\r\n".
-                                              "                                                '</div></tpl>'\r\n".
-                                              "                                     )\r\n".
-                                              "                                ";  
+                                              $blank_pre."                                     store:{$storeName},hiddenName : '{$fieldname}',\r\n".
+                                              $blank_pre."                                     emptyText: '请选择{$field_comment}',itemSelector: 'div.search-item',\r\n".
+                                              $blank_pre."                                     loadingText: '查询中...',width:280,pageSize:$appName_alias.$classname.Config.PageSize,\r\n". 
+                                              $blank_pre."                                     displayField:'{$show_name}',valueField:'{$fieldname}',\r\n".
+                                              $blank_pre."                                     mode: 'remote',editable:true,minChars: 1,autoSelect :true,typeAhead: false,\r\n".
+                                              $blank_pre."                                     forceSelection: true,triggerAction: 'all',resizable:true,selectOnFocus:true,\r\n".
+                                              $blank_pre."                                     tpl:new Ext.XTemplate(\r\n".
+                                              $blank_pre."                                         '<tpl for=\".\"><div class=\"search-item\">',\r\n".
+                                              $blank_pre."                                         '<h3>{{$show_name}}</h3>',\r\n".
+                                              $blank_pre."                                         '</div></tpl>'\r\n".
+                                              $blank_pre."                                     )\r\n".
+                                              $blank_pre."                                ";  
                                 
                             }    
                         }
                     }
                           
                     $filterFields.="},'&nbsp;&nbsp;',\r\n";
-                    $filterReset.="                                        this.topToolbar.$fname.setValue(\"\");\r\n"; 
-                    $filterdoSelect.="                var $fname = this.topToolbar.$fname.getValue();\r\n";
+                    $filterReset.=$blank_pre."                                        this.topToolbar.$fname.setValue(\"\");\r\n"; 
+                    $filterdoSelect.=$blank_pre."                var $fname = this.topToolbar.$fname.getValue();\r\n";
                     $filterfilter.="'$fieldname':$fname,";                                                          
                 }   
             }  
@@ -1532,16 +1542,21 @@ BATCHUPLOADIMAGES;
         $result["openBatchUploadImagesWindow"]   =$openBatchUploadImagesWindow;   
         $result["batchUploadImagesWinow"]   =$batchUploadImagesWinow;   
         return $result;
-    }
+    } 
 
     /**
-     * 获取数据对象的ID列名称
-     * @param mixed $dataobject 数据对象实体|对象名称
+     * 表注释只获取第一行内容    
+     * @param array $classcomment 表注释
      */
-    private static function keyIDColumn($dataobject)
+    private static function relation_classcomment($classcomment)
     {
-        return DataObjectSpec::getRealIDColumnNameStatic($dataobject);  
-    }    
+        $classcomment=str_replace("关系表","",$classcomment); 
+        if (contain($classcomment,"\r")||contain($classcomment,"\n")){
+            $classcomment=preg_split("/[\s,]+/", $classcomment);    
+            $classcomment=$classcomment[0]; 
+        }   
+        return $classcomment;
+    }
 
     /**
      * 将表列定义转换成使用ExtJs生成的表示层tpl文件定义的内容    

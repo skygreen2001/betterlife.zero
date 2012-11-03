@@ -1,6 +1,6 @@
 <?php
 $jsContent=<<<JSCONTENT
-Ext.namespace("$appName.Admin.$clasemosname");
+Ext.namespace("$appName.Admin.$classname");
 $appName_alias = $appName.Admin;
 $appName_alias.$classname={
     /**
@@ -68,6 +68,7 @@ $fields
         listeners : {
             beforeload : function(store, options) {
                 if (Ext.isReady) {
+                    if (!options.params.limit)options.params.limit=$appName_alias.$classname.Config.PageSize;
                     Ext.apply(options.params, $appName_alias.$classname.View.Running.{$instancename}Grid.filter);//保证分页也将查询条件带上
                 }
             }
@@ -439,7 +440,7 @@ $filterReset
                                             {text:'隐藏',group:'mlayout',checked:false,iconCls:'view-hide',scope:this,handler:function(){this.hide$classname();$appName_alias.$classname.Config.View.IsShow=0;}},'-',
                                             {text: '固定',ref:'mBind',checked: true,scope:this,checkHandler:function(item, checked){this.onBindGrid(item, checked);$appName_alias.$classname.Cookie.set('View.IsFix',$appName_alias.$classname.Config.View.IsFix);}}
                                         ]}
-                                },'-']}
+                                }{$relationM2mMenu},'-']}
                     )]
                 },
                 bbar: new Ext.PagingToolbar({
@@ -781,7 +782,7 @@ $filterdoSelect
                 this.doSelect$classname();
                 Ext.Msg.alert("提示", "删除成功！");
             }
-        },
+        },$relationM2mShowHide
         /**
          * 导出{$table_comment}
          */
@@ -834,7 +835,7 @@ $filterdoSelect
         /**
          * 当前{$table_comment}Grid对象
          */
-        {$instancename}Grid:null,{$relationViewGrids}
+        {$instancename}Grid:null,{$relationViewGrids}{$relationM2mRunningWindow}
         /**
          * 显示{$table_comment}信息及关联信息列表的Tab页
          */

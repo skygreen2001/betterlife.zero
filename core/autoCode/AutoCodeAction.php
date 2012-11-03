@@ -76,20 +76,24 @@ class AutoCodeAction extends AutoCode
         self::$echo_upload="";
          
         if(self::$type==0) {
-             AutoCodeFoldHelper::foldbeforeaction0();
+            AutoCodeFoldHelper::foldbeforeaction0();
         }else if(self::$type==1) {
-             AutoCodeFoldHelper::foldbeforeaction1();
+            AutoCodeFoldHelper::foldbeforeaction1();
         }     
         foreach (self::$fieldInfos as $tablename=>$fieldInfo){  
-           $definePhpFileContent=self::tableToActionDefine($tablename,$fieldInfo);
-           if (!empty($definePhpFileContent)){
-               if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($definePhpFileContent)){
-                   $classname=self::saveActionDefineToDir($tablename,$definePhpFileContent);
-                   echo "生成导出完成:$tablename=>$classname!<br/>";   
-               }else{
-                   echo $definePhpFileContent."<br/>";
-               }
-           }
+            if(self::$type==0) {
+                $classname=self::getClassname($tablename);
+                if ($classname=="Admin")continue;
+            }            
+            $definePhpFileContent=self::tableToActionDefine($tablename,$fieldInfo);
+            if (!empty($definePhpFileContent)){
+                if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($definePhpFileContent)){
+                    $classname=self::saveActionDefineToDir($tablename,$definePhpFileContent);
+                    echo "生成导出完成:$tablename=>$classname!<br/>";   
+                }else{
+                    echo $definePhpFileContent."<br/>";
+                }
+            }
         }   
                 
         if(self::$type==0) {

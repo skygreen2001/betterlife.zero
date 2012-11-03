@@ -2,6 +2,11 @@
 
 if (Config_AutoCode::RELATION_VIEW_FULL)
 {
+    if (self::isMany2ManyByClassname($current_classname))
+    {
+        $jsOne2ManyContent="";
+        return;
+    }
     $realId_relation=DataObjectSpec::getRealIDColumnName($key); 
     self::$relationStore=$relationStore;
     $editWindow_relationVars = self::model_fieldLables($appName_alias,$current_classname,$fieldInfo,$realId,"    ");
@@ -242,6 +247,7 @@ ADDUPADTEDITWINDOW;
 }
 
 $jsOne2ManyContent=<<<ONE2MANY
+
     /**
      * 视图：{$table_comment12n}列表
      */
