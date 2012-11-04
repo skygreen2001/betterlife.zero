@@ -173,7 +173,14 @@ $m2m_columns
                         items : [
                             new Ext.Toolbar({
                                 enableOverflow: true,width : 80,ref:'menus',
-                                defaults : {xtype : 'textfield'},
+                                defaults : {
+                                    xtype : 'textfield',
+                                    listeners : {
+                                       specialkey : function(field, e) {
+                                            if (e.getKey() == Ext.EventObject.ENTER)this.ownerCt.ownerCt.ownerCt.doSelect{$belong_class}();
+                                        }
+                                    }
+                                },
                                 items : [
                                     {text: '全部',ref:'../../isSelect',xtype:'tbsplit',iconCls : 'icon-view',enableToggle: true,
                                          toggleHandler:function(item, checked){

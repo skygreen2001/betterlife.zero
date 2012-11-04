@@ -370,7 +370,14 @@ $columns
                     items : [
                         new Ext.Toolbar({
                             enableOverflow: true,width : 100,
-                            defaults : {xtype : 'textfield'},
+                            defaults : {
+                                xtype : 'textfield',
+                                listeners : {
+                                   specialkey : function(field, e) {
+                                        if (e.getKey() == Ext.EventObject.ENTER)this.ownerCt.ownerCt.ownerCt.doSelect{$classname}();
+                                    }
+                                }
+                            },
                             items : [
 $filterFields
                                 {
