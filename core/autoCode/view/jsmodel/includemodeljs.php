@@ -510,7 +510,7 @@ $filterReset
                     // 判断删除和更新按钮是否可以激活
                     this.grid.btnRemove.setDisabled(sm.getCount() < 1);
                     this.grid.btnUpdate.setDisabled(sm.getCount() != 1);
-                    this.grid.tvpView.setDisabled(sm.getCount() != 1);
+                    this.grid.tvpView.setDisabled(sm.getCount() != 1);$relationM2mMenuShowHide
                 },
                 rowselect: function(sm, rowIndex, record) {
                     this.grid.updateView$classname();

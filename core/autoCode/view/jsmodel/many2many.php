@@ -56,7 +56,8 @@ if (self::isMany2ManyByClassname($key_many))
             successProperty: 'success',  
             root: 'data',remoteSort: true,                
             fields : [
-$fields_many_fields
+$fields_many_fields,
+                  {name: 'isShow{$belong_class}Check',type: 'string'}
             ]}         
         ),
         writer: new Ext.data.JsonWriter({
@@ -93,6 +94,7 @@ MANY2MANYSTORE;
     $m2m_filters=self::model_filters($appName_alias,$belong_class,$belong_instance_name,$belong_fieldInfo,"    ");        
     //Ext "Grid" 中"tbar"包含的items中的items
     $m2m_filterFields   =$m2m_filters["filterFields"];
+    $m2m_filterFields   =str_replace("{$appName_alias}.$belong_class.", "{$appName_alias}.$classname.", $m2m_filterFields);    
     //重置语句
     $m2m_filterReset    =$m2m_filters["filterReset"];
     //查询中的语句
@@ -112,7 +114,7 @@ MANY2MANYSTORE;
             constructor : function(config) {
                 config = Ext.apply({
                     title:"选择{$comment_belong}",updateData:null,closeAction:"hide",constrainHeader:true,maximizable:true,collapsible:true,
-                    width:650,minWidth:650,height:560,minHeight:450,layout:'fit',plain : true,buttonAlign : 'center',
+                    width:720,minWidth:720,height:560,minHeight:450,layout:'fit',plain : true,buttonAlign : 'center',
                     defaults : {autoScroll : true,},
                     listeners:{
                         hide:function(w){{$appName_alias}.$classname.View.Running.{$owner_instance_name}Grid.t{$belong_instance_name}.toggle(false);}
@@ -171,6 +173,7 @@ $m2m_columns
                         items : [
                             new Ext.Toolbar({
                                 enableOverflow: true,width : 80,ref:'menus',
+                                defaults : {xtype : 'textfield'},
                                 items : [
                                     {text: '全部',ref:'../../isSelect',xtype:'tbsplit',iconCls : 'icon-view',enableToggle: true,
                                          toggleHandler:function(item, checked){
@@ -321,6 +324,15 @@ MANY2MANY;
 MANY2MANYMENU;
 
     /**
+     * 多对多选择菜单显示隐藏 
+     * @var mixed
+     */
+    $jsMany2ManyMenuShowHide=<<<MANY2MANYMENUShowHide
+
+                    this.grid.t{$belong_instance_name}.setDisabled(sm.getCount() != 1);
+MANY2MANYMENUShowHide;
+
+    /**
      * 多对多显示隐藏窗口 
      * @var mixed
      */
@@ -358,7 +370,6 @@ MANY2MANYSHOWHIDE;
      * @var mixed
      */
     $jsMany2ManyRunningWindow=<<<M2MRW
-
         /**
          * 推荐{$comment_belong}
          */

@@ -276,6 +276,7 @@ class AutoCodeViewExt extends AutoCode
         $viewRelationDoSelect=$storeInfo['viewRelationDoSelect'];
         $relationViewGridInit=$storeInfo['relationViewGridInit'];
         $relationM2mMenu=$storeInfo['relationM2mMenu'];
+        $relationM2mMenuShowHide=$storeInfo['relationM2mMenuShowHide'];
         $relationM2mShowHide=$storeInfo['relationM2mShowHide'];
         $relationM2mRunningWindow=$storeInfo['relationM2mRunningWindow'];
 
@@ -441,6 +442,7 @@ class AutoCodeViewExt extends AutoCode
         $viewRelationDoSelect=$relationViewDefine['viewRelationDoSelect'];
         $relationViewGridInit=$relationViewDefine['relationViewGridInit'];
         $relationM2mMenu=$relationViewDefine['m2mMenu'];
+        $relationM2mMenuShowHide=$relationViewDefine['m2mMenuShowHide'];
         $relationM2mShowHide=$relationViewDefine['m2mShowHide'];
         $relationM2mRunningWindow=$relationViewDefine['m2mRunningWindow'];
         $result['relationStore']=$relationStore;
@@ -450,6 +452,7 @@ class AutoCodeViewExt extends AutoCode
         $result['viewRelationDoSelect']="\r\n".$viewRelationDoSelect;
         $result['relationViewGridInit']="\r\n".$relationViewGridInit;
         $result['relationM2mMenu']=$relationM2mMenu;
+        $result['relationM2mMenuShowHide']=$relationM2mMenuShowHide;
         $result['relationM2mShowHide']=$relationM2mShowHide;
         $result['relationM2mRunningWindow']=$relationM2mRunningWindow;
         return $result;
@@ -582,6 +585,7 @@ class AutoCodeViewExt extends AutoCode
                     $result['m2mMenu']=$jsMany2ManyMenu;
                     $result['m2mShowHide']=$jsMany2ManyShowHide;
                     $result['m2mRunningWindow']=$jsMany2ManyRunningWindow;
+                    $result['m2mMenuShowHide']=$jsMany2ManyMenuShowHide;
                     $relationClassesView.=$jsMany2ManyContent;        
                     $table_comment12n=self::tableCommentKey($tablename);
                     $realId=DataObjectSpec::getRealIDColumnName($classname);                    
@@ -644,7 +648,7 @@ class AutoCodeViewExt extends AutoCode
             }
         }
         $result['relationStore']=$relationStore;   
-        if (empty($relationClassesView)){
+        if (empty($relationViewAdds)){
             $relationViewAdds.="                    {title: '其他',iconCls:'tabs'}";                              
         }else{
             $relationViewAdds=substr($relationViewAdds,0,strlen($relationViewAdds)-3);

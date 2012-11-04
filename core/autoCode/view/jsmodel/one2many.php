@@ -2,7 +2,7 @@
 
 if (Config_AutoCode::RELATION_VIEW_FULL)
 {
-    if (self::isMany2ManyByClassname($current_classname))
+    if (!self::isMany2ManyShowHasMany($current_classname))
     {
         $jsOne2ManyContent="";
         return;
