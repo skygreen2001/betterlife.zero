@@ -2,7 +2,10 @@
 require_once ("init.php");
 //$blogs=Blog::select('name,content');
 //print_r($blogs);            
-UtilBarCode::upc_a("12207201213");                                      
+//UtilBarCode::upc_a("12207201213");                                      
+$user=new User();
+$user->user_id=2;
+print_r($user->userDetail);
 
 //print_r(User::get(array(username=> "like '%ad%'")));    
 //$serverCache=Manager_Cache::singleton()->server(EnumCacheDriverType::REDIS);

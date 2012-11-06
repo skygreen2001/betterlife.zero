@@ -247,7 +247,7 @@ class AutoCode extends Object
         echo "<div align='center' height='450'>";
         echo "<form>";  
         echo "  <div style='line-height:1.5em;'>";
-        $default_dir=Gc::$nav_root_path.DIRECTORY_SEPARATOR."model".DIRECTORY_SEPARATOR;        
+        $default_dir=Gc::$nav_root_path."model".DIRECTORY_SEPARATOR;        
         echo "      <label>输出文件路径:</label><input type=\"text\" name=\"save_dir\" value=\"$default_dir\" id=\"save_dir\" />
                         <input type=\"button\" onclick=\"browseFolder('save_dir')\" value=\"浏览...\" /><br/><br/>";
         if (!empty($inputArr)){      

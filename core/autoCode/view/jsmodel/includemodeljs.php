@@ -141,6 +141,7 @@ $fieldLabels
                             this.editForm.api.submit=ExtService$classname.update;
                             this.editForm.getForm().submit({
                                 success : function(form, action) {
+                                    $appName_alias.$classname.View.Running.{$instancename}Grid.store.reload();
                                     Ext.Msg.show({title:'提示',msg: '修改成功！',buttons: {yes: '确定'},fn: function(){
                                         $appName_alias.$classname.View.Running.{$instancename}Grid.bottomToolbar.doRefresh();
                                     }});

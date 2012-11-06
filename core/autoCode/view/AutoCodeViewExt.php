@@ -773,6 +773,12 @@ class AutoCodeViewExt extends AutoCode
                             }else{           
                                 $show_name_diff_name= $show_name_diff;                 
                                 if ($show_name_diff=="title")$show_name_diff=$key."_".$show_name_diff;
+                                $dorefresh="";
+                                if (Config_AutoCode::COMBO_REFRESH){
+                                    $dorefresh=$blank_pre."                                 listeners:{\r\n".
+                                               $blank_pre."                                     'beforequery': function(event){delete event.combo.lastQuery;}\r\n".
+                                               $blank_pre."                                 },\r\n";
+                                }
                                 $fieldLabels.=$blank_pre."                            {xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'},\r\n".
                                               $blank_pre."                            {\r\n".
                                               $blank_pre."                                 fieldLabel : '{$field_comment}',xtype: 'combo',name : '$show_name_diff_name',ref : '../$show_name_diff',\r\n".
@@ -785,7 +791,7 @@ class AutoCodeViewExt extends AutoCode
                                               $blank_pre."                                     '<tpl for=\".\"><div class=\"search-item\">',\r\n".
                                               $blank_pre."                                         '<h3>{{$value}}</h3>',\r\n".
                                               $blank_pre."                                     '</div></tpl>'\r\n".
-                                              $blank_pre."                                 ),\r\n".
+                                              $blank_pre."                                 ),\r\n".$dorefresh.
                                               $blank_pre."                                 onSelect:function(record,index){\r\n".
                                               $blank_pre."                                     if(this.fireEvent('beforeselect', this, record, index) !== false){\r\n".
                                               $blank_pre."                                        this.grid.$fieldname.setValue(record.data.$realId);\r\n".

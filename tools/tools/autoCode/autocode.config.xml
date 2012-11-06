@@ -68,9 +68,9 @@
 			<condition>email</condition>     
 			<condition>cellphone</condition>               
 		</conditions>       
-		<has_many>
+		<belong_has_one>
 			<relationclass name="User">user</relationclass>
-		</has_many>     
+		</belong_has_one>     
 	</class>                
 	<class name="Role">
 		<conditions>

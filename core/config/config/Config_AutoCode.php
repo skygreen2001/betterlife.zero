@@ -9,13 +9,17 @@
  */
 class Config_AutoCode extends ConfigBB
 {
-	/**
-	 * 是否生成的JS文件都在一个文件夹里 
-	 */
-	const JSFILE_DIRECT_CORE=false;
-	/**
-	 * 一对多关系显示是否完整,默认只生成Grid，完整模式包括增删改分页 
-	 */
-	const RELATION_VIEW_FULL=false;
+    /**
+     * 是否生成的JS文件都在一个文件夹里 
+     */
+    const JSFILE_DIRECT_CORE=false;
+    /**
+     * 一对多关系显示是否完整,默认只生成Grid，完整模式包括增删改分页 
+     */
+    const RELATION_VIEW_FULL=false;
+    /**
+     * 生成的Combo每次输入点选都重新查询服务端数据
+     */
+    const COMBO_REFRESH=true;
 }
 ?>
