@@ -39,7 +39,7 @@ if (self::isMany2ManyByClassname($key_many))
     $comment_belong=self::tableCommentKey($tablename_belong);
     $belong_fieldInfo=self::$fieldInfos[$tablename_belong];
     self::$relationStore=$relationStore;
-    $fields_many=self::model_fields($belong_class,$belong_instance_name,$belong_fieldInfo);
+    $fields_many=self::model_fields($belong_class,$belong_instance_name,$belong_fieldInfo,false);
     $fields_many_fields=$fields_many['fields'];
     /**
      * 多对多选择Store 
@@ -99,7 +99,8 @@ MANY2MANYSTORE;
     $m2m_filterReset    =$m2m_filters["filterReset"];
     //查询中的语句
     $m2m_filterdoSelect =$m2m_filters["filterdoSelect"]; 
-    $m2m_filterdoSelect=substr($m2m_filterdoSelect,0,strlen($m2m_filterdoSelect)-2);    
+    $m2m_filterdoSelect=substr($m2m_filterdoSelect,0,strlen($m2m_filterdoSelect)-2);   
+
     /**
      * 多对多选择Window,Grid 
      * @var mixed
@@ -339,6 +340,12 @@ MANY2MANYMENU;
                     this.grid.t{$belong_instance_name}.setDisabled(sm.getCount() != 1);
 MANY2MANYMENUShowHide;
 
+    $filterwordNames    =$m2m_filters["filterwordNames"]; 
+    $m2m_filterSelectionDoSelect="";
+    foreach ($filterwordNames as $filterwordName) {
+        $m2m_filterSelectionDoSelect.="                $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.topToolbar.$filterwordName.setValue(\"\");\r\n";
+    }
+
     /**
      * 多对多显示隐藏窗口 
      * @var mixed
@@ -352,13 +359,15 @@ MANY2MANYMENUShowHide;
             if ($appName_alias.$classname.View.Running.select{$belong_class}Window==null){
                 $appName_alias.$classname.View.Running.select{$belong_class}Window=new $appName_alias.$classname.View.{$belong_class}View.Select{$belong_class}Window();
             }
-            $appName_alias.$classname.View.Running.select{$belong_class}Window.show();
-            var {$owner_idcolumn}=$appName_alias.$classname.View.Running.{$owner_instance_name}Grid.getSelectionModel().getSelected().data.{$owner_idcolumn};
+            var {$owner_idcolumn}=$appName_alias.$classname.View.Running.{$owner_instance_name}Grid.getSelectionModel().getSelected().data.{$owner_idcolumn};             
             $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.{$owner_idcolumn}={$owner_idcolumn};
-            $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.topToolbar.ltitle.setValue("");
-            $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.topToolbar.lspeaker_id.setValue("");                                        
-            $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.filter={};
+            if ($appName_alias.$classname.View.Running.select{$belong_class}Window.hidden){   
+$m2m_filterSelectionDoSelect                $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.filter={};
+                $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.topToolbar.menus.all.setChecked(true);  
+                $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.isSelect.toggle(false); 
+            }
             $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.doSelect{$belong_class}();
+            $appName_alias.$classname.View.Running.select{$belong_class}Window.show();
             $appName_alias.$classname.View.Running.{$owner_instance_name}Grid.t{$belong_instance_name}.toggle(true);
         },
         /**

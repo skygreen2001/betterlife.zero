@@ -15,13 +15,7 @@ class Notice extends DataObject
      * @var int
      * @access public
      */
-    public $notice_id;
-    /**
-     * 管理员编号
-     * @var int
-     * @access public
-     */
-    public $user_id;
+    public $notice_id;  
     /**
      * 分类
      * @var string

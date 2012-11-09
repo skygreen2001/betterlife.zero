@@ -105,7 +105,7 @@ class AutoCodeViewExt extends AutoCode
         foreach(self::$tableList as $tablename){
             $table_comment=self::tableCommentKey($tablename);
             $instancename=self::getInstancename($tablename);                         
-            $section_content.="        <menu name=\"$table_comment\" address=\"index.php?go=admin.$appName.{$instancename}\" />\r\n";
+            $section_content.="        <menu name=\"$table_comment\" id=\"$instancename\" address=\"index.php?go=admin.$appName.{$instancename}\" />\r\n";
         }        
         $filename="menu.config.xml";
         $output_section_content="<?xml version=\"1.0\" encoding=\"UTF-8\"?> \r\n".
@@ -328,8 +328,9 @@ class AutoCodeViewExt extends AutoCode
      * @param string $classname 数据对象类名
      * @param string $instancename 实体变量 
      * @param array $fieldInfo 表列信息列表  
+     * @param array $isHaveRelation 是否需要关系显示
      */
-    private static function model_fields($classname,$instancename,$fieldInfo)
+    private static function model_fields($classname,$instancename,$fieldInfo,$isHaveRelation=true)
     {        
         $fields="";//Ext "store" 中包含的fields
         $relationStore="";//Ext "$relationStore="中关系库Store的定义
@@ -434,7 +435,9 @@ class AutoCodeViewExt extends AutoCode
         $fields=substr($fields,0,strlen($fields)-3);  
         $result['fields']=$fields;
         $result['relationStore_onlyForFieldLabels']=$relationStore;
-        $relationViewDefine=self::relationViewDefine($classname,$instancename,$relationStore);
+        if ($isHaveRelation){
+            $relationViewDefine=self::relationViewDefine($classname,$instancename,$relationStore);
+        }
         $relationStore=$relationViewDefine['relationStore'];
         $relationClassesView=$relationViewDefine['one2many'];
         $relationViewAdds=$relationViewDefine['relationViewAdds'];
@@ -480,6 +483,7 @@ class AutoCodeViewExt extends AutoCode
                 $current_classname=$key;
                 $key{0}=strtolower($key{0});
                 $tablename=self::getTablename($current_classname);
+                if (empty($tablename))continue;
                 $current_instancename=self::getInstancename($tablename); 
                 
                 $relation_classcomment=self::relation_classcomment(self::$class_comments[$current_classname]);
@@ -768,7 +772,7 @@ class AutoCodeViewExt extends AutoCode
                                               "                                              this.setValue(node.attributes.text);\r\n".
                                               "                                          }\r\n".
                                               "                                      },\r\n".
-                                              "                                      {xtype:'displayfield',value:'所选{$field_comment}:',ref: '{$key}ShowLabel'},{xtype:'displayfield',ref:'{$key}ShowAll',name:'{$key}ShowAll',flex:1,ref: '{$key}ShowValue'}]\r\n".
+                                              "                                      {xtype:'displayfield',value:'所选{$field_comment}:',ref: '{$key}ShowLabel'},{xtype:'displayfield',name:'{$key}ShowAll',flex:1,ref: '{$key}ShowValue'}]\r\n".
                                               "                            },\r\n"; 
                             }else{           
                                 $show_name_diff_name= $show_name_diff;                 
@@ -1286,6 +1290,7 @@ class AutoCodeViewExt extends AutoCode
         $filterFields             ="";//Ext "Grid" 中"tbar"包含的items中的items
         $filterReset              ="";//重置语句
         $filterdoSelect           ="";//查询中的语句
+        $filterwordNames          =array();
         if (array_key_exists($classname, self::$filter_fieldnames))
         {
             $filterwords=self::$filter_fieldnames[$classname];
@@ -1306,6 +1311,7 @@ class AutoCodeViewExt extends AutoCode
                     }else{
                         $filterFields.="{ref: '../$fname'";
                     }
+                    $filterwordNames[]=$fname;
                     $column_type=self::column_type($field["Type"]); 
                     if ($column_type=='bit')
                     {
@@ -1399,6 +1405,7 @@ class AutoCodeViewExt extends AutoCode
                 $filterfilter=$filterfilter."};";    
             }
         }
+        $result["filterwordNames"]    =$filterwordNames;
         $result["filterFields"]   =$filterFields;
         $result["filterReset"]    =$filterReset;
         $result["filterdoSelect"] =$filterdoSelect."\r\n".$filterfilter;
