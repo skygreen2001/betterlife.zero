@@ -31,7 +31,6 @@ class AutoCodeConfig extends AutoCode
         self::$config_classes=array("class"=>array());
         self::$table_key_map=array();
         self::init();     
-        $relation_keys=array("has_one","belong_has_one","has_many","many_many","belongs_many_many");
         foreach (self::$fieldInfos as $tablename=>$fieldInfo){
             $classname=self::getClassname($tablename);
             $current_class_config=array(
@@ -45,12 +44,6 @@ class AutoCodeConfig extends AutoCode
                     "show"=>array()
                 )
             );
-            foreach ($relation_keys as  $relation_key) {
-                $current_class_config[$relation_key]=array(
-                    "relationclass"=>array()
-                );
-                $relation_fives[$relation_key]=$current_class_config[$relation_key];
-            }
 
             $conditions=$current_class_config["conditions"]["condition"];
             $relationShows=$current_class_config["relationShows"]["show"];
@@ -59,21 +52,45 @@ class AutoCodeConfig extends AutoCode
             $conditions=self::conditionsToConfig($classname,$tablename,$fieldInfo,$conditions);
             //表关系主键显示配置 
             $relationShows=self::relationShowsToConfig($classname,$fieldInfo,$relationShows);
-            //数据对象之间关系配置
-            $relation_fives=self::relationFives($fieldInfo,$relation_fives);
 
             $current_class_config["conditions"]["condition"]= $conditions;
             $current_class_config["relationShows"]["show"]  = $relationShows;
             if (count($relationShows)==0){
                 unset($current_class_config["relationShows"]);
             }
-            foreach ($relation_keys as $relation_key) {
-                $current_class_config[$relation_key]  = $relation_fives[$relation_key];
-                if (count($relation_fives[$relation_key])==0){
-                    unset($current_class_config[$relation_key]);
-                }
-            }
             self::$config_classes["class"][]=$current_class_config;
+            end(self::$config_classes["class"]);
+            self::$table_key_map[$classname]=key(self::$config_classes["class"]);
+        }
+
+
+        $relation_keys=array("has_one","belong_has_one","has_many","many_many","belongs_many_many");
+        foreach (self::$fieldInfos as $tablename=>$fieldInfo){
+            $classname=self::getClassname($tablename);
+            foreach ($relation_keys as  $relation_key) {
+                self::$config_classes["class"][self::$table_key_map[$classname]][$relation_key]=array(
+                );
+            }
+        }
+        foreach (self::$fieldInfos as $tablename=>$fieldInfo){
+            $classname=self::getClassname($tablename);
+            $current_class_config= self::$config_classes["class"][self::$table_key_map[$classname]];
+            foreach ($relation_keys as  $relation_key) {
+                $relation_fives[$relation_key]=$current_class_config[$relation_key];
+            }
+            //数据对象之间关系配置
+            $relation_fives=self::relationFives($classname,$tablename,$fieldInfo,$relation_fives);
+            foreach ($relation_keys as $relation_key) {
+                $current_class_config[$relation_key]  = $relation_fives[$relation_key];  
+            }
+            self::$config_classes["class"][self::$table_key_map[$classname]]=$current_class_config;
+        }
+        foreach (self::$fieldInfos as $tablename=>$fieldInfo){                      
+            foreach ($relation_keys as $relation_key) {   
+                if (count(self::$config_classes["class"][self::$table_key_map[$classname]][$relation_key])==0){
+                    unset(self::$config_classes["class"][self::$table_key_map[$classname]][$relation_key]);
+                } 
+            }                                                                                          
         }
         $result =UtilArray::saveXML($filename,self::$config_classes,"classes");
         echo "成功生成配置文件：".$filename;
@@ -95,6 +112,7 @@ class AutoCodeConfig extends AutoCode
         {
             if (!self::isNotColumnKeywork($fieldname))continue;
             if ($fieldname==self::keyIDColumn($classname))continue;
+            
             if (contains($fieldname,array("name","title"))&&($fieldname!=$showfieldname)&&(!contain($fieldname,"_id"))){
                 $conditions[]=array("@value"=>$fieldname);
             }
@@ -110,11 +128,11 @@ class AutoCodeConfig extends AutoCode
                         $relation_class=new $relation_classname();
                     }
                     if ($relation_class instanceof DataObject){
-                        $showfieldname=self::getShowFieldNameByClassname($relation_classname);
+                        $showfieldname_relation=self::getShowFieldNameByClassname($relation_classname);
                         $conditions[]=array(
                             '@attributes' => array(
                                 "relation_class"=>$relation_classname,
-                                "show_name"=>$showfieldname
+                                "show_name"=>$showfieldname_relation
                             ),
                             "@value"=>$fieldname);
                     }
@@ -163,9 +181,9 @@ class AutoCodeConfig extends AutoCode
      * 表关系主键显示配置 
      * @param array $classname 数据对象类名
      * @param array $fieldInfo 表列信息列表  
-     * @param array $relationShows 表关系主键显示
+     * @param array $relation_fives 表关系主键显示
      */
-    private static function relationFives($classname,$fieldInfo,$relation_fives)
+    private static function relationFives($classname,$tablename,$fieldInfo,$relation_fives)
     {
         foreach  ($fieldInfo as $fieldname=>$field)
         {
@@ -181,25 +199,114 @@ class AutoCodeConfig extends AutoCode
                     $relation_class=new $relation_classname();
                 }
                 if ($relation_class instanceof DataObject){
-                    $showfieldname=self::getShowFieldNameByClassname($relation_classname);
                     //belong_has_one:[当前表有归属表的标识，归属表没有当前表的标识]
+                    if (!array_key_exists($realId, $relation_classname))
+                    {
+                        $instance_name=$relation_classname;
+                        $instance_name{0}=strtolower($instance_name);
+                        $relation_fives["belong_has_one"]["relationclass"][]=array(
+                            '@attributes' => array(
+                                "name"=>$relation_classname
+                            ),
+                            '@value' => $instance_name
+                        );
+                    }
 
                     //has_many[当前表没有归属表的标识，归属表有当前表的标识]
                     //has_one:[当前表没有归属表的标识，归属表有当前表的标识，并且归属表里当前表的标识为Unique]
-                }
-                if (!contain($tablename,Config_Db::TABLENAME_RELATION)) $conditions[]=array("@value"=>$showfieldname);
+                    if (!array_key_exists($realId, $relation_classname))
+                    {
+                        if (array_key_exists($relation_classname, self::$table_key_map)){
+                            $relation_tablename_key=self::$table_key_map[$relation_classname];
+                            $instance_name=$classname;
+                            $instance_name{0}=strtolower($instance_name)."s";
+                            $fieldInfo_key_isunique=$fieldInfo[$fieldname];
+                            $isunique=$fieldInfo_key_isunique["Key"];
+                            if ($isunique=="UNI"){
+                                self::$config_classes["class"][$relation_tablename_key]
+                                                     ["has_one"]["relationclass"][]=array(
+                                    '@attributes' => array(
+                                        "name"=>$classname
+                                    ),
+                                    '@value' => $instance_name
+                                );
+
+                            }else{
+                                $is_create_hasmany=true;
+                                if ((!Config_AutoCode::AUTOCONFIG_CREATE_FULL)&&(self::isMany2ManyByClassname($classname))){
+                                    $is_create_hasmany=false;
+                                }
+                                if ($is_create_hasmany){
+                                    self::$config_classes["class"][$relation_tablename_key]
+                                                         ["has_many"]["relationclass"][]=array(
+                                        '@attributes' => array(
+                                            "name"=>$classname
+                                        ),
+                                        '@value' => $instance_name
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }  
             }
-
-            foreach (self::$fieldInfos as $tablename=>$fieldInfo){
-
-            }
-            if (!contain($tablename,Config_Db::TABLENAME_RELATION)) $conditions[]=array("@value"=>$showfieldname);
-            //many_many
-            //belongs_many_many
-
-
         }
 
+        if (contain($tablename,Config_Db::TABLENAME_RELATION)){
+            if (self::isMany2ManyByClassname($classname))
+            {
+                $fieldInfo_m2m=self::$fieldInfos[self::getTablename($classname)];
+                unset($fieldInfo_m2m['updateTime'],$fieldInfo_m2m['commitTime']);
+                $realId=DataObjectSpec::getRealIDColumnName($classname);   
+                unset($fieldInfo_m2m[$realId]);
+                if (count($fieldInfo_m2m)==2){
+                    //many_many[在关系表中有两个关系主键，并且表名的前半部分是其中一个主键]
+                    //belongs_many_many[在关系表中有两个关系主键，并且表名的后半部分是其中一个主键]
+                    $class_onetwo=array();
+                    foreach (array_keys($fieldInfo_m2m) as $fieldname_m2m) 
+                    {
+                        $class_onetwo_element=str_replace("_id", "", $fieldname_m2m);
+                        $class_onetwo[]=$class_onetwo_element;
+                    }
+
+                    if ($class_onetwo[0].$class_onetwo[1]==strtolower($classname)){
+                        $ownerClassname=$class_onetwo[0];
+                        $belongClassname=$class_onetwo[1];
+                        $ownerInstancename=$class_onetwo[0]."s";
+                        $belongInstancename=$class_onetwo[1]."s";                 
+                    }else if ($class_onetwo[1].$class_onetwo[0]==strtolower($classname)){
+                        $ownerClassname=$class_onetwo[1];
+                        $belongClassname=$class_onetwo[0];
+                        $ownerInstancename=$class_onetwo[1]."s";
+                        $belongInstancename=$class_onetwo[0]."s";  
+                    }
+                    $ownerClassname{0}=strtoupper($ownerClassname{0});
+                    $belongClassname{0}=strtoupper($belongClassname{0});  
+                    
+                    $relation_tablename_key_m2m=self::$table_key_map[$ownerClassname];
+                    if (self::$config_classes["class"][$relation_tablename_key_m2m]){
+                        self::$config_classes["class"][$relation_tablename_key_m2m]
+                                             ["many_many"]["relationclass"][]=array(
+                            '@attributes' => array(
+                                "name"=>$belongClassname
+                            ),
+                            '@value' => $belongInstancename
+                        );
+                    } 
+                    $relation_tablename_key_m2m=self::$table_key_map[$belongClassname];
+                    if (self::$config_classes["class"][$relation_tablename_key_m2m]){        
+                        self::$config_classes["class"][$relation_tablename_key_m2m]
+                                             ["belongs_many_many"]["relationclass"][]=array(
+                            '@attributes' => array(
+                                "name"=>$ownerClassname
+                            ),
+                            '@value' => $ownerInstancename
+                        );    
+                    }
+                }
+            }    
+        }         
+        return $relation_fives;
     }
 }
 ?>

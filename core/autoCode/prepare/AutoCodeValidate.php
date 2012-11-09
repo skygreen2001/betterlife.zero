@@ -15,16 +15,18 @@ class AutoCodeValidate extends AutoCode
      * 0.invalid_idname-检测标识列是否按规范定义<br/>
      * 1.nocomment-表无注释说明<br/>
      * 2.column_nocomment-列名无注释说明<br/>
-     * 3.同张表列名不能包含:同名、同名_id<br/>
-     * 4.列名不能为Mysql特殊关键字如:desc,from,<br/>
+     * 3.samefieldname_id-同张表列名不能包含:同名、同名_id<br/>
+     * 4.invaid_keywords-列名不能为Mysql特殊关键字如:desc,from,<br/>
+     * 5.表中列定义中的"_"是半角，不是全角。
+     * 6.确认以下表的实体类放置在规范的domain目录下
      */
     public static function run()
     {
         self::init();
         $table_error=array("invalid_idname"=>array(),"unlocation_domain"=>array(),
                            "nocomment"=>array(),"column_nocomment"=>array(),
-                           "samefieldname_id"=>array(),"invaid_keywords"=>array()
-                            );
+                           "samefieldname_id"=>array(),"invaid_keywords"=>array(),
+                           "specialkey_half"=>array());
         $isValid=true;
         $invaid_keywords=array("desc","from","describe");
         foreach (self::$fieldInfos as $tablename=>$fieldInfo){
@@ -53,6 +55,9 @@ class AutoCodeValidate extends AutoCode
                 if (in_array($fieldname, $invaid_keywords)){
                     $table_error["invaid_keywords"][$tablename]=$fieldname; 
                 }
+                if  (contain($fieldname,"＿")){
+                    $table_error["specialkey_half"][$tablename]=$fieldname; 
+                }
             }
         }
 
@@ -62,7 +67,8 @@ class AutoCodeValidate extends AutoCode
                                 "nocomment"=>"以下表无注释,请添加以下表的注释",
                                 "column_nocomment"=>"以下表列举的列无注释,请添加以下表列举的列的注释",
                                 "samefieldname_id"=>"列名不能包含:同名、同名_id",
-                                "invaid_keywords"=>"列名不能为Mysql特殊关键字如:desc,from"
+                                "invaid_keywords"=>"列名不能为Mysql特殊关键字如:desc,from",
+                                "specialkey_half"=>"表中列定义中的\"_\"是半角，不是全角"
                                 );
         foreach ($print_error_info as $key => $value) {
             if (count($table_error[$key])>0){

@@ -52,7 +52,7 @@
 		</many_many>
 		<has_many>  
 			<relationclass name="Blog">blogs</relationclass>
-			<relationclass name="Comment">comment</relationclass>
+			<relationclass name="Comment">comment</relationclass> 
 		</has_many> 
 	</class>      
 	<class name="Department">

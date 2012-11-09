@@ -301,8 +301,9 @@ class Router
 	*/
 	private function resolveNavDispathParam()
 	{
-		if(!empty($_GET[self::VAR_DISPATCH])){
-			$_NavSection=explode(self::VAR_DISPATCH_DEPR,$_GET[self::VAR_DISPATCH]);
+        $data = array_merge($_POST,$_GET);
+		if(!empty($data[self::VAR_DISPATCH])){
+			$_NavSection=explode(self::VAR_DISPATCH_DEPR,$data[self::VAR_DISPATCH]);
 			$_GET[self::VAR_GROUP] = @$_NavSection[0];   
 			$_GET[self::VAR_ACTION] = @end($_NavSection);//@$_NavSection[2];   
 			unset($_NavSection[count($_NavSection)-1]);             

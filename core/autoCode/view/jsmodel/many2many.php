@@ -39,7 +39,7 @@ if (self::isMany2ManyByClassname($key_many))
     $comment_belong=self::tableCommentKey($tablename_belong);
     $belong_fieldInfo=self::$fieldInfos[$tablename_belong];
     self::$relationStore=$relationStore;
-    $fields_many=self::model_fields($belong_class,$belong_instance_name,$belong_fieldInfo);
+    $fields_many=self::model_fields($belong_class,$belong_instance_name,$belong_fieldInfo,false);
     $fields_many_fields=$fields_many['fields'];
     /**
      * 多对多选择Store 

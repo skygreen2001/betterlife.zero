@@ -85,7 +85,7 @@ class AutoCode extends Object
                     $ignoreTables[]=$tablename;
                     continue;
                 }
-                if ($classname=="Copy"){
+                if (($classname=="Copy")||($classname=="Copy1")||($classname=="Copy2")||($classname=="Copy3")||($classname=="Copy4")){
                     $ignoreTables[]=$tablename;
                     continue;
                 }
@@ -93,7 +93,8 @@ class AutoCode extends Object
                 foreach($fieldInfoList as $fieldname=>$field){
                     self::$fieldInfos[$tablename][$fieldname]["Field"]=$field["Field"];
                     self::$fieldInfos[$tablename][$fieldname]["Type"]=$field["Type"];
-                    self::$fieldInfos[$tablename][$fieldname]["Comment"]=$field["Comment"];          
+                    self::$fieldInfos[$tablename][$fieldname]["Comment"]=$field["Comment"];
+                    self::$fieldInfos[$tablename][$fieldname]["Key"]=$field["Key"];          
                     if ($field["Null"]=='NO'){
                         self::$fieldInfos[$tablename][$fieldname]["IsPermitNull"]=false; 
                     }else{
