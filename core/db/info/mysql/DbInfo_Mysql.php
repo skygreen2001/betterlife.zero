@@ -7,7 +7,7 @@
  * @package core.db.info
  * @subpackage mysql
  * @author skygreen
- */   
+ */
 class DbInfo_Mysql extends  DbInfo implements IDbInfo 
 {
     /**
@@ -25,6 +25,8 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo
      * @var bool 
      */
     public static $isUseDbInfoDatabase=false;   
+
+    private static $showtables;
     /**
      * 检查 操作Db的 Php Extensions驱动 是否已打开.   
      * @return TRUE/FALSE 是否已打开. 
@@ -192,8 +194,11 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo
      */
     public function tableList() 
     {
+        if (!self::$showtables){
+            self::$showtables=$this->query("SHOW TABLES");
+        }
         $tables = array();
-        foreach($this->query("SHOW TABLES") as $record) {
+        foreach(self::$showtables as $record) {
             $table = reset($record);
             $tables[strtolower($table)] = $table;
         }
@@ -337,7 +342,7 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo
     /**
      * 获取数据库创建表的定义
      */
-    public function getdbSqlDefinition($tableName) 
+    public function getDbSqlDefinition($tableName) 
     {
         $dbDefine= $this->query("SHOW CREATE TABLE $tableName");
         $dbDefine=$dbDefine->next();
@@ -356,7 +361,6 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo
         if(isset($_REQUEST['showqueries'])) {
             $starttime = microtime(true);
         }
-
         $handle = mysql_query($sql,$this->connection);
 
         if(isset($_REQUEST['showqueries'])) {
