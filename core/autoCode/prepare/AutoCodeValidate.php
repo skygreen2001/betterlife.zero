@@ -76,14 +76,15 @@ class AutoCodeValidate extends AutoCode
                 echo "<font color='#00FF00'>&nbsp;&nbsp;/".str_repeat("*",40).$value.str_repeat("*",40)."</font></a><br/>";  
                 foreach ($table_error[$key] as $first=>$second) {
                     if (is_numeric($first)){
-                        echo $second."<br/>";
+                        echo "&nbsp;&nbsp;&nbsp;&nbsp;".$second."<br/>";
                     }else{
-                        echo $first."->".$second."<br/>";
+                        echo "&nbsp;&nbsp;&nbsp;&nbsp;".$first."->".$second."<br/>";
                     }
                     
                 }
             }
         }
+        echo "<br/>";
         return $isValid;
     }
 }
