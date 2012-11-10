@@ -49,7 +49,7 @@ class AutoCodeValidate extends AutoCode
                 if (empty($field_comment)){
                     $table_error["column_nocomment"][$tablename]=$fieldname;    
                 }
-                if (array_key_exists($fieldname."_id", $fieldInfo)){
+                if (array_key_exists($fieldname."_id", $fieldInfo)&&($fieldname."_id"!=$realId)){
                     $table_error["samefieldname_id"][$tablename]=$fieldname;  
                 }
                 if (in_array($fieldname, $invaid_keywords)){
@@ -76,14 +76,15 @@ class AutoCodeValidate extends AutoCode
                 echo "<font color='#00FF00'>&nbsp;&nbsp;/".str_repeat("*",40).$value.str_repeat("*",40)."</font></a><br/>";  
                 foreach ($table_error[$key] as $first=>$second) {
                     if (is_numeric($first)){
-                        echo $second."<br/>";
+                        echo "&nbsp;&nbsp;&nbsp;&nbsp;".$second."<br/>";
                     }else{
-                        echo $first."->".$second."<br/>";
+                        echo "&nbsp;&nbsp;&nbsp;&nbsp;".$first."->".$second."<br/>";
                     }
                     
                 }
             }
         }
+        echo "<br/>";
         return $isValid;
     }
 }

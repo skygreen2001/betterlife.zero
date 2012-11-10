@@ -27,7 +27,12 @@ class AutoCodeConfig extends AutoCode
      */
     public static function run()
     {
-        $filename=Gc::$nav_root_path."tools".DIRECTORY_SEPARATOR."tools".DIRECTORY_SEPARATOR."autoCode".DIRECTORY_SEPARATOR."autocode_create.config.xml";
+        $dest_directory=Gc::$nav_root_path."tools".DIRECTORY_SEPARATOR."tools".DIRECTORY_SEPARATOR."autoCode".DIRECTORY_SEPARATOR;
+        $filename=$dest_directory."autocode.config.xml";
+        if (file_exists($filename)){
+            $filename=$dest_directory."autocode_create.config.xml";
+
+        }
         self::$config_classes=array("class"=>array());
         self::$table_key_map=array();
         self::init();     
@@ -93,7 +98,7 @@ class AutoCodeConfig extends AutoCode
             }                                                                                          
         }
         $result =UtilArray::saveXML($filename,self::$config_classes,"classes");
-        echo "成功生成配置文件：".$filename;
+        echo "&nbsp;&nbsp;"."成功生成配置文件：".$filename."<br /><br />";
         return true;
     }
 

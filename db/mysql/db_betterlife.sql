@@ -1,16 +1,16 @@
-﻿/*
+/*
 Navicat MySQL Data Transfer
 
 Source Server         : localhost
-Source Server Version : 50508
+Source Server Version : 50520
 Source Host           : localhost:3306
 Source Database       : betterlife
 
 Target Server Type    : MYSQL
-Target Server Version : 50508
+Target Server Version : 50520
 File Encoding         : 65001
 
-Date: 2012-03-17 17:44:53
+Date: 2012-11-10 15:59:19
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -3519,7 +3519,7 @@ CREATE TABLE `bb_log_logsystem` (
 -- ----------------------------
 DROP TABLE IF EXISTS `bb_log_loguser`;
 CREATE TABLE `bb_log_loguser` (
-  `loguser_id` int(11) NOT NULL AUTO_INCREMENT,
+  `loguser_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '标识',
   `user_id` int(11) NOT NULL COMMENT '用户标识',
   `userType` enum('1','2','3') NOT NULL COMMENT '类型\n1:登录-LOGIN\n2:写日志-BLOG\n3:写评论-COMMENT',
   `content` varchar(200) DEFAULT NULL COMMENT '日志详情\n一般日志类型决定了内容；这一栏一般没有内容',
@@ -3561,7 +3561,6 @@ CREATE TABLE `bb_msg_msg` (
 DROP TABLE IF EXISTS `bb_msg_notice`;
 CREATE TABLE `bb_msg_notice` (
   `notice_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `user_id` int(11) NOT NULL COMMENT '管理员编号',
   `group` varchar(200) DEFAULT NULL COMMENT '分类',
   `title` varchar(200) DEFAULT NULL COMMENT '标题',
   `content` varchar(1000) DEFAULT NULL COMMENT '通知内容',
@@ -3592,6 +3591,28 @@ CREATE TABLE `bb_msg_re_usernotice` (
 -- ----------------------------
 -- Records of bb_msg_re_usernotice
 -- ----------------------------
+
+-- ----------------------------
+-- Table structure for `bb_user_admin`
+-- ----------------------------
+DROP TABLE IF EXISTS `bb_user_admin`;
+CREATE TABLE `bb_user_admin` (
+  `admin_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '标识',
+  `username` varchar(200) NOT NULL COMMENT '用户名',
+  `realname` varchar(200) DEFAULT NULL COMMENT '真实姓名',
+  `password` varchar(45) NOT NULL COMMENT '密码',
+  `roletype` enum('0','1','2','3') DEFAULT '2' COMMENT '扮演角色\n系统管理员扮演角色。\n0:超级管理员-superadmin\n1:管理人员-manager\n2:运维人员-normal\n3:合作伙伴-partner\n\n\n',
+  `roleid` int(11) DEFAULT NULL COMMENT '角色标识\n角色在相应表里的唯一标识',
+  `seescope` enum('0','1') DEFAULT NULL COMMENT '视野\n0:只能查看自己的信息-self\n1:查看所有的信息-all',
+  `commitTime` int(11) DEFAULT NULL COMMENT '创建时间',
+  `updateTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  PRIMARY KEY (`admin_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='系统管理人员';
+
+-- ----------------------------
+-- Records of bb_user_admin
+-- ----------------------------
+INSERT INTO `bb_user_admin` VALUES ('1', 'admin', 'admin', 'admin', '1', '0', '1', '1334818587', '2012-04-19 14:57:11');
 
 -- ----------------------------
 -- Table structure for `bb_user_department`
@@ -3699,7 +3720,7 @@ CREATE TABLE `bb_user_user` (
   `user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '标识',
   `department_id` int(11) NOT NULL COMMENT '部门标识',
   `username` varchar(200) NOT NULL COMMENT '用户名',
-  `password` varchar(200) DEFAULT NULL COMMENT '用户密码',  
+  `password` varchar(200) DEFAULT NULL COMMENT '用户密码',
   `email` varchar(450) DEFAULT NULL COMMENT '邮箱地址',
   `commitTime` int(11) DEFAULT NULL COMMENT '提交时间',
   `updateTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -3710,7 +3731,7 @@ CREATE TABLE `bb_user_user` (
 -- ----------------------------
 -- Records of bb_user_user
 -- ----------------------------
-INSERT INTO `bb_user_user` VALUES ('1', '1', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'skygreen2001@gmail.com','1331953415', '2012-03-17 11:03:51');
+INSERT INTO `bb_user_user` VALUES ('1', '1', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'skygreen2001@gmail.com', '1331953415', '2012-03-17 11:03:51');
 INSERT INTO `bb_user_user` VALUES ('2', '1', 'china', 'edbd0effac3fcc98e725920a512881e0', 'skygreen2001@sina.com', '1331953421', '2012-03-17 11:03:51');
 
 -- ----------------------------
@@ -3724,33 +3745,11 @@ CREATE TABLE `bb_user_userdetail` (
   `cellphone` varchar(500) CHARACTER SET latin1 DEFAULT NULL COMMENT '手机号码',
   `commitTime` int(11) DEFAULT NULL COMMENT '提交时间',
   `updateTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`userdetail_id`,`user_id`),
-  KEY `fk_bb_user_userdetail_bb_user_user1` (`user_id`)
+  PRIMARY KEY (`userdetail_id`),
+  UNIQUE KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户详细信息';
 
 -- ----------------------------
 -- Records of bb_user_userdetail
 -- ----------------------------
 INSERT INTO `bb_user_userdetail` VALUES ('1', '2', 'skygreen_2001@hotmail.com', '13917320293', '1331953386', '2012-03-17 11:03:51');
-
--- ----------------------------
--- Table structure for `bb_user_admin`
--- ----------------------------
-DROP TABLE IF EXISTS `bb_user_admin`;
-CREATE TABLE `bb_user_admin` (
-  `admin_id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(200) NOT NULL COMMENT '用户名',
-  `realname` varchar(200) DEFAULT NULL COMMENT '真实姓名',
-  `password` varchar(45) NOT NULL COMMENT '密码',
-  `roletype` enum('0','1','2','3') DEFAULT '2' COMMENT '扮演角色\n系统管理员扮演角色。\n0:超级管理员-superadmin\n1:管理人员-manager\n2:运维人员-normal\n3:合作伙伴-partner\n\n\n',
-  `roleid` int(11) DEFAULT NULL COMMENT '角色标识\n角色在相应表里的唯一标识',
-  `seescope` enum('0','1') DEFAULT NULL COMMENT '视野\n0:只能查看自己的信息-self\n1:查看所有的信息-all',
-  `commitTime` int(11) DEFAULT NULL COMMENT '创建时间',
-  `updateTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`admin_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='系统管理人员';
-
--- ----------------------------
--- Records of bb_user_admin
--- ----------------------------
-INSERT INTO `bb_user_admin` VALUES ('1', 'admin', 'admin', 'admin', '1',  '', '1','1334818587', '2012-04-19 14:57:11');
