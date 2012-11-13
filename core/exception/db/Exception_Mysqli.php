@@ -22,7 +22,7 @@ class Exception_Mysqli extends Exception_Db {
 				$category=  Exception_Db::CATEGORY_MYSQL;
 			}
 			$errorinfo=mysqli_error($link);
-			if (Config_Db::$debug_show_sql) LogMe::log("Error Info:".$errorinfo);
+			if (Config_Db::$debug_show_sql) LogMe::log("Error Info:".$errorinfo,EnumLogLevel::ERR);
 			self::recordException($errorinfo, $category,mysqli_errno($link),$extra);
 		}
 	}
