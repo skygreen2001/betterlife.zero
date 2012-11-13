@@ -15,10 +15,28 @@ if (Config_AutoCode::RELATION_VIEW_FULL)
     $treeLevelVisible_Add    = $editWindow_relationVars["treeLevelVisible_Add"];
     $treeLevelVisible_Update = $editWindow_relationVars["treeLevelVisible_Update"];
 
-    $textarea_Vars=self::model_textareaOnlineEditor($appName_alias,$current_classname,$current_instancename,$fieldInfo);
-    $textareaOnlineditor_Add   =$textarea_Vars["textareaOnlineditor_Add"];
-    $textareaOnlineditor_Update=$textarea_Vars["textareaOnlineditor_Update"];
-
+    $textarea_Vars=self::model_textareaOnlineEditor($appName_alias,$current_classname,$current_instancename,$fieldInfo,"    ");
+    $textareaOnlineditor_Add   =$textarea_Vars["textareaOnlineditor_Add"];    
+    $textareaOnlineditor_Add   =str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $textareaOnlineditor_Add);     
+    $textareaOnlineditor_Add   =str_replace("View.EditWindow.", "View.{$current_classname}View.EditWindow.",$textareaOnlineditor_Add);    
+ 
+ 
+    $textareaOnlineditor_Update=$textarea_Vars["textareaOnlineditor_Update"]; 
+    $textareaOnlineditor_Update   =str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $textareaOnlineditor_Update);    
+    $textareaOnlineditor_Update   =str_replace("View.EditWindow.", "View.{$current_classname}View.EditWindow.", $textareaOnlineditor_Update);    
+ 
+    $textareaOnlineditor_Replace=$textarea_Vars["textareaOnlineditor_Replace"]; 
+    $textareaOnlineditor_Replace   =str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $textareaOnlineditor_Replace);    
+    $textareaOnlineditor_Replace   =str_replace("View.EditWindow.", "View.{$current_classname}View.EditWindow.", $textareaOnlineditor_Replace);    
+ 
+    $textareaOnlineditor_Save=$textarea_Vars["textareaOnlineditor_Save"]; 
+    $textareaOnlineditor_Save   =str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $textareaOnlineditor_Save);    
+    $textareaOnlineditor_Save   =str_replace("View.EditWindow.", "View.{$current_classname}View.EditWindow.", $textareaOnlineditor_Save);    
+ 
+    $textareaOnlineditor_Reset=$textarea_Vars["textareaOnlineditor_Reset"]; 
+    $textareaOnlineditor_Reset   =str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $textareaOnlineditor_Reset);    
+    $textareaOnlineditor_Reset   =str_replace("View.EditWindow.", "View.{$current_classname}View.EditWindow.", $textareaOnlineditor_Reset);    
+ 
     $tbar=<<<TBAR
         
                     tbar : {
@@ -98,7 +116,7 @@ SM;
                     listeners:{
                         beforehide:function(){
                             this.editForm.form.getEl().dom.reset();
-                        }
+                        }{$textareaOnlineditor_Replace}
                     },
                     items : [
                         new Ext.form.FormPanel({   
@@ -117,6 +135,7 @@ $fieldLabels_relation
                     buttons : [{
                         text: "",ref : "../saveBtn",scope:this,
                         handler : function() { 
+{$textareaOnlineditor_Save}
                             if (!this.editForm.getForm().isValid()) {
                                 return;
                             }
@@ -159,10 +178,11 @@ $fieldLabels_relation
                         text : "重 置",ref:'../resetBtn',scope:this,
                         handler : function() {  
                             this.editForm.form.loadRecord($appName_alias.$classname.View.Running.{$current_instancename}Grid.getSelectionModel().getSelected());
+{$textareaOnlineditor_Reset}                             
                         }
                     }]
                 }, config);
-                $appName_alias.$classname.View.EditWindow.superclass.constructor.call(this, config);
+                $appName_alias.$classname.View.{$current_classname}View.EditWindow.superclass.constructor.call(this, config);
             }
         }),
 EDITWINDOW;
@@ -196,7 +216,7 @@ EDITWINDOW;
                 $appName_alias.$classname.View.{$current_classname}View.edit_window.{$realId_relation}.setValue("");
                 var company_id = $appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.{$realId};
                 $appName_alias.$classname.View.{$current_classname}View.edit_window.{$realId}.setValue(company_id);
-    {$textareaOnlineditor_Add}{$treeLevelVisible_Add}
+{$textareaOnlineditor_Add}{$treeLevelVisible_Add}
                 $appName_alias.$classname.View.{$current_classname}View.edit_window.show();
                 $appName_alias.$classname.View.{$current_classname}View.edit_window.maximize();
             },
@@ -212,7 +232,7 @@ EDITWINDOW;
                 $appName_alias.$classname.View.{$current_classname}View.edit_window.setTitle('修改{$table_comment12n}');
                 $appName_alias.$classname.View.{$current_classname}View.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
                 $appName_alias.$classname.View.{$current_classname}View.edit_window.savetype=1;
-    {$textareaOnlineditor_Update}{$treeLevelVisible_Update}
+{$textareaOnlineditor_Update}{$treeLevelVisible_Update}
                 $appName_alias.$classname.View.{$current_classname}View.edit_window.show();
                 $appName_alias.$classname.View.{$current_classname}View.edit_window.maximize();
             },

@@ -940,8 +940,9 @@ class AutoCodeViewExt extends AutoCode
      * 获取Ext "Textarea" 转换成在线编辑器
      * @param string $classname 数据对象类名
      * @param array $fieldInfo 表列信息列表  
+     * @param string $blank_pre 空格字符串  
      */
-    private static function model_textareaOnlineEditor($appName_alias,$classname,$instancename,$fieldInfo)
+    private static function model_textareaOnlineEditor($appName_alias,$classname,$instancename,$fieldInfo,$blank_pre="")
     {
         $result=array();      
         $textareaOnlineditor_Replace="";
@@ -1039,64 +1040,64 @@ class AutoCodeViewExt extends AutoCode
                                       "            $appName_alias.$classname.Config.OnlineEditor=parseInt(Ext.util.Cookies.get('OnlineEditor'));\r\n".
                                       "        }\r\n";
             $textareaOnlineditor_Replace=",\r\n".
-                                      "                    afterrender:function(){\r\n". 
-                                      "                        switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
-                                      "                        {\r\n".
-                                      "                            case 2:\r\n".                                  
-                                      $textareaOnlineditor_Replace_array["kindEditor"].
-                                      "                                break\r\n".
-                                      "                            case 3:\r\n".
-                                      $textareaOnlineditor_Replace_array["xhEditor"].
-                                      "                                break\r\n".                                  
-                                      "                            default:\r\n".
-                                      $textareaOnlineditor_Replace_array["ckEditor"].  
-                                      "                        }\r\n".
-                                      "                    }";    
+                                      $blank_pre."                    afterrender:function(){\r\n". 
+                                      $blank_pre."                        switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
+                                      $blank_pre."                        {\r\n".
+                                      $blank_pre."                            case 2:\r\n".                                  
+                                      $blank_pre.$textareaOnlineditor_Replace_array["kindEditor"].
+                                      $blank_pre."                                break\r\n".
+                                      $blank_pre."                            case 3:\r\n".
+                                      $blank_pre.$textareaOnlineditor_Replace_array["xhEditor"].
+                                      $blank_pre."                                break\r\n".                                  
+                                      $blank_pre."                            default:\r\n".
+                                      $blank_pre.$textareaOnlineditor_Replace_array["ckEditor"].  
+                                      $blank_pre."                        }\r\n".
+                                      $blank_pre."                    }";    
             $textareaOnlineditor_Add=$add_img.
-                                      "            switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
-                                      "            {\r\n".
-                                      "                case 2:\r\n".
-                                      $textareaOnlineditor_Add_array["kindEditor"].
-                                      "                    break\r\n".
-                                      "                case 3:\r\n".
-                                      "                    break\r\n".
-                                      "                default:\r\n".
-                                      $textareaOnlineditor_Add_array["ckEditor"].
-                                      "            }\r\n";
+                                      $blank_pre."            switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
+                                      $blank_pre."            {\r\n".
+                                      $blank_pre."                case 2:\r\n".
+                                      $blank_pre.$textareaOnlineditor_Add_array["kindEditor"].
+                                      $blank_pre."                    break\r\n".
+                                      $blank_pre."                case 3:\r\n".
+                                      $blank_pre."                    break\r\n".
+                                      $blank_pre."                default:\r\n".
+                                      $blank_pre.$textareaOnlineditor_Add_array["ckEditor"].
+                                      $blank_pre."            }\r\n";
             $textareaOnlineditor_Update=$update_img.
-                                      "            switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
-                                      "            {\r\n".
-                                      "                case 2:\r\n".
-                                      $textareaOnlineditor_Update_array["kindEditor"].
-                                      "                    break\r\n".
-                                      "                case 3:\r\n".
-                                      $textareaOnlineditor_Update_array["xhEditor"].
-                                      "                    break\r\n".
-                                      "                default:\r\n".
-                                      $textareaOnlineditor_Update_array["ckEditor"].
-                                      "            }\r\n";
-            $textareaOnlineditor_Save="                        switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
-                                      "                        {\r\n".
-                                      "                            case 2:\r\n".
-                                      $textareaOnlineditor_Save_array["kindEditor"].
-                                      "                                break\r\n".
-                                      "                            case 3:\r\n".
-                                      $textareaOnlineditor_Save_array["xhEditor"].
-                                      "                                break\r\n".
-                                      "                            default:\r\n".
-                                      $textareaOnlineditor_Save_array["ckEditor"].
-                                      "                        }\r\n";
+                                      $blank_pre."            switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
+                                      $blank_pre."            {\r\n".
+                                      $blank_pre."                case 2:\r\n".
+                                      $blank_pre.$textareaOnlineditor_Update_array["kindEditor"].
+                                      $blank_pre."                    break\r\n".
+                                      $blank_pre."                case 3:\r\n".
+                                      $blank_pre.$textareaOnlineditor_Update_array["xhEditor"].
+                                      $blank_pre."                    break\r\n".
+                                      $blank_pre."                default:\r\n".
+                                      $blank_pre.$textareaOnlineditor_Update_array["ckEditor"].
+                                      $blank_pre."            }\r\n";
+            $textareaOnlineditor_Save=$blank_pre."                        switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
+                                      $blank_pre."                        {\r\n".
+                                      $blank_pre."                            case 2:\r\n".
+                                      $blank_pre.$textareaOnlineditor_Save_array["kindEditor"].
+                                      $blank_pre."                                break\r\n".
+                                      $blank_pre."                            case 3:\r\n".
+                                      $blank_pre.$textareaOnlineditor_Save_array["xhEditor"].
+                                      $blank_pre."                                break\r\n".
+                                      $blank_pre."                            default:\r\n".
+                                      $blank_pre.$textareaOnlineditor_Save_array["ckEditor"].
+                                      $blank_pre."                        }\r\n";
             $textareaOnlineditor_Reset=$reset_img.
-                                      "                        switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
-                                      "                        {\r\n".
-                                      "                            case 2:\r\n".
-                                      $textareaOnlineditor_Reset_array["kindEditor"].
-                                      "                                break\r\n".
-                                      "                            case 3:\r\n".
-                                      "                                break\r\n".
-                                      "                            default:\r\n".
-                                      $textareaOnlineditor_Reset_array["ckEditor"].
-                                      "                        }\r\n";
+                                      $blank_pre."                        switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
+                                      $blank_pre."                        {\r\n".
+                                      $blank_pre."                            case 2:\r\n".
+                                      $blank_pre.$textareaOnlineditor_Reset_array["kindEditor"].
+                                      $blank_pre."                                break\r\n".
+                                      $blank_pre."                            case 3:\r\n".
+                                      $blank_pre."                                break\r\n".
+                                      $blank_pre."                            default:\r\n".
+                                      $blank_pre.$textareaOnlineditor_Reset_array["ckEditor"].
+                                      $blank_pre."                        }\r\n";
         }else{
             $textareaOnlineditor_Add=$add_img;
             $textareaOnlineditor_Update=$update_img;
@@ -1405,7 +1406,7 @@ class AutoCodeViewExt extends AutoCode
                 $filterfilter=$filterfilter."};";    
             }
         }
-        $result["filterwordNames"]    =$filterwordNames;
+        $result["filterwordNames"]=$filterwordNames;
         $result["filterFields"]   =$filterFields;
         $result["filterReset"]    =$filterReset;
         $result["filterdoSelect"] =$filterdoSelect."\r\n".$filterfilter;
