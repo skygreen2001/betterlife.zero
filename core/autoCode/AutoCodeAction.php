@@ -273,9 +273,37 @@ class AutoCodeAction extends AutoCode
                     {                    
                         if (self::columnIsTextArea($fieldname,$field["Type"]))
                         {
-                            $text_area_fieldname[]="'".$fieldname."'";
+                            if (!in_array("'".$fieldname."'", $text_area_fieldname)){
+                                $text_area_fieldname[]="'".$fieldname."'";
+                            }
                         }   
+
+                        if (Config_AutoCode::RELATION_VIEW_FULL)
+                        {
+                            if (array_key_exists($classname,self::$relation_all))
+                            {
+                                $relationSpec=self::$relation_all[$classname]; 
+                                if (array_key_exists("has_many",$relationSpec))
+                                {
+                                    $has_many=$relationSpec["has_many"];
+                                    foreach ($has_many as $current_classname=>$value) 
+                                    {
+                                        $tablename_relation=self::getTablename($current_classname);
+                                        $fieldInfos_relation=self::$fieldInfos[$tablename_relation];                      
+                                        foreach ($fieldInfos_relation as $fieldname_relation=>$fields_relation) {           
+                                            if (self::columnIsTextArea($fieldname_relation,$fields_relation["Type"]))
+                                            {
+                                                if (!in_array("'".$fieldname_relation."'", $text_area_fieldname)){
+                                                    $text_area_fieldname[].="'".$fieldname_relation."'";
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }                        
                     }
+
                     if (count($text_area_fieldname)==1){  
                         $result.="         \$this->load_onlineditor({$text_area_fieldname[0]});\r\n"; 
                     }else if (count($text_area_fieldname)>1){

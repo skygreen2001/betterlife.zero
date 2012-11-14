@@ -81,18 +81,18 @@ class AutoCodeViewExt extends AutoCode
             }       
         } 
         echo "</div><br>";
-        AutoCodeFoldHelper::foldEffectCommon("Content_52");              
-        echo "<font color='#FF0000'>生成后端tpl模板显示文件导出:</font></a>";  
+        AutoCodeFoldHelper::foldEffectCommon("Content_52");
+        echo "<font color='#FF0000'>生成后端tpl模板显示文件导出:</font></a>";
         echo '<div id="Content_52" style="display:none;">';
-        foreach (self::$fieldInfos as $tablename=>$fieldInfo){      
-            $defineTplFileContent=self::tableToViewTplDefine($fieldInfo);
+        foreach (self::$fieldInfos as $tablename=>$fieldInfo){
+            $defineTplFileContent=self::tableToViewTplDefine($tablename,$fieldInfo);
             if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($defineTplFileContent)){
                 $tplName=self::saveTplDefineToDir($tablename,$defineTplFileContent);
-                echo "生成导出完成:$tablename=>$tplName!<br/>";   
+                echo "生成导出完成:$tablename=>$tplName!<br/>";
             }else{
                 echo $defineTplFileContent."<br/>";
-            }   
-        }   
+            }
+        }
         echo '</div>';
         self::tableToAjaxPhpDefine();
                              
@@ -803,8 +803,7 @@ class AutoCodeViewExt extends AutoCode
                                               $blank_pre."                                        this.collapse();\r\n".
                                               $blank_pre."                                     }\r\n".
                                               $blank_pre."                                 }\r\n".
-                                              $blank_pre."                            },\r\n".
-                                              $blank_pre.""; 
+                                              $blank_pre."                            },\r\n"; 
                  
                                 if (Config_AutoCode::RELATION_VIEW_FULL){  
                                     if (array_key_exists($fieldname,$relationSpecs))
@@ -856,7 +855,7 @@ class AutoCodeViewExt extends AutoCode
                 $isImage =self::columnIsImage($fieldname,$field["Comment"]);        
                 if ($fieldname==self::keyIDColumn($classname))
                 { 
-                    $fieldLabels.=$blank_pre."                            {xtype: 'hidden',  name : '$fieldname',ref:'../$fieldname'"; 
+                    $fieldLabels.=$blank_pre."                            {xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'"; 
                 }else if ($isImage){
                     $field_comment=$field["Comment"]; 
                     $field_comment=self::columnCommentKey($field_comment,$fieldname);
@@ -923,7 +922,7 @@ class AutoCodeViewExt extends AutoCode
                     } 
                     if (self::columnIsTextArea($fieldname,$field["Type"]))
                     {        
-                        $fieldLabels.=$blank_pre.",xtype : 'textarea',id:'$fieldname',ref:'$fieldname'";
+                        $fieldLabels.=",xtype : 'textarea',id:'$fieldname',ref:'$fieldname'";
                     }
                 }
                 $fieldLabels.="},\r\n"; 
@@ -1577,10 +1576,11 @@ BATCHUPLOADIMAGES;
     }
 
     /**
-     * 将表列定义转换成使用ExtJs生成的表示层tpl文件定义的内容    
+     * 将表列定义转换成使用ExtJs生成的表示层tpl文件定义的内容
+     * @param string $tablename 表名称
      * @param array $fieldInfo 表列信息列表
      */
-    private static function tableToViewTplDefine($fieldInfo)
+    private static function tableToViewTplDefine($tablename,$fieldInfo)
     {
         $result ="{extends file=\"\$templateDir/layout/normal/layout.tpl\"}\r\n".
                  "{block name=body}\r\n".
@@ -1593,9 +1593,34 @@ BATCHUPLOADIMAGES;
         {                    
             if (self::columnIsTextArea($fieldname,$field["Type"]))
             {
-                $result.="     {\$editorHtml}\r\n"; 
+                $result.="    {\$editorHtml}\r\n"; 
                 break;
             }   
+
+            if (Config_AutoCode::RELATION_VIEW_FULL)
+            {
+                $classname=self::getClassname($tablename);
+                if (array_key_exists($classname,self::$relation_all))
+                {
+                    $relationSpec=self::$relation_all[$classname]; 
+                    if (array_key_exists("has_many",$relationSpec))
+                    {
+                        $has_many=$relationSpec["has_many"];
+                        foreach ($has_many as $current_classname=>$value) 
+                        {
+                            $tablename_relation=self::getTablename($current_classname);
+                            $fieldInfos_relation=self::$fieldInfos[$tablename_relation];                      
+                            foreach ($fieldInfos_relation as $fieldname_relation=>$fields_relation) {           
+                                if (self::columnIsTextArea($fieldname_relation,$fields_relation["Type"]))
+                                {
+                                    $result.="    {\$editorHtml}\r\n"; 
+                                    break 3;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }    
         $result .="{/block}\r\n";  
         return $result;

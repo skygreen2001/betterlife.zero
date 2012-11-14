@@ -251,7 +251,7 @@ $m2m_filterReset
                         items: [
                             {xtype:'label', text: '每页显示'},
                             {xtype:'numberfield', value:$appName_alias.$classname.Config.PageSize,minValue:1,width:35,
-                                style:'text-align:center',allowBlank: false,
+                                style:'text-align:center',allowBlank:false,
                                 listeners:
                                 {
                                     change:function(Field, newValue, oldValue){
