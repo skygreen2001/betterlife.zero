@@ -12,8 +12,11 @@ if (Config_AutoCode::RELATION_VIEW_FULL)
     $editWindow_relationVars = self::model_fieldLables($appName_alias,$current_classname,$fieldInfo,$realId,"    ");
     $relationStore=self::$relationStore;
     $fieldLabels_relation    = $editWindow_relationVars["fieldLabels"];
-    $treeLevelVisible_Add    = $editWindow_relationVars["treeLevelVisible_Add"];
+    $treeLevelVisible_Add    = $editWindow_relationVars["treeLevelVisible_Add"];     
+    $treeLevelVisible_Add   =str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $treeLevelVisible_Add);     
+  
     $treeLevelVisible_Update = $editWindow_relationVars["treeLevelVisible_Update"];
+    $treeLevelVisible_Update   =str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $treeLevelVisible_Update);  
 
     $textarea_Vars=self::model_textareaOnlineEditor($appName_alias,$current_classname,$current_instancename,$fieldInfo,"    ");
     $textareaOnlineditor_Add   =$textarea_Vars["textareaOnlineditor_Add"];    

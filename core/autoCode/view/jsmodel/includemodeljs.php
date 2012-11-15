@@ -524,11 +524,11 @@ $filterReset
                     this.grid.updateView$classname();
                     if (sm.getCount() != 1){
                         this.grid.hide$classname();
-                        $appName_alias.$classname.Config.View.IsShow=0;
+                        $appName_alias.$classname.Config.View.IsShow=0;$relationM2mRowSelect
                     }else{
                         if ($appName_alias.$classname.View.IsSelectView==1){
                             $appName_alias.$classname.View.IsSelectView=0;
-                            this.grid.show$classname();
+                            this.grid.show$classname();$relationM2mRowSelectElse
                         }
                     }
                 },
@@ -599,7 +599,7 @@ $filterdoSelect
             var condition = {'start':0,'limit':$appName_alias.$classname.Config.PageSize};
             Ext.apply(condition,this.filter);
             ExtService$classname.queryPage$classname(condition,function(provider, response) {
-                if (response.result.data) {
+                if (response.result&&response.result.data) {
                     var result           = new Array();
                     result['data']       =response.result.data;
                     result['totalCount'] =response.result.totalCount;

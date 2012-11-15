@@ -111,35 +111,48 @@ class AutoCodeConfig extends AutoCode
      */
     private static function conditionsToConfig($classname,$tablename,$fieldInfo,$conditions,$showfieldname)
     {
-        $showfieldname=self::getShowFieldNameByClassname($classname);
-        if (!contain($tablename,Config_Db::TABLENAME_RELATION)) $conditions[]=array("@value"=>$showfieldname);
+        if (!self::isMany2ManyByClassname($classname)){
+            $showfieldname=self::getShowFieldNameByClassname($classname,true);
+            if (!empty($showfieldname)){
+                $exists_condition=array();
+                if ((!contain($tablename,Config_Db::TABLENAME_RELATION))&&(!in_array($showfieldname,$exists_condition))) {
+                    $conditions[]=array("@value"=>$showfieldname);
+                    $exists_condition[]=$showfieldname;
+                }
+            }
+        }
         foreach  ($fieldInfo as $fieldname=>$field)
         {
             if (!self::isNotColumnKeywork($fieldname))continue;
             if ($fieldname==self::keyIDColumn($classname))continue;
             
-            if (contains($fieldname,array("name","title"))&&($fieldname!=$showfieldname)&&(!contain($fieldname,"_id"))){
+            if ((!in_array($fieldname,$exists_condition))&&contains($fieldname,array("name","title"))&&($fieldname!=$showfieldname)&&(!contain($fieldname,"_id"))){
                 $conditions[]=array("@value"=>$fieldname);
+                $exists_condition[]=$fieldname;
             }
             if (count($conditions)<self::$count_condition){
-                if (contains($fieldname,array("code","_no","status","type"))){
+                if ((!in_array($fieldname,$exists_condition))&&contains($fieldname,array("code","_no","status","type"))&&(!contain($fieldname,"_id"))){
                     $conditions[]=array("@value"=>$fieldname);
+                    $exists_condition[]=$fieldname;
                 }
                 if (contain($fieldname,"_id")&&(!contain($fieldname,"parent_id"))){
                     $relation_classname=str_replace("_id", "", $fieldname);
                     $relation_classname{0}=strtoupper($relation_classname{0});
-                    //$relation_class=null;
+                    $relation_class=null;
                     if (class_exists($relation_classname)) {
                         $relation_class=new $relation_classname();
                     }
-                    if ($relation_class instanceof DataObject){
+                    if ((!in_array($fieldname,$exists_condition))&&($relation_class instanceof DataObject)){
                         $showfieldname_relation=self::getShowFieldNameByClassname($relation_classname);
-                        $conditions[]=array(
-                            '@attributes' => array(
-                                "relation_class"=>$relation_classname,
-                                "show_name"=>$showfieldname_relation
-                            ),
-                            "@value"=>$fieldname);
+                        if (!in_array($showfieldname_relation,$exists_condition)){
+                            $conditions[]=array(
+                                '@attributes' => array(
+                                    "relation_class"=>$relation_classname,
+                                    "show_name"=>$showfieldname_relation
+                                ),
+                                "@value"=>$fieldname);
+                            $exists_condition[]=$fieldname;
+                        }
                     }
                 }
             }else{
@@ -164,7 +177,7 @@ class AutoCodeConfig extends AutoCode
             if (contain($fieldname,"_id")&&(!contain($fieldname,"parent_id"))){
                 $relation_classname=str_replace("_id", "", $fieldname);
                 $relation_classname{0}=strtoupper($relation_classname{0});
-                //$relation_class=null;
+                $relation_class=null;
                 if (class_exists($relation_classname)) {
                     $relation_class=new $relation_classname();
                 }
@@ -199,7 +212,7 @@ class AutoCodeConfig extends AutoCode
             if (contain($fieldname,"_id")&&(!contain($fieldname,"parent_id"))){
                 $relation_classname=str_replace("_id", "", $fieldname);
                 $relation_classname{0}=strtoupper($relation_classname{0});
-                //$relation_class=null;
+                $relation_class=null;
                 if (class_exists($relation_classname)) {
                     $relation_class=new $relation_classname();
                 }

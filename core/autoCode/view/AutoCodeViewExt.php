@@ -277,6 +277,8 @@ class AutoCodeViewExt extends AutoCode
         $relationViewGridInit=$storeInfo['relationViewGridInit'];
         $relationM2mMenu=$storeInfo['relationM2mMenu'];
         $relationM2mMenuShowHide=$storeInfo['relationM2mMenuShowHide'];
+        $relationM2mRowSelect=$storeInfo['relationM2mRowSelect'];
+        $relationM2mRowSelectElse=$storeInfo['relationM2mRowSelectElse'];
         $relationM2mShowHide=$storeInfo['relationM2mShowHide'];
         $relationM2mRunningWindow=$storeInfo['relationM2mRunningWindow'];
 
@@ -445,6 +447,8 @@ class AutoCodeViewExt extends AutoCode
         $viewRelationDoSelect=$relationViewDefine['viewRelationDoSelect'];
         $relationViewGridInit=$relationViewDefine['relationViewGridInit'];
         $relationM2mMenu=$relationViewDefine['m2mMenu'];
+        $relationM2mRowSelect=$relationViewDefine['m2mRowSelect'];
+        $relationM2mRowSelectElse=$relationViewDefine['m2mRowSelectElse'];
         $relationM2mMenuShowHide=$relationViewDefine['m2mMenuShowHide'];
         $relationM2mShowHide=$relationViewDefine['m2mShowHide'];
         $relationM2mRunningWindow=$relationViewDefine['m2mRunningWindow'];
@@ -455,6 +459,8 @@ class AutoCodeViewExt extends AutoCode
         $result['viewRelationDoSelect']="\r\n".$viewRelationDoSelect;
         $result['relationViewGridInit']="\r\n".$relationViewGridInit;
         $result['relationM2mMenu']=$relationM2mMenu;
+        $result['relationM2mRowSelect']=$relationM2mRowSelect;
+        $result['relationM2mRowSelectElse']=$relationM2mRowSelectElse;
         $result['relationM2mMenuShowHide']=$relationM2mMenuShowHide;
         $result['relationM2mShowHide']=$relationM2mShowHide;
         $result['relationM2mRunningWindow']=$relationM2mRunningWindow;
@@ -587,6 +593,8 @@ class AutoCodeViewExt extends AutoCode
                 {           
                     include("jsmodel".DIRECTORY_SEPARATOR."many2many.php"); 
                     $result['m2mMenu']=$jsMany2ManyMenu;
+                    $result['m2mRowSelect']=$jsMany2ManyRowSelect;
+                    $result['m2mRowSelectElse']=$jsMany2ManyRowSelectElse;
                     $result['m2mShowHide']=$jsMany2ManyShowHide;
                     $result['m2mRunningWindow']=$jsMany2ManyRunningWindow;
                     $result['m2mMenuShowHide']=$jsMany2ManyMenuShowHide;
@@ -744,36 +752,38 @@ class AutoCodeViewExt extends AutoCode
                             $current_classname=$key;
                             $key{0}=strtolower($key{0});    
                             if (array_key_exists("parent_id",$fieldInfo_relationshow)){
-                                $treeLevelVisible_Add="\r\n            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(false);\r\n".
-                                                      "            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(false);\r\n";
-                                $treeLevelVisible_Update="\r\n            if (this.getSelectionModel().getSelected().data.{$key}ShowAll){\r\n".                      
-                                                         "                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(true);\r\n".                      
-                                                         "                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(true);\r\n".                     
-                                                         "            }else{\r\n".                      
-                                                         "                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(false);\r\n".                     
-                                                         "                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(false);\r\n".                     
-                                                         "            }\r\n";
-                                $fieldLabels.="                            {xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'},\r\n".
-                                              "                            {\r\n".
-                                              "                                  xtype: 'compositefield',ref: '../{$key}comp',\r\n".
-                                              "                                  items: [\r\n".
-                                              "                                      {\r\n".
-                                              "                                          xtype:'combotree', fieldLabel:'{$field_comment}',ref:'{$key}_name',name: '{$key}_name',grid:this,\r\n".
-                                              "                                          emptyText: '请选择{$field_comment}',canFolderSelect:false,flex:1,editable:false,\r\n".
-                                              "                                          tree: new Ext.tree.TreePanel({\r\n".
-                                              "                                              dataUrl: 'home/admin/src/httpdata/{$key}Tree.php',\r\n".
-                                              "                                              root: {nodeType: 'async'},border: false,rootVisible: false,\r\n".
-                                              "                                              listeners: {\r\n".
-                                              "                                                  beforeload: function(n) {if (n) {this.getLoader().baseParams.id = n.attributes.id;}}\r\n".
-                                              "                                              }\r\n".
-                                              "                                          }),\r\n".
-                                              "                                          onSelect: function(cmb, node) {\r\n".
-                                              "                                              this.grid.{$fieldname}.setValue(node.attributes.id);\r\n".
-                                              "                                              this.setValue(node.attributes.text);\r\n".
-                                              "                                          }\r\n".
-                                              "                                      },\r\n".
-                                              "                                      {xtype:'displayfield',value:'所选{$field_comment}:',ref: '{$key}ShowLabel'},{xtype:'displayfield',name:'{$key}ShowAll',flex:1,ref: '{$key}ShowValue'}]\r\n".
-                                              "                            },\r\n"; 
+                                $treeLevelVisible_Add="\r\n".
+                                                      $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(false);\r\n".
+                                                      $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(false);\r\n";
+                                $treeLevelVisible_Update="\r\n".
+                                                         $blank_pre."            if (this.getSelectionModel().getSelected().data.{$key}ShowAll){\r\n".                      
+                                                         $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(true);\r\n".                      
+                                                         $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(true);\r\n".                     
+                                                         $blank_pre."            }else{\r\n".                      
+                                                         $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(false);\r\n".                     
+                                                         $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(false);\r\n".                     
+                                                         $blank_pre."            }\r\n";
+                                $fieldLabels.=$blank_pre."                            {xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'},\r\n".
+                                              $blank_pre."                            {\r\n".
+                                              $blank_pre."                                  xtype: 'compositefield',ref: '../{$key}comp',\r\n".
+                                              $blank_pre."                                  items: [\r\n".
+                                              $blank_pre."                                      {\r\n".
+                                              $blank_pre."                                          xtype:'combotree', fieldLabel:'{$field_comment}',ref:'{$key}_name',name: '{$key}_name',grid:this,\r\n".
+                                              $blank_pre."                                          emptyText: '请选择{$field_comment}',canFolderSelect:false,flex:1,editable:false,\r\n".
+                                              $blank_pre."                                          tree: new Ext.tree.TreePanel({\r\n".
+                                              $blank_pre."                                              dataUrl: 'home/admin/src/httpdata/{$key}Tree.php',\r\n".
+                                              $blank_pre."                                              root: {nodeType: 'async'},border: false,rootVisible: false,\r\n".
+                                              $blank_pre."                                              listeners: {\r\n".
+                                              $blank_pre."                                                  beforeload: function(n) {if (n) {this.getLoader().baseParams.id = n.attributes.id;}}\r\n".
+                                              $blank_pre."                                              }\r\n".
+                                              $blank_pre."                                          }),\r\n".
+                                              $blank_pre."                                          onSelect: function(cmb, node) {\r\n".
+                                              $blank_pre."                                              this.grid.{$fieldname}.setValue(node.attributes.id);\r\n".
+                                              $blank_pre."                                              this.setValue(node.attributes.text);\r\n".
+                                              $blank_pre."                                          }\r\n".
+                                              $blank_pre."                                      },\r\n".
+                                              $blank_pre."                                      {xtype:'displayfield',value:'所选{$field_comment}:',ref: '{$key}ShowLabel'},{xtype:'displayfield',name:'{$key}ShowAll',flex:1,ref: '{$key}ShowValue'}]\r\n".
+                                              $blank_pre."                            },\r\n"; 
                             }else{           
                                 $show_name_diff_name= $show_name_diff;                 
                                 if ($show_name_diff=="title")$show_name_diff=$key."_".$show_name_diff;
@@ -862,7 +872,7 @@ class AutoCodeViewExt extends AutoCode
                     $result["isFileUpload"]="fileUpload: true,";  
                     $fieldLabels.=$blank_pre."                            {xtype: 'hidden',  name : '$fieldname',ref:'../$fieldname'},\r\n"; 
                     $fieldLabels.=$blank_pre."                            {fieldLabel : '{$field_comment}',name : '{$fieldname}Upload',ref:'../{$fieldname}Upload',xtype:'fileuploadfield',\r\n".
-                                $blank_pre."                           emptyText: '请上传{$field_comment}文件',buttonText: '',accept:'image/*',buttonCfg: {iconCls: 'upload-icon'}";
+                                  $blank_pre."                              emptyText: '请上传{$field_comment}文件',buttonText: '',accept:'image/*',buttonCfg: {iconCls: 'upload-icon'}";
                 }else{                  
                     $datatype=self::comment_type($field["Type"]);
                     $field_comment=$field["Comment"];  
@@ -1519,7 +1529,9 @@ class AutoCodeViewExt extends AutoCode
                                         $appName_alias.$classname.View.Running.{$instancename}Grid.doSelect{$classname}();
                                     },
                                     failure : function(form, response) {
-                                        Ext.Msg.alert('错误', response.result.data);
+                                        if (response.result&&response.result.data){
+                                            Ext.Msg.alert('错误', response.result.data);
+                                        }
                                     }
                                 });
                             }

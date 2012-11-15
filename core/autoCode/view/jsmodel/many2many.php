@@ -57,7 +57,7 @@ if (self::isMany2ManyByClassname($key_many))
             root: 'data',remoteSort: true,                
             fields : [
 $fields_many_fields,
-                  {name: 'isShow{$belong_class}Check',type: 'string'}
+                {name: 'isShow{$belong_class}Check',type: 'string'}
             ]}         
         ),
         writer: new Ext.data.JsonWriter({
@@ -99,7 +99,9 @@ MANY2MANYSTORE;
     $m2m_filterReset    =$m2m_filters["filterReset"];
     //查询中的语句
     $m2m_filterdoSelect =$m2m_filters["filterdoSelect"]; 
-    $m2m_filterdoSelect=substr($m2m_filterdoSelect,0,strlen($m2m_filterdoSelect)-2);   
+    if (!endWith($m2m_filterdoSelect,"{")){
+        $m2m_filterdoSelect=substr($m2m_filterdoSelect,0,strlen($m2m_filterdoSelect)-2).",";   
+    }
 
     /**
      * 多对多选择Window,Grid 
@@ -293,12 +295,12 @@ $m2m_filterReset
                 if (this.topToolbar){
                     var {$owner_idcolumn}=this.{$owner_idcolumn};
                     if (!this.filter.selectType)this.filter.selectType=0;
-{$m2m_filterdoSelect},'{$owner_idcolumn}':{$owner_idcolumn},'selectType':this.filter.selectType};
+{$m2m_filterdoSelect}'{$owner_idcolumn}':{$owner_idcolumn},'selectType':this.filter.selectType};
                 }
                 var condition = {'start':0,'limit':$appName_alias.$classname.Config.PageSize};
                 Ext.apply(condition,this.filter);
                 ExtService{$classname}.queryPage{$classname}{$belong_class}(condition,function(provider, response) {
-                    if (response.result.data) {
+                    if (response.result&&response.result.data) {
                         var result           = new Array();
                         result['data']       =response.result.data;
                         result['totalCount'] =response.result.totalCount;
@@ -391,5 +393,23 @@ MANY2MANYSHOWHIDE;
          */
         select{$belong_class}Window:null, 
 M2MRW;
+
+    /**
+     * 行选择控制隐藏
+     */
+    $jsMany2ManyRowSelect=<<<M2MROWSELECT
+
+                        this.grid.hide{$belong_class}();
+M2MROWSELECT;
+
+    /**
+     * 行选择控制显示
+     */
+    $jsMany2ManyRowSelectElse=<<<M2MROWSELECTELSE
+    
+                            if($appName_alias.$classname.View.Running.select{$belong_class}Window && !$appName_alias.$classname.View.Running.select{$belong_class}Window.hidden){
+                                this.grid.show{$belong_class}();
+                            }
+M2MROWSELECTELSE;
 }
 ?>

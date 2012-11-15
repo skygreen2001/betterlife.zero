@@ -47,16 +47,16 @@ class AutoCodeValidate extends AutoCode
             {       
                 $field_comment=$field["Comment"];  
                 if (empty($field_comment)){
-                    $table_error["column_nocomment"][$tablename]=$fieldname;    
+                    $table_error["column_nocomment"][$tablename][]=$fieldname;    
                 }
                 if (array_key_exists($fieldname."_id", $fieldInfo)&&($fieldname."_id"!=$realId)){
-                    $table_error["samefieldname_id"][$tablename]=$fieldname;  
+                    $table_error["samefieldname_id"][$tablename][]=$fieldname;  
                 }
                 if (in_array($fieldname, $invaid_keywords)){
-                    $table_error["invaid_keywords"][$tablename]=$fieldname; 
+                    $table_error["invaid_keywords"][$tablename][]=$fieldname; 
                 }
                 if  (contain($fieldname,"＿")){
-                    $table_error["specialkey_half"][$tablename]=$fieldname; 
+                    $table_error["specialkey_half"][$tablename][]=$fieldname; 
                 }
             }
         }
@@ -78,7 +78,13 @@ class AutoCodeValidate extends AutoCode
                     if (is_numeric($first)){
                         echo "&nbsp;&nbsp;&nbsp;&nbsp;".$second."<br/>";
                     }else{
-                        echo "&nbsp;&nbsp;&nbsp;&nbsp;".$first."->".$second."<br/>";
+                        if (is_array($second)){
+                            foreach ($second as $field_name) {
+                                echo "&nbsp;&nbsp;&nbsp;&nbsp;".$first."->".$field_name."<br/>";
+                            }
+                        }else{
+                            echo "&nbsp;&nbsp;&nbsp;&nbsp;".$first."->".$second."<br/>";
+                        }
                     }
                     
                 }
