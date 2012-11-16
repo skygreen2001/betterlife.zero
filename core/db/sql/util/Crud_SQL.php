@@ -132,9 +132,7 @@ abstract class Crud_SQL {
                 //第零种情况|第一种情况     
                 if (is_array($clause)&&count($clause)==1){
                     $detailStr=$clause[0];
-                    if (contain($detailStr, self::SQL_OR)||
-                        contain($detailStr, self::SQL_LIKE)||
-                        contain($detailStr, "(")){
+                    if (contains($detailStr, array(self::SQL_OR,self::SQL_LIKE,"("))){
                         $this->whereClause=$detailStr;
                         return $this;
                     }
@@ -160,7 +158,11 @@ abstract class Crud_SQL {
                         $asWhereClause[$key]=$key.self::SQL_LIKE." '%?%' ";
                     }else {
                         if (contains($value,array('>',"<","=",">=","<="))||(contains(strtolower($value),array("like ","between ")))){
-                            $asWhereClause[$key]=$key." ".$value." ";
+                            if (is_numeric($key)){
+                                $asWhereClause[$key]=$value;
+                            }else{
+                                $asWhereClause[$key]=$key." ".$value." ";
+                            }
                         }else{
                             $asWhereClause[$key]=$key."=?";
                         }
@@ -208,7 +210,11 @@ abstract class Crud_SQL {
         }
 
         if (!empty ($whereClause)) {
-            $this->whereClause .="(".$whereClause.")";
+            if (contain($whereClause,"(")&&contain($whereClause,")")){
+                $this->whereClause .=$whereClause;
+            }else{
+                $this->whereClause .="(".$whereClause.")";
+            }
         }
         return $this;
     }
@@ -302,6 +308,9 @@ abstract class Crud_SQL {
             if (contain($param, self::SQL_OR)||
                 contain($param, self::SQL_LIKE)||
                 contain($param, "(")){
+                if (contain($param,",")){ 
+                    $param=str_replace(",", " and ", $param);
+                } 
                 return $param;
             } else{           
                 if (contain($param,",")){          
@@ -313,11 +322,15 @@ abstract class Crud_SQL {
         }
         if (is_array($param)) {
             $filterc=each($param);
-            if (is_string($filterc["value"])&&strpos($filterc["value"],"=")!==false) {
-                $f_values=array_values($param);
+            if (is_string($filterc["value"])&&contains($filterc["value"],array("=",self::SQL_LIKE))) {
+                $f_values=$param;
                 foreach ($f_values as $key=>$value) {
-                    if (is_int($key)&&((substr_count($value,"=")>1))){
-                        $result[]=$value;
+                    if (is_numeric($key)&&(self::isComplicatedCondition($value))){
+                        if (contain($value,"(")&&contain($value,")")){
+                            $result[]=$value;
+                        }else{
+                            $result[]="(".$value.")";
+                        }
                         continue;
                     }
                     if ((strlen($value)>0)&&($value{0}=='(')&&($value{strlen($value)-1}==')')){
@@ -327,18 +340,21 @@ abstract class Crud_SQL {
                         $value=str_replace("1=1","",$value);
                         $value=str_replace("and","",$value);  
                         $value=trim($value);
-                    }                          
+                    }                        
                     if (!empty($value)){                    
                         if (contain($value, self::SQL_LIKE)){
-                            $tmp=explode(trim(self::SQL_LIKE), $value);
+                            if (!is_numeric($key)){
+                                $value=$key." ".$value." ";
+                            }
+                            $result[]=$value;
+                            continue;
                         }else{
-                            $tmp=explode("=", $value);
-                        }
-                        if ($this->isPreparedStatement) {                                                
-                            $result[$tmp[0]]=str_replace("'","",$tmp[1]); 
-                            $result[$tmp[0]]=str_replace("\"","",$result[$tmp[0]]);    
-                        }else {
-                            $result[$tmp[0]]=$tmp[1];
+                            if (contain($value,"=")&&(is_numeric($key))){
+                                $result[]=$value;
+                            }else{
+                                $result[]=$key."=".$value;
+                                continue;
+                            }
                         }
                     }
                 }
@@ -362,7 +378,6 @@ abstract class Crud_SQL {
                         $result[$key]=$value;
                     }
                 }
-
             }
         }
         if (is_object($param)) {
@@ -370,6 +385,24 @@ abstract class Crud_SQL {
         }
         return $result;
     }    
+
+    /**
+     * 是否是复杂的SQL条件语句
+     */
+    private function isComplicatedCondition($value)
+    {
+        if (contains($value,array(">",">=","<=","<","!=","<>"))){
+            return true;
+        }
+        $count=0;
+        $count+=substr_count($value, self::SQL_LIKE);
+        $count+=substr_count($value, self::SQL_OR);
+        $count+=substr_count($value, self::SQL_AND);
+        if ($count>0){
+            return true;
+        }
+        return false;
+    }
 
     /**
      * 生成需要的完整的SQL语句
