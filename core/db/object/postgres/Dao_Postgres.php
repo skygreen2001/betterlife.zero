@@ -9,7 +9,8 @@
  * @subpackage postgres
  * @author skygreen
  */
-class Dao_Postgres extends Dao implements IDaoNormal {
+class Dao_Postgres extends Dao implements IDaoNormal 
+{
 	/**
 	 * 连接数据库
 	 * @param string $host
@@ -19,7 +20,8 @@ class Dao_Postgres extends Dao implements IDaoNormal {
 	 * @param string $dbname 
 	 * @return string 数据库连接
 	 */
-	public function connect($host=null,$port=null,$username=null,$password=null,$dbname=null) {
+	public function connect($host=null,$port=null,$username=null,$password=null,$dbname=null) 
+	{
 		if (!isset($host)){
 			$host=Config_Postgres::$host;
 		}
@@ -51,7 +53,8 @@ class Dao_Postgres extends Dao implements IDaoNormal {
 	 * 执行预编译SQL语句
 	 * 无法防止SQL注入黑客技术
 	 */
-	private function executeSQL() {
+	private function executeSQL() 
+	{
 		if (Config_Db::$debug_show_sql){                           
 			LogMe::log("SQL:".$this->sQuery);   
 		}                            
@@ -66,7 +69,8 @@ class Dao_Postgres extends Dao implements IDaoNormal {
 	 * @param string $object 需要转换成的对象实体|类名称
 	 * @return 转换成的对象实体列表
 	 */
-	private function getResultToObjects($object) {
+	private function getResultToObjects($object) 
+	{
 		$result=array();
 		while ($currentrow = pg_fetch_array($this->result,NULL,Config_Postgres::$fetchmode)) {
 			if (!empty($object)) {
@@ -102,7 +106,8 @@ class Dao_Postgres extends Dao implements IDaoNormal {
 	 * @param Object $object
 	 * @return int 保存对象记录的ID标识号
 	 */
-	public function save($object) {
+	public function save($object) 
+	{
 		$autoId=-1;//新建对象插入数据库记录失败
 		if (!$this->validObjectParameter($object)) {
 			return $autoId;
@@ -147,7 +152,8 @@ class Dao_Postgres extends Dao implements IDaoNormal {
 	 * @param int $id
 	 * @return Object
 	 */
-	public function delete($object) {
+	public function delete($object) 
+	{
 		$result=false;
 		if (!$this->validObjectParameter($object)) {
 			return $result;
@@ -177,7 +183,8 @@ class Dao_Postgres extends Dao implements IDaoNormal {
 	 * @param Object $object
 	 * @return Object
 	 */
-	public function update($object) {
+	public function update($object) 
+	{
 		$result=false;
 		if (!$this->validObjectParameter($object)) {
 			return $result;
@@ -237,7 +244,8 @@ class Dao_Postgres extends Dao implements IDaoNormal {
 	 *    0,10
 	 * @return 对象列表数组
 	 */
-	public function get($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null) {
+	public function get($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null) 
+	{
 		$result=null;
 		try {
 			if (!$this->validParameter($object)) {
@@ -277,7 +285,8 @@ class Dao_Postgres extends Dao implements IDaoNormal {
 	 *      2.name desc;
 	 * @return 单个对象实体
 	 */
-	public function get_one($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID) {
+	public function get_one($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID) 
+	{
 		$result=null;
 		try {
 			if (!$this->validParameter($object)) {
@@ -310,7 +319,8 @@ class Dao_Postgres extends Dao implements IDaoNormal {
 	 * @param string $id
 	 * @return 对象
 	 */
-	public function get_by_id($object, $id) {
+	public function get_by_id($object, $id) 
+	{
 		$result=null;
 		try {
 			if (!$this->validParameter($object)) {
@@ -341,7 +351,8 @@ class Dao_Postgres extends Dao implements IDaoNormal {
 	 * @param string|class $object 需要生成注入的对象实体|类名称
 	 * @return array 返回数组
 	 */
-	public function sqlExecute($sql,$object=null) {
+	public function sqlExecute($sql,$object=null) 
+	{
 		if (Config_Db::$debug_show_sql){                           
 			LogMe::log("SQL:".$sql);  
 		}             
@@ -385,7 +396,8 @@ class Dao_Postgres extends Dao implements IDaoNormal {
 	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
 	 * @return 对象总计数
 	 */
-	public function count($object, $filter=null) {
+	public function count($object, $filter=null) 
+	{
 		$result=0;
 		try {
 			if (!$this->validParameter($object)) {
@@ -433,7 +445,8 @@ class Dao_Postgres extends Dao implements IDaoNormal {
 	 *      1.id asc;
 	 *      2.name desc;
 	 */
-	public function queryPage($object,$startPoint,$endPoint,$filter=null,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID) {
+	public function queryPage($object,$startPoint,$endPoint,$filter=null,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID) 
+	{
 		try {
 			if (!$this->validParameter($object)) {
 				return null;
@@ -454,20 +467,24 @@ class Dao_Postgres extends Dao implements IDaoNormal {
 		}
 	}
 
-	public function transBegin() {
+	public function transBegin() 
+	{
 		return @pg_exec($this->connection, "BEGIN");
 		return TRUE;
 	}
-	public function transCommit() {
+	public function transCommit() 
+	{
 		return @pg_exec($this->connection, "COMMIT");
 		return TRUE;
 	}
-	public function transRollback() {
+	public function transRollback() 
+	{
 		return @pg_exec($this->connection, "ROLLBACK");
 		return TRUE;
 	}
 
-	public function escape($sql) {
+	public function escape($sql) 
+	{
 		if (function_exists('pg_escape_string')) {
 			return pg_escape_string( $sql);
 		}

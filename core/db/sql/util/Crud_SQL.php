@@ -305,10 +305,8 @@ abstract class Crud_SQL {
             return $result;
         }
         if (is_string($param)) {
-            if (contain($param, self::SQL_OR)||
-                contain($param, self::SQL_LIKE)||
-                contain($param, "(")){
-                if (contain($param,",")){ 
+            if (contains($param, array(self::SQL_OR, self::SQL_LIKE, "("))){
+                if (contain($param,",")&&(!contains($param,array(" in "," in("," in (")))){ 
                     $param=str_replace(",", " and ", $param);
                 } 
                 return $param;

@@ -361,6 +361,9 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
             $this->sQuery=$_SQL->select()->from($this->classname)->where($filter_arr)->order($sort)->limit("0,1")->result();
             $this->executeSQL();
             $result=$this->getResultToObjects($object);
+            if (count($result)>=1) {
+                $result=$result[0];
+            }
             return $result;
         } catch (Exception $exc) {
             Exception_Mysqli::record($exc->getTraceAsString());
