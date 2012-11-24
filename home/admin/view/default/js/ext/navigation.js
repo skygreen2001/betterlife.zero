@@ -109,8 +109,11 @@ Bb.Navigation = {
         } else {
             title = linkTarget.text;
         }
-        Bb.Navigation.AddTabbyUrl(Bb.Viewport.center, title, linkTarget.href,
-                linkTarget.id);
+        if (linkTarget.id=="logout"){
+            window.location.href="index.php?go=admin.index.logout";
+        }else{
+            Bb.Navigation.AddTabbyUrl(Bb.Viewport.center, title, linkTarget.href,linkTarget.id);
+        }
     },
     OnContextMenu:function(e, item){  
         if (item.href){           

@@ -269,10 +269,12 @@ $appName_alias.Layout = {
      */
     Init : function() {      
         $appName_alias.Viewport.west.add($appName_alias.Layout.LeftMenuGroups);
-        $appName_alias.Viewport.west.doLayout();    
-        //顶部导航区不可拖动，否则顶部下方会有空白
-        $appName_alias.Viewport.layout.north.split.el.dom.style.cursor="inherit";
-        $appName_alias.Viewport.layout.north.split.dd.lock();                                             
+        $appName_alias.Viewport.west.doLayout();
+        if ($appName_alias.Viewport.layout.north){   
+            //顶部导航区不可拖动，否则顶部下方会有空白
+            $appName_alias.Viewport.layout.north.split.el.dom.style.cursor="inherit";
+            $appName_alias.Viewport.layout.north.split.dd.lock();      
+        }                                       
         if (Ext.get('hideit')) {
             Ext.get('hideit').on('click', function() {
                 if ($appName_alias.Viewport.west.collapsed) {
@@ -287,18 +289,20 @@ $appName_alias.Layout = {
         var navEs = $appName_alias.Viewport.west.el.select('a');
         navEs.on('click', $appName_alias.Navigation.HyperlinkClicked);
         navEs.on('contextmenu',$appName_alias.Navigation.OnContextMenu);
-        if ($appName_alias.Viewport.head.operator)$appName_alias.Viewport.head.operator.setText($appName_alias.Config.Operator);        
-        //设置当前在线编辑器的菜单选项
-        if ($appName_alias.Viewport.head.view){
-            var onlineditorItems=$appName_alias.Viewport.head.view.menu.onlineditor.menu.items.items;        
-            Ext.each(onlineditorItems, function(item) {
-              //console.log(item.value);
-              if (item.value==$appName_alias.Config.OnlineEditor){
-                  item.checked=true;
-              }else{
-                  item.checked=false;
-              }
-            });
+        if ($appName_alias.Viewport.head){
+            if ($appName_alias.Viewport.head.operator)$appName_alias.Viewport.head.operator.setText($appName_alias.Config.Operator);        
+            //设置当前在线编辑器的菜单选项
+            if ($appName_alias.Viewport.head.view){
+                var onlineditorItems=$appName_alias.Viewport.head.view.menu.onlineditor.menu.items.items;        
+                Ext.each(onlineditorItems, function(item) {
+                  //console.log(item.value);
+                  if (item.value==$appName_alias.Config.OnlineEditor){
+                      item.checked=true;
+                  }else{
+                      item.checked=false;
+                  }
+                });
+            }
         }
     },
     Function:{
@@ -472,8 +476,11 @@ $appName_alias.Navigation = {
         } else {
             title = linkTarget.text;
         }
-        $appName_alias.Navigation.AddTabbyUrl($appName_alias.Viewport.center, title, linkTarget.href,
-                linkTarget.id);
+        if (linkTarget.id=="logout"){
+            window.location.href="index.php?go=admin.index.logout";
+        }else{
+            $appName_alias.Navigation.AddTabbyUrl($appName_alias.Viewport.center, title, linkTarget.href,linkTarget.id);
+        }
     },
     OnContextMenu:function(e, item){  
         if (item.href){           

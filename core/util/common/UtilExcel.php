@@ -25,6 +25,7 @@ class UtilExcel extends Util
         $objActSheet=array ();                                     
         $objExcel=new PHPExcel();   
         if ($isExcel2007){
+            if(!function_exists("zip_open")){LogMe::log("后台下载功能需要Zip模块支持,名称:php_zip<br/>",EnumLogLevel::ALERT);die();}
             $objWriter=new PHPExcel_Writer_Excel2007($objExcel);          
         }else{
             $objWriter = new PHPExcel_Writer_Excel5($objExcel);  
@@ -79,8 +80,14 @@ class UtilExcel extends Util
             }    
         }
         if (empty($outputFileName)){
-            $outputFileName=date("YmdHis").".xlsx";    
-        }                  
+            if ($isExcel2007)$outputFileName=date("YmdHis").".xlsx";else$outputFileName=date("YmdHis").".xls";
+        }else{
+            if ($isExcel2007){
+                if (endWith($outputFileName,".xls"))$outputFileName=str_replace(".xls", ".xlsx", $outputFileName);
+            }else{
+                if (endWith($outputFileName,".xlsx"))$outputFileName=str_replace(".xlsx", ".xls", $outputFileName);
+            }
+        }                     
                                                                    
         if ($isDirectDownload){
             header("Content-Type: application/force-download");
