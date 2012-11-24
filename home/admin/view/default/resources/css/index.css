@@ -64,4 +64,8 @@ p#indexPage {
 
 p,.x-panel-body p {
 	margin:5px;
+}    
+
+#frmview{
+    border: 0px;
 }

@@ -4,6 +4,7 @@
 		<menu id="admin" name="系统管理人员" address="index.php?go=admin.betterlife.admin" />
 		<menu id="blog" name="博客" address="index.php?go=admin.betterlife.blog" />   
 		<menu id="user" name="用户" address="index.php?go=admin.betterlife.user" />
+		<menu id="logout" name="退出" address="index.php?go=admin.index.logout" />
 	</menuGroup>
 	<menuGroup id="navProgram" lang="en" name="程序员区" iconCls="settings">   
 		<menu name="Stumbleupon" address="http://www.stumbleupon.com/" />  

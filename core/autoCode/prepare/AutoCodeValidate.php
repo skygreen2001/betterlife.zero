@@ -28,7 +28,7 @@ class AutoCodeValidate extends AutoCode
                            "samefieldname_id"=>array(),"invaid_keywords"=>array(),
                            "specialkey_half"=>array());
         $isValid=true;
-        $invaid_keywords=array("desc","from","describe");
+        $invaid_keywords=array("desc","from","describe","case");
         foreach (self::$fieldInfos as $tablename=>$fieldInfo){
             $tableCommentKey=self::tableCommentKey($tablename);
             if (empty($tableCommentKey)){
