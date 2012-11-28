@@ -1,17 +1,16 @@
 <?php
-/**
- *  class.phpmailer.php
+/*~ class.phpmailer.php
 .---------------------------------------------------------------------------.
 |  Software: PHPMailer - PHP email class                                    |
-|   Version: 5.1                                                            |
-|   Contact: via sourceforge.net support pages (also www.worxware.com)      |
-|      Info: http://phpmailer.sourceforge.net                               |
-|   Support: http://sourceforge.net/projects/phpmailer/                     |
+|   Version: 5.2.1                                                          |
+|      Site: https://code.google.com/a/apache-extras.org/p/phpmailer/       |
 | ------------------------------------------------------------------------- |
-|     Admin: Andy Prevost (project admininistrator)                         |
+|     Admin: Jim Jagielski (project admininistrator)                        |
 |   Authors: Andy Prevost (codeworxtech) codeworxtech@users.sourceforge.net |
 |          : Marcus Bointon (coolbru) coolbru@users.sourceforge.net         |
+|          : Jim Jagielski (jimjag) jimjag@gmail.com                        |
 |   Founder: Brent R. Matzelle (original founder)                           |
+| Copyright (c) 2010-2012, Jim Jagielski. All Rights Reserved.              |
 | Copyright (c) 2004-2009, Andy Prevost. All Rights Reserved.               |
 | Copyright (c) 2001-2003, Brent R. Matzelle                                |
 | ------------------------------------------------------------------------- |
@@ -20,11 +19,6 @@
 | This program is distributed in the hope that it will be useful - WITHOUT  |
 | ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or     |
 | FITNESS FOR A PARTICULAR PURPOSE.                                         |
-| ------------------------------------------------------------------------- |
-| We offer a number of paid services (www.worxware.com):                    |
-| - Web Hosting on highly optimized fast and secure servers                 |
-| - Technology Consulting                                                   |
-| - Oursourcing (highly qualified programmers and graphic designers)        |
 '---------------------------------------------------------------------------'
 */
 
@@ -32,20 +26,21 @@
  * PHPMailer - PHP email transport class
  * NOTE: Requires PHP version 5 or later
  * 上传中文附件文件名丢失问题通过设置AddAttachment()的第二个参数来解决。<br/>
- * 邮件内容不能为空的问题通过取消空的判断来解决，注销564行if (empty($this->Body))<br/>
- * @category betterlie
- * @package util.email
- * @subpackage phpmailer
- * @author qiulin
+ * 邮件内容不能为空的问题通过取消空的判断来解决，注销617-619行if (empty($this->Body))<br/>
+ * @package PHPMailer
  * @author Andy Prevost
  * @author Marcus Bointon
+ * @author Jim Jagielski
+ * @author skygreen
+ * @copyright 2010 - 2012 Jim Jagielski
  * @copyright 2004 - 2009 Andy Prevost
- * @version $Id: class.phpmailer.php 447 2009-05-25 01:36:38Z codeworxtech $
+ * @version $Id: class.phpmailer.php 450 2010-06-23 16:46:33Z coolbru $
  * @license http://www.gnu.org/copyleft/lesser.html GNU Lesser General Public License
  */
+
 if (version_compare(PHP_VERSION, '5.0.0', '<') ) exit("Sorry, this version of PHPMailer will only run on PHP version 5 or greater!\n");
 
-class UtilEmailer extends Util {
+class PHPMailer {
 
   /////////////////////////////////////////////////
   // PROPERTIES, PUBLIC
@@ -61,7 +56,7 @@ class UtilEmailer extends Util {
    * Sets the CharSet of the message.
    * @var string
    */
-  public $CharSet           = 'GBK';
+  public $CharSet           = 'iso-8859-1';
 
   /**
    * Sets the Content-type of the message.
@@ -124,6 +119,27 @@ class UtilEmailer extends Util {
   public $AltBody           = '';
 
   /**
+   * Stores the complete compiled MIME message body.
+   * @var string
+   * @access protected
+   */
+  protected $MIMEBody       = '';
+
+  /**
+   * Stores the complete compiled MIME message headers.
+   * @var string
+   * @access protected
+   */
+  protected $MIMEHeader     = '';
+
+  /**
+   * Stores the complete sent MIME message (Body and Headers)
+   * @var string
+   * @access protected
+  */
+  protected $SentMIMEMessage     = '';
+
+  /**
    * Sets word wrapping on the body of the message to a given number of
    * characters.
    * @var int
@@ -140,7 +156,7 @@ class UtilEmailer extends Util {
    * Sets the path of the sendmail program.
    * @var string
    */
-  public $Sendmail          = '../';
+  public $Sendmail          = '/usr/sbin/sendmail';
 
   /**
    * Path to PHPMailer plugins.  Useful if the SMTP class
@@ -276,6 +292,12 @@ class UtilEmailer extends Util {
 
   /**
    * Used with DKIM DNS Resource Record
+   * @var string
+   */
+  public $DKIM_passphrase   = '';
+
+  /**
+   * Used with DKIM DNS Resource Record
    * optional, in format of email address 'you@yourdomain.com'
    * @var string
    */
@@ -305,28 +327,34 @@ class UtilEmailer extends Util {
    * Sets the PHPMailer Version number
    * @var string
    */
-  public $Version         = '5.1';
+  public $Version         = '5.2.1';
+
+  /**
+   * What to use in the X-Mailer header
+   * @var string
+   */
+  public $XMailer         = '';
 
   /////////////////////////////////////////////////
   // PROPERTIES, PRIVATE AND PROTECTED
   /////////////////////////////////////////////////
 
-  private   $smtp           = NULL;
-  private   $to             = array();
-  private   $cc             = array();
-  private   $bcc            = array();
-  private   $ReplyTo        = array();
-  private   $all_recipients = array();
-  private   $attachment     = array();
-  private   $CustomHeader   = array();
-  private   $message_type   = '';
-  private   $boundary       = array();
-  protected $language       = array();
-  private   $error_count    = 0;
-  private   $sign_cert_file = "";
-  private   $sign_key_file  = "";
-  private   $sign_key_pass  = "";
-  private   $exceptions     = false;
+  protected   $smtp           = NULL;
+  protected   $to             = array();
+  protected   $cc             = array();
+  protected   $bcc            = array();
+  protected   $ReplyTo        = array();
+  protected   $all_recipients = array();
+  protected   $attachment     = array();
+  protected   $CustomHeader   = array();
+  protected   $message_type   = '';
+  protected   $boundary       = array();
+  protected   $language       = array();
+  protected   $error_count    = 0;
+  protected   $sign_cert_file = '';
+  protected   $sign_key_file  = '';
+  protected   $sign_key_pass  = '';
+  protected   $exceptions     = false;
 
   /////////////////////////////////////////////////
   // CONSTANTS
@@ -383,7 +411,7 @@ class UtilEmailer extends Util {
    */
   public function IsSendmail() {
     if (!stristr(ini_get('sendmail_path'), 'sendmail')) {
-      $this->Sendmail = '../';
+      $this->Sendmail = '/var/qmail/bin/sendmail';
     }
     $this->Mailer = 'sendmail';
   }
@@ -394,7 +422,7 @@ class UtilEmailer extends Util {
    */
   public function IsQmail() {
     if (stristr(ini_get('sendmail_path'), 'qmail')) {
-      $this->Sendmail = '../';
+      $this->Sendmail = '/var/qmail/bin/sendmail';
     }
     $this->Mailer = 'sendmail';
   }
@@ -442,7 +470,7 @@ class UtilEmailer extends Util {
    * @return boolean
    */
   public function AddReplyTo($address, $name = '') {
-    return $this->AddAnAddress('ReplyTo', $address, $name);
+    return $this->AddAnAddress('Reply-To', $address, $name);
   }
 
   /**
@@ -452,11 +480,17 @@ class UtilEmailer extends Util {
    * @param string $address The email address to send to
    * @param string $name
    * @return boolean true on success, false if address already used or invalid in some way
-   * @access private
+   * @access protected
    */
-  private function AddAnAddress($kind, $address, $name = '') {
-    if (!preg_match('/^(to|cc|bcc|ReplyTo)$/', $kind)) {
-      echo 'Invalid recipient array: ' . kind;
+  protected function AddAnAddress($kind, $address, $name = '') {
+    if (!preg_match('/^(to|cc|bcc|Reply-To)$/', $kind)) {
+      $this->SetError($this->Lang('Invalid recipient array').': '.$kind);
+      if ($this->exceptions) {
+        throw new phpmailerException('Invalid recipient array: ' . $kind);
+      }
+	  if ($this->SMTPDebug) {
+        echo $this->Lang('Invalid recipient array').': '.$kind;
+      }
       return false;
     }
     $address = trim($address);
@@ -466,10 +500,12 @@ class UtilEmailer extends Util {
       if ($this->exceptions) {
         throw new phpmailerException($this->Lang('invalid_address').': '.$address);
       }
-      echo $this->Lang('invalid_address').': '.$address;
+	  if ($this->SMTPDebug) {
+        echo $this->Lang('invalid_address').': '.$address;
+      }
       return false;
     }
-    if ($kind != 'ReplyTo') {
+    if ($kind != 'Reply-To') {
       if (!isset($this->all_recipients[strtolower($address)])) {
         array_push($this->$kind, array($address, $name));
         $this->all_recipients[strtolower($address)] = true;
@@ -490,7 +526,7 @@ class UtilEmailer extends Util {
  * @param string $name
  * @return boolean
  */
-  public function SetFrom($address, $name = '',$auto=1) {
+  public function SetFrom($address, $name = '', $auto = 1) {
     $address = trim($address);
     $name = trim(preg_replace('/[\r\n]+/', '', $name)); //Strip breaks and trim
     if (!self::ValidateAddress($address)) {
@@ -498,14 +534,16 @@ class UtilEmailer extends Util {
       if ($this->exceptions) {
         throw new phpmailerException($this->Lang('invalid_address').': '.$address);
       }
-      echo $this->Lang('invalid_address').': '.$address;
+	  if ($this->SMTPDebug) {
+        echo $this->Lang('invalid_address').': '.$address;
+      }
       return false;
     }
     $this->From = $address;
     $this->FromName = $name;
     if ($auto) {
       if (empty($this->ReplyTo)) {
-        $this->AddAnAddress('ReplyTo', $address, $name);
+        $this->AddAnAddress('Reply-To', $address, $name);
       }
       if (empty($this->Sender)) {
         $this->Sender = $address;
@@ -549,6 +587,21 @@ class UtilEmailer extends Util {
    */
   public function Send() {
     try {
+      if(!$this->PreSend()) return false;
+      return $this->PostSend();
+    } catch (phpmailerException $e) {
+	  $this->SentMIMEMessage = '';
+      $this->SetError($e->getMessage());
+      if ($this->exceptions) {
+        throw $e;
+      }
+      return false;
+    }
+  }
+
+  protected function PreSend() {
+    try {
+	  $mailHeader = "";
       if ((count($this->to) + count($this->cc) + count($this->bcc)) < 1) {
         throw new phpmailerException($this->Lang('provide_address'), self::STOP_CRITICAL);
       }
@@ -560,28 +613,58 @@ class UtilEmailer extends Util {
 
       $this->error_count = 0; // reset errors
       $this->SetMessageType();
-      $header = $this->CreateHeader();
-      $body = $this->CreateBody();
+      //Refuse to send an empty message
+      // if (empty($this->Body)) {
+      //   throw new phpmailerException($this->Lang('empty_message'), self::STOP_CRITICAL);
+      // }
 
-//      取消邮件空内容的判断
-//      if (empty($this->Body)) {
-//        throw new phpmailerException($this->Lang('empty_message'), self::STOP_CRITICAL);
-//      }
+      $this->MIMEHeader = $this->CreateHeader();
+      $this->MIMEBody = $this->CreateBody();
+
+      // To capture the complete message when using mail(), create
+	  // an extra header list which CreateHeader() doesn't fold in
+      if ($this->Mailer == 'mail') {
+        if (count($this->to) > 0) {
+          $mailHeader .= $this->AddrAppend("To", $this->to);
+        } else {
+          $mailHeader .= $this->HeaderLine("To", "undisclosed-recipients:;");
+        }
+        $mailHeader .= $this->HeaderLine('Subject', $this->EncodeHeader($this->SecureHeader(trim($this->Subject))));
+        // if(count($this->cc) > 0) {
+            // $mailHeader .= $this->AddrAppend("Cc", $this->cc);
+        // }
+      }
 
       // digitally sign with DKIM if enabled
       if ($this->DKIM_domain && $this->DKIM_private) {
-        $header_dkim = $this->DKIM_Add($header,$this->Subject,$body);
-        $header = str_replace("\r\n","\n",$header_dkim) . $header;
+        $header_dkim = $this->DKIM_Add($this->MIMEHeader, $this->EncodeHeader($this->SecureHeader($this->Subject)), $this->MIMEBody);
+        $this->MIMEHeader = str_replace("\r\n", "\n", $header_dkim) . $this->MIMEHeader;
       }
 
+      $this->SentMIMEMessage = sprintf("%s%s\r\n\r\n%s",$this->MIMEHeader,$mailHeader,$this->MIMEBody);
+      return true;
+
+    } catch (phpmailerException $e) {
+      $this->SetError($e->getMessage());
+      if ($this->exceptions) {
+        throw $e;
+      }
+      return false;
+    }
+  }
+
+  protected function PostSend() {
+    try {
       // Choose the mailer and send through it
       switch($this->Mailer) {
         case 'sendmail':
-          return $this->SendmailSend($header, $body);
+          return $this->SendmailSend($this->MIMEHeader, $this->MIMEBody);
         case 'smtp':
-          return $this->SmtpSend($header, $body);
+          return $this->SmtpSend($this->MIMEHeader, $this->MIMEBody);
+        case 'mail':
+          return $this->MailSend($this->MIMEHeader, $this->MIMEBody);
         default:
-          return $this->MailSend($header, $body);
+          return $this->MailSend($this->MIMEHeader, $this->MIMEBody);
       }
 
     } catch (phpmailerException $e) {
@@ -589,7 +672,9 @@ class UtilEmailer extends Util {
       if ($this->exceptions) {
         throw $e;
       }
-      echo $e->getMessage()."\n";
+	  if ($this->SMTPDebug) {
+        echo $e->getMessage()."\n";
+      }
       return false;
     }
   }
@@ -618,7 +703,7 @@ class UtilEmailer extends Util {
         $result = pclose($mail);
         // implement call back function if it exists
         $isSent = ($result == 0) ? 1 : 0;
-        $this->doCallback($isSent,$val,$this->cc,$this->bcc,$this->Subject,$body);
+        $this->doCallback($isSent, $val, $this->cc, $this->bcc, $this->Subject, $body);
         if($result != 0) {
           throw new phpmailerException($this->Lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
         }
@@ -632,7 +717,7 @@ class UtilEmailer extends Util {
       $result = pclose($mail);
       // implement call back function if it exists
       $isSent = ($result == 0) ? 1 : 0;
-      $this->doCallback($isSent,$this->to,$this->cc,$this->bcc,$this->Subject,$body);
+      $this->doCallback($isSent, $this->to, $this->cc, $this->bcc, $this->Subject, $body);
       if($result != 0) {
         throw new phpmailerException($this->Lang('execute') . $this->Sendmail, self::STOP_CRITICAL);
       }
@@ -654,8 +739,12 @@ class UtilEmailer extends Util {
     }
     $to = implode(', ', $toArr);
 
-    $params = sprintf("-oi -f %s", $this->Sender);
-    if ($this->Sender != '' && strlen(ini_get('safe_mode'))< 1) {
+    if (empty($this->Sender)) {
+      $params = "-oi ";
+    } else {
+      $params = sprintf("-oi -f %s", $this->Sender);
+    }
+    if ($this->Sender != '' and !ini_get('safe_mode')) {
       $old_from = ini_get('sendmail_from');
       ini_set('sendmail_from', $this->Sender);
       if ($this->SingleTo === true && count($toArr) > 1) {
@@ -663,13 +752,13 @@ class UtilEmailer extends Util {
           $rt = @mail($val, $this->EncodeHeader($this->SecureHeader($this->Subject)), $body, $header, $params);
           // implement call back function if it exists
           $isSent = ($rt == 1) ? 1 : 0;
-          $this->doCallback($isSent,$val,$this->cc,$this->bcc,$this->Subject,$body);
+          $this->doCallback($isSent, $val, $this->cc, $this->bcc, $this->Subject, $body);
         }
       } else {
         $rt = @mail($to, $this->EncodeHeader($this->SecureHeader($this->Subject)), $body, $header, $params);
         // implement call back function if it exists
         $isSent = ($rt == 1) ? 1 : 0;
-        $this->doCallback($isSent,$to,$this->cc,$this->bcc,$this->Subject,$body);
+        $this->doCallback($isSent, $to, $this->cc, $this->bcc, $this->Subject, $body);
       }
     } else {
       if ($this->SingleTo === true && count($toArr) > 1) {
@@ -677,13 +766,13 @@ class UtilEmailer extends Util {
           $rt = @mail($val, $this->EncodeHeader($this->SecureHeader($this->Subject)), $body, $header, $params);
           // implement call back function if it exists
           $isSent = ($rt == 1) ? 1 : 0;
-          $this->doCallback($isSent,$val,$this->cc,$this->bcc,$this->Subject,$body);
+          $this->doCallback($isSent, $val, $this->cc, $this->bcc, $this->Subject, $body);
         }
       } else {
-        $rt = @mail($to, $this->EncodeHeader($this->SecureHeader($this->Subject)), $body, $header);
+        $rt = @mail($to, $this->EncodeHeader($this->SecureHeader($this->Subject)), $body, $header, $params);
         // implement call back function if it exists
         $isSent = ($rt == 1) ? 1 : 0;
-        $this->doCallback($isSent,$to,$this->cc,$this->bcc,$this->Subject,$body);
+        $this->doCallback($isSent, $to, $this->cc, $this->bcc, $this->Subject, $body);
       }
     }
     if (isset($old_from)) {
@@ -705,7 +794,7 @@ class UtilEmailer extends Util {
    * @return bool
    */
   protected function SmtpSend($header, $body) {
-    require_once $this->PluginDir . 'UtilEmailerSmtp.php';
+    require_once $this->PluginDir . 'class.smtp.php';
     $bad_rcpt = array();
 
     if(!$this->SmtpConnect()) {
@@ -722,11 +811,11 @@ class UtilEmailer extends Util {
         $bad_rcpt[] = $to[0];
         // implement call back function if it exists
         $isSent = 0;
-        $this->doCallback($isSent,$to[0],'','',$this->Subject,$body);
+        $this->doCallback($isSent, $to[0], '', '', $this->Subject, $body);
       } else {
         // implement call back function if it exists
         $isSent = 1;
-        $this->doCallback($isSent,$to[0],'','',$this->Subject,$body);
+        $this->doCallback($isSent, $to[0], '', '', $this->Subject, $body);
       }
     }
     foreach($this->cc as $cc) {
@@ -734,11 +823,11 @@ class UtilEmailer extends Util {
         $bad_rcpt[] = $cc[0];
         // implement call back function if it exists
         $isSent = 0;
-        $this->doCallback($isSent,'',$cc[0],'',$this->Subject,$body);
+        $this->doCallback($isSent, '', $cc[0], '', $this->Subject, $body);
       } else {
         // implement call back function if it exists
         $isSent = 1;
-        $this->doCallback($isSent,'',$cc[0],'',$this->Subject,$body);
+        $this->doCallback($isSent, '', $cc[0], '', $this->Subject, $body);
       }
     }
     foreach($this->bcc as $bcc) {
@@ -746,11 +835,11 @@ class UtilEmailer extends Util {
         $bad_rcpt[] = $bcc[0];
         // implement call back function if it exists
         $isSent = 0;
-        $this->doCallback($isSent,'','',$bcc[0],$this->Subject,$body);
+        $this->doCallback($isSent, '', '', $bcc[0], $this->Subject, $body);
       } else {
         // implement call back function if it exists
         $isSent = 1;
-        $this->doCallback($isSent,'','',$bcc[0],$this->Subject,$body);
+        $this->doCallback($isSent, '', '', $bcc[0], $this->Subject, $body);
       }
     }
 
@@ -828,7 +917,9 @@ class UtilEmailer extends Util {
       }
     } catch (phpmailerException $e) {
       $this->smtp->Reset();
-      throw $e;
+	  if ($this->exceptions) {
+        throw $e;
+      }
     }
     return true;
   }
@@ -948,7 +1039,7 @@ class UtilEmailer extends Util {
 
     $line = explode($this->LE, $message);
     $message = '';
-    for ($i=0 ;$i < count($line); $i++) {
+    for ($i = 0 ;$i < count($line); $i++) {
       $line_part = explode(' ', $line[$i]);
       $buf = '';
       for ($e = 0; $e<count($line_part); $e++) {
@@ -1062,7 +1153,9 @@ class UtilEmailer extends Util {
 
     switch($this->message_type) {
       case 'alt':
-      case 'alt_attachments':
+      case 'alt_inline':
+      case 'alt_attach':
+      case 'alt_inline_attach':
         $this->AltBody = $this->WrapText($this->AltBody, $this->WordWrap);
         break;
       default:
@@ -1083,6 +1176,7 @@ class UtilEmailer extends Util {
     $uniq_id = md5(uniqid(time()));
     $this->boundary[1] = 'b1_' . $uniq_id;
     $this->boundary[2] = 'b2_' . $uniq_id;
+    $this->boundary[3] = 'b3_' . $uniq_id;
 
     $result .= $this->HeaderLine('Date', self::RFCDate());
     if($this->Sender == '') {
@@ -1104,7 +1198,7 @@ class UtilEmailer extends Util {
           $result .= $this->HeaderLine('To', 'undisclosed-recipients:;');
         }
       }
-    }
+	}
 
     $from = array();
     $from[0][0] = trim($this->From);
@@ -1122,7 +1216,7 @@ class UtilEmailer extends Util {
     }
 
     if(count($this->ReplyTo) > 0) {
-      $result .= $this->AddrAppend('Reply-to', $this->ReplyTo);
+      $result .= $this->AddrAppend('Reply-To', $this->ReplyTo);
     }
 
     // mail() sets the subject itself
@@ -1131,12 +1225,16 @@ class UtilEmailer extends Util {
     }
 
     if($this->MessageID != '') {
-      $result .= $this->HeaderLine('Message-ID',$this->MessageID);
+      $result .= $this->HeaderLine('Message-ID', $this->MessageID);
     } else {
       $result .= sprintf("Message-ID: <%s@%s>%s", $uniq_id, $this->ServerHostname(), $this->LE);
     }
     $result .= $this->HeaderLine('X-Priority', $this->Priority);
-    $result .= $this->HeaderLine('X-Mailer', 'PHPMailer '.$this->Version.' (phpmailer.sourceforge.net)');
+    if($this->XMailer) {
+      $result .= $this->HeaderLine('X-Mailer', $this->XMailer);
+    } else {
+      $result .= $this->HeaderLine('X-Mailer', 'PHPMailer '.$this->Version.' (http://code.google.com/a/apache-extras.org/p/phpmailer/)');
+    }
 
     if($this->ConfirmReadingTo != '') {
       $result .= $this->HeaderLine('Disposition-Notification-To', '<' . trim($this->ConfirmReadingTo) . '>');
@@ -1164,18 +1262,21 @@ class UtilEmailer extends Util {
     switch($this->message_type) {
       case 'plain':
         $result .= $this->HeaderLine('Content-Transfer-Encoding', $this->Encoding);
-        $result .= sprintf("Content-Type: %s; charset=\"%s\"", $this->ContentType, $this->CharSet);
+        $result .= $this->TextLine('Content-Type: '.$this->ContentType.'; charset="'.$this->CharSet.'"');
         break;
-      case 'attachments':
-      case 'alt_attachments':
-        if($this->InlineImageExists()){
-          $result .= sprintf("Content-Type: %s;%s\ttype=\"text/html\";%s\tboundary=\"%s\"%s", 'multipart/related', $this->LE, $this->LE, $this->boundary[1], $this->LE);
-        } else {
-          $result .= $this->HeaderLine('Content-Type', 'multipart/mixed;');
-          $result .= $this->TextLine("\tboundary=\"" . $this->boundary[1] . '"');
-        }
+      case 'inline':
+        $result .= $this->HeaderLine('Content-Type', 'multipart/related;');
+        $result .= $this->TextLine("\tboundary=\"" . $this->boundary[1] . '"');
+        break;
+      case 'attach':
+      case 'inline_attach':
+      case 'alt_attach':
+      case 'alt_inline_attach':
+        $result .= $this->HeaderLine('Content-Type', 'multipart/mixed;');
+        $result .= $this->TextLine("\tboundary=\"" . $this->boundary[1] . '"');
         break;
       case 'alt':
+      case 'alt_inline':
         $result .= $this->HeaderLine('Content-Type', 'multipart/alternative;');
         $result .= $this->TextLine("\tboundary=\"" . $this->boundary[1] . '"');
         break;
@@ -1187,6 +1288,16 @@ class UtilEmailer extends Util {
 
     return $result;
   }
+
+  /**
+   * Returns the MIME message (headers and body). Only really valid post PreSend().
+   * @access public
+   * @return string
+   */
+  public function GetSentMIMEMessage() {
+    return $this->SentMIMEMessage;
+  }
+
 
   /**
    * Assembles the message body.  Returns an empty string on failure.
@@ -1203,6 +1314,33 @@ class UtilEmailer extends Util {
     $this->SetWordWrap();
 
     switch($this->message_type) {
+      case 'plain':
+        $body .= $this->EncodeString($this->Body, $this->Encoding);
+        break;
+      case 'inline':
+        $body .= $this->GetBoundary($this->boundary[1], '', '', '');
+        $body .= $this->EncodeString($this->Body, $this->Encoding);
+        $body .= $this->LE.$this->LE;
+        $body .= $this->AttachAll("inline", $this->boundary[1]);
+        break;
+      case 'attach':
+        $body .= $this->GetBoundary($this->boundary[1], '', '', '');
+        $body .= $this->EncodeString($this->Body, $this->Encoding);
+        $body .= $this->LE.$this->LE;
+        $body .= $this->AttachAll("attachment", $this->boundary[1]);
+        break;
+      case 'inline_attach':
+        $body .= $this->TextLine("--" . $this->boundary[1]);
+        $body .= $this->HeaderLine('Content-Type', 'multipart/related;');
+        $body .= $this->TextLine("\tboundary=\"" . $this->boundary[2] . '"');
+        $body .= $this->LE;
+        $body .= $this->GetBoundary($this->boundary[2], '', '', '');
+        $body .= $this->EncodeString($this->Body, $this->Encoding);
+        $body .= $this->LE.$this->LE;
+        $body .= $this->AttachAll("inline", $this->boundary[2]);
+        $body .= $this->LE;
+        $body .= $this->AttachAll("attachment", $this->boundary[1]);
+        break;
       case 'alt':
         $body .= $this->GetBoundary($this->boundary[1], '', 'text/plain', '');
         $body .= $this->EncodeString($this->AltBody, $this->Encoding);
@@ -1212,26 +1350,56 @@ class UtilEmailer extends Util {
         $body .= $this->LE.$this->LE;
         $body .= $this->EndBoundary($this->boundary[1]);
         break;
-      case 'plain':
-        $body .= $this->EncodeString($this->Body, $this->Encoding);
-        break;
-      case 'attachments':
-        $body .= $this->GetBoundary($this->boundary[1], '', '', '');
-        $body .= $this->EncodeString($this->Body, $this->Encoding);
-        $body .= $this->LE;
-        $body .= $this->AttachAll();
-        break;
-      case 'alt_attachments':
-        $body .= sprintf("--%s%s", $this->boundary[1], $this->LE);
-        $body .= sprintf("Content-Type: %s;%s" . "\tboundary=\"%s\"%s", 'multipart/alternative', $this->LE, $this->boundary[2], $this->LE.$this->LE);
-        $body .= $this->GetBoundary($this->boundary[2], '', 'text/plain', '') . $this->LE; // Create text body
+      case 'alt_inline':
+        $body .= $this->GetBoundary($this->boundary[1], '', 'text/plain', '');
         $body .= $this->EncodeString($this->AltBody, $this->Encoding);
         $body .= $this->LE.$this->LE;
-        $body .= $this->GetBoundary($this->boundary[2], '', 'text/html', '') . $this->LE; // Create the HTML body
+        $body .= $this->TextLine("--" . $this->boundary[1]);
+        $body .= $this->HeaderLine('Content-Type', 'multipart/related;');
+        $body .= $this->TextLine("\tboundary=\"" . $this->boundary[2] . '"');
+        $body .= $this->LE;
+        $body .= $this->GetBoundary($this->boundary[2], '', 'text/html', '');
+        $body .= $this->EncodeString($this->Body, $this->Encoding);
+        $body .= $this->LE.$this->LE;
+        $body .= $this->AttachAll("inline", $this->boundary[2]);
+        $body .= $this->LE;
+        $body .= $this->EndBoundary($this->boundary[1]);
+        break;
+      case 'alt_attach':
+        $body .= $this->TextLine("--" . $this->boundary[1]);
+        $body .= $this->HeaderLine('Content-Type', 'multipart/alternative;');
+        $body .= $this->TextLine("\tboundary=\"" . $this->boundary[2] . '"');
+        $body .= $this->LE;
+        $body .= $this->GetBoundary($this->boundary[2], '', 'text/plain', '');
+        $body .= $this->EncodeString($this->AltBody, $this->Encoding);
+        $body .= $this->LE.$this->LE;
+        $body .= $this->GetBoundary($this->boundary[2], '', 'text/html', '');
         $body .= $this->EncodeString($this->Body, $this->Encoding);
         $body .= $this->LE.$this->LE;
         $body .= $this->EndBoundary($this->boundary[2]);
-        $body .= $this->AttachAll();
+        $body .= $this->LE;
+        $body .= $this->AttachAll("attachment", $this->boundary[1]);
+        break;
+      case 'alt_inline_attach':
+        $body .= $this->TextLine("--" . $this->boundary[1]);
+        $body .= $this->HeaderLine('Content-Type', 'multipart/alternative;');
+        $body .= $this->TextLine("\tboundary=\"" . $this->boundary[2] . '"');
+        $body .= $this->LE;
+        $body .= $this->GetBoundary($this->boundary[2], '', 'text/plain', '');
+        $body .= $this->EncodeString($this->AltBody, $this->Encoding);
+        $body .= $this->LE.$this->LE;
+        $body .= $this->TextLine("--" . $this->boundary[2]);
+        $body .= $this->HeaderLine('Content-Type', 'multipart/related;');
+        $body .= $this->TextLine("\tboundary=\"" . $this->boundary[3] . '"');
+        $body .= $this->LE;
+        $body .= $this->GetBoundary($this->boundary[3], '', 'text/html', '');
+        $body .= $this->EncodeString($this->Body, $this->Encoding);
+        $body .= $this->LE.$this->LE;
+        $body .= $this->AttachAll("inline", $this->boundary[3]);
+        $body .= $this->LE;
+        $body .= $this->EndBoundary($this->boundary[2]);
+        $body .= $this->LE;
+        $body .= $this->AttachAll("attachment", $this->boundary[1]);
         break;
     }
 
@@ -1244,8 +1412,8 @@ class UtilEmailer extends Util {
         $signed = tempnam("", "signed");
         if (@openssl_pkcs7_sign($file, $signed, "file://".$this->sign_cert_file, array("file://".$this->sign_key_file, $this->sign_key_pass), NULL)) {
           @unlink($file);
-          @unlink($signed);
           $body = file_get_contents($signed);
+          @unlink($signed);
         } else {
           @unlink($file);
           @unlink($signed);
@@ -1264,9 +1432,10 @@ class UtilEmailer extends Util {
 
   /**
    * Returns the start of a message boundary.
-   * @access private
+   * @access protected
+   * @return string
    */
-  private function GetBoundary($boundary, $charSet, $contentType, $encoding) {
+  protected function GetBoundary($boundary, $charSet, $contentType, $encoding) {
     $result = '';
     if($charSet == '') {
       $charSet = $this->CharSet;
@@ -1278,7 +1447,7 @@ class UtilEmailer extends Util {
       $encoding = $this->Encoding;
     }
     $result .= $this->TextLine('--' . $boundary);
-    $result .= sprintf("Content-Type: %s; charset = \"%s\"", $contentType, $charSet);
+    $result .= sprintf("Content-Type: %s; charset=\"%s\"", $contentType, $charSet);
     $result .= $this->LE;
     $result .= $this->HeaderLine('Content-Transfer-Encoding', $encoding);
     $result .= $this->LE;
@@ -1288,31 +1457,25 @@ class UtilEmailer extends Util {
 
   /**
    * Returns the end of a message boundary.
-   * @access private
+   * @access protected
+   * @return string
    */
-  private function EndBoundary($boundary) {
+  protected function EndBoundary($boundary) {
     return $this->LE . '--' . $boundary . '--' . $this->LE;
   }
 
   /**
    * Sets the message type.
-   * @access private
+   * @access protected
    * @return void
    */
-  private function SetMessageType() {
-    if(count($this->attachment) < 1 && strlen($this->AltBody) < 1) {
-      $this->message_type = 'plain';
-    } else {
-      if(count($this->attachment) > 0) {
-        $this->message_type = 'attachments';
-      }
-      if(strlen($this->AltBody) > 0 && count($this->attachment) < 1) {
-        $this->message_type = 'alt';
-      }
-      if(strlen($this->AltBody) > 0 && count($this->attachment) > 0) {
-        $this->message_type = 'alt_attachments';
-      }
-    }
+  protected function SetMessageType() {
+    $this->message_type = array();
+    if($this->AlternativeExists()) $this->message_type[] = "alt";
+    if($this->InlineImageExists()) $this->message_type[] = "inline";
+    if($this->AttachmentExists()) $this->message_type[] = "attach";
+    $this->message_type = implode("_", $this->message_type);
+    if($this->message_type == "") $this->message_type = "plain";
   }
 
   /**
@@ -1348,21 +1511,12 @@ class UtilEmailer extends Util {
    * @return bool
    */
   public function AddAttachment($path, $name = '', $encoding = 'base64', $type = 'application/octet-stream') {
-//     $path = iconv('UTF-8','GBK',$path); //现放在Action类中转码。
     try {
       if ( !@is_file($path) ) {
         throw new phpmailerException($this->Lang('file_access') . $path, self::STOP_CONTINUE);
       }
-//      $filename=basename($path);         //这句是原代码
+      //$filename = basename($path);          //这句是原代码
       $filename = $this->get_basename($path);
-//      $path = iconv('UTF-8','GBK',$path);
-//      $filename= "=?UTF-8?B?" . base64_encode($filename) . "?=";
-//      //modify by skygreen
-//      if (false === strpos($path, '/')){
-//            $filename = $this->EncodeHeader($path,$position,1);
-//      }else{
-//            $filename = $this->EncodeHeader(substr($path, strrpos($path,'/') + 1),$position,1);
-//      }
       if ( $name == '' ) {
         $name = $filename;
       }
@@ -1383,7 +1537,9 @@ class UtilEmailer extends Util {
       if ($this->exceptions) {
         throw $e;
       }
-      echo $e->getMessage()."\n";
+	  if ($this->SMTPDebug) {
+        echo $e->getMessage()."\n";
+      }
       if ( $e->getCode() == self::STOP_CRITICAL ) {
         return false;
       }
@@ -1402,10 +1558,10 @@ class UtilEmailer extends Util {
   /**
    * Attaches all fs, string, and binary attachments to the message.
    * Returns an empty string on failure.
-   * @access private
+   * @access protected
    * @return string
    */
-  private function AttachAll() {
+  protected function AttachAll($disposition_type, $boundary) {
     // Return text of body
     $mime = array();
     $cidUniq = array();
@@ -1413,54 +1569,58 @@ class UtilEmailer extends Util {
 
     // Add all attachments
     foreach ($this->attachment as $attachment) {
-      // Check for string attachment
-      $bString = $attachment[5];
-      if ($bString) {
-        $string = $attachment[0];
-      } else {
-        $path = $attachment[0];
-      }
-
-      if (in_array($attachment[0], $incl)) { continue; }
-      $filename    = $attachment[1];
-      $name        = $attachment[2];
-      $encoding    = $attachment[3];
-      $type        = $attachment[4];
-      $disposition = $attachment[6];
-      $cid         = $attachment[7];
-      $incl[]      = $attachment[0];
-      if ( $disposition == 'inline' && isset($cidUniq[$cid]) ) { continue; }
-      $cidUniq[$cid] = true;
-
-      $mime[] = sprintf("--%s%s", $this->boundary[1], $this->LE);
-      $mime[] = sprintf("Content-Type: %s; name=\"%s\"%s", $type, $this->EncodeHeader($this->SecureHeader($name)), $this->LE);
-      $mime[] = sprintf("Content-Transfer-Encoding: %s%s", $encoding, $this->LE);
-
-      if($disposition == 'inline') {
-        $mime[] = sprintf("Content-ID: <%s>%s", $cid, $this->LE);
-      }
-
-      $mime[] = sprintf("Content-Disposition: %s; filename=\"%s\"%s", $disposition, $this->EncodeHeader($this->SecureHeader($name)), $this->LE.$this->LE);
-
-      // Encode as string attachment
-      if($bString) {
-        $mime[] = $this->EncodeString($string, $encoding);
-        if($this->IsError()) {
-          return '';
+      // CHECK IF IT IS A VALID DISPOSITION_FILTER
+      if($attachment[6] == $disposition_type) {
+        // Check for string attachment
+        $bString = $attachment[5];
+        if ($bString) {
+          $string = $attachment[0];
+        } else {
+          $path = $attachment[0];
         }
-        $mime[] = $this->LE.$this->LE;
-      } else {
-        $mime[] = $this->EncodeFile($path, $encoding);
-        if($this->IsError()) {
-          return '';
+
+        $inclhash = md5(serialize($attachment));
+        if (in_array($inclhash, $incl)) { continue; }
+        $incl[]      = $inclhash;
+        $filename    = $attachment[1];
+        $name        = $attachment[2];
+        $encoding    = $attachment[3];
+        $type        = $attachment[4];
+        $disposition = $attachment[6];
+        $cid         = $attachment[7];
+        if ( $disposition == 'inline' && isset($cidUniq[$cid]) ) { continue; }
+        $cidUniq[$cid] = true;
+
+        $mime[] = sprintf("--%s%s", $boundary, $this->LE);
+        $mime[] = sprintf("Content-Type: %s; name=\"%s\"%s", $type, $this->EncodeHeader($this->SecureHeader($name)), $this->LE);
+        $mime[] = sprintf("Content-Transfer-Encoding: %s%s", $encoding, $this->LE);
+
+        if($disposition == 'inline') {
+          $mime[] = sprintf("Content-ID: <%s>%s", $cid, $this->LE);
         }
-        $mime[] = $this->LE.$this->LE;
+
+        $mime[] = sprintf("Content-Disposition: %s; filename=\"%s\"%s", $disposition, $this->EncodeHeader($this->SecureHeader($name)), $this->LE.$this->LE);
+
+        // Encode as string attachment
+        if($bString) {
+          $mime[] = $this->EncodeString($string, $encoding);
+          if($this->IsError()) {
+            return '';
+          }
+          $mime[] = $this->LE.$this->LE;
+        } else {
+          $mime[] = $this->EncodeFile($path, $encoding);
+          if($this->IsError()) {
+            return '';
+          }
+          $mime[] = $this->LE.$this->LE;
+        }
       }
     }
 
-    $mime[] = sprintf("--%s--%s", $this->boundary[1], $this->LE);
+    $mime[] = sprintf("--%s--%s", $boundary, $this->LE);
 
-    return join('', $mime);
+    return implode("", $mime);
   }
 
   /**
@@ -1469,11 +1629,10 @@ class UtilEmailer extends Util {
    * @param string $path The full path to the file
    * @param string $encoding The encoding to use; one of 'base64', '7bit', '8bit', 'binary', 'quoted-printable'
    * @see EncodeFile()
-   * @access private
+   * @access protected
    * @return string
    */
-  private function EncodeFile($path, $encoding = 'base64') {
-      //$path = iconv('UTF-8','GBK',$path);
+  protected function EncodeFile($path, $encoding = 'base64') {
     try {
       if (!is_readable($path)) {
         throw new phpmailerException($this->Lang('file_open') . $path, self::STOP_CONTINUE);
@@ -1483,13 +1642,23 @@ class UtilEmailer extends Util {
           return false;
         }
       }
-      if (PHP_VERSION < 6) {
-        $magic_quotes = get_magic_quotes_runtime();
-        set_magic_quotes_runtime(0);
-      }
+	  $magic_quotes = get_magic_quotes_runtime();
+	  if ($magic_quotes) {
+        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+          set_magic_quotes_runtime(0);
+        } else {
+		  ini_set('magic_quotes_runtime', 0); 
+		}
+	  }
       $file_buffer  = file_get_contents($path);
       $file_buffer  = $this->EncodeString($file_buffer, $encoding);
-      if (PHP_VERSION < 6) { set_magic_quotes_runtime($magic_quotes); }
+	  if ($magic_quotes) {
+        if (version_compare(PHP_VERSION, '5.3.0', '<')) {
+          set_magic_quotes_runtime($magic_quotes);
+        } else {
+		  ini_set('magic_quotes_runtime', $magic_quotes); 
+	    }
+	  }
       return $file_buffer;
     } catch (Exception $e) {
       $this->SetError($e->getMessage());
@@ -1505,8 +1674,8 @@ class UtilEmailer extends Util {
    * @access public
    * @return string
    */
-  public function EncodeString ($str, $encoding = 'base64') {
-        $encoded = '';
+  public function EncodeString($str, $encoding = 'base64') {
+    $encoded = '';
     switch(strtolower($encoding)) {
       case 'base64':
         $encoded = chunk_split(base64_encode($str), 76, $this->LE);
@@ -1536,9 +1705,7 @@ class UtilEmailer extends Util {
    * @access public
    * @return string
    */
-  public function EncodeHeader($str, $position = 'text', $pl = 0) {
-    //modify by skygreen 加参数“, $pl = 0” 加一句
-    if ( $pl ) return "=?" . $this->CharSet . "?B?" . base64_encode($str) . "?=";
+  public function EncodeHeader($str, $position = 'text') {
     $x = 0;
 
     switch (strtolower($position)) {
@@ -1656,7 +1823,7 @@ class UtilEmailer extends Util {
   * @return string
   */
   public function EncodeQPphp( $input = '', $line_max = 76, $space_conv = false) {
-    $hex = array('0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F');
+    $hex = array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F');
     $lines = preg_split('/(?:\r\n|\r|\n)/', $input);
     $eol = "\r\n";
     $escape = '=';
@@ -1737,7 +1904,7 @@ class UtilEmailer extends Util {
    * @access public
    * @return string
    */
-  public function EncodeQ ($str, $position = 'text') {
+  public function EncodeQ($str, $position = 'text') {
     // There should not be any EOL in the string
     $encoded = preg_replace('/[\r\n]*/', '', $str);
 
@@ -1752,7 +1919,7 @@ class UtilEmailer extends Util {
         // Replace every high ascii, control =, ? and _ characters
         //TODO using /e (equivalent to eval()) is probably not a good idea
         $encoded = preg_replace('/([\000-\011\013\014\016-\037\075\077\137\177-\377])/e',
-              "'='.sprintf('%02X', ord('\\1'))", $encoded);
+                                "'='.sprintf('%02X', ord(stripslashes('\\1')))", $encoded);
         break;
     }
 
@@ -1777,7 +1944,7 @@ class UtilEmailer extends Util {
     $this->attachment[] = array(
       0 => $string,
       1 => $filename,
-      2 => $this->get_basename($filename),
+      2 => $this->get_basename($filename),//basename($filename),
       3 => $encoding,
       4 => $type,
       5 => true,  // isStringAttachment
@@ -1806,7 +1973,7 @@ class UtilEmailer extends Util {
       return false;
     }
 
-    $filename = $this->get_basename($path);
+    $filename = $this->get_basename($path);//basename($path);
     if ( $name == '' ) {
       $name = $filename;
     }
@@ -1826,6 +1993,20 @@ class UtilEmailer extends Util {
     return true;
   }
 
+  public function AddStringEmbeddedImage($string, $cid, $filename = '', $encoding = 'base64', $type = 'application/octet-stream') {
+    // Append to $attachment array
+    $this->attachment[] = array(
+      0 => $string,
+      1 => $filename,
+      2 => basename($filename),
+      3 => $encoding,
+      4 => $type,
+      5 => true,  // isStringAttachment
+      6 => 'inline',
+      7 => $cid
+    );
+  }
+
   /**
    * Returns true if an inline attachment is present.
    * @access public
@@ -1838,6 +2019,19 @@ class UtilEmailer extends Util {
       }
     }
     return false;
+  }
+
+  public function AttachmentExists() {
+    foreach($this->attachment as $attachment) {
+      if ($attachment[6] == 'attachment') {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public function AlternativeExists() {
+    return strlen($this->AltBody)>0;
   }
 
   /////////////////////////////////////////////////
@@ -1952,10 +2146,10 @@ class UtilEmailer extends Util {
 
   /**
    * Returns the server hostname or 'localhost.localdomain' if unknown.
-   * @access private
+   * @access protected
    * @return string
    */
-  private function ServerHostname() {
+  protected function ServerHostname() {
     if (!empty($this->Hostname)) {
       $result = $this->Hostname;
     } elseif (isset($_SERVER['SERVER_NAME'])) {
@@ -1969,12 +2163,12 @@ class UtilEmailer extends Util {
 
   /**
    * Returns a message in the appropriate language.
-   * @access private
+   * @access protected
    * @return string
    */
-  private function Lang($key) {
+  protected function Lang($key) {
     if(count($this->language) < 1) {
-      $this->SetLanguage('zh_cn'); // set the default language
+      $this->SetLanguage('en'); // set the default language
     }
 
     if(isset($this->language[$key])) {
@@ -1995,10 +2189,10 @@ class UtilEmailer extends Util {
 
   /**
    * Changes every end of line from CR or LF to CRLF.
-   * @access private
+   * @access public
    * @return string
    */
-  private function FixEOL($str) {
+  public function FixEOL($str) {
     $str = str_replace("\r\n", "\n", $str);
     $str = str_replace("\r", "\n", $str);
     $str = str_replace("\n", $this->LE, $str);
@@ -2020,34 +2214,37 @@ class UtilEmailer extends Util {
    * @return $message
    */
   public function MsgHTML($message, $basedir = '') {
-    preg_match_all("/(src|background)=\"(.*)\"/Ui", $message, $images);
+    preg_match_all("/(src|background)=[\"'](.*)[\"']/Ui", $message, $images);
     if(isset($images[2])) {
       foreach($images[2] as $i => $url) {
         // do not change urls for absolute images (thanks to corvuscorax)
-        if (!preg_match('#^[A-z]+://#',$url)) {
-          $filename = get_basename($url);
+        if (!preg_match('#^[A-z]+://#', $url)) {
+          $filename = $this->get_basename($url);//basename($url);
           $directory = dirname($url);
-          ($directory == '.')?$directory='':'';
+          ($directory == '.') ? $directory='': '';
           $cid = 'cid:' . md5($filename);
           $ext = pathinfo($filename, PATHINFO_EXTENSION);
           $mimeType  = self::_mime_types($ext);
-          if ( strlen($basedir) > 1 && substr($basedir,-1) != '/') { $basedir .= '/'; }
-          if ( strlen($directory) > 1 && substr($directory,-1) != '/') { $directory .= '/'; }
-          if ( $this->AddEmbeddedImage($basedir.$directory.$filename, md5($filename), $filename, 'base64',$mimeType) ) {
-            $message = preg_replace("/".$images[1][$i]."=\"".preg_quote($url, '/')."\"/Ui", $images[1][$i]."=\"".$cid."\"", $message);
+          if ( strlen($basedir) > 1 && substr($basedir, -1) != '/') { $basedir .= '/'; }
+          if ( strlen($directory) > 1 && substr($directory, -1) != '/') { $directory .= '/'; }
+          if ( $this->AddEmbeddedImage($basedir.$directory.$filename, md5($filename), $filename, 'base64', $mimeType) ) {
+            $message = preg_replace("/".$images[1][$i]."=[\"']".preg_quote($url, '/')."[\"']/Ui", $images[1][$i]."=\"".$cid."\"", $message);
           }
         }
       }
     }
     $this->IsHTML(true);
     $this->Body = $message;
-    $textMsg = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s','',$message)));
-    if (!empty($textMsg) && empty($this->AltBody)) {
-      $this->AltBody = html_entity_decode($textMsg);
-    }
+	if (empty($this->AltBody)) {
+		$textMsg = trim(strip_tags(preg_replace('/<(head|title|style|script)[^>]*>.*?<\/\\1>/s', '', $message)));
+		if (!empty($textMsg)) {
+			$this->AltBody = html_entity_decode($textMsg, ENT_QUOTES, $this->CharSet);
+		}
+	}
     if (empty($this->AltBody)) {
       $this->AltBody = 'To view this email message, open it in a program that understands HTML!' . "\n\n";
     }
+	return $message;
   }
 
   /**
@@ -2211,14 +2408,14 @@ class UtilEmailer extends Util {
    * @param string $key_pass Password for private key
    */
   public function DKIM_QP($txt) {
-    $tmp="";
-    $line="";
-    for ($i=0;$i<strlen($txt);$i++) {
-      $ord=ord($txt[$i]);
+    $tmp = '';
+    $line = '';
+    for ($i = 0; $i < strlen($txt); $i++) {
+      $ord = ord($txt[$i]);
       if ( ((0x21 <= $ord) && ($ord <= 0x3A)) || $ord == 0x3C || ((0x3E <= $ord) && ($ord <= 0x7E)) ) {
-        $line.=$txt[$i];
+        $line .= $txt[$i];
       } else {
-        $line.="=".sprintf("%02X",$ord);
+        $line .= "=".sprintf("%02X", $ord);
       }
     }
     return $line;
@@ -2232,8 +2429,8 @@ class UtilEmailer extends Util {
    */
   public function DKIM_Sign($s) {
     $privKeyStr = file_get_contents($this->DKIM_private);
-    if ($this->DKIM_passphrase!='') {
-      $privKey = openssl_pkey_get_private($privKeyStr,$this->DKIM_passphrase);
+    if ($this->DKIM_passphrase != '') {
+      $privKey = openssl_pkey_get_private($privKeyStr, $this->DKIM_passphrase);
     } else {
       $privKey = $privKeyStr;
     }
@@ -2249,15 +2446,15 @@ class UtilEmailer extends Util {
    * @param string $s Header
    */
   public function DKIM_HeaderC($s) {
-    $s=preg_replace("/\r\n\s+/"," ",$s);
-    $lines=explode("\r\n",$s);
-    foreach ($lines as $key=>$line) {
-      list($heading,$value)=explode(":",$line,2);
-      $heading=strtolower($heading);
-      $value=preg_replace("/\s+/"," ",$value) ; // Compress useless spaces
-      $lines[$key]=$heading.":".trim($value) ; // Don't forget to remove WSP around the value
+    $s = preg_replace("/\r\n\s+/", " ", $s);
+    $lines = explode("\r\n", $s);
+    foreach ($lines as $key => $line) {
+      list($heading, $value) = explode(":", $line, 2);
+      $heading = strtolower($heading);
+      $value = preg_replace("/\s+/", " ", $value) ; // Compress useless spaces
+      $lines[$key] = $heading.":".trim($value) ; // Don't forget to remove WSP around the value
     }
-    $s=implode("\r\n",$lines);
+    $s = implode("\r\n", $lines);
     return $s;
   }
 
@@ -2270,11 +2467,11 @@ class UtilEmailer extends Util {
   public function DKIM_BodyC($body) {
     if ($body == '') return "\r\n";
     // stabilize line endings
-    $body=str_replace("\r\n","\n",$body);
-    $body=str_replace("\n","\r\n",$body);
+    $body = str_replace("\r\n", "\n", $body);
+    $body = str_replace("\n", "\r\n", $body);
     // END stabilize line endings
-    while (substr($body,strlen($body)-4,4) == "\r\n\r\n") {
-      $body=substr($body,0,strlen($body)-2);
+    while (substr($body, strlen($body) - 4, 4) == "\r\n\r\n") {
+      $body = substr($body, 0, strlen($body) - 2);
     }
     return $body;
   }
@@ -2287,23 +2484,23 @@ class UtilEmailer extends Util {
    * @param string $subject Subject
    * @param string $body Body
    */
-  public function DKIM_Add($headers_line,$subject,$body) {
+  public function DKIM_Add($headers_line, $subject, $body) {
     $DKIMsignatureType    = 'rsa-sha1'; // Signature & hash algorithms
     $DKIMcanonicalization = 'relaxed/simple'; // Canonicalization of header/body
     $DKIMquery            = 'dns/txt'; // Query method
     $DKIMtime             = time() ; // Signature Timestamp = seconds since 00:00:00 - Jan 1, 1970 (UTC time zone)
     $subject_header       = "Subject: $subject";
-    $headers              = explode("\r\n",$headers_line);
+    $headers              = explode($this->LE, $headers_line);
     foreach($headers as $header) {
-      if (strpos($header,'From:') === 0) {
-        $from_header=$header;
-      } elseif (strpos($header,'To:') === 0) {
-        $to_header=$header;
+      if (strpos($header, 'From:') === 0) {
+        $from_header = $header;
+      } elseif (strpos($header, 'To:') === 0) {
+        $to_header = $header;
       }
     }
-    $from     = str_replace('|','=7C',$this->DKIM_QP($from_header));
-    $to       = str_replace('|','=7C',$this->DKIM_QP($to_header));
-    $subject  = str_replace('|','=7C',$this->DKIM_QP($subject_header)) ; // Copied header fields (dkim-quoted-printable
+    $from     = str_replace('|', '=7C', $this->DKIM_QP($from_header));
+    $to       = str_replace('|', '=7C', $this->DKIM_QP($to_header));
+    $subject  = str_replace('|', '=7C', $this->DKIM_QP($subject_header)) ; // Copied header fields (dkim-quoted-printable
     $body     = $this->DKIM_BodyC($body);
     $DKIMlen  = strlen($body) ; // Length of body
     $DKIMb64  = base64_encode(pack("H*", sha1($body))) ; // Base64 of packed binary SHA-1 hash of body
@@ -2322,28 +2519,20 @@ class UtilEmailer extends Util {
     return "X-PHPMAILER-DKIM: phpmailer.worxware.com\r\n".$dkimhdrs.$signed."\r\n";
   }
 
-  protected function doCallback($isSent,$to,$cc,$bcc,$subject,$body) {
+  protected function doCallback($isSent, $to, $cc, $bcc, $subject, $body) {
     if (!empty($this->action_function) && function_exists($this->action_function)) {
-      $params = array($isSent,$to,$cc,$bcc,$subject,$body);
-      call_user_func_array($this->action_function,$params);
+      $params = array($isSent, $to, $cc, $bcc, $subject, $body);
+      call_user_func_array($this->action_function, $params);
     }
-  }
+  }  
+
   function get_basename($filename)
-{
-    return preg_replace('/^.+[\\\\\\/]/', '', $filename);
-}
+  {
+      return preg_replace('/^.+[\\\\\\/]/', '', $filename);
+  }
+
 }
 
-/**
- +-------------------------------------<br/> 
- * Php Mailer的异常处理类
- +-------------------------------------<br/>
- * @category betterlie
- * @package util.email
- * @subpackage phpmailer
- * @author Andy Prevost
- * @author Marcus Bointon
- */
 class phpmailerException extends Exception {
   public function errorMessage() {
     $errorMsg = '<strong>' . $this->getMessage() . "</strong><br />\n";

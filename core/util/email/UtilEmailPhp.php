@@ -1,6 +1,14 @@
 <?php
 /**
  +---------------------------------------<br/>
+ * 这个功能用在Linux上 需要配合Sendmail使用
+ * 该功能尚未投入实际应用
+ * 参考这篇文章:http://www.jacmoe.dk/how-to-send-test-emails-using-php-mail-from-your-local-wamp-installation
+ * Window下sendmail下载:http://glob.com.au/sendmail/
+ * 要使邮件函数可用，PHP 需要已安装且正在运行的邮件系统。
+ * 要使用的程序是由 php.ini 文件中的配置设置定义的。
+ * 在Windows上要找到一个可以匿名发邮件的邮件服务器，然后修改php.ini相关部分
+ * 或者安装一个hMailServer,下载地址:http://www.hmailserver.com/；尚待验证
  * Mailer objects are responsible for actually sending emails.<br/>
  * The default Mailer class will use PHP's mail() function.<br/>
  * @see http://www.silverstripe.com<br/>
@@ -9,12 +17,15 @@
  * @category betterlife
  * @package util.email
  * @author silverstripe
+ * @author skygreen
  */
-class UtilEmail extends Util {
+class UtilEmailPhp extends Util 
+{
 	/**
 	 * @desc Validates the email address. Returns true of false
 	 */
-	public static function validEmailAddress($address) {
+	public static function validEmailAddress($address) 
+	{
 		return ereg('^([a-zA-Z0-9_+\.\-]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$', $address);
 	}
 	
@@ -45,7 +56,8 @@ class UtilEmail extends Util {
 	 * 	This code is licensed under a Creative Commons Attribution-ShareAlike 2.5 License
 	 * 	http://creativecommons.org/licenses/by-sa/2.5/
 	 */
-	public static function is_valid_address($email) {
+	public static function is_valid_address($email) 
+	{
 		$qtext = '[^\\x0d\\x22\\x5c\\x80-\\xff]';
 		$dtext = '[^\\x0d\\x5b-\\x5d\\x80-\\xff]';
 		$atom = '[^\\x00-\\x20\\x22\\x28\\x29\\x2c\\x2e\\x3a-\\x3c'.
@@ -63,7 +75,6 @@ class UtilEmail extends Util {
 		return preg_match("!^$addr_spec$!", $email) ? 1 : 0;
 	}
 
-
 	/**
 	 * Send a plain-text email.
 	 *
@@ -75,7 +86,8 @@ class UtilEmail extends Util {
 	 * @param array $customheaders
 	 * @return bool
 	 */
-	public static function sendPlain($to, $from, $subject, $plainContent, $attachedFiles = false, $customheaders = false) {
+	public static function sendPlain($from, $to, $subject, $plainContent, $attachedFiles = false, $customheaders = false) 
+	{
 		return self::plaintextEmail($to, $from, $subject, $plainContent, $attachedFiles, $customheaders);
 	}
 
@@ -84,28 +96,25 @@ class UtilEmail extends Util {
 	 *
 	 * @return bool
 	 */
-	public static function sendHTML($to, $from, $subject, $htmlContent, $attachedFiles = false, $customheaders = false, $plainContent = false, $inlineImages = false) {
+	public static function sendHTML($from, $to, $subject, $htmlContent, $attachedFiles = false, $customheaders = false, $plainContent = false, $inlineImages = false) 
+	{
 		return self::htmlEmail($to, $from, $subject, $htmlContent, $attachedFiles, $customheaders, $plainContent, $inlineImages);
 	}
 
-
-
-
-
 	/*
- * Sends an email as a both HTML and plaintext
- *   $attachedFiles should be an array of file names
- *    - if you pass the entire $_FILES entry, the user-uploaded filename will be preserved
- *   use $plainContent to override default plain-content generation
- *
- * @return bool
-	*/
-	private static function htmlEmail($to, $from, $subject, $htmlContent, $attachedFiles = false, $customheaders = false, $plainContent = false, $inlineImages = false) {
+	 * Sends an email as a both HTML and plaintext
+	 *   $attachedFiles should be an array of file names
+	 *    - if you pass the entire $_FILES entry, the user-uploaded filename will be preserved
+	 *   use $plainContent to override default plain-content generation
+	 *
+	 * @return bool
+	 */
+	private static function htmlEmail($to, $from, $subject, $htmlContent, $attachedFiles = false, $customheaders = false, $plainContent = false, $inlineImages = false) 
+	{
 		if ($customheaders && is_array($customheaders) == false) {
 			echo "htmlEmail($to, $from, $subject, ...) could not send mail: improper \$customheaders passed:<BR>";
 			dieprintr($headers);
 		}
-
 
 		$subjectIsUnicode = (strpos($subject,"&#") !== false);
 		$bodyIsUnicode = (strpos($htmlContent,"&#") !== false);
@@ -114,13 +123,13 @@ class UtilEmail extends Util {
 		// We generate plaintext content by default, but you can pass custom stuff
 		$plainEncoding = '';
 		if(!$plainContent) {
-			$plainContent = Convert::xml2raw($htmlContent);
+			$plainContent = self::xml2raw($htmlContent);
 			if(isset($bodyIsUnicode) && $bodyIsUnicode) $plainEncoding = "base64";
 		}
 
 
 		// If the subject line contains extended characters, we must encode the
-		$subject = Convert::xml2raw($subject);
+		$subject = self::xml2raw($subject);
 		if(isset($subjectIsUnicode) && $subjectIsUnicode)
 			$subject = "=?UTF-8?B?" . base64_encode($subject) . "?=";
 
@@ -235,10 +244,11 @@ class UtilEmail extends Util {
 		return $result;
 	}
 
-	/*
- * Send a plain text e-mail
-	*/
-	private static function plaintextEmail($to, $from, $subject, $plainContent, $attachedFiles, $customheaders = false) {
+	/**
+ 	 * Send a plain text e-mail
+	 */
+	private static function plaintextEmail($to, $from, $subject, $plainContent, $attachedFiles, $customheaders = false) 
+	{
 		$subjectIsUnicode = false;
 		$plainEncoding = false; // Not ensurely where this is supposed to be set, but defined it false for now to remove php notices
 
@@ -250,10 +260,9 @@ class UtilEmail extends Util {
 		if(strpos($subject,"&#") !== false) $subjectIsUnicode = true;
 
 		// If the subject line contains extended characters, we must encode it
-		$subject = Convert::xml2raw($subject);
+		$subject = self::xml2raw($subject);
 		if($subjectIsUnicode)
-			$subject = "=?UTF-8?B?" . base64_encode($subject) . "?=";
-
+			$subject = "=?UTF-8?B?" . base64_encode($subject) . "?=";     
 
 		// Make the plain text part
 		$headers["Content-Type"] = "text/plain; charset=\"utf-8\"";
@@ -286,17 +295,8 @@ class UtilEmail extends Util {
 		}
 
 		// Email headers
-		$headers["From"] 		= self::validEmailAddr($from);
-
-		// Messages with the X-SilverStripeMessageID header can be tracked
-		if(isset($customheaders["X-SilverStripeMessageID"]) && defined('BOUNCE_EMAIL')) {
-			$bounceAddress = BOUNCE_EMAIL;
-			// Get the human name from the from address, if there is one
-			if(ereg('^([^<>]+)<([^<>])> *$', $from, $parts))
-				$bounceAddress = "$parts[1]<$bounceAddress>";
-		} else {
-			$bounceAddress = $from;
-		}
+		$headers["From"] 		= self::validEmailAddr($from);   
+		$bounceAddress = $from;      
 
 		// $headers["Sender"] 		= $from;
 		$headers["X-Mailer"]	= X_MAILER;
@@ -331,7 +331,24 @@ class UtilEmail extends Util {
 	}
 
 
-	private static function encodeMultipart($parts, $contentType, $headers = false) {
+    /**
+     * Convert XML to raw text.
+     * @uses html2raw()
+     * @todo Currently &#xxx; entries are stripped; they should be converted
+     */
+    private static function xml2raw($val) {
+        if(is_array($val)) {
+            foreach($val as $k => $v) $val[$k] = self::xml2raw($v);
+            return $val;
+        } else {
+            // More complex text needs to use html2raw instead
+            if(strpos($val,'<') !== false) return self::html2raw($val);
+            else return html_entity_decode($val, ENT_QUOTES, 'UTF-8');
+        }
+    }
+    
+	private static function encodeMultipart($parts, $contentType, $headers = false) 
+	{
 		$separator = "----=_NextPart_" . ereg_replace('[^0-9]','',rand() * 10000000000);
 
 
@@ -359,7 +376,8 @@ class UtilEmail extends Util {
 	 * Return a multipart/related e-mail chunk for the given HTML message and its linked images
 	 * Decodes absolute URLs, accessing the appropriate local images
 	 */
-	private static  function wrapImagesInline($htmlContent) {
+	private static  function wrapImagesInline($htmlContent) 
+	{
 		global $_INLINED_IMAGES;
 		$_INLINED_IMAGES = null;
 
@@ -379,10 +397,11 @@ class UtilEmail extends Util {
 		return self::processHeaders($headers, $body);
 	}
 
-	/*
- * Combine headers w/ the body into a single string.
-	*/
-	private static function processHeaders($headers, $body = false) {
+	/**
+ 	 * Combine headers w/ the body into a single string.
+	 */
+	private static function processHeaders($headers, $body = false) 
+	{
 		$res = '';
 		if(is_array($headers)) while(list($k, $v) = each($headers))
 				$res .= "$k: $v\n";
@@ -428,7 +447,8 @@ class UtilEmail extends Util {
 	 *   );
 	 *
 	 */
-	private static function encodeFileForEmail($file, $destFileName = false, $disposition = NULL, $extraHeaders = "") {
+	private static function encodeFileForEmail($file, $destFileName = false, $disposition = NULL, $extraHeaders = "") 
+	{
 		if(!$file) {
 			user_error("encodeFileForEmail: not passed a filename and/or data", E_USER_WARNING);
 			return;
@@ -475,7 +495,8 @@ class UtilEmail extends Util {
 		return $headers . $file['contents'];
 	}
 
-	private static function QuotedPrintable_encode($quotprint) {
+	private static function QuotedPrintable_encode($quotprint) 
+	{
 		$quotprint = (string) str_replace('\r\n',chr(13).chr(10),$quotprint);
 		$quotprint = (string) str_replace('\n',  chr(13).chr(10),$quotprint);
 		$quotprint = (string) preg_replace("~([\x01-\x1F\x3D\x7F-\xFF])~e", "sprintf('=%02X', ord('\\1'))", $quotprint);
@@ -487,7 +508,8 @@ class UtilEmail extends Util {
 		return (string) $quotprint;
 	}
 
-	private static function validEmailAddr($emailAddress) {
+	private static function validEmailAddr($emailAddress) 
+	{
 		$emailAddress = trim($emailAddress);
 		$angBrack = strpos($emailAddress, '<');
 
@@ -502,20 +524,22 @@ class UtilEmail extends Util {
 		return $emailAddress;
 	}
 
-	/*
- * Get mime type based on extension
-	*/
-	private static function getMimeType($filename) {
+	/**
+ 	 * Get mime type based on extension
+	 */
+	private static function getMimeType($filename) 
+	{
 		global $global_mimetypes;
 		if(!$global_mimetypes) self::loadMimeTypes();
 		$ext = strtolower(substr($filename,strrpos($filename,'.')+1));
 		return $global_mimetypes[$ext];
 	}
 
-	/*
- * Load the mime-type data from the system file
-	*/
-	private static function loadMimeTypes() {
+	/**
+     * Load the mime-type data from the system file
+	 */
+	private static function loadMimeTypes() 
+	{
 		$mimetypePathCustom = '/etc/mime.types';
 		$mimetypePathGeneric = Director::baseFolder() . '/sapphire/email/mime.types';
 		$mimeTypes = file_exists($mimetypePathGeneric) ?  file($mimetypePathGeneric) : file($mimetypePathCustom);

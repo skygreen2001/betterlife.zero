@@ -2,15 +2,15 @@
 /*~ class.pop3.php
 .---------------------------------------------------------------------------.
 |  Software: PHPMailer - PHP email class                                    |
-|   Version: 5.1                                                            |
-|   Contact: via sourceforge.net support pages (also www.codeworxtech.com)  |
-|      Info: http://phpmailer.sourceforge.net                               |
-|   Support: http://sourceforge.net/projects/phpmailer/                     |
+|   Version: 5.2.1                                                          |
+|      Site: https://code.google.com/a/apache-extras.org/p/phpmailer/       |
 | ------------------------------------------------------------------------- |
-|     Admin: Andy Prevost (project admininistrator)                         |
+|     Admin: Jim Jagielski (project admininistrator)                        |
 |   Authors: Andy Prevost (codeworxtech) codeworxtech@users.sourceforge.net |
 |          : Marcus Bointon (coolbru) coolbru@users.sourceforge.net         |
+|          : Jim Jagielski (jimjag) jimjag@gmail.com                        |
 |   Founder: Brent R. Matzelle (original founder)                           |
+| Copyright (c) 2010-2012, Jim Jagielski. All Rights Reserved.              |
 | Copyright (c) 2004-2009, Andy Prevost. All Rights Reserved.               |
 | Copyright (c) 2001-2003, Brent R. Matzelle                                |
 | ------------------------------------------------------------------------- |
@@ -19,31 +19,25 @@
 | This program is distributed in the hope that it will be useful - WITHOUT  |
 | ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or     |
 | FITNESS FOR A PARTICULAR PURPOSE.                                         |
-| ------------------------------------------------------------------------- |
-| We offer a number of paid services (www.codeworxtech.com):                |
-| - Web Hosting on highly optimized fast and secure servers                 |
-| - Technology Consulting                                                   |
-| - Oursourcing (highly qualified programmers and graphic designers)        |
 '---------------------------------------------------------------------------'
 */
 
 /**
  * PHPMailer - PHP POP Before SMTP Authentication Class
  * NOTE: Designed for use with PHP version 5 and up
- * @category betterlie
- * @package util.email
- * @subpackage phpmailer
- * @author qiulin
+ * @package PHPMailer
  * @author Andy Prevost
  * @author Marcus Bointon
+ * @author Jim Jagielski
+ * @copyright 2010 - 2012 Jim Jagielski
  * @copyright 2004 - 2009 Andy Prevost
  * @license http://www.gnu.org/copyleft/lesser.html Distributed under the Lesser General Public License (LGPL)
- * @version $Id: class.pop3.php 444 2009-05-05 11:22:26Z coolbru $
+ * @version $Id: class.pop3.php 450 2010-06-23 16:46:33Z coolbru $
  */
 
 /**
  * POP Before SMTP Authentication Class
- * Version 5.0.0
+ * Version 5.2.1
  *
  * Author: Richard Davey (rich@corephp.co.uk)
  * Modifications: Andy Prevost
@@ -57,10 +51,12 @@
  *
  * This class is rfc 1939 compliant and implements all the commands
  * required for POP3 connection, authentication and disconnection.
+ *
+ * @package PHPMailer
  * @author Richard Davey
  */
 
-class UtilEmailerPop3  extends Util {
+class POP3 {
   /**
    * Default POP3 port
    * @var int
@@ -114,6 +110,12 @@ class UtilEmailerPop3  extends Util {
    * @var string
    */
   public $password;
+
+  /**
+   * Sets the POP3 PHPMailer Version number
+   * @var string
+   */
+  public $Version         = '5.2.1';
 
   /////////////////////////////////////////////////
   // PROPERTIES, PRIVATE AND PROTECTED
