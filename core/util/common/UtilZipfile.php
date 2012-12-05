@@ -2,8 +2,7 @@
 /**
  +---------------------------------<br/>
  * 功能:将多个文件压缩成zip文件的工具类<br/>
- +---------------------------------<br/>
- * @link http://www.oschina.net/code/snippet_115552_4975[PHP汉字转拼音函数]
+ +---------------------------------<br/>                                        
  * @category betterlife
  * @package util.common
  * @author skygreen

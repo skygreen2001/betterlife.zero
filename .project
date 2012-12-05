@@ -6,6 +6,16 @@
 	</projects>
 	<buildSpec>
 		<buildCommand>
+			<name>org.eclipse.wst.validation.validationbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.dltk.core.scriptbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
 			<name>com.aptana.ide.core.unifiedBuilder</name>
 			<arguments>
 			</arguments>
@@ -18,5 +28,16 @@
 	</buildSpec>
 	<natures>
 		<nature>com.aptana.editor.php.phpNature</nature>
+		<nature>org.eclipse.php.core.PHPNature</nature>
 	</natures>
+	<filteredResources>
+		<filter>
+			<id>1354674096538</id>
+			<name>.git</name>
+			<type>6</type>
+			<matcher>
+				<id>org.eclipse.ui.ide.multiFilter</id>
+			</matcher>
+		</filter>
+	</filteredResources>
 </projectDescription>
