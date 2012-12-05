@@ -1,5 +1,4 @@
 <?php
-
 //<editor-fold defaultstate="collapsed" desc="枚举类型">
 //加载枚举类型定义
 class_exists("Enum")||require(dirname(__FILE__)."/core/Enum.php");
@@ -10,35 +9,35 @@ class EnumLogType extends Enum{
 	/**
 	 * 默认。根据在 php.ini 文件中的 error_log 配置，错误被发送到服务器日志系统或文件。 
 	 */
-	const SYSTEM    = 0;
+	const SYSTEM	= 0;
 	/**
 	 * 日志通过邮件发送
 	 */
-	const MAIL      = 1;
+	const MAIL	  = 1;
 	/**
 	 * 通过 PHP debugging 连接来发送错误,在PHP3以后就不再使用了
 	 */
-	const DEGUG     = 2;  
+	const DEGUG	 = 2;  
 	/**
 	 * 错误发送到文件目标字符串
 	 */
-	const FILE      = 3;
+	const FILE	  = 3;
 	/**
 	 * SAPI:Server Application Programming Interface 服务端应用编程端口.
 	 */
-	const SAPI      = 4;
+	const SAPI	  = 4;
 	/**
 	 * 浏览器显示。 
 	 */
-	const BROWSER    = 11;    
+	const BROWSER	= 11;	
 	/**
 	 * 默认记录在数据库中
 	 */
-	const DB        = 100;
+	const DB		= 100;
 	/**
 	 * 通过Firebug Console 输出。
 	 */
-	const FIREBUG   = 101;    
+	const FIREBUG   = 101;	
 }
 //</editor-fold>
 
@@ -51,7 +50,7 @@ class EnumLogType extends Enum{
  */
 class Gc 
 {
-	//<editor-fold desc="网站使用设置">      
+	//<editor-fold desc="网站使用设置">	  
 	/**
 	 * 是否在线性能优化 
 	 * @var mixed
@@ -73,7 +72,7 @@ class Gc
 	 * @var string 
 	 * @static
 	 */
-	public static $url_base;//="http://localhost/betterlife/";//获取网站URL根路径        
+	public static $url_base;//="http://localhost/betterlife/";//获取网站URL根路径		
 	/**
 	 * 网站根路径的物理路径
 	 * @var string
@@ -85,11 +84,11 @@ class Gc
 	 * 有两种策略可以部署<br/>
 	 * 1.框架和应用整合在一起；则路径同$nav_root_path   <br/>
 	 * 2.框架和应用分开，在php.ini里设置include_path="";添加框架所在的路径<br/>
-	 *                   则可以直接通过  <br/>
+	 *				   则可以直接通过  <br/>
 	 * @var string
 	 * @static
 	 */
-	public static $nav_framework_path;//="C:\\wamp\\www\\betterlife\\";       
+	public static $nav_framework_path;//="C:\\wamp\\www\\betterlife\\";	   
 	/**
 	* 上传或者下载文件的路径
 	* 
@@ -101,21 +100,21 @@ class Gc
 	* 
 	* @var mixed
 	*/
-	public static $attachment_url;//="http://localhost/betterlife/attachment/";      
+	public static $attachment_url;//="http://localhost/betterlife/attachment/";	  
 	/**
 	* 上传图片的网络路径
 	* 
 	* @var mixed
 	*/
-	public static $upload_url;//="http://localhost/betterlife/upload/";    
+	public static $upload_url;//="http://localhost/betterlife/upload/";	
 	/**
 	* 上传图片的路径 
 	* 
 	* @var mixed
 	*/
-	public static $upload_path;//="C:\\wamp\\www\\betterlife\\upload\\";    
+	public static $upload_path;//="C:\\wamp\\www\\betterlife\\upload\\";	
 	//</editor-fold>
-	
+
 	//<editor-fold desc="开发者使用设置">
 	/**
 	 * 网站应用的名称<br/>
@@ -125,7 +124,6 @@ class Gc
 	 */
 	public static $appName="betterlife";
 	public static $appName_alias="Bb";//应用名的缩写，主要用在后台Extjs生成代码的命名空间缩写
-	
 	/**
 	 * 业务应用部署的根目录<br/>
 	 * 说明：该框架采用模块组建的方式<br/>
@@ -141,24 +139,22 @@ class Gc
 	 * @static
 	 */
 	public static $module_names=array(
-			"admin",    
+			"admin",	
 			"betterlife",  
 			"model",
 			"business",
 	);
-	
 	/**
 	 * 所有无需预加载的 业务应用所在的根目录路径下的子目录<br/>
 	 * 举例：<br/>
-	 *      view在module目录下<br/>
-	 *      主要为html,javascript,css文件；不是类对象文件，因此无需预加载
+	 *	  view在module目录下<br/>
+	 *	  主要为html,javascript,css文件；不是类对象文件，因此无需预加载
 	 * @var array
 	 * @static
 	 */
 	public static $moudle_exclude_subpackage=array(
 			"view",
-	);                                                            
-
+	);
 	/**
 	 * URL访问模式,可选参数0、1、2、3,代表以下四种模式：<br/>
 	 * 0 (普通模式);<br/>
@@ -169,22 +165,19 @@ class Gc
 	 * @var int
 	 * @static
 	 */
-	public static $url_model=0; 
-
+	public static $url_model=0;
 	/**
 	 * 是否打开Debug模式
 	 * @var bool
 	 * @static
 	 */
 	public static $dev_debug_on=false;
-	
 	/**
 	 * 是否要Profile网站性能
 	 * @var bool
 	 * @static
 	 */
 	public static $dev_profile_on=false;
-		
 	/**
 	 * 模板模式<br/>
 	 * 本框架自带四种开源模板支持<br/>
@@ -207,28 +200,28 @@ class Gc
 	 * @var mixed
 	 */
 	public static $template_mode_every=array(
-		//'betterlife'=>5    
+		//'betterlife'=>5	
 	);   
 	/**
 	 * 开发者自定义当前使用模板目录名<br/>
 	 * 示例：D:\wamp\www\betterlife\home\betterlife\view\default<br/>
-	 *       default即自定义当前使用模板目录名 
+	 *	   default即自定义当前使用模板目录名 
 	 * @var string
 	 * @static
 	 */
-	public static $self_theme_dir="default";        
+	public static $self_theme_dir="default";		
 	/**
 	 * 每个模块可以定义自己显示的模板名
 	 * 如过没有定义，则使用$self_theme_dir默认定义的名称，一般都是default 
 	 * @var mixed
 	 */
 	public static $self_theme_dir_every=array(
-		//'betterlife'=>'flexy'    
-	);    
+		//'betterlife'=>'flexy'	
+	);
 	/**
 	 * 是否与Ucenter的用户中心进行整合 
 	 * @var mixed
-	 */    
+	 */
 	public static $is_ucenter_integration=false;
 	/**
 	* 模板文件后缀名称<br/>
@@ -238,8 +231,7 @@ class Gc
 	* @var string
 	* @static
 	*/
-	public static $template_file_suffix=".tpl"; 
-	
+	public static $template_file_suffix=".tpl";
 	/**
 	 * @string 页面字符集<br/>
 	 * 一般分为：<br/>
@@ -250,39 +242,35 @@ class Gc
 	 * @static
 	 */
 	public static $encoding="UTF-8";
-	
 	/**
 	 * @var string 文字显示默认语言
 	 * @static
 	 * 最终可以由用户选择
 	 */
 	public static $language="Zh_Cn";
-	
 	/**
 	 * 是否Session自动启动
 	 * @var bool
 	 * @static
 	 */
 	public static $session_auto_start=true;
-	
 	/**
 	* 单点登录认证框架:oauth
 	* -oauth
 	* -openid
 	* @var mixed
 	*/
-	public static $sso_method="oauth";  
-	
+	public static $sso_method="oauth";
 	/**
 	 * 通常用于用邮件发送重要日志给管理员。
 	 * @var array 邮件的配置。
 	 * @static
 	 */
-	//<editor-fold defaultstate="collapsed" desc="邮件的设置">        
+	//<editor-fold defaultstate="collapsed" desc="邮件的设置">		
 	public static $email_config=array(
 		"SMTP"=>"smtp.sina.com.cn",
 		'smtp_port'=>"25",
-		"sendmail_from"=>"skygreen2001@sina.com",        
+		"sendmail_from"=>"skygreen2001@sina.com",		
 		/**
 		 * 可在php.ini中设置sendmail_path，无法通过ini_set实时设置，因为它只能在php.ini或者httpd.conf中设置。<br/>
 		 * 因为官网文档【http://php.net/manual/en/mail.configuration.php】：sendmail_path "/usr/sbin/sendmail -t -i" PHP_INI_SYSTEM 
@@ -292,15 +280,15 @@ class Gc
 		 * 通过邮件发送日志的目的者
 		 */
 		"mailto"=>"skygreen@sohu.com"
-	);    
+	);
 	//</editor-fold>
-	
+
 	/**
 	 * 日志的配置。
 	 * @var array 日志的配置。
 	 * @static
-	 */    
-	//<editor-fold defaultstate="collapsed" desc="日志的设置">    
+	 */	
+	//<editor-fold defaultstate="collapsed" desc="日志的设置">	
 	public static $log_config=array(
 		/**
 		 * 默认日志记录的方式。<br/>
@@ -335,25 +323,25 @@ class Gc
 		),
 		"log_table"=>"bb_log_log",
 	);
-	//</editor-fold>    
+	//</editor-fold>	
 	//</editor-fold>
-		
+
 	/**
 	* 无需配置自动注入网站的网络地址和物理地址。
 	*/
-	//<editor-fold defaultstate="collapsed" desc="初始化设置">      
+	//<editor-fold defaultstate="collapsed" desc="初始化设置">	  
 	public static function init(){
 		if (empty(Gc::$nav_root_path)){
 		   Gc::$nav_root_path=dirname(__FILE__).DIRECTORY_SEPARATOR;
 		   Gc::$attachment_path=Gc::$nav_root_path."attachment".DIRECTORY_SEPARATOR;
-		   Gc::$upload_path=Gc::$nav_root_path."upload".DIRECTORY_SEPARATOR;    
+		   Gc::$upload_path=Gc::$nav_root_path."upload".DIRECTORY_SEPARATOR;
 		}
-	   
+
 		if (empty(Gc::$nav_framework_path)){
 		   Gc::$nav_framework_path=dirname(__FILE__).DIRECTORY_SEPARATOR;
 		}
-		
-		if (empty(Gc::$url_base)){          
+
+		if (empty(Gc::$url_base)){
 			if(isset($_SERVER['HTTPS']) && strpos('on',$_SERVER['HTTPS'])){
 				$baseurl = 'https://'.$_SERVER['HTTP_HOST'];
 				if($_SERVER['SERVER_PORT']!=443)$baseurl.=':'.$_SERVER['SERVER_PORT'];
@@ -362,10 +350,10 @@ class Gc
 				if (!(strpos($_SERVER['HTTP_HOST'],$_SERVER['SERVER_PORT'])!== false)){
 					if($_SERVER['SERVER_PORT']!=80)$baseurl.=':'.$_SERVER['SERVER_PORT'];
 				}
-			}            
+			}
 			$baseDir = dirname($_SERVER['SCRIPT_NAME']);
 			$baseurl.=($baseDir == '\\' ? '' : $baseDir).'/';
-			
+
 			if (strpos(strtolower($baseurl),strtolower("common/js"))!== false) {
 				$baseurl=substr($baseurl,0,stripos($baseurl,"common/js"));
 			}
@@ -375,18 +363,32 @@ class Gc
 				$same_part=explode(DIRECTORY_SEPARATOR,Gc::$nav_root_path);
 				if ($same_part&&(count($same_part)>2)){
 					$same_part=$same_part[count($same_part)-2];
-					Gc::$attachment_url=substr(Gc::$attachment_url,0,(strpos(Gc::$attachment_url,$same_part."/")+strlen($same_part)+1))."attachment/";
-				}    
+					if (strpos(strtolower(Gc::$attachment_url),strtolower($same_part))!== false) {
+						Gc::$attachment_url=substr(Gc::$attachment_url,0,(strrpos(Gc::$attachment_url,$same_part."/")+strlen($same_part)+1))."attachment/";
+					}else{
+						$parse_url=parse_url(Gc::$attachment_url);
+						Gc::$attachment_url=$parse_url["scheme"]."://".$parse_url["host"];
+						if (!empty($parse_url["port"]))  Gc::$attachment_url.=":".$parse_url["port"];
+						Gc::$attachment_url.="/attachment/";
+					}
+				}
 			}
 			if (empty(Gc::$upload_url)){
 				Gc::$upload_url=Gc::$url_base; 
 				$same_part=explode(DIRECTORY_SEPARATOR,Gc::$nav_root_path);
 				if ($same_part&&(count($same_part)>2)){
 					$same_part=$same_part[count($same_part)-2];
-					Gc::$upload_url=substr(Gc::$upload_url,0,(strpos(Gc::$upload_url,$same_part."/")+strlen($same_part)+1))."upload/";
-				}  
-			}            
-		}     
+					if (strpos(strtolower(Gc::$upload_url),strtolower($same_part))!== false) { 
+						Gc::$upload_url=substr(Gc::$upload_url,0,(strrpos(Gc::$upload_url,$same_part."/")+strlen($same_part)+1))."upload/";
+					}else{
+						$parse_url=parse_url(Gc::$upload_url);
+						Gc::$upload_url=$parse_url["scheme"]."://".$parse_url["host"];
+						if (!empty($parse_url["port"]))  Gc::$attachment_url.=":".$parse_url["port"];
+						Gc::$upload_url.="/upload/"; 
+					}
+				}
+			}
+		}
 	}
 	//</editor-fold>
 }
