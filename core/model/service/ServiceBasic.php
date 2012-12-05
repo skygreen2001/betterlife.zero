@@ -369,7 +369,7 @@ class ServiceBasic extends Service implements IServiceBasic
                     $value=UtilString::gbk2utf8($value);
                 }
                 if (is_numeric($value)){
-                    $conditionArr[]=$key."=".$value;                           
+                    $conditionArr[]=$key."='".$value."'";                           
                 }else if (contain($value,"T00:00:00")){
                     $value=str_replace("T00:00:00","",$value);
                     $conditionArr[]=$key."='".$value."'";                           
