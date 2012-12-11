@@ -22,12 +22,12 @@ DataObjectSpec::init();
  * @author skygreen
  */
 abstract class DataObject extends Object implements ArrayAccess 
-{     
+{ 
 	//<editor-fold defaultstate="collapsed" desc="定义部分">
 	/**
 	* @var enum $id_name_strategy ID名称定义的策略
 	*/
-	public static $idname_strategy=EnumIDNameStrategy::TABLENAME_ID;    
+	public static $idname_strategy=EnumIDNameStrategy::TABLENAME_ID;
 	/**
 	* ID名称中的连接符。<br/>
 	* ID名称定义的策略为TABLENAME_ID有效。
@@ -37,7 +37,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	/**
 	* @var enum $foreignid_name_strategy Foreign ID名称定义的策略
 	*/
-	public static $foreignid_name_strategy=EnumForeignIDNameStrategy::TABLENAME_ID;    
+	public static $foreignid_name_strategy=EnumForeignIDNameStrategy::TABLENAME_ID;
 	/**
 	* Foreign ID名称中的连接符。<br/>
 	* Foreign ID名称定义的策略为TABLENAME_ID有效。
@@ -61,11 +61,11 @@ abstract class DataObject extends Object implements ArrayAccess
 	/**
 	 * @var int 记录最后更新的时间，当表中无该字段时，一般用commitTime记录最后更新的时间。
 	 */
-	public $updateTime;    
+	public $updateTime;
 	/**
 	 * @var IDao 当前使用的数据库调用对象
 	 */
-	private static $currentDao;    
+	private static $currentDao;
 	/**
 	 * 获取当前使用的数据库调用对象
 	 * @return IDao 
@@ -76,16 +76,16 @@ abstract class DataObject extends Object implements ArrayAccess
 			self::$currentDao=Manager_Db::newInstance()->dao();
 		}
 		return self::$currentDao;
-	}      
+	}
 	/**
-	* 静态方法:获取数据对象的类名   
+	* 静态方法:获取数据对象的类名
 	*/
 	public static function classname_static() 
 	{
 		$result=get_called_class();
 		return $result;
-	}  
-	//</editor-fold>   
+	}
+	//</editor-fold>
 	
 	//<editor-fold defaultstate="collapsed" desc="魔术方法">
 	/**
@@ -95,9 +95,9 @@ abstract class DataObject extends Object implements ArrayAccess
 	*/
 	public function __construct($array=null)
 	{
-	  if (!empty($array)){
-		UtilObject::array_to_object($array,$this);   
-	  }
+		if (!empty($array)){
+			UtilObject::array_to_object($array,$this);
+		}
 	}
 		
 	/**
@@ -142,7 +142,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 */
 	public function __toString() {
 		return DataObjectFunc::toString($this);
-	}    
+	}
 	//</editor-fold>
 	
 	/**
@@ -150,27 +150,28 @@ abstract class DataObject extends Object implements ArrayAccess
 	 */
 	public function getMutualRelation($property,&$isRelation=false) 
 	{
-		 return DataObjectRelation::getMutualRelation($this,$property,$isRelation);    
+		 return DataObjectRelation::getMutualRelation($this,$property,$isRelation);
 	}
 	
 	//<editor-fold defaultstate="collapsed" desc="默认列Setter和Getter"> 
 	/**
 	 * @var array 存放当前数据对象的列规格说明
 	 */
-	public $real_fieldspec;  
+	public $real_fieldspec;
 	
 	/**
 	 * 设置唯一标识
 	 * @param mixed $id 
 	 */
 	public function setId($id) 
-	{        
+	{
 		if (DataObjectSpec::isNeedID($this)){
-		   $columnName=DataObjectSpec::getRealIDColumnName($this);  
-		   $this->$columnName=$id;
+			$columnName=DataObjectSpec::getRealIDColumnName($this);
+			$this->$columnName=$id;
 		}
+		unset($this->real_fieldspec);
 	}
-	
+
 	/**
 	 * 获取唯一标识
 	 * @return mixed
@@ -179,13 +180,14 @@ abstract class DataObject extends Object implements ArrayAccess
 	{
 		if (DataObjectSpec::isNeedID($this)){
 			$columnName=DataObjectSpec::getRealIDColumnName($this);
+			unset($this->real_fieldspec);
 			return $this->$columnName;
-		}  else {
+		}else{
+			unset($this->real_fieldspec);
 			return null;
 		}
 	}
 
-	
 	/**
 	 * 设置数据创建的时间
 	 * @param mixed $commitTime 
@@ -193,10 +195,11 @@ abstract class DataObject extends Object implements ArrayAccess
 	public function setCommitTime($commitTime) 
 	{
 		if (DataObjectSpec::isNeedCommitTime($this))
-		{            
+		{
 			$columnName=DataObjectSpec::getRealColumnName($this,EnumColumnNameDefault::COMMITTIME);
-			$this->$columnName= $commitTime;                                                           
-		}        
+			$this->$columnName= $commitTime;
+		}
+		unset($this->real_fieldspec);
 	}
 
 	/**
@@ -207,13 +210,15 @@ abstract class DataObject extends Object implements ArrayAccess
 	{
 		if (DataObjectSpec::isNeedCommitTime($this)){
 			$columnName=DataObjectSpec::getRealColumnName($this,EnumColumnNameDefault::COMMITTIME);
+			unset($this->real_fieldspec);
 			return $this->$columnName;
-		}  else {
+		} else {
+			unset($this->real_fieldspec);
 			return null;
 		}
 		//return $this->commitTime;
 	}
-	
+
 	/**
 	 * 设置数据最后更新的时间
 	 * @param mixed $updateTime 
@@ -221,12 +226,13 @@ abstract class DataObject extends Object implements ArrayAccess
 	public function setUpdateTime($updateTime) 
 	{
 		if (DataObjectSpec::isNeedUpdateTime($this))
-		{  
+		{
 			$columnName=DataObjectSpec::getRealColumnName($this,EnumColumnNameDefault::UPDATETIME);
 			$this->$columnName= $updateTime;
 		}else{
 			$this->setCommitTime($updateTime); 
 		}
+		unset($this->real_fieldspec);
 	}
 
 	/**
@@ -237,12 +243,14 @@ abstract class DataObject extends Object implements ArrayAccess
 	{
 		if (DataObjectSpec::isNeedUpdateTime($this)){
 			$columnName=DataObjectSpec::getRealColumnName($this,EnumColumnNameDefault::UPDATETIME);
+			unset($this->real_fieldspec);
 			return $this->$columnName;
-		}  else {
-			$this->getCommitTime($updateTime); 
+		} else {
+			unset($this->real_fieldspec);
+			return $this->getCommitTime($updateTime); 
 		}
-		//return $this->updateTime;        
-	}  
+		//return $this->updateTime;
+	}
 	//</editor-fold>
 	
 	//<editor-fold defaultstate="collapsed" desc="定义数组进入对象方式">
@@ -260,7 +268,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	{
 		$method="set".ucfirst($key);
 		$this->$method($value);
-//        $this->$key = $value;
+		//$this->$key = $value;
 	}
 	public function offsetUnset($key) 
 	{
@@ -275,16 +283,16 @@ abstract class DataObject extends Object implements ArrayAccess
 	public static function tablename(){
 		return Config_Db::orm(get_called_class());
 	} 
-	  
+
 	/**
 	 * 根据数据对象的属性名获取属性名的显示。
 	 * @param mixed $data 数据对象数组。如:array(user,user)
 	 * @param mixed $property_name  属性名【可以一次指定多个属性名】
 	 */
 	public static function propertyShow($data,$property_name)
-	{            
+	{
 		DataObjectFunc::propertyShow($data,get_called_class(),$property_name);
-	}     
+	} 
 	 
 	/**
 	 * 保存前操作
@@ -339,46 +347,46 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * @return mixed 保存对象后的主键 
 	 */
 	public function saveRelationForManyToMany($relation_object,$relation_id_value,$other_column_values=null)
-	{    
+	{
 		return DataObjectRelation::saveRelationForManyToMany($this,$relation_object,$relation_id_value,$other_column_values);
 	}
-	  
+
 	/**
 	 * 由标识删除指定ID数据对象
 	 * @param mixed $id 数据对象编号
 	 */
 	public static function deleteByID($id)
 	{
-		return DataObjectFunc::deleteByID(get_called_class(),$id);  
-	}    
-	  
-   /**
-	* 根据主键删除多条记录                                          
-	* @param array|string $ids 数据对象编号
-	*  形式如下:
-	*  1.array:array(1,2,3,4,5)
-	*  2.字符串:1,2,3,4
-	*/
+		return DataObjectFunc::deleteByID(get_called_class(),$id);
+	}
+
+	/**
+	 * 根据主键删除多条记录
+	 * @param array|string $ids 数据对象编号
+	 *  形式如下:
+	 *  1.array:array(1,2,3,4,5)
+	 *  2.字符串:1,2,3,4
+	 */
 	public static function deleteByIds($ids)
 	{
-		return DataObjectFunc::deleteByIds(get_called_class(),$ids);  
+		return DataObjectFunc::deleteByIds(get_called_class(),$ids);
 	} 
-	  
-   /**
-	* 根据条件删除多条记录                                                                                                 
-	* @param mixed $filter 查询条件，在where后的条件<br/>
-	* 示例如下：<br/>
-	*      0."id=1,name='sky'"<br/>
-	*      1.array("id=1","name='sky'")<br/>
-	*      2.array("id"=>"1","name"=>"sky")<br/>
-	*      3.允许对象如new User(id="1",name="green");<br/>
-	* 默认:SQL Where条件子语句。如："(id=1 and name='sky') or (name like 'sky')"<br/>
-	*/
+
+	/**
+	 * 根据条件删除多条记录
+	 * @param mixed $filter 查询条件，在where后的条件<br/>
+	 * 示例如下：<br/>
+	 *      0."id=1,name='sky'"<br/>
+	 *      1.array("id=1","name='sky'")<br/>
+	 *      2.array("id"=>"1","name"=>"sky")<br/>
+	 *      3.允许对象如new User(id="1",name="green");<br/>
+	 * 默认:SQL Where条件子语句。如："(id=1 and name='sky') or (name like 'sky')"<br/>
+	 */
 	public static function deleteBy($filter)
 	{
-		return DataObjectFunc::deleteBy(get_called_class(),$filter);  
+		return DataObjectFunc::deleteBy(get_called_class(),$filter);
 	} 
-	
+
 	/**
 	 * 删除当前对象
 	 * @return boolen 是否删除成功；true为操作正常
@@ -398,9 +406,9 @@ abstract class DataObject extends Object implements ArrayAccess
 	}
 
 	/**
-	 * 更新对象指定的属性                    
-	 * @param array|string $sql_id 需更新数据的ID编号或者ID编号的Sql语句<br/>        
-	 * 示例如下：<br/>          
+	 * 更新对象指定的属性
+	 * @param array|string $sql_id 需更新数据的ID编号或者ID编号的Sql语句<br/>
+	 * 示例如下：<br/>
 	 *     $sql_ids:<br/>
 	 *         1.1,2,3<br/>
 	 *         2.array(1,2,3)<br/>
@@ -414,10 +422,10 @@ abstract class DataObject extends Object implements ArrayAccess
 	public static function updateProperties($sql_ids,$array_properties) 
 	{
 		return DataObjectFunc::updateProperties(get_called_class(),$sql_ids,$array_properties);
-	}       
-	
+	}
+
 	/**
-	 * 根据条件更新数据对象指定的属性                                                                                    
+	 * 根据条件更新数据对象指定的属性
 	 * @param mixed $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
 	 *      0."id=1,name='sky'"<br/>
@@ -431,7 +439,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 *      1.pass=1,name='sky'<br/>
 	 *      2.array("pass"=>"1","name"=>"sky")<br/>
 	 * @return boolen 是否更新成功；true为操作正常<br/>
-	 */    
+	 */
 	public static function updateBy($filter,$array_properties) 
 	{
 		return DataObjectFunc::updateBy(get_called_class(),$filter,$array_properties);
@@ -445,64 +453,64 @@ abstract class DataObject extends Object implements ArrayAccess
 	 *      0."id=1,name='sky'"<br/>
 	 *      1.array("id=1","name='sky'")<br/>
 	 *      2.array("id"=>"1","name"=>"sky")<br/>
-	 *      3.允许对象如new User(id="1",name="green");<br/>    
-	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>  
+	 *      3.允许对象如new User(id="1",name="green");<br/>
+	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
 	 * @param string property_name 属性名称
-	 * @param int incre_value 递增数      
+	 * @param int incre_value 递增数
 	 */
 	public static function increment($filter=null,$property_name,$incre_value=1)
 	{
-		 return DataObjectFunc::increment(get_called_class(),$filter,$property_name,$incre_value);  
+		 return DataObjectFunc::increment(get_called_class(),$filter,$property_name,$incre_value);
 	}
-	
+
 	/**
-	 * 对属性进行递减    
+	 * 对属性进行递减
 	 * @param object|string|array $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
 	 *      0."id=1,name='sky'"<br/>
 	 *      1.array("id=1","name='sky'")<br/>
 	 *      2.array("id"=>"1","name"=>"sky")<br/>
-	 *      3.允许对象如new User(id="1",name="green");<br/>   
+	 *      3.允许对象如new User(id="1",name="green");<br/>
 	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
 	 * @param string property_name 属性名称
 	 * @param int decre_value 递减数
 	 */
 	public static function decrement($filter=null,$property_name,$decre_value=1)
 	{
-		 return DataObjectFunc::decrement(get_called_class(),$filter,$property_name,$decre_value);          
-	}   
-      
-    /**
-     * 由标识判断指定ID数据对象是否存在
-     * @param mixed $id 数据对象编号
-     * @return bool 是否存在
-     */
-    public static function existByID($id)
-    {
-        return DataObjectFunc::existByID(get_called_class(),$id);  
-    }  
-      
-    /**
-     * 由标识判断指定ID数据对象是否存在                                                                                      
-     * @param mixed $filter 查询条件，在where后的条件<br/>
-     * 示例如下：<br/>
-     *      0."id=1,name='sky'"<br/>
-     *      1.array("id=1","name='sky'")<br/>
-     *      2.array("id"=>"1","name"=>"sky")<br/>
-     *      3.允许对象如new User(id="1",name="green");<br/>
-     * 默认:SQL Where条件子语句。如："(id=1 and name='sky') or (name like 'sky')"<br/>
-     * @return bool 是否存在
-     */
-    public static function existBy($filter)
-    {
-        return DataObjectFunc::existBy(get_called_class(),$filter);  
-    }   
-											  
+		 return DataObjectFunc::decrement(get_called_class(),$filter,$property_name,$decre_value);
+	}
+
 	/**
-	 * 查询当前对象需显示属性的列表  
+	 * 由标识判断指定ID数据对象是否存在
+	 * @param mixed $id 数据对象编号
+	 * @return bool 是否存在
+	 */
+	public static function existByID($id)
+	{
+		return DataObjectFunc::existByID(get_called_class(),$id);
+	}
+
+	/**
+	 * 由标识判断指定ID数据对象是否存在
+	 * @param mixed $filter 查询条件，在where后的条件<br/>
+	 * 示例如下：<br/>
+	 *      0."id=1,name='sky'"<br/>
+	 *      1.array("id=1","name='sky'")<br/>
+	 *      2.array("id"=>"1","name"=>"sky")<br/>
+	 *      3.允许对象如new User(id="1",name="green");<br/>
+	 * 默认:SQL Where条件子语句。如："(id=1 and name='sky') or (name like 'sky')"<br/>
+	 * @return bool 是否存在
+	 */
+	public static function existBy($filter)
+	{
+		return DataObjectFunc::existBy(get_called_class(),$filter);
+	}
+
+	/**
+	 * 查询当前对象需显示属性的列表
 	 * @param string 指定的显示属性，同SQL语句中的Select部分。 
 	 * 示例如下：<br/>
-	 *     id,name,commitTime                                                               
+	 *     id,name,commitTime
 	 * @param object|string|array $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
 	 *      0."id=1,name='sky'"<br/>
@@ -521,7 +529,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 */
 	public static function select($columns,$filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null)
 	{
-		  return DataObjectFunc::showColumns(get_called_class(),$columns,$filter, $sort, $limit); 
+		return DataObjectFunc::showColumns(get_called_class(),$columns,$filter, $sort, $limit); 
 	}
 
 	/**
@@ -591,9 +599,9 @@ abstract class DataObject extends Object implements ArrayAccess
 	{
 		return self::dao()->count(get_called_class(), $filter);
 	}
-	
+
 	/**
-	 * 数据对象标识最大值  
+	 * 数据对象标识最大值
 	 * @return int 数据对象标识最大值<br/>
 	 */
 	public static function max()
@@ -624,7 +632,7 @@ abstract class DataObject extends Object implements ArrayAccess
 		return self::dao()->queryPage(get_called_class(),$startPoint,$endPoint,$filter,$sort);
 	}
 	//</editor-fold>
-	
+
 	//<editor-fold defaultstate="collapsed" desc="数据类型转换">
 	/**
 	 * 将数据对象转换成xml
@@ -635,9 +643,9 @@ abstract class DataObject extends Object implements ArrayAccess
 	 */
 	public function toXml($isAll=true,$filterArray=null)
 	{
-	   return UtilObject::object_to_xml($this,$filterArray,$isAll);
+		return UtilObject::object_to_xml($this,$filterArray,$isAll);
 	}
-	
+
 	/**
 	 * 将数据对象转换成Json类型格式
 	 * @param $isAll 是否对象所有的field都要生成，包括没有内容或者内容为空的field
@@ -645,19 +653,19 @@ abstract class DataObject extends Object implements ArrayAccess
 	 */
 	public function toJson($isAll=false)
 	{
-	   return DataObjectFunc::toJson($this,$isAll);
+		return DataObjectFunc::toJson($this,$isAll);
 	}
-	
+
 	/**
 	 * 将数据对象转换成Array
 	 * @param $isAll 是否对象所有的field都要生成，包括没有内容或者内容为空的field
 	 * @return 数组
 	 */
 	public function toArray($isAll=true)
-	{  
-	   return UtilObject::object_to_array($this,$isAll);
+	{
+		return UtilObject::object_to_array($this,$isAll);
 	}
 	//</editor-fold>
-	
+
 }
 ?>
