@@ -175,7 +175,7 @@ class Config_Db extends ConfigBB
 	 * @var string Host 默认本地 localhost                   
 	 * @static
 	 */
-	public static $host="127.0.0.1";//UF-T4300-2003-9
+	public static $host="localhost";//UF-T4300-2003-9
 	/**
 	 * 默认端口如下：<br/>
 	 * Mysql 3306<br/>
