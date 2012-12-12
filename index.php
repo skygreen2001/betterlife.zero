@@ -1,8 +1,8 @@
-<?php      
-date_default_timezone_set('Asia/Shanghai');              
+<?php
+date_default_timezone_set('Asia/Shanghai');
 /**
  * 这个文件是BetterLife CMS 的Bootstrap
- */                          
+ */
 require_once("core/main/Application.php");
 /**
  * 具体环境变量设置参考
@@ -10,8 +10,8 @@ require_once("core/main/Application.php");
  * 2.数据库设置:core/config/config/Config_Db.php里的变量名及注释说明    
  */
 $application_env=array(
-   "dev_debug_on"=>true,
-   "dev_profile_on"=>false,
+	"dev_debug_on"=>false,
+	"dev_profile_on"=>false,
 );
 
 $application = new Application($application_env);
