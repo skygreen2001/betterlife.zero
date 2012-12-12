@@ -169,7 +169,7 @@ Bb.Blog.View={
                 items : [ 
                     new Ext.form.FormPanel({   
                         ref:'editForm',layout:'form',formId:'editForm',
-                        labelWidth : 100,autoWidth : true,labelAlign : "center",
+                        labelWidth : 100,labelAlign : "center",
                         bodyStyle : 'padding:5px 5px 0',align : "center",
                         api : {},
                         defaults : {
