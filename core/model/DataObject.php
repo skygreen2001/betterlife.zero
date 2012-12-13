@@ -631,6 +631,55 @@ abstract class DataObject extends Object implements ArrayAccess
 	{
 		return self::dao()->queryPage(get_called_class(),$startPoint,$endPoint,$filter,$sort);
 	}
+	
+	/**
+	 * 对象分页根据当前页数和每页显示记录数
+	 * @param int $pageNo  当前页数
+	 * @param int $pageSize 每页显示记录数
+	 * @param object|string|array $filter 查询条件，在where后的条件
+	 * 示例如下：<br/>
+	 *      0."id=1,name='sky'"<br/>
+	 *      1.array("id=1","name='sky'")<br/>
+	 *      2.array("id"=>"1","name"=>"sky")<br/>
+	 *      3.允许对象如new User(id="1",name="green");<br/>
+	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
+	 * @param string $sort 排序条件<br/>
+	 * 默认为 id desc<br/>
+	 * 示例如下：<br/>
+	 *      1.id asc;<br/>
+	 *      2.name desc;
+	 * @return array 
+	 *           count    :符合条件的记录总计数
+	 *           pageCount:符合条件的总页数
+	 *           data     :对象分页
+	 */
+	public static function queryPageByPageNo($pageNo,$filter=null,$pageSize=10,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID) 
+	{
+		$count= self::dao()->count(get_called_class(), $filter);
+		$data = null;
+		$pageCount=0;
+		if ($count>0){
+			// 总页数
+			$pageCount = floor(($count + $pageSize - 1) / $pageSize);
+			if ($pageNo>$pageCount){
+				$pageNo=$pageCount;
+			}
+			$startPoint=($pageNo-1)*$pageSize+1;
+			if ($startPoint>$count) {
+				$startPoint=0; 
+			}
+			$endPoint=$pageNo*$pageSize;
+			if ($endPoint>$count) {
+				$endPoint=$count;
+			}
+			$data=self::dao()->queryPage(get_called_class(),$startPoint,$endPoint,$filter,$sort);
+		}
+		return array(
+			"count"    =>$count,
+			"pageCount"=>$pageCount,
+			"data"    =>$data
+		);
+	}
 	//</editor-fold>
 
 	//<editor-fold defaultstate="collapsed" desc="数据类型转换">
