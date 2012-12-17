@@ -7,7 +7,7 @@ class_exists("Enum")||require(dirname(__FILE__)."/core/Enum.php");
  */
 class EnumLogType extends Enum{
 	/**
-	 * 默认。根据在 php.ini 文件中的 error_log 配置，错误被发送到服务器日志系统或文件。 
+	 * 默认。根据在 php.ini 文件中的 error_log 配置，错误被发送到服务器日志系统或文件。
 	 */
 	const SYSTEM	= 0;
 	/**
@@ -17,7 +17,7 @@ class EnumLogType extends Enum{
 	/**
 	 * 通过 PHP debugging 连接来发送错误,在PHP3以后就不再使用了
 	 */
-	const DEGUG	 = 2;  
+	const DEGUG	 = 2;
 	/**
 	 * 错误发送到文件目标字符串
 	 */
@@ -29,7 +29,7 @@ class EnumLogType extends Enum{
 	/**
 	 * 浏览器显示。 
 	 */
-	const BROWSER	= 11;	
+	const BROWSER	= 11;
 	/**
 	 * 默认记录在数据库中
 	 */
@@ -37,7 +37,7 @@ class EnumLogType extends Enum{
 	/**
 	 * 通过Firebug Console 输出。
 	 */
-	const FIREBUG   = 101;	
+	const FIREBUG   = 101;
 }
 //</editor-fold>
 
@@ -50,7 +50,7 @@ class EnumLogType extends Enum{
  */
 class Gc 
 {
-	//<editor-fold desc="网站使用设置">	  
+	//<editor-fold desc="网站使用设置">
 	/**
 	 * 是否在线性能优化 
 	 * @var mixed
@@ -72,7 +72,7 @@ class Gc
 	 * @var string 
 	 * @static
 	 */
-	public static $url_base;//="http://localhost/betterlife/";//获取网站URL根路径		
+	public static $url_base;//="http://localhost/betterlife/";//获取网站URL根路径
 	/**
 	 * 网站根路径的物理路径
 	 * @var string
@@ -88,31 +88,31 @@ class Gc
 	 * @var string
 	 * @static
 	 */
-	public static $nav_framework_path;//="C:\\wamp\\www\\betterlife\\";	   
+	public static $nav_framework_path;//="C:\\wamp\\www\\betterlife\\";
 	/**
 	* 上传或者下载文件的路径
 	* 
 	* @var mixed
 	*/
-	public static $attachment_path;//="C:\\wamp\\www\\betterlife\\attachment\\";  
+	public static $attachment_path;//="C:\\wamp\\www\\betterlife\\attachment\\";
 	/**
 	* 上传或者下载文件的网络路径[可删除] 
 	* 
 	* @var mixed
 	*/
-	public static $attachment_url;//="http://localhost/betterlife/attachment/";	  
+	public static $attachment_url;//="http://localhost/betterlife/attachment/";
 	/**
 	* 上传图片的网络路径
 	* 
 	* @var mixed
 	*/
-	public static $upload_url;//="http://localhost/betterlife/upload/";	
+	public static $upload_url;//="http://localhost/betterlife/upload/";
 	/**
 	* 上传图片的路径 
 	* 
 	* @var mixed
 	*/
-	public static $upload_path;//="C:\\wamp\\www\\betterlife\\upload\\";	
+	public static $upload_path;//="C:\\wamp\\www\\betterlife\\upload\\";
 	//</editor-fold>
 
 	//<editor-fold desc="开发者使用设置">
@@ -139,8 +139,8 @@ class Gc
 	 * @static
 	 */
 	public static $module_names=array(
-			"admin",	
-			"betterlife",  
+			"admin",
+			"betterlife",
 			"model",
 			"business",
 	);
@@ -193,7 +193,7 @@ class Gc
 	 * @var int
 	 * @static
 	 */
-	public static $template_mode=1;  
+	public static $template_mode=1;
 	/**
 	 * 每个模块可以定义自己的模板模式
 	 * 如过没有定义，则使用$template_mode默认定义的名称，一般都是1:Smarty 
@@ -201,7 +201,7 @@ class Gc
 	 */
 	public static $template_mode_every=array(
 		//'betterlife'=>5	
-	);   
+	);
 	/**
 	 * 开发者自定义当前使用模板目录名<br/>
 	 * 示例：D:\wamp\www\betterlife\home\betterlife\view\default<br/>
@@ -209,7 +209,7 @@ class Gc
 	 * @var string
 	 * @static
 	 */
-	public static $self_theme_dir="default";		
+	public static $self_theme_dir="default";
 	/**
 	 * 每个模块可以定义自己显示的模板名
 	 * 如过没有定义，则使用$self_theme_dir默认定义的名称，一般都是default 
@@ -266,11 +266,11 @@ class Gc
 	 * @var array 邮件的配置。
 	 * @static
 	 */
-	//<editor-fold defaultstate="collapsed" desc="邮件的设置">		
+	//<editor-fold defaultstate="collapsed" desc="邮件的设置">
 	public static $email_config=array(
 		"SMTP"=>"smtp.sina.com.cn",
 		'smtp_port'=>"25",
-		"sendmail_from"=>"skygreen2001@sina.com",		
+		"sendmail_from"=>"skygreen2001@sina.com",
 		/**
 		 * 可在php.ini中设置sendmail_path，无法通过ini_set实时设置，因为它只能在php.ini或者httpd.conf中设置。<br/>
 		 * 因为官网文档【http://php.net/manual/en/mail.configuration.php】：sendmail_path "/usr/sbin/sendmail -t -i" PHP_INI_SYSTEM 
@@ -330,17 +330,18 @@ class Gc
 	* 无需配置自动注入网站的网络地址和物理地址。
 	*/
 	//<editor-fold defaultstate="collapsed" desc="初始化设置">	  
-	public static function init(){
+	public static function init()
+	{
 		if (empty(Gc::$nav_root_path)){
-		   Gc::$nav_root_path=dirname(__FILE__).DIRECTORY_SEPARATOR;
-		   Gc::$attachment_path=Gc::$nav_root_path."attachment".DIRECTORY_SEPARATOR;
-		   Gc::$upload_path=Gc::$nav_root_path."upload".DIRECTORY_SEPARATOR;
+			Gc::$nav_root_path=dirname(__FILE__).DIRECTORY_SEPARATOR;
+			Gc::$attachment_path=Gc::$nav_root_path."attachment".DIRECTORY_SEPARATOR;
+			Gc::$upload_path=Gc::$nav_root_path."upload".DIRECTORY_SEPARATOR;
 		}
 
 		if (empty(Gc::$nav_framework_path)){
-		   Gc::$nav_framework_path=dirname(__FILE__).DIRECTORY_SEPARATOR;
+			Gc::$nav_framework_path=dirname(__FILE__).DIRECTORY_SEPARATOR;
 		}
-
+		
 		if (empty(Gc::$url_base)){
 			if(isset($_SERVER['HTTPS']) && strpos('on',$_SERVER['HTTPS'])){
 				$baseurl = 'https://'.$_SERVER['HTTP_HOST'];
@@ -353,11 +354,15 @@ class Gc
 			}
 			$baseDir = dirname($_SERVER['SCRIPT_NAME']);
 			$baseurl.=($baseDir == '\\' ? '' : $baseDir).'/';
-
-			if (strpos(strtolower($baseurl),strtolower("common/js"))!== false) {
-				$baseurl=substr($baseurl,0,stripos($baseurl,"common/js"));
-			}
 			Gc::$url_base=$baseurl;
+			$with_file=$_SERVER["SCRIPT_FILENAME"];
+			$file_sub_dir=dirname($with_file).DIRECTORY_SEPARATOR;
+			$file_sub_dir=str_replace("/", DIRECTORY_SEPARATOR, $file_sub_dir);
+			$file_sub_dir=str_replace(Gc::$nav_root_path, "", $file_sub_dir);
+			$file_sub_dir=str_replace(DIRECTORY_SEPARATOR, "/", $file_sub_dir);
+			$url_base=Gc::$url_base;
+			$url_base=str_replace($file_sub_dir, "", $url_base);
+			Gc::$url_base=$url_base;
 			if (empty(Gc::$attachment_url)){
 				Gc::$attachment_url=Gc::$url_base;
 				$same_part=explode(DIRECTORY_SEPARATOR,Gc::$nav_root_path);
@@ -374,17 +379,17 @@ class Gc
 				}
 			}
 			if (empty(Gc::$upload_url)){
-				Gc::$upload_url=Gc::$url_base; 
+				Gc::$upload_url=Gc::$url_base;
 				$same_part=explode(DIRECTORY_SEPARATOR,Gc::$nav_root_path);
 				if ($same_part&&(count($same_part)>2)){
 					$same_part=$same_part[count($same_part)-2];
-					if (strpos(strtolower(Gc::$upload_url),strtolower($same_part))!== false) { 
+					if (strpos(strtolower(Gc::$upload_url),strtolower($same_part))!== false) {
 						Gc::$upload_url=substr(Gc::$upload_url,0,(strrpos(Gc::$upload_url,$same_part."/")+strlen($same_part)+1))."upload/";
 					}else{
 						$parse_url=parse_url(Gc::$upload_url);
 						Gc::$upload_url=$parse_url["scheme"]."://".$parse_url["host"];
 						if (!empty($parse_url["port"]))  Gc::$attachment_url.=":".$parse_url["port"];
-						Gc::$upload_url.="/upload/"; 
+						Gc::$upload_url.="/upload/";
 					}
 				}
 			}

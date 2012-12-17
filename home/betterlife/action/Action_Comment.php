@@ -30,12 +30,10 @@ class Action_Comment extends Action
 			$_GET["comment_id"]=null;       
 			$view->view->color="green";             
 		}                 
-		$comment_id= $this->data["comment_id"];        
-		$content="";
+		$comment_id= $this->data["comment_id"];          
 		if ($comment_id){
-			$comment=Comment::get_by_id($comment_id);
-			$content=$comment->comment;  
-			$this->view->content=$content;                                                   
+			$comment=Comment::get_by_id($comment_id);      
+			$this->view->content=$comment->comment;                                                   
 		}                                               													 
 		$this->load_onlineditor("comment");                                                			         
 	}

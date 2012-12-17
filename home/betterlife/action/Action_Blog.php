@@ -60,10 +60,7 @@ class Action_Blog extends Action
 			$view=new View_Blog($this); 
 			if (count($_GET)>0&&$blog_id) {  
 				$blog=Blog::get_by_id($blog_id); 
-				$view->blog=$blog;
-				if ($blog){
-					$content=$blog->content;   
-				}                               
+				$view->blog=$blog; 
 			}                             
 			$this->view->viewObject=$view;                                                                     
 		}                 
