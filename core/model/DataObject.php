@@ -656,23 +656,22 @@ abstract class DataObject extends Object implements ArrayAccess
 	public static function queryPageByPageNo($pageNo,$filter=null,$pageSize=10,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID) 
 	{
 		$count= self::dao()->count(get_called_class(), $filter);
-		$data = null;
+		$data = array();
 		$pageCount=0;
 		if ($count>0){
 			// 总页数
 			$pageCount = floor(($count + $pageSize - 1) / $pageSize);
-			if ($pageNo>$pageCount){
-				$pageNo=$pageCount;
+			if ($pageNo<=$pageCount){
+				$startPoint=($pageNo-1)*$pageSize+1;
+				if ($startPoint>$count) {
+					$startPoint=0; 
+				}
+				$endPoint=$pageNo*$pageSize;
+				if ($endPoint>$count) {
+					$endPoint=$count;
+				}
+				$data=self::dao()->queryPage(get_called_class(),$startPoint,$endPoint,$filter,$sort);
 			}
-			$startPoint=($pageNo-1)*$pageSize+1;
-			if ($startPoint>$count) {
-				$startPoint=0; 
-			}
-			$endPoint=$pageNo*$pageSize;
-			if ($endPoint>$count) {
-				$endPoint=$count;
-			}
-			$data=self::dao()->queryPage(get_called_class(),$startPoint,$endPoint,$filter,$sort);
 		}
 		return array(
 			"count"    =>$count,
