@@ -4,8 +4,8 @@
     <script language="Javascript" type="text/javascript">
     <!--
         function go(arg) {
-                location.href='FileManager.php?frame=3&dir_atual='+arg+'/';
+                location.href='FileManager.php?senha=&dir_atual='+arg+'/';//frame=3&
         }
-        go('<?php echo str_replace("\\","\/",Gc::$nav_root_path);?>');
+        go('<?php echo str_replace("\\","/",Gc::$nav_root_path);?>');
     //-->
     </script>

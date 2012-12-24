@@ -6,16 +6,16 @@
  */
 require_once ("../../init.php");
 class ViewFiles {
-    public static function getFiles($dir_name) {
-        return UtilFileSystem::getAllFilesInDirectory($dir_name);
-    }
+	public static function getFiles($dir_name) {
+		return UtilFileSystem::getAllFilesInDirectory($dir_name);
+	}
 }
 
 /******************************显示本工程文件列表清单********************************************************/
 
-$dirs_core=UtilFileSystem::getAllFilesInDirectory(Initializer::$NAV_CORE_PATH);
+$files=UtilFileSystem::getAllFilesInDirectory(Initializer::$NAV_CORE_PATH);
 foreach (Initializer::$moduleFiles as $moduleFile) {
-    $files=array_merge($dirs_core, $moduleFile);
+	$files=array_merge($files, $moduleFile);
 }
 
 
@@ -35,17 +35,17 @@ echo '<th>文件路径</th>';
 echo '<th>文件名</th>';
 echo '<th>行数</th>';
 echo '<th>大小</th>';
-echo '<th>操作</th>'; 
+echo '<th>操作</th>';
 echo '</tr>';
 foreach ($files as $file) {
-    echo '<tr>';
-    echo '<td>'.dirname($file).'</td>';
-    echo '<td>'.basename($file).'&nbsp;</td>';
-    echo '<td>'.count(file($file)).'</td>';
-    echo '<td>'.filesize($file).'</td>';
-    echo '<td>[<a href="viewfilebyline.php?f='.$file.'">查看</a>]';    
-    echo '[<a href="editfile.php?f='.$file.'">编辑</a>]</td>';    
-    echo '</tr>';
+	echo '<tr>';
+	echo '<td>'.dirname($file).'</td>';
+	echo '<td>'.basename($file).'&nbsp;</td>';
+	echo '<td>'.count(file($file)).'</td>';
+	echo '<td>'.filesize($file).'</td>';
+	echo '<td>[<a href="viewfilebyline.php?f='.$file.'">查看</a>]';
+	echo '[<a href="editfile.php?f='.$file.'">编辑</a>]</td>';
+	echo '</tr>';
 }
 echo '</table>';
 echo "<br/><br/><br/><br/><br/><br/><br/>"

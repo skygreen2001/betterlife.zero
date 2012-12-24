@@ -28,7 +28,7 @@ class DataObjectArray extends Object implements ArrayAccess
 	 * @param mixed $property 属性名
 	 * @return mixed 属性值
 	 */
-	public function __get($property) 
+	public function __get($property)
 	{
 		return $this->$property;
 	}
@@ -39,7 +39,7 @@ class DataObjectArray extends Object implements ArrayAccess
 	 * @param mixed $property 属性名
 	 * @param mixed $value 属性值
 	 */
-	public function __set($property, $value) 
+	public function __set($property, $value)
 	{
 		return $this->$property=$value;
 	}
@@ -50,23 +50,24 @@ class DataObjectArray extends Object implements ArrayAccess
 	 */
 	public function __toString() {
 		return DataObjectFunc::toString($this);
-	}    
+	}
 	//</editor-fold>
 	
 	//<editor-fold defaultstate="collapsed" desc="定义数组进入对象方式">
-	public function offsetExists($key) 
+	public function offsetExists($key)
 	{
+		if ($this->$key) return true;
 		return method_exists($this,$key);
 	}
-	public function offsetGet($key) 
+	public function offsetGet($key)
 	{
 		return $this->$key;
 	}
-	public function offsetSet($key, $value) 
+	public function offsetSet($key, $value)
 	{
 		$this->$key=$value;
 	}
-	public function offsetUnset($key) 
+	public function offsetUnset($key)
 	{
 		unset($this->$key);
 	}
