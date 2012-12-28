@@ -1,8 +1,10 @@
 <?php
 require_once ("init.php");
-
-$blog=Blog::get_one();
-print_r($blog);
+    require_once 'init.php';
+    $allfiles=UtilFileSystem::getAllFilesInDirectory(Gc::$nav_root_path);
+    print_r($allfiles);
+//$blog=Blog::get_one();
+//print_r($blog);
 /*$blogs=Blog::select('name,content');
 print_r($blogs);            
 UtilBarCode::upc_a("12207201213");                                      

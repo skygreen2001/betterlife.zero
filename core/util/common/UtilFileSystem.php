@@ -281,7 +281,7 @@ class UtilFileSystem extends Util
 			$dir=substr($dir,0,strlen($dir)-1);//如果路径不以DIRECTORY_SEPARATOR结尾的话，应补上
 		}
 		$dir=self::charsetConvert($dir);
-		self::searchAllFilesInDirectory($dir,$data,$agreesuffix);
+		$data=self::searchAllFilesInDirectory($dir,$data,$agreesuffix);
 		ksort($data);
 		$result=array_values($data);
 //        print_r($data);
@@ -304,7 +304,7 @@ class UtilFileSystem extends Util
 			$dir=substr($dir,0,strlen($dir)-1);//如果路径不以DIRECTORY_SEPARATOR结尾的话，应补上
 		}
 		$dir=self::charsetConvert($dir);
-		self::searchAllDirsInDirectory($dir,$dirdata);
+		$dirdata=self::searchAllDirsInDirectory($dir,$dirdata);
 		return  $dirdata;
 	}
 
@@ -313,18 +313,19 @@ class UtilFileSystem extends Util
 	 * @param string $dir 指定目录
 	 * @return array
 	 */
-	private static function searchAllDirsInDirectory($path,&$dirdata) 
+	private static function searchAllDirsInDirectory($path,$dirdata) 
 	{
 		if(is_dir($path)) {
 			$dp=dir($path);
 			$dirdata[]=$path;
 			while($file=$dp->read()) {
 				if($file!='.'&& $file!='..'&& $file!='.svn'&& $file!='.git') {
-					self::searchAllDirsInDirectory($path.DIRECTORY_SEPARATOR.$file,$dirdata);
+					$dirdata=self::searchAllDirsInDirectory($path.DIRECTORY_SEPARATOR.$file,$dirdata);
 				}
 			}
 			$dp->close();
 		}
+		return $dirdata;
 	}
 
 	/**
@@ -336,7 +337,7 @@ class UtilFileSystem extends Util
 	 *      3.当$agreesuffix=array('php','xml')为查找所有php和xml后缀名的文件
 	 * @return array
 	 */
-	private static function searchAllFilesInDirectory($path,&$data,$agreesuffix=array("php")) 
+	private static function searchAllFilesInDirectory($path,$data,$agreesuffix=array("php")) 
 	{
 		$handle = @opendir($path);
 		if ($handle) {
@@ -347,7 +348,7 @@ class UtilFileSystem extends Util
 				$nextpath = $path.DIRECTORY_SEPARATOR.$file;
 
 				if(is_dir($nextpath)) {
-					self::searchAllFilesInDirectory($nextpath,$data,$agreesuffix);
+					$data=self::searchAllFilesInDirectory($nextpath,$data,$agreesuffix);
 				}else {
 					if ($file!=="Thumbs.db") {
 						if ($agreesuffix=="*") {
@@ -369,6 +370,7 @@ class UtilFileSystem extends Util
 			}
 			@closedir($handle);
 		}
+		return $data;
 	}
 
 	/**
