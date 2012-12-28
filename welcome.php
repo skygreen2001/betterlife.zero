@@ -1,6 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html lang="zh-CN" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">    
+<html lang="zh-CN" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<?php require_once ("Gc.php"); ?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Lang" content="zh_CN">
 <meta name="author" content="skygreen">
@@ -23,10 +24,10 @@ p {
 	margin:5px;
 }
 .en-head{
-   font:bold 0.8em Arial,verdana,Geneva,Helvetica,sans-serif; 
+	font:bold 0.8em Arial,verdana,Geneva,Helvetica,sans-serif; 
 }
 .en{
-   font-family:verdana,Geneva,Helvetica,Arial,sans-serif; 
+	font-family:verdana,Geneva,Helvetica,Arial,sans-serif; 
 }
 
 a {
@@ -38,8 +39,8 @@ a:link {
 }
 
 a:visited {
-   color: #555;
-   text-decoration: none;
+	color: #555;
+	text-decoration: none;
 }
 
 a:hover {
@@ -53,7 +54,7 @@ h1{
 div#content{
 	border-style:outset;
 	border-color: black;
-	border-width: thin;    
+	border-width: thin;
 	font-size: 14px;
 	width: 300px;
 	height: 150px;
@@ -64,12 +65,11 @@ div#content{
 <link rel="icon" href="favicon.ico" mce_href="favicon.ico" type="image/x-icon"> 
 </head>
 <body>
-<?php require_once ("Gc.php"); ?>         
 <h1 align="center">欢迎来到&nbsp;&nbsp;<span class="en-head"><?php echo Gc::$site_name?></span></h1>
 <div align="center">
 	<div id="content" align="center">
 		<p><a href="<?php echo Gc::$url_base?>index.php?go=<?php echo Gc::$appName?>.index.index">网站前台</a></p>
-		<p><a href="<?php echo Gc::$url_base?>index.php?go=admin.index.index">网站后台</a></p> 
+		<p><a href="<?php echo Gc::$url_base?>index.php?go=admin.index.index">网站后台</a></p>
 	</div>
 </div>
 </body>
