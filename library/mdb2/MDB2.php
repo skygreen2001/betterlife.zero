@@ -52,7 +52,7 @@
  * @author      Lukas Smith <smith@pooteeweet.org>
  */
 
-require_once 'PEAR.php';
+if (!class_exists("PEAR")){require_once 'PEAR.php';}
 
 // {{{ Error constants
 

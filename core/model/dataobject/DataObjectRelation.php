@@ -81,7 +81,7 @@ class DataObjectRelation extends Object
 	 * @param string $property 关系对象类名
 	 * @param bool $isRelation 是否存在关系，如果存在关系，则返回关系对象数据
 	 */
-	public static function getMutualRelation($dataobject,$property,&$isRelation=false) {
+	public static function getMutualRelation($dataobject,$property) {
 		if ($dataobject instanceof DataObject){
 			$properties=UtilReflection::getClassStaticProperties($dataobject);
 			$properties=DataObjectSpec::removeNotObjectDataField($properties,$dataobject);
@@ -299,6 +299,7 @@ class DataObjectRelation extends Object
 		}else{
 			LogMe::record(Wl::ERROR_INFO_EXTENDS_CLASS);    
 		}
+        return null;
 	}    
 	
 	/**

@@ -34,9 +34,9 @@ class DataObjectFunc
 			return $dataobject->{$property};
 		}else {
 			//处理表之间一对一，一对多，多对多的关系
-			$isRelation=false;//是否存在关系
-			$relationData=$dataobject->getMutualRelation($method,&$isRelation);
-			if ($isRelation) {
+			//$isRelation=false;//是否存在关系
+			$relationData=$dataobject->getMutualRelation($method);
+			if ($relationData) {
 				return $relationData;
 			}
 		}
@@ -57,9 +57,9 @@ class DataObjectFunc
 			return $dataobject->{$methodname}();
 		}else {
 			//处理表之间一对一，一对多，多对多的关系
-			$isRelation=false;//是否存在关系
-			$relationData=$dataobject->getMutualRelation($property,&$isRelation);
-			if ($isRelation) {
+			//$isRelation=false;//是否存在关系
+			$relationData=$dataobject->getMutualRelation($property);
+			if ($relationData) {
 				return $relationData;
 			}else {
 				if (!property_exists($dataobject,$property)) {
