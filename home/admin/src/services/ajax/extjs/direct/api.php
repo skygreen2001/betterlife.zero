@@ -27,9 +27,9 @@ class ConfigApi{
         header('Content-Type: text/javascript');
         // convert API config to Ext.Direct spec
         $actions = array();
-        foreach (self::$configApi as $aname => &$a) {
+        foreach (self::$configApi as $aname => $a) {
             $methods = array();
-            foreach ($a['methods'] as $mname => &$m) {
+            foreach ($a['methods'] as $mname => $m) {
                 $md = array(
                     'name' => $mname,
                     'len' => $m['len']
