@@ -18,9 +18,9 @@ class UtilFileSystem extends Util
 	{
 		if(is_array($data)){
 			foreach($data as $k=>$v){
-				if (is_file($v)){   
+				if (is_file($v)){
 					$v = file_get_contents($v);
-				}     
+				}
 				$charset[1] = substr($v, 0, 1);
 				$charset[2] = substr($v, 1, 1);
 				$charset[3] = substr($v, 2, 1);
@@ -30,9 +30,9 @@ class UtilFileSystem extends Util
 			}
 		}
 		else{
-			if (is_file($data)){   
+			if (is_file($data)){
 				$data = file_get_contents($data);
-			}            
+			}
 			$charset[1] = substr($data, 0, 1);
 			$charset[2] = substr($data, 1, 1);
 			$charset[3] = substr($data, 2, 1);
@@ -68,11 +68,11 @@ class UtilFileSystem extends Util
 	 */
 	public static function createDir($dir)
 	{
-	   if (UtilString::is_utf8($dir)){ 
+		if (UtilString::is_utf8($dir)){ 
 			$dir=rawurldecode(self::charsetConvert($dir));
-	   }   
-	   return is_dir($dir) or mkdir($dir, 0777,true);
-	   //return is_dir($dir) or (self::createDir(dirname($dir)) and mkdir($dir, 0777));
+		}
+		return is_dir($dir) or mkdir($dir, 0777,true);
+		//return is_dir($dir) or (self::createDir(dirname($dir)) and mkdir($dir, 0777));
 	}
 			 
 	/**
@@ -86,15 +86,15 @@ class UtilFileSystem extends Util
 	{
 		if (UtilString::is_utf8($filename)){ 
 			$filename=rawurldecode(self::charsetConvert($filename));
-		}   
+		}
 		$cFile = fopen ($filename, 'w' ); 
 		if ($cFile){
 			file_put_contents($filename, $content);
 		}else{
 			LogMe::log("创建文件:".$filename."失败！");
 		}
-		fclose($cFile);     
-	}   
+		fclose($cFile);
+	}
 	
 	/**
 	 * 移除文件夹<br/>
@@ -158,47 +158,47 @@ class UtilFileSystem extends Util
 		}else{
 			return false;
 		}
-	}      
+	}
 	
 	/**
 	 * 服务器上传文件
-	 * @param mixed $_FILES 上传的文件对象
+	 * @param mixed $files 上传的文件对象
 	 * @param string $uploadPath 文件路径或者文件名
 	 * @param sting $uploadFieldName 上传文件的input组件的名称
 	 * @return array 返回信息数组
 	 */
-	public static function uploadFile($_FILES,$uploadPath,$uploadFieldName="upload_file")
-	{                             
-		if ($_FILES[$uploadFieldName]["size"] < intval(ini_get("upload_max_filesize")*1024*1024)) {
-			if ($_FILES[$uploadFieldName]["error"] > 0) {
+	public static function uploadFile($files,$uploadPath,$uploadFieldName="upload_file")
+	{
+		if ($files[$uploadFieldName]["size"] < intval(ini_get("upload_max_filesize")*1024*1024)) {
+			if ($files[$uploadFieldName]["error"] > 0) {
 				return array('success' => false, 'msg' =>  '文件太大！文件大小不能超过2M！');
 			} else {
 				//获得临时文件名
-				$tmptail = end(explode('.', $_FILES[$uploadFieldName]["name"])); 
+				$tmptail = end(explode('.', $files[$uploadFieldName]["name"])); 
 				$temp_name=basename($uploadPath); 
 				if (contain($temp_name,".")){ 
-					$temp_name="";           
-					self::createDir(dirname($uploadPath));      
+					$temp_name="";
+					self::createDir(dirname($uploadPath));
 				}else{
 					$temp_name = date("YmdHis").'.'.$tmptail;
-					self::createDir($uploadPath);      
+					self::createDir($uploadPath);
 				}
 				if (file_exists($uploadPath.$temp_name)) {
 					return array('success' => false, 'msg' => '文件重名!');
 				} else { 
-					$IsUploadSucc=move_uploaded_file($_FILES[$uploadFieldName]["tmp_name"], $uploadPath.$temp_name);
+					$IsUploadSucc=move_uploaded_file($files[$uploadFieldName]["tmp_name"], $uploadPath.$temp_name);
 					if (!$IsUploadSucc){
 						return array('success' => false, 'msg' => '文件上传失败，通知系统管理员!');
 					}
 					if (empty($temp_name)){
 						$temp_name=basename($uploadPath); 
 					}
-					return array('success' => true,'file_showname'=>$_FILES[$uploadFieldName]["name"],'file_name' => $temp_name);
+					return array('success' => true,'file_showname'=>$files[$uploadFieldName]["name"],'file_name' => $temp_name);
 				}
 			}
 		} else {
 			return array('success' => false, 'msg' => '文件太大！');
-		}    
+		}
 	}
 		
 	/**
@@ -209,8 +209,8 @@ class UtilFileSystem extends Util
 	 * @access public
 	 * @param string $dir 指定目录
 	 * @return array 指定目录下的子目录
-	 *   1:key-子目录名
-	 *   2:value-全路径名
+	 *	1:key-子目录名
+	 *	2:value-全路径名
 	 */
 	public static function getSubDirsInDirectory($dir) 
 	{
@@ -225,7 +225,7 @@ class UtilFileSystem extends Util
 				if ($fileinfo->isDir()) {
 					if($fileinfo->getFilename()!='.'&& $fileinfo->getFilename()!='..'&& $fileinfo->getFilename()!='.svn'&& $fileinfo->getFilename()!='.git') {
 						$dirdata[$fileinfo->getFilename()]=$fileinfo->getPathname();
-	//                    echo $fileinfo->getFilename() ."=>".$fileinfo->getPathname()."\n";
+	//						  echo $fileinfo->getFilename() ."=>".$fileinfo->getPathname()."\n";
 					}
 				}
 			}
@@ -246,11 +246,11 @@ class UtilFileSystem extends Util
 			$dh = opendir($dir);
 			if ($dh) {
 				while (($file = readdir($dh)) !== false) {
-					 if($file!='.'&& $file!='..'&& $file!='.svn' && $file!='.git'&&UtilString::contain($file,".")) {    
+					 if($file!='.'&& $file!='..'&& $file!='.svn' && $file!='.git'&&UtilString::contain($file,".")) {
 						 foreach ($agreesuffix as $suffix) {
 							if (strcasecmp(end(explode('.', $file)),$suffix)===0) {
 								$result[]=$dir.$file;
-								//echo "filename: $file : filetype: " . filetype($dir . $file) . "\n";                                  
+								//echo "filename: $file : filetype: " . filetype($dir . $file) . "\n";
 							}
 						 }
 					 }
@@ -259,7 +259,7 @@ class UtilFileSystem extends Util
 			}
 		}
 		return $result;
-	}   
+	}
 	
 	/**
 	 +----------------------------------------------------------<br/>
@@ -269,9 +269,9 @@ class UtilFileSystem extends Util
 	 * @access public
 	 * @param string $dir 指定目录
 	 * @param string|array $agreesuffix 是否要求文件后缀名为指定
-	 *      1.当$agreesuffix='*'为查找所有后缀名的文件
-	 *      2.当$agreesuffix='php'为查找所有php后缀名的文件
-	 *      3.当$agreesuffix=array('php','xml')为查找所有php和xml后缀名的文件
+	 *		1.当$agreesuffix='*'为查找所有后缀名的文件
+	 *		2.当$agreesuffix='php'为查找所有php后缀名的文件
+	 *		3.当$agreesuffix=array('php','xml')为查找所有php和xml后缀名的文件
 	 * @return array
 	 */
 	public static function getAllFilesInDirectory($dir,$agreesuffix=array("php")) 
@@ -284,7 +284,7 @@ class UtilFileSystem extends Util
 		$data=self::searchAllFilesInDirectory($dir,$data,$agreesuffix);
 		ksort($data);
 		$result=array_values($data);
-//        print_r($data);
+//		  print_r($data);
 		return  $result;
 	}
 
@@ -332,9 +332,9 @@ class UtilFileSystem extends Util
 	 * 递归执行查看指定目录下的所有文件
 	 * @param string $dir 指定目录
 	 * @param string|array $agreesuffix 是否要求文件后缀名为指定
-	 *      1.当$agreesuffix='*'为查找所有后缀名的文件
-	 *      2.当$agreesuffix='php'为查找所有php后缀名的文件
-	 *      3.当$agreesuffix=array('php','xml')为查找所有php和xml后缀名的文件
+	 *		1.当$agreesuffix='*'为查找所有后缀名的文件
+	 *		2.当$agreesuffix='php'为查找所有php后缀名的文件
+	 *		3.当$agreesuffix=array('php','xml')为查找所有php和xml后缀名的文件
 	 * @return array
 	 */
 	private static function searchAllFilesInDirectory($path,$data,$agreesuffix=array("php")) 
@@ -382,7 +382,7 @@ class UtilFileSystem extends Util
 	private static function charsetConvert($path) 
 	{
 		return iconv("UTF-8", "GBK", $path);
-	}    
+	}
 	
 	/**
 	 * 获取文件扩展名
