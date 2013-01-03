@@ -93,9 +93,9 @@ class XML
 		$this->document = array();
 		$this->stack    = array();
 		$this->parent   = &$this->document;
-                $result=xml_parse(&$this->parser, &$data, true) ? $this->document : NULL;
+        $result=xml_parse(&$this->parser, &$data, true) ? $this->document : NULL;
 		return $result;
-                //return xml_parse(&$this->parser, &$data, true) ? $this->document : NULL;
+        //return xml_parse(&$this->parser, &$data, true) ? $this->document : NULL;
 	}
 	function open(&$parser, $tag, $attributes){
 		$this->data = ''; #stores temporary cdata
