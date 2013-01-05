@@ -82,5 +82,25 @@ class HttpCookie
 		}
 		return $result;
 	}
+
+	/**
+	 * 一次在Cookie中移除多个指定$key
+	 * @param string|array $keys 多个键值, 每个数组元素为cookie的key，如果只移除一个cookie的key，直接传cookie的key字符串即可   
+	 * @param string $domain cookie所在的域
+	 * @return 返回cookie值
+	 */
+	public static function remove($keys,$domain="/")
+	{
+		if ($keys&&is_array($keys)&&(count($keys)>0))
+		{
+			if (is_array($value)){
+				setcookie($value,null,-1,$domain);
+				//setcookie($key,"");
+				//setcookie($key,$value,time()-3600);
+			}
+		}else{
+			setcookie($keys,null,-1,$domain);
+		}
+	}
 }
 ?>

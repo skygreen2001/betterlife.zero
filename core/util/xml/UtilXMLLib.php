@@ -1,16 +1,6 @@
 <?php
 /**
  * ###################################################################################<br/>
- * #
- * # XML Library, by Keith Devens, version 1.2b<br/>
- * # http://keithdevens.com/software/phpxml<br/>
- * #
- * # This code is Open Source, released under terms similar to the Artistic License.<br/>
- * # Read the license at http://keithdevens.com/software/license<br/>
- * #
- * ###################################################################################<br/>
- * 
- * ###################################################################################<br/>
  * # XML class: utility class to be used with PHP's XML handling functions <br/>
  * # XML和Array的转换<br/>
  * ###################################################################################<br/>
@@ -19,53 +9,23 @@
  * @author Keith Devens
  */
 class UtilXMLLib extends Util
-{   
+{
 	###################################################################################
 	# XML_unserialize: takes raw XML as a parameter (a string)
 	# and returns an equivalent PHP data structure
 	###################################################################################
-	public static function & XML_unserialize(&$xml){
-			$xml_parser = &new XML();
-			$data = &$xml_parser->parse($xml);
-			$xml_parser->destruct();
-			return $data;
+	public static function XML_unserialize($xml)
+	{
+		return XML::parse($xml);
 	}
-	###################################################################################
-	# XML_serialize: serializes any PHP data structure into XML
-	# Takes one parameter: the data to serialize. Must be an array.
-	###################################################################################
-	public static function & XML_serialize(&$data, $level = 0, $prior_key = NULL){
-			if($level == 0){ ob_start(); echo '<?xml version="1.0" ?>',"\n"; }
-			while(list($key, $value) = each($data))
-					if(!strpos($key, ' attr')) #if it's not an attribute
-							#we don't treat attributes by themselves, so for an empty element
-							# that has attributes you still need to set the element to NULL
-
-							if(is_array($value) and array_key_exists(0, $value)){
-									XML_serialize($value, $level, $key);
-							}else{
-									$tag = $prior_key ? $prior_key : $key;
-									echo str_repeat("\t", $level),'<',$tag;
-									if(array_key_exists("$key attr", $data)){ #if there's an attribute for this element
-											while(list($attr_name, $attr_value) = each($data["$key attr"]))
-													echo ' ',$attr_name,'="',htmlspecialchars($attr_value),'"';
-											reset($data["$key attr"]);
-									}
-
-									if(is_null($value)) echo " />\n";
-									elseif(!is_array($value)) echo '>',htmlspecialchars($value),"</$tag>\n";
-									else echo ">\n",XML_serialize($value, $level+1),str_repeat("\t", $level),"</$tag>\n";
-							}
-			reset($data);
-			if($level == 0){ $str = &ob_get_contents(); ob_end_clean(); return $str; }
-	}    
 	/**
 	 * 转换指定xml文件里的内容到数组。
 	 * @param string $xmlFile Xml内容的文件名
 	 */
-	public static function xmltoArray($xmlFile){
+	public static function xmltoArray($xmlFile)
+	{
 		$xml=file_get_contents($xmlFile);
-		$result=self::XML_unserialize($xml);        
+		$result=self::XML_unserialize($xml);
 		return $result;
 	}
 }
@@ -75,69 +35,74 @@ class UtilXMLLib extends Util
 ###################################################################################
 class XML
 {
-	var $parser;   #a reference to the XML parser
-	var $document; #the entire XML structure built up so far
-	var $parent;   #a pointer to the current parent - the parent will be an array
-	var $stack;    #a stack of the most recent parent at each nesting level
-	var $last_opened_tag; #keeps track of the last tag opened.
+	public static $tags;//所有解析的标签和对应的xml元的内容所在的标识
+	public static $values;//所有解析的经过归类的xml内容
 
-	function XML(){
-		$this->parser = &xml_parser_create();
-		xml_parser_set_option(&$this->parser, XML_OPTION_CASE_FOLDING, false);
-		xml_set_object(&$this->parser, &$this);
-		xml_set_element_handler(&$this->parser, 'open','close');
-		xml_set_character_data_handler(&$this->parser, 'data');
-	}
-	function destruct(){ xml_parser_free(&$this->parser); }
-	function & parse(&$data){
-		$this->document = array();
-		$this->stack    = array();
-		$this->parent   = &$this->document;
-		$result=xml_parse(&$this->parser, &$data, true) ? $this->document : NULL;
-		return $result;
-		//return xml_parse(&$this->parser, &$data, true) ? $this->document : NULL;
-	}
-	function open(&$parser, $tag, $attributes){
-		$this->data = ''; #stores temporary cdata
-		$this->last_opened_tag = $tag;
-		if(is_array($this->parent) and array_key_exists($tag,$this->parent)){ #if you've seen this tag before
-			if(is_array($this->parent[$tag]) and array_key_exists(0,$this->parent[$tag])){ #if the keys are numeric
-				#this is the third or later instance of $tag we've come across
-				$key = self::count_numeric_items($this->parent[$tag]);
-			}else{
-				#this is the second instance of $tag that we've seen. shift around
-				if(array_key_exists("$tag attr",$this->parent)){
-					$arr = array('0 attr'=>&$this->parent["$tag attr"], &$this->parent[$tag]);
-					unset($this->parent["$tag attr"]);
-				}else{
-					$arr = array(&$this->parent[$tag]);
-				}
-				$this->parent[$tag] = &$arr;
-				$key = 1;
+	public function parse($data)
+	{
+		$parser = xml_parser_create();
+		xml_parser_set_option($parser, XML_OPTION_CASE_FOLDING, false);
+		xml_parser_set_option($parser, XML_OPTION_SKIP_WHITE, true);
+		xml_parse_into_struct($parser, $data, $values, $vtags); 
+		xml_parser_free($parser);
+		
+		self::$tags =$vtags;
+		self::$values =$values;
+		
+		$keys=array_keys(self::$tags);
+		$root = array_shift($keys);
+		foreach ($keys as $key=>$keyword_meta) { 
+			$current_flags = self::$tags[$keyword_meta];
+			$count=0;
+			for ($i=0; $i < count($current_flags); $i+=2) {
+				$start = $current_flags[$i] + 1;
+				$end = $current_flags[$i + 1]-1;
+				if (array_key_exists("attributes",self::$values[$current_flags[$i]])){ 
+					$key_attr= $count." attr";
+					$result[$root][$keyword_meta][$key_attr]=self::$values[$current_flags[$i]]["attributes"];
+				}                      
+				$result[$root][$keyword_meta][$count] = self::parseElements($start,$end,$keys[$key+1]); 
+				$count++;
 			}
-			$this->parent = &$this->parent[$tag];
+		}
+		return $result;
+	}
+		
+	public static function parseElements($start, $end,$keyword_meta) 
+	{
+		$current_flags =self::$tags[$keyword_meta];
+		$start_flag=array_search($start,$current_flags);
+		$end_flag=array_search($end,$current_flags);   
+		$keys=array_keys(self::$tags);
+		$keyword_meta_key=array_search($keyword_meta,$keys);
+		
+		$count=0;
+		if ($keyword_meta_key+1<count($keys)){
+			$next_keyword_meta=$keys[$keyword_meta_key+1];
+			for ($i=$start_flag; $i < $end_flag; $i+=2) {
+				$start = $current_flags[$i] + 1;
+				$end = $current_flags[$i + 1]-1;
+				if (array_key_exists("attributes",self::$values[$current_flags[$i]])){
+					$key= $count." attr";
+					$result[$keyword_meta][$key]=self::$values[$current_flags[$i]]["attributes"];
+					$result[$keyword_meta][$count] = self::parseElements($start, $end,$next_keyword_meta);
+				} else{
+					$result[$keyword_meta] = self::parseElements($start, $end,$next_keyword_meta);
+				}
+				$count++;
+			}
 		}else{
-			$key = $tag;
-		}
-		if($attributes) $this->parent["$key attr"] = $attributes;
-		$this->parent  = &$this->parent[$key];
-		$this->stack[] = &$this->parent;
+			for ($i=$start_flag; $i <= $end_flag; $i++) { 
+				if (array_key_exists("attributes",self::$values[$current_flags[$i]])){
+					$key= $count." attr";
+					$result[$keyword_meta][$key]=self::$values[$current_flags[$i]]["attributes"];
+				}
+				$result[$keyword_meta][$count] =self::$values[$current_flags[$i]]["value"];
+				$count++;
+			}
+		} 
+		return $result;
 	}
-	function data(&$parser, $data){
-		if($this->last_opened_tag != NULL) #you don't need to store whitespace in between tags
-			$this->data .= $data;
-	}
-	function close(&$parser, $tag){
-		if($this->last_opened_tag == $tag){
-			$this->parent = $this->data;
-			$this->last_opened_tag = NULL;
-		}
-		array_pop($this->stack);
-		if($this->stack) $this->parent = &$this->stack[count($this->stack)-1];
-	}        
-		private static function count_numeric_items(&$array){
-				return is_array($array) ? count(array_filter(array_keys($array), 'is_numeric')) : 0;
-		}
 }
 
 ?>
