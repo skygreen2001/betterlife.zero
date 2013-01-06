@@ -387,26 +387,26 @@ class ServiceBasic extends Service implements IServiceBasic
     
     /**
      * 批量上传图片 
-     * @param mixed $_FILES 上传文件服务器变量
+     * @param mixed $files 上传文件服务器变量
      * @param mixed $upload_field_name 上传文件的input的name
      * @param mixed $class_name 数据对象类名
      * @param mixed $classname_comment 数据对象类名注释简介
      * @param mixed $img_column_name 数据对象指定图像列名
      * @return array 上传图片反馈信息 
      */
-    public function batchUploadImages($_FILES,$upload_field_name,$class_name,$classname_comment,$img_column_name)
+    public function batchUploadImages($files,$upload_field_name,$class_name,$classname_comment,$img_column_name)
     {
         $instance_name=strtolower($class_name);
-        if (!empty($_FILES)&&!empty($_FILES[$upload_field_name]["name"]))
+        if (!empty($files)&&!empty($files[$upload_field_name]["name"]))
         {    
             //上传压缩文件并解压
             $filename   = date("YmdHis");
             $upload_dir = GC::$upload_path."images".DIRECTORY_SEPARATOR.$instance_name.DIRECTORY_SEPARATOR;
             $upload_zip_dir=$upload_dir."zip".DIRECTORY_SEPARATOR;
-            $tmptail    = end(explode('.', $_FILES[$upload_field_name]["name"]));
+            $tmptail    = end(explode('.', $files[$upload_field_name]["name"]));
             $uploadPath = $upload_zip_dir.$filename.".".$tmptail;   
             UtilFileSystem::createDir($upload_zip_dir);
-            $IsUploadSucc=move_uploaded_file($_FILES[$upload_field_name]["tmp_name"], $uploadPath);
+            $IsUploadSucc=move_uploaded_file($files[$upload_field_name]["tmp_name"], $uploadPath);
             $zip = new ZipArchive;
             $res = $zip->open($uploadPath);
             if ($res === TRUE) {

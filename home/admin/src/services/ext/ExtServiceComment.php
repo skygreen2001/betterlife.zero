@@ -121,13 +121,13 @@ class ExtServiceComment extends ServiceBasic
 	 * 批量上传评论
 	 * @param mixed $upload_file <input name="upload_file" type="file">
 	 */
-	public function import($_FILES)
+	public function import($files)
 	{
 		$diffpart=date("YmdHis");
-		if (!empty($_FILES["upload_file"])){
-			$tmptail = end(explode('.', $_FILES["upload_file"]["name"]));
+		if (!empty($files["upload_file"])){
+			$tmptail = end(explode('.', $files["upload_file"]["name"]));
 			$uploadPath =GC::$attachment_path."comment".DIRECTORY_SEPARATOR."import".DIRECTORY_SEPARATOR."comment$diffpart.$tmptail";
-			$result     =UtilFileSystem::uploadFile($_FILES,$uploadPath);
+			$result     =UtilFileSystem::uploadFile($files,$uploadPath);
 			if ($result&&($result['success']==true)){
 				if (array_key_exists('file_name',$result)){
 					$arr_import_header = self::fieldsMean(Comment::tablename());

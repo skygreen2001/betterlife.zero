@@ -452,13 +452,13 @@ class AutoCodeService extends AutoCode
                          "     * 批量上传{$object_desc}\r\n".
                          "     * @param mixed \$upload_file <input name=\"upload_file\" type=\"file\">\r\n".
                          "     */\r\n".
-                         "    public function import(\$_FILES)\r\n".
+                         "    public function import(\$files)\r\n".
                          "    {\r\n".
                          "        \$diffpart=date(\"YmdHis\");\r\n".
-                         "        if (!empty(\$_FILES[\"upload_file\"])){\r\n".
-                         "            \$tmptail = end(explode('.', \$_FILES[\"upload_file\"][\"name\"]));\r\n".
+                         "        if (!empty(\$files[\"upload_file\"])){\r\n".
+                         "            \$tmptail = end(explode('.', \$files[\"upload_file\"][\"name\"]));\r\n".
                          "            \$uploadPath =GC::\$attachment_path.\"{$instance_name}\".DIRECTORY_SEPARATOR.\"import\".DIRECTORY_SEPARATOR.\"{$instance_name}\$diffpart.\$tmptail\";\r\n".
-                         "            \$result     =UtilFileSystem::uploadFile(\$_FILES,\$uploadPath);\r\n".
+                         "            \$result     =UtilFileSystem::uploadFile(\$files,\$uploadPath);\r\n".
                          "            if (\$result&&(\$result['success']==true)){\r\n".
                          "                if (array_key_exists('file_name',\$result)){\r\n".
                          "                    \$arr_import_header = self::fieldsMean({$classname}::tablename());\r\n".
@@ -1127,14 +1127,14 @@ MANY2MANYQUERYPAGE;
                          "    /**\r\n".
                          "     * 上传{$object_desc}图片文件\r\n".
                          "     */\r\n".     
-                         "    public function uploadImg(\$_FILES,\$uploadFlag,\$upload_dir)\r\n".
+                         "    public function uploadImg(\$files,\$uploadFlag,\$upload_dir)\r\n".
                          "    {\r\n". 
                          "        \$diffpart=date(\"YmdHis\");\r\n".
                          "        \$result=\"\";\r\n". 
-                         "        if (!empty(\$_FILES[\$uploadFlag])&&!empty(\$_FILES[\$uploadFlag][\"name\"])){\r\n".
-                         "            \$tmptail = end(explode('.', \$_FILES[\$uploadFlag][\"name\"]));\r\n". 
+                         "        if (!empty(\$files[\$uploadFlag])&&!empty(\$files[\$uploadFlag][\"name\"])){\r\n".
+                         "            \$tmptail = end(explode('.', \$files[\$uploadFlag][\"name\"]));\r\n". 
                          "            \$uploadPath =GC::\$upload_path.\"images\".DIRECTORY_SEPARATOR.\"{$instance_name}\".DIRECTORY_SEPARATOR.\$upload_dir.DIRECTORY_SEPARATOR.\$diffpart.\".\".\$tmptail;\r\n".
-                         "            \$result     =UtilFileSystem::uploadFile(\$_FILES,\$uploadPath,\$uploadFlag);\r\n". 
+                         "            \$result     =UtilFileSystem::uploadFile(\$files,\$uploadPath,\$uploadFlag);\r\n". 
                          "            if (\$result&&(\$result['success']==true)){\r\n".
                          "                \$result['file_name']=\"{$instance_name}/\$upload_dir/\$diffpart.\$tmptail\";\r\n".    
                          "            }else{\r\n".                     

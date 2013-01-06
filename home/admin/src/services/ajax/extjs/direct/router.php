@@ -188,16 +188,18 @@ class RemoteServiceCall
 	 * @param type $returnData
 	 * @return type 
 	 */
-	private function doAroundCalls(&$fns, &$cdata, &$returnData=null) {
+	private function doAroundCalls($fns, $cdata, $returnData=null) 
+	{
 		if (!$fns) {
 			return;
 		}
 		if (is_array($fns)) {
+			$returnData=array();
 			foreach ($fns as $f) {
-				$f($cdata, $returnData);
+				$returnData=array_merge_recursive($returnData,$f($cdata));
 			}
 		} else {
-			$fns($cdata, $returnData);
+			$returnData=$fns($cdata);
 		}
 	}
 }
