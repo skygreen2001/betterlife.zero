@@ -1,16 +1,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="zh-CN" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<?php require_once ("Gc.php"); ?>
+<?php 
+	if (ini_get('short_open_tag') != 1) {echo "请在php.ini配置文件里设置short_open_tag = On<br/>";die();}
+	require_once ("Gc.php");
+?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="Lang" content="zh_CN">
 <meta name="author" content="skygreen">
 <meta http-equiv="Reply-to" content="skygreen2001@gmail.com">
-<meta name="description" content="<?php echo Gc::$site_name?>">
-<meta name="keywords" content="<?php echo Gc::$site_name?>">
+<meta name="description" content="<?=Gc::$site_name?>">
+<meta name="keywords" content="<?=Gc::$site_name?>">
 <meta name="creation-date" content="12/01/2010">
 <meta name="revisit-after" content="15 days">
-<title><?php echo Gc::$site_name?></title>
+<title><?=Gc::$site_name?></title>
 <style type="text/css">
 html, body {
 	font:normal 12px SimSun,sans-serif;
@@ -65,10 +68,10 @@ div#content{
 <link rel="icon" href="favicon.ico" mce_href="favicon.ico" type="image/x-icon"> 
 </head>
 <body>
-<h1 align="center">欢迎来到&nbsp;&nbsp;<span class="en-head"><?php echo Gc::$site_name?></span></h1>
+<h1 align="center">欢迎来到&nbsp;&nbsp;<span class="en-head"><?=Gc::$site_name?></span></h1>
 <div align="center">
 	<div id="content" align="center">
-		<p><a href="<?php echo Gc::$url_base?>index.php?go=<?php echo Gc::$appName?>.index.index">网站前台</a></p>
+		<p><a href="<?php echo Gc::$url_base?>index.php?go=<?=Gc::$appName?>.index.index">网站前台</a></p>
 		<p><a href="<?php echo Gc::$url_base?>index.php?go=admin.index.index">网站后台</a></p>
 	</div>
 </div>
