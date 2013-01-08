@@ -60,7 +60,7 @@ class Log_composite extends Log
         /* Attempt to open each of our children. */
         $this->_opened = true;
         foreach ($this->_children as $child) {
-            $this->_opened &= $child->open();
+            $this->_opened = $child->open();
         }
 
         /* If all children were opened, return success. */
@@ -86,7 +86,7 @@ class Log_composite extends Log
         $closed = true;
         foreach ($this->_children as $child) {
             if ($child->_opened) {
-                $closed &= $child->close();
+                $closed = $child->close();
             }
         }
 
@@ -111,7 +111,7 @@ class Log_composite extends Log
         /* Attempt to flush each of our children. */
         $flushed = true;
         foreach ($this->_children as $child) {
-            $flushed &= $child->flush();
+            $flushed = $child->flush();
         }
 
         /* If all children were flushed, return success. */
@@ -175,7 +175,7 @@ class Log_composite extends Log
 
             /* If this child has yet to be opened, attempt to do so now. */
             if (!$child->_opened) {
-                $success &= $child->open();
+                $success = $child->open();
 
                 /*
                  * If we've successfully opened our first handler, the
@@ -188,7 +188,7 @@ class Log_composite extends Log
 
             /* Finally, attempt to log the message to the child handler. */
             if ($child->_opened) {
-                $success &= $child->log($message, $priority);
+                $success = $child->log($message, $priority);
             }
         }
 
@@ -239,7 +239,7 @@ class Log_composite extends Log
      *
      * @access public
      */
-    function addChild(&$child)
+    function addChild($child)
     {
         /* Make sure this is a Log instance. */
         if (!is_a($child, 'Log')) {

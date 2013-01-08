@@ -67,7 +67,7 @@ class Log_observer
      * @return object               The newly created concrete Log_observer
      *                              instance, or null on an error.
      */
-    function &factory($type, $priority = PEAR_LOG_INFO, $conf = array())
+    function factory($type, $priority = PEAR_LOG_INFO, $conf = array())
     {
         $type = strtolower($type);
         $class = 'Log_observer_' . $type;
@@ -78,7 +78,7 @@ class Log_observer
          * instance.
          */
         if (class_exists($class)) {
-            $object = &new $class($priority, $conf);
+            $object = new $class($priority, $conf);
             return $object;
         }
 
@@ -102,9 +102,9 @@ class Log_observer
         if (class_exists($class)) {
             /* Support both new-style and old-style construction. */
             if ($newstyle) {
-                $object = &new $class($priority, $conf);
+                $object = new $class($priority, $conf);
             } else {
-                $object = &new $class($priority);
+                $object = new $class($priority);
             }
             return $object;
         }

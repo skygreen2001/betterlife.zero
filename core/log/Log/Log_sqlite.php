@@ -71,7 +71,7 @@ class Log_sqlite extends Log
      * @param int    $level        Log messages up to and including this level.
      * @access public
      */
-    function Log_sqlite($name, $ident = '', &$conf, $level = PEAR_LOG_DEBUG)
+    function Log_sqlite($name, $ident = '', $conf, $level = PEAR_LOG_DEBUG)
     {
         $this->_id = md5(microtime());
         $this->_table = $name;
@@ -84,7 +84,7 @@ class Log_sqlite extends Log
             }
         } else {
             // If an existing database connection was provided, use it.
-            $this->_db =& $conf;
+            $this->_db = $conf;
             $this->_existingConnection = true;
         }
     }

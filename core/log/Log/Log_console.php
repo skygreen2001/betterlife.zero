@@ -94,7 +94,7 @@ class Log_console extends Log
          * shutdown function that will dump the buffer upon termination.
          */
         if ($this->_buffering) {
-            register_shutdown_function(array(&$this, '_Log_console'));
+            register_shutdown_function(array($this, '_Log_console'));
         }
     }
 

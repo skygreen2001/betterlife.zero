@@ -139,11 +139,11 @@ class Log_mdb2 extends Log
 
         /* If an existing database connection was provided, use it. */
         if (isset($conf['db'])) {
-            $this->_db = &$conf['db'];
+            $this->_db = $conf['db'];
             $this->_existingConnection = true;
             $this->_opened = true;
         } elseif (isset($conf['singleton'])) {
-            $this->_db = &MDB2::singleton($conf['singleton'], $this->_options);
+            $this->_db = MDB2::singleton($conf['singleton'], $this->_options);
             $this->_existingConnection = true;
             $this->_opened = true;
         } else {
@@ -162,7 +162,7 @@ class Log_mdb2 extends Log
     {
         if (!$this->_opened) {
             /* Use the DSN and options to create a database connection. */
-            $this->_db = &MDB2::connect($this->_dsn, $this->_options);
+            $this->_db = MDB2::connect($this->_dsn, $this->_options);
             if (PEAR::isError($this->_db)) {
                 return false;
             }
@@ -268,7 +268,7 @@ class Log_mdb2 extends Log
 
         /* Execute the SQL query for this log entry insertion. */
         $this->_db->expectError(MDB2_ERROR_NOSUCHTABLE);
-        $result = &$this->_statement->execute($values);
+        $result = $this->_statement->execute($values);
         $this->_db->popExpect();
 
         /* Attempt to handle any errors. */
@@ -346,7 +346,7 @@ class Log_mdb2 extends Log
      */
     function _prepareStatement()
     {
-        $this->_statement = &$this->_db->prepare(
+        $this->_statement = $this->_db->prepare(
                 'INSERT INTO ' . $this->_table .
                 ' (id, logtime, ident, priority, message)' .
                 ' VALUES(:id, :logtime, :ident, :priority, :message)',

@@ -143,7 +143,7 @@ class Log_file extends Log
             $this->_eol = (strstr(PHP_OS, 'WIN')) ? "\r\n" : "\n";
         }
 
-        register_shutdown_function(array(&$this, '_Log_file'));
+        register_shutdown_function(array($this, '_Log_file'));
     }
 
     /**

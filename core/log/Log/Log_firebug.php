@@ -89,7 +89,7 @@ class Log_firebug extends Log
         }
 
         if ($this->_buffering) {
-            register_shutdown_function(array(&$this, '_Log_firebug'));
+            register_shutdown_function(array($this, '_Log_firebug'));
         }
 
         if (!empty($conf['lineFormat'])) {

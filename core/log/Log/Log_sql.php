@@ -153,7 +153,7 @@ class Log_sql extends Log
 
         /* If an existing database connection was provided, use it. */
         if (isset($conf['db'])) {
-            $this->_db = &$conf['db'];
+            $this->_db = $conf['db'];
             $this->_existingConnection = true;
             $this->_opened = true;
         } else {

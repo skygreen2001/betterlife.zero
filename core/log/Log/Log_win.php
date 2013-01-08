@@ -89,7 +89,7 @@ class Log_win extends Log
             }
         }
 
-        register_shutdown_function(array(&$this, '_Log_win'));
+        register_shutdown_function(array($this, '_Log_win'));
     }
 
     /**

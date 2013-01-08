@@ -756,13 +756,13 @@ class Log
      * @access  public
      * @since   Log 1.0
      */
-    function attach(&$observer)
+    function attach($observer)
     {
         if (!is_a($observer, 'Log_observer')) {
             return false;
         }
 
-        $this->_listeners[$observer->_id] = &$observer;
+        $this->_listeners[$observer->_id] = $observer;
 
         return true;
     }

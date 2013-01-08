@@ -101,7 +101,7 @@ class Log_daemon extends Log
         }
         $this->_proto = $this->_proto . '://';
 
-        register_shutdown_function(array(&$this, '_Log_daemon'));
+        register_shutdown_function(array($this, '_Log_daemon'));
     }
 
     /**

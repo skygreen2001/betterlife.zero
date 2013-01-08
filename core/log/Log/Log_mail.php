@@ -157,7 +157,7 @@ class Log_mail extends Log
         }
 
         /* register the destructor */
-        register_shutdown_function(array(&$this, '_Log_mail'));
+        register_shutdown_function(array($this, '_Log_mail'));
     }
 
     /**
@@ -212,7 +212,7 @@ class Log_mail extends Log
                                      'To' => $this->_recipients,
                                      'User-Agent' => 'PEAR Log Package',
                                      'Subject' => $this->_subject);
-                    $mailer = &Mail::factory($this->_mailBackend,
+                    $mailer = Mail::factory($this->_mailBackend,
                                              $this->_mailParams);
                     $res = $mailer->send($this->_recipients, $headers,
                                          $this->_message);
