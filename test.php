@@ -1,15 +1,18 @@
 <?php
 require_once ("init.php");
-
 $blog=Blog::get_one();
-print_r($blog);
+$blog["user"]=array("test1"=>"aaa","test2"=>array("good"=>"mscrift"));
+$result=UtilObject::object_to_xml($blog);
+echo $result;
+//$blog=Blog::get_one();
+//print_r($blog);
 /*$blogs=Blog::select('name,content');
 print_r($blogs);            
 UtilBarCode::upc_a("12207201213");                                      
 
 Blog::queryPage(0,10,
     array(
-        //"(content like '%�抽�瀛�' or content like '%���璇�')",  
+        //"(content like '%关键字%' or content like '%公开课%')",
         "blog_id<4",
         "user_id"=>1
     ));
@@ -23,10 +26,10 @@ $serverCache=Manager_Cache::singleton()->server(EnumCacheDriverType::REDIS);
 $serverCache->TestRun();
 					       
 print_r(SystemService::doLibrarySelect(array("name"=>"m")));                                             
-LogMe::log("����充����锛��绛��");       
-LogMe::log("瑁�繁娌��浣�氨瑁��锛�);
+LogMe::log("我在想事情呢！等等我");     
+LogMe::log("装深沉，你就装吧！");
 
-//PHP 涓�Linq
+//PHP 与 Linq
 //Create data source
 $names = array("John", "Peter", "Joe", "Patrick", "Donald", "Eric"); 
 
@@ -35,28 +38,30 @@ $result = from('$name')->in($names)
             ->select('$name'); 
 print_r($result);
 			
-//��浇��疆            
+//加载配置             
 $xml=UtilConfig::Instance();
 $xml->load(Gc::$nav_root_path."core\\util\\config\\xml\\"."setting.xml");
 echo 'PHP:'. $xml->get('db.host').'';
 
-//璋��涓��涓�$user=new User;
+//调用一对一
+$user=new User;
 $user->setId(2);
 print_r($user->getUserDetail());
 print_r($user->UserDetail());
 
-//璋��涓��澶�$department=new Department();
+//调用一对多
+$department=new Department();
 $department->setId(5);
 print_r($department->getUsers());
 print_r($department->Users());
 
-//璋��澶��澶��涓绘�����广�
+//调用多对多【主控的一方】
 $user=new User();
 $user->setId(2);
 print_r($user->getRoles());
 print_r($user->Roles());
 
-//璋��澶��澶��琚������广�
+//调用多对多【被控的一方】
 $role=new Role();
 $role->setId(2);
 print_r($role->getUsers());
