@@ -256,9 +256,16 @@ class View {
 				$this->template->allow_php_templates= true;
 				$this->template->allow_php_tag=true;
 				$this->template->debugging = Gc::$dev_debug_on;
-				$smarty->force_compile = false;
-				$smarty->caching = true;
-				$smarty->cache_lifetime = 120;
+				$this->template->force_compile = false;
+				$this->template->caching = true;
+				$this->template->cache_lifetime = 86400;//缓存一周
+				UtilFileSystem::createDir($this->template->compile_dir);
+				if (!is_dir($this->template->compile_dir)){
+					die("因为安全原因，需要手动在操作系统中创建目录:".$this->template->compile_dir."<br/>".
+						"Linux command need:<br/>".str_repeat("&nbsp;",40).
+						"sudo mkdir ".$this->template->compile_dir."<br/>".str_repeat("&nbsp;",40).
+						"sudo chmod 0777 ".$this->template->compile_dir);
+				}
 				break;
 			case self::TEMPLATE_MODE_SMARTTEMPLATE:
 				$this->templateMode=self::TEMPLATE_MODE_SMARTTEMPLATE;

@@ -196,7 +196,22 @@ class ActionExt extends Action
 		//初始化加载Css和Javascript库
 		$this->view->viewObject=new ViewObject();
 		UtilCss::loadExt($this->view->viewObject,UtilAjaxExtjs::$ext_version);
-		UtilAjaxExtjs::loadUI($this->view->viewObject,UtilAjaxExtjs::$ext_version);         
+		UtilAjaxExtjs::loadUI($this->view->viewObject,UtilAjaxExtjs::$ext_version);     
+
+		UtilFileSystem::createDir(Gc::$attachment_path);
+		UtilFileSystem::createDir(Gc::$upload_path);
+		if (!is_dir(Gc::$attachment_path)){
+			die("因为安全原因，需要手动在操作系统中创建目录:".Gc::$attachment_path."<br/>".
+				"Linux command need:<br/>".str_repeat("&nbsp;",40).
+				"sudo mkdir ".Gc::$attachment_path."<br/>".str_repeat("&nbsp;",40).
+				"sudo chmod 0777 ".Gc::$attachment_path);
+		}
+		if (!is_dir(Gc::$upload_path)){
+			die("因为安全原因，需要手动在操作系统中创建目录:".Gc::$upload_path."<br/>".
+				"Linux command need:<br/>".str_repeat("&nbsp;",40).
+				"sudo mkdir ".Gc::$upload_path."<br/>".str_repeat("&nbsp;",40).
+				"sudo chmod 0777 ".Gc::$upload_path);
+		}    
 	}
 }
 ?>

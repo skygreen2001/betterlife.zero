@@ -94,6 +94,12 @@ class LogMe extends Object {
         if (isset ($destination)){
             UtilFileSystem::createDir(dirname($destination));
         }
+        if (!is_dir(dirname($destination))){
+            die("因为安全原因，需要手动在操作系统中创建框架日志存放的目录:".dirname($destination)."<br/>".
+                "Linux command need:<br/>".str_repeat("&nbsp;",40).
+                "sudo mkdir ".dirname($destination)."<br/>".str_repeat("&nbsp;",40).
+                "sudo chmod 0777 ".dirname($destination));
+        }
         return $destination;
     }
     
