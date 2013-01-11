@@ -150,7 +150,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 */
 	public function getMutualRelation($property) 
 	{
-		 return DataObjectRelation::getMutualRelation($this,$property);
+		return DataObjectRelation::getMutualRelation($this,$property);
 	}
 	
 	//<editor-fold defaultstate="collapsed" desc="默认列Setter和Getter"> 
