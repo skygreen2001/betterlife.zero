@@ -247,7 +247,7 @@ class Dal_Adodb extends Dal implements IDal
 				$object->setUpdateTime(UtilDateTime::now(EnumDateTimeFormat::STRING)); 
 				$this->saParams=UtilObject::object_to_array($object);
 				unset($this->saParams[DataObjectSpec::getRealIDColumnName($object)]);
-				$this->filterViewProperties($this->saParams);
+				$this->saParams=$this->filterViewProperties($this->saParams);
 				$_SQL=new Crud_Sql_Update();
 				$_SQL->isPreparedStatement=false;
 				$where=$this->sql_id($object).self::EQUAL.$id;

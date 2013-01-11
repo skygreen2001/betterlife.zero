@@ -22,10 +22,10 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	 * @param string $dbname 
 	 * @return mixed 数据库连接
 	 */
-	public function connect($host=null,$port=null,$username=null,$password=null,$dbname=null) 
+	public function connect($host=null,$port=null,$username=null,$password=null,$dbname=null)
 	{
 		$connecturl=Config_Mysql::connctionurl($host,$port);
-	   
+
 		if (!isset($username)){
 			$username=Config_Mysql::$username;
 		}
@@ -36,7 +36,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 			$dbname=Config_Mysql::$dbname;
 		}
 		$this->connection = new mysqli($connecturl,
-				$username,$password,$dbname);        
+				$username,$password,$dbname);
 		
 		if (mysqli_connect_errno()) {
 			Exception_Mysqli::record();
@@ -54,9 +54,9 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	private function executeSQL() 
 	{
 		try {
-			if (Config_Db::$debug_show_sql){                                                     
-				LogMe::log("SQL:".$this->sQuery);  
-				if (!empty($this->saParams)) {      
+			if (Config_Db::$debug_show_sql){
+				LogMe::log("SQL:".$this->sQuery);
+				if (!empty($this->saParams)) {
 					LogMe::log("SQL PARAM:".var_export($this->saParams, true));
 				}
 			}
@@ -64,9 +64,9 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 				$this->sQuery=self::preparse_prepared($this->sQuery, $this->saParams);
 			}
 
-			$this->stmt  =$this->connection->prepare($this->sQuery);       
+			$this->stmt  =$this->connection->prepare($this->sQuery);
 			Exception_Mysqli::record();
-			if (!empty($this->saParams)&&is_array($this->saParams)) { 
+			if (!empty($this->saParams)&&is_array($this->saParams)) {
 				/*****************************************************************************
 				 * START:执行预编译生成SQL语句
 				 * 说明：
@@ -101,7 +101,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 			Exception_Mysqli::record($ex->getTraceAsString());
 		}
 	}
-			  
+
 	/**
 	 *  直接执行SQL语句
 	 * @param mixed $sql SQL查询|更新|删除语句
@@ -110,14 +110,14 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	 *  1.执行查询语句返回对象数组<br/>
 	 *  2.执行更新和删除SQL语句返回执行成功与否的true|null
 	 */
-	public function sqlExecute($sqlstring,$object=null) 
+	public function sqlExecute($sqlstring,$object=null)
 	{
 		$result=null;
 		try {
-			if (Config_Db::$debug_show_sql){                   
-				LogMe::log("SQL:".$sqlstring);   
+			if (Config_Db::$debug_show_sql){
+				LogMe::log("SQL:".$sqlstring);
 			}
-			$this->stmt=$this->connection->prepare($sqlstring);     
+			$this->stmt=$this->connection->prepare($sqlstring);
 			Exception_Mysqli::record();
 			if ($this->stmt){
 				$this->stmt->execute();
@@ -137,7 +137,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 				}
 				$result=$this->getResultToObjects($object);
 			}else{
-			   Exception_Mysqli::record(Wl::ERROR_INFO_DB_HANDLE); 
+			   Exception_Mysqli::record(Wl::ERROR_INFO_DB_HANDLE);
 			}
 		} catch (Exception $exc) {
 			Exception_Mysqli::record($exc->getTraceAsString());
@@ -156,7 +156,32 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	 *          3.array("id"=>"1","name"=>"sky")<br/>
 	 * @return 对象总计数
 	 */
-	public function count($object, $filter=null) 
+	public function count($object, $filter=null)
+	{
+		if (!$this->validParameter($object)) {
+			return 0;
+		}
+		return $this->countMultitable($object,$this->classname,$filter);
+	}
+
+	/**
+	 * 对象总计数[多表关联查询]
+	 * @param string|class $object 需要查询的对象实体|类名称
+	 * @param string|array $from 来自多张表或者多个类[必须是数据对象类名]，在from后的多张表名，表名之间以逗号[,]隔开
+	 * 示例如下：<br/>
+	 *      0."table1,table2"<br/>
+	 *      1.array("table1","table2")<br/>
+	 *      2."class1,class2"<br/>
+	 *      3.array("class1","class2")<br/>
+	 * @param object|string|array $filter
+	 *      $filter 格式示例如下：<br/>
+	 *          0.允许对象如new User(id="1",name="green");<br/>
+	 *          1."id=1","name='sky'"<br/>
+	 *          2.array("id=1","name='sky'")<br/>
+	 *          3.array("id"=>"1","name"=>"sky")<br/>
+	 * @return 对象总计数
+	 */
+	public function countMultitable($object,$from,$filter=null)
 	{
 		$result=null;
 		try {
@@ -164,26 +189,25 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 				return 0;
 			}
 			$_SQL=new Crud_Sql_Select();
-			$_SQL->isPreparedStatement=true;            
+			$_SQL->isPreparedStatement=true;
 			$this->saParams=$_SQL->parseValidInputParam($filter);
 			$_SQL->isPreparedStatement=false;
-			$this->sQuery=$_SQL->select(Crud_Sql_Select::SQL_COUNT)->from($this->classname)->where($this->saParams)->result();
-			if (Config_Db::$debug_show_sql){                           
-				LogMe::log("SQL:".$this->sQuery);  
-				if (!empty($this->saParams)) {      
+			$this->sQuery=$_SQL->select(Crud_Sql_Select::SQL_COUNT)->from($from)->where($this->saParams)->result();
+			if (Config_Db::$debug_show_sql){
+				LogMe::log("SQL:".$this->sQuery);
+				if (!empty($this->saParams)) {
 					LogMe::log("SQL PARAM:".var_export($this->saParams, true));
 				}
 			}
-			$object_arr=$this->connection->query($this->sQuery);   
+			$object_arr=$this->connection->query($this->sQuery);
 			if ($object_arr){
 				$row = $object_arr->fetch_row();
 				$result=$row[0];
-			}else{
-				$result=0;
 			}
 			return $result;
 		} catch (Exception $exc) {
 			Exception_Mysqli::record($exc->getTraceAsString());
+			return 0;
 		}
 	}
 
@@ -207,7 +231,10 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	 */
 	public function queryPage($object,$startPoint,$endPoint,$filter=null,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)
 	{
-		return self::queryPageMultitable($object,$startPoint,$endPoint,$this->classname,$filter,$sort);
+		if (!$this->validParameter($object)) {
+			return null;
+		}
+		return $this->queryPageMultitable($object,$startPoint,$endPoint,$this->classname,$filter,$sort);
 	}
 
 	/**
@@ -256,10 +283,6 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 			return null;
 		}
 	}
-
-
-
-	
 
 	/**
 	 * 将查询结果转换成业务层所认知的对象
@@ -451,7 +474,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 			$_SQL->isPreparedStatement=true;
 			$object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::TIMESTAMP));
 			$this->saParams=UtilObject::object_to_array($object);
-			//$this->filterViewProperties($this->saParams);
+			//$this->saParams=$this->filterViewProperties($this->saParams);
 			$this->sQuery=$_SQL->insert($this->classname)->values($this->saParams)->result();
 			$this->executeSQL();
 			if ($this->stmt){
@@ -519,7 +542,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 				$object->setUpdateTime(UtilDateTime::now(EnumDateTimeFormat::STRING));   
 				$this->saParams=UtilObject::object_to_array($object);
 				unset($this->saParams[DataObjectSpec::getRealIDColumnName($object)]);
-				$this->filterViewProperties($this->saParams);
+				$this->saParams=$this->filterViewProperties($this->saParams);
 				$where=$this->sql_id($object).self::EQUAL.$id;
 				$this->sQuery=$_SQL->update($this->classname)->set($this->saParams)->where($where)->result();
 				$this->executeSQL();

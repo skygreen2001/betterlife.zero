@@ -228,7 +228,7 @@ class Dal_Mdb2 extends Dal implements IDal
 				$object->setUpdateTime(UtilDateTime::now(EnumDateTimeFormat::STRING));
 				$this->saParams=UtilObject::object_to_array($object);
 				unset($this->saParams[DataObjectSpec::getRealIDColumnName($object)]);
-				$this->filterViewProperties($this->saParams);
+				$this->saParams=$this->filterViewProperties($this->saParams);
 				$where=$this->sql_id($object).self::EQUAL.$id;
 				$this->sQuery=$_SQL->update($this->classname)->set($this->saParams)->where($where)->result();         
 				if (Config_Db::$debug_show_sql){     

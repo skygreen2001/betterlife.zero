@@ -96,7 +96,8 @@ abstract class Dal {
      * 规范：数据对象里的显示属性以v_开始
      * @param array $saParams 预编译准备SQL参数
      */
-    protected function filterViewProperties(&$saParams) {
+    protected function filterViewProperties($saParams) 
+    {
         if (isset($saParams)&&is_array($saParams)) {
             $keys=array_keys($saParams);
             foreach ($keys as $key) {
@@ -105,6 +106,7 @@ abstract class Dal {
                 }
             }
         }
+        return $saParams;
     }
 
     /**

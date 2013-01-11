@@ -186,7 +186,7 @@ class Dao_Php5 extends Dao implements IDaoNormal
                 $object->setUpdateTime(UtilDateTime::now(EnumDateTimeFormat::STRING));
                 $this->saParams=UtilObject::object_to_array($object);
                 unset($this->saParams[DataObjectSpec::getRealIDColumnName($object)]);
-                $this->filterViewProperties($this->saParams);
+                $this->saParams=$this->filterViewProperties($this->saParams);
                 $where=$this->sql_id($object).self::EQUAL.$id;
                 foreach ($this->saParams as $key=>&$value) {
                     $value=$this->escape($value);

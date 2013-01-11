@@ -10,10 +10,11 @@
  * @package core.db.sql.util.crud
  * @author skygreen
  */
-class Crud_Sql_Select extends Crud_SQL {
-   /**
-	* @var array 查询列 
-	*/
+class Crud_Sql_Select extends Crud_SQL 
+{
+	/**
+	 * @var array 查询列 
+	 */
 	private $selectables = array();
 	/**
 	 * SQL join 子语句
@@ -21,13 +22,13 @@ class Crud_Sql_Select extends Crud_SQL {
 	 */
 	private $join;
 	/**
-	* SQL group by 子语句
-	* @var mixed
-	*/
+	 * SQL group by 子语句
+	 * @var mixed
+	 */
 	private $groupby;
 	/**
-	* SQL having 子语句
-	*/
+	 * SQL having 子语句
+	 */
 	private $having;
 	/**
 	 * @var string 排序字段 
@@ -74,7 +75,7 @@ class Crud_Sql_Select extends Crud_SQL {
 
 	/**
 	 * 创建from Select语句子字符串
-	 * @param string $tableorclassName 表名|类名[映射表]
+	 * @param string $tableorclassNames 表名|类名[映射表]
 	 * @return Crud_Sql_Select 
 	 */
 	public function from($tableorclassNames)
@@ -130,16 +131,16 @@ class Crud_Sql_Select extends Crud_SQL {
 	{
 		$this->groupby = $groupby;  
 	}
-	 
+
 	/**
 	* 创建 having 子语句
 	* @param string $having
 	*/
 	public function having($having)
 	{
-		$this->having = $having;  
+		$this->having = $having;
 	}
-	
+
 	/**
 	 * 根据$order排序<br/>
 	 * 默认为倒序<br/>
@@ -149,7 +150,7 @@ class Crud_Sql_Select extends Crud_SQL {
 	 * 2:order("name desc")<br/>
 	 * @return Crud_Sql_Select
 	 */
-	public function order($order) 
+	public function order($order)
 	{
 		if(!empty($order)) {
 			if (!(stripos($order,"asc")!==false||stripos($order,"desc")!==false)) {
@@ -168,7 +169,7 @@ class Crud_Sql_Select extends Crud_SQL {
 	 * @param mixed $limit
 	 * @return Crud_Sql_Select 
 	 */
-	public function limit($limit) 
+	public function limit($limit)
 	{
 		if (is_int($limit)) {
 			$this->limit = $limit;
@@ -194,7 +195,7 @@ class Crud_Sql_Select extends Crud_SQL {
 	 *    2:10<br/>
 	 * @param mixed $limit
 	 */
-	public function offset($offset) 
+	public function offset($offset)
 	{
 		if ($offset>0){
 			$offset=$offset-1;
