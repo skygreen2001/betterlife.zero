@@ -150,7 +150,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 */
 	public function getMutualRelation($property) 
 	{
-		 return DataObjectRelation::getMutualRelation($this,$property);
+		return DataObjectRelation::getMutualRelation($this,$property);
 	}
 	
 	//<editor-fold defaultstate="collapsed" desc="默认列Setter和Getter"> 
@@ -684,18 +684,18 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * 对象分页[多表关联查询]
 	 * @param int $startPoint  分页开始记录数
 	 * @param int $endPoint    分页结束记录数 
-	 * @param object|string|array $filter 查询条件，在where后的条件
-	 * 示例如下：<br/>
-	 *      0."id=1,name='sky'"<br/>
-	 *      1.array("id=1","name='sky'")<br/>
-	 *      2.array("id"=>"1","name"=>"sky")<br/>
-	 *      3.允许对象如new User(id="1",name="green");<br/>
 	 * @param string|array $from 来自多张表或者多个类[必须是数据对象类名]，在from后的多张表名，表名之间以逗号[,]隔开
 	 * 示例如下：<br/>
 	 *      0."table1,table2"<br/>
 	 *      1.array("table1","table2")<br/>
 	 *      2."class1,class2"<br/>
 	 *      3.array("class1","class2")<br/>	 
+	 * @param object|string|array $filter 查询条件，在where后的条件
+	 * 示例如下：<br/>
+	 *      0."id=1,name='sky'"<br/>
+	 *      1.array("id=1","name='sky'")<br/>
+	 *      2.array("id"=>"1","name"=>"sky")<br/>
+	 *      3.允许对象如new User(id="1",name="green");<br/>
 	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
 	 * @param string $sort 排序条件<br/>
 	 * 默认为 id desc<br/>
