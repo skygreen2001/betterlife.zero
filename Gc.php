@@ -353,7 +353,8 @@ class Gc
 				}
 			}
 			$baseDir = dirname($_SERVER['SCRIPT_NAME']);
-			$baseurl.=($baseDir == '\\' ? '' : $baseDir).'/';
+			$baseurl.=($baseDir == '\\' ? '' : $baseDir);
+			if (strpos(strrev($baseurl), "/") !== 0)$baseurl.='/';
 			Gc::$url_base=$baseurl;
 			$with_file=$_SERVER["SCRIPT_FILENAME"];
 			$file_sub_dir=dirname($with_file).DIRECTORY_SEPARATOR;

@@ -1,82 +1,115 @@
-body{
-	font-size:15px; 
-	font-family:"宋体",Verdana, Arial; 
-}
-a {
-	color: #000;
-}
-a:link {
-	color: #000;
-	text-decoration: none;
+body {
+	font-size: 15px;
+	font-family: 宋体, Verdana, Arial;
 }
 
-a:visited {
+a {
 	color: #000;
-	text-decoration: none;
 }
 
 a:hover {
 	text-decoration: underline;
-	color: #F00;
-}
-.title{
-	font-size: 24px;
-}
-.content{
-	width:860px;
-	height:250px; 
-	margin-left:250px;
-	margin-top:130px;
-	border:solid 1px #ccc;
-}
-.left{
-	width:450px; 
-	height:250px;
-}
-.leftContent{
-	border-right: solid 1px #ccc;
-}
-.right{
-	width: 300px;
-	height:250px;
+	color: red;
 }
 
-.logoLeft{
-	vertical-align:middle;
+a:link, a:visited {
+	color: #000;
+	text-decoration: none;
 }
+
+.title {
+	font-size: 24px;
+}
+
+body, ul, li, p, h1 {
+	margin: 0;
+	padding: 0;
+}
+
+#main {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	align: center;
+}
+
+#content {
+	position: absolute;
+	top: -50%;
+	width: 860px;
+	margin: -160px -430px;
+}
+
+.content {
+	width: 860px;
+	height: 250px;
+	border: solid 1px #ccc;
+}
+
+.left {
+	width: 450px;
+	height: 250px;
+}
+
+.leftContent {
+	border-right: solid 1px #ccc;
+}
+
+.right {
+	width: 300px;
+	height: 250px;
+}
+
+.logoLeft {
+	vertical-align: middle;
+}
+
 .inputNormal {
-	border-radius: 6px 6px 6px 6px;
-	text-align:center;
-	height:28px;
-	line-height:28px;
-	background:gray;
-	color:#FFF;
-	background-color:gray;
-	width:160px;  
+	border-radius: 6px;
+	text-align: center;
+	height: 28px;
+	line-height: 28px;
+	background: gray;
+	color: #FFF;
+	background-color: gray;
+	width: 160px;
 	margin-left: 12px;
-	border:1px solid gray;  
+	border: 1px solid gray;
 }
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	.inputNormal{
+		margin-left:22px;
+		-webkit-border-radius: 6px;
+		-webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+	}
+	.btnSubmit{
+		-webkit-border-radius: 6px;
+		-webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+	}
+}
+
 .inputVerify {
-	text-align:center;
-	height:24px;
-	line-height:24px;
-	background:gray;
-	color:#FFF;
-	background-color:gray;
-	width:100px;  
+	text-align: center;
+	height: 24px;
+	line-height: 24px;
+	background: gray;
+	color: #FFF;
+	background-color: gray;
+	width: 100px;
 	margin-left: 6px;
 	margin-right: 2px;
-	border:1px solid gray;  
+	border: 1px solid gray;
 }
-.btnSubmit{
-	margin-top:5px;
-	width:126px;
-	height:38px;
-	color:#FFF;
-	cursor:pointer;
-	font:bold 84% SimSun,helvetica,sans-serif;
-	background-color:#000;
-	border:1px solid;
-	border-color:#696 #363 #363 #696;
+
+.btnSubmit {
+	margin-top: 5px;
+	width: 126px;
+	height: 38px;
+	color: #FFF;
+	cursor: pointer;
+	font: bold 84% SimSun, helvetica, sans-serif;
+	background-color: #000;
+	border: 1px solid;
 	border-radius: 6px 6px 6px 6px;
-} 
+	border-color: #696 #363 #363 #696;
+}
