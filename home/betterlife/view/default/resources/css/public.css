@@ -85,6 +85,18 @@ textarea {
 	display: block;
 }
 
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+	.inputNormal{
+		margin-left:22px;
+		-webkit-border-radius: 6px;
+		-webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+	}
+	.btnSubmit{
+		-webkit-border-radius: 6px;
+		-webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+	}
+}
+
 .inputNormal {
 	border-radius: 6px 6px 6px 6px;
 	text-align:center;

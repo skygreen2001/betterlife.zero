@@ -15,13 +15,11 @@
 <meta name="revisit-after" content="15 days">
 <title><?=Gc::$site_name?></title>
 <style type="text/css">
-html, body {
+body {
 	font:normal 12px SimSun,sans-serif;
 	margin:0;
 	padding:0;
 	border:0 none;
-	overflow:hidden;
-	height:100%;
 }
 p {
 	margin:5px;
@@ -54,26 +52,44 @@ h1{
 	font:bold 200% STXingkai;
 	margin-top: 200px;
 }
+
+#main {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    align: center;
+}
+#inbox {
+    position: absolute;
+    top: -50%;
+    width: 360px;
+    margin: -330px -180px;
+}
+
 div#content{
 	border-style:outset;
 	border-color: black;
 	border-width: thin;
 	font-size: 14px;
-	width: 300px;
+	width: 360px;
 	height: 150px;
-	padding-top:50px;
+	padding-top:80px;
 	margin-top: 20px;
 }
 </style>
 <link rel="icon" href="favicon.ico" mce_href="favicon.ico" type="image/x-icon"> 
 </head>
 <body>
-<h1 align="center">欢迎来到&nbsp;&nbsp;<span class="en-head"><?=Gc::$site_name?></span></h1>
-<div align="center">
-	<div id="content" align="center">
-		<p><a href="<?php echo Gc::$url_base?>index.php?go=<?=Gc::$appName?>.index.index">网站前台</a></p>
-		<p><a href="<?php echo Gc::$url_base?>index.php?go=admin.index.index">网站后台</a></p>
+	<div id="main">
+		<div id="inbox">
+			<h1 align="center">欢迎来到&nbsp;&nbsp;<span class="en-head"><?=Gc::$site_name?></span></h1>
+			<div align="center">
+				<div id="content" align="center">
+					<p><a href="<?php echo Gc::$url_base?>index.php?go=<?=Gc::$appName?>.index.index">网站前台</a></p>
+					<p><a href="<?php echo Gc::$url_base?>index.php?go=admin.index.index">网站后台</a></p>
+				</div>
+			</div>
+		</div>
 	</div>
-</div>
 </body>
 </html>

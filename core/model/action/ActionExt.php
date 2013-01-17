@@ -196,7 +196,7 @@ class ActionExt extends Action
 		//初始化加载Css和Javascript库
 		$this->view->viewObject=new ViewObject();
 		UtilCss::loadExt($this->view->viewObject,UtilAjaxExtjs::$ext_version);
-		UtilAjaxExtjs::loadUI($this->view->viewObject,UtilAjaxExtjs::$ext_version);     
+		UtilAjaxExtjs::loadUI($this->view->viewObject,UtilAjaxExtjs::$ext_version);
 
 		UtilFileSystem::createDir(Gc::$attachment_path);
 		UtilFileSystem::createDir(Gc::$upload_path);
@@ -211,7 +211,7 @@ class ActionExt extends Action
 				"Linux command need:<br/>".str_repeat("&nbsp;",40).
 				"sudo mkdir -p ".Gc::$upload_path."<br/>".str_repeat("&nbsp;",40).
 				"sudo chmod 0777 ".Gc::$upload_path);
-		}    
+		}
 	}
 }
 ?>
