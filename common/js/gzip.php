@@ -24,6 +24,7 @@ $group=@$_GET['g'];
 $version = @$_GET['v'];
 
 if (isset ($jsFile)){
+	if (!endWith($jsFile, ".js"))return;
 	header("Content-type: text/javascript; charset: UTF-8");    
 	if (EnumJsFramework::isEnumValue($group)) {
 		$ajax_root=Gc::$nav_root_path."common".DIRECTORY_SEPARATOR."js".DIRECTORY_SEPARATOR."ajax".DIRECTORY_SEPARATOR;
@@ -62,6 +63,7 @@ if (isset ($jsFile)){
 }
 
 if (isset ($cssFile)){
+	if (!endWith($cssFile, ".css"))return;
 	header("Content-type: text/css; charset: UTF-8");   
 	if (EnumJsFramework::isEnumValue($group)) {  
 		$ajax_root=Gc::$nav_root_path."common".DIRECTORY_SEPARATOR."js".DIRECTORY_SEPARATOR."ajax".DIRECTORY_SEPARATOR;
