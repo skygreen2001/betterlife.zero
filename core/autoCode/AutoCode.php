@@ -19,7 +19,7 @@ class AutoCode extends Object
 	 */
 	public static $save_dir;
 	/**
-	 * 应用所在的路径 
+	 * 应用所在的路径
 	 */
 	public static $app_dir;
 	/**
@@ -27,9 +27,9 @@ class AutoCode extends Object
 	 */
 	public static $dir_src="src";
 	/**
-	 *实体数据对象类文件所在的路径 
+	 *实体数据对象类文件所在的路径
 	 */
-	public static $domain_dir="domain"; 
+	public static $domain_dir="domain";
 	/**
 	 * 表列表
 	 * @var mixed
@@ -46,41 +46,47 @@ class AutoCode extends Object
 	 */
 	public static $fieldInfos=array();
 	/**
-	 * 数据对象关系显示字段 
+	 * 数据对象关系显示字段
 	 * @var mixed
 	 */
 	public static $relation_viewfield;
 	/**
 	 * 所有的数据对象关系:<br/>
 	 * 一对一，一对多，多对多<br/>
-	 * 包括*.has_one,belong_has_one,has_many,many_many,belongs_many_many. <br/> 
+	 * 包括*.has_one,belong_has_one,has_many,many_many,belongs_many_many. <br/>
 	 * 参考说明:EnumTableRelation
 	 * @var mixed
 	 */
-	public static $relation_all; 
+	public static $relation_all;
 	/**
-	 * 数据对象引用另一个数据对象同样值的冗余字段 
+	 * 数据对象引用另一个数据对象同样值的冗余字段
 	 * @var mixed
 	 */
 	public static $redundancy_table_fields;
 	/**
 	 * 获取类和注释的说明<br/>
 	 */
-	public static $class_comments; 
-	
+	public static $class_comments;
+
 	/**
-	 * 初始化 
+	 * 初始化
 	 */
 	public static function init()
 	{
+		if (!is_dir(self::$save_dir)){
+			die("因为安全原因，需要手动在操作系统中创建目录:".self::$save_dir."<br/>".
+				"Linux command need:<br/>".str_repeat("&nbsp;",40).
+				"sudo mkdir -p ".self::$save_dir."<br/>".str_repeat("&nbsp;",40).
+				"sudo chmod 0777 ".self::$save_dir);
+		}
 		if (empty(self::$tableList)){
-			self::$tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
-			self::$tableList=array_keys(self::$tableInfoList);//Manager_Db::newInstance()->dbinfo()->tableList(); 
+			self::$tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList();
+			self::$tableList=array_keys(self::$tableInfoList);//Manager_Db::newInstance()->dbinfo()->tableList();
 		}
 		if (empty(self::$fieldInfos)){
 			$ignoreTables=array();
 			foreach (self::$tableList as $tablename){
-				$classname=self::getClassname($tablename); 
+				$classname=self::getClassname($tablename);
 				if (!contain($tablename,Config_Db::$table_prefix)){
 					$ignoreTables[]=$tablename;
 					continue;
@@ -89,31 +95,31 @@ class AutoCode extends Object
 					$ignoreTables[]=$tablename;
 					continue;
 				}
-				$fieldInfoList=Manager_Db::newInstance()->dbinfo()->fieldInfoList($tablename); 
+				$fieldInfoList=Manager_Db::newInstance()->dbinfo()->fieldInfoList($tablename);
 				foreach($fieldInfoList as $fieldname=>$field){
 					self::$fieldInfos[$tablename][$fieldname]["Field"]=$field["Field"];
 					self::$fieldInfos[$tablename][$fieldname]["Type"]=$field["Type"];
 					self::$fieldInfos[$tablename][$fieldname]["Comment"]=$field["Comment"];
 					self::$fieldInfos[$tablename][$fieldname]["Key"]=$field["Key"];
 					if ($field["Null"]=='NO'){
-						self::$fieldInfos[$tablename][$fieldname]["IsPermitNull"]=false; 
+						self::$fieldInfos[$tablename][$fieldname]["IsPermitNull"]=false;
 					}else{
 						self::$fieldInfos[$tablename][$fieldname]["IsPermitNull"]=true;
 					}
 				}
 				self::$class_comments[$classname]=self::$tableInfoList[$tablename]["Comment"];
-			} 
+			}
 			self::$tableList=array_diff(self::$tableList, $ignoreTables);
 			foreach ($ignoreTables as $tablename) {
 				unset(self::$tableInfoList[$tablename]);
-			} 
+			}
 		}
 	}
-	
+
 	/**
 	 * 从表名称获取对象的类名【头字母大写】。
 	 * @param string $tablename
-	 * @return string 返回对象的类名 
+	 * @return string 返回对象的类名
 	 */
 	protected static function getClassname($tablename)
 	{
@@ -126,7 +132,7 @@ class AutoCode extends Object
 		}
 		return $classname;
 	}
-	
+
 	/**
 	 * 根据类名获取表名
 	 * @param mixed $class
@@ -142,27 +148,27 @@ class AutoCode extends Object
 		}
 		return null;
 	}
-	
+
 	/**
 	 * 从表名称获取对象的类名实例化名【头字母小写】。
 	 * @param string $tablename
-	 * @return string 返回对象的类名 
+	 * @return string 返回对象的类名
 	 */
 	protected static function getInstancename($tablename)
 	{
 		if (in_array($tablename, Config_Db::$orm)) {
 			$classname=array_search($tablename, Config_Db::$orm);
-		}else { 
+		}else {
 			$classnameSplit= explode("_", $tablename);
 			$classnameSplit=array_reverse($classnameSplit);
 			$classname=$classnameSplit[0];
 		}
 		return $classname;
 	}
-	
+
 	/**
 	 * 表中列的类型定义
-	 * @param string $type 
+	 * @param string $type
 	 */
 	protected static function column_type($type)
 	{
@@ -171,9 +177,9 @@ class AutoCode extends Object
 		}else{
 			$typep=$type;
 		}
-		return $typep; 
+		return $typep;
 	}
-	
+
 	/**
 	 * 将表中的类型定义转换成对象field的注释类型说明
 	 * @param string $type 类型定义
@@ -184,10 +190,10 @@ class AutoCode extends Object
 		switch ($typep) {
 			case "int":
 			case "enum":
-				return $typep; 
+				return $typep;
 			case "timestamp":
 			case "datetime":
-				return 'date'; 
+				return 'date';
 			case "bigint":
 				return "int";
 			case "decimal":
@@ -198,10 +204,10 @@ class AutoCode extends Object
 				return "string";
 		}
 	}
-	
+
 	/**
 	 * 表中列的长度定义
-	 * @param string $type 
+	 * @param string $type
 	 */
 	protected static function column_length($type)
 	{
@@ -210,22 +216,22 @@ class AutoCode extends Object
 		}else{
 			$length=1;
 		}
-		return $length; 
+		return $length;
 	}
-			
+
 	/**
-	 * 保存生成的代码到指定命名规范的文件中 
+	 * 保存生成的代码到指定命名规范的文件中
 	 * @param string $dir 保存路径
 	 * @param string $filename 文件名称
-	 * @param string $definePhpFileContent 生成的代码 
+	 * @param string $definePhpFileContent 生成的代码
 	 */
 	protected static function saveDefineToDir($dir,$filename,$definePhpFileContent)
-	{ 
+	{
 		UtilFileSystem::createDir($dir);
-		UtilFileSystem::save_file_content($dir.DIRECTORY_SEPARATOR.$filename,$definePhpFileContent); 
+		UtilFileSystem::save_file_content($dir.DIRECTORY_SEPARATOR.$filename,$definePhpFileContent);
 		return basename($filename, ".php");
 	}
-	
+
 	/**
 	 * 用户输入需求
 	 * @param 输入用户需求的选项
@@ -238,11 +244,11 @@ class AutoCode extends Object
 		 */
 		echo  '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 				<html lang="zh-CN" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">';
-		echo "<head>\r\n"; 
+		echo "<head>\r\n";
 		echo UtilCss::form_css()."\r\n";
 		$url_base=UtilNet::urlbase();
 		echo "<script type='text/javascript' src='".$url_base."common/js/util/file.js'></script>";
-		echo "</head>"; 
+		echo "</head>";
 		echo "<body>";
 		echo "<br/><br/><br/><br/><br/><h1 align='center'>$title</h1>";
 		echo "<div align='center' height='450'>";
@@ -258,7 +264,7 @@ class AutoCode extends Object
 				echo "        <option value='$key'>$value</option>";
 			}
 			echo "      </select>";
-		} 
+		}
 		echo "  </div>";
 		echo "  <input type=\"submit\" value='生成' /><br/>";
 		echo "  <p id='indexPage'>说明： <br/>
@@ -266,26 +272,26 @@ class AutoCode extends Object
 					* 如果您希望选择指定文件夹，特别注意的是,由于安全方面的问题,你还需要如下设置才能使本JS代码正确运行,否则会出现\"没有权限\"的问题。<br/>
 					1.设置可信任站点（例如本地的可以为：http://localhost）<br/>
 					2.其次：可信任站点安全级别自定义设置中：设置下面的选项<br/>
-					\"对没有标记为安全的ActiveX控件进行初始化和脚本运行\"----\"启用\"</p>"; 
+					\"对没有标记为安全的ActiveX控件进行初始化和脚本运行\"----\"启用\"</p>";
 		echo "</form>";
 		echo "</div>";
 		echo "</body>";
 		echo "</html>";
 	}
-		 
+
 	/**
-	 * 根据表列枚举类型生成枚举类名称 
+	 * 根据表列枚举类型生成枚举类名称
 	 * @param string $columnname 枚举列名称
 	 * @param string $tablename 表名称
 	 */
 	protected static function enumClassName($columnname,$tablename=null)
 	{
-		$enumclassname="Enum"; 
-		if ((strtolower($columnname)=='type')||(strtolower($columnname)=='statue')||(strtolower($columnname)=='status')){ 
+		$enumclassname="Enum";
+		if ((strtolower($columnname)=='type')||(strtolower($columnname)=='statue')||(strtolower($columnname)=='status')){
 			$enumclassname.=self::getClassname($tablename).ucfirst($columnname);
 		}else{
 			if (contain($columnname,"_")){
-				$c_part=explode("_",$columnname); 
+				$c_part=explode("_",$columnname);
 				foreach ($c_part as $column) {
 					$enumclassname.=ucfirst($column);
 				}
@@ -303,7 +309,7 @@ class AutoCode extends Object
 	 *    0：女-female
 	 *    1：男-mail
 	 *    -1：待确认-unknown
-	 *    默认男  
+	 *    默认男
 	 * @param mixed $fieldComment 表枚举类型列注释
 	 */
 	protected static function enumDefines($fieldComment)
@@ -321,7 +327,7 @@ class AutoCode extends Object
 					$comment = str_replace("：",':',$comment);
 				}
 				$part_arr=preg_split("/[.:]+/", $comment);
-				if ((!empty($part_arr))&&(count($part_arr)==2)){ 
+				if ((!empty($part_arr))&&(count($part_arr)==2)){
 					$cn_en_arr=array();
 					$enum_comment=$part_arr[1];
 					if (is_numeric($part_arr[0])){
@@ -332,21 +338,21 @@ class AutoCode extends Object
 								'name'=>strtolower($cn_en_arr[1]),
 								'value'=>$part_arr[0],
 								'comment'=>$cn_en_arr[0]
-							); 
+							);
 						}
 					}else{
 						$enum_columnDefine[]=array(
 							'name'=>strtolower($part_arr[0]),
 							'value'=>strtolower($part_arr[0]),
 							'comment'=>$part_arr[1]
-						); 
+						);
 					}
 				}
 			}
-		} 
+		}
 		return $enum_columnDefine;
 	}
-			 
+
 	/**
 	 * 列是否大量文本输入应该TextArea输入
 	 * @param string $column_name 列名称
@@ -359,11 +365,11 @@ class AutoCode extends Object
 			return true;
 		}else{
 			return false;
-		} 
-	} 
-	
+		}
+	}
+
 	/**
-	 * 列是否是图片路径 
+	 * 列是否是图片路径
 	 * @param string $column_name 列名称
 	 * @param mixed $column_comment 列注释
 	 */
@@ -385,7 +391,7 @@ class AutoCode extends Object
 	protected static function isNotColumnKeywork($fieldname)
 	{
 		if ($fieldname=="id"||$fieldname=="commitTime"||$fieldname=="updateTime"){
-			return false; 
+			return false;
 		}else{
 			return true;
 		}
@@ -397,7 +403,7 @@ class AutoCode extends Object
 	 */
 	protected static function keyIDColumn($dataobject)
 	{
-		return DataObjectSpec::getRealIDColumnNameStatic($dataobject);  
+		return DataObjectSpec::getRealIDColumnNameStatic($dataobject);
 	}
 
 	/**
@@ -409,10 +415,10 @@ class AutoCode extends Object
 		if (self::$tableInfoList!=null&&count(self::$tableInfoList)>0&&array_key_exists("$tablename", self::$tableInfoList))
 		{
 			$table_comment=self::$tableInfoList[$tablename]["Comment"];
-			$table_comment=str_replace("关系表","",$table_comment); 
+			$table_comment=str_replace("关系表","",$table_comment);
 			if (contain($table_comment,"\r")||contain($table_comment,"\n")){
 				$table_comment=preg_split("/[\s,]+/", $table_comment);
-				$table_comment=$table_comment[0]; 
+				$table_comment=$table_comment[0];
 			}
 		}else{
 			$table_comment=self::getClassname($tablename);
@@ -434,7 +440,7 @@ class AutoCode extends Object
 		if (contain($field_comment,"\r")||contain($field_comment,"\n"))
 		{
 			$field_comment=preg_split("/[\s,]+/", $field_comment);
-			$field_comment=$field_comment[0]; 
+			$field_comment=$field_comment[0];
 		}
 		if ($field_comment)$field_comment=str_replace(array('标识','编号','主键'),"",$field_comment);
 		return $field_comment;
