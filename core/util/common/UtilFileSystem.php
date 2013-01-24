@@ -165,13 +165,35 @@ class UtilFileSystem extends Util
 	 * @param mixed $files 上传的文件对象
 	 * @param string $uploadPath 文件路径或者文件名
 	 * @param sting $uploadFieldName 上传文件的input组件的名称
+	 * @param sting $file_permit_upload_size 上传文件大小尺寸,单位是M
 	 * @return array 返回信息数组
 	 */
-	public static function uploadFile($files,$uploadPath,$uploadFieldName="upload_file")
+	public static function uploadFile($files,$uploadPath,$uploadFieldName="upload_file",$file_permit_upload_size=100)
 	{
-		if ($files[$uploadFieldName]["size"] < intval(ini_get("upload_max_filesize")*1024*1024)) {
+		if ($files[$uploadFieldName]["size"] < intval(ini_get("upload_max_filesize")*1024*$file_permit_upload_size)) {
 			if ($files[$uploadFieldName]["error"] > 0) {
-				return array('success' => false, 'msg' =>  '文件太大！文件大小不能超过2M！');
+				switch($files[$uploadFieldName]['error']) {
+					case 1:
+						$errorInfo="文件大小超出了服务器的空间大小";//The file is too large (server)
+						break;
+					case 2:
+						$errorInfo="要上传的文件大小超出浏览器限制";//The file is too large (form)
+						break;
+					case 3:
+						$errorInfo="文件仅部分被上传";//The file was only partially uploaded.
+						break;
+					case 4:
+						$errorInfo="没有文件被上传";//No file was uploaded.
+						break;
+					case 5:
+						$errorInfo="服务器临时文件夹丢失";//The servers temporary folder is missing.
+						break;
+					case 6:
+						$errorInfo="文件写入到临时文件夹出错";//Failed to write to the temporary folder.
+						break;
+				}
+				$errorInfo.="[错误号：".$files[$uploadFieldName]["error"]."],详情查看：<br/>http://php.net/manual/zh/features.file-upload.errors.php";
+				return array('success' => false, 'msg' =>  $errorInfo);
 			} else {
 				//获得临时文件名
 				$tmptail = end(explode('.', $files[$uploadFieldName]["name"])); 
@@ -197,7 +219,7 @@ class UtilFileSystem extends Util
 				}
 			}
 		} else {
-			return array('success' => false, 'msg' => '文件太大！');
+			return array('success' => false, 'msg' => '文件太大！文件大小不能超过'.$file_permit_upload_size."M!");
 		}
 	}
 		
