@@ -27,7 +27,7 @@ class EnumLogType extends Enum{
 	 */
 	const SAPI	  = 4;
 	/**
-	 * 浏览器显示。 
+	 * 浏览器显示。
 	 */
 	const BROWSER	= 11;
 	/**
@@ -48,11 +48,11 @@ class EnumLogType extends Enum{
 
  * @access public
  */
-class Gc 
+class Gc
 {
 	//<editor-fold desc="网站使用设置">
 	/**
-	 * 是否在线性能优化 
+	 * 是否在线性能优化
 	 * @var mixed
 	 */
 	public static $is_online_optimize=false;
@@ -69,7 +69,7 @@ class Gc
 	public static $version="1.0";
 	/**
 	 * 网站根路径的URL路径
-	 * @var string 
+	 * @var string
 	 * @static
 	 */
 	public static $url_base;//="http://localhost/betterlife/";//获取网站URL根路径
@@ -91,25 +91,25 @@ class Gc
 	public static $nav_framework_path;//="C:\\wamp\\www\\betterlife\\";
 	/**
 	* 上传或者下载文件的路径
-	* 
+	*
 	* @var mixed
 	*/
 	public static $attachment_path;//="C:\\wamp\\www\\betterlife\\attachment\\";
 	/**
-	* 上传或者下载文件的网络路径[可删除] 
-	* 
+	* 上传或者下载文件的网络路径[可删除]
+	*
 	* @var mixed
 	*/
 	public static $attachment_url;//="http://localhost/betterlife/attachment/";
 	/**
 	* 上传图片的网络路径
-	* 
+	*
 	* @var mixed
 	*/
 	public static $upload_url;//="http://localhost/betterlife/upload/";
 	/**
-	* 上传图片的路径 
-	* 
+	* 上传图片的路径
+	*
 	* @var mixed
 	*/
 	public static $upload_path;//="C:\\wamp\\www\\betterlife\\upload\\";
@@ -128,7 +128,7 @@ class Gc
 	 * 业务应用部署的根目录<br/>
 	 * 说明：该框架采用模块组建的方式<br/>
 	 * 每一个遵循该框架的网站业务应用都部署在该目录下<br/>
-	 * @var string 
+	 * @var string
 	 * @static
 	 */
 	public static $module_root="home";
@@ -196,30 +196,30 @@ class Gc
 	public static $template_mode=1;
 	/**
 	 * 每个模块可以定义自己的模板模式
-	 * 如过没有定义，则使用$template_mode默认定义的名称，一般都是1:Smarty 
+	 * 如过没有定义，则使用$template_mode默认定义的名称，一般都是1:Smarty
 	 * @var mixed
 	 */
 	public static $template_mode_every=array(
-		//'betterlife'=>5	
+		//'betterlife'=>5
 	);
 	/**
 	 * 开发者自定义当前使用模板目录名<br/>
 	 * 示例：D:\wamp\www\betterlife\home\betterlife\view\default<br/>
-	 *	   default即自定义当前使用模板目录名 
+	 *	   default即自定义当前使用模板目录名
 	 * @var string
 	 * @static
 	 */
 	public static $self_theme_dir="default";
 	/**
 	 * 每个模块可以定义自己显示的模板名
-	 * 如过没有定义，则使用$self_theme_dir默认定义的名称，一般都是default 
+	 * 如过没有定义，则使用$self_theme_dir默认定义的名称，一般都是default
 	 * @var mixed
 	 */
 	public static $self_theme_dir_every=array(
-		//'betterlife'=>'flexy'	
+		//'betterlife'=>'flexy'
 	);
 	/**
-	 * 是否与Ucenter的用户中心进行整合 
+	 * 是否与Ucenter的用户中心进行整合
 	 * @var mixed
 	 */
 	public static $is_ucenter_integration=false;
@@ -273,7 +273,7 @@ class Gc
 		"sendmail_from"=>"skygreen2001@sina.com",
 		/**
 		 * 可在php.ini中设置sendmail_path，无法通过ini_set实时设置，因为它只能在php.ini或者httpd.conf中设置。<br/>
-		 * 因为官网文档【http://php.net/manual/en/mail.configuration.php】：sendmail_path "/usr/sbin/sendmail -t -i" PHP_INI_SYSTEM 
+		 * 因为官网文档【http://php.net/manual/en/mail.configuration.php】：sendmail_path "/usr/sbin/sendmail -t -i" PHP_INI_SYSTEM
 		 */
 		//"sendmail_path"=>"C:\wamp\sendmail\sendmail.exe -t",
 		/**
@@ -287,8 +287,8 @@ class Gc
 	 * 日志的配置。
 	 * @var array 日志的配置。
 	 * @static
-	 */	
-	//<editor-fold defaultstate="collapsed" desc="日志的设置">	
+	 */
+	//<editor-fold defaultstate="collapsed" desc="日志的设置">
 	public static $log_config=array(
 		/**
 		 * 默认日志记录的方式。<br/>
@@ -315,7 +315,7 @@ class Gc
 		 */
 		"timeFormat" =>  '%Y-%m-%d %H:%M:%S',
 		/**
-		 * 通过邮件发送日志的配置。 
+		 * 通过邮件发送日志的配置。
 		 */
 		"config_mail_log"=>array(
 			'subject' => '重要的日志事件',
@@ -323,13 +323,13 @@ class Gc
 		),
 		"log_table"=>"bb_log_log",
 	);
-	//</editor-fold>	
+	//</editor-fold>
 	//</editor-fold>
 
 	/**
 	* 无需配置自动注入网站的网络地址和物理地址。
 	*/
-	//<editor-fold defaultstate="collapsed" desc="初始化设置">	  
+	//<editor-fold defaultstate="collapsed" desc="初始化设置">
 	public static function init()
 	{
 		if (empty(Gc::$nav_root_path)){
@@ -341,7 +341,7 @@ class Gc
 		if (empty(Gc::$nav_framework_path)){
 			Gc::$nav_framework_path=dirname(__FILE__).DIRECTORY_SEPARATOR;
 		}
-		
+
 		if (empty(Gc::$url_base)){
 			if(isset($_SERVER['HTTPS']) && strpos('on',$_SERVER['HTTPS'])){
 				$baseurl = 'https://'.$_SERVER['HTTP_HOST'];
@@ -361,15 +361,13 @@ class Gc
 			$file_sub_dir=str_replace("/", DIRECTORY_SEPARATOR, $file_sub_dir);
 			$file_sub_dir=str_replace(Gc::$nav_root_path, "", $file_sub_dir);
 			$file_sub_dir=str_replace(DIRECTORY_SEPARATOR, "/", $file_sub_dir);
-			$url_base=Gc::$url_base;
-			$url_base=str_replace($file_sub_dir, "", $url_base);
-			Gc::$url_base=$url_base;
+			Gc::$url_base=str_replace($file_sub_dir, "", Gc::$url_base);
 			if (empty(Gc::$attachment_url)){
 				Gc::$attachment_url=Gc::$url_base;
 				$same_part=explode(DIRECTORY_SEPARATOR,Gc::$nav_root_path);
 				if ($same_part&&(count($same_part)>2)){
 					$same_part=$same_part[count($same_part)-2];
-					if (strpos(strtolower(Gc::$attachment_url),strtolower($same_part))!== false) {
+					if (strpos(strtolower(Gc::$attachment_url),"/".strtolower($same_part)."/")!== false) {
 						Gc::$attachment_url=substr(Gc::$attachment_url,0,(strrpos(Gc::$attachment_url,$same_part."/")+strlen($same_part)+1))."attachment/";
 					}else{
 						$parse_url=parse_url(Gc::$attachment_url);
@@ -384,7 +382,7 @@ class Gc
 				$same_part=explode(DIRECTORY_SEPARATOR,Gc::$nav_root_path);
 				if ($same_part&&(count($same_part)>2)){
 					$same_part=$same_part[count($same_part)-2];
-					if (strpos(strtolower(Gc::$upload_url),strtolower($same_part))!== false) {
+					if (strpos(strtolower(Gc::$upload_url),"/".strtolower($same_part)."/")!== false) {
 						Gc::$upload_url=substr(Gc::$upload_url,0,(strrpos(Gc::$upload_url,$same_part."/")+strlen($same_part)+1))."upload/";
 					}else{
 						$parse_url=parse_url(Gc::$upload_url);
