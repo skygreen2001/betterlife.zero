@@ -73,6 +73,7 @@ class AutoCode extends Object
 	 */
 	public static function init()
 	{
+		UtilFileSystem::createDir(self::$save_dir);
 		if (!is_dir(self::$save_dir)){
 			die("因为安全原因，需要手动在操作系统中创建目录:".self::$save_dir."<br/>".
 				"Linux command need:<br/>".str_repeat("&nbsp;",40).
