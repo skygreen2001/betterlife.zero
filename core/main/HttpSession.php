@@ -19,7 +19,7 @@ class HttpSession
 
 	/**
 	 * 判断Session中是否存在$key的值
-	 * 
+	 *
 	 * @param mixed $key
 	 * @return mixed
 	 */
@@ -30,12 +30,13 @@ class HttpSession
 
 	/**
 	 * 在Session会话中添加指定$key的值
-	 * 
+	 *
 	 * @param mixed $key
 	 * @param mixed $value
 	 */
 	public static function set($key,$value)
 	{
+		if (empty($_SESSION))self::init();
 		$_SESSION[$key]= $value;
 	}
 
@@ -55,7 +56,7 @@ class HttpSession
 
 	/**
 	 * 在Session会话中获取$key的值
-	 * 
+	 *
 	 * @param mixed $key
 	 * @return mixed
 	 */
@@ -70,8 +71,25 @@ class HttpSession
 	}
 
 	/**
+	 * 在Session会话中获取多个指定$key的值
+	 * @param mixed $keys 多个键值
+	 * @return mixed
+	 */
+	public static function gets($keys)
+	{
+		$result=array();
+		if ($keys&&is_array($keys)&&(count($keys)>0))
+		{
+			foreach ($keys as $key) {
+				$result[$key]=self::get($key);
+			}
+		}
+		return $result;
+	}
+
+	/**
 	 * 从Session会话中移除指定$key的值
-	 * 
+	 *
 	 * @param string $key
 	 */
 	public static function remove($key)
@@ -83,7 +101,7 @@ class HttpSession
 
 	/**
 	 * 从Session会话中移除指定$keys的值
-	 * 
+	 *
 	 * @param array $keys 多个键值
 	 */
 	public static function removes($keys)
@@ -97,7 +115,7 @@ class HttpSession
 	}
 
 	/**
-	 * 清除所有的Session 
+	 * 清除所有的Session
 	 */
 	public static function removeAll()
 	{
