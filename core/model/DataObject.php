@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 //<editor-fold defaultstate="collapsed" desc="枚举类型">
 DataObjectSpec::init();
@@ -21,8 +21,8 @@ DataObjectSpec::init();
  * @package core.model
  * @author skygreen
  */
-abstract class DataObject extends Object implements ArrayAccess 
-{ 
+abstract class DataObject extends Object implements ArrayAccess
+{
 	//<editor-fold defaultstate="collapsed" desc="定义部分">
 	/**
 	* @var enum $id_name_strategy ID名称定义的策略
@@ -43,7 +43,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	* Foreign ID名称定义的策略为TABLENAME_ID有效。
 	* @static
 	*/
-	public static $foreignid_concat='_'; 
+	public static $foreignid_concat='_';
 	/**
 	* 数据对象定义需定义字段：public $field_spec<br/>
 	* 它定义了当前数据对象的列规格说明。<br/>
@@ -51,11 +51,11 @@ abstract class DataObject extends Object implements ArrayAccess
 	*/
 	public $field_spec;
 	/**
-	 * @var mixed 数据对象的唯一标识 
+	 * @var mixed 数据对象的唯一标识
 	 */
 	protected $id;
 	/**
-	 * @var int 记录创建的时间timestamp 
+	 * @var int 记录创建的时间timestamp
 	 */
 	public $commitTime;
 	/**
@@ -68,9 +68,9 @@ abstract class DataObject extends Object implements ArrayAccess
 	private static $currentDao;
 	/**
 	 * 获取当前使用的数据库调用对象
-	 * @return IDao 
+	 * @return IDao
 	 */
-	public static function dao() 
+	public static function dao()
 	{
 		if (!isset(self::$currentDao)) {
 			self::$currentDao=Manager_Db::newInstance()->dao();
@@ -80,13 +80,13 @@ abstract class DataObject extends Object implements ArrayAccess
 	/**
 	* 静态方法:获取数据对象的类名
 	*/
-	public static function classname_static() 
+	public static function classname_static()
 	{
 		$result=get_called_class();
 		return $result;
 	}
 	//</editor-fold>
-	
+
 	//<editor-fold defaultstate="collapsed" desc="魔术方法">
 	/**
 	* 从数组创建对象。
@@ -99,7 +99,7 @@ abstract class DataObject extends Object implements ArrayAccess
 			UtilObject::array_to_object($array,$this);
 		}
 	}
-		
+
 	/**
 	 * 说明：若每个具体的实现类希望不想实现set,get方法；<br/>
 	 *      则将该方法复制到每个具体继承他的对象类内。<br/>
@@ -120,7 +120,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * @param mixed $property 属性名
 	 * @return mixed 属性值
 	 */
-	public function __get($property) 
+	public function __get($property)
 	{
 		return DataObjectFunc::get($this,$property);
 	}
@@ -131,11 +131,11 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * @param mixed $property 属性名
 	 * @param mixed $value 属性值
 	 */
-	public function __set($property, $value) 
+	public function __set($property, $value)
 	{
 		return DataObjectFunc::set($this,$property,$value);
 	}
-	
+
 	 /**
 	 * 打印当前对象的数据结构
 	 * @return string 描述当前对象。
@@ -144,26 +144,26 @@ abstract class DataObject extends Object implements ArrayAccess
 		return DataObjectFunc::toString($this);
 	}
 	//</editor-fold>
-	
+
 	/**
 	 * 处理表之间一对一，一对多，多对多的关系
 	 */
-	public function getMutualRelation($property) 
+	public function getMutualRelation($property)
 	{
 		return DataObjectRelation::getMutualRelation($this,$property);
 	}
-	
-	//<editor-fold defaultstate="collapsed" desc="默认列Setter和Getter"> 
+
+	//<editor-fold defaultstate="collapsed" desc="默认列Setter和Getter">
 	/**
 	 * @var array 存放当前数据对象的列规格说明
 	 */
 	public $real_fieldspec;
-	
+
 	/**
 	 * 设置唯一标识
-	 * @param mixed $id 
+	 * @param mixed $id
 	 */
-	public function setId($id) 
+	public function setId($id)
 	{
 		if (DataObjectSpec::isNeedID($this)){
 			$columnName=DataObjectSpec::getRealIDColumnName($this);
@@ -176,7 +176,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * 获取唯一标识
 	 * @return mixed
 	 */
-	public function getId() 
+	public function getId()
 	{
 		if (DataObjectSpec::isNeedID($this)){
 			$columnName=DataObjectSpec::getRealIDColumnName($this);
@@ -190,9 +190,9 @@ abstract class DataObject extends Object implements ArrayAccess
 
 	/**
 	 * 设置数据创建的时间
-	 * @param mixed $commitTime 
+	 * @param mixed $commitTime
 	 */
-	public function setCommitTime($commitTime) 
+	public function setCommitTime($commitTime)
 	{
 		if (DataObjectSpec::isNeedCommitTime($this))
 		{
@@ -204,9 +204,9 @@ abstract class DataObject extends Object implements ArrayAccess
 
 	/**
 	 * 获取数据创建的时间
-	 * @return mixed 
+	 * @return mixed
 	 */
-	public function getCommitTime() 
+	public function getCommitTime()
 	{
 		if (DataObjectSpec::isNeedCommitTime($this)){
 			$columnName=DataObjectSpec::getRealColumnName($this,EnumColumnNameDefault::COMMITTIME);
@@ -221,25 +221,25 @@ abstract class DataObject extends Object implements ArrayAccess
 
 	/**
 	 * 设置数据最后更新的时间
-	 * @param mixed $updateTime 
+	 * @param mixed $updateTime
 	 */
-	public function setUpdateTime($updateTime) 
+	public function setUpdateTime($updateTime)
 	{
 		if (DataObjectSpec::isNeedUpdateTime($this))
 		{
 			$columnName=DataObjectSpec::getRealColumnName($this,EnumColumnNameDefault::UPDATETIME);
 			$this->$columnName= $updateTime;
 		}else{
-			$this->setCommitTime($updateTime); 
+			$this->setCommitTime($updateTime);
 		}
 		unset($this->real_fieldspec);
 	}
 
 	/**
 	 * 获取数据最后更新的时间
-	 * @return mixed 
+	 * @return mixed
 	 */
-	public function getUpdateTime() 
+	public function getUpdateTime()
 	{
 		if (DataObjectSpec::isNeedUpdateTime($this)){
 			$columnName=DataObjectSpec::getRealColumnName($this,EnumColumnNameDefault::UPDATETIME);
@@ -247,42 +247,42 @@ abstract class DataObject extends Object implements ArrayAccess
 			return $this->$columnName;
 		} else {
 			unset($this->real_fieldspec);
-			return $this->getCommitTime($updateTime); 
+			return $this->getCommitTime($updateTime);
 		}
 		//return $this->updateTime;
 	}
 	//</editor-fold>
-	
+
 	//<editor-fold defaultstate="collapsed" desc="定义数组进入对象方式">
-	public function offsetExists($key) 
+	public function offsetExists($key)
 	{
 		$method="get".ucfirst($key);
 		return method_exists($this,$method);
 	}
-	public function offsetGet($key) 
+	public function offsetGet($key)
 	{
 		$method="get".ucfirst($key);
 		return $this->$method();
 	}
-	public function offsetSet($key, $value) 
+	public function offsetSet($key, $value)
 	{
 		$method="set".ucfirst($key);
 		$this->$method($value);
 		//$this->$key = $value;
 	}
-	public function offsetUnset($key) 
+	public function offsetUnset($key)
 	{
 		unset($this->$key);
 	}
 	//</editor-fold>
-	
+
 	//<editor-fold defaultstate="collapsed" desc="数据持久化：数据库的CRUD操作">
 	/**
 	 * 获取当前数据对象的表名
 	 */
 	public static function tablename(){
 		return Config_Db::orm(get_called_class());
-	} 
+	}
 
 	/**
 	 * 根据数据对象的属性名获取属性名的显示。
@@ -292,20 +292,20 @@ abstract class DataObject extends Object implements ArrayAccess
 	public static function propertyShow($data,$property_name)
 	{
 		DataObjectFunc::propertyShow($data,get_called_class(),$property_name);
-	} 
-	 
+	}
+
 	/**
 	 * 保存前操作
 	 */
-	protected function onBeforeWrite() 
+	protected function onBeforeWrite()
 	{
 	}
-	
+
 	/**
 	 * 保存当前对象
 	 * @return boolen 是否新建成功；true为操作正常
 	 */
-	protected function write() 
+	protected function write()
 	{
 		$this->save();
 	}
@@ -314,7 +314,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * 保存当前对象
 	 * @return int 保存对象记录的ID标识号
 	 */
-	public function save() 
+	public function save()
 	{
 		$this->onBeforeWrite();
 		return self::dao()->save($this);
@@ -344,7 +344,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * @param mixed $relation_object 多对多|从属于多对多关系定义对象
 	 * @param mixed $relation_id_value 关系对象的主键ID值。
 	 * @param array $other_column_values  其他列值键值对【冗余字段便于查询的数据列值】，如有一列：记录关系创建时间。
-	 * @return mixed 保存对象后的主键 
+	 * @return mixed 保存对象后的主键
 	 */
 	public function saveRelationForManyToMany($relation_object,$relation_id_value,$other_column_values=null)
 	{
@@ -370,7 +370,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	public static function deleteByIds($ids)
 	{
 		return DataObjectFunc::deleteByIds(get_called_class(),$ids);
-	} 
+	}
 
 	/**
 	 * 根据条件删除多条记录
@@ -385,13 +385,13 @@ abstract class DataObject extends Object implements ArrayAccess
 	public static function deleteBy($filter)
 	{
 		return DataObjectFunc::deleteBy(get_called_class(),$filter);
-	} 
+	}
 
 	/**
 	 * 删除当前对象
 	 * @return boolen 是否删除成功；true为操作正常
 	 */
-	public function delete() 
+	public function delete()
 	{
 		return self::dao()->delete($this);
 	}
@@ -419,7 +419,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 *      2.array("pass"=>"1","name"=>"sky")<br/>
 	 * @return boolen 是否更新成功；true为操作正常<br/>
 	 */
-	public static function updateProperties($sql_ids,$array_properties) 
+	public static function updateProperties($sql_ids,$array_properties)
 	{
 		return DataObjectFunc::updateProperties(get_called_class(),$sql_ids,$array_properties);
 	}
@@ -440,11 +440,11 @@ abstract class DataObject extends Object implements ArrayAccess
 	 *      2.array("pass"=>"1","name"=>"sky")<br/>
 	 * @return boolen 是否更新成功；true为操作正常<br/>
 	 */
-	public static function updateBy($filter,$array_properties) 
+	public static function updateBy($filter,$array_properties)
 	{
 		return DataObjectFunc::updateBy(get_called_class(),$filter,$array_properties);
 	}
-	
+
 
 	/**
 	 * 对属性进行递增
@@ -491,7 +491,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	}
 
 	/**
-	 * 由标识判断指定ID数据对象是否存在
+	 * 判断符合条件的数据对象是否存在
 	 * @param mixed $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
 	 *      0."id=1,name='sky'"<br/>
@@ -508,7 +508,7 @@ abstract class DataObject extends Object implements ArrayAccess
 
 	/**
 	 * 查询当前对象需显示属性的列表
-	 * @param string 指定的显示属性，同SQL语句中的Select部分。 
+	 * @param string 指定的显示属性，同SQL语句中的Select部分。
 	 * 示例如下：<br/>
 	 *     id,name,commitTime
 	 * @param object|string|array $filter 查询条件，在where后的条件<br/>
@@ -529,7 +529,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 */
 	public static function select($columns,$filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null)
 	{
-		return DataObjectFunc::showColumns(get_called_class(),$columns,$filter, $sort, $limit); 
+		return DataObjectFunc::showColumns(get_called_class(),$columns,$filter, $sort, $limit);
 	}
 
 	/**
@@ -550,7 +550,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 *    0,10<br/>
 	 * @return 对象列表数组
 	 */
-	public static function get($filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null) 
+	public static function get($filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null)
 	{
 		return self::dao()->get(get_called_class(), $filter, $sort, $limit);
 	}
@@ -580,7 +580,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * @param string $id
 	 * @return 对象
 	 */
-	public static function get_by_id($id) 
+	public static function get_by_id($id)
 	{
 		return self::dao()->get_by_id(get_called_class(), $id);
 	}
@@ -595,7 +595,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 *          3.array("id"=>"1","name"=>"sky")
 	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
 	 */
-	public static function count($filter=null) 
+	public static function count($filter=null)
 	{
 		return self::dao()->count(get_called_class(), $filter);
 	}
@@ -617,7 +617,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 *          3.array("id"=>"1","name"=>"sky")<br/>
 	 * @return 对象总计数
 	 */
-	public static function countMultitable($object,$from,$filter=null) 
+	public static function countMultitable($object,$from,$filter=null)
 	{
 		return self::dao()->countMultitable(get_called_class(), $from, $filter);
 	}
@@ -634,7 +634,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	/**
 	 * 对象分页
 	 * @param int $startPoint  分页开始记录数
-	 * @param int $endPoint    分页结束记录数 
+	 * @param int $endPoint    分页结束记录数
 	 * @param object|string|array $filter 查询条件，在where后的条件
 	 * 示例如下：<br/>
 	 *      0."id=1,name='sky'"<br/>
@@ -649,11 +649,11 @@ abstract class DataObject extends Object implements ArrayAccess
 	 *      2.name desc;
 	 * @return mixed 对象分页
 	 */
-	public static function queryPage($startPoint,$endPoint,$filter=null,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID) 
+	public static function queryPage($startPoint,$endPoint,$filter=null,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)
 	{
 		return self::dao()->queryPage(get_called_class(),$startPoint,$endPoint,$filter,$sort);
 	}
-	
+
 	/**
 	 * 对象分页根据当前页数和每页显示记录数
 	 * @param int $pageNo  当前页数
@@ -670,12 +670,12 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * 示例如下：<br/>
 	 *      1.id asc;<br/>
 	 *      2.name desc;
-	 * @return array 
+	 * @return array
 	 *           count    :符合条件的记录总计数
 	 *           pageCount:符合条件的总页数
 	 *           data     :对象分页
 	 */
-	public static function queryPageByPageNo($pageNo,$filter=null,$pageSize=10,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID) 
+	public static function queryPageByPageNo($pageNo,$filter=null,$pageSize=10,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)
 	{
 		$count= self::dao()->count(get_called_class(), $filter);
 		$data = array();
@@ -686,7 +686,7 @@ abstract class DataObject extends Object implements ArrayAccess
 			if ($pageNo<=$pageCount){
 				$startPoint=($pageNo-1)*$pageSize+1;
 				if ($startPoint>$count) {
-					$startPoint=0; 
+					$startPoint=0;
 				}
 				$endPoint=$pageNo*$pageSize;
 				if ($endPoint>$count) {
@@ -705,13 +705,13 @@ abstract class DataObject extends Object implements ArrayAccess
 	/**
 	 * 对象分页[多表关联查询]
 	 * @param int $startPoint  分页开始记录数
-	 * @param int $endPoint    分页结束记录数 
+	 * @param int $endPoint    分页结束记录数
 	 * @param string|array $from 来自多张表或者多个类[必须是数据对象类名]，在from后的多张表名，表名之间以逗号[,]隔开
 	 * 示例如下：<br/>
 	 *      0."table1,table2"<br/>
 	 *      1.array("table1","table2")<br/>
 	 *      2."class1,class2"<br/>
-	 *      3.array("class1","class2")<br/>	 
+	 *      3.array("class1","class2")<br/>
 	 * @param object|string|array $filter 查询条件，在where后的条件
 	 * 示例如下：<br/>
 	 *      0."id=1,name='sky'"<br/>
