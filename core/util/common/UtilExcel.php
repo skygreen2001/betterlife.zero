@@ -126,7 +126,7 @@ class UtilExcel extends Util
             $myDateStr= str_pad($myDate[2],4,'0', STR_PAD_LEFT)."-".str_pad($myDate[0],2,'0',STR_PAD_LEFT)."-".str_pad($myDate[1],2,'0', STR_PAD_LEFT).($time?" 00:00:00":'');
             return $myDateStr;
         }
-        return $time;
+        return $days;
     }
 
 
