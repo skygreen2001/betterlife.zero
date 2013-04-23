@@ -169,8 +169,8 @@ class Initializer
 		$is_not_run_betterlife=false;
 		//if (ini_get('register_globals') != 1) {echo "请在php.ini配置文件里设置register_globals = On<br/>";$is_not_run_betterlife=true;}
 		//if (ini_get('allow_call_time_pass_reference') != 1) {echo "请在php.ini配置文件里设置allow_call_time_pass_reference = On<br/>";$is_not_run_betterlife=true;}
-		if(!function_exists("imagecreate")){echo "没有安装GD模块支持,名称:php_gd2,请加载<br/>";$is_not_run_betterlife=true;}
-		if(!function_exists("curl_init")) {echo "没有安装Curl模块支持,名称:php_curl,请加载<br/>";$is_not_run_betterlife=true;}
+		if(!function_exists("imagecreate")){echo "没有安装GD模块支持,名称:php_gd2,请加载<br/>Ubuntu服务器下执行: sudo apt-get install php5-gd<br/>";$is_not_run_betterlife=true;}
+		if(!function_exists("curl_init")) {echo "没有安装Curl模块支持,名称:php_curl,请加载<br/>Ubuntu服务器下执行: sudo apt-get install php5-curl<br/>";$is_not_run_betterlife=true;}
 		if(!function_exists("mb_check_encoding")) {echo "没有安装mbstring模块支持,名称:php_mbstring,请加载<br/>";$is_not_run_betterlife=true;}
 		if(!function_exists("mysqli_stmt_fetch")) {echo "没有安装mysqli模块支持,名称:php_mysqli,请加载<br/>";$is_not_run_betterlife=true;}
 		if ($is_not_run_betterlife)die();
