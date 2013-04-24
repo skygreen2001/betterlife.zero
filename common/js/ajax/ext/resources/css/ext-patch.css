@@ -34,31 +34,31 @@
 	FONT: normal 13px tahoma,arial,verdana,sans-serif;
 }
 .x-form-field {
-	FONT: 13px tahoma,arial,helvetica,SimSun,sans-serif	
+	FONT: 13px tahoma,arial,helvetica,SimSun,sans-serif
 }
 .x-small-editor .x-form-field {
-	FONT: 13px tahoma,arial,helvetica,SimSun,sans-serif	
+	FONT: 13px tahoma,arial,helvetica,SimSun,sans-serif
 }
 .x-combo-list-item {
-	FONT: 13px tahoma,arial,helvetica,sans-serif;	
-}	
+	FONT: 13px tahoma,arial,helvetica,sans-serif;
+}
 .x-menu-list-item {
 	FONT: 13px tahoma,arial,sans-serif;
 }
 .x-window-tl .x-window-header {
-	FONT: bold 13px tahoma,arial,verdana,sans-serif;	
+	FONT: bold 13px tahoma,arial,verdana,sans-serif;
 }
 /*
-.x-layout-split-west .x-layout-mini {	
+.x-layout-split-west .x-layout-mini {
 	BACKGROUND-IMAGE: url(ajax/ext/resources/images/mini-left.jpg);
 }*/
 .ext-ie .x-form-text {
 	margin-top:1px;
 } /* the textField missing bottom line */
-.x-form-item {	
+.x-form-item {
 	FONT: 13px tahoma,arial,helvetica,SimSun,sans-serif
 }
-.x-grid-group-hd DIV {	
+.x-grid-group-hd DIV {
 	FONT: bold 13px tahoma,arial,helvetica,sans-serif;
 }
 div.x-tab-strip-wrap .add-tab a span.x-tab-strip-inner {
@@ -100,59 +100,73 @@ div.x-tab-strip-wrap .add-tab a span.x-tab-strip-inner {
 	margin:0;
 	padding:10px;
 }
-/* END */   
-
-/**按钮字体大小 */
-.ext-gecko .x-btn button {  
-	font-size: 13px;  
-	padding-top: 0;  
-}        
-.x-btn button {  
-	font-size: 13px;  
-	padding-top: 0;  
-}        
 /* END */
 
-/**工具栏字体大小 */   
-.x-toolbar td, .x-toolbar span, .x-toolbar input, .x-toolbar div, .x-toolbar select, .x-toolbar label{         
+/**按钮字体大小 */
+.ext-gecko .x-btn button {
+	font-size: 13px;
+	padding-top: 0;
+}
+.x-btn button {
+	font-size: 13px;
+	padding-top: 0;
+}
+/* END */
+
+/**工具栏字体大小 */
+.x-toolbar td, .x-toolbar span, .x-toolbar input, .x-toolbar div, .x-toolbar select, .x-toolbar label{
 	font: 13px arial,tahoma,helvetica,sans-serif;
 }
 /* END */
 
 .x-small-editor .x-form-num-field {
 	text-align: center;
-}       
+}
 
-/** 数据对象模板显示样式 */ 
-.viewdoblock {  
+/** 数据对象模板显示样式 */
+.viewdoblock {
 	width          : 98%;
-	border-collapse: collapse;      
-	margin         : 10px;         
-	border-left    : 1px solid #99BBE8; 
-	border-right   : 1px solid #99BBE8; 
-	border-top     : 5px solid #ccc; 
-	border-bottom  : 5px solid #ccc; 
+	border-collapse: collapse;
+	margin         : 10px;
+	border-left    : 1px solid #99BBE8;
+	border-right   : 1px solid #99BBE8;
+	border-top     : 5px solid #ccc;
+	border-bottom  : 5px solid #ccc;
 }
-.viewdoblock .entry{      
-	font-size:14px;   
+.viewdoblock .entry{
+	font-size:14px;
 }
-.viewdoblock span{   
+.viewdoblock span{
 }
-.viewdoblock .head{         
-	width      :32%;             
+.viewdoblock .head{
+	width      :32%;
 	text-align :right;
-	font-weight:bold;  
-	line-height        : 1.5em;    
-	padding-right      : 5px;    
-	border             : 1px solid #ccc ;          
-	border-bottom-width: 0px;   
-	border-left-width  : 0px;   
+	font-weight:bold;
+	line-height        : 1.5em;
+	padding-right      : 5px;
+	border             : 1px solid #ccc ;
+	border-bottom-width: 0px;
+	border-left-width  : 0px;
 }
-.viewdoblock .content{    
-	line-height :1.5em;  
+.viewdoblock .content{
+	line-height :1.5em;
 	padding-left:20px;
-	border      : 1px solid #ccc ;    
-	border-bottom-width: 0px;   
-	border-right-width : 0px;    
+	border      : 1px solid #ccc ;
+	border-bottom-width: 0px;
+	border-right-width : 0px;
+}
+
+/**Grid 的单元格可复制文本*/
+.x-grid3-row td,
+.x-grid3-summary-row td,
+.x-grid3-cell-text,
+.x-grid3-hd-text,
+.x-grid3-hd,
+.x-grid3-row {
+	-moz-user-select:inherit;
+	-khtml-user-select:text;
+	-user-select: text! important;
+    -o-user-select: text! important;
+    -webkit-user-select: text! important;
 }
 /* END */
