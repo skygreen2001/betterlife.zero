@@ -25,7 +25,7 @@ if (contain($os,"Windows")) {
 	echo "log|attachment|upload|templates_c<br/>".str_repeat("&nbsp;",20);
 	echo "需要手动在服务器上执行脚本:<br/>".str_repeat("&nbsp;",40);
 	foreach (Gc::$module_names as $template_tmp_dir) {
-		$destination=Gc::$nav_root_path.$template_tmp_dir."/".Config_F::VIEW_CORE."/default/tmp/templates_c/";
+		$destination=Gc::$nav_root_path.Gc::$module_root."/".$template_tmp_dir."/".View::VIEW_DIR_VIEW."/".Gc::$self_theme_dir."/tmp/templates_c/";
 		echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",40);
 		echo "sudo chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",40);
 	}
@@ -54,7 +54,7 @@ if (contain($os,"Windows")) {
 	echo "log|attachment|upload|templates_c<br/>".str_repeat("&nbsp;",20);
 	echo "需要手动在服务器上执行脚本:<br/>".str_repeat("&nbsp;",40);
 	foreach (Gc::$module_names as $template_tmp_dir) {
-		$destination=Gc::$nav_root_path.$template_tmp_dir."/".Config_F::VIEW_CORE."/default/tmp/templates_c/";
+		$destination=Gc::$nav_root_path.Gc::$module_root."/".$template_tmp_dir."/".View::VIEW_DIR_VIEW."/".Gc::$self_theme_dir."/tmp/templates_c/";
 		echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",40);
 		echo "sudo chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",40);
 	}
@@ -84,7 +84,7 @@ if (contain($os,"Windows")) {
 	echo "log|attachment|upload|templates_c<br/>".str_repeat("&nbsp;",20);
 	echo "需要手动在服务器上执行脚本:<br/>".str_repeat("&nbsp;",40);
 	foreach (Gc::$module_names as $template_tmp_dir) {
-		$destination=Gc::$nav_root_path.$template_tmp_dir."/".Config_F::VIEW_CORE."/default/tmp/templates_c/";
+		$destination=Gc::$nav_root_path.Gc::$module_root."/".$template_tmp_dir."/".View::VIEW_DIR_VIEW."/".Gc::$self_theme_dir."/tmp/templates_c/";
 		echo "mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",40);
 		echo "chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",40);
 	}
