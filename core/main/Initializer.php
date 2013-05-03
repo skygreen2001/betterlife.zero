@@ -275,7 +275,7 @@ class Initializer
 	public static function set_language()
 	{
 		//可能在应用中会存在其他config.php文件。
-		require_once self::$NAV_CORE_PATH.'config'.DIRECTORY_SEPARATOR.'Config.php';
+		require_once self::$NAV_CORE_PATH.'config'.DIRECTORY_SEPARATOR.'ConfigBB.php';
 		$core_lang=Config_F::CORE_LANG;
 		$default_language="Zh_Cn";
 		$world_language=Config_C::WORLD_LANGUAGE;
