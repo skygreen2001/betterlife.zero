@@ -65,7 +65,7 @@ INSERT INTO `bb_core_comment` VALUES ('6', '2', 'WebWiz RichTextEditor:<a href=\
 INSERT INTO `bb_core_comment` VALUES ('7', '2', 'QQ淘课：<a target=\"_blank\" href=\"http://bb.news.qq.com/open.htm\">http://bb.news.qq.com/open.htm</a><br />', '5', '1331953386', '2012-03-17 12:37:47');
 INSERT INTO `bb_core_comment` VALUES ('8', '2', '网易公开课：<a target=\"_blank\" href=\"http://v.163.com/open/\">http://v.163.com/open/</a><br />', '5', '1331953386', '2012-03-17 12:37:48');
 INSERT INTO `bb_core_comment` VALUES ('9', '2', '搜狐名校公开课：<a target=\"_blank\" href=\"http://tv.sohu.com/open/\">http://tv.sohu.com/open/</a><br />', '5', '1331953386', '2012-03-17 12:37:48');
-INSERT INTO `bb_core_comment` VALUES ('10', '2', '新浪名校公开课：<a target=\"_blank\" href=\"http://edu.sina.com.cn/video/open/index.shtml\">http://edu.sina.com.cn/video/open/index.shtml</a><br />', '5', '1331953386', '2012-03-17 12:37:49');
+INSERT INTO `bb_core_comment` VALUES ('10', '2', '新浪名校公开课：<a target=\"_blank\" href=\"http://open.sina.com.cn/\">http://edu.sina.com.cn/video/open/index.shtml</a><br />', '5', '1331953386', '2012-03-17 12:37:49');
 INSERT INTO `bb_core_comment` VALUES ('11', '2', '网络公开课：<a target=\"_blank\" href=\"http://www.cicistudy.com/index.php\">http://www.cicistudy.com/index.php</a><br />', '5', '1331953386', '2012-03-17 12:37:50');
 
 -- ----------------------------

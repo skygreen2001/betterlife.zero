@@ -20,12 +20,12 @@ class Dal_Pdo extends Dal  implements IDal
 	 * @param string $port
 	 * @param string $username
 	 * @param string $password
-	 * @param string $dbname 
+	 * @param string $dbname
 	 * @param mixed $dbtype 指定数据库类型。{该字段的值参考：EnumDbSource}
 	 * @param mixed $engine 指定操作数据库引擎。{该字段的值参考：EnumDbEngine}
 	 * @return mixed 数据库连接
 	 */
-	public function connect($host=null,$port=null,$username=null,$password=null,$dbname=null,$dbtype=null,$engine=null) { 
+	public function connect($host=null,$port=null,$username=null,$password=null,$dbname=null,$dbtype=null,$engine=null) {
 		if (!isset($username)){
 			$username=Config_Pdo::$username;
 		}
@@ -34,11 +34,11 @@ class Dal_Pdo extends Dal  implements IDal
 		}
 		if (!isset($dbtype)){
 		   $dbtype=Config_Pdo::$db;
-		}           
+		}
 		if (!isset($engine)){
 		   $engine=Config_Adodb::$engine;
-		}  
-		
+		}
+
 		try {
 			if ($dbtype==  EnumDbSource::DB_MICROSOFT_ACCESS) {
 				$this->connection = new PDO(Config_Pdo::dsn($host,$port,$username,$password,$dbname,$dbtype,$engine));
@@ -59,12 +59,12 @@ class Dal_Pdo extends Dal  implements IDal
 	 */
 	private function executeSQL() {
 		try {
-			if (Config_Db::$debug_show_sql){                                                         
-				LogMe::log("SQL:".$this->sQuery);  
-				if (!empty($this->saParams)) {      
+			if (Config_Db::$debug_show_sql){
+				LogMe::log("SQL:".$this->sQuery);
+				if (!empty($this->saParams)) {
 					LogMe::log("SQL PARAM:".var_export($this->saParams, true));
 				}
-			}       
+			}
 			$this->stmt = $this->connection->prepare($this->sQuery);
 			$columnCount=0;
 			if (!empty($this->saParams)&&is_array($this->saParams)&&(count($this->saParams)>0)) {
@@ -122,10 +122,10 @@ class Dal_Pdo extends Dal  implements IDal
 	 */
 	public function sqlExecute($sql,$object=null) {
 		$result=null;
-		try {                   
-			if (Config_Db::$debug_show_sql){                    
-				LogMe::log("SQL:".$sql);   
-			}            
+		try {
+			if (Config_Db::$debug_show_sql){
+				LogMe::log("SQL:".$sql);
+			}
 			$this->stmt=$this->connection->prepare($sql);
 			$this->stmt->execute ();
 			$parts = split(" ",trim($sql));
@@ -137,6 +137,15 @@ class Dal_Pdo extends Dal  implements IDal
 				return $autoId;
 			}
 			$result=$this->getResultToObjects($object);
+			$sql_s=preg_replace("/\s/","",$sql);
+			$sql_s=strtolower($sql_s);
+			if (!is_array($result)){
+				if (!(contain($sql_s,"count(")||contain($sql_s,"sum("))){
+					$tmp=$result;
+					$result=null;
+					$result[]=$tmp;
+				}
+			}
 			return $result;
 		} catch (Exception $exc) {
 			Exception_Db::log($exc->getTraceAsString());
@@ -166,12 +175,12 @@ class Dal_Pdo extends Dal  implements IDal
 			$this->saParams=$_SQL->parseValidInputParam($filter);
 			$_SQL->isPreparedStatement=false;
 			$this->sQuery=$_SQL->select(Crud_Sql_Select::SQL_COUNT)->from($this->classname)->where($this->saParams)->result();
-			if (Config_Db::$debug_show_sql){                          
-				LogMe::log("SQL:".$this->sQuery);  
-				if (!empty($this->saParams)) {      
+			if (Config_Db::$debug_show_sql){
+				LogMe::log("SQL:".$this->sQuery);
+				if (!empty($this->saParams)) {
 					LogMe::log("SQL PARAM:".var_export($this->saParams, true));
-				}   
-			}                   
+				}
+			}
 			$this->stmt=$this->connection->query($this->sQuery,PDO::FETCH_NUM);
 			$result=$this->stmt->fetchColumn();
 			return $result;
@@ -184,7 +193,7 @@ class Dal_Pdo extends Dal  implements IDal
 	 * 对象分页
 	 * @param string|class $object 需要查询的对象实体|类名称
 	 * @param int $startPoint  分页开始记录数
-	 * @param int $endPoint    分页结束记录数 
+	 * @param int $endPoint    分页结束记录数
 	 * @param object|string|array $filter 查询条件，在where后的条件
 	 * 示例如下：<br/>
 	 *      0."id=1,name='sky'"<br/>
@@ -207,9 +216,9 @@ class Dal_Pdo extends Dal  implements IDal
 			$_SQL->isPreparedStatement=true;
 			$this->saParams=$_SQL->parseValidInputParam($filter);
 			$_SQL->isPreparedStatement=false;
-			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){                
+			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){
 				$realIdName=$this->sql_id($object);
-				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);            
+				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);
 			}
 			if (Config_Db::$db==EnumDbSource::DB_MYSQL) {
 				$this->sQuery=$_SQL->select()->from($this->classname)->where($this->saParams)->order($sort)->limit($startPoint.",".($endPoint-$startPoint+1))->result();
@@ -240,7 +249,7 @@ class Dal_Pdo extends Dal  implements IDal
 		try {
 			$_SQL=new Crud_Sql_Insert();
 			$_SQL->isPreparedStatement=true;
-			$object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::TIMESTAMP));           
+			$object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::TIMESTAMP));
 			$this->saParams=UtilObject::object_to_array($object);
 			$this->sQuery=$_SQL->insert($this->classname)->values($this->saParams)->result();
 			$this->executeSQL();
@@ -248,7 +257,7 @@ class Dal_Pdo extends Dal  implements IDal
 		} catch (Exception $exc) {
 			Exception_Db::log($exc->getTraceAsString());
 		}
-		if (!empty($object)&&is_object($object)){ 
+		if (!empty($object)&&is_object($object)){
 		  $object->setId($autoId);//当保存返回对象时使用
 		}
 		return $autoId;
@@ -341,9 +350,9 @@ class Dal_Pdo extends Dal  implements IDal
 				return $result;
 			}
 			$_SQL=new Crud_Sql_Select();
-			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){                
+			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){
 				$realIdName=$this->sql_id($object);
-				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);            
+				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);
 			}
 			$_SQL->isPreparedStatement=true;
 			$filter_arr=$_SQL->parseValidInputParam($filter);
@@ -398,9 +407,9 @@ class Dal_Pdo extends Dal  implements IDal
 			}else{
 				$_SQL->isPreparedStatement=false;
 			}
-			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){                
+			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){
 				$realIdName=$this->sql_id($object);
-				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);            
+				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);
 			}
 			$this->sQuery=$_SQL->select()->from($this->classname)->where($filter_arr)->order($sort)->result();
 			$this->executeSQL();
@@ -431,14 +440,14 @@ class Dal_Pdo extends Dal  implements IDal
 				$_SQL=new Crud_Sql_Select();
 				$where=$this->sql_id($object).self::EQUAL.$id;
 				$this->sQuery=$_SQL->select()->from($this->classname)->where($where)->result();
-				if (Config_Db::$debug_show_sql){                         
-					LogMe::log("SQL:".$this->sQuery);    
-				}                                   
+				if (Config_Db::$debug_show_sql){
+					LogMe::log("SQL:".$this->sQuery);
+				}
 				$rows = $this->connection->query($this->sQuery);
 				$rows->setFetchMode(PDO::FETCH_OBJ);
 				foreach ($rows as $row) {
 					$result = UtilObject::array_to_object($row, $this->classname);
-				}                
+				}
 			}
 			return $result;
 		} catch (Exception $exc) {

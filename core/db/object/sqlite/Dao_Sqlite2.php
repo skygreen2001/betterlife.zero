@@ -15,14 +15,14 @@ class Dao_Sqlite2 extends Dao implements IDaoNormal {
 	 * @param string $port
 	 * @param string $username
 	 * @param string $password
-	 * @param string $dbname 
+	 * @param string $dbname
 	 * @return mixed 数据库连接
 	 */
 	public function connect($host=null,$port=null,$username=null,$password=null,$dbname=null) {
 		if (!isset($dbname)){
 			$dbname=Config_Sqlite::$dbname;
 		}
-		
+
 		if (Config_Sqlite::$is_persistent) {
 			$this->connection =
 					sqlite_popen($dbname,0666,$errormessage);
@@ -41,9 +41,9 @@ class Dao_Sqlite2 extends Dao implements IDaoNormal {
 	 * 无法防止SQL注入黑客技术
 	 */
 	private function executeSQL() {
-		if (Config_Db::$debug_show_sql){                        
-			LogMe::log("SQL:".$this->sQuery); 
-		}             
+		if (Config_Db::$debug_show_sql){
+			LogMe::log("SQL:".$this->sQuery);
+		}
 		$this->stmt=sqlite_query($this->sQuery,$this->connection);
 	}
 
@@ -53,7 +53,7 @@ class Dao_Sqlite2 extends Dao implements IDaoNormal {
 	 * @return 转换成的对象实体列表
 	 */
 	private function getResultToObjects($object) {
-		$result=null;        
+		$result=null;
 		while ($currentrow = sqlite_fetch_array($this->stmt, Config_Sqlite::$sqlite2_fetchmode)) {
 			if (!empty($object)) {
 				if ($this->validParameter($object)) {
@@ -94,12 +94,12 @@ class Dao_Sqlite2 extends Dao implements IDaoNormal {
 			$this->saParams=UtilObject::object_to_array($object);
 			$this->saParams=$this->filterViewProperties($this->saParams);
 			$this->sQuery=$_SQL->insert($this->classname)->values($this->saParams)->result();
-			if (Config_Db::$debug_show_sql){                        
-				LogMe::log("SQL:".$this->sQuery);  
-				if (!empty($this->saParams)) {      
+			if (Config_Db::$debug_show_sql){
+				LogMe::log("SQL:".$this->sQuery);
+				if (!empty($this->saParams)) {
 					LogMe::log("SQL PARAM:".var_export($this->saParams, true));
 				}
-			}                         
+			}
 			$result = sqlite_exec($this->connection,  $this->sQuery, $error);
 			if (!$result) {
 				Exception_Db::log($error);
@@ -108,9 +108,9 @@ class Dao_Sqlite2 extends Dao implements IDaoNormal {
 		} catch (Exception $exc) {
 			Exception_Db::log($exc->getTraceAsString());
 		}
-		if (!empty($object)&&is_object($object)){ 
-			$object->setId($autoId);//当保存返回对象时使用   
-		}                                              
+		if (!empty($object)&&is_object($object)){
+			$object->setId($autoId);//当保存返回对象时使用
+		}
 		return $autoId;
 	}
 
@@ -132,9 +132,9 @@ class Dao_Sqlite2 extends Dao implements IDaoNormal {
 				$_SQL=new Crud_Sql_Delete();
 				$where=$this->sql_id($object).self::EQUAL.$id;
 				$this->sQuery=$_SQL->deletefrom($this->classname)->where($where)->result();
-				if (Config_Db::$debug_show_sql){                        
-					LogMe::log("SQL:".$this->sQuery);   
-				}                             
+				if (Config_Db::$debug_show_sql){
+					LogMe::log("SQL:".$this->sQuery);
+				}
 				$result = sqlite_exec($this->connection,  $this->sQuery, $error);
 				if (!$result) {
 					Exception_Db::log($error);
@@ -169,12 +169,12 @@ class Dao_Sqlite2 extends Dao implements IDaoNormal {
 				$this->saParams=$this->filterViewProperties($this->saParams);
 				$where=$this->sql_id($object).self::EQUAL.$id;
 				$this->sQuery=$_SQL->update($this->classname)->set($this->saParams)->where($where)->result();
-				if (Config_Db::$debug_show_sql){                         
-					LogMe::log("SQL:".$this->sQuery);  
-					if (!empty($this->saParams)) {      
+				if (Config_Db::$debug_show_sql){
+					LogMe::log("SQL:".$this->sQuery);
+					if (!empty($this->saParams)) {
 						LogMe::log("SQL PARAM:".var_export($this->saParams, true));
-					} 
-				}                             
+					}
+				}
 				$result = sqlite_exec($this->connection,  $this->sQuery, $error);
 				if (!$result) {
 					Exception_Db::log($error);
@@ -220,12 +220,12 @@ class Dao_Sqlite2 extends Dao implements IDaoNormal {
 			}
 
 			$_SQL=new Crud_Sql_Select();
-			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){                
+			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){
 				$realIdName=$this->sql_id($object);
-				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);            
+				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);
 			}
 			$_SQL->isPreparedStatement=true;
-			$filter_arr=$_SQL->parseValidInputParam($filter);            
+			$filter_arr=$_SQL->parseValidInputParam($filter);
 			$_SQL->isPreparedStatement=false;
 			$this->sQuery=$_SQL->select()->from($this->classname)->where($filter_arr)->order($sort)->limit($limit)->result();
 			$this->executeSQL();
@@ -260,12 +260,12 @@ class Dao_Sqlite2 extends Dao implements IDaoNormal {
 			}
 
 			$_SQL=new Crud_Sql_Select();
-			$_SQL->isPreparedStatement=true;     
+			$_SQL->isPreparedStatement=true;
 			$this->saParams=$_SQL->parseValidInputParam($filter);
-			$_SQL->isPreparedStatement=false;  
-			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){                
+			$_SQL->isPreparedStatement=false;
+			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){
 				$realIdName=$this->sql_id($object);
-				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);            
+				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);
 			}
 			$this->sQuery=$_SQL->select()->from($this->classname)->where($this->saParams)->order($sort)->result();
 			$this->executeSQL();
@@ -319,7 +319,7 @@ class Dao_Sqlite2 extends Dao implements IDaoNormal {
 	public function sqlExecute($sqlstring,$object=null) {
 		$result=null;
 		try {
-			$this->sQuery=$sqlstring;        
+			$this->sQuery=$sqlstring;
 			$this->executeSQL();
 
 			$parts = split(" ",trim($sqlstring));
@@ -331,6 +331,15 @@ class Dao_Sqlite2 extends Dao implements IDaoNormal {
 				return $autoId;
 			}
 			$result=$this->getResultToObjects($object);
+			$sql_s=preg_replace("/\s/","",$sqlstring);
+			$sql_s=strtolower($sql_s);
+			if (!is_array($result)){
+				if (!(contain($sql_s,"count(")||contain($sql_s,"sum("))){
+					$tmp=$result;
+					$result=null;
+					$result[]=$tmp;
+				}
+			}
 		} catch (Exception $exc) {
 			Exception_Db::log($exc->getTraceAsString());
 		}
@@ -372,7 +381,7 @@ class Dao_Sqlite2 extends Dao implements IDaoNormal {
 	 * 对象分页
 	 * @param string|class $object 需要查询的对象实体|类名称
 	 * @param int $startPoint  分页开始记录数
-	 * @param int $endPoint    分页结束记录数 
+	 * @param int $endPoint    分页结束记录数
 	 * @param object|string|array $filter 查询条件，在where后的条件
 	 * 示例如下：<br/>
 	 *      0."id=1,name='sky'"<br/>
@@ -395,9 +404,9 @@ class Dao_Sqlite2 extends Dao implements IDaoNormal {
 			$_SQL->isPreparedStatement=true;
 			$this->saParams=$_SQL->parseValidInputParam($filter);
 			$_SQL->isPreparedStatement=false;
-			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){                
+			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){
 				$realIdName=$this->sql_id($object);
-				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);            
+				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);
 			}
 			$this->sQuery=$_SQL->select()->from($this->classname)->where($this->saParams)->order($sort)->limit($startPoint.",".($endPoint-$startPoint+1))->result();
 			$result=$this->sqlExecute($this->sQuery,$object);

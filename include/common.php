@@ -7,14 +7,19 @@
  */
 function sqlExecute($sqlstring,$object=null)
 {
+	if (empty($sqlstring)) {
+		return null;
+	}
 	if ($object){
 		if (is_bool($object))$object=null;
 		return Manager_Db::newInstance()->currentdao()->sqlExecute($sqlstring,$object);
 	}else{
 		$lists=Manager_Db::newInstance()->currentdao()->sqlExecute($sqlstring,$object);
 		if ($lists){
-			foreach ($lists as $key=>$data) {
-				$lists[$key]=(array) $data;
+			if (!(is_array($lists)&&(count($lists)==1))){
+				foreach ($lists as $key=>$data) {
+					$lists[$key]=(array) $data;
+				}
 			}
 		}
 		return $lists;
@@ -24,7 +29,7 @@ function sqlExecute($sqlstring,$object=null)
 /**
  * 设置处理所有未捕获异常的用户定义函数
  */
-function e_me($exception) 
+function e_me($exception)
 {
 	ExceptionMe::recordUncatchedException($exception);
 	e_view();
@@ -33,7 +38,7 @@ function e_me($exception)
 /**
  * 显示异常处理缩写表示
  */
-function e_view() 
+function e_view()
 {
 	if (Gc::$dev_debug_on) {
 		echo ExceptionMe::showMessage(ExceptionMe::VIEW_TYPE_HTML_TABLE);
@@ -97,7 +102,7 @@ function startWith($haystack, $needle,$strict=true)
  * @return bool true:是，false:否。
  */
 function endWith($haystack, $needle,$strict=true)
-{ 
+{
 	if (!$strict){
 		$haystack=strtoupper($haystack);
 		$needle=strtoupper($needle);
@@ -105,12 +110,12 @@ function endWith($haystack, $needle,$strict=true)
 	return (strpos(strrev($haystack), strrev($needle)) === 0);
 }
 
-/** 
- * js escape php 实现 
- * 参考：PHP实现javascript的escape和unescape函数【http://js8.in/941.html】 
- * @param $string the sting want to be escaped 
- * @param $in_encoding       
- * @param $out_encoding      
+/**
+ * js escape php 实现
+ * 参考：PHP实现javascript的escape和unescape函数【http://js8.in/941.html】
+ * @param $string the sting want to be escaped
+ * @param $in_encoding
+ * @param $out_encoding
  */
 function escape($string, $in_encoding = 'UTF-8',$out_encoding = 'UCS-2')
 {
@@ -148,10 +153,10 @@ function unescape($str)
 				$ret .= chr($val);
 			else
 				if ($val < 0x800)
-					$ret .= chr(0xc0|($val>>6)).chr(0x80|($val & 0x3f)); 
+					$ret .= chr(0xc0|($val>>6)).chr(0x80|($val & 0x3f));
 				else
 					$ret .= chr(0xe0|($val>>12)).chr(0x80|(($val >> 6) & 0x3f)).chr(0x80|($val&0x3f));
-			$i += 5; 
+			$i += 5;
 		} else
 			if ($str[$i] == '%')
 			{
@@ -168,7 +173,7 @@ function unescape($str)
  * @link http://www.adobe.com/cn/devnet/flex/articles/flex_php_05.html
  * @param mixed $var
  */
-function logMe($var) 
+function logMe($var)
 {
 	$filename = dirname(__FILE__) . '/__log.txt';
 	if (!$handle = fopen($filename, 'a')) {
@@ -187,7 +192,7 @@ function logMe($var)
 /**
  * 是否直接显示出来
  * @param type $s
- * @param type $isEcho 
+ * @param type $isEcho
  */
 function print_pre($s,$isEcho=false)
 {

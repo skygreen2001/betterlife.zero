@@ -9,7 +9,7 @@
  * @subpackage postgres
  * @author skygreen
  */
-class Dao_Postgres extends Dao implements IDaoNormal 
+class Dao_Postgres extends Dao implements IDaoNormal
 {
 	/**
 	 * 连接数据库
@@ -17,10 +17,10 @@ class Dao_Postgres extends Dao implements IDaoNormal
 	 * @param string $port
 	 * @param string $username
 	 * @param string $password
-	 * @param string $dbname 
+	 * @param string $dbname
 	 * @return string 数据库连接
 	 */
-	public function connect($host=null,$port=null,$username=null,$password=null,$dbname=null) 
+	public function connect($host=null,$port=null,$username=null,$password=null,$dbname=null)
 	{
 		if (!isset($host)){
 			$host=Config_Postgres::$host;
@@ -37,7 +37,7 @@ class Dao_Postgres extends Dao implements IDaoNormal
 		if (!isset($dbname)){
 			$dbname=Config_Postgres::$dbname;
 		}
-		
+
 		if (Config_Postgres::$is_persistent) {
 			$this->connection = pg_pconnect("host=".$host." port=".$port." dbname=".$dbname." user=".$username." password=".$password);
 		}else {
@@ -53,11 +53,11 @@ class Dao_Postgres extends Dao implements IDaoNormal
 	 * 执行预编译SQL语句
 	 * 无法防止SQL注入黑客技术
 	 */
-	private function executeSQL() 
+	private function executeSQL()
 	{
-		if (Config_Db::$debug_show_sql){                           
-			LogMe::log("SQL:".$this->sQuery);   
-		}                            
+		if (Config_Db::$debug_show_sql){
+			LogMe::log("SQL:".$this->sQuery);
+		}
 		$this->result=pg_query($this->connection,$this->sQuery);
 		if (!$this->result) {
 			Exception_Db::log(Wl::ERROR_INFO_DB_HANDLE);
@@ -69,7 +69,7 @@ class Dao_Postgres extends Dao implements IDaoNormal
 	 * @param string $object 需要转换成的对象实体|类名称
 	 * @return 转换成的对象实体列表
 	 */
-	private function getResultToObjects($object) 
+	private function getResultToObjects($object)
 	{
 		$result=array();
 		while ($currentrow = pg_fetch_array($this->result,NULL,Config_Postgres::$fetchmode)) {
@@ -99,14 +99,14 @@ class Dao_Postgres extends Dao implements IDaoNormal
 		pg_free_result($this->result);
 		return $result;
 	}
-	
+
 
 	/**
 	 * 新建对象
 	 * @param Object $object
 	 * @return int 保存对象记录的ID标识号
 	 */
-	public function save($object) 
+	public function save($object)
 	{
 		$autoId=-1;//新建对象插入数据库记录失败
 		if (!$this->validObjectParameter($object)) {
@@ -123,12 +123,12 @@ class Dao_Postgres extends Dao implements IDaoNormal
 				$value=$this->escape($value);
 			}
 			$this->sQuery=$_SQL->insert($this->classname)->values($this->saParams,1)->result()." RETURNING ".$this->sql_id($object);
-			if (Config_Db::$debug_show_sql){                                      
-				LogMe::log("SQL:".$this->sQuery);  
-				if (!empty($this->saParams)) {      
+			if (Config_Db::$debug_show_sql){
+				LogMe::log("SQL:".$this->sQuery);
+				if (!empty($this->saParams)) {
 					LogMe::log("SQL PARAM:".var_export($this->saParams, true));
 				}
-			}                    
+			}
 			$this->result=pg_prepare($this->connection,"insert_query",$this->sQuery);
 			$this->result=pg_execute($this->connection,"insert_query",$this->saParams);
 			$row = pg_fetch_row($this->result);
@@ -152,7 +152,7 @@ class Dao_Postgres extends Dao implements IDaoNormal
 	 * @param int $id
 	 * @return Object
 	 */
-	public function delete($object) 
+	public function delete($object)
 	{
 		$result=false;
 		if (!$this->validObjectParameter($object)) {
@@ -164,9 +164,9 @@ class Dao_Postgres extends Dao implements IDaoNormal
 				$_SQL=new Crud_Sql_Delete();
 				$where=$this->sql_id($object).self::EQUAL.$id;
 				$this->sQuery=$_SQL->deletefrom($this->classname)->where($where)->result();
-				if (Config_Db::$debug_show_sql){                        
-					LogMe::log("SQL:".$this->sQuery);      
-				}                   
+				if (Config_Db::$debug_show_sql){
+					LogMe::log("SQL:".$this->sQuery);
+				}
 				$result = pg_query($this->connection,$this->sQuery);
 				pg_free_result($result);
 				$result = true;
@@ -183,7 +183,7 @@ class Dao_Postgres extends Dao implements IDaoNormal
 	 * @param Object $object
 	 * @return Object
 	 */
-	public function update($object) 
+	public function update($object)
 	{
 		$result=false;
 		if (!$this->validObjectParameter($object)) {
@@ -205,12 +205,12 @@ class Dao_Postgres extends Dao implements IDaoNormal
 					$value=$this->escape($value);
 				}
 				$this->sQuery=$_SQL->update($this->classname)->set($this->saParams)->where($where)->result();
-				if (Config_Db::$debug_show_sql){                                       
-					LogMe::log("SQL:".$this->sQuery);  
-					if (!empty($this->saParams)) {      
+				if (Config_Db::$debug_show_sql){
+					LogMe::log("SQL:".$this->sQuery);
+					if (!empty($this->saParams)) {
 						LogMe::log("SQL PARAM:".var_export($this->saParams, true));
 					}
-				}                     
+				}
 				$this->result=pg_prepare($this->connection,"update_query",$this->sQuery);
 				$this->result=pg_execute($this->connection,"update_query",$this->saParams);
 				pg_free_result($this->result);
@@ -244,7 +244,7 @@ class Dao_Postgres extends Dao implements IDaoNormal
 	 *    0,10
 	 * @return 对象列表数组
 	 */
-	public function get($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null) 
+	public function get($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null)
 	{
 		$result=null;
 		try {
@@ -252,14 +252,14 @@ class Dao_Postgres extends Dao implements IDaoNormal
 				return $result;
 			}
 			$_SQL=new Crud_Sql_Select();
-			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){                
+			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){
 				$realIdName=$this->sql_id($object);
-				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);            
+				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);
 			}
 			$_SQL->isPreparedStatement=true;
 			$filter_arr=$_SQL->parseValidInputParam($filter);
-			$_SQL->isPreparedStatement=false;    
-			$this->sQuery=$_SQL->select()->from($this->classname)->where($filter_arr)->order($sort)->limit($limit)->result();          
+			$_SQL->isPreparedStatement=false;
+			$this->sQuery=$_SQL->select()->from($this->classname)->where($filter_arr)->order($sort)->limit($limit)->result();
 			$this->executeSQL();
 			$result=$this->getResultToObjects($object);
 
@@ -285,7 +285,7 @@ class Dao_Postgres extends Dao implements IDaoNormal
 	 *      2.name desc;
 	 * @return 单个对象实体
 	 */
-	public function get_one($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID) 
+	public function get_one($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)
 	{
 		$result=null;
 		try {
@@ -294,12 +294,12 @@ class Dao_Postgres extends Dao implements IDaoNormal
 			}
 
 			$_SQL=new Crud_Sql_Select();
-			$_SQL->isPreparedStatement=true;     
+			$_SQL->isPreparedStatement=true;
 			$this->saParams=$_SQL->parseValidInputParam($filter);
-			$_SQL->isPreparedStatement=false;     
-			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){                
+			$_SQL->isPreparedStatement=false;
+			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){
 				$realIdName=$this->sql_id($object);
-				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);            
+				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);
 			}
 			$this->sQuery=$_SQL->select()->from($this->classname)->where($this->saParams)->order($sort)->result();
 			$this->executeSQL();
@@ -319,7 +319,7 @@ class Dao_Postgres extends Dao implements IDaoNormal
 	 * @param string $id
 	 * @return 对象
 	 */
-	public function get_by_id($object, $id) 
+	public function get_by_id($object, $id)
 	{
 		$result=null;
 		try {
@@ -351,11 +351,11 @@ class Dao_Postgres extends Dao implements IDaoNormal
 	 * @param string|class $object 需要生成注入的对象实体|类名称
 	 * @return array 返回数组
 	 */
-	public function sqlExecute($sql,$object=null) 
+	public function sqlExecute($sql,$object=null)
 	{
-		if (Config_Db::$debug_show_sql){                           
-			LogMe::log("SQL:".$sql);  
-		}             
+		if (Config_Db::$debug_show_sql){
+			LogMe::log("SQL:".$sql);
+		}
 		$parts = split(" ",trim($sql));
 		$type = strtolower($parts[0]);
 		if((Crud_Sql_Update::SQL_KEYWORD_UPDATE==$type)||(Crud_Sql_Delete::SQL_KEYWORD_DELETE==$type)) {
@@ -375,9 +375,18 @@ class Dao_Postgres extends Dao implements IDaoNormal
 			}
 			pg_free_result($this->result);
 			return $autoId;
-		}                  
+		}
 		$this->result = pg_query($this->connection,$sql);
 		$result=$this->getResultToObjects($object);
+		$sql_s=preg_replace("/\s/","",$sqlstring);
+		$sql_s=strtolower($sql_s);
+		if (!is_array($result)){
+			if (!(contain($sql_s,"count(")||contain($sql_s,"sum("))){
+				$tmp=$result;
+				$result=null;
+				$result[]=$tmp;
+			}
+		}
 		if (is_array($result)&&count($result)==1) {
 			$result=$result[0];
 		}
@@ -396,7 +405,7 @@ class Dao_Postgres extends Dao implements IDaoNormal
 	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
 	 * @return 对象总计数
 	 */
-	public function count($object, $filter=null) 
+	public function count($object, $filter=null)
 	{
 		$result=0;
 		try {
@@ -408,12 +417,12 @@ class Dao_Postgres extends Dao implements IDaoNormal
 			$this->saParams=$_SQL->parseValidInputParam($filter);
 			$_SQL->isPreparedStatement=false;
 			$this->sQuery=$_SQL->select(Crud_Sql_Select::SQL_COUNT)->from($this->classname)->where($this->saParams)->result();
-			if (Config_Db::$debug_show_sql){                            
-				LogMe::log("SQL:".$this->sQuery);  
-				if (!empty($this->saParams)) {      
+			if (Config_Db::$debug_show_sql){
+				LogMe::log("SQL:".$this->sQuery);
+				if (!empty($this->saParams)) {
 					LogMe::log("SQL PARAM:".var_export($this->saParams, true));
 				}
-			}                 
+			}
 			$this->result = pg_query($this->connection,$this->sQuery);
 			$row = pg_fetch_row($this->result);
 			if (!empty($row)&&is_array($row)) {
@@ -431,7 +440,7 @@ class Dao_Postgres extends Dao implements IDaoNormal
 	 * 对象分页
 	 * @param string|class $object 需要查询的对象实体|类名称
 	 * @param int $startPoint  分页开始记录数
-	 * @param int $endPoint    分页结束记录数 
+	 * @param int $endPoint    分页结束记录数
 	 * @param object|string|array $filter 查询条件，在where后的条件
 	 * 示例如下：<br/>
 	 *      0."id=1,name='sky'"<br/>
@@ -445,7 +454,7 @@ class Dao_Postgres extends Dao implements IDaoNormal
 	 *      1.id asc;
 	 *      2.name desc;
 	 */
-	public function queryPage($object,$startPoint,$endPoint,$filter=null,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID) 
+	public function queryPage($object,$startPoint,$endPoint,$filter=null,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)
 	{
 		try {
 			if (!$this->validParameter($object)) {
@@ -455,9 +464,9 @@ class Dao_Postgres extends Dao implements IDaoNormal
 			$_SQL->isPreparedStatement=true;
 			$this->saParams=$_SQL->parseValidInputParam($filter);
 			$_SQL->isPreparedStatement=false;
-			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){                
+			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){
 				$realIdName=$this->sql_id($object);
-				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);            
+				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);
 			}
 			$this->sQuery=$_SQL->select()->from($this->classname)->where($this->saParams)->order($sort)->limit($endPoint-$startPoint+1)->offset($startPoint)->result();
 			$result=$this->sqlExecute($this->sQuery,$object);
@@ -467,23 +476,23 @@ class Dao_Postgres extends Dao implements IDaoNormal
 		}
 	}
 
-	public function transBegin() 
+	public function transBegin()
 	{
 		return @pg_exec($this->connection, "BEGIN");
 		return TRUE;
 	}
-	public function transCommit() 
+	public function transCommit()
 	{
 		return @pg_exec($this->connection, "COMMIT");
 		return TRUE;
 	}
-	public function transRollback() 
+	public function transRollback()
 	{
 		return @pg_exec($this->connection, "ROLLBACK");
 		return TRUE;
 	}
 
-	public function escape($sql) 
+	public function escape($sql)
 	{
 		if (function_exists('pg_escape_string')) {
 			return pg_escape_string( $sql);

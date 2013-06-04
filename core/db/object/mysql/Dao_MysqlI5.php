@@ -11,7 +11,7 @@
  * @subpackage mysql
  * @author skygreen
  */
-class Dao_MysqlI5 extends Dao implements IDaoNormal 
+class Dao_MysqlI5 extends Dao implements IDaoNormal
 {
 	/**
 	 * 连接数据库
@@ -19,7 +19,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	 * @param string $port
 	 * @param string $username
 	 * @param string $password
-	 * @param string $dbname 
+	 * @param string $dbname
 	 * @return mixed 数据库连接
 	 */
 	public function connect($host=null,$port=null,$username=null,$password=null,$dbname=null)
@@ -37,7 +37,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 		}
 		$this->connection = new mysqli($connecturl,
 				$username,$password,$dbname);
-		
+
 		if (mysqli_connect_errno()) {
 			Exception_Mysqli::record();
 		}
@@ -51,7 +51,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	 * 执行预编译SQL语句<br/>
 	 * 可以防止SQL注入黑客技术
 	 */
-	private function executeSQL() 
+	private function executeSQL()
 	{
 		try {
 			if (Config_Db::$debug_show_sql){
@@ -136,6 +136,15 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 					return $autoId;
 				}
 				$result=$this->getResultToObjects($object);
+				$sql_s=preg_replace("/\s/","",$sqlstring);
+				$sql_s=strtolower($sql_s);
+				if (!is_array($result)){
+					if (!(contain($sql_s,"count(")||contain($sql_s,"sum("))){
+						$tmp=$result;
+						$result=null;
+						$result[]=$tmp;
+					}
+				}
 			}else{
 			   Exception_Mysqli::record(Wl::ERROR_INFO_DB_HANDLE);
 			}
@@ -215,7 +224,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	 * 对象分页
 	 * @param string|class $object 需要查询的对象实体|类名称
 	 * @param int $startPoint  分页开始记录数
-	 * @param int $endPoint    分页结束记录数 
+	 * @param int $endPoint    分页结束记录数
 	 * @param object|string|array $filter 查询条件，在where后的条件
 	 * 示例如下：<br/>
 	 *      0."id=1,name='sky'"<br/>
@@ -241,7 +250,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	 * 对象分页[多表关联查询]
 	 * @param string|class $object 需要查询的对象实体|类名称
 	 * @param int $startPoint  分页开始记录数
-	 * @param int $endPoint    分页结束记录数 
+	 * @param int $endPoint    分页结束记录数
 	 * @param object|string|array $filter 查询条件，在where后的条件
 	 * 示例如下：<br/>
 	 *      0."id=1,name='sky'"<br/>
@@ -289,7 +298,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	 * @param string $object 需要转换成的对象实体|类名称
 	 * @return 转换成的对象实体列表
 	 */
-	private function getResultToObjects($object) 
+	private function getResultToObjects($object)
 	{
 		$result=null;
 		if (is_object($this->stmt)){
@@ -350,7 +359,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	 *    0,10<br/>
 	 * @return 列表:查询被列表的对象
 	 */
-	public function get($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null) 
+	public function get($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null)
 	{
 		$result=null;
 		try {
@@ -359,10 +368,10 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 			}
 
 			$_SQL=new Crud_Sql_Select();
-			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){                
+			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){
 				$realIdName=$this->sql_id($object);
-				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);            
-			}            
+				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);
+			}
 			$_SQL->isPreparedStatement=true;
 			$filter_arr=$_SQL->parseValidInputParam($filter);
 			if (is_array($filter_arr)&&count($filter_arr)>0){
@@ -395,7 +404,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	 *      2.name desc;
 	 * @return 单个对象实体
 	 */
-	public function get_one($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID) 
+	public function get_one($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)
 	{
 		$result=null;
 		try {
@@ -411,10 +420,10 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 			}else{
 				$_SQL->isPreparedStatement=false;
 			}
-			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){                
+			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){
 				$realIdName=$this->sql_id($object);
-				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);            
-			}            
+				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);
+			}
 			$this->sQuery=$_SQL->select()->from($this->classname)->where($filter_arr)->order($sort)->limit("0,1")->result();
 			$this->executeSQL();
 			$result=$this->getResultToObjects($object);
@@ -433,7 +442,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	 * @param string $id 数据对象的唯一标识
 	 * @return Object 对象
 	 */
-	public function get_by_id($object, $id) 
+	public function get_by_id($object, $id)
 	{
 		$result=null;
 		try {
@@ -463,7 +472,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	 * @param string|class $object 需要添加对象实体|对象名称【允许设置自定义ID】
 	 * @return int 保存对象记录的ID标识号
 	 */
-	public function save($object) 
+	public function save($object)
 	{
 		$autoId=-1;//新建对象插入数据库记录失败
 		if (!$this->validObjectParameter($object)) {
@@ -496,7 +505,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	 * @param string|class $object 需要删除对象实体|对象名称【对象内的属性即存在的条件】
 	 * @return boolen 是否删除成功；true为操作正常
 	 */
-	public function delete($object) 
+	public function delete($object)
 	{
 		$result=false;
 		if (!$this->validObjectParameter($object)) {
@@ -508,9 +517,9 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 				$_SQL=new Crud_Sql_Delete();
 				$where=$this->sql_id($object).self::EQUAL.$id;
 				$this->sQuery=$_SQL->deletefrom($this->classname)->where($where)->result();
-				if (Config_Db::$debug_show_sql){                             
-					LogMe::log("SQL:".$this->sQuery);     
-				}                
+				if (Config_Db::$debug_show_sql){
+					LogMe::log("SQL:".$this->sQuery);
+				}
 				$this->stmt=mysqli_prepare($this->connection,$this->sQuery);
 				$this->stmt->execute ();
 				$this->stmt->free_result ();
@@ -528,7 +537,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	 * @param string|class $object 需要更新的对象实体|对象名称【Id是已经存在的】
 	 * @return boolen 是否更新成功；true为操作正常
 	 */
-	public function update($object) 
+	public function update($object)
 	{
 		$result=false;
 		if (!$this->validObjectParameter($object)) {
@@ -539,7 +548,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 		if(!empty($id)) {
 			try {
 				$_SQL=new Crud_Sql_Update();
-				$object->setUpdateTime(UtilDateTime::now(EnumDateTimeFormat::STRING));   
+				$object->setUpdateTime(UtilDateTime::now(EnumDateTimeFormat::STRING));
 				$this->saParams=UtilObject::object_to_array($object);
 				unset($this->saParams[DataObjectSpec::getRealIDColumnName($object)]);
 				$this->saParams=$this->filterViewProperties($this->saParams);
@@ -569,10 +578,10 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	 * @param array $saParams
 	 * @return string
 	 */
-	private static function preparse_prepared($sQuery, &$saParams) 
+	private static function preparse_prepared($sQuery, &$saParams)
 	{
 		$nPos =0;
-		$sRetval=$sQuery;      
+		$sRetval=$sQuery;
 		foreach ($saParams as $x_Key =>$Param) {
 			//if we find no more ?'s we're done then
 			if (($nPos=strpos($sRetval, '?', $nPos + 1)) === false) {
@@ -587,8 +596,8 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 
 			//null value, replace this ? with NULL.
 			$sRetval=substr_replace($sRetval, 'NULL', $nPos, 1);
-			//unset this element now 
-			unset($saParams[$x_Key]); 
+			//unset this element now
+			unset($saParams[$x_Key]);
 		}
 
 		return $sRetval;
@@ -606,7 +615,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	 * @param pointer $saParams
 	 * @return string
 	 */
-	private static function getPreparedTypeString(&$saParams) 
+	private static function getPreparedTypeString(&$saParams)
 	{
 		$sRetval='';
 		//if not an array, or empty.. return empty string
@@ -623,8 +632,8 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 			}
 			else if (is_string($Param)) {
 				$sRetval.='s';
-			} 
-			else {   
+			}
+			else {
 				$sRetval.='s';
 			}
 		}
@@ -635,7 +644,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	 * 设置数据库字符集
 	 * @param string $character_code 字符集
 	 */
-	public function change_character_set($character_code=Config_C::CHARACTER_UTF8) 
+	public function change_character_set($character_code=Config_C::CHARACTER_UTF8)
 	{
 		$sql = "set names ".$character_code;
 		$this->connection->query($sql);
@@ -644,7 +653,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	/**
 	 * 显示数据库的字符集
 	 */
-	public function character_set() 
+	public function character_set()
 	{
 		$charset = $this->connection->character_set_name();
 		return $charset;

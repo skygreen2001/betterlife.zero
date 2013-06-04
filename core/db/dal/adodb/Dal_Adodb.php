@@ -13,10 +13,10 @@
  * @subpackage adodb
  * @author skygreen
  */
-class Dal_Adodb extends Dal implements IDal 
+class Dal_Adodb extends Dal implements IDal
 {
 	/**
-	 * @var enum 当前使用的数据类型 
+	 * @var enum 当前使用的数据类型
 	 */
 	private $dbtype;
 	/**
@@ -26,12 +26,12 @@ class Dal_Adodb extends Dal implements IDal
 	 * @param string $port
 	 * @param string $username
 	 * @param string $password
-	 * @param string $dbname 
+	 * @param string $dbname
 	 * @param mixed $dbtype 指定数据库类型。{该字段的值参考：EnumDbSource}
 	 * @param mixed $engine 指定操作数据库引擎。{该字段的值参考：EnumDbEngine}
 	 * @return mixed 数据库连接
 	 */
-	public function connect($host=null,$port=null,$username=null,$password=null,$dbname=null,$dbtype=null,$engine=null) {        
+	public function connect($host=null,$port=null,$username=null,$password=null,$dbname=null,$dbtype=null,$engine=null) {
 		if (!isset($username)){
 			$username=Config_Adodb::$username;
 		}
@@ -40,25 +40,25 @@ class Dal_Adodb extends Dal implements IDal
 		}
 		if (!isset($dbname)){
 			$dbname=Config_Adodb::$dbname;
-		}        
+		}
 		if (!isset($dbtype)){
 		   $dbtype=Config_Adodb::$db;
-		}   
+		}
 		$this->dbtype=$dbtype;
 		if (!isset($engine)){
 		   $engine=Config_Adodb::$engine;
-		}   
-		
+		}
+
 		try {
 			switch($dbtype){
 			  case EnumDbSource::DB_SQLSERVER:
 			  case EnumDbSource::DB_MICROSOFT_ACCESS:
 			  case EnumDbSource::DB_DB2:
-				 Config_Adodb::$is_dsn_set=false;//当数据库为Sql Server,Microsoft Access,DB2时，Adodb只支持Dsn less   
+				 Config_Adodb::$is_dsn_set=false;//当数据库为Sql Server,Microsoft Access,DB2时，Adodb只支持Dsn less
 				 break;
-			} 
+			}
 			global $ADODB_FETCH_MODE;
-			$ADODB_FETCH_MODE= ADODB_FETCH_ASSOC;            
+			$ADODB_FETCH_MODE= ADODB_FETCH_ASSOC;
 			if($engine==EnumDbEngine::ENGINE_DAL_ADODB_PDO) {
 				$this->connection=ADONewConnection("pdo");
 			 }
@@ -74,7 +74,7 @@ class Dal_Adodb extends Dal implements IDal
 				if (count($conn_vars)>0) {
 					$conn_str="?".implode("&", $conn_vars);
 				}
-				switch ($dbtype) {  
+				switch ($dbtype) {
 					case EnumDbSource::DB_MICROSOFT_ACCESS:
 					case EnumDbSource::DB_DB2:
 						if($engine==EnumDbEngine::ENGINE_DAL_ADODB) {
@@ -82,12 +82,12 @@ class Dal_Adodb extends Dal implements IDal
 						}
 						$this->connection->Connect(Config_Adodb::dsn($host,$port,$username,$password,$dbname,$dbtype,$engine));
 						break;
-					default: 
+					default:
 						if($engine==EnumDbEngine::ENGINE_DAL_ADODB) {
 							$this->connection =ADONewConnection(Config_Adodb::dsn($host,$port,$username,$password,$dbname,$dbtype,$engine).$conn_str);
 						}
 						break;
-				}              
+				}
 			}else{
 				if($engine==EnumDbSource::ENGINE_DAL_ADODB) {
 					$this->connection=ADONewConnection(Config_Adodb::driver($dbtype));
@@ -97,13 +97,13 @@ class Dal_Adodb extends Dal implements IDal
 				}
 				switch ($dbtype) {
 					case EnumDbSource::DB_SQLSERVER:
-						$this->connection =ADONewConnection(Config_Adodb::driver($dbtype));                         
-						if ((strtoupper(Gc::$encoding)==Config_C::CHARACTER_UTF8)||(strtoupper(Gc::$encoding)==Config_C::CHARACTER_UTF_8)){      
+						$this->connection =ADONewConnection(Config_Adodb::driver($dbtype));
+						if ((strtoupper(Gc::$encoding)==Config_C::CHARACTER_UTF8)||(strtoupper(Gc::$encoding)==Config_C::CHARACTER_UTF_8)){
 							$this->connection->Connect(Config_Adodb::dsn_less($host,$port,$username,$password,$dbname,$dbtype,$engine),$username,$password,$dbname);
 						}else{
 							$this->connection->Connect(Config_Adodb::dsn_less($host,$port,$username,$password,$dbname,$dbtype,$engine),$username,$password);
 						}
-						break;                  
+						break;
 					case EnumDbSource::DB_FIREBIRD:
 					case EnumDbSource::DB_INTERBASE:
 						if (Config_Db::$is_persistent) {
@@ -129,7 +129,7 @@ class Dal_Adodb extends Dal implements IDal
 						break;
 				}
 			}
-			
+
 			if (!$this->connection) {
 				Exception_Db::log(Wl::ERROR_INFO_CONNECT_FAIL);
 			}
@@ -152,7 +152,7 @@ class Dal_Adodb extends Dal implements IDal
 			return $autoId;
 		}
 		try {
-			$object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::TIMESTAMP));  
+			$object->setCommitTime(UtilDateTime::now(EnumDateTimeFormat::TIMESTAMP));
 			$this->saParams=UtilObject::object_to_array($object);
 //            $sql = Crud_SQL::SQL_SELECT." * ".Crud_SQL::SQL_FROM.$tablename.Crud_SQL::SQL_WHERE.$this->sql_id($object).self::EQUAL."-1";
 //            $rs = $this->connection->Execute($sql); # Execute the query and get the empty recordset
@@ -161,17 +161,17 @@ class Dal_Adodb extends Dal implements IDal
 			$_SQL=new Crud_Sql_Insert();
 			$this->sQuery=$_SQL->insert($this->classname)->values($this->saParams)->result();
 			if (Config_Db::$db==EnumDbSource::DB_SQLSERVER&&((trim(strtoupper(Gc::$encoding))==Config_C::CHARACTER_UTF_8)||(trim(strtolower(Gc::$encoding))==Config_C::CHARACTER_UTF8))) {
-			  if (UtilString::is_utf8($this->sQuery)&&Config_Adodb::driver($this->dbtype)!=Config_Adodb::DRIVER_MSSQL_UTF8) { 
-				 $this->sQuery=UtilString::utf82gbk($this->sQuery); 
-			  }   
-			}              
+			  if (UtilString::is_utf8($this->sQuery)&&Config_Adodb::driver($this->dbtype)!=Config_Adodb::DRIVER_MSSQL_UTF8) {
+				 $this->sQuery=UtilString::utf82gbk($this->sQuery);
+			  }
+			}
 
-			if (Config_Db::$debug_show_sql){      
-				LogMe::log("SQL:".$this->sQuery);  
-				if (!empty($this->saParams)) {      
+			if (Config_Db::$debug_show_sql){
+				LogMe::log("SQL:".$this->sQuery);
+				if (!empty($this->saParams)) {
 					LogMe::log("SQL PARAM:".var_export($this->saParams, true));
-				}                
-			}            
+				}
+			}
 			if ($this->connection->Execute($this->sQuery) === false) {
 				Exception_Db::log($this->connection->ErrorMsg());
 			}
@@ -180,7 +180,7 @@ class Dal_Adodb extends Dal implements IDal
 				$realIdName=DataObjectSpec::getRealIDColumnName($object);
 				$sql_maxid=Crud_SQL::SQL_MAXID;
 				$sql_maxid=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sql_maxid);
-				$tablename =Config_Adodb::orm($this->classname);                
+				$tablename =Config_Adodb::orm($this->classname);
 				$autoIdSql=Crud_SQL::SQL_SELECT.$sql_maxid.Crud_SQL::SQL_FROM.$tablename;
 				$this->stmt= $this->connection->Execute($autoIdSql);
 				if (!empty($this->stmt)&&(count($this->stmt->fields)>0)) {
@@ -194,7 +194,7 @@ class Dal_Adodb extends Dal implements IDal
 		} catch (Exception $exc) {
 			Exception_Db::log($exc->getTraceAsString());
 		}
-		if (!empty($object)&&is_object($object)){ 
+		if (!empty($object)&&is_object($object)){
 		  $object->setId($autoId);//当保存返回对象时使用
 		}
 		return $autoId;
@@ -216,10 +216,10 @@ class Dal_Adodb extends Dal implements IDal
 			try {
 				$_SQL=new Crud_Sql_Delete();
 				$where=$this->sql_id($object).self::EQUAL.$id;
-				$this->sQuery=$_SQL->deletefrom($this->classname)->where($where)->result();     
-				if (Config_Db::$debug_show_sql){                    
-					LogMe::log("SQL:".$this->sQuery);      
-				}            
+				$this->sQuery=$_SQL->deletefrom($this->classname)->where($where)->result();
+				if (Config_Db::$debug_show_sql){
+					LogMe::log("SQL:".$this->sQuery);
+				}
 				$this->connection->Execute($this->sQuery);
 				$result=true;
 			} catch (Exception $exc) {
@@ -244,7 +244,7 @@ class Dal_Adodb extends Dal implements IDal
 		$id=$object->getId();
 		if(!empty($id)) {
 			try {
-				$object->setUpdateTime(UtilDateTime::now(EnumDateTimeFormat::STRING)); 
+				$object->setUpdateTime(UtilDateTime::now(EnumDateTimeFormat::STRING));
 				$this->saParams=UtilObject::object_to_array($object);
 				unset($this->saParams[DataObjectSpec::getRealIDColumnName($object)]);
 				$this->saParams=$this->filterViewProperties($this->saParams);
@@ -253,20 +253,20 @@ class Dal_Adodb extends Dal implements IDal
 				$where=$this->sql_id($object).self::EQUAL.$id;
 				$this->sQuery=$_SQL->update($this->classname)->set($this->saParams)->where($where)->result();
 				if (Config_Db::$db==EnumDbSource::DB_SQLSERVER&&((trim(strtoupper(Gc::$encoding))==Config_C::CHARACTER_UTF_8)||(trim(strtolower(Gc::$encoding))==Config_C::CHARACTER_UTF8))) {
-				  if (UtilString::is_utf8($this->sQuery)&&Config_Adodb::driver($this->dbtype)!=Config_Adodb::DRIVER_MSSQL_UTF8) { 
-					 $this->sQuery=UtilString::utf82gbk($this->sQuery); 
-				  }   
-				}                    
-				if (Config_Db::$debug_show_sql){                   
-					LogMe::log("SQL:".$this->sQuery);  
-					if (!empty($this->saParams)) {      
+				  if (UtilString::is_utf8($this->sQuery)&&Config_Adodb::driver($this->dbtype)!=Config_Adodb::DRIVER_MSSQL_UTF8) {
+					 $this->sQuery=UtilString::utf82gbk($this->sQuery);
+				  }
+				}
+				if (Config_Db::$debug_show_sql){
+					LogMe::log("SQL:".$this->sQuery);
+					if (!empty($this->saParams)) {
 						LogMe::log("SQL PARAM:".var_export($this->saParams, true));
 					}
-				}                            
-//                $tablename =Config_Adodb::orm($this->classname);                         
+				}
+//                $tablename =Config_Adodb::orm($this->classname);
 //                $sql = Crud_SQL::SQL_SELECT." * ".Crud_SQL::SQL_FROM.$tablename.Crud_SQL::SQL_WHERE.$this->sql_id($object).self::EQUAL.$id;
-//                $rs = $this->connection->Execute($sql); # Execute the query and get the empty recordset  
-//                $this->sQuery= $this->connection->GetUpdateSQL($rs, $this->saParams);//对SQL Server会报异常,故不使用:SQL error:无法更新标识列    
+//                $rs = $this->connection->Execute($sql); # Execute the query and get the empty recordset
+//                $this->sQuery= $this->connection->GetUpdateSQL($rs, $this->saParams);//对SQL Server会报异常,故不使用:SQL error:无法更新标识列
 				$this->connection->Execute($this->sQuery);
 				$result=true;
 			} catch (Exception $exc) {
@@ -300,7 +300,7 @@ class Dal_Adodb extends Dal implements IDal
 			}else if((!empty($object))&&(is_string($object))){
 				$classname=$object;
 			}
-			// 循环输出  
+			// 循环输出
 			if ($this->stmt){
 				foreach ($this->stmt as $row){//需要和GetAll配合使用
 				//while ($row = $this->stmt->FetchNextObject()) { 需要和Execute配合使用
@@ -316,15 +316,15 @@ class Dal_Adodb extends Dal implements IDal
 							}
 						}
 					}else {
-						$rowObject=new $object();                   
+						$rowObject=new $object();
 						if ($this->validParameter($object)) {
-							$rowObject = UtilObject::array_to_object($row, $this->classname);       
+							$rowObject = UtilObject::array_to_object($row, $this->classname);
 					   }
-					}     
-					$result[]=$rowObject;                
-				}                 
+					}
+					$result[]=$rowObject;
+				}
 				$result=  $this->getValueIfOneValue($result);
-			}  
+			}
 		//}
 		return $result;
 	}
@@ -356,22 +356,22 @@ class Dal_Adodb extends Dal implements IDal
 				return $result;
 			}
 			$_SQL=new Crud_Sql_Select();
-			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){                
+			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){
 				$realIdName=$this->sql_id($object);
-				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);            
+				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);
 			}
 
 			$_SQL->isPreparedStatement=true;
 			$this->saParams=$_SQL->parseValidInputParam($filter);
 			$_SQL->isPreparedStatement=false;
 			$this->sQuery=$_SQL->select()->from($this->classname)->where($this->saParams)->order($sort)->limit($limit)->result();
-			if (Config_Db::$debug_show_sql){                    
-				LogMe::log("SQL:".$this->sQuery);  
-				if (!empty($this->saParams)) {      
+			if (Config_Db::$debug_show_sql){
+				LogMe::log("SQL:".$this->sQuery);
+				if (!empty($this->saParams)) {
 					LogMe::log("SQL PARAM:".var_export($this->saParams, true));
 				}
-			}            
-			$this->stmt = $this->connection->GetAll($this->sQuery); 
+			}
+			$this->stmt = $this->connection->GetAll($this->sQuery);
 			$result=$this->getResultToObjects($object);
 			return $result;
 		} catch (Exception $exc) {
@@ -387,7 +387,7 @@ class Dal_Adodb extends Dal implements IDal
 	 *      0."id=1,name='sky'"<br/>
 	 *      1.array("id=1","name='sky'")<br/>
 	 *      2.array("id"=>"1","name"=>"sky")<br/>
-	 *      3.允许对象如new User(id="1",name="green");<br/> 
+	 *      3.允许对象如new User(id="1",name="green");<br/>
 	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
 	 * @param string $sort 排序条件
 	 * 示例如下：
@@ -405,19 +405,19 @@ class Dal_Adodb extends Dal implements IDal
 			$_SQL=new Crud_Sql_Select();
 			$_SQL->isPreparedStatement=true;
 			$this->saParams=$_SQL->parseValidInputParam($filter);
-			$_SQL->isPreparedStatement=false;            
-			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){                
+			$_SQL->isPreparedStatement=false;
+			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){
 				$realIdName=$this->sql_id($object);
-				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);            
-			}                                                                      
+				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);
+			}
 			$this->sQuery=$_SQL->select()->from($this->classname)->where($this->saParams)->order($sort)->result();
 
-			if (Config_Db::$debug_show_sql){                     
-				LogMe::log("SQL:".$this->sQuery);  
-				if (!empty($this->saParams)) {      
+			if (Config_Db::$debug_show_sql){
+				LogMe::log("SQL:".$this->sQuery);
+				if (!empty($this->saParams)) {
 					LogMe::log("SQL PARAM:".var_export($this->saParams, true));
 				}
-			}                        
+			}
 			$this->stmt =  $this->connection->SelectLimit($this->sQuery,1,0);
 			$result=$this->getResultToObjects($object);
 			if (count($result)>0) {
@@ -446,10 +446,10 @@ class Dal_Adodb extends Dal implements IDal
 				$_SQL=new Crud_Sql_Select();
 				$where=$this->sql_id($object).self::EQUAL.$id;
 				$this->saParams=null;
-				$this->sQuery=$_SQL->select()->from($this->classname)->where($where)->result();   
-				if (Config_Db::$debug_show_sql){                   
+				$this->sQuery=$_SQL->select()->from($this->classname)->where($where)->result();
+				if (Config_Db::$debug_show_sql){
 					LogMe::log("SQL:".$this->sQuery);
-				}                            
+				}
 				$this->stmt =  $this->connection->GetAll($this->sQuery);
 				$result=$this->getResultToObjects($object);
 				if (count($result)>0) {
@@ -474,20 +474,20 @@ class Dal_Adodb extends Dal implements IDal
 		$result=null;
 		try {
 			if (Config_Db::$db==EnumDbSource::DB_SQLSERVER&&((trim(strtoupper(Gc::$encoding))==Config_C::CHARACTER_UTF_8)||(trim(strtolower(Gc::$encoding))==Config_C::CHARACTER_UTF8))) {
-			  if (UtilString::is_utf8($sqlstring)&&Config_Adodb::driver($this->dbtype)!=Config_Adodb::DRIVER_MSSQL_UTF8) { 
-				 $sqlstring=UtilString::utf82gbk($sqlstring); 
-			  }   
-			}             
-			if (Config_Db::$debug_show_sql){                           
-				LogMe::log("SQL:".$sqlstring);   
-			}                                                 
+			  if (UtilString::is_utf8($sqlstring)&&Config_Adodb::driver($this->dbtype)!=Config_Adodb::DRIVER_MSSQL_UTF8) {
+				 $sqlstring=UtilString::utf82gbk($sqlstring);
+			  }
+			}
+			if (Config_Db::$debug_show_sql){
+				LogMe::log("SQL:".$sqlstring);
+			}
 			$parts = split(" ",trim($sqlstring));
 			$type = strtolower($parts[0]);
-			if((Crud_Sql_Update::SQL_KEYWORD_UPDATE==$type)||(Crud_Sql_Delete::SQL_KEYWORD_DELETE==$type)) {                
+			if((Crud_Sql_Update::SQL_KEYWORD_UPDATE==$type)||(Crud_Sql_Delete::SQL_KEYWORD_DELETE==$type)) {
 				$this->stmt= $this->connection->Execute($sqlstring);
 				return true;
-			}elseif (Crud_Sql_Insert::SQL_KEYWORD_INSERT==$type) {                      
-				$this->stmt= $this->connection->Execute($sqlstring);  
+			}elseif (Crud_Sql_Insert::SQL_KEYWORD_INSERT==$type) {
+				$this->stmt= $this->connection->Execute($sqlstring);
 				$autoId=$this->connection->Insert_ID();
 				if (!$autoId) {
 					$tablename=Crud_Sql_Insert::tablename($sqlstring);
@@ -495,29 +495,38 @@ class Dal_Adodb extends Dal implements IDal
 						$object=Config_Db::tom($tablename);
 						$realIdName=DataObjectSpec::getRealIDColumnName($object);
 						$sql_maxid=Crud_SQL::SQL_MAXID;
-						$sql_maxid=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sql_maxid);   
+						$sql_maxid=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sql_maxid);
 
-						$autoIdSql=Crud_SQL::SQL_SELECT.$sql_maxid.Crud_SQL::SQL_FROM.$tablename;      
-						if (Config_Db::$debug_show_sql){                
-							LogMe::log("SQL:".$autoIdSql);     
-						}                                    
+						$autoIdSql=Crud_SQL::SQL_SELECT.$sql_maxid.Crud_SQL::SQL_FROM.$tablename;
+						if (Config_Db::$debug_show_sql){
+							LogMe::log("SQL:".$autoIdSql);
+						}
 						$this->stmt= $this->connection->Execute($autoIdSql);
 						if ((!empty($this->stmt))&&(count($this->stmt->fields)>0)) {
 							$autoId=@$this->stmt->fields[0];
-							if (!empty($object)&&is_object($object)){ 
-							   $object->setId($autoId);//当保存返回对象时使用   
-							}  
+							if (!empty($object)&&is_object($object)){
+							   $object->setId($autoId);//当保存返回对象时使用
+							}
 						}  else {
 							$autoId=-1;
 						}
-					}else{                        
+					}else{
 						$autoId=-1;
 					}
 				}
-				return $autoId;                                 
-			}    
+				return $autoId;
+			}
 			$this->stmt= $this->connection->GetAll($sqlstring);
 			$result=$this->getResultToObjects($object);
+			$sql_s=preg_replace("/\s/","",$sqlstring);
+			$sql_s=strtolower($sql_s);
+			if (!is_array($result)){
+				if (!(contain($sql_s,"count(")||contain($sql_s,"sum("))){
+					$tmp=$result;
+					$result=null;
+					$result[]=$tmp;
+				}
+			}
 		} catch (Exception $exc) {
 			Exception_Db::record($exc->getTraceAsString());
 		}
@@ -546,13 +555,13 @@ class Dal_Adodb extends Dal implements IDal
 			$_SQL->isPreparedStatement=true;
 			$this->saParams=$_SQL->parseValidInputParam($filter);
 			$_SQL->isPreparedStatement=false;
-			$this->sQuery=$_SQL->select(Crud_Sql_Select::SQL_COUNT)->from($this->classname)->where($this->saParams)->result();    
-			if (Config_Db::$debug_show_sql){                           
-				LogMe::log("SQL:".$this->sQuery);  
-				if (!empty($this->saParams)) {      
+			$this->sQuery=$_SQL->select(Crud_Sql_Select::SQL_COUNT)->from($this->classname)->where($this->saParams)->result();
+			if (Config_Db::$debug_show_sql){
+				LogMe::log("SQL:".$this->sQuery);
+				if (!empty($this->saParams)) {
 					LogMe::log("SQL PARAM:".var_export($this->saParams, true));
-				}                                    
-			}                        
+				}
+			}
 			$this->stmt=$this->connection->Execute($this->sQuery);
 			if (!empty($this->stmt)) {
 				$result=$this->stmt->fields[""];
@@ -569,7 +578,7 @@ class Dal_Adodb extends Dal implements IDal
 	 * 对象分页
 	 * @param string|class $object 需要查询的对象实体|类名称
 	 * @param int $startPoint  分页开始记录数
-	 * @param int $endPoint    分页结束记录数 
+	 * @param int $endPoint    分页结束记录数
 	 * @param object|string|array $filter 查询条件，在where后的条件
 	 * 示例如下：<br/>
 	 *      0."id=1,name='sky'"<br/>
@@ -589,21 +598,21 @@ class Dal_Adodb extends Dal implements IDal
 				return null;
 			}
 			$_SQL=new Crud_Sql_Select();
-			$_SQL->isPreparedStatement=true;             
+			$_SQL->isPreparedStatement=true;
 			$this->saParams=$_SQL->parseValidInputParam($filter);
-			$_SQL->isPreparedStatement=false; 
-			
-			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){                
+			$_SQL->isPreparedStatement=false;
+
+			if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){
 				$realIdName=$this->sql_id($object);
-				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);            
+				$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);
 			}
-			$this->sQuery=$_SQL->select()->from($this->classname)->where($this->saParams)->order($sort)->result();  
-			if (Config_Db::$debug_show_sql){                       
-				LogMe::log("SQL:".$this->sQuery);  
-				if (!empty($this->saParams)) {      
+			$this->sQuery=$_SQL->select()->from($this->classname)->where($this->saParams)->order($sort)->result();
+			if (Config_Db::$debug_show_sql){
+				LogMe::log("SQL:".$this->sQuery);
+				if (!empty($this->saParams)) {
 					LogMe::log("SQL PARAM:".var_export($this->saParams, true));
 				}
-			}                        
+			}
 			$this->stmt = $this->connection->SelectLimit($this->sQuery,($endPoint-$startPoint+1),$startPoint-1);
 			//SelectLimit($sql,$numrows=-1,$offset=-1,$inputarr=false)
 			//$offset从0开始

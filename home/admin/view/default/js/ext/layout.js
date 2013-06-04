@@ -3,7 +3,7 @@ Bb = Betterlife.Admin;
 /**
  * 页面布局格局
  */
-Bb.Layout = {    
+Bb.Layout = {
     /**
      * 布局：页面头部
      */
@@ -12,27 +12,27 @@ Bb.Layout = {
         tbar:{
             xtype : 'container',layout : 'anchor',
             height : 27*3,style:'font-size:14px',
-            items : [                        
-                new Ext.Toolbar({ 
+            items : [
+                new Ext.Toolbar({
                     height : 27,ref:'menus',
                     items:[
                         {text: '', ref:'../../file',iconCls : 'logo',
                             menu: {
                                 xtype:'menu',items: [
                                   /*{text:'新建',handler:function(){}},
-                                    {text:'导入',handler:function(){}}, 
+                                    {text:'导入',handler:function(){}},
                                     {text:'导出',handler:function(){}},*/
                                     {text:'关闭所有',handler:function(){
                                         Bb.Viewport.center.tabCloseMenu.onCloseAll();
-                                    }}, '-', 
+                                    }}, '-',
                                     {text: '退出',iconCls : 'icon-quit',ref:'exit',handler:function(){
                                         window.location.href="index.php?go=admin.index.logout";
-                                    }} 
+                                    }}
                                 ]
                             }
                         },{text: '显示', ref:'../../view',iconCls : 'page',handler:function(){
                                 var headerPanel=this.ownerCt.ownerCt.ownerCt;
-                                if(window.outerHeight==screen.height && window.outerWidth==screen.width){ 
+                                if(window.outerHeight==screen.height && window.outerWidth==screen.width){
                                     headerPanel.view.menu.full.setChecked(true);
                                 }else{
                                     headerPanel.view.menu.full.setChecked(false);
@@ -77,11 +77,11 @@ Bb.Layout = {
                                             group: 'onlineditor',
                                             checkHandler: function(item, checked){Bb.Layout.Function.onOnlineditorCheck(item, checked);}
                                         }]
-                                    }},                                    
+                                    }},
                                     '-',
                                     {text: '全屏  [F11]',checked:false,ref:'full',checkHandler:function(){
                                         Bb.Layout.Function.FullScreen();
-                                    }} 
+                                    }}
                                 ]
                             }
                         },{text: '博客', ref:'../../blog',iconCls : 'page',
@@ -92,16 +92,16 @@ Bb.Layout = {
                                     }},
                                     {text:'管理',ref:'blogs',handler:function(){
                                         Bb.Navigation.AddTabbyUrl(Bb.Layout.CenterPanel,"博客","index.php?go=admin.betterlife.blog","blog");
-                                    }} 
+                                    }}
                                 ]
                             }
                         },{text: '帮助', ref:'../../help',iconCls : 'page',
                             menu: {
                                 xtype:'menu',items: [
                                     {text:'帮助手册',handler:function(){}},
-                                    {text:'在线帮助',handler:function(){}}, 
+                                    {text:'在线帮助',handler:function(){}},
                                     {text:'在线升级',handler:function(){}},
-                                    {text:'关于...',handler:function(){}} 
+                                    {text:'关于...',handler:function(){}}
                                 ]
                             }
                         },'-',{text: '退出', iconCls : 'icon-quit',ref:'../../exit',handler:function(){
@@ -109,21 +109,21 @@ Bb.Layout = {
                         }},new Ext.Toolbar.Fill(),'-',{text: "",ref:'../../operator',handler:function(){
                             Bb.Layout.Function.OpenWindow("index.php?go=admin.view.admin&admin_id="+Bb.Config.Admin_id);
                         }}]
-                }), 
+                }),
                 new Ext.Toolbar({
                     height:54,ref:'toolbar',
                     items : [
-                        {xtype: 'buttongroup',title: '博客管理',columns: 2,defaults: {scale: 'small'},                         
+                        {xtype: 'buttongroup',title: '博客管理',columns: 2,defaults: {scale: 'small'},
                          items: [{text: '添加',iconCls: 'page',ref:"../addBlog",handler:function(){
-                                Bb.Navigation.AddTabbyUrl(Bb.Layout.CenterPanel,"博客","index.php?go=admin.index.blog","blog");
+                                Bb.Navigation.AddTabbyUrl(Bb.Layout.CenterPanel,"博客","index.php?go=admin.betterlife.blog","blog");
                             }},
                             {text: '管理',iconCls: 'page',ref:"../blogs",handler:function(){
-                                Bb.Navigation.AddTabbyUrl(Bb.Layout.CenterPanel,"博客","index.php?go=admin.index.blog","blog");
+                                Bb.Navigation.AddTabbyUrl(Bb.Layout.CenterPanel,"博客","index.php?go=admin.betterlife.blog","blog");
                             }}
                          ]}]
                 })
           ]}
-    }],   
+    }],
     /**
      * 布局:页面左部
      */
@@ -136,9 +136,9 @@ Bb.Layout = {
             type : 'accordion',animate : true,
             activeOnTop: true
         }
-    }],      
+    }],
     /**
-     * 布局:页面右部 
+     * 布局:页面右部
      */
     RightPanel : [{
         region : 'east',title : '',collapsible : true,collapseMode : 'mini',split : true,
@@ -162,18 +162,18 @@ Bb.Layout = {
                             '版本' : 1.0,
                             '介绍' : '提供专业服务、并向企业客户提供IT服务为重点的盈利公司。'
                         }
-                    })    
+                    })
                 ]
             })
-    }],   
+    }],
     /**
-     * 布局:页面底部 
-     */ 
+     * 布局:页面底部
+     */
     FooterPanel : [{
         region : 'south',contentEl : 'south',collapsible : true,
         title : '状态栏',split : true,collapseMode : 'mini',layout : 'fit',autoScroll : true,
         height : 50,minSize : 100,maxSize : 200,margins : '0 0 0 0'
-    }],   
+    }],
     /**
      * 布局:页面内容区
      */
@@ -189,15 +189,15 @@ Bb.Layout = {
             new Ext.ux.TabScrollerMenu({maxText : 15,pageSize : 5})
         ],
         listeners:{
-            render: function() {                                                                          
-                Ext.getBody().on("contextmenu", Ext.emptyFn, null, {preventDefault: true});  
+            render: function() {
+                Ext.getBody().on("contextmenu", Ext.emptyFn, null, {preventDefault: true});
             },
-            tabchange: function(tabPanel, tab){  
+            tabchange: function(tabPanel, tab){
                 if (tab){
-                    //tabs切换时修改浏览器hash  
-                    Ext.History.add(tabPanel.id + Bb.Config.TokenDelimiter + tab.id);  
+                    //tabs切换时修改浏览器hash
+                    Ext.History.add(tabPanel.id + Bb.Config.TokenDelimiter + tab.id);
                 }
-            } 
+            }
         },
         items : [{
                 contentEl : 'centerArea',
@@ -224,24 +224,24 @@ Bb.Layout = {
         contentEl : 'centerArea',
         height : '100%',
         layout : 'fit',
-        title : '',   
+        title : '',
         listeners:{
-            render: function() {                                                                          
-                Ext.getBody().on("contextmenu", Ext.emptyFn, null, {preventDefault: true});  
+            render: function() {
+                Ext.getBody().on("contextmenu", Ext.emptyFn, null, {preventDefault: true});
             }
         },
         margins : '0 3 3 0'
     }],
     /**
-     * Layout初始化 
+     * Layout初始化
      */
-    Init : function() {      
+    Init : function() {
         Bb.Viewport.west.add(Bb.Layout.LeftMenuGroups);
-        Bb.Viewport.west.doLayout(); 
-        if (Bb.Viewport.layout.north){   
+        Bb.Viewport.west.doLayout();
+        if (Bb.Viewport.layout.north){
             //顶部导航区不可拖动，否则顶部下方会有空白
             Bb.Viewport.layout.north.split.el.dom.style.cursor="inherit";
-            Bb.Viewport.layout.north.split.dd.lock();                                             
+            Bb.Viewport.layout.north.split.dd.lock();
         }
         if (Ext.get('hideit')) {
             Ext.get('hideit').on('click', function() {
@@ -258,10 +258,10 @@ Bb.Layout = {
         navEs.on('click', Bb.Navigation.HyperlinkClicked);
         navEs.on('contextmenu',Bb.Navigation.OnContextMenu);
         if (Bb.Viewport.head){
-            if (Bb.Viewport.head.operator)Bb.Viewport.head.operator.setText(Bb.Config.Operator);        
+            if (Bb.Viewport.head.operator)Bb.Viewport.head.operator.setText(Bb.Config.Operator);
             //设置当前在线编辑器的菜单选项
             if (Bb.Viewport.head.view){
-                var onlineditorItems=Bb.Viewport.head.view.menu.onlineditor.menu.items.items;        
+                var onlineditorItems=Bb.Viewport.head.view.menu.onlineditor.menu.items.items;
                 Ext.each(onlineditorItems, function(item) {
                   //console.log(item.value);
                   if (item.value==Bb.Config.OnlineEditor){
@@ -289,7 +289,7 @@ Bb.Layout = {
             if (IsOnlyOneWindow){
                 url=url+"&ow=true";
             }
-            Ext.get("frmview").dom.src=url;  
+            Ext.get("frmview").dom.src=url;
         },
         /**
          * 全屏模式支持:
@@ -320,11 +320,11 @@ Bb.Layout = {
                     }
                     catch(err)
                     {
-                       if(!((window.outerHeight==screen.height && window.outerWidth==screen.width))){  
+                       if(!((window.outerHeight==screen.height && window.outerWidth==screen.width))){
                            if (isIEPrompt){
                                 Ext.Msg.alert('提示', 'IE浏览器请使用快捷键:F11');
                            }
-                           Bb.Viewport.head.view.menu.full.setChecked(false); 
+                           Bb.Viewport.head.view.menu.full.setChecked(false);
                            return;
                        }
                     }
@@ -348,8 +348,8 @@ Bb.Layout = {
                     }
                     catch(err)
                     {
-                        
-                        if((window.outerHeight==screen.height && window.outerWidth==screen.width)){ 
+
+                        if((window.outerHeight==screen.height && window.outerWidth==screen.width)){
                             if (isIEPrompt){
                                 Ext.Msg.alert('提示', 'IE浏览器请使用快捷键:F11');
                             }
@@ -357,8 +357,8 @@ Bb.Layout = {
                         return;
                     }
                 }
-            }            
+            }
         }
     }
-};     
+};
 
