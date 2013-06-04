@@ -378,17 +378,17 @@ class Dao_Postgres extends Dao implements IDaoNormal
 		}
 		$this->result = pg_query($this->connection,$sql);
 		$result=$this->getResultToObjects($object);
+		// if (is_array($result)&&count($result)==1) {
+		// 	$result=$result[0];
+		// }
 		$sql_s=preg_replace("/\s/","",$sqlstring);
 		$sql_s=strtolower($sql_s);
-		if (!is_array($result)){
+		if ((!empty($result))&&(!is_array($result))){
 			if (!(contain($sql_s,"count(")||contain($sql_s,"sum("))){
 				$tmp=$result;
 				$result=null;
 				$result[]=$tmp;
 			}
-		}
-		if (is_array($result)&&count($result)==1) {
-			$result=$result[0];
 		}
 		return $result;
 	}

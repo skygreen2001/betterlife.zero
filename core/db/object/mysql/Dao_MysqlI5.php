@@ -138,7 +138,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 				$result=$this->getResultToObjects($object);
 				$sql_s=preg_replace("/\s/","",$sqlstring);
 				$sql_s=strtolower($sql_s);
-				if (!is_array($result)){
+				if ((!empty($result))&&(!is_array($result))){
 					if (!(contain($sql_s,"count(")||contain($sql_s,"sum("))){
 						$tmp=$result;
 						$result=null;
