@@ -533,6 +533,36 @@ abstract class DataObject extends Object implements ArrayAccess
 	}
 
 	/**
+	 * 查询当前对象需显示属性的列表
+	 * @param string 指定的显示属性，同SQL语句中的Select部分。
+	 * 示例如下：<br/>
+	 *     id,name,commitTime
+	 * @param object|string|array $filter 查询条件，在where后的条件<br/>
+	 * 示例如下：<br/>
+	 *      0."id=1,name='sky'"<br/>
+	 *      1.array("id=1","name='sky'")<br/>
+	 *      2.array("id"=>"1","name"=>"sky")<br/>
+	 *      3.允许对象如new User(id="1",name="green");<br/>
+	 * 默认:SQL Where条件子语句。如："(id=1 and name='sky') or (name like 'sky')"<br/>
+	 * @param string $sort 排序条件<br/>
+	 * 示例如下：<br/>
+	 *      1.id asc;<br/>
+	 *      2.name desc;<br/>
+	 * @param string $limit 分页数目:同Mysql limit语法
+	 * 示例如下：<br/>
+	 *    0,10<br/>
+	 * @return 查询列数组，自动从数组中转换出来值字符串,最后只返回一个值
+	 */
+	public static function select_one($columns,$filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null)
+	{
+		$result=DataObjectFunc::showColumns(get_called_class(),$columns,$filter, $sort, $limit);
+		if (!empty($result)&&(is_array($result))&&(count($result)>0)){
+			$result=$result[0];
+		}
+		return $result;
+	}
+
+	/**
 	 * 查询当前对象列表
 	 * @param object|string|array $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
