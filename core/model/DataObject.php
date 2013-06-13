@@ -661,6 +661,26 @@ abstract class DataObject extends Object implements ArrayAccess
 		return DataObjectFunc::max(get_called_class());
 	}
 
+    /**
+     * 数据对象指定列名最小值，如未指定列名，为标识最小值
+     * @param string $column_name 列名，默认为数据对象标识
+     * @return int 数据对象列名最小值，如未指定列名，为标识最小值<br/>
+     */
+    public static function min($column_name=null)
+    {
+        return DataObjectFunc::min(get_called_class(),$column_name);
+    }
+
+    /**
+     * 数据对象指定列名总数
+     * @param string $column_name 列名
+     * @return int 数据对象列名总数<br/>
+     */
+    public static function sum($column_name)
+    {
+        return DataObjectFunc::sum(get_called_class(),$column_name);
+    }
+
 	/**
 	 * 对象分页
 	 * @param int $startPoint  分页开始记录数

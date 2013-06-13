@@ -392,7 +392,7 @@ class Dao_Mssql extends Dao implements IDaoNormal{
 			$sql_s=preg_replace("/\s/","",$sqlstring);
 			$sql_s=strtolower($sql_s);
 			if ((!empty($result))&&(!is_array($result))){
-				if (!(contain($sql_s,"count(")||contain($sql_s,"sum("))){
+				if (!(contains($sql_s,array("count(","sum(","max(","min(","sum(")))){
 					$tmp=$result;
 					$result=null;
 					$result[]=$tmp;

@@ -11,7 +11,7 @@ class DataObjectFunc
 	//<editor-fold defaultstate="collapsed" desc="魔术方法">
 	/**
 	 * 对应数据对象的__call方法
-	 * 
+	 *
 	 * @param string $dataobject 当前数据对象
 	 * @param string $method 方法名
 	 * @param array $arguments 传递的变量数组
@@ -50,7 +50,7 @@ class DataObjectFunc
 	 * @param mixed $property 属性名
 	 * @return mixed 属性值
 	 */
-	public static function get($dataobject,$property) 
+	public static function get($dataobject,$property)
 	{
 		if (method_exists($dataobject, "get".ucfirst($property))) {
 			$methodname="get".ucfirst($property);
@@ -71,7 +71,7 @@ class DataObjectFunc
 				}
 			}
 		}
-	} 
+	}
 
 	/**
 	 * 对应数据对象的__set方法
@@ -110,7 +110,7 @@ class DataObjectFunc
 	 *      2.array("pass"=>"1","name"=>"sky")<br/>
 	 * @return boolen 是否更新成功；true为操作正常<br/>
 	 */
-	public static function updateProperties($classname,$sql_ids,$array_properties) 
+	public static function updateProperties($classname,$sql_ids,$array_properties)
 	{
 		$tablename=Config_Db::orm($classname);
 		$_SQL=new Crud_Sql_Update();
@@ -129,8 +129,8 @@ class DataObjectFunc
 				$sql_ids=explode(",",$sql_ids);
 			}else if(!is_array($sql_ids)){
 				$sql_ids=array($sql_ids);
-			} 
-			if ($sql_ids&&(count($sql_ids)>0)){ 
+			}
+			if ($sql_ids&&(count($sql_ids)>0)){
 				$condition= " $idColumn=".$sql_ids[0]." ";
 				for($i=1;$i<count($sql_ids);$i++){
 					if (!empty($sql_ids[$i])){
@@ -140,7 +140,7 @@ class DataObjectFunc
 			}
 			$sql_ids=$condition;
 		}
-		
+
 		$sQuery=$_SQL->update($tablename)->set($array_properties)->where($sql_ids)->result();
 		return DataObject::dao()->sqlExecute($sQuery);
 	}
@@ -168,7 +168,7 @@ class DataObjectFunc
 		$_SQL=new Crud_Sql_Update();
 		$_SQL->isPreparedStatement=false;
 		$sQuery=$_SQL->update($tablename)->set($array_properties)->where($filter)->result();
-		return DataObject::dao()->sqlExecute($sQuery); 
+		return DataObject::dao()->sqlExecute($sQuery);
 	}
 
 	/**
@@ -188,7 +188,7 @@ class DataObjectFunc
 		$tablename=Config_Db::orm($classname);
 		$_SQL=new Crud_Sql_Update();
 		$_SQL->isPreparedStatement=false;
-		$sQuery=$_SQL->update($tablename)->set("$property_name=$property_name+$incre_value")->where($filter)->result(); 
+		$sQuery=$_SQL->update($tablename)->set("$property_name=$property_name+$incre_value")->where($filter)->result();
 		return DataObject::dao()->sqlExecute($sQuery);
 	}
 
@@ -200,7 +200,7 @@ class DataObjectFunc
 	 *      1.array("id=1","name='sky'")<br/>
 	 *      2.array("id"=>"1","name"=>"sky")<br/>
 	 *      3.允许对象如new User(id="1",name="green");<br/>
-	 * @param string classname 数据对象类名  
+	 * @param string classname 数据对象类名
 	 * @param string property_name 属性名称
 	 * @param int decre_value 递减数
 	 */
@@ -209,16 +209,16 @@ class DataObjectFunc
 		$tablename=Config_Db::orm($classname);
 		$_SQL=new Crud_Sql_Update();
 		$_SQL->isPreparedStatement=false;
-		$sQuery=$_SQL->update($tablename)->set("$property_name=$property_name-$decre_value")->where($filter)->result(); 
+		$sQuery=$_SQL->update($tablename)->set("$property_name=$property_name-$decre_value")->where($filter)->result();
 		return DataObject::dao()->sqlExecute($sQuery);
 	}
-	
+
 	/**
-	 * 查询当前对象需显示属性的列表  
-	 * @param string classname 数据对象类名  
-	 * @param string 指定的显示属性，同SQL语句中的Select部分。 
+	 * 查询当前对象需显示属性的列表
+	 * @param string classname 数据对象类名
+	 * @param string 指定的显示属性，同SQL语句中的Select部分。
 	 * 示例如下：<br/>
-	 *     id,name,commitTime  
+	 *     id,name,commitTime
 	 * @param mixed $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
 	 *      0."id=1,name='sky'"<br/>
@@ -238,19 +238,19 @@ class DataObjectFunc
 	public static function showColumns($classname,$columns,$filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null)
 	{
 		$tablename=Config_Db::orm($classname);
-		$_SQL=new Crud_Sql_Select();  
+		$_SQL=new Crud_Sql_Select();
 
-		if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){ 
+		if ($sort==Crud_SQL::SQL_ORDER_DEFAULT_ID){
 			$realIdName=DataObjectSpec::getRealIDColumnName($classname);
-			$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);  
+			$sort=str_replace(Crud_SQL::SQL_FLAG_ID, $realIdName, $sort);
 		}
 		$sQuery=$_SQL->select($columns)->from($tablename)->where($filter)->order($sort)->limit($limit)->result();
 		return DataObject::dao()->sqlExecute($sQuery);//,$classname
 	}
-	
+
 	/**
 	 * 由标识删除指定ID数据对象
-	 * @param string classname 数据对象类名  
+	 * @param string classname 数据对象类名
 	 * @param mixed $id 数据对象编号
 	 */
 	public static function deleteByID($classname,$id)
@@ -268,12 +268,12 @@ class DataObjectFunc
 			$idColumn=DataObjectSpec::getRealIDColumnName($classname);
 			if (isset($idColumn)){
 				$sQuery= $_SQL->deletefrom($tablename)->where($idColumn."='$id'")->result();
-				return DataObject::dao()->sqlExecute($sQuery); 
+				return DataObject::dao()->sqlExecute($sQuery);
 			}
 		}
-		return false; 
+		return false;
 	}
-		
+
 	/**
 	 * 根据主键删除多条记录
 	 * @param string classname 数据对象类名
@@ -284,7 +284,7 @@ class DataObjectFunc
 	 */
 	public static function deleteByIds($classname,$ids)
 	{
-		$data=false; 
+		$data=false;
 		if (!empty($ids)) {
 			$tablename=Config_Db::orm($classname);
 			$_SQL=new Crud_Sql_Delete();
@@ -293,19 +293,19 @@ class DataObjectFunc
 				if (class_exists($classname)) {
 					$classname=new $classname();
 				}
-			} 
+			}
 			if ($classname instanceof DataObject){
 				$idColumn=DataObjectSpec::getRealIDColumnName($classname);
 			}
 			if (isset($idColumn)){
-				$condition=" "; 
+				$condition=" ";
 				$ids=str_replace("(", "", $ids);
 				$ids=str_replace(")", "", $ids);
 				$ids=str_replace("'", "", $ids);
 				if (is_string($ids)){
 					$ids=explode(",",$ids);
-				} 
-				if ($ids&&(count($ids)>0)){ 
+				}
+				if ($ids&&(count($ids)>0)){
 					$condition= " $idColumn=".$ids[0]." ";
 					for($i=1;$i<count($ids);$i++){
 						if (!empty($ids[$i])){
@@ -314,11 +314,11 @@ class DataObjectFunc
 					}
 				}
 				$sQuery= $_SQL->deletefrom($tablename)->where($condition)->result();
-				return DataObject::dao()->sqlExecute($sQuery); 
-			} 
+				return DataObject::dao()->sqlExecute($sQuery);
+			}
 		}
 	}
-		
+
 	/**
 	 * 根据条件删除多条记录
 	 * @param string classname 数据对象类名
@@ -353,19 +353,19 @@ class DataObjectFunc
 	{
 		$tablename=Config_Db::orm($classname);
 		$_SQL=new Crud_Sql_Select();
-		
+
 		if (is_string($classname)) {
 			if (class_exists($classname)) {
 				$classname=new $classname();
 			}
-		} 
+		}
 		if ($classname instanceof DataObject){
 			$idColumn=DataObjectSpec::getRealIDColumnName($classname);
 		}
 		if (isset($idColumn)){
-			$count_string="count(1)"; 
+			$count_string="count(1)";
 			$sQuery =$_SQL->select($count_string)->from($tablename)->where($idColumn."='$id'")->result();
-			$isExist=DataObject::dao()->sqlExecute($sQuery); 
+			$isExist=DataObject::dao()->sqlExecute($sQuery);
 			if ($isExist>0) return true; else return false;
 		}else{
 			return false;
@@ -389,44 +389,90 @@ class DataObjectFunc
 		if (!empty($filter)) {
 			$tablename=Config_Db::orm($classname);
 			$_SQL=new Crud_Sql_Select();
-			$count_string="count(1)"; 
+			$count_string="count(1)";
 			$sQuery =$_SQL->select($count_string)->from($tablename)->where($filter)->result();
-			$isExist=DataObject::dao()->sqlExecute($sQuery); 
+			$isExist=DataObject::dao()->sqlExecute($sQuery);
 			if ($isExist>0) return true; else return false;
 		}else{
 			return false;
 		}
 	}
-							
+
 	/**
 	 * 对应数据对象的max方法
-	 * @param string classname 数据对象类名 
+	 * @param string classname 数据对象类名
 	 * @return int 数据对象标识最大值<br/>
 	 */
 	public static function max($classname)
 	{
 		$tablename=Config_Db::orm($classname);
 		$_SQL=new Crud_Sql_Select();
-		
+
 		if (is_string($classname)) {
 			if (class_exists($classname)) {
 				$classname=new $classname();
 			}
-		} 
+		}
 		if ($classname instanceof DataObject){
 			$idColumn=DataObjectSpec::getRealIDColumnName($classname);
 		}
 		if (isset($idColumn)){
 			$max_string="max($idColumn)";
 			$sQuery=$_SQL->select($max_string)->from($tablename)->result();
-			return DataObject::dao()->sqlExecute($sQuery); 
+			return DataObject::dao()->sqlExecute($sQuery);
+		}else{
+			return -1;
+		}
+	}
+
+	/**
+	 * 数据对象指定列名最小值，如未指定列名，为标识最小值
+	 * @param string $column_name 列名，默认为数据对象标识
+	 * @return int 数据对象列名最小值，如未指定列名，为标识最小值<br/>
+	 */
+	public static function min($classname,$column_name=null)
+	{
+		$tablename=Config_Db::orm($classname);
+		$_SQL=new Crud_Sql_Select();
+		if (empty($column_name)&&($classname instanceof DataObject)){
+			if (is_string($classname)) {
+				if (class_exists($classname)) {
+					$classname=new $classname();
+				}
+			}
+			$idColumn=DataObjectSpec::getRealIDColumnName($classname);
+		}else{
+			$idColumn= $column_name;
+		}
+		if (isset($idColumn)){
+			$min_string="min($idColumn)";
+			$sQuery=$_SQL->select($min_string)->from($tablename)->result();
+			return DataObject::dao()->sqlExecute($sQuery);
+		}else{
+			return -1;
+		}
+	}
+
+	/**
+	 * 数据对象指定列名总数
+	 * @param string $column_name 列名
+	 * @return int 数据对象列名总数<br/>
+	 */
+	public static function sum($classname,$column_name)
+	{
+		$tablename=Config_Db::orm($classname);
+		$_SQL=new Crud_Sql_Select();
+		if (isset($column_name)){
+			$sum_string="sum($column_name)";
+			$sQuery=$_SQL->select($sum_string)->from($tablename)->result();
+			return DataObject::dao()->sqlExecute($sQuery);
 		}else{
 			return -1;
 		}
 	}
 	//</editor-fold>
-	
-	//<editor-fold defaultstate="collapsed" desc="其他"> 
+
+	//<editor-fold defaultstate="collapsed" desc="其他">
 	/**
 	 * 根据数据对象的属性名获取属性名的显示。
 	 * @param mixed $data 数据对象数组|数据对象。如:array(user,user)
@@ -436,17 +482,17 @@ class DataObjectFunc
 	{
 		if (!empty($class_name))
 		{
-			$class_property_names=array();//$class_name 
+			$class_property_names=array();//$class_name
 			if (is_string($property_name))
 			{
-				$class_property_names[]=$property_name; 
+				$class_property_names[]=$property_name;
 			}
 			else if (is_array($property_name))
 			{
 				$class_property_names=$property_name;
 			}
 			if (is_array($data)&&(count($data)>0)){
-				foreach ($data as $record){ 
+				foreach ($data as $record){
 					foreach ($class_property_names as $property_name) {
 						$record->{$property_name."Show"}=call_user_func($class_name."::".$property_name."Show",$record->$property_name);
 					}
@@ -457,9 +503,9 @@ class DataObjectFunc
 					$data->{$property_name."Show"}=call_user_func($class_name."::".$property_name."Show",$data->$property_name);
 				}
 			}
-		} 
+		}
 	}
-	
+
 	/**
 	 * 输出显示DataObject对象<br/>
 	 * 通常以 echo $dataobject。<br/>
@@ -475,7 +521,7 @@ class DataObjectFunc
 			$result.=$classname." DataObject\r\n{\r\n";
 			$dataobject=clone $dataobject;
 			$dataobjectArr=$dataobject->toArray();
-			$dataobjectProperties=UtilReflection::getClassPropertiesInfo($dataobject); 
+			$dataobjectProperties=UtilReflection::getClassPropertiesInfo($dataobject);
 			foreach($dataobjectArr as $key=>$value)
 			{
 				$access="";
@@ -492,7 +538,7 @@ class DataObjectFunc
 			return $result;
 		}
 	}
-																					
+
 	/**
 	 * 将数据对象转换成Json类型格式
 	 * @param string $dataobject 当前数据对象
@@ -511,6 +557,6 @@ class DataObjectFunc
 		}
 		return json_encode($object_arr);
 	}
-	//</editor-fold> 
+	//</editor-fold>
 }
 ?>
