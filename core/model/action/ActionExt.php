@@ -56,9 +56,14 @@ class ActionExt extends Action
 		if ($this->view->viewObject)
 		{   
 			if ($isGzip&&startWith($viewCss,'shared')){
+                UtilAjax::init();
 				UtilCss::loadCssReady($this->view->viewObject,$viewCss,$isGzip,EnumJsFramework::JS_FW_EXTJS,UtilAjaxExtjs::$ext_version);  
 			}else{
-				UtilCss::loadCssReady($this->view->viewObject,$templateurl."resources/css/".$viewCss,$isGzip); 
+                if(startWith($viewCss,'shared')){ 
+				    UtilCss::loadCssReady($this->view->viewObject,$viewCss,$isGzip);
+                }else{
+                    UtilCss::loadCssReady($this->view->viewObject,$templateurl."resources/css/".$viewCss,$isGzip);
+                } 
 			}
 		}else{
 			UtilCss::loadCss($templateurl."resources/css/".$viewCss,true); 
@@ -70,7 +75,7 @@ class ActionExt extends Action
 	 * @param $viewCss 显示的Css文件路径  
 	 * @param bool $isGzip 是否使用Gzip进行压缩。
 	 */
-	public function loadExtComponentCss($viewCss,$isGzip=false)
+	public function loadExtComponentCss($viewCss,$isGzip=true)
 	{
 		 $this->loadExtCss("shared/css/".$viewCss, $isGzip);         
 	}

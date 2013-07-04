@@ -257,7 +257,7 @@ class View {
 				$this->template->allow_php_tag=true;
 				$this->template->debugging = Gc::$dev_debug_on;
 				$this->template->force_compile = false;
-				$this->template->caching = true;
+				$this->template->caching = Gc::$is_online_optimize;
 				$this->template->cache_lifetime = 86400;//缓存一周
 				UtilFileSystem::createDir($this->template->compile_dir);
 				if (!is_dir($this->template->compile_dir)){

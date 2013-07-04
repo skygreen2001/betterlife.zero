@@ -70,11 +70,12 @@ class Action_System extends ActionExt
 	public function menumanager()
 	{
 		//初始化加载Css和Javascript库
-		$this->view->viewObject=new ViewObject();
-		UtilCss::loadExt($this->view->viewObject,UtilAjaxExtjs::$ext_version);
-		UtilAjaxExtjs::load(UtilAjaxExtjs::$ext_version,$this->view->viewObject);
+		$this->view->viewObject=new ViewObject(); 
+		UtilCss::loadExt($this->view->viewObject,UtilAjaxExtjs::$ext_version);                         
+        $this->loadExtComponentCss("RowEditor.css");  
+		UtilAjaxExtjs::load(UtilAjaxExtjs::$ext_version,$this->view->viewObject);        
 		$this->loadExtJs("shared/grid/roweditor.js",true);
-		$this->loadExtJs("system/menu.js");
+		$this->loadExtJs("system/menu.js");                 
 		$this -> ExtDirectMode();
 	}
 
@@ -85,9 +86,10 @@ class Action_System extends ActionExt
 	{
 		//初始化加载Css和Javascript库
 		$this->view->viewObject=new ViewObject();
-		UtilCss::loadExt($this->view->viewObject,UtilAjaxExtjs::$ext_version);
-		UtilAjaxExtjs::load(UtilAjaxExtjs::$ext_version,$this->view->viewObject);
-		$this->loadExtCss("library.css",true);
+		UtilCss::loadExt($this->view->viewObject,UtilAjaxExtjs::$ext_version);            
+        $this->loadExtComponentCss("RowEditor.css");
+        $this->loadExtCss("library.css",true);
+		UtilAjaxExtjs::load(UtilAjaxExtjs::$ext_version,$this->view->viewObject);     
 		$this->loadExtJs("shared/message.js",true);
 		$this->loadExtJs("shared/grid/roweditor.js",true);
 		$this->loadExtJs("shared/grid/checkcolumn.js",true);
