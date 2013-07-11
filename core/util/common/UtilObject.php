@@ -149,7 +149,7 @@ class UtilObject extends Util
 								if ($isAll) {
 										$rtn[$newkey] = $rtn['source_keys'][$key];
 								}else {
-										if ($rtn['source_keys'][$key]!=null||is_bool($rtn['source_keys'][$key])) {
+										if (isset($rtn['source_keys'][$key])||is_bool($rtn['source_keys'][$key])) {
 												$rtn[$newkey] = $rtn['source_keys'][$key];
 										}
 								}
