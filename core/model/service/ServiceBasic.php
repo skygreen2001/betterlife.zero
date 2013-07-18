@@ -365,6 +365,9 @@ class ServiceBasic extends Service implements IServiceBasic
         if (!empty($condition)&&(count($condition)>0)){
             $conditionArr=array();
             foreach ($condition as $key=>$value) {
+                if (empty($value)){
+                    continue;
+                }                
                 if (!UtilString::is_utf8($value)){
                     $value=UtilString::gbk2utf8($value);
                 }
