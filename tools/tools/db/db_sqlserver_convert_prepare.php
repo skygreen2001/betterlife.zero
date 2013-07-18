@@ -58,8 +58,11 @@ foreach ($fieldInfos as $tablename=>$fieldInfo){
 				$fname=ucfirst($fname);
 			}
 			$newwords=substr($newwords,0,$index)."_".$fname;
-		}
-		echo "alter table $tablename change column $fieldname $newwords ".$type." COMMENT '".$fieldInfos[$tablename][$fieldname]["Comment"]."';<br/>";
+		}		
+		$comments=$fieldInfos[$tablename][$fieldname]["Comment"];
+		$comments=str_replace("\r","\\r",$comments);
+		$comments=str_replace("\n","\\n",$comments); 
+		echo "alter table $tablename change column $fieldname $newwords ".$type." COMMENT '".$comments."';<br/>";
 	}
 }
 
@@ -89,10 +92,13 @@ foreach ($fieldInfos as $tablename=>$fieldInfo){
 	$classname=getClassname($tablename);
 	$classname{0}=strtolower($classname{0});
 	$old_fieldname=$classname."_id";
-	echo "alter table $tablename change column $old_fieldname ID ".$fieldInfos[$tablename][$old_fieldname]["Type"]." COMMENT '".$fieldInfos[$tablename][$old_fieldname]["Comment"]."';<br/>";
-	if (!Manager_Db::newInstance()->dbinfo()->hasUnique($tablename,array("ID",$old_fieldname))){ 
-		echo "alter table $tablename add unique(ID);<br/>";
-	}
+	$comments=$fieldInfos[$tablename][$old_fieldname]["Comment"];
+	$comments=str_replace("\r","\\r",$comments);
+	$comments=str_replace("\n","\\n",$comments); 
+	echo "alter table $tablename change column $old_fieldname ID ".$fieldInfos[$tablename][$old_fieldname]["Type"]." COMMENT '".$comments."';<br/>";
+	// if (!Manager_Db::newInstance()->dbinfo()->hasUnique($tablename,array("ID",$old_fieldname))){ 
+	// 	echo "alter table $tablename add unique(ID);<br/>";
+	// }
 }
 
 if ($isComment) {
