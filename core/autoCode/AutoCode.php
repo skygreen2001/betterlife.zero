@@ -361,8 +361,12 @@ class AutoCode extends Object
 	 */
 	protected static function columnIsTextArea($column_name,$column_type)
 	{
-		if (((self::column_length($column_type)>=500)&&(!contain($column_name,"images"))&&(!contain($column_name,"link"))&&(!contain($column_name,"ico")))
-			 ||(contain($column_name,"intro"))||(contain($column_name,"memo"))||(contain($column_name,"content"))||(self::column_type($column_type)=='text')||(self::column_type($column_type)=='longtext')){  //&&(!contain($column_name,"addr"))
+		$column_name=strtoupper($column_name);
+		if (contain($column_name,"ID")){
+			return false;
+		}		
+		if (((self::column_length($column_type)>=500)&&(!contain($column_name,"IMAGES"))&&(!contain($column_name,"LINK"))&&(!contain($column_name,"ICO")))
+			 ||(contains($column_name,array("INTRO","MEMO","CONTENT")))||(self::column_type($column_type)=='text')||(self::column_type($column_type)=='longtext')){  //&&(!contain($column_name,"addr"))
 			return true;
 		}else{
 			return false;
@@ -376,10 +380,11 @@ class AutoCode extends Object
 	 */
 	protected static function columnIsImage($column_name,$column_comment)
 	{
-		if (contain($column_name,"id")){
+		$column_name=strtoupper($column_name);
+		if (contain($column_name,"ID")){
 			return false;
 		}
-		if ((contain($column_name,"image"))||(contain($column_name,"img"))||(contain($column_name,"ico"))||(contain($column_name,"logo"))||(contain($column_name,"pic"))){
+		if (contains($column_name,array("IMAGE","IMG","ICO","LOGO","PIC"))){
 			return true;
 		}
 		return false;
@@ -390,8 +395,9 @@ class AutoCode extends Object
 	 * @param string $fieldname 列名称
 	 */
 	protected static function isNotColumnKeywork($fieldname)
-	{
-		if ($fieldname=="id"||$fieldname=="commitTime"||$fieldname=="updateTime"){
+	{	
+		$fieldname=strtoupper($fieldname);
+		if ($fieldname=="ID"||$fieldname=="COMMITTIME"||$fieldname=="UPDATETIME"){
 			return false;
 		}else{
 			return true;
