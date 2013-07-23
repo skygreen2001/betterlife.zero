@@ -160,7 +160,7 @@ class ActionExt extends Action
 	 * @param mixed $response  
 	 * @param mixed $isFormAndIsUpload
 	 */
-	public static function ExtResponse($response,$isFormAndIsUpload=true)
+	public static function ExtResponse($response,$isFormAndIsUpload=false)
 	{
 		if ($isFormAndIsUpload) {
 			echo '<html><body><textarea>';
