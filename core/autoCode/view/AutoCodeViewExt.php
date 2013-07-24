@@ -320,6 +320,7 @@ class AutoCodeViewExt extends AutoCode
 		$openBatchUploadImagesWindow   =$upload_mixed["openBatchUploadImagesWindow"];
 		$batchUploadImagesWinow        =$upload_mixed["batchUploadImagesWinow"];
 		$result="";
+        $realId=DataObjectSpec::getRealIDColumnName($classname);  
 		require("jsmodel".DIRECTORY_SEPARATOR."includemodeljs.php");
 		$result.=$jsContent;
 		return $result;

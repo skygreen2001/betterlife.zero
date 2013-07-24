@@ -784,7 +784,7 @@ $filterdoSelect
 				var del_{$instancename}_ids ="";
 				var selectedRows    = this.getSelectionModel().getSelections();
 				for ( var flag = 0; flag < selectedRows.length; flag++) {
-					del_{$instancename}_ids=del_{$instancename}_ids+selectedRows[flag].data.{$instancename}_id+",";
+					del_{$instancename}_ids=del_{$instancename}_ids+selectedRows[flag].data.{$realId}+",";
 				}
 				ExtService$classname.deleteByIds(del_{$instancename}_ids);
 				this.doSelect$classname();
