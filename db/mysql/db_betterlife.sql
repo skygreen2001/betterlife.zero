@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost
+Source Server         : localhost_3306
 Source Server Version : 50520
 Source Host           : localhost:3306
 Source Database       : betterlife
@@ -10,10 +10,11 @@ Target Server Type    : MYSQL
 Target Server Version : 50520
 File Encoding         : 65001
 
-Date: 2012-11-10 15:59:19
+Date: 2013-07-27 16:14:25
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
 -- ----------------------------
 -- Table structure for `bb_core_blog`
 -- ----------------------------
@@ -3653,20 +3654,20 @@ CREATE TABLE `bb_user_functions` (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for `bb_user_re_rolefunction`
+-- Table structure for `bb_user_re_rolefunctions`
 -- ----------------------------
-DROP TABLE IF EXISTS `bb_user_re_rolefunction`;
-CREATE TABLE `bb_user_re_rolefunction` (
-  `rolefunction_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '标识',
+DROP TABLE IF EXISTS `bb_user_re_rolefunctions`;
+CREATE TABLE `bb_user_re_rolefunctions` (
+  `rolefunctions_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '标识',
   `role_id` int(11) NOT NULL COMMENT '角色标识',
-  `function_id` int(11) NOT NULL COMMENT '功能标识',
-  PRIMARY KEY (`rolefunction_id`,`role_id`,`function_id`),
+  `functions_id` int(11) NOT NULL COMMENT '功能标识',
+  PRIMARY KEY (`rolefunctions_id`,`role_id`,`functions_id`),
   KEY `fk_function_belong_role` (`role_id`),
-  KEY `fk_role_has_function` (`function_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='角色拥有功能\n角色拥有功能关系表';
+  KEY `fk_role_has_function` (`functions_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='角色拥有功能\r\n角色拥有功能关系表';
 
 -- ----------------------------
--- Records of bb_user_re_rolefunction
+-- Records of bb_user_re_rolefunctions
 -- ----------------------------
 
 -- ----------------------------
