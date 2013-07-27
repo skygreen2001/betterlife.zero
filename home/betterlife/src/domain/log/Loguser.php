@@ -37,7 +37,7 @@ class Loguser extends DataObject
      * @var string
      * @access public
      */
-    public $content;
+    public $log_content;
     //</editor-fold>
     /**
      * 规格说明

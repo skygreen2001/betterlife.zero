@@ -69,7 +69,7 @@ Bb.Blog.Store = {
                 {name: 'user_id',type: 'int'},
                 {name: 'username',type: 'string'},
                 {name: 'blog_name',type: 'string'},
-                {name: 'content',type: 'string'},
+                {name: 'blog_content',type: 'string'},
                 {name: 'commitTime',type: 'date',dateFormat:'Y-m-d H:i:s'},
                 {name: 'updateTime',type: 'date',dateFormat:'Y-m-d H:i:s'}
             ]}         
@@ -156,13 +156,13 @@ Bb.Blog.View={
                         switch (Bb.Blog.Config.OnlineEditor)
                         {
                             case 2:
-                                Bb.Blog.View.EditWindow.KindEditor_content = KindEditor.create('textarea[name="content"]',{width:'98%',minHeith:'350px', filterMode:true});
+                                Bb.Blog.View.EditWindow.KindEditor_blog_content = KindEditor.create('textarea[name="blog_content"]',{width:'98%',minHeith:'350px', filterMode:true});
                                 break
                             case 3:
-                                pageInit_content();
+                                pageInit_blog_content();
                                 break
                             default:
-                                ckeditor_replace_content(); 
+                                ckeditor_replace_blog_content(); 
                         }
                     }  
                 },
@@ -199,7 +199,7 @@ Bb.Blog.View={
                                  }
                             },
                             {fieldLabel : '博客标题',name : 'blog_name'},
-                            {fieldLabel : '博客内容',name : 'content',xtype : 'textarea',id:'content',ref:'content'}        
+                            {fieldLabel : '博客内容',name : 'blog_content',xtype : 'textarea',id:'blog_content',ref:'blog_content'}        
                         ]
                     })                
                 ],
@@ -209,13 +209,13 @@ Bb.Blog.View={
                         switch (Bb.Blog.Config.OnlineEditor)
                         {
                             case 2:
-                                if (Bb.Blog.View.EditWindow.KindEditor_content)this.editForm.content.setValue(Bb.Blog.View.EditWindow.KindEditor_content.html());
+                                if (Bb.Blog.View.EditWindow.KindEditor_blog_content)this.editForm.blog_content.setValue(Bb.Blog.View.EditWindow.KindEditor_blog_content.html());
                                 break
                             case 3:
-                                if (xhEditor_content)this.editForm.content.setValue(xhEditor_content.getSource());
+                                if (xhEditor_blog_content)this.editForm.blog_content.setValue(xhEditor_blog_content.getSource());
                                 break
                             default:                        
-                                if (CKEDITOR.instances.content)this.editForm.content.setValue(CKEDITOR.instances.content.getData());
+                                if (CKEDITOR.instances.blog_content)this.editForm.blog_content.setValue(CKEDITOR.instances.blog_content.getData());
                         }
                         if (!this.editForm.getForm().isValid()) {
                             return;
@@ -262,12 +262,12 @@ Bb.Blog.View={
                         switch (Bb.Blog.Config.OnlineEditor)
                         {
                             case 2:
-                                if (Bb.Blog.View.EditWindow.KindEditor_content) Bb.Blog.View.EditWindow.KindEditor_content.html(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.content);
+                                if (Bb.Blog.View.EditWindow.KindEditor_blog_content) Bb.Blog.View.EditWindow.KindEditor_blog_content.html(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.blog_content);
                                 break
                             case 3:
                                 break
                             default:                   
-                                if (CKEDITOR.instances.content) CKEDITOR.instances.content.setData(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.content);
+                                if (CKEDITOR.instances.blog_content) CKEDITOR.instances.blog_content.setData(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.blog_content);
                         }     
  
                     }                  
@@ -337,7 +337,7 @@ Bb.Blog.View={
                       '<table class="viewdoblock">', 
                          '<tr class="entry"><td class="head">用户名称</td><td class="content"><a style="cursor:pointer;" onclick="Bb.Blog.Function.openLinkUser({user_id});">{username}</a></td></tr>',
                          '<tr class="entry"><td class="head">博客标题</td><td class="content">{blog_name}</td></tr>',
-                         '<tr class="entry"><td class="head">博客内容</td><td class="content">{content}</td></tr>', 
+                         '<tr class="entry"><td class="head">博客内容</td><td class="content">{blog_content}</td></tr>', 
                          '<tr class="entry"><td class="head">创建时间</td><td class="content">{commitTime:date("Y-m-d H:i")}</td></tr>',  
                          '<tr class="entry"><td class="head">更新时间</td><td class="content">{updateTime:date("Y-m-d H:i")}</td></tr>',  
                      '</table>' 
@@ -534,7 +534,7 @@ Bb.Blog.View={
                         this.sm,        
                         {header : '用户名称',dataIndex : 'username'},
                         {header : '博客标题',dataIndex : 'blog_name'},
-                        {header : '博客内容',dataIndex : 'content',width:450},
+                        {header : '博客内容',dataIndex : 'blog_content',width:450},
                         {header : '创建时间',dataIndex : 'commitTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i')},  
                         {header : '更新时间',dataIndex : 'updateTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i')} 
                     ]
@@ -782,7 +782,7 @@ Bb.Blog.View={
                 var buser_id = this.topToolbar.buser_id.getValue();
                 var bblog_name = this.topToolbar.bblog_name.getValue();
                 var bcontent = this.topToolbar.bcontent.getValue();
-                this.filter       ={'user_id':buser_id,'blog_name':bblog_name,'content':bcontent};
+                this.filter       ={'user_id':buser_id,'blog_name':bblog_name,'blog_content':bcontent};
             }
             var condition = {'start':0,'limit':Bb.Blog.Config.PageSize};
             Ext.apply(condition,this.filter);
@@ -942,12 +942,12 @@ Bb.Blog.View={
             switch (Bb.Blog.Config.OnlineEditor)
             {
                 case 2:
-                    if (Bb.Blog.View.EditWindow.KindEditor_content) Bb.Blog.View.EditWindow.KindEditor_content.html("");
+                    if (Bb.Blog.View.EditWindow.KindEditor_blog_content) Bb.Blog.View.EditWindow.KindEditor_blog_content.html("");
                     break
                 case 3:
                     break
                 default:
-                    if (CKEDITOR.instances.content)CKEDITOR.instances.content.setData("");
+                    if (CKEDITOR.instances.blog_content)CKEDITOR.instances.blog_content.setData("");
             }
             Bb.Blog.View.Running.edit_window.show();   
             Bb.Blog.View.Running.edit_window.maximize();               
@@ -967,13 +967,13 @@ Bb.Blog.View={
             switch (Bb.Blog.Config.OnlineEditor)
             {
                 case 2:
-                    if (Bb.Blog.View.EditWindow.KindEditor_content)Bb.Blog.View.EditWindow.KindEditor_content.html(this.getSelectionModel().getSelected().data.content);
+                    if (Bb.Blog.View.EditWindow.KindEditor_blog_content)Bb.Blog.View.EditWindow.KindEditor_blog_content.html(this.getSelectionModel().getSelected().data.blog_content);
                     break
                 case 3:
-                    if (xhEditor_content)xhEditor_content.setSource(this.getSelectionModel().getSelected().data.content);
+                    if (xhEditor_blog_content)xhEditor_blog_content.setSource(this.getSelectionModel().getSelected().data.blog_content);
                     break
-                default:            
-                    if (CKEDITOR.instances.content) CKEDITOR.instances.content.setData(this.getSelectionModel().getSelected().data.content); 
+                default:
+                    if (CKEDITOR.instances.blog_content) CKEDITOR.instances.blog_content.setData(this.getSelectionModel().getSelected().data.blog_content); 
             }
             
             Bb.Blog.View.Running.edit_window.show();    

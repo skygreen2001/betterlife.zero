@@ -16,7 +16,7 @@
 		<my:a href='{$url_base}?go=betterlife.blog.display&pageNo={$smarty.get.pageNo|default:"1"}'><b>博客列表</b></my:a>
 		<div id='blog{$blog.blog_id}' >
 			<h1>{$blog.blog_name}</h1>
-			<p>{$blog.content|nl2br}</p>
+			<p>{$blog.blog_content|nl2br}</p>
 			评论数:{$blog.count_comments}
 		</div>  
 		{if !$smarty.get.comment_id}
@@ -38,8 +38,8 @@
 			{if !$smarty.get.comment_id}<h2>提交新评论</h2> {else}<h2>修改评论</h2>{/if}                     
 			<form name="commentForm" method="post">
 				我要发言: <br/><input type="hidden" name="blog_id" value="{$blog.blog_id}"/>
-				<textarea name="comment" id="comment" style="width:700px;height:300px;visibility:hidden;">{$content}</textarea><br/>
-				<input type="submit" value="提交" class="btnSubmit" />
+				<textarea name="comment" id="comment" style="width:700px;height:300px;visibility:hidden;">{$comment_content}</textarea><br/>
+				<input type="submit" value="提交" class="btnSubmit" /> | <input class="btnSubmit" onclick="location.href='{$url_base}index.php?go=betterlife.comment.comment&blog_id={$smarty.get.blog_id}&pageNo={$smarty.get.pageNo|default:"1"}'" type="button" value="返回" />
 			</form>   
 		</div> 
 		{/if} 

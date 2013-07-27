@@ -33,7 +33,7 @@ class Blog extends DataObject
 	 * @var string
 	 * @access public
 	 */
-	public $content;
+	public $blog_content;
 	//</editor-fold>       
 	static $has_many=array(
 	  "comments"=>"Comment"

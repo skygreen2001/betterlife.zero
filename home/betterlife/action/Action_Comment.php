@@ -25,15 +25,13 @@ class Action_Comment extends Action
 			}else{
 			  $comment->save();       
 			  $this->view->message="评论提交成功";                        
-			}              
-			$this->data["comment_id"]=null;  
-			$_GET["comment_id"]=null;       
+			}   
 			$view->view->color="green";             
 		}                 
 		$comment_id= $this->data["comment_id"];          
 		if ($comment_id){
 			$comment=Comment::get_by_id($comment_id);      
-			$this->view->content=$comment->comment;                                                   
+			$this->view->comment_content=$comment->comment;                                                   
 		}                                               													 
 		$this->load_onlineditor("comment");                                                			         
 	}

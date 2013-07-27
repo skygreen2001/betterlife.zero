@@ -106,7 +106,7 @@ Bb.User.Store = {
 				  {name: 'user_id',type: 'int'},
 				  {name: 'username',type: 'string'},
 				  {name: 'blog_name',type: 'string'},
-				  {name: 'content',type: 'string'}
+				  {name: 'blog_content',type: 'string'}
 			]}
 		),
 		writer: new Ext.data.JsonWriter({
@@ -195,8 +195,8 @@ Bb.User.View={
 								   }
 							  },
 							  {fieldLabel : '用户名(<font color=red>*</font>)',name : 'username',allowBlank : false},
-							  {fieldLabel : '用户密码',name : 'password'},
-							  {fieldLabel : '邮箱地址',name : 'email'}        
+							  {fieldLabel : '用户密码',name : 'password',inputType:'password'},
+							  {fieldLabel : '邮箱地址',name : 'email',vtype:'email'}        
 						]
 					})                
 				],
@@ -386,7 +386,7 @@ Bb.User.View={
 						columns : [
 						  {header : '用户',dataIndex : 'username'},
 						  {header : '博客标题',dataIndex : 'blog_name'},
-						  {header : '博客内容',dataIndex : 'content',width:450}                               
+						  {header : '博客内容',dataIndex : 'blog_content',width:450}
 						]
 					})
 				}, config);

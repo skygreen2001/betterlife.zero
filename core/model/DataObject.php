@@ -402,7 +402,9 @@ abstract class DataObject extends Object implements ArrayAccess
 	 */
 	public function update()
 	{
-		return  self::dao()->update($this);
+		$result=self::dao()->update($this);
+		unset($this["real_fieldspec"]);
+		return  $result;
 	}
 
 	/**

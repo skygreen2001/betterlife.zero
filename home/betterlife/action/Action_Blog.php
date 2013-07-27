@@ -38,7 +38,7 @@ class Action_Blog extends Action
 	public function write() 
 	{        
 		$this->view->color="green";  
-		$content="";
+		$blog_content="";
 		if (!empty($_POST)) {
 			$blog = $this->model->Blog;     
 			$blog->user_id=HttpSession::get('user_id');
@@ -52,7 +52,7 @@ class Action_Blog extends Action
 			  $blog->save();      
 			  $this->redirect("blog","display");               
 			}    
-			$content=$blog->content;                                                                                                                    
+			$blog_content=$blog->blog_content;                                                                                                                    
 			$this->view->message="博客提交成功";
 			$this->view->color="green";                                                        
 		}else{     
@@ -65,7 +65,7 @@ class Action_Blog extends Action
 			$this->view->viewObject=$view;                                                                     
 		}                 
 		//加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。 
-		$this->load_onlineditor("content");          
+		$this->load_onlineditor("blog_content");          
 	}
 	/**
 	 * 删除博客

@@ -21,7 +21,7 @@ class Notice extends DataObject
      * @var string
      * @access public
      */
-    public $group;
+    public $noticeType;
     /**
      * 标题
      * @var string
@@ -33,7 +33,7 @@ class Notice extends DataObject
      * @var string
      * @access public
      */
-    public $content;
+    public $notice_content;
     //</editor-fold>
 }
 ?>

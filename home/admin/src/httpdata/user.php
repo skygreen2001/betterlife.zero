@@ -4,7 +4,7 @@ $pageSize=15;
 $name   = !empty($_REQUEST['query'])&&($_REQUEST['query']!="?")&&($_REQUEST['query']!="？") ? trim($_REQUEST['query']) : "";
 $condition=array();
 if (!empty($name)){
-    $condition["name"]=" like '%$name%'"; 
+    $condition["username"]=" like '%$name%'"; 
 }
 $start=0;
 if (isset($_REQUEST['start'])){

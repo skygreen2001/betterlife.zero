@@ -10,7 +10,7 @@
 			{if $blog.canEdit}[<my:a href="{$url_base}index.php?go=betterlife.blog.write&blog_id={$blog.blog_id}&pageNo={$smarty.get.pageNo|default:"1"}">改</my:a>]{/if}
 			{if $blog.canDelete}[<my:a href="{$url_base}index.php?go=betterlife.blog.delete&blog_id={$blog.blog_id}&pageNo={$smarty.get.pageNo|default:"1"}">删</my:a>]{/if}
 			</b><br/>
-			{$blog.content|nl2br}<br/><br/>
+			{$blog.blog_content|nl2br}<br/><br/>
 			由 {$blog.user.username} 在 {$blog.commitTime|date_format:'%Y-%m-%d %H:%M'} 发表<br/>
 			评论数:{$viewObject->count_comments($blog.blog_id)}<br/>
 		</div>

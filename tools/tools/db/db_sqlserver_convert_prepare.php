@@ -106,8 +106,7 @@ if ($isComment) {
 	echo str_repeat("*",40)."4.表名头字母大写".str_repeat("*",40)."<br/><br/>";
 }
 foreach ($tableList as $tablename){
-	$new_table_name=str_replace(Config_Db::$table_prefix, "", $tablename);
-	$new_table_name=ucfirst($new_table_name);
+	$new_table_name=getClassname($tablename);
 	$new_table_names=strtoupper($new_table_name);
 	if (contain($mysql_keywords,$new_table_names.",")){
 		$new_table_name=$new_table_name."s";

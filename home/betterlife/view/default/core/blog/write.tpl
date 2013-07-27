@@ -1,14 +1,14 @@
 {extends file="$templateDir/layout/normal/layout.tpl"}
 {block name=body}
-	{if ($online_editor=='KindEditor')}<script>showHtmlEditor("content");//KindEditor 加载语句</script>{/if}
+	{if ($online_editor=='KindEditor')}<script>showHtmlEditor("blog_content");//KindEditor 加载语句</script>{/if}
 	{if ($online_editor=='CKEditor')}
 	{$editorHtml}
 	<script>$(function(){
-		 ckeditor_replace_content();});</script>
+		 ckeditor_replace_blog_content();});</script>
 	 {/if}
 	 {if ($online_editor=='xhEditor')}
 	<script>$(function(){
-		pageInit_content();});</script>
+		pageInit_blog_content();});</script>
 	{/if}
  
 	<div class="contentBox">
@@ -19,7 +19,7 @@
 			博文名:<br/>
 			<input type="text" class="inputNormal" style="width: 620px; margin-left: 0px;text-align: left;" name="blog_name" value="{$blog.blog_name}"/><br/>
 			内容: <br/>  
-			<textarea id="content" name="content" style="width:600px;height:300px;visibility:hidden;">{$blog.content}</textarea><br/> 
+			<textarea id="blog_content" name="blog_content" style="width:600px;height:300px;visibility:hidden;">{$blog.blog_content}</textarea><br/> 
 			<input type="submit" value="提交" class="btnSubmit" />
 		</form>
 	</div>

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50520
 File Encoding         : 65001
 
-Date: 2013-07-27 16:14:25
+Date: 2013-07-27 19:38:10
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -23,7 +23,7 @@ CREATE TABLE `bb_core_blog` (
   `blog_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '标识',
   `user_id` int(11) NOT NULL COMMENT '用户标识',
   `blog_name` varchar(200) DEFAULT NULL COMMENT '博客标题',
-  `content` varchar(500) DEFAULT NULL COMMENT '博客内容',
+  `blog_content` varchar(500) DEFAULT NULL COMMENT '博客内容',
   `commitTime` int(11) DEFAULT NULL COMMENT '创建时间',
   `updateTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`blog_id`,`user_id`),
@@ -3523,7 +3523,7 @@ CREATE TABLE `bb_log_loguser` (
   `loguser_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '标识',
   `user_id` int(11) NOT NULL COMMENT '用户标识',
   `userType` enum('1','2','3') NOT NULL COMMENT '类型\n1:登录-LOGIN\n2:写日志-BLOG\n3:写评论-COMMENT',
-  `content` varchar(200) DEFAULT NULL COMMENT '日志详情\n一般日志类型决定了内容；这一栏一般没有内容',
+  `log_content` varchar(200) DEFAULT NULL COMMENT '日志详情\n一般日志类型决定了内容；这一栏一般没有内容',
   `commitTime` int(11) NOT NULL COMMENT '提交时间',
   PRIMARY KEY (`loguser_id`,`user_id`),
   KEY `fk_bb_log_loguser_bb_user_user1` (`user_id`)
@@ -3562,9 +3562,9 @@ CREATE TABLE `bb_msg_msg` (
 DROP TABLE IF EXISTS `bb_msg_notice`;
 CREATE TABLE `bb_msg_notice` (
   `notice_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `group` varchar(200) DEFAULT NULL COMMENT '分类',
+  `noticeType` varchar(200) DEFAULT NULL COMMENT '分类',
   `title` varchar(200) DEFAULT NULL COMMENT '标题',
-  `content` varchar(1000) DEFAULT NULL COMMENT '通知内容',
+  `notice_content` varchar(1000) DEFAULT NULL COMMENT '通知内容',
   `commitTime` int(11) DEFAULT NULL COMMENT '提交时间',
   `updateTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`notice_id`)

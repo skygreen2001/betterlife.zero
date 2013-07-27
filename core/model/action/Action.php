@@ -222,7 +222,7 @@ class Action extends Object
 			}
 		}
 		if (!empty($querystring)){
-			if (is_array($querystring)){
+			if (is_array($querystring)||is_a($querystring,"DataObjectArray")){
 				$querystring_tmp="";
 				foreach ($querystring as $key=>$value){
 					if ($key==Router::VAR_DISPATCH){

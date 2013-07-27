@@ -41,7 +41,7 @@ class Action_Betterlife extends ActionExt
 		 $this->ExtDirectMode();
 		 $this->ExtUpload();
 		 $this->loadExtJs('core/blog.js');
-		 $this->load_onlineditor('content');
+		 $this->load_onlineditor('blog_content');
 	 }
 }
 ?>

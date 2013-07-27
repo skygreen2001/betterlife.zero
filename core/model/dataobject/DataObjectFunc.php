@@ -520,19 +520,21 @@ class DataObjectFunc
 			$result="<pre>";
 			$result.=$classname." DataObject\r\n{\r\n";
 			$dataobject=clone $dataobject;
-			$dataobjectArr=$dataobject->toArray();
-			$dataobjectProperties=UtilReflection::getClassPropertiesInfo($dataobject);
-			foreach($dataobjectArr as $key=>$value)
-			{
-				$access="";
-				if (array_key_exists($key,$dataobjectProperties)){
-					$propertyInfo=$dataobjectProperties[$key];
-					if (!empty($propertyInfo)&& array_key_exists("access",$propertyInfo)){
-						$access=":".$propertyInfo["access"];
-					}
-				}
-				$result.="      [".$key.$access."]"." => ".$value."\r\n";
-			}
+            if (is_a($dataobject,"DataObject")){
+			    $dataobjectArr=$dataobject->toArray();
+			    $dataobjectProperties=UtilReflection::getClassPropertiesInfo($dataobject);
+			    foreach($dataobjectArr as $key=>$value)
+			    {
+				    $access="";
+				    if (array_key_exists($key,$dataobjectProperties)){
+					    $propertyInfo=$dataobjectProperties[$key];
+					    if (!empty($propertyInfo)&& array_key_exists("access",$propertyInfo)){
+						    $access=":".$propertyInfo["access"];
+					    }
+				    }
+				    $result.="      [".$key.$access."]"." => ".$value."\r\n";
+			    }
+            }
 			$result.="}";
 			$result.="</pre>";
 			return $result;
