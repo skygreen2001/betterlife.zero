@@ -8,7 +8,7 @@
  * @package user.relation
  * @author skygreen skygreen2001@gmail.com
  */
-class Rolefunction extends DataObject
+class Rolefunctions extends DataObject
 {
     //<editor-fold defaultstate="collapsed" desc="定义部分">
     /**
@@ -16,7 +16,7 @@ class Rolefunction extends DataObject
      * @var int
      * @access public
      */
-    public $rolefunction_id;
+    public $rolefunctions_id;
     /**
      * 角色标识
      * @var int
@@ -28,7 +28,7 @@ class Rolefunction extends DataObject
      * @var int
      * @access public
      */
-    public $function_id;
+    public $functions_id;
     //</editor-fold>
     /**
      * 规格说明
