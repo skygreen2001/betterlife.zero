@@ -405,6 +405,7 @@ Bb.Blog.View={
                             width:120,sortable : true
                         },
                         columns : [
+                          {header : '标识',dataIndex : 'comment_id',hidden:true},
                           {header : '评论者',dataIndex : 'username'},
                           {header : '评论',dataIndex : 'comment',width:450},
                           {header : '评论时间',dataIndex : 'commitTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i')},  
@@ -532,6 +533,7 @@ Bb.Blog.View={
                     },
                     columns : [
                         this.sm,        
+                        {header : '标识',dataIndex : 'blog_id',hidden:true},
                         {header : '用户名称',dataIndex : 'username'},
                         {header : '博客标题',dataIndex : 'blog_name'},
                         {header : '博客内容',dataIndex : 'blog_content',width:450},

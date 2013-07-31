@@ -7,7 +7,7 @@
 		博文名:<br/>
 		<input type="text" name="name" value="{blog.blog_name}"/><br/>
 		内容: <br/>
-		<textarea rows="5" cols="60" name="content">{blog.content}</textarea><br/>
+		<textarea rows="5" cols="60" name="content">{blog.blog_content}</textarea><br/>
 		<input type="submit" />
 	</form>             
 	<flexy:include src="../../layout/normal/footer.tpl"></flexy:include>  

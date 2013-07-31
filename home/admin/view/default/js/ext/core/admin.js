@@ -260,9 +260,9 @@ Bb.Admin.View={
 					 ]
 					}
 				);
-				this.add(
-					{title: '其他',iconCls:'tabs'}
-				);         
+				// this.add(
+				// 	{title: '其他',iconCls:'tabs'}
+				// );  
 			}       
 		}),
 		/**
@@ -322,6 +322,7 @@ Bb.Admin.View={
 					},
 					columns : [
 						this.sm,        
+						  {header : '标识',dataIndex : 'admin_id',hidden:true},
 						  {header : '用户名',dataIndex : 'username'},
 						  {header : '真实姓名',dataIndex : 'realname'},
 						  {header : '扮演角色',dataIndex : 'roletypeShow'},

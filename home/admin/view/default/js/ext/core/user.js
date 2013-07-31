@@ -384,6 +384,7 @@ Bb.User.View={
 							width:120,sortable : true
 						},
 						columns : [
+                          {header : '标识',dataIndex : 'blog_id',hidden:true},
 						  {header : '用户',dataIndex : 'username'},
 						  {header : '博客标题',dataIndex : 'blog_name'},
 						  {header : '博客内容',dataIndex : 'blog_content',width:450}
@@ -436,6 +437,7 @@ Bb.User.View={
 							width:120,sortable : true
 						},
 						columns : [
+                          {header : '标识',dataIndex : 'comment_id',hidden:true},
 						  {header : '评论者',dataIndex : 'username'},
 						  {header : '评论',dataIndex : 'comment',width:450},
 						  {header : '博客',dataIndex : 'blog_name',width:450}                               
@@ -562,6 +564,7 @@ Bb.User.View={
 					},
 					columns : [
 						this.sm,        
+                          {header : '标识',dataIndex : 'user_id',hidden:true},
 						  {header : '部门',dataIndex : 'department_name'},
 						  {header : '用户名',dataIndex : 'username'},
 						  {header : '邮箱地址',dataIndex : 'email'}                                 
