@@ -40,21 +40,12 @@ class Admin extends DataObject
 	 * 1:管理人员-manager<br/>
 	 * 2:运维人员-normal<br/>
 	 * 3:合作伙伴-partner<br/>
-	 * 4:供应商-supplier<br/>
-	 * 5:渠道商-channel<br/>
 	 * <br/>
 	 * 
 	 * @var enum
 	 * @access public
 	 */
 	public $roletype;    
-	/**
-	 * 角色标识<br/>
-	 * 角色为渠道商或者供应商时为供应商标识。
-	 * @var int
-	 * @access public
-	 */
-	public $roleid; 
 	/**
 	 * 视野<br/>
 	 * 0:只能查看自己的信息-self<br/>
@@ -72,8 +63,6 @@ class Admin extends DataObject
 	 * 1:管理人员-manager<br/>
 	 * 2:运维人员-normal<br/>
 	 * 3:合作伙伴-partner<br/>
-	 * 4:供应商-supplier<br/>
-	 * 5:渠道商-channel<br/>
 	 * <br/>
 	 * <br/>
 	 */
@@ -99,8 +88,6 @@ class Admin extends DataObject
 	 * 1:管理人员-manager<br/>
 	 * 2:运维人员-normal<br/>
 	 * 3:合作伙伴-partner<br/>
-	 * 4:供应商-supplier<br/>
-	 * 5:渠道商-channel<br/>
 	 * <br/>
 	 * <br/>
 	 */

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50520
 File Encoding         : 65001
 
-Date: 2013-07-27 19:38:10
+Date: 2013-07-27 21:38:13
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -3603,7 +3603,6 @@ CREATE TABLE `bb_user_admin` (
   `realname` varchar(200) DEFAULT NULL COMMENT '真实姓名',
   `password` varchar(45) NOT NULL COMMENT '密码',
   `roletype` enum('0','1','2','3') DEFAULT '2' COMMENT '扮演角色\n系统管理员扮演角色。\n0:超级管理员-superadmin\n1:管理人员-manager\n2:运维人员-normal\n3:合作伙伴-partner\n\n\n',
-  `roleid` int(11) DEFAULT NULL COMMENT '角色标识\n角色在相应表里的唯一标识',
   `seescope` enum('0','1') DEFAULT NULL COMMENT '视野\n0:只能查看自己的信息-self\n1:查看所有的信息-all',
   `commitTime` int(11) DEFAULT NULL COMMENT '创建时间',
   `updateTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -3613,7 +3612,7 @@ CREATE TABLE `bb_user_admin` (
 -- ----------------------------
 -- Records of bb_user_admin
 -- ----------------------------
-INSERT INTO `bb_user_admin` VALUES ('1', 'admin', 'admin', 'admin', '1', '0', '1', '1334818587', '2012-04-19 14:57:11');
+INSERT INTO `bb_user_admin` VALUES ('1', 'admin', 'admin', 'admin', '1', '1', '1334818587', '2012-04-19 14:57:11');
 
 -- ----------------------------
 -- Table structure for `bb_user_department`
