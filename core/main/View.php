@@ -260,11 +260,16 @@ class View {
 				$this->template->caching = Gc::$is_online_optimize;
 				$this->template->cache_lifetime = 86400;//缓存一周
 				UtilFileSystem::createDir($this->template->compile_dir);
-				if (!is_dir($this->template->compile_dir)){
-					die("因为安全原因，需要手动在操作系统中创建目录:".$this->template->compile_dir."<br/>".
-						"Linux command need:<br/>".str_repeat("&nbsp;",40).
-						"sudo mkdir -p ".$this->template->compile_dir."<br/>".str_repeat("&nbsp;",40).
-						"sudo chmod 0777 ".$this->template->compile_dir);
+				$is_win=is_server_windows();
+				if (!$is_win){
+					$isRoot= fileperms($this->template->compile_dir);
+					$isRoot= substr(sprintf('%o',$isRoot),-4);
+					if (!is_dir($this->template->compile_dir)||($isRoot=='0755')){
+						die("因为安全原因，需要手动在操作系统中创建目录:".$this->template->compile_dir."<br/>".
+							"Linux command need:<br/>".str_repeat("&nbsp;",40).
+							"sudo mkdir -p ".$this->template->compile_dir."<br/>".str_repeat("&nbsp;",40).
+							"sudo chmod 0777 ".$this->template->compile_dir);
+					}
 				}
 				break;
 			case self::TEMPLATE_MODE_SMARTTEMPLATE:
