@@ -46,7 +46,9 @@ foreach ($fieldInfos as $tablename=>$fieldInfo){
 	}
 	
 	foreach ($fieldInfo as $fieldname=>$field){
+		$is_auto_increment=false;
 		$newwords=ucfirst($fieldname);
+		$auto_increment="";
 		$type=$fieldInfos[$tablename][$fieldname]["Type"];
 		if(stripos($newwords,"time")!==false){
 			$type="datetime";
@@ -55,6 +57,12 @@ foreach ($fieldInfos as $tablename=>$fieldInfo){
 			$fname=substr($newwords,$index+1);
 			if($fname=="id"){
 				$fname="ID";
+
+				$classname=getClassname($tablename);
+				if (contain($newwords,$classname)){
+					$is_auto_increment=true;
+					$auto_increment=" auto_increment";
+				}
 			}else{
 				$fname=ucfirst($fname);
 			}
@@ -63,7 +71,7 @@ foreach ($fieldInfos as $tablename=>$fieldInfo){
 		$comments=$fieldInfos[$tablename][$fieldname]["Comment"];
 		$comments=str_replace("\r","\\r",$comments);
 		$comments=str_replace("\n","\\n",$comments); 
-		echo "alter table $tablename change column $fieldname $newwords ".$type." COMMENT '".$comments."';<br/>";
+		echo "alter table $tablename change column $fieldname $newwords ".$type.$auto_increment." COMMENT '".$comments."';<br/>";
 	}
 }
 
@@ -96,7 +104,7 @@ foreach ($fieldInfos as $tablename=>$fieldInfo){
 	$comments=$fieldInfos[$tablename][$old_fieldname]["Comment"];
 	$comments=str_replace("\r","\\r",$comments);
 	$comments=str_replace("\n","\\n",$comments); 
-	echo "alter table $tablename change column $old_fieldname ID ".$fieldInfos[$tablename][$old_fieldname]["Type"]." COMMENT '".$comments."';<br/>";
+	echo "alter table $tablename change column $old_fieldname ID ".$fieldInfos[$tablename][$old_fieldname]["Type"]." auto_increment COMMENT '".$comments."';<br/>";
 	// if (!Manager_Db::newInstance()->dbinfo()->hasUnique($tablename,array("ID",$old_fieldname))){ 
 	// 	echo "alter table $tablename add unique(ID);<br/>";
 	// }
