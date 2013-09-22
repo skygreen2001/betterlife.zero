@@ -178,7 +178,11 @@ class ActionExt extends Action
 	{
 		if (contain($this->data["go"],"admin")){
 			if(($this->data["go"]!="admin.index.login")&&!HttpSession::isHave(Gc::$appName_alias.'admin_id')) {
-				$this->redirect("index","login");
+				if ($this->data["go"]=="admin.index.index"){
+                    $this->redirect("index","login");
+                }else{
+                    UtilJavascript::loadJsContent("window.parent.location='".Gc::$url_base."index.php?go=admin.index.login"."&".$querystring."'");
+                }
 			}
 			if (HttpCookie::get("OnlineEditor")){
 				$this->online_editor=HttpCookie::get("OnlineEditor");

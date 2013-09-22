@@ -94,6 +94,7 @@ class HttpSession
 	 */
 	public static function remove($key)
 	{
+        if (empty($_SESSION))self::init();
 		if(isset($_SESSION[$key])) {
 			unset($_SESSION[$key]);
 		}
@@ -106,6 +107,7 @@ class HttpSession
 	 */
 	public static function removes($keys)
 	{
+        if (empty($_SESSION))self::init();
 		if ($keys&&is_array($keys)&&(count($keys)>0))
 		{
 			foreach ($keys as $key) {
