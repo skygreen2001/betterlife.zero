@@ -397,6 +397,15 @@ abstract class DataObject extends Object implements ArrayAccess
 	}
 
 	/**
+	 * 保存或更新当前对象
+	 * @return boolen 是否更新成功；true为操作正常
+	 */
+	public function saveOrUpdate()
+	{
+		return self::dao()->saveOrUpdate($this);
+	}
+
+	/**
 	 * 更新当前对象
 	 * @return boolen 是否更新成功；true为操作正常
 	 */

@@ -224,6 +224,22 @@ class Dao_Mssql extends Dao implements IDaoNormal{
 	}
 
 	/**
+	 * 保存或更新当前对象
+	 * @param Object $dataobject
+	 * @return boolen|int 更新:是否更新成功；true为操作正常|保存:保存对象记录的ID标识号 
+	 */
+	public function saveOrUpdate($dataobject)
+	{
+		$id=$dataobject->getId();
+		if (isset($id)){
+			$result=$this->update($dataobject);
+		}else{
+			$result=$this->save($dataobject);
+		}
+		return $result;
+	}
+
+	/**
 	 * 根据对象实体查询对象列表
 	 * @param string $object 需要查询的对象实体|类名称
 	 * @param object|string|array $filter 查询条件，在where后的条件

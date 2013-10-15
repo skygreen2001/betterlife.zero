@@ -573,6 +573,22 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	}
 
 	/**
+	 * 保存或更新当前对象
+	 * @param Object $dataobject
+	 * @return boolen|int 更新:是否更新成功；true为操作正常|保存:保存对象记录的ID标识号 
+	 */
+	public function saveOrUpdate($dataobject)
+	{
+		$id=$dataobject->getId();
+		if (isset($id)){
+			$result=$this->update($dataobject);
+		}else{
+			$result=$this->save($dataobject);
+		}
+		return $result;
+	}
+
+	/**
 	 * 处理当传入参数为NULL的情况
 	 * @param string $sQuery SQL
 	 * @param array $saParams

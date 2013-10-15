@@ -14,7 +14,8 @@ class Dal_DbFacile extends Dal implements IDal
     /**
      * 连接数据库
      */
-    public function connect() {
+    public function connect() 
+    {
     }
 
 
@@ -23,7 +24,8 @@ class Dal_DbFacile extends Dal implements IDal
      * @param Object $object
      * @return Object
      */
-    public function save($object) {
+    public function save($object)
+    {
 
     }
 
@@ -34,7 +36,8 @@ class Dal_DbFacile extends Dal implements IDal
      * @param int $id
      * @return Object
      */
-    public function delete($object) {
+    public function delete($object) 
+    {
 
     }
 
@@ -44,7 +47,8 @@ class Dal_DbFacile extends Dal implements IDal
      * @param Object $object
      * @return Object
      */
-    public function update($object) {
+    public function update($object)
+    {
 
     }
 
@@ -67,7 +71,8 @@ class Dal_DbFacile extends Dal implements IDal
      *    0,10
      * @return 对象列表数组
      */
-    public function get($object, $filter, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null){
+    public function get($object, $filter, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null)
+    {
 
     }
 
@@ -87,7 +92,8 @@ class Dal_DbFacile extends Dal implements IDal
      *      2.name desc;
      * @return 单个对象实体
      */
-    public function get_one($object, $filter, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID){
+    public function get_one($object, $filter, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)
+    {
 
     }
 
@@ -97,7 +103,8 @@ class Dal_DbFacile extends Dal implements IDal
      * @param string $id
      * @return 对象
      */
-    public function get_by_id($object, $id) {
+    public function get_by_id($object, $id)
+    {
 
     }
 
@@ -108,7 +115,8 @@ class Dal_DbFacile extends Dal implements IDal
      * @param string|class $object 需要生成注入的对象实体|类名称
      * @return array 返回数组
      */
-    public function sqlQuery($sql,$object) {
+    public function sqlQuery($sql,$object) 
+    {
 
     }
 
@@ -125,7 +133,8 @@ class Dal_DbFacile extends Dal implements IDal
      * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
      * @return 对象总计数
      */
-    public function count($object, $filter=null){
+    public function count($object, $filter=null)
+    {
 
     }
 
@@ -147,7 +156,8 @@ class Dal_DbFacile extends Dal implements IDal
      *      1.id asc;
      *      2.name desc;
      */
-    public function queryPage($object,$startPoint,$endPoint,$filter=null,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID){
+    public function queryPage($object,$startPoint,$endPoint,$filter=null,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)
+    {
 
     }
 }

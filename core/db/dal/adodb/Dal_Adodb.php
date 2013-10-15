@@ -31,7 +31,8 @@ class Dal_Adodb extends Dal implements IDal
 	 * @param mixed $engine 指定操作数据库引擎。{该字段的值参考：EnumDbEngine}
 	 * @return mixed 数据库连接
 	 */
-	public function connect($host=null,$port=null,$username=null,$password=null,$dbname=null,$dbtype=null,$engine=null) {
+	public function connect($host=null,$port=null,$username=null,$password=null,$dbname=null,$dbtype=null,$engine=null) 
+	{
 		if (!isset($username)){
 			$username=Config_Adodb::$username;
 		}
@@ -146,7 +147,8 @@ class Dal_Adodb extends Dal implements IDal
 	 * @param Object $object
 	 * @return int 保存对象记录的ID标识号
 	 */
-	public function save($object) {
+	public function save($object) 
+	{
 		$autoId=-1;//新建对象插入数据库记录失败
 		if (!$this->validObjectParameter($object)) {
 			return $autoId;
@@ -206,7 +208,8 @@ class Dal_Adodb extends Dal implements IDal
 	 * @param int $id
 	 * @return Object
 	 */
-	public function delete($object) {
+	public function delete($object) 
+	{
 		$result=false;
 		if (!$this->validObjectParameter($object)) {
 			return $result;
@@ -235,7 +238,8 @@ class Dal_Adodb extends Dal implements IDal
 	 * @param Object $object
 	 * @return Object
 	 */
-	public function update($object) {
+	public function update($object) 
+	{
 		$result=false;
 		if (!$this->validObjectParameter($object)) {
 			return $result;
@@ -280,11 +284,28 @@ class Dal_Adodb extends Dal implements IDal
 	}
 
 	/**
+	 * 保存或更新当前对象
+	 * @param Object $dataobject
+	 * @return boolen|int 更新:是否更新成功；true为操作正常|保存:保存对象记录的ID标识号 
+	 */
+	public function saveOrUpdate($dataobject)
+	{
+		$id=$dataobject->getId();
+		if (isset($id)){
+			$result=$this->update($dataobject);
+		}else{
+			$result=$this->save($dataobject);
+		}
+		return $result;
+	}
+
+	/**
 	 * 将查询结果转换成业务层所认知的对象
 	 * @param string $object 需要转换成的对象实体|类名称
 	 * @return 转换成的对象实体列表
 	 */
-	private function getResultToObjects($object) {
+	private function getResultToObjects($object) 
+	{
 		if (empty($this->stmt)) {
 			Exception_Db::log($this->connection->ErrorMsg()."<br/>");
 		}
@@ -349,7 +370,8 @@ class Dal_Adodb extends Dal implements IDal
 	 *    0,10
 	 * 列表:查询被列表的对象
 	 */
-	public function get($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null) {
+	public function get($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null) 
+	{
 		$result=null;
 		try {
 			if (!$this->validParameter($object)) {
@@ -395,7 +417,8 @@ class Dal_Adodb extends Dal implements IDal
 	 *      2.name desc;
 	 * @return 单个对象实体
 	 */
-	public function get_one($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID) {
+	public function get_one($object, $filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID) 
+	{
 		$result=null;
 		try {
 			if (!$this->validParameter($object)) {
@@ -435,7 +458,8 @@ class Dal_Adodb extends Dal implements IDal
 	 * @param string $id
 	 * @return 对象
 	 */
-	public function get_by_id($object, $id) {
+	public function get_by_id($object, $id) 
+	{
 		$result=null;
 		try {
 			if (!$this->validParameter($object)) {
@@ -470,7 +494,8 @@ class Dal_Adodb extends Dal implements IDal
 	 *  1.执行查询语句返回对象数组
 	 *  2.执行更新和删除SQL语句返回执行成功与否的true|null
 	 */
-	public function sqlExecute($sqlstring,$object=null) {
+	public function sqlExecute($sqlstring,$object=null) 
+	{
 		$result=null;
 		try {
 			if (Config_Db::$db==EnumDbSource::DB_SQLSERVER&&((trim(strtoupper(Gc::$encoding))==Config_C::CHARACTER_UTF_8)||(trim(strtolower(Gc::$encoding))==Config_C::CHARACTER_UTF8))) {
@@ -545,7 +570,8 @@ class Dal_Adodb extends Dal implements IDal
 	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
 	 * @return 对象总计数
 	 */
-	public function count($object, $filter=null) {
+	public function count($object, $filter=null) 
+	{
 		$result=null;
 		try {
 			if (!$this->validParameter($object)) {
@@ -592,7 +618,8 @@ class Dal_Adodb extends Dal implements IDal
 	 *      1.id asc;
 	 *      2.name desc;
 	 */
-	public function queryPage($object,$startPoint,$endPoint,$filter=null,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID) {
+	public function queryPage($object,$startPoint,$endPoint,$filter=null,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID) 
+	{
 		try {
 			if (!$this->validParameter($object)) {
 				return null;
