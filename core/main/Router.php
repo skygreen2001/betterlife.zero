@@ -226,24 +226,41 @@ class Router
 			self::getPathInfo();
 			if (!empty($_GET) && !isset($_GET[self::VAR_ROUTER])) {
 				$_GET  =  array_merge (self::parsePathInfo(),$_GET);
-			   
+
 				$_varGroup =   self::VAR_GROUP; // 分组变量
 				$_varModule =   self::VAR_MODULE;
 				$_varAction =  self::VAR_ACTION;
 				$_depr  =   self::URL_PATHINFO_DEPR;
-				$_pathModel =   self::URL_PATHINFO_MODEL;
-				if (empty(Gc::$module_names)) {
-					$_GET[$_varGroup] = '';
-				}    
-				// 设置默认模块和操作
-				if(empty($_GET[$_varModule])) $_GET[$_varModule] = self::DEFAULT_MODULE;
-				if(empty($_GET[$_varAction])) $_GET[$_varAction] = self::DEFAULT_ACTION;
+				$_pathModel =   self::URL_PATHINFO_MODEL;    
+				$_varDispatch=self::VAR_DISPATCH;
+				
 				// 组装新的URL地址
 				$_URL = '/';
-				if($_pathModel==self::URL_PATHINFO_DEFAULT) {
-					// groupName/modelName/actionName/
-					$_URL .= $_GET[$_varGroup].($_GET[$_varGroup]?$_depr:'').$_GET[$_varModule].$_depr.$_GET[$_varAction].$_depr;
-					unset($_GET[$_varGroup],$_GET[$_varModule],$_GET[$_varAction]);
+				if (empty($_varDispatch)){
+					if (empty(Gc::$module_names))$_GET[$_varGroup] = '';
+					// 设置默认模块和操作
+					if(empty($_GET[$_varModule])) $_GET[$_varModule] = self::DEFAULT_MODULE;
+					if(empty($_GET[$_varAction])) $_GET[$_varAction] = self::DEFAULT_ACTION;
+					if($_pathModel==self::URL_PATHINFO_DEFAULT) {
+						// groupName/modelName/actionName/
+						$_URL .= $_GET[$_varGroup].($_GET[$_varGroup]?$_depr:'').$_GET[$_varModule].$_depr.$_GET[$_varAction].$_depr;
+						unset($_GET[$_varGroup],$_GET[$_varModule],$_GET[$_varAction]);
+					}
+				}else{
+					$data = array_merge($_POST,$_GET);
+					$_NavSection=explode(self::VAR_DISPATCH_DEPR,$data[self::VAR_DISPATCH]);
+					$_GET[self::VAR_GROUP] = @$_NavSection[0];
+					$_GET[self::VAR_ACTION] = @end($_NavSection);  
+					unset($_NavSection[count($_NavSection)-1]);
+					unset($_NavSection[0]);
+					if (!empty($_NavSection)&&count($_NavSection)>0){
+						$_GET[self::VAR_MODULE] = @$_NavSection[count($_NavSection)]; 
+						unset($_NavSection[count($_NavSection)]);
+					}
+					if($_pathModel==self::URL_PATHINFO_DEFAULT) {
+						$_URL .= $_GET[$_varGroup].($_GET[$_varGroup]?$_depr:'').$_GET[$_varModule].$_depr.$_GET[$_varAction].$_depr;
+						unset($_GET[$_varGroup],$_GET[$_varModule],$_GET[$_varAction],$_GET[$_varDispatch]);
+					}
 				}
 				foreach ($_GET as $_VAR => $_VAL) {
 					if('' != trim($_GET[$_VAR])) {
@@ -301,7 +318,7 @@ class Router
 	*/
 	private function resolveNavDispathParam()
 	{
-        $data = array_merge($_POST,$_GET);
+		$data = array_merge($_POST,$_GET);
 		if(!empty($data[self::VAR_DISPATCH])){
 			$_NavSection=explode(self::VAR_DISPATCH_DEPR,$data[self::VAR_DISPATCH]);
 			$_GET[self::VAR_GROUP] = @$_NavSection[0];   

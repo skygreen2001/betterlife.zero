@@ -158,8 +158,9 @@ class Gc
 	/**
 	 * URL访问模式,可选参数0、1、2、3,代表以下四种模式：<br/>
 	 * 0 (普通模式);<br/>
-	 * 1 (PATHINFO 模式);<br/>
-	 * 2 (REWRITE  模式);<br/>
+	 * 1 (PATHINFO 模式); eg:<br/>
+	 * 2 (REWRITE  模式); 需要打开.htaccess里的注释行: RewriteEngine On;
+     *                    eg: http://localhost/betterlife/betterlife/auth/login<br/>
 	 * 3 兼容模式(通过一个GET变量将PATHINFO传递给dispather，默认为s index.php?s=/module/action/id/1)<br/>
 	 * 当URL_DISPATCH_ON开启后有效; 默认为PATHINFO 模式，提供最好的用户体验和SEO支持
 	 * @var int
@@ -212,7 +213,7 @@ class Gc
 	public static $self_theme_dir="default";
 	/**
 	 * 每个模块可以定义自己显示的模板名
-	 * 如过没有定义，则使用$self_theme_dir默认定义的名称，一般都是default
+	 * 如果没有定义，则使用$self_theme_dir默认定义的名称，一般都是default
 	 * @var mixed
 	 */
 	public static $self_theme_dir_every=array(
