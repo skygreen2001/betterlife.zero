@@ -23,6 +23,7 @@ class ExtServiceUser extends ServiceBasic
 			$userObj=new User($user);
 		}
 		if ($userObj instanceof User){
+            $userObj->password=md5($userObj->password); 
 			$data=$userObj->save();
 		}else{
 			$data=false;
@@ -39,11 +40,17 @@ class ExtServiceUser extends ServiceBasic
 	 * @return boolen 是否更新成功；true为操作正常
 	 */
 	public function update($user)
-	{
+	{                                                                            
 		if (is_array($user)){
 			$userObj=new User($user);
 		}
 		if ($userObj instanceof User){
+            if(!empty($userObj->password))
+            {
+                $userObj->password=md5($userObj->password);     
+            }else{
+                $userObj->password=$user["password_old"];
+            }
 			$data=$userObj->update();
 		}else{
 			$data=false;
@@ -81,7 +88,7 @@ class ExtServiceUser extends ServiceBasic
 	public function queryPageUser($formPacket=null)
 	{
 		$start=1;
-		$limit=10;
+		$limit=15;
 		$condition=UtilObject::object_to_array($formPacket);
 		if (isset($condition['start'])){
 			$start=$condition['start']+1;
@@ -159,8 +166,8 @@ class ExtServiceUser extends ServiceBasic
 						$user=new User($user);
 						$user_id=$user->getId();
 						if (!empty($user_id)){
-							$hadUser=User::get_by_id($user->getId());
-							if ($hadUser!=null){
+							$hadUser=User::existByID($user->getId());
+							if ($hadUser){
 								$result=$user->update();
 							}else{
 								$result=$user->save();
@@ -190,12 +197,16 @@ class ExtServiceUser extends ServiceBasic
 	{
 		if ($filter)$filter=$this->filtertoCondition($filter);
 		$data=User::get($filter);
-		$arr_output_header= self::fieldsMean(User::tablename()); 
-		unset($arr_output_header['updateTime']);
-		unset($arr_output_header['commitTime']);
+		$arr_output_header= self::fieldsMean(User::tablename());  
+        foreach ($data as $user) {
+            if ($user->department_id){
+                $department_instance=Department::get_by_id($user->department_id);
+                $user['department_id']=$department_instance->department_name;
+            }
+        }                                              
+        unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
 		$diffpart=date("YmdHis");
 		$outputFileName=Gc::$attachment_path."user".DIRECTORY_SEPARATOR."export".DIRECTORY_SEPARATOR."user$diffpart.xls"; 
-		UtilFileSystem::createDir(dirname($outputFileName)); 
 		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false); 
 		$downloadPath  =Gc::$attachment_url."user/export/user$diffpart.xls"; 
 		return array(

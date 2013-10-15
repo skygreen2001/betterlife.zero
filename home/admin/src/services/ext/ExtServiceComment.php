@@ -81,7 +81,7 @@ class ExtServiceComment extends ServiceBasic
 	public function queryPageComment($formPacket=null)
 	{
 		$start=1;
-		$limit=10;
+		$limit=15;
 		$condition=UtilObject::object_to_array($formPacket);
 		if (isset($condition['start'])){
 			$start=$condition['start']+1;
@@ -137,8 +137,8 @@ class ExtServiceComment extends ServiceBasic
 						$comment=new Comment($comment);
 						$comment_id=$comment->getId();
 						if (!empty($comment_id)){
-							$hadComment=Comment::get_by_id($comment->getId());
-							if ($hadComment!=null){
+							$hadComment=Comment::existByID($comment->getId());
+							if ($hadComment){
 								$result=$comment->update();
 							}else{
 								$result=$comment->save();
@@ -167,13 +167,21 @@ class ExtServiceComment extends ServiceBasic
 	public function exportComment($filter=null)
 	{
 		if ($filter)$filter=$this->filtertoCondition($filter);
-		$data=Comment::get($filter);
-		$arr_output_header= self::fieldsMean(Comment::tablename()); 
-		unset($arr_output_header['updateTime']);
-		unset($arr_output_header['commitTime']);
+		$data=Comment::get($filter);              
+		$arr_output_header= self::fieldsMean(Comment::tablename());
+        foreach ($data as $comment) {
+            if ($comment->user_id){
+                $user_instance=User::get_by_id($comment->user_id);
+                $comment['user_id']=$user_instance->username;
+            }
+            if ($comment->blog_id){
+                $blog_instance=Blog::get_by_id($comment->blog_id);
+                $comment['blog_id']=$blog_instance->blog_name;
+            }
+        }
+        unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
 		$diffpart=date("YmdHis");
-		$outputFileName=Gc::$attachment_path."comment".DIRECTORY_SEPARATOR."export".DIRECTORY_SEPARATOR."comment$diffpart.xls"; 
-		UtilFileSystem::createDir(dirname($outputFileName)); 
+		$outputFileName=Gc::$attachment_path."comment".DIRECTORY_SEPARATOR."export".DIRECTORY_SEPARATOR."comment$diffpart.xls";
 		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false); 
 		$downloadPath  =Gc::$attachment_url."comment/export/comment$diffpart.xls"; 
 		return array(

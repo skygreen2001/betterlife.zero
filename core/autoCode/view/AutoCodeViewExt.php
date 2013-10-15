@@ -931,6 +931,9 @@ class AutoCodeViewExt extends AutoCode
 									  $blank_pre."                                valueField : 'value',displayField : 'text'\r\n".
 									  $blank_pre."                            ";
 					}
+					if (self::columnIsEmail($fieldname,$field_comment)){
+						$fieldLabels.=",vtype:'email'";
+					}
 					if (self::columnIsTextArea($fieldname,$field["Type"]))
 					{
 						$fieldLabels.=",xtype : 'textarea',id:'$fieldname',ref:'$fieldname'";

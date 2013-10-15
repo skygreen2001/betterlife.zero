@@ -391,6 +391,37 @@ class AutoCode extends Object
 	}
 
 	/**
+	 * 列是否是email
+	 * @param string $column_name 列名称
+	 */
+	protected static function columnIsEmail($column_name,$column_comment)
+	{
+		$column_name=strtoupper($column_name);
+		if ((contain($column_name,"EMAIL")||contains($column_comment,array("邮件","邮箱")))&&(!contain($column_name,"IS"))){
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 列是否是密码
+	 * @param string $column_name 列名称
+	 * @param mixed $column_comment 列注释
+	 */
+	protected static function columnIsPassword($table_name,$column_name)
+	{
+
+		$table_name=strtoupper($table_name);
+		if (contains($table_name,array("MEMBER","ADMIN","USER"))){
+			$column_name=strtoupper($column_name);
+			if (contain($column_name,"PASSWORD")){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * 是否默认的列关键字：id,committime,updateTime
 	 * @param string $fieldname 列名称
 	 */

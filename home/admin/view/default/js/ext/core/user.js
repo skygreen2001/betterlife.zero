@@ -195,7 +195,8 @@ Bb.User.View={
 								   }
 							  },
 							  {fieldLabel : '用户名(<font color=red>*</font>)',name : 'username',allowBlank : false},
-							  {fieldLabel : '用户密码',name : 'password',inputType:'password'},
+							  {fieldLabel : '用户密码(<font color=red>*</font>)',name : 'password',id:'password',inputType:'password',ref:'../password'},
+                              {xtype: 'hidden',  name : 'password_old',ref:'../password_old'},  
 							  {fieldLabel : '邮箱地址',name : 'email',vtype:'email'}        
 						]
 					})                
@@ -953,7 +954,9 @@ Bb.User.View={
 			Bb.User.View.Running.edit_window.setTitle('添加用户');
 			Bb.User.View.Running.edit_window.savetype=0;
 			Bb.User.View.Running.edit_window.user_id.setValue("");
-			
+            var passwordObj=Bb.User.View.Running.edit_window.password;
+            passwordObj.allowBlank=false;
+            if (passwordObj.dom) passwordObj.dom.parentNode.previousSibling.innerHTML ="用户密码(<font color=red>*</font>)";
 			Bb.User.View.Running.edit_window.show();   
 			Bb.User.View.Running.edit_window.maximize();               
 		},   
@@ -968,6 +971,11 @@ Bb.User.View={
 			Bb.User.View.Running.edit_window.resetBtn.setVisible(true);
 			Bb.User.View.Running.edit_window.setTitle('修改用户');
 			Bb.User.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
+            var passwordObj=Bb.User.View.Running.edit_window.password;
+            passwordObj.allowBlank=true;
+            passwordObj.dom.parentNode.previousSibling.innerHTML ="用户密码";
+            Bb.User.View.Running.edit_window.password_old.setValue(Bb.User.View.Running.edit_window.password.getValue());
+            Bb.User.View.Running.edit_window.password.setValue("");     
 			Bb.User.View.Running.edit_window.savetype=1;
 			
 			Bb.User.View.Running.edit_window.show();    

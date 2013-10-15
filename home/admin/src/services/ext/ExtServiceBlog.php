@@ -81,7 +81,7 @@ class ExtServiceBlog extends ServiceBasic
 	public function queryPageBlog($formPacket=null)
 	{
 		$start=1;
-		$limit=10;
+		$limit=15;
 		$condition=UtilObject::object_to_array($formPacket);
 		if (isset($condition['start'])){
 			$start=$condition['start']+1;
@@ -96,7 +96,7 @@ class ExtServiceBlog extends ServiceBasic
 		if ($count>0){
 			if ($limit>$count)$limit=$count;
 			$data =Blog::queryPage($start,$limit,$condition);
-			foreach ($data as $blog) {
+			foreach ($data as $blog) {                           
 				$user=User::get_by_id($blog->user_id);
 				$blog['username']=$user->username;                
 				if ($blog["commitTime"]){
@@ -136,7 +136,7 @@ class ExtServiceBlog extends ServiceBasic
 						$blog_id=$blog->getId();
 						if (!empty($blog_id)){
 							$hadBlog=Blog::get_by_id($blog->getId());
-							if ($hadBlog!=null){
+							if ($hadBlog){
 								$result=$blog->update();
 							}else{
 								$result=$blog->save();
@@ -166,12 +166,16 @@ class ExtServiceBlog extends ServiceBasic
 	{
 		if ($filter)$filter=$this->filtertoCondition($filter);
 		$data=Blog::get($filter);
-		$arr_output_header= self::fieldsMean(Blog::tablename()); 
-		unset($arr_output_header['updateTime']);
-		unset($arr_output_header['commitTime']);
+		$arr_output_header= self::fieldsMean(Blog::tablename());   
+        foreach ($data as $blog) {
+            if ($blog->user_id){
+                $user_instance=User::get_by_id($blog->user_id);
+                $blog['user_id']=$user_instance->username;
+            }
+        }
+        unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
 		$diffpart=date("YmdHis");
 		$outputFileName=Gc::$attachment_path."blog".DIRECTORY_SEPARATOR."export".DIRECTORY_SEPARATOR."blog$diffpart.xls"; 
-		UtilFileSystem::createDir(dirname($outputFileName)); 
 		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false); 
 		$downloadPath  =Gc::$attachment_url."blog/export/blog$diffpart.xls"; 
 		return array(

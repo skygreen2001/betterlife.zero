@@ -344,6 +344,7 @@ class AutoCodeService extends AutoCode
 						 "            \${$instance_name}Obj=new $classname(\$$instance_name);\r\n".
 						 "        }\r\n".
 						 "        if (\${$instance_name}Obj instanceof $classname){\r\n".
+						 self::passwordInExtService($tablename,$instance_name,$fieldInfo,false).
 						 "            \$data=\${$instance_name}Obj->save();\r\n".
 						 "        }else{\r\n".
 						 "            \$data=false;\r\n".
@@ -369,6 +370,7 @@ class AutoCodeService extends AutoCode
 						 "            \${$instance_name}Obj=new $classname(\$$instance_name);\r\n".
 						 "        }\r\n".
 						 "        if (\${$instance_name}Obj instanceof $classname){\r\n".
+						 self::passwordInExtService($tablename,$instance_name,$fieldInfo,true).
 						 "            \$data=\${$instance_name}Obj->update();\r\n".
 						 "        }else{\r\n".
 						 "            \$data=false;\r\n".
@@ -473,7 +475,7 @@ class AutoCodeService extends AutoCode
 						 "                        \${$instance_name}_id=\${$instance_name}->getId();\r\n".
 						 "                        if (!empty(\${$instance_name}_id)){\r\n".
 						 "                            \$had{$classname}={$classname}::existByID(\${$instance_name}->getId());\r\n".
-						 "                            if (\$had{$classname}!=null){\r\n".
+						 "                            if (\$had{$classname}){\r\n".
 						 "                                \$result=\${$instance_name}->update();\r\n".
 						 "                            }else{\r\n".
 						 "                                \$result=\${$instance_name}->save();\r\n".
@@ -1145,6 +1147,35 @@ MANY2MANYQUERYPAGE;
 						 "        return \$result;\r\n".
 						 "    }\r\n";
 				$onlyonce=false;
+			}
+		}
+		return $result;
+	}
+
+
+	/**
+	 * 将表列为bit类型的列转换成需要存储在数据库里的bool值
+	 * @param string $tablename 表名称
+	 * @param string $instance_name 实体变量
+	 * @param array $fieldInfo 表列信息列表
+	 * @param bool $isUpdate 是否在更新里
+	 */
+	private static function passwordInExtService($tablename,$instance_name,$fieldInfo,$isUpdate)
+	{
+		$result="";
+		foreach ($fieldInfo as $fieldname=>$field){
+			if (self::columnIsPassword($tablename,$fieldname)){
+				if ($isUpdate){
+					$result="            if(!empty(\${$instance_name}Obj->{$fieldname}))\r\n".
+							"            {\r\n".
+							"                \${$instance_name}Obj->{$fieldname}=md5(\${$instance_name}Obj->{$fieldname});\r\n".
+							"            }else{\r\n".
+							"                \${$instance_name}Obj->{$fieldname}= \${$instance_name}[\"{$fieldname}_old\"];\r\n".
+							"            }\r\n";
+					
+				}else{
+					$result="            \${$instance_name}Obj->{$fieldname}=md5(\${$instance_name}Obj->{$fieldname});\r\n";
+				}
 			}
 		}
 		return $result;

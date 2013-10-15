@@ -23,6 +23,7 @@ class ExtServiceAdmin extends ServiceBasic
 			$adminObj=new Admin($admin);
 		}
 		if ($adminObj instanceof Admin){
+            $adminObj->password=md5($adminObj->password);
 			$data=$adminObj->save();
 		}else{
 			$data=false;
@@ -44,6 +45,12 @@ class ExtServiceAdmin extends ServiceBasic
 			$adminObj=new Admin($admin);
 		}
 		if ($adminObj instanceof Admin){
+            if(!empty($adminObj->password))
+            {
+                $adminObj->password=md5($adminObj->password);     
+            }else{
+                $adminObj->password=$admin["password_old"];
+            }
 			$data=$adminObj->update();
 		}else{
 			$data=false;
@@ -81,7 +88,7 @@ class ExtServiceAdmin extends ServiceBasic
 	public function queryPageAdmin($formPacket=null)
 	{
 		$start=1;
-		$limit=10;
+		$limit=15;
 		$condition=UtilObject::object_to_array($formPacket);
 		if (isset($condition['start'])){
 			$start=$condition['start']+1;
@@ -153,17 +160,17 @@ class ExtServiceAdmin extends ServiceBasic
 					$data              = UtilExcel::exceltoArray($uploadPath,$arr_import_header);
 					$result=false;
 					foreach ($data as $admin) {
-						$admin=new Admin($admin);
-						if (!EnumRoletype::isEnumValue($admin["roletype"])){
-							$admin["roletype"]=EnumRoletype::roletypeByShow($admin["roletype"]);
-						}
-						if (!EnumSeescope::isEnumValue($admin["seescope"])){
-							$admin["seescope"]=EnumSeescope::seescopeByShow($admin["seescope"]);
-						}
+						$admin=new Admin($admin);          
+                        if (!EnumRoletype::isEnumValue($admin->roletype)){
+                            $admin->roletype=EnumRoletype::roletypeByShow($admin->roletype);
+                        }
+                        if (!EnumSeescope::isEnumValue($admin->seescope)){
+                            $admin->seescope=EnumSeescope::seescopeByShow($admin->seescope);
+                        }
 						$admin_id=$admin->getId();
 						if (!empty($admin_id)){
-							$hadAdmin=Admin::get_by_id($admin->getId());
-							if ($hadAdmin!=null){
+							$hadAdmin=Admin::existByID($admin->getId());
+							if ($hadAdmin){
 								$result=$admin->update();
 							}else{
 								$result=$admin->save();
@@ -192,17 +199,23 @@ class ExtServiceAdmin extends ServiceBasic
 	public function exportAdmin($filter=null)
 	{
 		if ($filter)$filter=$this->filtertoCondition($filter);
-		$data=Admin::get($filter);
-		if ((!empty($data))&&(count($data)>0))
-		{
-			Admin::propertyShow($data,array('roleid'));
-		}
-		$arr_output_header= self::fieldsMean(Admin::tablename()); 
-		unset($arr_output_header['updateTime']);
-		unset($arr_output_header['commitTime']);
+		$data=Admin::get($filter);         
+        if ((!empty($data))&&(count($data)>0))
+        {
+            Admin::propertyShow($data,array('roletype','seescope'));
+        }
+		$arr_output_header= self::fieldsMean(Admin::tablename());   
+        foreach ($data as $admin) {
+            if ($admin->roletypeShow){
+                $admin['roletype']=$admin->roletypeShow;
+            }
+            if ($admin->seescopeShow){
+                $admin['seescope']=$admin->seescopeShow;
+            }
+        }
+        unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
 		$diffpart=date("YmdHis");
-		$outputFileName=Gc::$attachment_path."admin".DIRECTORY_SEPARATOR."export".DIRECTORY_SEPARATOR."admin$diffpart.xls"; 
-		UtilFileSystem::createDir(dirname($outputFileName)); 
+		$outputFileName=Gc::$attachment_path."admin".DIRECTORY_SEPARATOR."export".DIRECTORY_SEPARATOR."admin$diffpart.xls";
 		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false); 
 		$downloadPath  =Gc::$attachment_url."admin/export/admin$diffpart.xls"; 
 		return array(
