@@ -750,7 +750,7 @@ $filterdoSelect
 			$appName_alias.$classname.View.Running.edit_window.setTitle('添加{$table_comment}');
 			$appName_alias.$classname.View.Running.edit_window.savetype=0;
 			$appName_alias.$classname.View.Running.edit_window.$tableFieldIdName.setValue("");
-{$textareaOnlineditor_Add}{$treeLevelVisible_Add}
+{$textareaOnlineditor_Add}{$treeLevelVisible_Add}{$password_Add}
 			$appName_alias.$classname.View.Running.edit_window.show();
 			$appName_alias.$classname.View.Running.edit_window.maximize();
 		},
@@ -767,7 +767,7 @@ $filterdoSelect
 			$appName_alias.$classname.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
 			$appName_alias.$classname.View.Running.edit_window.savetype=1;
 {$textareaOnlineditor_Update}{$treeLevelVisible_Update}
-			$appName_alias.$classname.View.Running.edit_window.show();
+			$appName_alias.$classname.View.Running.edit_window.show();{$password_update}
 			$appName_alias.$classname.View.Running.edit_window.maximize();
 		},
 		/**

@@ -22,7 +22,7 @@ class ExtServiceAdmin extends ServiceBasic
 		if (is_array($admin)){
 			$adminObj=new Admin($admin);
 		}
-		if ($adminObj instanceof Admin){
+		if ($adminObj instanceof Admin){                  
             $adminObj->password=md5($adminObj->password);
 			$data=$adminObj->save();
 		}else{
@@ -47,9 +47,9 @@ class ExtServiceAdmin extends ServiceBasic
 		if ($adminObj instanceof Admin){
             if(!empty($adminObj->password))
             {
-                $adminObj->password=md5($adminObj->password);     
+                $adminObj->password=md5($adminObj->password);
             }else{
-                $adminObj->password=$admin["password_old"];
+                $adminObj->password= $admin["password_old"];
             }
 			$data=$adminObj->update();
 		}else{

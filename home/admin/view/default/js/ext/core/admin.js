@@ -120,7 +120,8 @@ Bb.Admin.View={
 							  {xtype: 'hidden',  name : 'admin_id',ref:'../admin_id'},
 							  {fieldLabel : '用户名(<font color=red>*</font>)',name : 'username',allowBlank : false},
 							  {fieldLabel : '真实姓名',name : 'realname'},
-							  {fieldLabel : '密码(<font color=red>*</font>)',name : 'password',inputType: 'password',allowBlank : false},
+                              {fieldLabel : '密码(<font color=red>*</font>)',name : 'password',inputType:'password',ref:'../password'},
+                              {xtype: 'hidden',name : 'password_old',ref:'../password_old'},                                      
 							  {fieldLabel : '扮演角色',hiddenName : 'roletype',xtype : 'combo',mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,allowBlank : false,
 								store : new Ext.data.SimpleStore({
 										fields : ['value', 'text'],
@@ -705,8 +706,11 @@ Bb.Admin.View={
 			Bb.Admin.View.Running.edit_window.saveBtn.setText('保 存');
 			Bb.Admin.View.Running.edit_window.setTitle('添加系统管理人员');
 			Bb.Admin.View.Running.edit_window.savetype=0;
-			Bb.Admin.View.Running.edit_window.admin_id.setValue("");
-			
+			Bb.Admin.View.Running.edit_window.admin_id.setValue(""); 
+            var passwordObj=Bb.Admin.View.Running.edit_window.password;
+            passwordObj.allowBlank=false;
+            if (passwordObj.getEl()) passwordObj.getEl().dom.parentNode.previousSibling.innerHTML ="密码(<font color=red>*</font>)";
+
 			Bb.Admin.View.Running.edit_window.show();   
 			Bb.Admin.View.Running.edit_window.maximize();               
 		},   
@@ -722,8 +726,12 @@ Bb.Admin.View={
 			Bb.Admin.View.Running.edit_window.setTitle('修改系统管理人员');
 			Bb.Admin.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
 			Bb.Admin.View.Running.edit_window.savetype=1;
-			
-			Bb.Admin.View.Running.edit_window.show();    
+			Bb.Admin.View.Running.edit_window.show();                                
+            var passwordObj=Bb.Admin.View.Running.edit_window.password;
+            passwordObj.allowBlank=true;                                                                   
+            Bb.Admin.View.Running.edit_window.password_old.setValue(Bb.Admin.View.Running.edit_window.password.getValue());
+            Bb.Admin.View.Running.edit_window.password.setValue("");
+            if (passwordObj.getEl())passwordObj.getEl().dom.parentNode.previousSibling.innerHTML ="密码";
 			Bb.Admin.View.Running.edit_window.maximize();                  
 		},        
 		/**

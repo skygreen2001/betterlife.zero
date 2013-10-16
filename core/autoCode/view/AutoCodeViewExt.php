@@ -283,8 +283,10 @@ class AutoCodeViewExt extends AutoCode
 		$relationM2mRunningWindow=$storeInfo['relationM2mRunningWindow'];
 
 		//获取Ext "EditWindow"里items的fieldLabels
-		$editWindowVars=self::model_fieldLables($appName_alias,$classname,$fieldInfo);
+		$editWindowVars=self::model_fieldLables($tablename,$appName_alias,$classname,$fieldInfo);
 		$fieldLabels=$editWindowVars["fieldLabels"];
+		$password_Add=$editWindowVars["password_Add"];
+		$password_update=$editWindowVars["password_update"];
 		$isFileUpload=$editWindowVars["isFileUpload"];
 
 		$treeLevelVisible_Add   =$editWindowVars["treeLevelVisible_Add"];
@@ -687,7 +689,7 @@ class AutoCodeViewExt extends AutoCode
 	 * @param array $relationIgnoreID 在一对多关系Grid里的EditWindow中需忽视自己的标识
 	 * @param string $blank_pre 空格字符串
 	 */
-	private static function model_fieldLables($appName_alias,$classname,$fieldInfo,$relationIgnoreID=null,$blank_pre="")
+	private static function model_fieldLables($tablename,$appName_alias,$classname,$fieldInfo,$relationIgnoreID=null,$blank_pre="")
 	{
 		$result=array();
 		$fieldLabels="";//Ext "EditWindow"里items的fieldLabels
@@ -696,6 +698,10 @@ class AutoCodeViewExt extends AutoCode
 		$isRedundancyCurrentHad=false;
 		$redundancy_table_fields=self::$redundancy_table_fields[$classname];
 		$relationStore="";
+
+		$password_Add="";
+		$password_update="";
+
 		foreach ($fieldInfo as $fieldname=>$field)
 		{
 			if ($redundancy_table_fields){
@@ -864,6 +870,7 @@ class AutoCodeViewExt extends AutoCode
 
 				$column_type=self::column_type($field["Type"]);
 				$isImage =self::columnIsImage($fieldname,$field["Comment"]);
+				$isPassword=self::columnIsPassword($tablename,$fieldname);
 				if ($fieldname==self::keyIDColumn($classname))
 				{
 					$fieldLabels.=$blank_pre."                            {xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'";
@@ -874,6 +881,21 @@ class AutoCodeViewExt extends AutoCode
 					$fieldLabels.=$blank_pre."                            {xtype: 'hidden',  name : '$fieldname',ref:'../$fieldname'},\r\n";
 					$fieldLabels.=$blank_pre."                            {fieldLabel : '{$field_comment}',name : '{$fieldname}Upload',ref:'../{$fieldname}Upload',xtype:'fileuploadfield',\r\n".
 								  $blank_pre."                              emptyText: '请上传{$field_comment}文件',buttonText: '',accept:'image/*',buttonCfg: {iconCls: 'upload-icon'}";
+				}else if($isPassword){
+					$field_comment=$field["Comment"];
+					$field_comment=self::columnCommentKey($field_comment,$fieldname);
+					$fieldLabels.=$blank_pre."                            {fieldLabel : '{$field_comment}(<font color=red>*</font>)',name : '{$fieldname}',inputType:'{$fieldname}',ref:'../{$fieldname}'},\r\n";
+					$fieldLabels.=$blank_pre."                            {xtype: 'hidden',name : '{$fieldname}_old',ref:'../{$fieldname}_old'";
+				
+					$password_Add.=$blank_pre."            var {$fieldname}Obj=$appName_alias.$classname.View.Running.edit_window.{$fieldname};\r\n".
+								   $blank_pre."            {$fieldname}Obj.allowBlank=false;\r\n".
+								   $blank_pre."            if ({$fieldname}Obj.getEl()) {$fieldname}Obj.getEl().dom.parentNode.previousSibling.innerHTML =\"{$field_comment}(<font color=red>*</font>)\";\r\n";
+					$password_update.="\r\n\r\n".
+									  $blank_pre."            var {$fieldname}Obj=$appName_alias.$classname.View.Running.edit_window.{$fieldname};\r\n".
+									  $blank_pre."            {$fieldname}Obj.allowBlank=true;\r\n".
+									  $blank_pre."            if ({$fieldname}Obj.getEl()){$fieldname}Obj.getEl().dom.parentNode.previousSibling.innerHTML =\"{$field_comment}\";\r\n".
+									  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$fieldname}_old.setValue($appName_alias.$classname.View.Running.edit_window.{$fieldname}.getValue());\r\n".
+									  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$fieldname}.setValue(\"\");\r\n";
 				}else{
 					$datatype=self::comment_type($field["Type"]);
 					$field_comment=$field["Comment"];
@@ -944,6 +966,9 @@ class AutoCodeViewExt extends AutoCode
 		}
 		$fieldLabels=substr($fieldLabels,0,strlen($fieldLabels)-3);
 		$result["fieldLabels"]=$fieldLabels;
+
+		$result["password_Add"]   =$password_Add;
+		$result["password_update"]=$password_update;
 		$result["treeLevelVisible_Add"]=$treeLevelVisible_Add;
 		$result["treeLevelVisible_Update"]=$treeLevelVisible_Update;
 		return $result;
