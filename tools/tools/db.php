@@ -15,5 +15,6 @@
 	<a href="db/db_delete_tables.php">删除所有的表</a><br/>
 	<a href="db/db_delete_data.php">删除所有的表数据</a><br/>
 	<a href="db/db_replace_keywords.php">替换所有表里的关键词</a><br/>
+	<a href="db/db_sqlserver_convert_prepare.php">移植数据库表从Mysql到Sqlserver</a><br/>
 </body>
 </html>

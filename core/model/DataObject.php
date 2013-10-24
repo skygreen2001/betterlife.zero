@@ -418,7 +418,7 @@ abstract class DataObject extends Object implements ArrayAccess
 
 	/**
 	 * 更新对象指定的属性
-	 * @param array|string $sql_id 需更新数据的ID编号或者ID编号的Sql语句<br/>
+	 * @param array|string $sql_ids 需更新数据的ID编号或者ID编号的Sql语句<br/>
 	 * 示例如下：<br/>
 	 *     $sql_ids:<br/>
 	 *         1.1,2,3<br/>
@@ -519,7 +519,7 @@ abstract class DataObject extends Object implements ArrayAccess
 
 	/**
 	 * 查询当前对象需显示属性的列表
-	 * @param string 指定的显示属性，同SQL语句中的Select部分。
+	 * @param string $columns指定的显示属性，同SQL语句中的Select部分。
 	 * 示例如下：<br/>
 	 *     id,name,commitTime
 	 * @param object|string|array $filter 查询条件，在where后的条件<br/>
@@ -635,6 +635,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 *          2.array("id=1","name='sky'")<br/>
 	 *          3.array("id"=>"1","name"=>"sky")
 	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
+	 * @return 对象总计数
 	 */
 	public static function count($filter=null)
 	{
@@ -665,31 +666,35 @@ abstract class DataObject extends Object implements ArrayAccess
 
 	/**
 	 * 数据对象标识最大值
+     * @param string $column_name 列名，默认为数据对象标识
+	 * @param object|string|array $filter 查询条件，在where后的条件
 	 * @return int 数据对象标识最大值<br/>
 	 */
-	public static function max()
+	public static function max($column_name=null,$filter=null)
 	{
-		return DataObjectFunc::max(get_called_class());
+		return DataObjectFunc::max(get_called_class(),$column_name,$filter);
 	}
 
     /**
      * 数据对象指定列名最小值，如未指定列名，为标识最小值
      * @param string $column_name 列名，默认为数据对象标识
+	 * @param object|string|array $filter 查询条件，在where后的条件
      * @return int 数据对象列名最小值，如未指定列名，为标识最小值<br/>
      */
-    public static function min($column_name=null)
+    public static function min($column_name=null,$filter=null)
     {
-        return DataObjectFunc::min(get_called_class(),$column_name);
+        return DataObjectFunc::min(get_called_class(),$column_name,$filter);
     }
 
     /**
      * 数据对象指定列名总数
      * @param string $column_name 列名
+	 * @param object|string|array $filter 查询条件，在where后的条件
      * @return int 数据对象列名总数<br/>
      */
-    public static function sum($column_name)
+    public static function sum($column_name=null,$filter=null)
     {
-        return DataObjectFunc::sum(get_called_class(),$column_name);
+        return DataObjectFunc::sum(get_called_class(),$column_name,$filter);
     }
 
 	/**
