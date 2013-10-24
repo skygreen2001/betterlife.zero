@@ -97,7 +97,7 @@ class DataObjectFunc
 	//<editor-fold defaultstate="collapsed" desc="数据持久化：数据库的CRUD操作">
 	/**
 	 * 对应数据对象的updateProperties方法
-	 * @param string classname 数据对象类名
+	 * @param string $classname 数据对象类名
 	 * @param string $sql_id 需更新数据的ID编号或者ID编号的Sql语句<br/>
 	 * 示例如下：<br/>
 	 *     $sql_ids:<br/>
@@ -147,7 +147,7 @@ class DataObjectFunc
 
 	/**
 	 * 对应数据对象的updateBy方法
-	 * @param string classname 数据对象类名
+	 * @param string $classname 数据对象类名
 	 * @param mixed $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
 	 *      0."id=1,name='sky'"<br/>
@@ -173,6 +173,7 @@ class DataObjectFunc
 
 	/**
 	 * 对属性进行递增
+	 * @param string $classname 数据对象类名
 	 * @param string $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
 	 *      0."id=1,name='sky'"<br/>
@@ -194,6 +195,7 @@ class DataObjectFunc
 
 	/**
 	 * 对属性进行递减
+	 * @param string $classname 数据对象类名
 	 * @param string $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
 	 *      0."id=1,name='sky'"<br/>
@@ -215,7 +217,7 @@ class DataObjectFunc
 
 	/**
 	 * 查询当前对象需显示属性的列表
-	 * @param string classname 数据对象类名
+	 * @param string $classname 数据对象类名
 	 * @param string 指定的显示属性，同SQL语句中的Select部分。
 	 * 示例如下：<br/>
 	 *     id,name,commitTime
@@ -250,7 +252,7 @@ class DataObjectFunc
 
 	/**
 	 * 由标识删除指定ID数据对象
-	 * @param string classname 数据对象类名
+	 * @param string $classname 数据对象类名
 	 * @param mixed $id 数据对象编号
 	 */
 	public static function deleteByID($classname,$id)
@@ -276,7 +278,7 @@ class DataObjectFunc
 
 	/**
 	 * 根据主键删除多条记录
-	 * @param string classname 数据对象类名
+	 * @param string $classname 数据对象类名
 	 * @param array|string $ids 数据对象编号
 	 *  形式如下:
 	 *  1.array:array(1,2,3,4,5)
@@ -321,7 +323,7 @@ class DataObjectFunc
 
 	/**
 	 * 根据条件删除多条记录
-	 * @param string classname 数据对象类名
+	 * @param string $classname 数据对象类名
 	 * @param mixed $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
 	 *      0."id=1,name='sky'"<br/>
@@ -345,7 +347,7 @@ class DataObjectFunc
 
 	/**
 	 * 由标识判断指定ID数据对象是否存在
-	 * @param string classname 数据对象类名
+	 * @param string $classname 数据对象类名
 	 * @param mixed $id 数据对象编号
 	 * @return bool 是否存在
 	 */
@@ -374,7 +376,7 @@ class DataObjectFunc
 
 	/**
 	 * 由标识判断指定ID数据对象是否存在
-	 * @param string classname 数据对象类名
+	 * @param string $classname 数据对象类名
 	 * @param mixed $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
 	 *      0."id=1,name='sky'"<br/>
@@ -400,37 +402,12 @@ class DataObjectFunc
 
 	/**
 	 * 对应数据对象的max方法
-	 * @param string classname 数据对象类名
+	 * @param string $classname 数据对象类名
+	 * @param string $column_name 列名，默认为数据对象标识
+	 * @param object|string|array $filter 查询条件，在where后的条件
 	 * @return int 数据对象标识最大值<br/>
 	 */
-	public static function max($classname)
-	{
-		$tablename=Config_Db::orm($classname);
-		$_SQL=new Crud_Sql_Select();
-
-		if (is_string($classname)) {
-			if (class_exists($classname)) {
-				$classname=new $classname();
-			}
-		}
-		if ($classname instanceof DataObject){
-			$idColumn=DataObjectSpec::getRealIDColumnName($classname);
-		}
-		if (isset($idColumn)){
-			$max_string="max($idColumn)";
-			$sQuery=$_SQL->select($max_string)->from($tablename)->result();
-			return DataObject::dao()->sqlExecute($sQuery);
-		}else{
-			return -1;
-		}
-	}
-
-	/**
-	 * 数据对象指定列名最小值，如未指定列名，为标识最小值
-	 * @param string $column_name 列名，默认为数据对象标识
-	 * @return int 数据对象列名最小值，如未指定列名，为标识最小值<br/>
-	 */
-	public static function min($classname,$column_name=null)
+	public static function max($classname,$column_name=null,$filter=null)
 	{
 		$tablename=Config_Db::orm($classname);
 		$_SQL=new Crud_Sql_Select();
@@ -440,13 +417,39 @@ class DataObjectFunc
 					$classname=new $classname();
 				}
 			}
-			$idColumn=DataObjectSpec::getRealIDColumnName($classname);
-		}else{
-			$idColumn= $column_name;
+			$column_name=DataObjectSpec::getRealIDColumnName($classname);
 		}
 		if (isset($idColumn)){
-			$min_string="min($idColumn)";
-			$sQuery=$_SQL->select($min_string)->from($tablename)->result();
+			$max_string="max($column_name)";
+			$sQuery=$_SQL->select($max_string)->from($tablename)->where($filter)->result();
+			return DataObject::dao()->sqlExecute($sQuery);
+		}else{
+			return -1;
+		}
+	}
+
+	/**
+	 * 数据对象指定列名最小值，如未指定列名，为标识最小值
+	 * @param string $classname 数据对象类名
+	 * @param string $column_name 列名，默认为数据对象标识
+	 * @param object|string|array $filter 查询条件，在where后的条件
+	 * @return int 数据对象列名最小值，如未指定列名，为标识最小值<br/>
+	 */
+	public static function min($classname,$column_name=null,$filter=null)
+	{
+		$tablename=Config_Db::orm($classname);
+		$_SQL=new Crud_Sql_Select();
+		if (empty($column_name)&&($classname instanceof DataObject)){
+			if (is_string($classname)) {
+				if (class_exists($classname)) {
+					$classname=new $classname();
+				}
+			}
+			$column_name=DataObjectSpec::getRealIDColumnName($classname);
+		}
+		if (isset($idColumn)){
+			$min_string="min($column_name)";
+			$sQuery=$_SQL->select($min_string)->from($tablename)->where($filter)->result();
 			return DataObject::dao()->sqlExecute($sQuery);
 		}else{
 			return -1;
@@ -455,16 +458,26 @@ class DataObjectFunc
 
 	/**
 	 * 数据对象指定列名总数
+	 * @param string $classname 数据对象类名
 	 * @param string $column_name 列名
+	 * @param object|string|array $filter 查询条件，在where后的条件
 	 * @return int 数据对象列名总数<br/>
 	 */
-	public static function sum($classname,$column_name)
+	public static function sum($classname,$column_name,$filter=null)
 	{
 		$tablename=Config_Db::orm($classname);
 		$_SQL=new Crud_Sql_Select();
+		if (empty($column_name)&&($classname instanceof DataObject)){
+			if (is_string($classname)) {
+				if (class_exists($classname)) {
+					$classname=new $classname();
+				}
+			}
+			$column_name=DataObjectSpec::getRealIDColumnName($classname);
+		}
 		if (isset($column_name)){
 			$sum_string="sum($column_name)";
-			$sQuery=$_SQL->select($sum_string)->from($tablename)->result();
+			$sQuery=$_SQL->select($sum_string)->from($tablename)->where($filter)->result();
 			return DataObject::dao()->sqlExecute($sQuery);
 		}else{
 			return -1;
@@ -520,21 +533,21 @@ class DataObjectFunc
 			$result="<pre>";
 			$result.=$classname." DataObject\r\n{\r\n";
 			$dataobject=clone $dataobject;
-            if (is_a($dataobject,"DataObject")){
-			    $dataobjectArr=$dataobject->toArray();
-			    $dataobjectProperties=UtilReflection::getClassPropertiesInfo($dataobject);
-			    foreach($dataobjectArr as $key=>$value)
-			    {
-				    $access="";
-				    if (array_key_exists($key,$dataobjectProperties)){
-					    $propertyInfo=$dataobjectProperties[$key];
-					    if (!empty($propertyInfo)&& array_key_exists("access",$propertyInfo)){
-						    $access=":".$propertyInfo["access"];
-					    }
-				    }
-				    $result.="      [".$key.$access."]"." => ".$value."\r\n";
-			    }
-            }
+			if (is_a($dataobject,"DataObject")){
+				$dataobjectArr=$dataobject->toArray();
+				$dataobjectProperties=UtilReflection::getClassPropertiesInfo($dataobject);
+				foreach($dataobjectArr as $key=>$value)
+				{
+					$access="";
+					if (array_key_exists($key,$dataobjectProperties)){
+						$propertyInfo=$dataobjectProperties[$key];
+						if (!empty($propertyInfo)&& array_key_exists("access",$propertyInfo)){
+							$access=":".$propertyInfo["access"];
+						}
+					}
+					$result.="      [".$key.$access."]"." => ".$value."\r\n";
+				}
+			}
 			$result.="}";
 			$result.="</pre>";
 			return $result;
