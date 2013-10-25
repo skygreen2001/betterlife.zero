@@ -178,7 +178,7 @@ class AutoCodeViewExt extends AutoCode
 								$showname=self::getShowFieldNameByClassname($key);
 								$result="<?php \r\n".
 										 "require_once (\"../../../../init.php\");\r\n".
-										 "\$node=\$_REQUEST[\"id\"];\r\n".
+										 "\$node=intval(\$_REQUEST[\"id\"]);\r\n".
 										 "if (\$node){\r\n".
 										 "    \$condition=array(\"parent_id\"=>\"\$node\");\r\n".
 										 "}else{\r\n".
