@@ -9,11 +9,11 @@ if (contain($os,"Windows")) {
 	echo "需要安装PHP模块如下:<br/>".str_repeat("&nbsp;",20);
 	echo "php_gd2|php_curl|php_mbstring|php_mysqli<br/>".str_repeat("&nbsp;",20);
 	echo "需要修改php.ini文件，去掉以下行前的注释符号;<br/>".str_repeat("&nbsp;",40);
-	echo "extension=php_curl.dll".str_repeat("&nbsp;",40);
-	echo "extension=php_mbstring.dll".str_repeat("&nbsp;",40);
-	echo "extension=php_mysqli.dll".str_repeat("&nbsp;",40);
-	echo "extension=php_gd2.dll".str_repeat("&nbsp;",40);
-	echo "重新运行apache:重新启动 wamp";
+	echo "extension=php_curl.dll<br/>".str_repeat("&nbsp;",40);
+	echo "extension=php_mbstring.dll<br/>".str_repeat("&nbsp;",40);
+	echo "extension=php_mysqli.dll<br/>".str_repeat("&nbsp;",40);
+	echo "extension=php_gd2.dll<br/>";
+	echo "重新启动 wamp<br/>";
 } else if (contain($os,"darwin")) {
 	echo "您使用的是MAC系统<br/>";
 	echo "安装提示如下:<br/>".str_repeat("&nbsp;",20);

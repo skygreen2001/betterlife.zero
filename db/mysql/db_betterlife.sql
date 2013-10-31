@@ -3604,6 +3604,7 @@ CREATE TABLE `bb_user_admin` (
   `password` varchar(45) NOT NULL COMMENT '密码',
   `roletype` enum('0','1','2','3') DEFAULT '2' COMMENT '扮演角色\n系统管理员扮演角色。\n0:超级管理员-superadmin\n1:管理人员-manager\n2:运维人员-normal\n3:合作伙伴-partner\n\n\n',
   `seescope` enum('0','1') DEFAULT NULL COMMENT '视野\n0:只能查看自己的信息-self\n1:查看所有的信息-all',
+  `loginTimes` int(10) DEFAULT '0' COMMENT '登录次数',
   `commitTime` int(11) DEFAULT NULL COMMENT '创建时间',
   `updateTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`admin_id`)
@@ -3612,7 +3613,7 @@ CREATE TABLE `bb_user_admin` (
 -- ----------------------------
 -- Records of bb_user_admin
 -- ----------------------------
-INSERT INTO `bb_user_admin` VALUES ('1', 'admin', 'admin', 'admin', '1', '1', '1334818587', '2012-04-19 14:57:11');
+INSERT INTO `bb_user_admin` VALUES ('1', 'admin', 'admin', 'admin', '1', '1', 0 ,'1334818587', '2012-04-19 14:57:11');
 
 -- ----------------------------
 -- Table structure for `bb_user_department`

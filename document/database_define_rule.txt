@@ -1,49 +1,49 @@
-ʹ�����ݿ����IDE����MysqlWorkBench���б���ơ�
+﻿使用数据库设计IDE工具MysqlWorkBench进行表设计。
 
 
-*.���¹淶�ж����"_"�ǰ�ǣ�����ȫ�ǡ�
+*.以下规范中定义的"_"是半角，不是全角。
 
-*.��������:������д+��_��+Ŀ¼��+"_"+����[ͷ��ĸСд]
-  �������Ź��Ķ�������
-      ������д��ele
-      Ŀ¼����shop
-      ������order
-     ���Զ�������:ele_shop_order
-  �������һ�β�������Ϊ����ؼ�����new����ele_brand_new
+*.表名定义:库名缩写+“_”+目录名+"_"+类名[头字母小写]
+  如易乐团购的订单表：
+      库名缩写：ele
+      目录名：shop
+      类名：order
+     所以订单表名:ele_shop_order
+  表名最后一段不能命名为特殊关键字如new：如ele_brand_new
 
-*.ÿ�ű��趨���ֶΣ�
-  ��ʶ    :����[ͷ��ĸСд]+��_��+"id"
-  ����ʱ��:commitTime
-  ����ʱ��:updateTime
+*.每张表需定义字段：
+  标识    :类名[头字母小写]+“_”+"id"
+  创建时间:commitTime
+  更新时间:updateTime
 
-*.��ʶ��������Ϊ������[ͷ��ĸСд]+��_��+"id"
-  �������Ź��Ķ�������order_id
+*.标识列名定义为：类名[头字母小写]+“_”+"id"
+  如易乐团购的订单表：order_id
 
-*.��ʶ��Ϊ��������AI�й�ѡ��
+*.标识列为自增长，AI列勾选。
 
-*.������Ϊintʱ��Ĭ��ֵΪ0
+*.列类型为int时，默认值为0
 
-*.��������Ϊname����ü�ǰ׺������Ʒ����Ϊproduct_name��
+*.列名不能为name，最好加前缀，如商品表就为product_name。
 
-*.ö������ע�Ͷ���:
-  ö��ֵ:ö��ֵ˵��-ö��ֵӢ����(��ƴ����)
-  ÿ��֮���Իس�����;�ָ�
-  �綩�����е�֧��״̬����Ϊ��pay_status
-  ����:enum('0','1','2')
-  ֧��״̬
-	0:׼��֧��-ready
-	1:֧���ɹ�-succ
-	2:֧����-progress
+*.枚举类型注释定义:
+  枚举值:枚举值说明-枚举值英文名(或拼音名)
+  每句之间以回车或者;分割
+  如订单表中的支付状态定义为：pay_status
+  类型:enum('0','1','2')
+  支付状态
+	0:准备支付-ready
+	1:支付成功-succ
+	2:支付中-progress
 
-*.updateTimeĬ��ֵ��CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+*.updateTime默认值是CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 
-*.ͼƬ�ж������
-	������Ϊ��image|img|ico|logo|pic
+*.图片列定义规则：
+	列名称为：image|img|ico|logo|pic
 
-*.��TextArea������ı��ж������:
-        ������Ϊ��intro|memo
-        ������Ϊ��text|longtext
-        ����������г���>=500�������Ʋ���Ϊimages|link|ico
+*.需TextArea输入大文本列定义规则:
+        列名称为：intro|memo
+        列类型为：text|longtext
+        特殊情况：列长度>=500并且名称不能为images|link|ico
 
-*.������������һ��һ�Ĺ�ϵ�ǣ�����������ֶ�ΪUnique
-	���û����û������������Ҫ���û��������ָ�����user_id��Unique��
+*.当和其他表是一对一的关系是，需设置外键字段为Unique
+	如用户和用户详情表，则需要在用户详情表里指明外键user_id是Unique。

@@ -1,28 +1,30 @@
-*.°²×°wamp
-*.½«ÏîÄ¿¸´ÖÆµ½wwwÄ¿Â¼ÏÂ
-*.°²×°Êı¾İ¿â
+ï»¿*.å®‰è£…wamp
+*.å°†é¡¹ç›®å¤åˆ¶åˆ°wwwç›®å½•ä¸‹
+*.å®‰è£…æ•°æ®åº“
 
-*.ftpÉÏÈ¥ÎÄ¼şºó£¬ĞèÒªÉèÖÃÒÔÏÂÄ¿Â¼È¨ÏŞÎªÈ«¹«¿ª£º
+*.ftpä¸Šå»æ–‡ä»¶åï¼Œéœ€è¦è®¾ç½®ä»¥ä¸‹ç›®å½•æƒé™ä¸ºå…¨å…¬å¼€ï¼š
 - upload
 - attachment
 - log
 - home/admin/view/default/tmp/templates_c
-- home/Ó¦ÓÃÃû³Æ/view/default/tmp/templates_c
+- home/åº”ç”¨åç§°/view/default/tmp/templates_c
 
-*.ĞŞ¸ÄÒÔÏÂÅäÖÃ£º
+*.ä¿®æ”¹ä»¥ä¸‹é…ç½®ï¼š
 http.conf
-  ËùÓĞµÄDeny from allĞŞ¸Ä³É  Allow from all
-  Ğè¼ÓÔØÄ£¿é
+  æ‰€æœ‰çš„Deny from allä¿®æ”¹æˆ  Allow from all
+  éœ€åŠ è½½æ¨¡å—
 	LoadModule rewrite_module modules/mod_rewrite.so
 
 php.ini
   display_errors = Off
 
-  Ğè¼ÓÔØ¹¦ÄÜÄ£¿é:
+  éœ€åŠ è½½åŠŸèƒ½æ¨¡å—:
 	extension=php_curl.dll
 	extension=php_mbstring.dll
 	extension=php_mysqli.dll
 	extension=php_gd2.dll
 	extension=php_zip.dll
 	extension=php_rar.dll
+
+*.è¿è¡Œå®‰è£…é¡»çŸ¥ï¼šhttp://localhost/betterlife/install/
 
