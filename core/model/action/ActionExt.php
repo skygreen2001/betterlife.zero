@@ -213,13 +213,13 @@ class ActionExt extends Action
 			die("因为安全原因，需要手动在操作系统中创建目录:".Gc::$attachment_path."<br/>".
 				"Linux command need:<br/>".str_repeat("&nbsp;",40).
 				"sudo mkdir -p ".Gc::$attachment_path."<br/>".str_repeat("&nbsp;",40).
-				"sudo chmod 0777 ".Gc::$attachment_path);
+				"sudo chmod -R 0777 ".Gc::$attachment_path);
 		}
 		if (!is_dir(Gc::$upload_path)){
 			die("因为安全原因，需要手动在操作系统中创建目录:".Gc::$upload_path."<br/>".
 				"Linux command need:<br/>".str_repeat("&nbsp;",40).
 				"sudo mkdir -p ".Gc::$upload_path."<br/>".str_repeat("&nbsp;",40).
-				"sudo chmod 0777 ".Gc::$upload_path);
+				"sudo chmod -R 0777 ".Gc::$upload_path);
 		}
 	}
 }

@@ -16,15 +16,13 @@ function sqlExecute($sqlstring,$object=null)
 	}else{
 		$lists=Manager_Db::newInstance()->currentdao()->sqlExecute($sqlstring,$object);
 		if ($lists){
-            if (is_array($lists)){
-                if (count($lists)>1){
-				    foreach ($lists as $key=>$data) {
-                        if (is_object($data)){
-					        $lists[$key]=(array) $data;
-                        }
-				    }
-                }
-            }
+			if (is_array($lists)){
+				foreach ($lists as $key=>$data) {
+					if (is_object($data)){
+						$lists[$key]=(array) $data;
+					}
+				}
+			}
 		}
 		return $lists;
 	}

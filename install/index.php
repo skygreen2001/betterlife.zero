@@ -37,10 +37,10 @@ if (contain($os,"Windows")) {
 	echo "sudo chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",40);
 	$destination=Gc::$attachment_path;
 	echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",40);
-	echo "sudo chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",40);
+	echo "sudo chmod -R 0777 ".$destination."<br/>".str_repeat("&nbsp;",40);
 	$destination=Gc::$upload_path;
 	echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",40);
-	echo "sudo chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",40);
+	echo "sudo chmod -R 0777 ".$destination."<br/>".str_repeat("&nbsp;",40);
 	echo "重新运行apache:sudo apachectl restart";
 } else if (contain($os,"ubuntu")) {
 	echo "您使用的是Ubuntu系统<br/>";
@@ -66,10 +66,10 @@ if (contain($os,"Windows")) {
 	echo "sudo chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",40);
 	$destination=Gc::$attachment_path;
 	echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",40);
-	echo "sudo chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",40);
+	echo "sudo chmod -R 0777 ".$destination."<br/>".str_repeat("&nbsp;",40);
 	$destination=Gc::$upload_path;
 	echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",40);
-	echo "sudo chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",20);
+	echo "sudo chmod -R 0777 ".$destination."<br/>".str_repeat("&nbsp;",20);
 	echo "重新运行apache:sudo service apache2 restart";
 } else if (contain($os,"linux")) {
 	echo "您使用的是linux系统<br/>";
@@ -96,10 +96,10 @@ if (contain($os,"Windows")) {
 	echo "chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",40);
 	$destination=Gc::$attachment_path;
 	echo "mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",40);
-	echo "chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",40);
+	echo "chmod -R 0777 ".$destination."<br/>".str_repeat("&nbsp;",40);
 	$destination=Gc::$upload_path;
 	echo "mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",40);
-	echo "chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",20);
+	echo "chmod -R 0777 ".$destination."<br/>".str_repeat("&nbsp;",20);
 	echo "重新运行apache:sudo service httpd restart";
 	$mysql_config=<<<MYSQLCONFIG
 			修改mysql的字符集为utf8
