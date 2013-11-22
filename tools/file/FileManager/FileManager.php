@@ -667,7 +667,7 @@ function zip_extract(){
 // | Data Formating
 // +--------------------------------------------------
 function htmlencode($str){
-	return htmlentities($str);
+	return htmlentities($str,ENT_COMPAT,"UTF-8");
 }
 // html_entity_decode() replacement
 function html_entity_decode_for_php4_compatibility ($string)  {

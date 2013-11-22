@@ -2031,7 +2031,7 @@ class adoSchema {
 					   . '<table>' . "\n";
 		
 		foreach( $msg as $label => $details ) {
-			$error_details .= '<tr><td><b>' . $label . ': </b></td><td>' . htmlentities( $details ) . '</td></tr>' . "\n";
+			$error_details .= '<tr><td><b>' . $label . ': </b></td><td>' . htmlentities( $details,ENT_COMPAT,"UTF-8" ) . '</td></tr>' . "\n";
 		}
 		
 		$error_details .= '</table>';
@@ -2108,7 +2108,7 @@ class adoSchema {
 		if( is_array( $tables = $this->db->MetaTables( 'TABLES' , ($prefix) ? $prefix.'%' : '') ) ) {
 			foreach( $tables as $table ) {
 				if ($stripprefix) $table = str_replace(str_replace('\\_', '_', $pfx ), '', $table);
-				$schema .= $indent . '<table name="' . htmlentities( $table ) . '">' . "\n";
+				$schema .= $indent . '<table name="' . htmlentities( $table,ENT_COMPAT,"UTF-8" ) . '">' . "\n";
 				
 				// grab details from database
 				$rs = $this->db->Execute( 'SELECT * FROM ' . $table . ' WHERE -1' );
@@ -2147,7 +2147,7 @@ class adoSchema {
 						$details->primary_key = 0;
 						$type = $rs->MetaType( $details );
 						
-						$schema .= str_repeat( $indent, 2 ) . '<field name="' . htmlentities( $details->name ) . '" type="' . $type . '"' . $extra;
+						$schema .= str_repeat( $indent, 2 ) . '<field name="' . htmlentities( $details->name,ENT_COMPAT,"UTF-8" ) . '" type="' . $type . '"' . $extra;
 						
 						if( !empty( $content ) ) {
 							$schema .= ">\n" . str_repeat( $indent, 3 )
@@ -2168,7 +2168,7 @@ class adoSchema {
 						}
 						
 						foreach( $details['columns'] as $column ) {
-							$schema .= str_repeat( $indent, 3 ) . '<col>' . htmlentities( $column ) . '</col>' . "\n";
+							$schema .= str_repeat( $indent, 3 ) . '<col>' . htmlentities( $column,ENT_COMPAT,"UTF-8" ) . '</col>' . "\n";
 						}
 						
 						$schema .= str_repeat( $indent, 2 ) . '</index>' . "\n";
@@ -2183,7 +2183,7 @@ class adoSchema {
 						
 						while( $row = $rs->FetchRow() ) {
 							foreach( $row as $key => $val ) {
-								if ( $val != htmlentities( $val ) ) {
+								if ( $val != htmlentities( $val,ENT_COMPAT,"UTF-8" ) ) {
 									$row[$key] = '<![CDATA[' . $val . ']]>';
 								}
 							}
@@ -2362,7 +2362,7 @@ class adoSchema {
 			case 'text':
 				return !empty( $sqlArray ) ? implode( ";\n\n", $sqlArray ) . ';' : '';
 			case'html':
-				return !empty( $sqlArray ) ? nl2br( htmlentities( implode( ";\n\n", $sqlArray ) . ';' ) ) : '';
+				return !empty( $sqlArray ) ? nl2br( htmlentities( implode( ";\n\n", $sqlArray ) . ';',ENT_COMPAT,"UTF-8" ) ) : '';
 		}
 		
 		return $this->sqlArray;
@@ -2391,7 +2391,7 @@ function logMsg( $msg, $title = NULL, $force = FALSE ) {
 		echo '<pre>';
 		
 		if( isset( $title ) ) {
-			echo '<h3>' . htmlentities( $title ) . '</h3>';
+			echo '<h3>' . htmlentities( $title,ENT_COMPAT,"UTF-8" ) . '</h3>';
 		}
 		
 		if( @is_object( $this ) ) {

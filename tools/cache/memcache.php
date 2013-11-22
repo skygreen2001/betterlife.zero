@@ -517,14 +517,14 @@ EOB;
 // TODO, AUTH
 
 $_GET['op'] = !isset($_GET['op'])? '1':$_GET['op'];
-$PHP_SELF= isset($_SERVER['PHP_SELF']) ? htmlentities(strip_tags($_SERVER['PHP_SELF'],'')) : '';
+$PHP_SELF= isset($_SERVER['PHP_SELF']) ? htmlentities(strip_tags($_SERVER['PHP_SELF'],''),ENT_COMPAT,"UTF-8") : '';
 
 $PHP_SELF=$PHP_SELF.'?';
 $time = time();
 // sanitize _GET
 
 foreach($_GET as $key=>$g){
-    $_GET[$key]=htmlentities($g);
+    $_GET[$key]=htmlentities($g,ENT_COMPAT,"UTF-8");
 }
 
 
@@ -864,7 +864,7 @@ EOB;
 			echo "No key set!";
 			break;
         }
-        $theKey = htmlentities(base64_decode($_GET['key']));
+        $theKey = htmlentities(base64_decode($_GET['key']),ENT_COMPAT,"UTF-8");
 		$theserver = $MEMCACHE_SERVERS[(int)$_GET['server']];
 		list($h,$p) = explode(':',$theserver);
         $r = sendMemcacheCommand($h,$p,'delete '.$theKey);

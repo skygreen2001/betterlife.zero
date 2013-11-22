@@ -2,7 +2,7 @@
 <html lang="zh-CN" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <?php 
-	if (ini_get('short_open_tag') != 1) {echo "请在php.ini配置文件里设置short_open_tag = On<br/>";die();}
+//	if (ini_get('short_open_tag') != 1) {echo "请在php.ini配置文件里设置short_open_tag = On<br/>";die();}
 	require_once ("Gc.php");
 ?>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -13,7 +13,7 @@
 <meta name="keywords" content="<?=Gc::$site_name?>">
 <meta name="creation-date" content="12/01/2010">
 <meta name="revisit-after" content="15 days">
-<title><?=Gc::$site_name?></title>
+<title><?php echo Gc::$site_name ?></title>
 <style type="text/css">
 body {
 	font:normal 12px SimSun,sans-serif;
@@ -82,10 +82,10 @@ div#content{
 <body>
 	<div id="main">
 		<div id="inbox">
-			<h1 align="center">欢迎来到&nbsp;&nbsp;<span class="en-head"><?=Gc::$site_name?></span></h1>
+			<h1 align="center">欢迎来到&nbsp;&nbsp;<span class="en-head"><?php echo Gc::$site_name ?></span></h1>
 			<div align="center">
 				<div id="content" align="center">
-					<p><a href="<?php echo Gc::$url_base?>index.php?go=<?=Gc::$appName?>.index.index">网站前台</a></p>
+					<p><a href="<?php echo Gc::$url_base?>index.php?go=<?php echo Gc::$appName ?>.index.index">网站前台</a></p>
 					<p><a href="<?php echo Gc::$url_base?>index.php?go=admin.index.index">网站后台</a></p>
 				</div>
 			</div>

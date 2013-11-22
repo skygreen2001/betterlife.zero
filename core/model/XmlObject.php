@@ -326,10 +326,11 @@ class XmlObject extends Object implements ArrayAccess
 		$child->addAttribute(self::$name_id_property, $this->id);     
 		foreach($data as $key=>$value) {
 			if ($value!=null&&!endWith($key,"Show")){
+				$value=htmlentities( $value,ENT_COMPAT,"UTF-8");
 				$child->addAttribute($key, $value);
 			}
 		}
-		$dom = new DOMDocument('1.0');
+		$dom = new DOMDocument('1.0',"UTF-8");
 		$dom->preserveWhiteSpace = false;
 		$dom->formatOutput = true;
 		$dom->loadXML($xml->asXML());
@@ -403,7 +404,7 @@ class XmlObject extends Object implements ArrayAccess
 				$domRef->parentNode->removeChild($domRef);
 			}
 		}                
-		$dom = new DOMDocument('1.0');
+		$dom = new DOMDocument('1.0',"UTF-8");
 		$dom->preserveWhiteSpace = false;
 		$dom->formatOutput = true;
 		$dom->loadXML($xml->asXML());
