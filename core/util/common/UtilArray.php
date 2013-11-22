@@ -104,7 +104,7 @@ class UtilArray extends Util
                 self::array_to_xml( $value, $key, $node);
             } else {
                 // add single node.
-                //$value = htmlentities( $value );
+                $value = htmlentities( $value,ENT_COMPAT,"UTF-8");
                 $xml->addChild( $key, $value );
             }
         }
@@ -113,7 +113,7 @@ class UtilArray extends Util
         //return $xml->asXML();
 
         // if you want the XML to be formatted, use the below instead to return the XML
-        $doc = new DOMDocument('1.0');
+        $doc = new DOMDocument('1.0',"UTF-8");
         $doc->preserveWhiteSpace = false;
         $doc->loadXML( $xml->asXML() );
         $doc->formatOutput = true;

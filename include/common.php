@@ -17,9 +17,11 @@ function sqlExecute($sqlstring,$object=null)
 		$lists=Manager_Db::newInstance()->currentdao()->sqlExecute($sqlstring,$object);
 		if ($lists){
 			if (is_array($lists)){
-				foreach ($lists as $key=>$data) {
-					if (is_object($data)){
-						$lists[$key]=(array) $data;
+				if (count($lists)>0){
+					foreach ($lists as $key=>$data) {
+						if (is_object($data)){
+							$lists[$key]=(array) $data;
+						}
 					}
 				}
 			}

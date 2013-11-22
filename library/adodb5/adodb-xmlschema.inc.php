@@ -1871,7 +1871,7 @@ class adoSchema {
 					   . '<table>' . "\n";
 		
 		foreach( $msg as $label => $details ) {
-			$error_details .= '<tr><td><b>' . $label . ': </b></td><td>' . htmlentities( $details ) . '</td></tr>' . "\n";
+			$error_details .= '<tr><td><b>' . $label . ': </b></td><td>' . htmlentities( $details,ENT_COMPAT,"UTF-8" ) . '</td></tr>' . "\n";
 		}
 		
 		$error_details .= '</table>';
@@ -2013,7 +2013,7 @@ class adoSchema {
 						
 						while( $row = $rs->FetchRow() ) {
 							foreach( $row as $key => $val ) {
-								$row[$key] = htmlentities($val);
+								$row[$key] = htmlentities($val,ENT_COMPAT,"UTF-8");
 							}
 							
 							$schema .= '			<row><f>' . implode( '</f><f>', $row ) . '</f></row>' . "\n";
@@ -2181,7 +2181,7 @@ class adoSchema {
 			case 'text':
 				return !empty( $sqlArray ) ? implode( ";\n\n", $sqlArray ) . ';' : '';
 			case'html':
-				return !empty( $sqlArray ) ? nl2br( htmlentities( implode( ";\n\n", $sqlArray ) . ';' ) ) : '';
+				return !empty( $sqlArray ) ? nl2br( htmlentities( implode( ";\n\n", $sqlArray ) . ';' ,ENT_COMPAT,"UTF-8") ) : '';
 		}
 		
 		return $this->sqlArray;
@@ -2210,7 +2210,7 @@ function logMsg( $msg, $title = NULL, $force = FALSE ) {
 		echo '<pre>';
 		
 		if( isset( $title ) ) {
-			echo '<h3>' . htmlentities( $title ) . '</h3>';
+			echo '<h3>' . htmlentities( $title,ENT_COMPAT,"UTF-8" ) . '</h3>';
 		}
 		
 		if( is_object( $this ) ) {
