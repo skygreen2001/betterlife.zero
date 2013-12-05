@@ -9,8 +9,8 @@
 <meta http-equiv="Lang" content="zh_CN">
 <meta name="author" content="skygreen">
 <meta http-equiv="Reply-to" content="skygreen2001@gmail.com">
-<meta name="description" content="<?=Gc::$site_name?>">
-<meta name="keywords" content="<?=Gc::$site_name?>">
+<meta name="description" content="<?php echo Gc::$site_name?>">
+<meta name="keywords" content="<?php echo Gc::$site_name?>">
 <meta name="creation-date" content="12/01/2010">
 <meta name="revisit-after" content="15 days">
 <title><?php echo Gc::$site_name ?></title>
