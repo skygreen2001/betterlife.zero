@@ -8,7 +8,9 @@ class Action_Blog extends Action
 	* 显示博客列表
 	*/
 	public function display() 
-	{   
+	{
+		$this->keywords.="-博客";
+		$this->description.="-显示博客列表";
 		if (HttpSession::isHave("IsSyncUcenterOtherApp")&&isset($this->data["uid"])){
 			$this->uc_sync_login($this->data["uid"]);
 		}     

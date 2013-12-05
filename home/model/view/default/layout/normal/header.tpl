@@ -1,9 +1,9 @@
-	<meta http-equiv="Content-Type" content="text/html; charset={$encoding}">
-	<meta http-equiv="Lang" content="zh_CN">
-	<meta name="author" content="skygreen">
-	<meta http-equiv="Reply-to" content="skygreen2001@gmail.com">
-	<meta name="description" content="BetterLife CMS开源框架">
-	<meta name="keywords" content="BetterLife CMS开源框架">
-	<meta name="creation-date" content="12/01/2010">
-	<meta name="revisit-after" content="15 days">
-	<title>BetterLife CMS开源框架</title>
+	<meta http-equiv="Content-Type" content="text/html; charset={$encoding}" />
+	<meta http-equiv="Lang" content="zh_CN" />
+	<meta name="author" content="skygreen" />
+	<meta http-equiv="Reply-to" content="skygreen2001@gmail.com" />
+	<meta name="keywords" content="{$keywords}" />
+	<meta name="description" content="{$description}" />
+	<meta name="creation-date" content="12/01/2010" />
+	<meta name="revisit-after" content="15 days" />
+	<title>{$site_name}</title>

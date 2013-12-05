@@ -64,10 +64,10 @@ if (isset ($jsFile)){
 
 if (isset ($cssFile)){
 	if (!endWith($cssFile, ".css"))return;
-	header("Content-type: text/css; charset: UTF-8");   
-	if (EnumJsFramework::isEnumValue($group)) {  
+	header("Content-type: text/css; charset: UTF-8");
+	if (EnumJsFramework::isEnumValue($group)) {
 		$ajax_root=Gc::$nav_root_path."common".DIRECTORY_SEPARATOR."js".DIRECTORY_SEPARATOR."ajax".DIRECTORY_SEPARATOR;
-		$cssFile=str_replace("/", DIRECTORY_SEPARATOR, $cssFile);  
+		$cssFile=str_replace("/", DIRECTORY_SEPARATOR, $cssFile);
 		switch ($group){
 			case EnumJsFramework::JS_FW_EXTJS:
 				if ($version<4){
@@ -82,7 +82,7 @@ if (isset ($cssFile)){
 		$url_base=UtilNet::urlbase();
 		if (contain($cssFile,$url_base)){
 		   $cssFile=str_replace($url_base,"",$cssFile);
-		   $cssFile=Gc::$nav_root_path.$cssFile;           
+		   $cssFile=Gc::$nav_root_path.$cssFile;
 		   $cssFile=str_replace("/",DIRECTORY_SEPARATOR,$cssFile);
 		}
 		include($cssFile);
@@ -90,9 +90,9 @@ if (isset ($cssFile)){
 }
 
 if(extension_loaded("zlib")){
-	if (Gc::$is_online_optimize){      
-		$result=ob_get_clean();         
-		$result=UtilString::online_optimize($result); 
+	if (Gc::$is_online_optimize){
+		$result=ob_get_clean();
+		$result=UtilString::online_optimize($result);
 		echo $result;
 	}else{
 		ob_end_flush();//输出buffer中的内容

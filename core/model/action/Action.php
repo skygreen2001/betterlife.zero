@@ -34,6 +34,14 @@ class Action extends Object
 	 */
 	const ROUTINE_CLASS_PREFIX="Action_";
 	/**
+	 * SEO：keywords
+	 */
+	public $keywords;
+	/**
+	 * SEO：description
+	 */
+	public $description;
+	/**
 	 * 在线编辑器,参考:EnumOnlineEditorType
 	 * 1.CKEditor
 	 * 2.KindEditor
@@ -380,14 +388,13 @@ class Action extends Object
 		} 
 	}
 	
-	
-	
-	
 	/**
 	 * 在Action所有的方法执行之前可以执行的方法
 	 */
 	public function beforeAction()
 	{
+		$this->keywords=Gc::$site_name;
+		$this->description=Gc::$site_name;
 		if (contain($this->data["go"],Gc::$appName)){
 			if(($this->data["go"]!=Gc::$appName.".auth.register")&&($this->data["go"]!=Gc::$appName.".auth.login")&&!HttpSession::isHave('user_id')) {
 				$this->redirect("auth","login");
@@ -400,6 +407,8 @@ class Action extends Object
 	 */
 	public function afterAction()
 	{
+		$this->view->set("keywords",$this->keywords);
+		$this->view->set("description",$this->description);
 	}
 }
 
