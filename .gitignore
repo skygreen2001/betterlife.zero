@@ -5,6 +5,7 @@
 .settings/org.eclipse.php.debug.core.Debug_Process_Preferences.prefs
 .settings/org.eclipse.wst.validation.prefs
 .buildpath
+/stressdata
 /model
 /attachment
 betterlife.*
