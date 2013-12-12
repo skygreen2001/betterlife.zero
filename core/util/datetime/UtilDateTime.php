@@ -44,6 +44,27 @@ class UtilDateTime extends Util
 	{
 	   date_default_timezone_set('Asia/Shanghai');
 	}
+
+	/**
+	 +----------------------------------------------------------<br/>
+	 * 获取现在的时间显示<br/>
+	 * 格式：年-月-日 小时:分钟:秒<br/> 
+	 +----------------------------------------------------------<br/>      
+	 */
+	public static function nowDate($type=EnumDateTimeFormat::DATE)
+	{
+		date_default_timezone_set('Asia/Shanghai');
+		$now= date(self::TIMEFORMAT_YMD);
+		switch ($type){
+			case EnumDateTimeFORMAT::TIMESTAMP: 
+				return UtilDateTime::dateToTimestamp($now);      
+			case EnumDateTimeFORMAT::DATE:
+				return $now;        
+			case EnumDateTimeFORMAT::STRING:
+				return $now."";        
+		}
+		return $now;
+	}
 	
 	/**
 	 +----------------------------------------------------------<br/>
