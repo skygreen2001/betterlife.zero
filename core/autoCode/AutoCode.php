@@ -119,7 +119,7 @@ class AutoCode extends Object
 
 	/**
 	 * 从表名称获取对象的类名【头字母大写】。
-	 * @param string $tablename
+	 * @param string $tablename 表名称
 	 * @return string 返回对象的类名
 	 */
 	protected static function getClassname($tablename)
@@ -152,7 +152,7 @@ class AutoCode extends Object
 
 	/**
 	 * 从表名称获取对象的类名实例化名【头字母小写】。
-	 * @param string $tablename
+	 * @param string $tablename 表名称
 	 * @return string 返回对象的类名
 	 */
 	protected static function getInstancename($tablename)
@@ -393,6 +393,7 @@ class AutoCode extends Object
 	/**
 	 * 列是否是email
 	 * @param string $column_name 列名称
+	 * @param mixed $column_comment 列注释
 	 */
 	protected static function columnIsEmail($column_name,$column_comment)
 	{
@@ -405,8 +406,8 @@ class AutoCode extends Object
 
 	/**
 	 * 列是否是密码
+	 * @param string $tablename 表名称
 	 * @param string $column_name 列名称
-	 * @param mixed $column_comment 列注释
 	 */
 	protected static function columnIsPassword($table_name,$column_name)
 	{
