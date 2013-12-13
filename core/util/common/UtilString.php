@@ -400,7 +400,7 @@ class UtilString extends Util
 						$strtemp .=  self::rand_string(1,2);
 						break;
                     case "."://小写字母
-                        $strtemp .=  self::rand_string(1,3);
+						$strtemp .=  self::rand_string(1,3);
                         break;
 					default://其他格式均不转换
 						$strtemp .=   $char;
