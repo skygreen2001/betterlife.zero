@@ -31,7 +31,8 @@ class UtilString extends Util
 	public static function has_unsafeword($str)
 	{
 		return preg_match('/~!@#\\$%\\^&\\*\\(\\)\\+=\\|\\}]{\\[":><\\?;\'\/\\.,/', $str);
-	}  
+	}
+
 	/**
 	 * 查看字符串是否包含中文 
 	 * @param string $string 查看的字符串 
@@ -410,6 +411,32 @@ class UtilString extends Util
 			$str[] = $strtemp;
 		}
 		return $number==1? $strtemp : $str ;
+	}
+	
+	/**
+	* 去除Html标签   
+	* str 需要截去的对象
+	*/
+	public static function delhtml($str){   //清除HTML标签
+		$st=-1; //开始
+		$et=-1; //结束
+		$stmp=array();
+		$stmp[]="&nbsp;";
+		$len=strlen($str);
+		for($i=0;$i<$len;$i++){
+		   $ss=substr($str,$i,1);
+		   if(ord($ss)==60){ //ord("<")==60
+			$st=$i;
+		   }
+		   if(ord($ss)==62){ //ord(">")==62
+			$et=$i;
+			if($st!=-1){
+			 $stmp[]=substr($str,$st,$et-$st+1);
+			}
+		   }
+		}
+		$str=str_replace($stmp,"",$str);
+		return $str;
 	}
 }
 
