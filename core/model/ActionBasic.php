@@ -27,7 +27,7 @@ class EnumOnlineEditorType extends Enum
  * @package core.model
  * @author skygreen
  */
-class Action extends Object 
+class ActionBasic extends Object 
 {
 	/**
 	 * 规范要求：所有控制器要求的前缀

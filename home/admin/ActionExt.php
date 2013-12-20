@@ -8,7 +8,7 @@
  * @package core.model
  * @author skygreen
  */
-class ActionExt extends Action 
+class ActionExt extends ActionBasic 
 {   
 	/**
 	 * 加载Ext 第三方定义组件定义对象  

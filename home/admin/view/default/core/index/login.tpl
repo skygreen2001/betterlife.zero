@@ -12,7 +12,7 @@
 							<tr align="center"><td><font color="#ff0000">{$message|default:''}</font></td></tr>
 							<tr align="center"><td><label>用户名&nbsp;&nbsp;&nbsp;</label><input class="inputNormal" type="text" name="username" /><br/></td></tr>
 							<tr align="center"><td><label>密&nbsp;&nbsp;码&nbsp;&nbsp;&nbsp;</label><input class="inputNormal" type="password" name="password" /><br/></td></tr>
-							<tr align="center"><td><label>图形验证码</label><input class="inputVerify" name="validate" id="validate" size="15" type="text" /><img src="{$url_base}home/admin/src/httpdata/validate.php" name="validateCode" id="validateCode" onclick="changeCode();" style="cursor: pointer;vertical-align:top;"/></td></tr>
+							<tr align="center"><td><label id="lVerImg">图形验证码</label><input class="inputVerify" name="validate" id="validate" size="15" type="text" /><img src="{$url_base}home/admin/src/httpdata/validate.php" name="validateCode" id="validateCode" onclick="changeCode();" style="cursor: pointer;vertical-align:top;"/></td></tr>
 							<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a style="cursor: pointer;" onclick="changeCode();">看不清楚？换张图片</a></td></tr>
 							<tr><td align="center"><input type="submit" name="Submit" value="登录" class="btnSubmit" /></td></tr>
 						</table>
