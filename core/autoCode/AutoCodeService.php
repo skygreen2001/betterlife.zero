@@ -46,7 +46,7 @@ class AutoCodeService extends AutoCode
 		if (!UtilString::is_utf8(self::$service_dir_full)){
 			self::$service_dir_full=UtilString::gbk2utf8(self::$service_dir_full);
 		}
-		self::$service_dir_full=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR.self::$service_dir.DIRECTORY_SEPARATOR;
+		self::$service_dir_full=self::$save_dir.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR.self::$service_dir.DIRECTORY_SEPARATOR;
 		self::init();
 
 		if (self::$isNoOutputCss) echo UtilCss::form_css()."\r\n";
@@ -1172,7 +1172,7 @@ MANY2MANYQUERYPAGE;
 							"            }else{\r\n".
 							"                \${$instance_name}Obj->{$fieldname}= \${$instance_name}[\"{$fieldname}_old\"];\r\n".
 							"            }\r\n";
-					
+
 				}else{
 					$result="            \${$instance_name}Obj->{$fieldname}=md5(\${$instance_name}Obj->{$fieldname});\r\n";
 				}

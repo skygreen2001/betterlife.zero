@@ -4,10 +4,10 @@
  * 控制器:用户详细信息<br/>
  +---------------------------------------
  * @category betterlife
- * @package web.front.action
+ * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
-class Action_Userdetail extends Action
+class Action_Userdetail extends ActionModel
 {
     /**
      * 用户详细信息列表

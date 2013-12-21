@@ -4,10 +4,10 @@
  * 控制器:评论<br/>
  +---------------------------------------
  * @category betterlife
- * @package web.front.action
+ * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
-class Action_Comment extends Action
+class Action_Comment extends ActionModel
 {
     /**
      * 评论列表

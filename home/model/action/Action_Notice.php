@@ -4,10 +4,10 @@
  * 控制器:通知<br/>
  +---------------------------------------
  * @category betterlife
- * @package web.front.action
+ * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
-class Action_Notice extends Action
+class Action_Notice extends ActionModel
 {
     /**
      * 通知列表
@@ -53,7 +53,7 @@ class Action_Notice extends Action
             $notice = Notice::get_by_id($noticeId);
             $this->view->set("notice",$notice); 
             //加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。
-            $this->load_onlineditor('content');
+            $this->load_onlineditor('notice_content');
         }
     }
     /**

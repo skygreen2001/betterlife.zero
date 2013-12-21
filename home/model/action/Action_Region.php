@@ -4,10 +4,10 @@
  * 控制器:地区<br/>
  +---------------------------------------
  * @category betterlife
- * @package web.front.action
+ * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
-class Action_Region extends Action
+class Action_Region extends ActionModel
 {
     /**
      * 地区列表

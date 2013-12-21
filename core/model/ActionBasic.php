@@ -395,11 +395,6 @@ class ActionBasic extends Object
 	{
 		$this->keywords=Gc::$site_name;
 		$this->description=Gc::$site_name;
-		if (contain($this->data["go"],Gc::$appName)){
-			if(($this->data["go"]!=Gc::$appName.".auth.register")&&($this->data["go"]!=Gc::$appName.".auth.login")&&!HttpSession::isHave('user_id')) {
-				$this->redirect("auth","login");
-			}
-		}
 	}
 	
 	/**

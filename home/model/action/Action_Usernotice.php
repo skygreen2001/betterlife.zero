@@ -4,10 +4,10 @@
  * 控制器:用户收到通知<br/>
  +---------------------------------------
  * @category betterlife
- * @package web.front.action
+ * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
-class Action_Usernotice extends Action
+class Action_Usernotice extends ActionModel
 {
     /**
      * 用户收到通知列表

@@ -4,10 +4,10 @@
  * 控制器:用户日志<br/>
  +---------------------------------------
  * @category betterlife
- * @package web.front.action
+ * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
-class Action_Loguser extends Action
+class Action_Loguser extends ActionModel
 {
     /**
      * 用户日志列表
@@ -52,6 +52,8 @@ class Action_Loguser extends Action
             $loguserId=$this->data["id"];
             $loguser = Loguser::get_by_id($loguserId);
             $this->view->set("loguser",$loguser); 
+            //加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。
+            $this->load_onlineditor('log_content');
         }
     }
     /**

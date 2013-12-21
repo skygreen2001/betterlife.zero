@@ -30,11 +30,11 @@ class UtilPage {
 
 	private  $navig;// 导航条
 	private  $navigTo;// 导航条
-								 
-	public static function Init($nowpage,$count,$pageSize=3,$linkUrl=null){
+
+	public static function Init($nowpage,$count,$pageSize=10,$linkUrl=null){
 		return new UtilPage($nowpage,$count,$pageSize,$linkUrl);
-	}  
-								 
+	}
+
 	/**
 	 *
 	 * @param pageSize
@@ -44,15 +44,15 @@ class UtilPage {
 	 * @param count
 	 *            :记录总数
 	 */
-	function __construct($nowpage,$count,$pageSize=3,$linkUrl=null) 
+	function __construct($nowpage,$count,$pageSize=10,$linkUrl=null)
 	{
-		if (empty($linkUrl)){         
+		if (empty($linkUrl)){
 		  $linkUrl=@$_SERVER['HOST'].@$_SERVER['REQUEST_URI'];
 		}
 		if (empty($nowpage)) {
 			$nowpage=1;
 		}
-		
+
 		$this->count=$count;
 		$this->pageSize = $pageSize;
 		$this->nowpage = $nowpage;
@@ -60,11 +60,11 @@ class UtilPage {
 		$this->allPageCount = floor(($this->count + $this->pageSize - 1) / $this->pageSize);
 		if ($this->nowpage>$this->allPageCount){
 			$this->nowpage=$this->allPageCount;
-		}        
-		if ($this->count>0) {    
+		}
+		if ($this->count>0) {
 			$this->startPoint=($this->nowpage-1)*$this->pageSize+1;
-			if ($this->startPoint>$this->count) {  
-			  $this->startPoint=0;      
+			if ($this->startPoint>$this->count) {
+			  $this->startPoint=0;
 			}
 		}else{
 			$this->startPoint= 0;
@@ -76,7 +76,7 @@ class UtilPage {
 		}
 
 		$this->linkUrl = $linkUrl;
-		$_SESSION[TagPageClass::$tag_page_sessionname]=$this; 
+		$_SESSION[TagPageClass::$tag_page_sessionname]=$this;
 	}
 
 	/**
@@ -85,8 +85,8 @@ class UtilPage {
 	 * 2.如果没有，则加后缀?pageno=分页数
 	 * @param mixed $this->linkUrl
 	 */
-	private function url_link_pageparam($pageNo) 
-	{                                 
+	private function url_link_pageparam($pageNo)
+	{
 		if (UtilString::contain($this->linkUrl,"?")) {
 			$result="<a href='$this->linkUrl&".self::$linkUrl_pageFlag."=$pageNo'>";
 		}else {
@@ -99,7 +99,7 @@ class UtilPage {
 	 * 获取当前页开始记录数
 	 *
 	 */
-	public function getStartPoint() 
+	public function getStartPoint()
 	{
 		return $this->startPoint;
 	}
@@ -108,10 +108,10 @@ class UtilPage {
 	 * 获取当前页结束记录数
 	 *
 	 */
-	public function getEndPoint() 
+	public function getEndPoint()
 	{
 		return $this->endPoint;
-	}     
+	}
 
 	/**
 	 * 生成导航条供页面使用
@@ -119,7 +119,7 @@ class UtilPage {
 	 * @param somedo
 	 * @return
 	 */
-	public function createBaseNavi() 
+	public function createBaseNavi()
 	{
 		if ($this->count < $this->pageSize) {
 			$this->navig = "";
@@ -210,7 +210,7 @@ class UtilPage {
 		return $stb;
 	}
 
-	private function viewStatistic() 
+	private function viewStatistic()
 	{
 		$stb="<br />";
 		$stb.="当前：第&nbsp;";
@@ -225,13 +225,13 @@ class UtilPage {
 		return $stb;
 	}
 
-	private function createNavig() 
+	private function createNavig()
 	{
 		$this->navig = $this->createBaseNavi();
 		return $this->navig.$this->viewStatistic();
 	}
 
-	private function createNavigTo() 
+	private function createNavigTo()
 	{
 		$this->navigTo=$this->createBaseNavi();
 		$stb="";
@@ -243,16 +243,16 @@ class UtilPage {
 			$stb.=" size='3'";
 			$stb.=" lang='3'";
 			$stb.=" maxlength='3' />";
-			$stb.="<a href=\"javascript:";    
+			$stb.="<a href=\"javascript:";
 			$stb.="var topage=document.getElementById('".self::$linkUrl_pageFlag."').value;";
 			$stb.='if(!(/^\d+$/.test(topage)))';
 			$stb.="{";
 			$stb.="alert('需要输入数字');";
-			$stb.="}else{";                     
-			$stb.="document.forms.bb_page.setAttribute('action','".$this->getLinkUrl()."&".self::$linkUrl_pageFlag."='+topage);";        
+			$stb.="}else{";
+			$stb.="document.forms.bb_page.setAttribute('action','".$this->getLinkUrl()."&".self::$linkUrl_pageFlag."='+topage);";
 			$stb.="document.forms.bb_page.setAttribute('method','post');";
-			$stb.="document.forms.bb_page.submit();";                
-//            $stb.="document.forms.bb_page.".self::$linkUrl_pageFlag.".value='';";                     
+			$stb.="document.forms.bb_page.submit();";
+//            $stb.="document.forms.bb_page.".self::$linkUrl_pageFlag.".value='';";
 			$stb.="}";
 			$stb.="\">&nbsp;跳转&nbsp;</a>&nbsp;";
 			$stb.="</form>";
@@ -260,38 +260,38 @@ class UtilPage {
 		return $this->navigTo.$stb.$this->viewStatistic();
 	}
 
-	public function getCount() 
+	public function getCount()
 	{
 		return $this->count;
 	}
 
-	public function getNavig() 
+	public function getNavig()
 	{
 		$this->navig=$this->createNavig();
 		return $this->navig;
 	}
 
-	public function getNowpage() 
+	public function getNowpage()
 	{
 		return $this->nowpage;
 	}
 
-	public function getPageSize() 
+	public function getPageSize()
 	{
 		return $this->pageSize;
 	}
 
-	public function setCount($count) 
+	public function setCount($count)
 	{
 		$this->count = $count;
 	}
 
-	public function setNowpage($nowpage) 
+	public function setNowpage($nowpage)
 	{
 		$this->nowpage = $nowpage;
 	}
 
-	public function setPageSize($pageSize) 
+	public function setPageSize($pageSize)
 	{
 		$this->pageSize = $pageSize;
 	}
@@ -299,28 +299,28 @@ class UtilPage {
 	/**
 	 * wap使用替换空格
 	 */
-	public function wapReplace() 
+	public function wapReplace()
 	{
 		$this->navig = str_replace("&nbsp;", "  ",navig);
-	}   
+	}
 
-	public function getNavigTo() 
+	public function getNavigTo()
 	{
 		$this->navigTo=$this->createNavigTo();
 		return $this->navigTo;
 	}
 
-	public function getLinkUrl() 
+	public function getLinkUrl()
 	{
 		return $this->linkUrl;
 	}
 
-	public function setLinkUrl($linkUrl) 
+	public function setLinkUrl($linkUrl)
 	{
 		$this->linkUrl = $linkUrl;
 	}
 
-	public function setNavig($navig) 
+	public function setNavig($navig)
 	{
 		$this->navig = $navig;
 	}

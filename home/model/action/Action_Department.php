@@ -4,10 +4,10 @@
  * 控制器:用户所属部门<br/>
  +---------------------------------------
  * @category betterlife
- * @package web.front.action
+ * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
-class Action_Department extends Action
+class Action_Department extends ActionModel
 {
     /**
      * 用户所属部门列表

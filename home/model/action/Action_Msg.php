@@ -4,10 +4,10 @@
  * 控制器:消息<br/>
  +---------------------------------------
  * @category betterlife
- * @package web.front.action
+ * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
-class Action_Msg extends Action
+class Action_Msg extends ActionModel
 {
     /**
      * 消息列表

@@ -4,10 +4,10 @@
  * 控制器:用户角色<br/>
  +---------------------------------------
  * @category betterlife
- * @package web.front.action
+ * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
-class Action_Userrole extends Action
+class Action_Userrole extends ActionModel
 {
     /**
      * 用户角色列表

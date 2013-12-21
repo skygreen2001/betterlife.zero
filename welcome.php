@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="zh-CN" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<?php 
+<?php
 //	if (ini_get('short_open_tag') != 1) {echo "请在php.ini配置文件里设置short_open_tag = On<br/>";die();}
 	require_once ("Gc.php");
 ?>
@@ -25,10 +25,10 @@ p {
 	margin:5px;
 }
 .en-head{
-	font:bold 0.8em Arial,verdana,Geneva,Helvetica,sans-serif; 
+	font:bold 0.8em Arial,verdana,Geneva,Helvetica,sans-serif;
 }
 .en{
-	font-family:verdana,Geneva,Helvetica,Arial,sans-serif; 
+	font-family:verdana,Geneva,Helvetica,Arial,sans-serif;
 }
 
 a {
@@ -77,7 +77,7 @@ div#content{
 	margin-top: 20px;
 }
 </style>
-<link rel="icon" href="favicon.ico" mce_href="favicon.ico" type="image/x-icon"> 
+<link rel="icon" href="favicon.ico" mce_href="favicon.ico" type="image/x-icon">
 </head>
 <body>
 	<div id="main">
@@ -87,6 +87,7 @@ div#content{
 				<div id="content" align="center">
 					<p><a href="<?php echo Gc::$url_base?>index.php?go=<?php echo Gc::$appName ?>.index.index">网站前台</a></p>
 					<p><a href="<?php echo Gc::$url_base?>index.php?go=admin.index.index">网站后台</a></p>
+					<p><a href="<?php echo Gc::$url_base?>index.php?go=model.index.index">通用模板</a></p>
 				</div>
 			</div>
 		</div>

@@ -1,13 +1,13 @@
 <?php
 /**
  +----------------------------------------------<br/>
- * 所有控制器的父类<br/>
+ * 所有Model应用控制器的父类<br/>
  +----------------------------------------------
  * @category betterlife
- * @package core.model
+ * @package web.model
  * @author skygreen
  */
-class Action extends ActionBasic
+class ActionModel extends ActionBasic
 {
 	/**
 	 * 在Action所有的方法执行之前可以执行的方法
@@ -15,11 +15,6 @@ class Action extends ActionBasic
 	public function beforeAction()
 	{
 		parent::beforeAction();
-		if (contain($this->data["go"],Gc::$appName)){
-			if(($this->data["go"]!=Gc::$appName.".auth.register")&&($this->data["go"]!=Gc::$appName.".auth.login")&&!HttpSession::isHave('user_id')) {
-				$this->redirect("auth","login");
-			}
-		}
 	}
 
 	/**

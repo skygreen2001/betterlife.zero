@@ -3,8 +3,8 @@
  +---------------------------------------<br/>
  * 控制器:Ajax请求服务<br/>
  +---------------------------------------
- * @category bonli
- * @package web.front.action
+ * @category betterlife
+ * @package  web.front
  * @author skygreen skygreen2001@gmail.com
  */
 class Action_Ajax extends Action

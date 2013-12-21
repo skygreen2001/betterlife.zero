@@ -4,10 +4,10 @@
  * 控制器:系统管理人员<br/>
  +---------------------------------------
  * @category betterlife
- * @package web.front.action
+ * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
-class Action_Admin extends Action
+class Action_Admin extends ActionModel
 {
     /**
      * 系统管理人员列表

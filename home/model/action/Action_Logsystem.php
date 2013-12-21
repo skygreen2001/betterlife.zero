@@ -4,10 +4,10 @@
  * 控制器:系统日志<br/>
  +---------------------------------------
  * @category betterlife
- * @package web.front.action
+ * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
-class Action_Logsystem extends Action
+class Action_Logsystem extends ActionModel
 {
     /**
      * 系统日志列表

@@ -4,10 +4,10 @@
  * 控制器:功能信息<br/>
  +---------------------------------------
  * @category betterlife
- * @package web.front.action
+ * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
-class Action_Functions extends Action
+class Action_Functions extends ActionModel
 {
     /**
      * 功能信息列表

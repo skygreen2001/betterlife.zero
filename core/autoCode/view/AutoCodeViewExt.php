@@ -41,9 +41,9 @@ class AutoCodeViewExt extends AutoCode
 	public static function pathset()
 	{
 		self::$app_dir="admin";
-		self::$view_dir_full=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR.Config_F::VIEW_VIEW.DIRECTORY_SEPARATOR.Gc::$self_theme_dir.DIRECTORY_SEPARATOR;
-		self::$menuconfig_dir_full=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR."view".DIRECTORY_SEPARATOR."menu".DIRECTORY_SEPARATOR;
-		self::$ajax_dir_full=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR."httpdata".DIRECTORY_SEPARATOR;
+		self::$view_dir_full=self::$save_dir.self::$app_dir.DIRECTORY_SEPARATOR.Config_F::VIEW_VIEW.DIRECTORY_SEPARATOR.Gc::$self_theme_dir.DIRECTORY_SEPARATOR;
+		self::$menuconfig_dir_full=self::$save_dir.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR."view".DIRECTORY_SEPARATOR."menu".DIRECTORY_SEPARATOR;
+		self::$ajax_dir_full=self::$save_dir.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR."httpdata".DIRECTORY_SEPARATOR;
 		self::$view_core=self::$view_dir_full.Config_F::VIEW_CORE.DIRECTORY_SEPARATOR;
 		self::$view_js_package=self::$view_dir_full."js".DIRECTORY_SEPARATOR."ext".DIRECTORY_SEPARATOR;
 	}
@@ -322,7 +322,7 @@ class AutoCodeViewExt extends AutoCode
 		$openBatchUploadImagesWindow   =$upload_mixed["openBatchUploadImagesWindow"];
 		$batchUploadImagesWinow        =$upload_mixed["batchUploadImagesWinow"];
 		$result="";
-        $realId=DataObjectSpec::getRealIDColumnName($classname);  
+		$realId=DataObjectSpec::getRealIDColumnName($classname);
 		require("jsmodel".DIRECTORY_SEPARATOR."includemodeljs.php");
 		$result.=$jsContent;
 		return $result;
@@ -886,7 +886,7 @@ class AutoCodeViewExt extends AutoCode
 					$field_comment=self::columnCommentKey($field_comment,$fieldname);
 					$fieldLabels.=$blank_pre."                            {fieldLabel : '{$field_comment}(<font color=red>*</font>)',name : '{$fieldname}',inputType:'{$fieldname}',ref:'../{$fieldname}'},\r\n";
 					$fieldLabels.=$blank_pre."                            {xtype: 'hidden',name : '{$fieldname}_old',ref:'../{$fieldname}_old'";
-				
+
 					$password_Add.=$blank_pre."            var {$fieldname}Obj=$appName_alias.$classname.View.Running.edit_window.{$fieldname};\r\n".
 								   $blank_pre."            {$fieldname}Obj.allowBlank=false;\r\n".
 								   $blank_pre."            if ({$fieldname}Obj.getEl()) {$fieldname}Obj.getEl().dom.parentNode.previousSibling.innerHTML =\"{$field_comment}(<font color=red>*</font>)\";\r\n";

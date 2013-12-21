@@ -1,104 +1,103 @@
 <?php
 /**
  +----------------------------------------------<br/>
- * 所有c采用Ext JS Javascript框架的控制器的父类<br/>
- * class_alias("Action","Controller");<br/>
+ * 所有采用Ext JS Javascript框架的控制器的父类<br/>
  +----------------------------------------------
  * @category betterlife
- * @package core.model
+ * @package web.back.admin
  * @author skygreen
  */
-class ActionExt extends ActionBasic 
-{   
+class ActionExt extends ActionBasic
+{
 	/**
-	 * 加载Ext 第三方定义组件定义对象  
+	 * 加载Ext 第三方定义组件定义对象
 	 */
 	public function loadExtComponent($objectFile)
-	{               
-		$this->loadExtJs("components/$objectFile");  
-	}      
-						 
+	{
+		$this->loadExtJs("components/$objectFile");
+	}
+
 	/**
-	 * 加载Ext 显示层定义对象  
+	 * 加载Ext 显示层定义对象
 	 * @param $viewFile 显示的文件路径
 	 * @param bool $isGzip 是否使用Gzip进行压缩。
 	 */
 	public function loadExtJs($viewFile,$isGzip=false)
-	{                
+	{
 		if (UtilAjaxExtjs::$ext_version<4){
-			$module_templateurl_relative="js/ext/"; 
+			$module_templateurl_relative="js/ext/";
 		}else{
-			$module_templateurl_relative="js/ext4/";   
+			$module_templateurl_relative="js/ext4/";
 		}
-		$templateurl=$this->view->template_url; 
+		$templateurl=$this->view->template_url;
 		if ($isGzip&&startWith($viewFile,'shared')){
-			UtilJavascript::loadJsReady($this->view->viewObject, $viewFile,$isGzip,EnumJsFramework::JS_FW_EXTJS,UtilAjaxExtjs::$ext_version);  
+			UtilJavascript::loadJsReady($this->view->viewObject, $viewFile,$isGzip,EnumJsFramework::JS_FW_EXTJS,UtilAjaxExtjs::$ext_version);
 		}else{
-			$path=$templateurl.$module_templateurl_relative;       
-			UtilJavascript::loadJsReady($this->view->viewObject, $path.$viewFile,$isGzip);  
-		}             
-		
-	}     
-	
+			$path=$templateurl.$module_templateurl_relative;
+			UtilJavascript::loadJsReady($this->view->viewObject, $path.$viewFile,$isGzip);
+		}
+
+	}
+
 	/**
-	 * 加载Ext 显示层Css文件      
-	 * @param $viewCss 显示的Css文件路径  
-	 * @param bool $isGzip 是否使用Gzip进行压缩。               
+	 * 加载Ext 显示层Css文件
+	 * @param $viewCss 显示的Css文件路径
+	 * @param bool $isGzip 是否使用Gzip进行压缩。
 	 */
 	public function loadExtCss($viewCss,$isGzip=false)
 	{
-		$templateurl=$this->view->template_url; 
+		$templateurl=$this->view->template_url;
 		$viewObject=$this->view->viewObject;
 		if(empty($viewObject))
 		{
 			$this->view->viewObject=new ViewObject();
-		}              
+		}
 		if ($this->view->viewObject)
-		{   
+		{
 			if ($isGzip&&startWith($viewCss,'shared')){
                 UtilAjax::init();
-				UtilCss::loadCssReady($this->view->viewObject,$viewCss,$isGzip,EnumJsFramework::JS_FW_EXTJS,UtilAjaxExtjs::$ext_version);  
+				UtilCss::loadCssReady($this->view->viewObject,$viewCss,$isGzip,EnumJsFramework::JS_FW_EXTJS,UtilAjaxExtjs::$ext_version);
 			}else{
-                if(startWith($viewCss,'shared')){ 
+                if(startWith($viewCss,'shared')){
 				    UtilCss::loadCssReady($this->view->viewObject,$viewCss,$isGzip);
                 }else{
                     UtilCss::loadCssReady($this->view->viewObject,$templateurl."resources/css/".$viewCss,$isGzip);
-                } 
+                }
 			}
 		}else{
-			UtilCss::loadCss($templateurl."resources/css/".$viewCss,true); 
-		}                
+			UtilCss::loadCss($templateurl."resources/css/".$viewCss,true);
+		}
 	}
-	
+
 	/**
 	 * 加载 组件的Css
-	 * @param $viewCss 显示的Css文件路径  
+	 * @param $viewCss 显示的Css文件路径
 	 * @param bool $isGzip 是否使用Gzip进行压缩。
 	 */
 	public function loadExtComponentCss($viewCss,$isGzip=true)
 	{
-		 $this->loadExtCss("shared/css/".$viewCss, $isGzip);         
+		 $this->loadExtCss("shared/css/".$viewCss, $isGzip);
 	}
-	
+
 	/**
 	 * 使用Ext Direct Remote 模式
 	 */
 	public function ExtDirectMode()
-	{              
-		UtilJavascript::loadJsReady($this->view->viewObject, "home/admin/src/services/ajax/extjs/direct/api.php");                         
-	} 
-	
+	{
+		UtilJavascript::loadJsReady($this->view->viewObject, "home/admin/src/services/ajax/extjs/direct/api.php");
+	}
+
 	/**
 	 *  使用Ext 上传功能
 	 */
 	public function ExtUpload()
 	{
-		 $this->loadExtComponentCss("fileuploadfield.css",true); 
-		 $this->loadExtComponent("FileUploadField.js"); 
+		 $this->loadExtComponentCss("fileuploadfield.css",true);
+		 $this->loadExtComponent("FileUploadField.js");
 	}
-	
+
 	/**
-	 * 加载在线编辑器 
+	 * 加载在线编辑器
 	 * @param array|string $textarea_ids Input为Textarea的名称name[一个页面可以有多个Textarea]
 	 */
 	public function load_onlineditor($textarea_ids="content")
@@ -116,48 +115,48 @@ class ActionExt extends ActionBasic
 				$this->view->online_editor="CKEditor";
 			 break;
 		   case EnumOnlineEditorType::KINDEDITOR:
-				$viewObject=$this->view->viewObject; 
+				$viewObject=$this->view->viewObject;
 				if(empty($viewObject))
 				{
 					$this->view->viewObject=new ViewObject();
 				}
 				if (UtilAjax::$IsDebug){
-					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/kindeditor.js"); 
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/kindeditor.js");
 				}else{
-					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/kindeditor-min.js"); 
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/kindeditor-min.js");
 				}
-				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/lang/zh_CN.js"); 
+				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/lang/zh_CN.js");
 				$this->view->online_editor="KindEditor";
-			 break;  
-		   case EnumOnlineEditorType::XHEDITOR:   
-				$viewObject=$this->view->viewObject; 
+			 break;
+		   case EnumOnlineEditorType::XHEDITOR:
+				$viewObject=$this->view->viewObject;
 				if(empty($viewObject))
 				{
 					$this->view->viewObject=new ViewObject();
-				}               
+				}
 				UtilAjaxJquery::load("1.7.1",$this->view->viewObject);
 				UtilXheditor::loadcss($this->view->viewObject);
 				if (UtilAjax::$IsDebug){
-					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/xheditor/xheditor-1.1.13-zh-cn.js"); 
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/xheditor/xheditor-1.1.13-zh-cn.js");
 				}else{
-					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/xheditor/xheditor-1.1.13-zh-cn.min.js");  
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/xheditor/xheditor-1.1.13-zh-cn.min.js");
 				}
 				UtilXheditor::loadJsPlugin($this->view->viewObject);
 				if (is_array($textarea_ids)&&(count($textarea_ids)>0)){
-					for($i=0;$i<count($textarea_ids);$i++){                
-						UtilXheditor::loadJsFunction($textarea_ids[$i],$this->view->viewObject,null,"width:'98%',height:350,"); 
+					for($i=0;$i<count($textarea_ids);$i++){
+						UtilXheditor::loadJsFunction($textarea_ids[$i],$this->view->viewObject,null,"width:'98%',height:350,");
 					}
 				}else{
-					UtilXheditor::loadJsFunction($textarea_ids,$this->view->viewObject,null,"width:'98%',height:350,"); 
+					UtilXheditor::loadJsFunction($textarea_ids,$this->view->viewObject,null,"width:'98%',height:350,");
 				}
-				$this->view->online_editor="xhEditor";  
-			 break; 
-		} 
+				$this->view->online_editor="xhEditor";
+			 break;
+		}
 	}
-	
+
 	/**
 	 * Ext请求返回 Response
-	 * @param mixed $response  
+	 * @param mixed $response
 	 * @param mixed $isFormAndIsUpload
 	 */
 	public static function ExtResponse($response,$isFormAndIsUpload=false)
@@ -169,8 +168,8 @@ class ActionExt extends ActionBasic
 		} else {
 			echo json_encode($response);
 		}
-	}    
-	
+	}
+
 	/**
 	 * 在Action所有的方法执行之前可以执行的方法
 	 */
@@ -189,14 +188,14 @@ class ActionExt extends ActionBasic
 			}
 		}
 	}
-	
+
 	/**
-	 * 在Action所有的方法执行之后可以执行的方法 
+	 * 在Action所有的方法执行之后可以执行的方法
 	 */
 	public function afterAction()
 	{
-	}   
-	 
+	}
+
 	/**
 	 * 初始化，加载Css和Javascript库。
 	 */
