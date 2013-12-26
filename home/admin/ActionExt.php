@@ -180,7 +180,8 @@ class ActionExt extends ActionBasic
 				if ($this->data["go"]=="admin.index.index"){
                     $this->redirect("index","login");
                 }else{
-                    UtilJavascript::loadJsContent("window.parent.location='".Gc::$url_base."index.php?go=admin.index.login"."&".$querystring."'");
+                    if (!empty($querystring)) $querystring= "&".$querystring;
+                    UtilJavascript::loadJsContent("window.parent.location='".Gc::$url_base."index.php?go=admin.index.login".$querystring."'");
                 }
 			}
 			if (HttpCookie::get("OnlineEditor")){
