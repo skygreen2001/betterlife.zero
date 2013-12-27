@@ -3,7 +3,7 @@
 $key_many=$key;
 $key_many{0}=strtoupper($key_many{0});
 $jsMany2ManyContent="";
-$jsMany2ManyMenu="";    
+$jsMany2ManyMenu="";
 $jsMany2ManyShowHide="";
 $jsMany2ManyRunningWindow="";
 if (self::isMany2ManyByClassname($key_many))
@@ -33,40 +33,40 @@ if (self::isMany2ManyByClassname($key_many))
     }
     $tablename_owner=self::getTablename($classname);
     $comment_owner=self::tableCommentKey($tablename_owner);
-    $owner_instance_name=self::getInstancename($tablename_owner); 
+    $owner_instance_name=self::getInstancename($tablename_owner);
     $tablename_belong=self::getTablename($belong_class);
-    $belong_instance_name=self::getInstancename($tablename_belong); 
+    $belong_instance_name=self::getInstancename($tablename_belong);
     $comment_belong=self::tableCommentKey($tablename_belong);
     $belong_fieldInfo=self::$fieldInfos[$tablename_belong];
     self::$relationStore=$relationStore;
-    $fields_many=self::model_fields($belong_class,$belong_instance_name,$belong_fieldInfo,false);
+    $fields_many=self::model_fields($tablename,$belong_class,$belong_instance_name,$belong_fieldInfo,false);
     $fields_many_fields=$fields_many['fields'];
     /**
-     * 多对多选择Store 
+     * 多对多选择Store
      * @var mixed
      */
     $jsMany2ManyStore=<<<MANY2MANYSTORE
 ,
     /**
      * {$comment_belong}
-     */ 
+     */
     select{$belong_class}Store:new Ext.data.Store({
         reader: new Ext.data.JsonReader({
             totalProperty: 'totalCount',
-            successProperty: 'success',  
-            root: 'data',remoteSort: true,                
+            successProperty: 'success',
+            root: 'data',remoteSort: true,
             fields : [
 $fields_many_fields,
                 {name: 'isShow{$belong_class}Check',type: 'string'}
-            ]}         
+            ]}
         ),
         writer: new Ext.data.JsonWriter({
-            encode: false 
+            encode: false
         }),
-        listeners : {    
-            beforeload : function(store, options) {   
-                if (Ext.isReady) {  
-                    Ext.apply(options.params, $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.filter);//保证分页也将查询条件带上  
+        listeners : {
+            beforeload : function(store, options) {
+                if (Ext.isReady) {
+                    Ext.apply(options.params, $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.filter);//保证分页也将查询条件带上
                 }
             },
             load : function(records,options){
@@ -86,25 +86,25 @@ $fields_many_fields,
                     $appName_alias.$classname.View.Running.select{$belong_class}Window.updateData=updateData;
                 }
             }
-        }    
+        }
     })
 MANY2MANYSTORE;
-    $relationStore.=$jsMany2ManyStore.$fields_many['relationStore_onlyForFieldLabels']; 
-    $m2m_columns=self::model_columns($belong_class,$belong_fieldInfo,"    ");   
-    $m2m_filters=self::model_filters($appName_alias,$belong_class,$belong_instance_name,$belong_fieldInfo,"    ");        
+    $relationStore.=$jsMany2ManyStore.$fields_many['relationStore_onlyForFieldLabels'];
+    $m2m_columns=self::model_columns($belong_class,$belong_fieldInfo,"    ");
+    $m2m_filters=self::model_filters($appName_alias,$belong_class,$belong_instance_name,$belong_fieldInfo,"    ");
     //Ext "Grid" 中"tbar"包含的items中的items
     $m2m_filterFields   =$m2m_filters["filterFields"];
-    $m2m_filterFields   =str_replace("{$appName_alias}.$belong_class.", "{$appName_alias}.$classname.", $m2m_filterFields);    
+    $m2m_filterFields   =str_replace("{$appName_alias}.$belong_class.", "{$appName_alias}.$classname.", $m2m_filterFields);
     //重置语句
     $m2m_filterReset    =$m2m_filters["filterReset"];
     //查询中的语句
-    $m2m_filterdoSelect =$m2m_filters["filterdoSelect"]; 
+    $m2m_filterdoSelect =$m2m_filters["filterdoSelect"];
     if (!endWith($m2m_filterdoSelect,"{")){
-        $m2m_filterdoSelect=substr($m2m_filterdoSelect,0,strlen($m2m_filterdoSelect)-2).",";   
+        $m2m_filterdoSelect=substr($m2m_filterdoSelect,0,strlen($m2m_filterdoSelect)-2).",";
     }
 
     /**
-     * 多对多选择Window,Grid 
+     * 多对多选择Window,Grid
      * @var mixed
      */
     $jsMany2ManyContent=<<<MANY2MANY
@@ -112,7 +112,7 @@ MANY2MANYSTORE;
     /**
      * 视图：{$comment_belong}
      */
-    {$belong_class}View:{    
+    {$belong_class}View:{
         Select{$belong_class}Window:Ext.extend(Ext.Window,{
             constructor : function(config) {
                 config = Ext.apply({
@@ -203,7 +203,7 @@ $m2m_columns
                                                         }
                                                         $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.doSelect{$belong_class}();
                                                     }
-                                                }, 
+                                                },
                                                 {text: '未选择',checked: false,group: 'isSelect',ref:'../../unselect',
                                                       checkHandler: function(item, checked){
                                                           if (checked){
@@ -222,16 +222,16 @@ $m2m_columns
                                                           $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.doSelect{$belong_class}();
                                                     }
                                                 }
-                                             ]   
+                                             ]
                                         }
                                     },
 $m2m_filterFields
                                     {
-                                        xtype : 'button',text : '查询',scope: this, 
+                                        xtype : 'button',text : '查询',scope: this,
                                         handler : function() {
                                             this.doSelect{$belong_class}();
                                         }
-                                    }, 
+                                    },
                                     {
                                         xtype : 'button',text : '重置',scope: this,
                                         handler : function() {
@@ -316,7 +316,7 @@ $m2m_filterReset
 MANY2MANY;
 
     /**
-     * 多对多选择菜单 
+     * 多对多选择菜单
      * @var mixed
      */
     $jsMany2ManyMenu=<<<MANY2MANYMENU
@@ -334,7 +334,7 @@ MANY2MANY;
 MANY2MANYMENU;
 
     /**
-     * 多对多选择菜单显示隐藏 
+     * 多对多选择菜单显示隐藏
      * @var mixed
      */
     $jsMany2ManyMenuShowHide=<<<MANY2MANYMENUShowHide
@@ -342,14 +342,14 @@ MANY2MANYMENU;
                     this.grid.t{$belong_instance_name}.setDisabled(sm.getCount() != 1);
 MANY2MANYMENUShowHide;
 
-    $filterwordNames    =$m2m_filters["filterwordNames"]; 
+    $filterwordNames    =$m2m_filters["filterwordNames"];
     $m2m_filterSelectionDoSelect="";
     foreach ($filterwordNames as $filterwordName) {
         $m2m_filterSelectionDoSelect.="                $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.topToolbar.$filterwordName.setValue(\"\");\r\n";
     }
 
     /**
-     * 多对多显示隐藏窗口 
+     * 多对多显示隐藏窗口
      * @var mixed
      */
     $jsMany2ManyShowHide=<<<MANY2MANYSHOWHIDE
@@ -361,12 +361,12 @@ MANY2MANYMENUShowHide;
             if ($appName_alias.$classname.View.Running.select{$belong_class}Window==null){
                 $appName_alias.$classname.View.Running.select{$belong_class}Window=new $appName_alias.$classname.View.{$belong_class}View.Select{$belong_class}Window();
             }
-            var {$owner_idcolumn}=$appName_alias.$classname.View.Running.{$owner_instance_name}Grid.getSelectionModel().getSelected().data.{$owner_idcolumn};             
+            var {$owner_idcolumn}=$appName_alias.$classname.View.Running.{$owner_instance_name}Grid.getSelectionModel().getSelected().data.{$owner_idcolumn};
             $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.{$owner_idcolumn}={$owner_idcolumn};
-            if ($appName_alias.$classname.View.Running.select{$belong_class}Window.hidden){   
+            if ($appName_alias.$classname.View.Running.select{$belong_class}Window.hidden){
 $m2m_filterSelectionDoSelect                $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.filter={};
-                $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.topToolbar.menus.all.setChecked(true);  
-                $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.isSelect.toggle(false); 
+                $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.topToolbar.menus.all.setChecked(true);
+                $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.isSelect.toggle(false);
             }
             $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.doSelect{$belong_class}();
             $appName_alias.$classname.View.Running.select{$belong_class}Window.show();
@@ -384,14 +384,14 @@ $m2m_filterSelectionDoSelect                $appName_alias.$classname.View.Runni
 MANY2MANYSHOWHIDE;
 
     /**
-     * 多对多创建运行窗口 
+     * 多对多创建运行窗口
      * @var mixed
      */
     $jsMany2ManyRunningWindow=<<<M2MRW
         /**
          * 推荐{$comment_belong}
          */
-        select{$belong_class}Window:null, 
+        select{$belong_class}Window:null,
 M2MRW;
 
     /**
@@ -406,7 +406,7 @@ M2MROWSELECT;
      * 行选择控制显示
      */
     $jsMany2ManyRowSelectElse=<<<M2MROWSELECTELSE
-    
+
                             if($appName_alias.$classname.View.Running.select{$belong_class}Window && !$appName_alias.$classname.View.Running.select{$belong_class}Window.hidden){
                                 this.grid.show{$belong_class}();
                             }

@@ -5,7 +5,7 @@
     <table class="viewdoblock">
         <tr class="entry">
             <th class="header">编号</th>
-            <th class="header">分类</th>
+            <th class="header">通知分类</th>
             <th class="header">标题</th>
             <th class="header">通知内容</th>
             <th class="header">操作</th>

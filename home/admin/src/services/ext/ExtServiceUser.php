@@ -23,7 +23,7 @@ class ExtServiceUser extends ServiceBasic
 			$userObj=new User($user);
 		}
 		if ($userObj instanceof User){
-            $userObj->password=md5($userObj->password); 
+			$userObj->password=md5($userObj->password);
 			$data=$userObj->save();
 		}else{
 			$data=false;
@@ -31,7 +31,7 @@ class ExtServiceUser extends ServiceBasic
 		return array(
 			'success' => true,
 			'data'    => $data
-		); 
+		);
 	}
 
 	/**
@@ -40,17 +40,17 @@ class ExtServiceUser extends ServiceBasic
 	 * @return boolen 是否更新成功；true为操作正常
 	 */
 	public function update($user)
-	{                                                                            
+	{
 		if (is_array($user)){
 			$userObj=new User($user);
 		}
 		if ($userObj instanceof User){
-            if(!empty($userObj->password))
-            {
-                $userObj->password=md5($userObj->password);     
-            }else{
-                $userObj->password=$user["password_old"];
-            }
+			if(!empty($userObj->password))
+			{
+				$userObj->password=md5($userObj->password);
+			}else{
+				$userObj->password=$user["password_old"];
+			}
 			$data=$userObj->update();
 		}else{
 			$data=false;
@@ -58,7 +58,7 @@ class ExtServiceUser extends ServiceBasic
 		return array(
 			'success' => true,
 			'data'    => $data
-		); 
+		);
 	}
 
 	/**
@@ -66,7 +66,7 @@ class ExtServiceUser extends ServiceBasic
 	 * @param array|string $ids 数据对象编号
 	 * 形式如下:
 	 * 1.array:array(1,2,3,4,5)
-	 * 2.字符串:1,2,3,4 
+	 * 2.字符串:1,2,3,4
 	 * @return boolen 是否删除成功；true为操作正常
 	 */
 	public function deleteByIds($ids)
@@ -75,7 +75,7 @@ class ExtServiceUser extends ServiceBasic
 		return array(
 			'success' => true,
 			'data'    => $data
-		); 
+		);
 	}
 
 	/**
@@ -94,8 +94,8 @@ class ExtServiceUser extends ServiceBasic
 			$start=$condition['start']+1;
 		  }
 		if (isset($condition['limit'])){
-			$limit=$condition['limit']; 
-			$limit=$start+$limit-1; 
+			$limit=$condition['limit'];
+			$limit=$start+$limit-1;
 		}
 		unset($condition['start'],$condition['limit']);
 		$condition=$this->filtertoCondition($condition);
@@ -103,12 +103,6 @@ class ExtServiceUser extends ServiceBasic
 		if ($count>0){
 			if ($limit>$count)$limit=$count;
 			$data =User::queryPage($start,$limit,$condition);
-			foreach ($data as $user) {
-				if ($user->department_id){
-					$department_instance=Department::get_by_id($user->department_id);
-					$user['department_name']=$department_instance->department_name;
-				}
-			}
 			if ($data==null)$data=array();
 		}else{
 			$data=array();
@@ -117,11 +111,11 @@ class ExtServiceUser extends ServiceBasic
 			'success' => true,
 			'totalCount'=>$count,
 			'data'    => $data
-		); 
+		);
 	}
-	
+
 	/**
-	 * 根据管理员标识显示管理员信息 
+	 * 根据管理员标识显示管理员信息
 	 * @param mixed $viewId
 	 */
 	public function viewUser($viewId)
@@ -133,7 +127,7 @@ class ExtServiceUser extends ServiceBasic
 				if ($user->department_id){
 					$department_instance=Department::get_by_id($user->department_id);
 					$user['department_name']=$department_instance->department_name;
-				}                
+				}
 			}
 			return array(
 				'success' => true,
@@ -197,22 +191,16 @@ class ExtServiceUser extends ServiceBasic
 	{
 		if ($filter)$filter=$this->filtertoCondition($filter);
 		$data=User::get($filter);
-		$arr_output_header= self::fieldsMean(User::tablename());  
-        foreach ($data as $user) {
-            if ($user->department_id){
-                $department_instance=Department::get_by_id($user->department_id);
-                $user['department_id']=$department_instance->department_name;
-            }
-        }                                              
-        unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
+		$arr_output_header= self::fieldsMean(User::tablename());
+		unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
 		$diffpart=date("YmdHis");
-		$outputFileName=Gc::$attachment_path."user".DIRECTORY_SEPARATOR."export".DIRECTORY_SEPARATOR."user$diffpart.xls"; 
-		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false); 
-		$downloadPath  =Gc::$attachment_url."user/export/user$diffpart.xls"; 
+		$outputFileName=Gc::$attachment_path."user".DIRECTORY_SEPARATOR."export".DIRECTORY_SEPARATOR."user$diffpart.xls";
+		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false);
+		$downloadPath  =Gc::$attachment_url."user/export/user$diffpart.xls";
 		return array(
 			'success' => true,
 			'data'    => $downloadPath
-		); 
+		);
 	}
 }
 ?>

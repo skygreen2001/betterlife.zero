@@ -364,9 +364,9 @@ class AutoCode extends Object
 		$column_name=strtoupper($column_name);
 		if (contain($column_name,"ID")){
 			return false;
-		}		
-		if (((self::column_length($column_type)>=500)&&(!contain($column_name,"IMAGES"))&&(!contain($column_name,"LINK"))&&(!contain($column_name,"ICO")))
-			 ||(contains($column_name,array("INTRO","MEMO","CONTENT")))||(self::column_type($column_type)=='text')||(self::column_type($column_type)=='longtext')){  //&&(!contain($column_name,"addr"))
+		}
+		if (((self::column_length($column_type)>=500)&&(!contains($column_name,array("PROFILE","IMAGES","LINK","ICO","PASSWORD","EMAIL","PHONE"))))
+			 ||(contains($column_name,array("INTRO","MEMO","CONTENT")))||(self::column_type($column_type)=='text')||(self::column_type($column_type)=='longtext')){
 			return true;
 		}else{
 			return false;
@@ -384,7 +384,7 @@ class AutoCode extends Object
 		if (contain($column_name,"ID")){
 			return false;
 		}
-		if (contains($column_name,array("IMAGE","IMG","ICO","LOGO","PIC"))){
+		if (contains($column_name,array("PROFILE","IMAGE","IMG","ICO","LOGO","PIC"))){
 			return true;
 		}
 		return false;
@@ -427,7 +427,7 @@ class AutoCode extends Object
 	 * @param string $fieldname 列名称
 	 */
 	protected static function isNotColumnKeywork($fieldname)
-	{	
+	{
 		$fieldname=strtoupper($fieldname);
 		if ($fieldname=="ID"||$fieldname=="COMMITTIME"||$fieldname=="UPDATETIME"){
 			return false;

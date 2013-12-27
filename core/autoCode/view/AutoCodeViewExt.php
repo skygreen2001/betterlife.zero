@@ -33,7 +33,9 @@ class AutoCodeViewExt extends AutoCode
 	 * 查询过滤条件字段
 	 */
 	public static $filter_fieldnames=array();
-
+	/**
+	 * Ext "$relationStore="中关系库Store的定义
+	 */
 	public static $relationStore="";
 	/**
 	 * 设置必需的路径
@@ -254,6 +256,7 @@ class AutoCodeViewExt extends AutoCode
 	/**
 	 * 将表列定义转换成使用ExtJs生成的表示层Js文件定义的内容
 	 * @param string $tablename 表名
+	 * @param string $appName_alias 应用别名
 	 * @param array $fieldInfo 表列信息列表
 	 */
 	public static function tableToViewJsDefine($tablename,$fieldInfo)
@@ -266,7 +269,7 @@ class AutoCodeViewExt extends AutoCode
 		$instancename=self::getInstancename($tablename);
 		$appName=ucfirst($appName);
 		//Ext "store" 中包含的fields
-		$storeInfo=self::model_fields($classname,$instancename,$fieldInfo);
+		$storeInfo=self::model_fields($tablename,$classname,$instancename,$fieldInfo);
 		$fields=$storeInfo['fields'];
 		//Ext "$relationStore="中关系库Store的定义
 		$relationStore=$storeInfo['relationStore'];
@@ -303,9 +306,9 @@ class AutoCodeViewExt extends AutoCode
 		$textareaOnlineditor_Init_func=$textarea_Vars["textareaOnlineditor_Init_func"];
 
 		//Ext "Tabs" 中"onAddItems"包含的viewdoblock
-		$viewdoblock=self::model_viewblock($classname,$fieldInfo);
+		$viewdoblock=self::model_viewblock($tablename,$classname,$fieldInfo);
 		//Ext "Grid" 中包含的columns
-		$columns=self::model_columns($classname,$fieldInfo);
+		$columns=self::model_columns($tablename,$classname,$fieldInfo);
 
 		$filters=self::model_filters($appName_alias,$classname,$instancename,$fieldInfo);
 		//Ext "Grid" 中"tbar"包含的items中的items
@@ -330,12 +333,13 @@ class AutoCodeViewExt extends AutoCode
 
 	/**
 	 * 获取Ext "Store"里的fields
+	 * @param string $tablename 表名
 	 * @param string $classname 数据对象类名
 	 * @param string $instancename 实体变量
 	 * @param array $fieldInfo 表列信息列表
 	 * @param array $isHaveRelation 是否需要关系显示
 	 */
-	private static function model_fields($classname,$instancename,$fieldInfo,$isHaveRelation=true)
+	private static function model_fields($tablename,$classname,$instancename,$fieldInfo,$isHaveRelation=true)
 	{
 		$fields="";//Ext "store" 中包含的fields
 		$relationStore="";//Ext "$relationStore="中关系库Store的定义
@@ -441,7 +445,7 @@ class AutoCodeViewExt extends AutoCode
 		$result['fields']=$fields;
 		$result['relationStore_onlyForFieldLabels']=$relationStore;
 		if ($isHaveRelation){
-			$relationViewDefine=self::relationViewDefine($classname,$instancename,$relationStore);
+			$relationViewDefine=self::relationViewDefine($tablename,$classname,$instancename,$relationStore);
 		}
 		$relationStore=$relationViewDefine['relationStore'];
 		$relationClassesView=$relationViewDefine['one2many'];
@@ -472,9 +476,12 @@ class AutoCodeViewExt extends AutoCode
 
 	/**
 	 * 关系显示定义
+	 * @param string $tablename 表名
 	 * @param string $classname 数据对象类名
+	 * @param string $instancename 实体变量
+	 * @param string $relationStore Ext "$relationStore="中关系库Store的定义
 	 */
-	private static function relationViewDefine($classname,$instancename,$relationStore)
+	private static function relationViewDefine($tablename,$classname,$instancename,$relationStore)
 	{
 		$relationSpec=self::$relation_all[$classname];
 		$relationClassesView="";
@@ -684,6 +691,8 @@ class AutoCodeViewExt extends AutoCode
 
 	/**
 	 * 获取Ext "EditWindow"里items的fieldLabels
+	 * @param string $tablename 表名
+	 * @param string $appName_alias 应用别名
 	 * @param string $classname 数据对象类名
 	 * @param array $fieldInfo 表列信息列表
 	 * @param array $relationIgnoreID 在一对多关系Grid里的EditWindow中需忽视自己的标识
@@ -976,6 +985,7 @@ class AutoCodeViewExt extends AutoCode
 
 	/**
 	 * 获取Ext "Textarea" 转换成在线编辑器
+	 * @param string $appName_alias 应用别名
 	 * @param string $classname 数据对象类名
 	 * @param array $fieldInfo 表列信息列表
 	 * @param string $blank_pre 空格字符串
@@ -1156,7 +1166,7 @@ class AutoCodeViewExt extends AutoCode
 	 * @param string $classname 数据对象类名
 	 * @param array $fieldInfo 表列信息列表
 	 */
-	private static function model_viewblock($classname,$fieldInfo)
+	private static function model_viewblock($tablename,$classname,$fieldInfo)
 	{
 		$viewdoblock="";//Ext "Tabs" 中"onAddItems"包含的viewdoblock
 		$isTreelevelViewInfoHad=false;
@@ -1216,6 +1226,7 @@ class AutoCodeViewExt extends AutoCode
 				}
 				$isImage =self::columnIsImage($fieldname,$field["Comment"]);
 				$column_type=self::column_type($field["Type"]);
+				$isPassword=self::columnIsPassword($tablename,$fieldname);
 				if ($isImage){
 					if (contain($field_comment,"路径"))$field_comment=str_replace("路径", "", $field_comment);
 					$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">{$field_comment}路径</td><td class=\"content\">{{$fieldname}}</td></tr>',\r\n";
@@ -1224,6 +1235,8 @@ class AutoCodeViewExt extends AutoCode
 					$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\"><tpl if=\"{$fieldname} == true\">是</tpl><tpl if=\"{$fieldname} == false\">否</tpl></td></tr>',\r\n";
 				}else if ($datatype=='enum'){
 					$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$fieldname}Show}</td></tr>',\r\n";
+				}else if ($isPassword){
+					$viewdoblock.="";
 				}else{
 					$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$fieldname}{$dateformat}}</td></tr>',\r\n";
 				}
@@ -1235,11 +1248,12 @@ class AutoCodeViewExt extends AutoCode
 
 	/**
 	 * 获取Ext "Grid" 中包含的columns
+	 * @param string $tablename 表名称
 	 * @param string $classname 数据对象类名
 	 * @param array $fieldInfo 表列信息列表
 	 * @param string $blank_pre 空格字符串
 	 */
-	private static function model_columns($classname,$fieldInfo,$blank_pre="")
+	private static function model_columns($tablename,$classname,$fieldInfo,$blank_pre="")
 	{
 		$columns="";//Ext "Grid" 中包含的columns
 		foreach ($fieldInfo as $fieldname=>$field)
@@ -1289,8 +1303,11 @@ class AutoCodeViewExt extends AutoCode
 					$columns.=$blank_pre."                        {header : '标识',dataIndex : '{$fieldname}',hidden:true},\r\n";
 					continue;
 				}
-				if (self::columnIsImage($fieldname,$field["Comment"])) continue;
+				if (self::columnIsImage($fieldname,$field["Comment"]))continue;
 				if (self::columnIsTextArea($fieldname,$field["Type"]))continue;
+
+				$isPassword=self::columnIsPassword($tablename,$fieldname);
+				if ($isPassword)continue;
 				$field_comment=$field["Comment"];
 				$field_comment=self::columnCommentKey($field_comment,$fieldname);
 				$datatype=self::comment_type($field["Type"]);
@@ -1319,6 +1336,7 @@ class AutoCodeViewExt extends AutoCode
 	 * 获取Ext "Grid" 中"tbar"包含的items中的items<br/>
 	 * 获取重置语句<br/>
 	 * 获取查询中的语句<br/>
+	 * @param string $appName_alias 应用别名
 	 * @param string $classname 数据对象类名
 	 * @param string $instance_name 实体变量
 	 * @param array $fieldInfo 表列信息列表
@@ -1453,6 +1471,7 @@ class AutoCodeViewExt extends AutoCode
 
 	/**
 	 * 批量上传图片
+	 * @param string $appName_alias 应用别名
 	 * @param string $classname 数据对象类名
 	 * @param string $instance_name 实体变量
 	 * @param array $fieldInfo 表列信息列表

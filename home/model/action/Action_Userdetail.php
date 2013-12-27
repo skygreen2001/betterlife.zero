@@ -53,7 +53,7 @@ class Action_Userdetail extends ActionModel
             $userdetail = Userdetail::get_by_id($userdetailId);
             $this->view->set("userdetail",$userdetail); 
             //加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。
-            $this->load_onlineditor(array('email','cellphone'));
+            $this->load_onlineditor('address');
         }
     }
     /**

@@ -11,17 +11,11 @@ class User extends DataObject
 {
 	//<editor-fold defaultstate="collapsed" desc="定义部分">
 	/**
-	 * 标识
+	 * 用户标识
 	 * @var int
 	 * @access public
 	 */
 	public $user_id;
-	/**
-	 * 部门标识
-	 * @var int
-	 * @access public
-	 */
-	public $department_id;
 	/**
 	 * 用户名
 	 * @var string
@@ -40,28 +34,46 @@ class User extends DataObject
 	 * @access public
 	 */
 	public $email;
-	//</editor-fold>
-	
 	/**
-	 * 调用启动方法-》$this->userDetail();
-	 * @var array
+	 * 手机电话
+	 * @var string
+	 * @access public
 	 */
-	static $has_one=array(    
-		"userDetail"=> "Userdetail"            
+	public $cellphone;
+	/**
+	 * 访问次数
+	 * @var int
+	 * @access public
+	 */
+	public $loginTimes;
+	//</editor-fold>
+
+	/**
+	 * 一对一关系
+	 */
+	static $has_one=array(
+		"userDetail"=>"Userdetail"
 	);
 
-	static $belong_has_one=array(    
-		"department"=> "Department"            
+	/**
+	 * 一对多关系
+	 */
+	static $has_many=array(
+		"blogs"=>"Blog",
+		"comment"=>"Comment"
 	);
 
-	
+	/**
+	 * 多对多关系
+	 */
 	static $many_many=array(
-	   "roles"=>"Role"
+		"roles"=>"Role"
 	);
-	
+
 	public function getUsernameShow() {
-		$username=UtilString::gbk2utf8($this->username);    
+		$username=UtilString::gbk2utf8($this->username);
 		return $username;
 	}
 }
+
 ?>

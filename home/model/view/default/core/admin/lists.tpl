@@ -4,7 +4,8 @@
     <div><h1>系统管理人员列表(共计{$countAdmins}个)</h1></div>
     <table class="viewdoblock">
         <tr class="entry">
-            <th class="header">标识</th>
+            <th class="header">管理员标识</th>
+            <th class="header">部门标识</th>
             <th class="header">用户名</th>
             <th class="header">真实姓名</th>
             <th class="header">密码</th>
@@ -16,6 +17,7 @@
         {foreach item=admin from=$admins}
         <tr class="entry">
             <td class="content">{$admin.admin_id}</td>
+            <td class="content">{$admin.department_id}</td>
             <td class="content">{$admin.username}</td>
             <td class="content">{$admin.realname}</td>
             <td class="content">{$admin.password}</td>

@@ -30,7 +30,7 @@ class ExtServiceBlog extends ServiceBasic
 		return array(
 			'success' => true,
 			'data'    => $data
-		); 
+		);
 	}
 
 	/**
@@ -51,7 +51,7 @@ class ExtServiceBlog extends ServiceBasic
 		return array(
 			'success' => true,
 			'data'    => $data
-		); 
+		);
 	}
 
 	/**
@@ -59,7 +59,7 @@ class ExtServiceBlog extends ServiceBasic
 	 * @param array|string $ids 数据对象编号
 	 * 形式如下:
 	 * 1.array:array(1,2,3,4,5)
-	 * 2.字符串:1,2,3,4 
+	 * 2.字符串:1,2,3,4
 	 * @return boolen 是否删除成功；true为操作正常
 	 */
 	public function deleteByIds($ids)
@@ -68,7 +68,7 @@ class ExtServiceBlog extends ServiceBasic
 		return array(
 			'success' => true,
 			'data'    => $data
-		); 
+		);
 	}
 
 	/**
@@ -87,8 +87,8 @@ class ExtServiceBlog extends ServiceBasic
 			$start=$condition['start']+1;
 		  }
 		if (isset($condition['limit'])){
-			$limit=$condition['limit']; 
-			$limit=$start+$limit-1; 
+			$limit=$condition['limit'];
+			$limit=$start+$limit-1;
 		}
 		unset($condition['start'],$condition['limit']);
 		$condition=$this->filtertoCondition($condition);
@@ -96,13 +96,15 @@ class ExtServiceBlog extends ServiceBasic
 		if ($count>0){
 			if ($limit>$count)$limit=$count;
 			$data =Blog::queryPage($start,$limit,$condition);
-			foreach ($data as $blog) {                           
-				$user=User::get_by_id($blog->user_id);
-				$blog['username']=$user->username;                
+			foreach ($data as $blog) {
+				if ($blog->user_id){
+					$user_instance=User::get_by_id($blog->user_id);
+					$blog['username']=$user_instance->username;
+				}
 				if ($blog["commitTime"]){
 					UtilDateTime::ChinaTime();
 					$blog["commitTime"]=UtilDateTime::timestampToDateTime($blog["commitTime"]);
-				}       
+				}
 			}
 			if ($data==null)$data=array();
 		}else{
@@ -112,7 +114,7 @@ class ExtServiceBlog extends ServiceBasic
 			'success' => true,
 			'totalCount'=>$count,
 			'data'    => $data
-		); 
+		);
 	}
 
 	/**
@@ -132,6 +134,10 @@ class ExtServiceBlog extends ServiceBasic
 					$data              = UtilExcel::exceltoArray($uploadPath,$arr_import_header);
 					$result=false;
 					foreach ($data as $blog) {
+						if (!is_numeric($blog["user_id"])){
+							$user=User::get_one("username='".$blog["user_id"]."'");
+							if ($user) $blog["user_id"]=$user->user_id;
+						}
 						$blog=new Blog($blog);
 						$blog_id=$blog->getId();
 						if (!empty($blog_id)){
@@ -166,22 +172,22 @@ class ExtServiceBlog extends ServiceBasic
 	{
 		if ($filter)$filter=$this->filtertoCondition($filter);
 		$data=Blog::get($filter);
-		$arr_output_header= self::fieldsMean(Blog::tablename());   
-        foreach ($data as $blog) {
-            if ($blog->user_id){
-                $user_instance=User::get_by_id($blog->user_id);
-                $blog['user_id']=$user_instance->username;
-            }
-        }
-        unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
+		$arr_output_header= self::fieldsMean(Blog::tablename());
+		foreach ($data as $blog) {
+			if ($blog->user_id){
+				$user_instance=User::get_by_id($blog->user_id);
+				$blog['user_id']=$user_instance->username;
+			}
+		}
+		unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
 		$diffpart=date("YmdHis");
-		$outputFileName=Gc::$attachment_path."blog".DIRECTORY_SEPARATOR."export".DIRECTORY_SEPARATOR."blog$diffpart.xls"; 
-		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false); 
-		$downloadPath  =Gc::$attachment_url."blog/export/blog$diffpart.xls"; 
+		$outputFileName=Gc::$attachment_path."blog".DIRECTORY_SEPARATOR."export".DIRECTORY_SEPARATOR."blog$diffpart.xls";
+		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false);
+		$downloadPath  =Gc::$attachment_url."blog/export/blog$diffpart.xls";
 		return array(
 			'success' => true,
 			'data'    => $downloadPath
-		); 
+		);
 	}
 }
 ?>

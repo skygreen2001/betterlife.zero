@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50520
 File Encoding         : 65001
 
-Date: 2013-07-27 21:38:13
+Date: 2013-12-26 17:05:23
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -33,11 +33,11 @@ CREATE TABLE `bb_core_blog` (
 -- ----------------------------
 -- Records of bb_core_blog
 -- ----------------------------
-INSERT INTO `bb_core_blog` VALUES ('1', '1', 'Web在线编辑器', '搜索关键字：在线编辑器\r\n引自：<a href=\"http://paranimage.com/22-online-web-editor/\" target=\"_blank\">http://paranimage.com/22-online-web-editor/</a>', '1331953386', '2012-03-17 11:03:51');
-INSERT INTO `bb_core_blog` VALUES ('2', '1', '地图导航第三方库', '百度地图:<a href=\"http://openapi.baidu.com/map/index.html\" target=\"_blank\">http://openapi.baidu.com/map/index.html</a><br />City8 &nbsp; &nbsp; :<a href=\"http://sh.city8.com/api.html\" target=\"_blank\">http://sh.city8.com/api.html</a>', '1331953386', '2012-03-17 11:03:51');
-INSERT INTO `bb_core_blog` VALUES ('3', '1', 'PHPLinq', 'PHPLinq:<a href=\"http://phplinq.codeplex.com/\" target=\"_blank\">http://phplinq.codeplex.com/</a>', '1331953386', '2012-03-17 11:03:51');
-INSERT INTO `bb_core_blog` VALUES ('4', '1', 'EditArea', 'EditArea:<a href=\"http://www.cdolivet.com/index.php?page=editArea\" target=\"_blank\">http://www.cdolivet.com/index.php?page=editArea</a>&nbsp;\r\n提供给开发者和工作者的用于编辑源码或者样式模板的TextArea', '1331953386', '2012-03-17 11:03:51');
-INSERT INTO `bb_core_blog` VALUES ('5', '1', '名校公开课', '来自新浪、搜狐、网易和QQ的名校公开课。', '1331953386', '2012-03-17 11:03:51');
+INSERT INTO `bb_core_blog` VALUES ('1', '1', 'Web在线编辑器', '搜索关键字：在线编辑器\r\n引自：<a href=\"http://paranimage.com/22-online-web-editor/\" target=\"_blank\">http://paranimage.com/22-online-web-editor/</a>', '1331953386', '2013-12-26 15:27:05');
+INSERT INTO `bb_core_blog` VALUES ('2', '1', '地图导航第三方库', '百度地图:<a href=\"http://openapi.baidu.com/map/index.html\" target=\"_blank\">http://openapi.baidu.com/map/index.html</a><br />City8 &nbsp; &nbsp; :<a href=\"http://sh.city8.com/api.html\" target=\"_blank\">http://sh.city8.com/api.html</a>', '1331953386', '2013-12-26 15:27:05');
+INSERT INTO `bb_core_blog` VALUES ('3', '1', 'PHPLinq', 'PHPLinq:<a href=\"http://phplinq.codeplex.com/\" target=\"_blank\">http://phplinq.codeplex.com/</a>', '1331953386', '2013-12-26 15:27:05');
+INSERT INTO `bb_core_blog` VALUES ('4', '1', 'EditArea', 'EditArea:<a href=\"http://www.cdolivet.com/index.php?page=editArea\" target=\"_blank\">http://www.cdolivet.com/index.php?page=editArea</a>&nbsp;\r\n提供给开发者和工作者的用于编辑源码或者样式模板的TextArea', '1331953386', '2013-12-26 15:27:05');
+INSERT INTO `bb_core_blog` VALUES ('5', '1', '名校公开课', '来自新浪、搜狐、网易和QQ的名校公开课。', '1331953386', '2013-12-26 15:27:05');
 
 -- ----------------------------
 -- Table structure for `bb_core_comment`
@@ -3562,7 +3562,7 @@ CREATE TABLE `bb_msg_msg` (
 DROP TABLE IF EXISTS `bb_msg_notice`;
 CREATE TABLE `bb_msg_notice` (
   `notice_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
-  `noticeType` varchar(200) DEFAULT NULL COMMENT '分类',
+  `noticeType` int(11) NOT NULL COMMENT '通知分类',
   `title` varchar(200) DEFAULT NULL COMMENT '标题',
   `notice_content` varchar(1000) DEFAULT NULL COMMENT '通知内容',
   `commitTime` int(11) DEFAULT NULL COMMENT '提交时间',
@@ -3598,22 +3598,23 @@ CREATE TABLE `bb_msg_re_usernotice` (
 -- ----------------------------
 DROP TABLE IF EXISTS `bb_user_admin`;
 CREATE TABLE `bb_user_admin` (
-  `admin_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '标识',
+  `admin_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '管理员标识',
+  `department_id` int(11) NOT NULL COMMENT '部门标识',
   `username` varchar(200) NOT NULL COMMENT '用户名',
   `realname` varchar(200) DEFAULT NULL COMMENT '真实姓名',
   `password` varchar(45) NOT NULL COMMENT '密码',
-  `roletype` enum('0','1','2','3') DEFAULT '2' COMMENT '扮演角色\n系统管理员扮演角色。\n0:超级管理员-superadmin\n1:管理人员-manager\n2:运维人员-normal\n3:合作伙伴-partner\n\n\n',
+  `roletype` enum('0','1','2','3') DEFAULT '1' COMMENT '扮演角色\n系统管理员扮演角色。\n0:超级管理员-superadmin\n1:管理人员-manager\n2:运维人员-normal\n3:合作伙伴-partner',
   `seescope` enum('0','1') DEFAULT NULL COMMENT '视野\n0:只能查看自己的信息-self\n1:查看所有的信息-all',
   `loginTimes` int(10) DEFAULT '0' COMMENT '登录次数',
   `commitTime` int(11) DEFAULT NULL COMMENT '创建时间',
   `updateTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`admin_id`)
+  PRIMARY KEY (`admin_id`,`department_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='系统管理人员';
 
 -- ----------------------------
 -- Records of bb_user_admin
 -- ----------------------------
-INSERT INTO `bb_user_admin` VALUES ('1', 'admin', 'admin', 'admin', '1', '1', 0 ,'1334818587', '2012-04-19 14:57:11');
+INSERT INTO `bb_user_admin` VALUES ('1', '1', 'admin', 'admin', 'admin', '0', '1', '0', '1334818587', '2013-12-26 14:56:44');
 
 -- ----------------------------
 -- Table structure for `bb_user_department`
@@ -3664,7 +3665,7 @@ CREATE TABLE `bb_user_re_rolefunctions` (
   PRIMARY KEY (`rolefunctions_id`,`role_id`,`functions_id`),
   KEY `fk_function_belong_role` (`role_id`),
   KEY `fk_role_has_function` (`functions_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='角色拥有功能\r\n角色拥有功能关系表';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='角色拥有功能\n角色拥有功能关系表';
 
 -- ----------------------------
 -- Records of bb_user_re_rolefunctions
@@ -3682,20 +3683,11 @@ CREATE TABLE `bb_user_re_userrole` (
   UNIQUE KEY `id_UNIQUE` (`userrole_id`),
   KEY `fk_role_belongs_user` (`user_id`),
   KEY `fk_user_has_role` (`role_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='用户角色\n用户角色关系表';
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='用户角色\n用户角色关系表';
 
 -- ----------------------------
 -- Records of bb_user_re_userrole
 -- ----------------------------
-INSERT INTO `bb_user_re_userrole` VALUES ('1', '2', '3');
-INSERT INTO `bb_user_re_userrole` VALUES ('2', '2', '3');
-INSERT INTO `bb_user_re_userrole` VALUES ('3', '2', '3');
-INSERT INTO `bb_user_re_userrole` VALUES ('4', '2', '3');
-INSERT INTO `bb_user_re_userrole` VALUES ('5', '3', '2');
-INSERT INTO `bb_user_re_userrole` VALUES ('6', '3', '2');
-INSERT INTO `bb_user_re_userrole` VALUES ('7', '3', '2');
-INSERT INTO `bb_user_re_userrole` VALUES ('8', '3', '2');
-INSERT INTO `bb_user_re_userrole` VALUES ('9', '6', '5');
 
 -- ----------------------------
 -- Table structure for `bb_user_role`
@@ -3718,22 +3710,22 @@ CREATE TABLE `bb_user_role` (
 -- ----------------------------
 DROP TABLE IF EXISTS `bb_user_user`;
 CREATE TABLE `bb_user_user` (
-  `user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '标识',
-  `department_id` int(11) NOT NULL COMMENT '部门标识',
+  `user_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户标识',
   `username` varchar(200) NOT NULL COMMENT '用户名',
   `password` varchar(200) DEFAULT NULL COMMENT '用户密码',
-  `email` varchar(450) DEFAULT NULL COMMENT '邮箱地址',
+  `email` varchar(500) DEFAULT NULL COMMENT '邮箱地址',
+  `cellphone` varchar(500) DEFAULT NULL COMMENT '手机电话',
+  `loginTimes` int(11) DEFAULT '0' COMMENT '访问次数',
   `commitTime` int(11) DEFAULT NULL COMMENT '提交时间',
   `updateTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`user_id`,`department_id`),
-  KEY `fk_bb_user_user_bb_user_department1` (`department_id`)
+  PRIMARY KEY (`user_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='用户';
 
 -- ----------------------------
 -- Records of bb_user_user
 -- ----------------------------
-INSERT INTO `bb_user_user` VALUES ('1', '1', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'skygreen2001@gmail.com', '1331953415', '2012-03-17 11:03:51');
-INSERT INTO `bb_user_user` VALUES ('2', '1', 'china', 'edbd0effac3fcc98e725920a512881e0', 'skygreen2001@sina.com', '1331953421', '2012-03-17 11:03:51');
+INSERT INTO `bb_user_user` VALUES ('1', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'skygreen2001@gmail.com', '13917320293', '0', '1331953415', '2013-12-26 14:31:27');
+INSERT INTO `bb_user_user` VALUES ('2', 'china', 'edbd0effac3fcc98e725920a512881e0', 'skygreen2001@sina.com', '13917320293', '0', '1331953421', '2013-12-26 14:31:30');
 
 -- ----------------------------
 -- Table structure for `bb_user_userdetail`
@@ -3742,15 +3734,20 @@ DROP TABLE IF EXISTS `bb_user_userdetail`;
 CREATE TABLE `bb_user_userdetail` (
   `userdetail_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '标识',
   `user_id` int(11) NOT NULL COMMENT '用户标识',
-  `email` varchar(500) DEFAULT NULL COMMENT '邮件地址',
-  `cellphone` varchar(500) CHARACTER SET latin1 DEFAULT NULL COMMENT '手机号码',
+  `realname` varchar(45) DEFAULT NULL COMMENT '真实姓名',
+  `region_id` int(11) NOT NULL COMMENT '地区标识',
+  `profile` varchar(500) DEFAULT NULL COMMENT '头像\n头像图片路径',
+  `address` varchar(500) DEFAULT NULL COMMENT '家庭住址',
+  `qq` varchar(100) DEFAULT NULL COMMENT 'QQ号',
+  `sex` enum('-1','0','1') DEFAULT NULL COMMENT '会员性别\n0：女-female\n1：男-male\n-1：待确认-unknown\n默认男',
+  `birthday` date DEFAULT NULL COMMENT '生日',
   `commitTime` int(11) DEFAULT NULL COMMENT '提交时间',
   `updateTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`userdetail_id`),
-  UNIQUE KEY `user_id` (`user_id`)
+  PRIMARY KEY (`userdetail_id`,`user_id`,`region_id`),
+  KEY `fk_bb_user_userdetail_bb_user_user1` (`user_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户详细信息';
 
 -- ----------------------------
 -- Records of bb_user_userdetail
 -- ----------------------------
-INSERT INTO `bb_user_userdetail` VALUES ('1', '2', 'skygreen_2001@hotmail.com', '13917320293', '1331953386', '2012-03-17 11:03:51');
+INSERT INTO `bb_user_userdetail` VALUES ('1', '2', '周月璞', '0', null, '上海市石岚三村80号404室', '412731900', '1', '1979-03-10', '1331953386', '2013-12-26 14:32:43');

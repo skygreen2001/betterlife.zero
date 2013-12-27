@@ -9,34 +9,98 @@
  */
 class Userdetail extends DataObject
 {
-	//<editor-fold defaultstate="collapsed" desc="定义部分">
-	/**
-	 * 标识
-	 * @var int
-	 * @access public
-	 */
-	public $userdetail_id;
-	/**
-	 * 用户标识
-	 * @var int
-	 * @access public
-	 */
-	public $user_id;
-	/**
-	 * 邮件地址
-	 * @var string
-	 * @access public
-	 */
-	public $email;
-	/**
-	 * 手机号码
-	 * @var string
-	 * @access public
-	 */
-	public $cellphone;
-	//</editor-fold>
-	static $belong_has_one=array(
-	  "user"=>"User"
-	);   
+    //<editor-fold defaultstate="collapsed" desc="定义部分">
+    /**
+     * 标识
+     * @var int
+     * @access public
+     */
+    public $userdetail_id;
+    /**
+     * 用户标识
+     * @var int
+     * @access public
+     */
+    public $user_id;
+    /**
+     * 真实姓名
+     * @var string
+     * @access public
+     */
+    public $realname;
+    /**
+     * 地区标识
+     * @var int
+     * @access public
+     */
+    public $region_id;
+    /**
+     * 头像<br/>
+     * 头像图片路径
+     * @var string
+     * @access public
+     */
+    public $profile;
+    /**
+     * 家庭住址
+     * @var string
+     * @access public
+     */
+    public $address;
+    /**
+     * QQ号
+     * @var string
+     * @access public
+     */
+    public $qq;
+    /**
+     * 会员性别<br/>
+     * 0：女-female<br/>
+     * 1：男-male<br/>
+     * -1：待确认-unknown<br/>
+     * 默认男
+     * @var string
+     * @access public
+     */
+    public $sex;
+    /**
+     * 生日
+     * @var string
+     * @access public
+     */
+    public $birthday;
+    //</editor-fold>
+
+    /**
+     * 从属一对一关系
+     */
+    static $belong_has_one=array(
+        "user"=>"User"
+    );
+
+    /**
+     * 显示会员性别<br/>
+     * 0：女-female<br/>
+     * 1：男-male<br/>
+     * -1：待确认-unknown<br/>
+     * 默认男<br/>
+     */
+    public function getSexShow()
+    {
+        return self::sexShow($this->sex);
+    }
+
+    /**
+     * 显示会员性别<br/>
+     * 0：女-female<br/>
+     * 1：男-male<br/>
+     * -1：待确认-unknown<br/>
+     * 默认男<br/>
+     */
+    public static function sexShow($sex)
+    {
+        return EnumSex::sexShow($sex);
+    }
+
 }
 ?>

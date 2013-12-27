@@ -3,7 +3,8 @@
 <div class="block">
     <div><h1>查看系统管理人员</h1></div>
     <table class="viewdoblock">
-        <tr class="entry"><td class="head">标识</th><td class="content">{$admin.admin_id}</td></tr> 
+        <tr class="entry"><td class="head">管理员标识</th><td class="content">{$admin.admin_id}</td></tr> 
+        <tr class="entry"><td class="head">部门标识</th><td class="content">{$admin.department_id}</td></tr> 
         <tr class="entry"><td class="head">用户名</th><td class="content">{$admin.username}</td></tr> 
         <tr class="entry"><td class="head">真实姓名</th><td class="content">{$admin.realname}</td></tr> 
         <tr class="entry"><td class="head">密码</th><td class="content">{$admin.password}</td></tr> 

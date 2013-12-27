@@ -6,16 +6,26 @@
         <tr class="entry">
             <th class="header">标识</th>
             <th class="header">用户标识</th>
-            <th class="header">邮件地址</th>
-            <th class="header">手机号码</th>
+            <th class="header">真实姓名</th>
+            <th class="header">地区标识</th>
+            <th class="header">头像</th>
+            <th class="header">家庭住址</th>
+            <th class="header">QQ号</th>
+            <th class="header">会员性别</th>
+            <th class="header">生日</th>
             <th class="header">操作</th>
         </tr>
         {foreach item=userdetail from=$userdetails}
         <tr class="entry">
             <td class="content">{$userdetail.userdetail_id}</td>
             <td class="content">{$userdetail.user_id}</td>
-            <td class="content">{$userdetail.email}</td>
-            <td class="content">{$userdetail.cellphone}</td>
+            <td class="content">{$userdetail.realname}</td>
+            <td class="content">{$userdetail.region_id}</td>
+            <td class="content">{$userdetail.profile}</td>
+            <td class="content">{$userdetail.address}</td>
+            <td class="content">{$userdetail.qq}</td>
+            <td class="content">{$userdetail.sex}</td>
+            <td class="content">{$userdetail.birthday}</td>
             <td class="btnCol"><my:a href="{$url_base}index.php?go=model.userdetail.view&id={$userdetail.id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.userdetail.edit&id={$userdetail.id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.userdetail.delete&id={$userdetail.id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
         </tr>
         {/foreach}

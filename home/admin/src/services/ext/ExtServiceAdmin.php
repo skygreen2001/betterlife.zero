@@ -22,8 +22,7 @@ class ExtServiceAdmin extends ServiceBasic
 		if (is_array($admin)){
 			$adminObj=new Admin($admin);
 		}
-		if ($adminObj instanceof Admin){                  
-            $adminObj->password=md5($adminObj->password);
+		if ($adminObj instanceof Admin){
 			$data=$adminObj->save();
 		}else{
 			$data=false;
@@ -31,7 +30,7 @@ class ExtServiceAdmin extends ServiceBasic
 		return array(
 			'success' => true,
 			'data'    => $data
-		); 
+		);
 	}
 
 	/**
@@ -45,12 +44,10 @@ class ExtServiceAdmin extends ServiceBasic
 			$adminObj=new Admin($admin);
 		}
 		if ($adminObj instanceof Admin){
-            if(!empty($adminObj->password))
-            {
-                $adminObj->password=md5($adminObj->password);
-            }else{
-                $adminObj->password= $admin["password_old"];
-            }
+			if(empty($adminObj->password))
+			{
+				$adminObj->password= $admin["password_old"];
+			}
 			$data=$adminObj->update();
 		}else{
 			$data=false;
@@ -58,7 +55,7 @@ class ExtServiceAdmin extends ServiceBasic
 		return array(
 			'success' => true,
 			'data'    => $data
-		); 
+		);
 	}
 
 	/**
@@ -66,7 +63,7 @@ class ExtServiceAdmin extends ServiceBasic
 	 * @param array|string $ids 数据对象编号
 	 * 形式如下:
 	 * 1.array:array(1,2,3,4,5)
-	 * 2.字符串:1,2,3,4 
+	 * 2.字符串:1,2,3,4
 	 * @return boolen 是否删除成功；true为操作正常
 	 */
 	public function deleteByIds($ids)
@@ -75,7 +72,7 @@ class ExtServiceAdmin extends ServiceBasic
 		return array(
 			'success' => true,
 			'data'    => $data
-		); 
+		);
 	}
 
 	/**
@@ -94,8 +91,8 @@ class ExtServiceAdmin extends ServiceBasic
 			$start=$condition['start']+1;
 		  }
 		if (isset($condition['limit'])){
-			$limit=$condition['limit']; 
-			$limit=$start+$limit-1; 
+			$limit=$condition['limit'];
+			$limit=$start+$limit-1;
 		}
 		unset($condition['start'],$condition['limit']);
 		$condition=$this->filtertoCondition($condition);
@@ -107,6 +104,12 @@ class ExtServiceAdmin extends ServiceBasic
 			{
 				Admin::propertyShow($data,array('roletype','seescope'));
 			}
+			foreach ($data as $admin) {
+				if ($admin->department_id){
+					$department_instance=Department::get_by_id($admin->department_id);
+					$admin['department_name']=$department_instance->department_name;
+				}
+			}
 			if ($data==null)$data=array();
 		}else{
 			$data=array();
@@ -115,11 +118,11 @@ class ExtServiceAdmin extends ServiceBasic
 			'success' => true,
 			'totalCount'=>$count,
 			'data'    => $data
-		); 
+		);
 	}
-	
+
 	/**
-	 * 根据管理员标识显示管理员信息 
+	 * 根据管理员标识显示管理员信息
 	 * @param mixed $viewId 管理员标识
 	 */
 	public function viewAdmin($viewId)
@@ -160,13 +163,17 @@ class ExtServiceAdmin extends ServiceBasic
 					$data              = UtilExcel::exceltoArray($uploadPath,$arr_import_header);
 					$result=false;
 					foreach ($data as $admin) {
-						$admin=new Admin($admin);          
-                        if (!EnumRoletype::isEnumValue($admin->roletype)){
-                            $admin->roletype=EnumRoletype::roletypeByShow($admin->roletype);
-                        }
-                        if (!EnumSeescope::isEnumValue($admin->seescope)){
-                            $admin->seescope=EnumSeescope::seescopeByShow($admin->seescope);
-                        }
+						if (!is_numeric($admin["department_id"])){
+							$department=Department::get_one("department_name='".$admin["department_id"]."'");
+							if ($department) $admin["department_id"]=$department->department_id;
+						}
+						$admin=new Admin($admin);
+						if (!EnumRoletype::isEnumValue($admin->roletype)){
+							$admin->roletype=EnumRoletype::roletypeByShow($admin->roletype);
+						}
+						if (!EnumSeescope::isEnumValue($admin->seescope)){
+							$admin->seescope=EnumSeescope::seescopeByShow($admin->seescope);
+						}
 						$admin_id=$admin->getId();
 						if (!empty($admin_id)){
 							$hadAdmin=Admin::existByID($admin->getId());
@@ -199,29 +206,33 @@ class ExtServiceAdmin extends ServiceBasic
 	public function exportAdmin($filter=null)
 	{
 		if ($filter)$filter=$this->filtertoCondition($filter);
-		$data=Admin::get($filter);         
-        if ((!empty($data))&&(count($data)>0))
-        {
-            Admin::propertyShow($data,array('roletype','seescope'));
-        }
-		$arr_output_header= self::fieldsMean(Admin::tablename());   
-        foreach ($data as $admin) {
-            if ($admin->roletypeShow){
-                $admin['roletype']=$admin->roletypeShow;
-            }
-            if ($admin->seescopeShow){
-                $admin['seescope']=$admin->seescopeShow;
-            }
-        }
-        unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
+		$data=Admin::get($filter);
+		if ((!empty($data))&&(count($data)>0))
+		{
+			Admin::propertyShow($data,array('roletype','seescope'));
+		}
+		$arr_output_header= self::fieldsMean(Admin::tablename());
+		foreach ($data as $admin) {
+			if ($admin->roletypeShow){
+				$admin['roletype']=$admin->roletypeShow;
+			}
+			if ($admin->seescopeShow){
+				$admin['seescope']=$admin->seescopeShow;
+			}
+			if ($admin->department_id){
+				$department_instance=Department::get_by_id($admin->department_id);
+				$admin['department_id']=$department_instance->department_name;
+			}
+		}
+		unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
 		$diffpart=date("YmdHis");
 		$outputFileName=Gc::$attachment_path."admin".DIRECTORY_SEPARATOR."export".DIRECTORY_SEPARATOR."admin$diffpart.xls";
-		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false); 
-		$downloadPath  =Gc::$attachment_url."admin/export/admin$diffpart.xls"; 
+		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false);
+		$downloadPath  =Gc::$attachment_url."admin/export/admin$diffpart.xls";
 		return array(
 			'success' => true,
 			'data'    => $downloadPath
-		); 
+		);
 	}
 }
 ?>

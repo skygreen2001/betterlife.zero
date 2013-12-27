@@ -34,9 +34,6 @@ class EnumRoletype extends Enum
      * 1:管理人员-manager<br/>
      * 2:运维人员-normal<br/>
      * 3:合作伙伴-partner<br/>
-     * <br/>
-     * <br/>
-     * <br/>
      */
     public static function roletypeShow($roletype)
     {

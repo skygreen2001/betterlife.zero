@@ -14,7 +14,7 @@ class UtilAjaxExtjs extends UtilAjax implements IUtilAjax
      * Ext Js框架的版本号
      * @var type 
      */
-    public static $ext_version="3.3.0";
+    public static $ext_version="3.4.1.1";
     /**
      * 动态加载ExtJS:Ajax Javascript Framework库
      * @link http://www.sencha.com/products/extjs/
@@ -22,7 +22,7 @@ class UtilAjaxExtjs extends UtilAjax implements IUtilAjax
      * @param string $version javascript框架的版本号
      * @param ViewObject $viewObject 表示层显示对象,只在Web框架中使用,一般结合loadJsReady使用
      */
-    public static function load($version="3.3.0",$viewObject=null) 
+    public static function load($version="3.4.1.1",$viewObject=null) 
     {   
         if (self::$IsGoogleApi){       
             if (self::$IsDebug){            

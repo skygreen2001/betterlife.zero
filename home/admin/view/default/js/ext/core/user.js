@@ -7,11 +7,11 @@ Bb.User={
 	Config:{
 		/**
 		 *分页:每页显示记录数
-		 */        
+		 */
 		PageSize:15,
 		/**
 		 *显示配置
-		 */  
+		 */
 		View:{
 			/**
 			 * 显示用户的视图相对用户列表Grid的位置
@@ -25,7 +25,7 @@ Bb.User={
 			/**
 			 * 是否固定显示用户信息页(或者打开新窗口)
 			 */
-			IsFix:0          
+			IsFix:0
 		}
 	},
 	/**
@@ -43,127 +43,141 @@ Bb.User={
 			Bb.User.Config.View.IsFix=Bb.User.Cookie.get('View.IsFix');
 		}
 	}
-}; 
+};
 /**
- * Model:数据模型   
+ * Model:数据模型
  */
-Bb.User.Store = { 
+Bb.User.Store = {
 	/**
 	 * 用户
-	 */ 
+	 */
 	userStore:new Ext.data.Store({
 		reader: new Ext.data.JsonReader({
 			totalProperty: 'totalCount',
-			successProperty: 'success',  
-			root: 'data',remoteSort: true,                
+			successProperty: 'success',
+			root: 'data',remoteSort: true,
 			fields : [
-				  {name: 'user_id',type: 'int'},
-				  {name: 'department_id',type: 'int'},
-				  {name: 'department_name',type: 'string'},
-				  {name: 'username',type: 'string'},
-				  {name: 'password',type: 'string'},
-				  {name: 'email',type: 'string'}
-			]}         
+                {name: 'user_id',type: 'int'},
+                {name: 'username',type: 'string'},
+                {name: 'password',type: 'string'},
+                {name: 'email',type: 'string'},
+                {name: 'cellphone',type: 'string'},
+                {name: 'loginTimes',type: 'int'}
+			]}
 		),
 		writer: new Ext.data.JsonWriter({
-			encode: false 
+			encode: false
 		}),
-		listeners : {    
-			beforeload : function(store, options) {   
-				if (Ext.isReady) {  
-					Ext.apply(options.params, Bb.User.View.Running.userGrid.filter);//保证分页也将查询条件带上  
+		listeners : {
+			beforeload : function(store, options) {
+				if (Ext.isReady) {
+					if (!options.params.limit)options.params.limit=Bb.User.Config.PageSize;
+					Ext.apply(options.params, Bb.User.View.Running.userGrid.filter);//保证分页也将查询条件带上
 				}
 			}
-		}    
+		}
 	}),
-	/**
-	 * 用户所属部门
-	 */
-	departmentStore : new Ext.data.Store({
-		proxy: new Ext.data.HttpProxy({
-			url: 'home/admin/src/httpdata/department.php'
-		  }),
-		reader: new Ext.data.JsonReader({
-			root: 'departments',
-			autoLoad: true,
-			totalProperty: 'totalCount',
-			id: 'department_id'
-		  }, [
-			  {name: 'department_id', mapping: 'department_id'}, 
-			  {name: 'department_name', mapping: 'department_name'} 
-		])
-	}),
-	/**
-	 * 博客
-	 */
-	blogStore:new Ext.data.Store({
-		reader: new Ext.data.JsonReader({
-			totalProperty: 'totalCount',
-			successProperty: 'success',
-			root: 'data',remoteSort: true,
-			fields : [
-				  {name: 'blog_id',type: 'int'},
-				  {name: 'user_id',type: 'int'},
-				  {name: 'username',type: 'string'},
-				  {name: 'blog_name',type: 'string'},
-				  {name: 'blog_content',type: 'string'}
-			]}
-		),
-		writer: new Ext.data.JsonWriter({
-			encode: false 
-		})
-	}),
-	/**
-	 * 评论
-	 */
-	commentStore:new Ext.data.Store({
-		reader: new Ext.data.JsonReader({
-			totalProperty: 'totalCount',
-			successProperty: 'success',
-			root: 'data',remoteSort: true,
-			fields : [
-				  {name: 'comment_id',type: 'int'},
-				  {name: 'user_id',type: 'int'},
-				  {name: 'username',type: 'string'},
-				  {name: 'comment',type: 'string'},
-				  {name: 'blog_id',type: 'int'},
-				  {name: 'blog_name',type: 'string'}
-			]}
-		),
-		writer: new Ext.data.JsonWriter({
-			encode: false 
-		})
-	})      
+    /**
+     * 博客
+     */
+    blogStore:new Ext.data.Store({
+        reader: new Ext.data.JsonReader({
+            totalProperty: 'totalCount',
+            successProperty: 'success',
+            root: 'data',remoteSort: true,
+            fields : [
+                {name: 'blog_id',type: 'int'},
+                {name: 'username',type: 'string'},
+                {name: 'blog_name',type: 'string'},
+                {name: 'blog_content',type: 'string'}
+            ]}
+        ),
+        writer: new Ext.data.JsonWriter({
+            encode: false
+        }),
+        listeners : {
+            beforeload : function(store, options) {
+                if (Ext.isReady) {
+                    if (!options.params.limit)options.params.limit=Bb.User.Config.PageSize;
+                    Ext.apply(options.params, Bb.User.View.Running.blogGrid.filter);//保证分页也将查询条件带上
+                }
+            }
+        }
+    }),
+    /**
+     * 评论
+     */
+    commentStore:new Ext.data.Store({
+        reader: new Ext.data.JsonReader({
+            totalProperty: 'totalCount',
+            successProperty: 'success',
+            root: 'data',remoteSort: true,
+            fields : [
+                {name: 'comment_id',type: 'int'},
+                {name: 'username',type: 'string'},
+                {name: 'comment',type: 'string'},
+                {name: 'blog_name',type: 'string'}
+            ]}
+        ),
+        writer: new Ext.data.JsonWriter({
+            encode: false
+        }),
+        listeners : {
+            beforeload : function(store, options) {
+                if (Ext.isReady) {
+                    if (!options.params.limit)options.params.limit=Bb.User.Config.PageSize;
+                    Ext.apply(options.params, Bb.User.View.Running.commentGrid.filter);//保证分页也将查询条件带上
+                }
+            }
+        }
+    }),
+    /**
+     * 博客
+     */
+    blogStoreForCombo:new Ext.data.Store({
+        proxy: new Ext.data.HttpProxy({
+            url: 'home/admin/src/httpdata/blog.php'
+        }),
+        reader: new Ext.data.JsonReader({
+            root: 'blogs',
+            autoLoad: true,
+            totalProperty: 'totalCount',
+            idProperty: 'blog_id'
+        }, [
+            {name: 'blog_id', mapping: 'blog_id'},
+            {name: 'blog_name', mapping: 'blog_name'}
+        ])
+    })
 };
 /**
- * View:用户显示组件   
+ * View:用户显示组件
  */
-Bb.User.View={ 
+Bb.User.View={
 	/**
 	 * 编辑窗口：新建或者修改用户
-	 */        
+	 */
 	EditWindow:Ext.extend(Ext.Window,{
-		constructor : function(config) { 
-			config = Ext.apply({ 
+		constructor : function(config) {
+			config = Ext.apply({
 				/**
 				 * 自定义类型:保存类型
 				 * 0:保存窗口,1:修改窗口
 				 */
-				savetype:0,       
-				closeAction : "hide",  
+				savetype:0,
+				closeAction : "hide",
 				constrainHeader:true,maximizable: true,collapsible: true,
 				width : 450,height : 550,minWidth : 400,minHeight : 450,
 				layout : 'fit',plain : true,buttonAlign : 'center',
 				defaults : {
 					autoScroll : true
-				},                
+				},
 				listeners:{
 					beforehide:function(){
-						this.editForm.form.getEl().dom.reset();                    
-					}  
+						this.editForm.form.getEl().dom.reset();
+					}
 				},
-				items : [ 
-					new Ext.form.FormPanel({   
+				items : [
+					new Ext.form.FormPanel({
 						ref:'editForm',layout:'form',
 						labelWidth : 100,labelAlign : "center",
 						bodyStyle : 'padding:5px 5px 0',align : "center",
@@ -171,87 +185,69 @@ Bb.User.View={
 						defaults : {
 							xtype : 'textfield',anchor:'98%'
 						},
-						items : [ 
-							  {xtype: 'hidden',  name : 'user_id',ref:'../user_id'},
-							  {xtype: 'hidden',name : 'department_id',id:'department_id'},
-							  {
-								 fieldLabel : '部门',xtype: 'combo',name : 'department_name',id : 'department_name',
-								 store:Bb.User.Store.departmentStore,emptyText: '请选择部门',itemSelector: 'div.search-item',
-								 loadingText: '查询中...',width: 570, pageSize:Bb.User.Config.PageSize,
-								 displayField:'department_name',// 显示文本
-								 mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,
-								 forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,
-								 tpl:new Ext.XTemplate(
-											'<tpl for="."><div class="search-item">',
-												'<h3>{department_name}</h3>',
-											'</div></tpl>'
-								 ),
-								 onSelect:function(record,index){
-									 if(this.fireEvent('beforeselect', this, record, index) !== false){
-										Ext.getCmp("department_id").setValue(record.data.department_id);
-										Ext.getCmp("department_name").setValue(record.data.department_name);
-										this.collapse();
-									   }
-								   }
-							  },
-							  {fieldLabel : '用户名(<font color=red>*</font>)',name : 'username',allowBlank : false},
-							  {fieldLabel : '用户密码(<font color=red>*</font>)',name : 'password',inputType:'password',ref:'../password'},
-                              {xtype: 'hidden',  name : 'password_old',ref:'../password_old'},  
-							  {fieldLabel : '邮箱地址',name : 'email',vtype:'email'}        
+						items : [
+                            {xtype: 'hidden',name : 'user_id',ref:'../user_id'},
+                            {fieldLabel : '用户名(<font color=red>*</font>)',name : 'username',allowBlank : false},
+                            {fieldLabel : '用户密码(<font color=red>*</font>)',name : 'password',inputType:'password',ref:'../password'},
+                            {xtype: 'hidden',name : 'password_old',ref:'../password_old'},
+                            {fieldLabel : '邮箱地址',name : 'email',vtype:'email'},
+                            {fieldLabel : '手机电话',name : 'cellphone'},
+                            {fieldLabel : '访问次数',name : 'loginTimes',xtype : 'numberfield'}
 						]
-					})                
+					})
 				],
-				buttons : [ {         
+				buttons : [{
 					text: "",ref : "../saveBtn",scope:this,
-					handler : function() {   
-		 
+					handler : function() {
+
 						if (!this.editForm.getForm().isValid()) {
 							return;
 						}
-						editWindow=this;                   
-						if (this.savetype==0){    
-							this.editForm.api.submit=ExtServiceUser.save;                   
+						editWindow=this;
+						if (this.savetype==0){
+							this.editForm.api.submit=ExtServiceUser.save;
 							this.editForm.getForm().submit({
 								success : function(form, action) {
 									Ext.Msg.alert("提示", "保存成功！");
 									Bb.User.View.Running.userGrid.doSelectUser();
-									form.reset(); 
+									form.reset();
 									editWindow.hide();
 								},
-								failure : function(form, action) {
-									Ext.Msg.alert('提示', '失败');
+								failure : function(form, response) {
+									Ext.Msg.show({title:'提示',width:350,buttons: {yes: '确定'},msg:response.result.msg});
 								}
 							});
 						}else{
 							this.editForm.api.submit=ExtServiceUser.update;
 							this.editForm.getForm().submit({
-								success : function(form, action) {                                                  
-									Ext.Msg.show({title:'提示',msg: '修改成功！',buttons: {yes: '确定'},fn: function(){       
-										Bb.User.View.Running.userGrid.bottomToolbar.doRefresh(); 
-									}});                                       
+								success : function(form, action) {
+									Bb.User.View.Running.userGrid.store.reload();
+									Ext.Msg.show({title:'提示',msg: '修改成功！',buttons: {yes: '确定'},fn: function(){
+										Bb.User.View.Running.userGrid.bottomToolbar.doRefresh();
+									}});
 									form.reset();
 									editWindow.hide();
 								},
-								failure : function(form, action) {
-									Ext.Msg.alert('提示', '失败');
+								failure : function(form, response) {
+									Ext.Msg.show({title:'提示',width:350,buttons: {yes: '确定'},msg:response.result.msg});
 								}
 							});
 						}
 					}
 				}, {
 					text : "取 消",scope:this,
-					handler : function() {  
+					handler : function() {
 						this.hide();
 					}
 				}, {
 					text : "重 置",ref:'../resetBtn',scope:this,
-					handler : function() {  
+					handler : function() {
 						this.editForm.form.loadRecord(Bb.User.View.Running.userGrid.getSelectionModel().getSelected());
- 
-					}                  
-				}]    
-			}, config);  
-			Bb.User.View.EditWindow.superclass.constructor.call(this, config);     
+
+					}
+				}]
+			}, config);
+			Bb.User.View.EditWindow.superclass.constructor.call(this, config);
 		}
 	}),
 	/**
@@ -260,26 +256,26 @@ Bb.User.View={
 	UserView:{
 		/**
 		 * Tab页：容器包含显示与用户所有相关的信息
-		 */  
-		Tabs:Ext.extend(Ext.TabPanel,{ 
-			constructor : function(config) { 
-				config = Ext.apply({             
+		 */
+		Tabs:Ext.extend(Ext.TabPanel,{
+			constructor : function(config) {
+				config = Ext.apply({
 					region : 'south',collapseMode : 'mini',split : true,
-					activeTab: 1, tabPosition:"bottom",resizeTabs : true,     
+					activeTab: 1, tabPosition:"bottom",resizeTabs : true,
 					header:false,enableTabScroll : true,tabWidth:'auto', margins : '0 3 3 0',
 					defaults : {
 						autoScroll : true,
 						layout:'fit'
 					},
 					listeners:{
-						beforetabchange:function(tabs,newtab,currentTab){  
-							if (tabs.tabFix==newtab){            
+						beforetabchange:function(tabs,newtab,currentTab){
+							if (tabs.tabFix==newtab){
 								if (Bb.User.View.Running.userGrid.getSelectionModel().getSelected()==null){
 									Ext.Msg.alert('提示', '请先选择用户！');
 									return false;
-								} 
+								}
 								Bb.User.Config.View.IsShow=1;
-								Bb.User.View.Running.userGrid.showUser();   
+								Bb.User.View.Running.userGrid.showUser();
 								Bb.User.View.Running.userGrid.tvpView.menu.mBind.setChecked(false);
 								return false;
 							}
@@ -290,8 +286,8 @@ Bb.User.View={
 					]
 				}, config);
 				Bb.User.View.UserView.Tabs.superclass.constructor.call(this, config);
-				Bb.User.View.Running.blogGrid=new Bb.User.View.BlogView.Grid();
-				Bb.User.View.Running.commentGrid=new Bb.User.View.CommentView.Grid(); 
+                Bb.User.View.Running.blogGrid=new Bb.User.View.BlogView.Grid();
+                Bb.User.View.Running.commentGrid=new Bb.User.View.CommentView.Grid();
 				this.onAddItems();
 			},
 			/**
@@ -302,47 +298,47 @@ Bb.User.View={
 					this.width =Ext.getBody().getViewSize().width;
 					this.height=Ext.getBody().getViewSize().height/2;
 				}else{
-					this.width =Ext.getBody().getViewSize().width/2;  
-					this.height=Ext.getBody().getViewSize().height;                  
+					this.width =Ext.getBody().getViewSize().width/2;
+					this.height=Ext.getBody().getViewSize().height;
 				}
-				this.ownerCt.setSize(this.width,this.height);       
-				if (this.ownerCt.collapsed)this.ownerCt.expand();         
+				this.ownerCt.setSize(this.width,this.height);
+				if (this.ownerCt.collapsed)this.ownerCt.expand();
 				this.ownerCt.collapsed=false;
 			},
 			onAddItems:function(){
 				this.add(
 					{title: '基本信息',ref:'tabUserDetail',iconCls:'tabs',
 					 tpl: [
-					  '<table class="viewdoblock">', 
-						 '<tr class="entry"><td class="head">部门</td><td class="content">{department_name}</td></tr>',
-						 '<tr class="entry"><td class="head">用户名</td><td class="content">{username}</td></tr>',
-						 '<tr class="entry"><td class="head">邮箱地址</td><td class="content">{email}</td></tr>',    
-					  '</table>' 
-					 ]
-					}
+						 '<table class="viewdoblock">',
+                         '    <tr class="entry"><td class="head">用户名</td><td class="content">{username}</td></tr>',
+                         '    <tr class="entry"><td class="head">邮箱地址</td><td class="content">{email}</td></tr>',
+                         '    <tr class="entry"><td class="head">手机电话</td><td class="content">{cellphone}</td></tr>',
+                         '    <tr class="entry"><td class="head">访问次数</td><td class="content">{loginTimes}</td></tr>',
+						 '</table>'
+					 ]}
 				);
-				this.add(
-					{title: '博客',iconCls:'tabs',tabWidth:150,
-					 items:[Bb.User.View.Running.blogGrid]
-					},
-					{title: '评论',iconCls:'tabs',tabWidth:150,
-					 items:[Bb.User.View.Running.commentGrid]
-					}
-				);         
-			}       
+                this.add(
+                    {title: '博客',iconCls:'tabs',tabWidth:150,
+                     items:[Bb.User.View.Running.blogGrid]
+                    },
+                    {title: '评论',iconCls:'tabs',tabWidth:150,
+                     items:[Bb.User.View.Running.commentGrid]
+                    }
+                );
+			}
 		}),
 		/**
 		 * 窗口:显示用户信息
 		 */
-		Window:Ext.extend(Ext.Window,{ 
-			constructor : function(config) { 
+		Window:Ext.extend(Ext.Window,{
+			constructor : function(config) {
 				config = Ext.apply({
-					title:"查看用户",constrainHeader:true,maximizable: true,minimizable : true, 
+					title:"查看用户",constrainHeader:true,maximizable: true,minimizable : true,
 					width : 705,height : 500,minWidth : 450,minHeight : 400,
-					layout : 'fit',resizable:true,plain : true,bodyStYle : 'padding:5px;',
+					layout : 'fit',resizable:true,plain : true,bodyStyle : 'padding:5px;',
 					closeAction : "hide",
 					items:[new Bb.User.View.UserView.Tabs({ref:'winTabs',tabPosition:'top'})],
-					listeners: { 
+					listeners: {
 						minimize:function(w){
 							w.hide();
 							Bb.User.Config.View.IsShow=0;
@@ -350,18 +346,18 @@ Bb.User.View={
 						},
 						hide:function(w){
 							Bb.User.View.Running.userGrid.tvpView.toggle(false);
-						}   
+						}
 					},
 					buttons: [{
-						text: '新增',scope:this,
+						text: '新增用户',scope:this,
 						handler : function() {this.hide();Bb.User.View.Running.userGrid.addUser();}
 					},{
-						text: '修改',scope:this,
+						text: '修改用户',scope:this,
 						handler : function() {this.hide();Bb.User.View.Running.userGrid.updateUser();}
 					}]
-				}, config);  
-				Bb.User.View.UserView.Window.superclass.constructor.call(this, config);   
-			}        
+				}, config);
+				Bb.User.View.UserView.Window.superclass.constructor.call(this, config);
+			}
 		})
 	},
 	/**
@@ -369,50 +365,361 @@ Bb.User.View={
 	 */
 	BlogView:{
 		/**
+		 *  当前创建的博客编辑窗口
+		 */
+		edit_window:null,
+		/**
+		 * 编辑窗口：新建或者修改博客
+		 */
+		EditWindow:Ext.extend(Ext.Window,{
+			constructor : function(config) {
+				config = Ext.apply({
+					/**
+					 * 自定义类型:保存类型
+					 * 0:保存窗口,1:修改窗口
+					 */
+					savetype:0,closeAction : "hide",constrainHeader:true,maximizable: true,collapsible: true,
+					width : 450,height : 550,minWidth : 400,minHeight : 450,
+					layout : 'fit',plain : true,buttonAlign : 'center',
+					defaults : {autoScroll : true},
+					listeners:{
+						beforehide:function(){
+							this.editForm.form.getEl().dom.reset();
+						},
+                        afterrender:function(){
+                            switch (Bb.User.Config.OnlineEditor)
+                            {
+                                case 2:
+                                    Bb.User.View.BlogView.EditWindow.KindEditor_blog_content = KindEditor.create('textarea[name="blog_content"]',{width:'98%',minHeith:'350px', filterMode:true});
+                                    break
+                                case 3:
+                                    pageInit_blog_content();
+                                    break
+                                default:
+                                    ckeditor_replace_blog_content();
+                            }
+                        }
+					},
+					items : [
+						new Ext.form.FormPanel({
+							ref:'editForm',layout:'form',
+							labelWidth : 100,labelAlign : "center",
+							bodyStyle : 'padding:5px 5px 0',align : "center",
+							api : {},
+							defaults : {
+								xtype : 'textfield',anchor:'98%'
+							},
+							items : [
+                                {xtype: 'hidden',name : 'blog_id',ref:'../blog_id'},
+                                {xtype: 'hidden',name : 'user_id',ref:'../user_id'},
+                                {fieldLabel : '博客标题',name : 'blog_name'},
+                                {fieldLabel : '博客内容',name : 'blog_content',xtype : 'textarea',id:'blog_content',ref:'blog_content'}
+							]
+						})
+					],
+					buttons : [{
+						text: "",ref : "../saveBtn",scope:this,
+						handler : function() {
+                            switch (Bb.User.Config.OnlineEditor)
+                            {
+                                case 2:
+                                    if (Bb.User.View.BlogView.EditWindow.KindEditor_blog_content)this.editForm.blog_content.setValue(Bb.User.View.BlogView.EditWindow.KindEditor_blog_content.html());
+                                    break
+                                case 3:
+                                    if (xhEditor_blog_content)this.editForm.blog_content.setValue(xhEditor_blog_content.getSource());
+                                    break
+                                default:
+                                    if (CKEDITOR.instances.blog_content) this.editForm.blog_content.setValue(CKEDITOR.instances.blog_content.getData());
+                            }
+
+							if (!this.editForm.getForm().isValid()) {
+								return;
+							}
+							editWindow=this;
+							if (this.savetype==0){
+								this.editForm.api.submit=ExtServiceBlog.save;
+								this.editForm.getForm().submit({
+									success : function(form, action) {
+										Ext.Msg.alert("提示", "保存成功！");
+										Bb.User.View.Running.blogGrid.doSelectBlog();
+										form.reset();
+										editWindow.hide();
+									},
+									failure : function(form, response) {
+										Ext.Msg.show({title:'提示',width:350,buttons: {yes: '确定'},msg:response.result.msg});
+									}
+								});
+							}else{
+								this.editForm.api.submit=ExtServiceBlog.update;
+								this.editForm.getForm().submit({
+									success : function(form, action) {
+										Ext.Msg.show({title:'提示',msg: '修改成功！',buttons: {yes: '确定'},fn: function(){
+											Bb.User.View.Running.blogGrid.bottomToolbar.doRefresh();
+										}});
+										form.reset();
+										editWindow.hide();
+									},
+									failure : function(form, response) {
+										Ext.Msg.show({title:'提示',width:350,buttons: {yes: '确定'},msg:response.result.msg});
+									}
+								});
+							}
+						}
+					}, {
+						text : "取 消",scope:this,
+						handler : function() {
+							this.hide();
+						}
+					}, {
+						text : "重 置",ref:'../resetBtn',scope:this,
+						handler : function() {
+							this.editForm.form.loadRecord(Bb.User.View.Running.blogGrid.getSelectionModel().getSelected());
+                            switch (Bb.User.Config.OnlineEditor)
+                            {
+                                case 2:
+                                    if (Bb.User.View.BlogView.EditWindow.KindEditor_blog_content) Bb.User.View.BlogView.EditWindow.KindEditor_blog_content.html(Bb.User.View.Running.blogGrid.getSelectionModel().getSelected().data.blog_content);
+                                    break
+                                case 3:
+                                    break
+                                default:
+                                    if (CKEDITOR.instances.blog_content) CKEDITOR.instances.blog_content.setData(Bb.User.View.Running.blogGrid.getSelectionModel().getSelected().data.blog_content);
+                            }
+
+						}
+					}]
+				}, config);
+				Bb.User.View.BlogView.EditWindow.superclass.constructor.call(this, config);
+			}
+		}),
+		/**
+		 * 查询条件
+		 */
+		filter:null,
+		/**
 		 * 视图：博客列表
 		 */
 		Grid:Ext.extend(Ext.grid.GridPanel, {
 			constructor : function(config) {
 				config = Ext.apply({
-					store : Bb.User.Store.blogStore,
+					store : Bb.User.Store.blogStore,sm : this.sm,
 					frame : true,trackMouseOver : true,enableColumnMove : true,columnLines : true,
-					loadMask : true,stripeRows : true,headerAsText : false,                
-					defaults : {
-						autoScroll : true
-					},
+					loadMask : true,stripeRows : true,headerAsText : false,
+					defaults : {autoScroll : true},
 					cm : new Ext.grid.ColumnModel({
 						defaults:{
 							width:120,sortable : true
 						},
 						columns : [
-                          {header : '标识',dataIndex : 'blog_id',hidden:true},
-						  {header : '用户',dataIndex : 'username'},
-						  {header : '博客标题',dataIndex : 'blog_name'},
-						  {header : '博客内容',dataIndex : 'blog_content',width:450}
+                            this.sm,
+                            {header : '标识',dataIndex : 'blog_id',hidden:true},
+                            {header : '博客标题',dataIndex : 'blog_name'},
+                            {header : '博客内容',dataIndex : 'blog_content'}
+						]
+					}),
+					tbar : {
+						xtype : 'container',layout : 'anchor',
+						height : 27,style:'font-size:14px',
+						defaults : {
+							height : 27,anchor : '100%'
+						},
+						items : [
+							new Ext.Toolbar({
+								defaults:{
+								  scope: this
+								},
+								items : [
+									{
+										text: '反选',iconCls : 'icon-reverse',
+										handler: function(){
+											this.onReverseSelect();
+										}
+									},'-',{
+										text : '添加博客',iconCls : 'icon-add',
+										handler : function() {
+											this.addBlog();
+										}
+									},'-',{
+										text : '修改博客',ref: '../../btnUpdate',iconCls : 'icon-edit',disabled : true,
+										handler : function() {
+											this.updateBlog();
+										}
+									},'-',{
+										text : '删除博客', ref: '../../btnRemove',iconCls : 'icon-delete',disabled : true,
+										handler : function() {
+											this.deleteBlog();
+										}
+									},'-']}
+						)]
+					},
+					bbar: new Ext.PagingToolbar({
+						pageSize: Bb.User.Config.PageSize,
+						store: Bb.User.Store.blogStore,scope:this,autoShow:true,displayInfo: true,
+						displayMsg: '当前显示 {0} - {1}条记录/共 {2}条记录。',emptyMsg: "无显示数据",
+						items: [
+							{xtype:'label', text: '每页显示'},
+							{xtype:'numberfield', value:Bb.User.Config.PageSize,minValue:1,width:35,style:'text-align:center',allowBlank: false,
+								listeners:
+								{
+									change:function(Field, newValue, oldValue){
+										var num = parseInt(newValue);
+										if (isNaN(num) || !num || num<1)
+										{
+											num = Bb.User.Config.PageSize;
+											Field.setValue(num);
+										}
+										this.ownerCt.pageSize= num;
+										Bb.User.Config.PageSize = num;
+										this.ownerCt.ownerCt.doSelectBlog();
+									},
+									specialKey :function(field,e){
+										if (e.getKey() == Ext.EventObject.ENTER){
+											var num = parseInt(field.getValue());
+											if (isNaN(num) || !num || num<1)num = Bb.User.Config.PageSize;
+											this.ownerCt.pageSize= num;
+											Bb.User.Config.PageSize = num;
+											this.ownerCt.ownerCt.doSelectBlog();
+										}
+									}
+								}
+							},{xtype:'label', text: '个'}
 						]
 					})
 				}, config);
-				Bb.User.View.BlogView.Grid.superclass.constructor.call(this, config); 
-			},             
+				/**
+				 * 博客数据模型获取数据Direct调用
+				 */
+				Bb.User.Store.blogStore.proxy=new Ext.data.DirectProxy({
+					api: {read:ExtServiceBlog.queryPageBlog}
+				});
+				Bb.User.View.BlogView.Grid.superclass.constructor.call(this, config);
+			},
 			/**
-			 * 查询符合条件的合同订单
+			 * 行选择器
+			 */
+			sm : new Ext.grid.CheckboxSelectionModel({
+				listeners : {
+					selectionchange:function(sm) {
+						// 判断删除和更新按钮是否可以激活
+						this.grid.btnRemove.setDisabled(sm.getCount() < 1);
+						this.grid.btnUpdate.setDisabled(sm.getCount() != 1);
+					}
+				}
+			}),
+			/**
+			 * 查询符合条件的博客
 			 */
 			doSelectBlog : function() {
 				if (Bb.User.View.Running.userGrid&&Bb.User.View.Running.userGrid.getSelectionModel().getSelected()){
 					var user_id = Bb.User.View.Running.userGrid.getSelectionModel().getSelected().data.user_id;
-					var condition = {'user_id':user_id};
-					ExtServiceBlog.queryPageBlog(condition,function(provider, response) { 
-						if (response.result){  
-							if (response.result.data) {   
+					var condition = {'user_id':user_id,'start':0,'limit':Bb.User.Config.PageSize};
+					this.filter       ={'user_id':user_id};
+					ExtServiceBlog.queryPageBlog(condition,function(provider, response) {
+						if (response.result){
+							if (response.result.data) {
 								var result           = new Array();
-								result['data']       =response.result.data; 
-								Bb.User.Store.blogStore.loadData(result); 
+								result['data']       =response.result.data;
+								result['totalCount'] =response.result.totalCount;
+								Bb.User.Store.blogStore.loadData(result);
 							} else {
-								Bb.User.Store.blogStore.removeAll();                        
-								Ext.Msg.alert('提示', '无符合条件的合同订单！');
+								Bb.User.Store.blogStore.removeAll();
+								Ext.Msg.alert('提示', '无符合条件的博客！');
 							}
+							if (Bb.User.Store.blogStore.getTotalCount()>Bb.User.Config.PageSize){
+								 Bb.User.View.Running.blogGrid.bottomToolbar.show();
+							}else{
+								 Bb.User.View.Running.blogGrid.bottomToolbar.hide();
+							}
+							Bb.User.View.Running.userGrid.ownerCt.doLayout();
 						}
 					});
+				}
+			},
+			/**
+			 * 反选
+			 */
+			onReverseSelect:function() {
+				for (var i = this.getView().getRows().length - 1; i >= 0; i--) {
+					if (this.sm.isSelected(i)) {
+						this.sm.deselectRow(i);
+					}else {
+						this.sm.selectRow(i, true);
+					}
+				}
+			},
+			/**
+			 * 新建博客
+			 */
+			addBlog : function(){
+				if (Bb.User.View.BlogView.edit_window==null){
+					Bb.User.View.BlogView.edit_window=new Bb.User.View.BlogView.EditWindow();
+				}
+				Bb.User.View.BlogView.edit_window.resetBtn.setVisible(false);
+				Bb.User.View.BlogView.edit_window.saveBtn.setText('保 存');
+				Bb.User.View.BlogView.edit_window.setTitle('添加博客');
+				Bb.User.View.BlogView.edit_window.savetype=0;
+				Bb.User.View.BlogView.edit_window.blog_id.setValue("");
+				var company_id = Bb.User.View.Running.userGrid.getSelectionModel().getSelected().data.user_id;
+				Bb.User.View.BlogView.edit_window.user_id.setValue(company_id);
+                switch (Bb.User.Config.OnlineEditor)
+                {
+                    case 2:
+                        if (Bb.User.View.BlogView.EditWindow.KindEditor_blog_content) Bb.User.View.BlogView.EditWindow.KindEditor_blog_content.html("");
+                        break
+                    case 3:
+                        break
+                    default:
+                        if (CKEDITOR.instances.blog_content) CKEDITOR.instances.blog_content.setData("");
+                }
+
+				Bb.User.View.BlogView.edit_window.show();
+				Bb.User.View.BlogView.edit_window.maximize();
+			},
+			/**
+			 * 编辑博客时先获得选中的博客信息
+			 */
+			updateBlog : function() {
+				if (Bb.User.View.BlogView.edit_window==null){
+					Bb.User.View.BlogView.edit_window=new Bb.User.View.BlogView.EditWindow();
+				}
+				Bb.User.View.BlogView.edit_window.saveBtn.setText('修 改');
+				Bb.User.View.BlogView.edit_window.resetBtn.setVisible(true);
+				Bb.User.View.BlogView.edit_window.setTitle('修改博客');
+				Bb.User.View.BlogView.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
+				Bb.User.View.BlogView.edit_window.savetype=1;
+                switch (Bb.User.Config.OnlineEditor)
+                {
+                    case 2:
+                        if (Bb.User.View.BlogView.EditWindow.KindEditor_blog_content) Bb.User.View.BlogView.EditWindow.KindEditor_blog_content.html(this.getSelectionModel().getSelected().data.blog_content);
+                        break
+                    case 3:
+                        if (xhEditor_blog_content)xhEditor_blog_content.setSource(this.getSelectionModel().getSelected().data.blog_content);
+                        break
+                    default:
+                        if (CKEDITOR.instances.blog_content) CKEDITOR.instances.blog_content.setData(this.getSelectionModel().getSelected().data.blog_content);
+                }
+
+				Bb.User.View.BlogView.edit_window.show();
+				Bb.User.View.BlogView.edit_window.maximize();
+			},
+			/**
+			 * 删除博客
+			 */
+			deleteBlog : function() {
+				Ext.Msg.confirm('提示', '确实要删除所选的博客吗?', this.confirmDeleteBlog,this);
+			},
+			/**
+			 * 确认删除博客
+			 */
+			confirmDeleteBlog : function(btn) {
+				if (btn == 'yes') {
+					var del_blog_ids ="";
+					var selectedRows    = this.getSelectionModel().getSelections();
+					for ( var flag = 0; flag < selectedRows.length; flag++) {
+						del_blog_ids=del_blog_ids+selectedRows[flag].data.blog_id+",";
+					}
+					ExtServiceBlog.deleteByIds(del_blog_ids);
+					this.doSelectBlog();
+					Ext.Msg.alert("提示", "删除成功！");
 				}
 			}
 		})
@@ -422,64 +729,396 @@ Bb.User.View={
 	 */
 	CommentView:{
 		/**
+		 *  当前创建的评论编辑窗口
+		 */
+		edit_window:null,
+		/**
+		 * 编辑窗口：新建或者修改评论
+		 */
+		EditWindow:Ext.extend(Ext.Window,{
+			constructor : function(config) {
+				config = Ext.apply({
+					/**
+					 * 自定义类型:保存类型
+					 * 0:保存窗口,1:修改窗口
+					 */
+					savetype:0,closeAction : "hide",constrainHeader:true,maximizable: true,collapsible: true,
+					width : 450,height : 550,minWidth : 400,minHeight : 450,
+					layout : 'fit',plain : true,buttonAlign : 'center',
+					defaults : {autoScroll : true},
+					listeners:{
+						beforehide:function(){
+							this.editForm.form.getEl().dom.reset();
+						},
+                        afterrender:function(){
+                            switch (Bb.User.Config.OnlineEditor)
+                            {
+                                case 2:
+                                    Bb.User.View.CommentView.EditWindow.KindEditor_comment = KindEditor.create('textarea[name="comment"]',{width:'98%',minHeith:'350px', filterMode:true});
+                                    break
+                                case 3:
+                                    pageInit_comment();
+                                    break
+                                default:
+                                    ckeditor_replace_comment();
+                            }
+                        }
+					},
+					items : [
+						new Ext.form.FormPanel({
+							ref:'editForm',layout:'form',
+							labelWidth : 100,labelAlign : "center",
+							bodyStyle : 'padding:5px 5px 0',align : "center",
+							api : {},
+							defaults : {
+								xtype : 'textfield',anchor:'98%'
+							},
+							items : [
+                                {xtype: 'hidden',name : 'comment_id',ref:'../comment_id'},
+                                {xtype: 'hidden',name : 'user_id',ref:'../user_id'},
+                                {fieldLabel : '评论',name : 'comment',xtype : 'textarea',id:'comment',ref:'comment'},
+                                {xtype: 'hidden',name : 'blog_id',ref:'../blog_id'},
+                                {
+                                     fieldLabel : '博客',xtype: 'combo',name : 'blog_name',ref : '../blog_name',
+                                     store:Bb.User.Store.blogStoreForCombo,emptyText: '请选择博客',itemSelector: 'div.search-item',
+                                     loadingText: '查询中...',width: 570, pageSize:Bb.User.Config.PageSize,
+                                     displayField:'blog_name',grid:this,
+                                     mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,
+                                     forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,
+                                     tpl:new Ext.XTemplate(
+                                         '<tpl for="."><div class="search-item">',
+                                             '<h3>{blog_name}</h3>',
+                                         '</div></tpl>'
+                                     ),
+                                     listeners:{
+                                         'beforequery': function(event){delete event.combo.lastQuery;}
+                                     },
+                                     onSelect:function(record,index){
+                                         if(this.fireEvent('beforeselect', this, record, index) !== false){
+                                            this.grid.blog_id.setValue(record.data.blog_id);
+                                            this.grid.blog_name.setValue(record.data.blog_name);
+                                            this.collapse();
+                                         }
+                                     }
+                                }
+							]
+						})
+					],
+					buttons : [{
+						text: "",ref : "../saveBtn",scope:this,
+						handler : function() {
+                            switch (Bb.User.Config.OnlineEditor)
+                            {
+                                case 2:
+                                    if (Bb.User.View.CommentView.EditWindow.KindEditor_comment)this.editForm.comment.setValue(Bb.User.View.CommentView.EditWindow.KindEditor_comment.html());
+                                    break
+                                case 3:
+                                    if (xhEditor_comment)this.editForm.comment.setValue(xhEditor_comment.getSource());
+                                    break
+                                default:
+                                    if (CKEDITOR.instances.comment) this.editForm.comment.setValue(CKEDITOR.instances.comment.getData());
+                            }
+
+							if (!this.editForm.getForm().isValid()) {
+								return;
+							}
+							editWindow=this;
+							if (this.savetype==0){
+								this.editForm.api.submit=ExtServiceComment.save;
+								this.editForm.getForm().submit({
+									success : function(form, action) {
+										Ext.Msg.alert("提示", "保存成功！");
+										Bb.User.View.Running.commentGrid.doSelectComment();
+										form.reset();
+										editWindow.hide();
+									},
+									failure : function(form, response) {
+										Ext.Msg.show({title:'提示',width:350,buttons: {yes: '确定'},msg:response.result.msg});
+									}
+								});
+							}else{
+								this.editForm.api.submit=ExtServiceComment.update;
+								this.editForm.getForm().submit({
+									success : function(form, action) {
+										Ext.Msg.show({title:'提示',msg: '修改成功！',buttons: {yes: '确定'},fn: function(){
+											Bb.User.View.Running.commentGrid.bottomToolbar.doRefresh();
+										}});
+										form.reset();
+										editWindow.hide();
+									},
+									failure : function(form, response) {
+										Ext.Msg.show({title:'提示',width:350,buttons: {yes: '确定'},msg:response.result.msg});
+									}
+								});
+							}
+						}
+					}, {
+						text : "取 消",scope:this,
+						handler : function() {
+							this.hide();
+						}
+					}, {
+						text : "重 置",ref:'../resetBtn',scope:this,
+						handler : function() {
+							this.editForm.form.loadRecord(Bb.User.View.Running.commentGrid.getSelectionModel().getSelected());
+                            switch (Bb.User.Config.OnlineEditor)
+                            {
+                                case 2:
+                                    if (Bb.User.View.CommentView.EditWindow.KindEditor_comment) Bb.User.View.CommentView.EditWindow.KindEditor_comment.html(Bb.User.View.Running.commentGrid.getSelectionModel().getSelected().data.comment);
+                                    break
+                                case 3:
+                                    break
+                                default:
+                                    if (CKEDITOR.instances.comment) CKEDITOR.instances.comment.setData(Bb.User.View.Running.commentGrid.getSelectionModel().getSelected().data.comment);
+                            }
+
+						}
+					}]
+				}, config);
+				Bb.User.View.CommentView.EditWindow.superclass.constructor.call(this, config);
+			}
+		}),
+		/**
+		 * 查询条件
+		 */
+		filter:null,
+		/**
 		 * 视图：评论列表
 		 */
 		Grid:Ext.extend(Ext.grid.GridPanel, {
 			constructor : function(config) {
 				config = Ext.apply({
-					store : Bb.User.Store.commentStore,
+					store : Bb.User.Store.commentStore,sm : this.sm,
 					frame : true,trackMouseOver : true,enableColumnMove : true,columnLines : true,
-					loadMask : true,stripeRows : true,headerAsText : false,                
-					defaults : {
-						autoScroll : true
-					},
+					loadMask : true,stripeRows : true,headerAsText : false,
+					defaults : {autoScroll : true},
 					cm : new Ext.grid.ColumnModel({
 						defaults:{
 							width:120,sortable : true
 						},
 						columns : [
-                          {header : '标识',dataIndex : 'comment_id',hidden:true},
-						  {header : '评论者',dataIndex : 'username'},
-						  {header : '评论',dataIndex : 'comment',width:450},
-						  {header : '博客',dataIndex : 'blog_name',width:450}                               
+                            this.sm,
+                            {header : '标识',dataIndex : 'comment_id',hidden:true},
+                            {header : '评论',dataIndex : 'comment'},
+                            {header : '博客',dataIndex : 'blog_name'}
+						]
+					}),
+					tbar : {
+						xtype : 'container',layout : 'anchor',
+						height : 27,style:'font-size:14px',
+						defaults : {
+							height : 27,anchor : '100%'
+						},
+						items : [
+							new Ext.Toolbar({
+								defaults:{
+								  scope: this
+								},
+								items : [
+									{
+										text: '反选',iconCls : 'icon-reverse',
+										handler: function(){
+											this.onReverseSelect();
+										}
+									},'-',{
+										text : '添加评论',iconCls : 'icon-add',
+										handler : function() {
+											this.addComment();
+										}
+									},'-',{
+										text : '修改评论',ref: '../../btnUpdate',iconCls : 'icon-edit',disabled : true,
+										handler : function() {
+											this.updateComment();
+										}
+									},'-',{
+										text : '删除评论', ref: '../../btnRemove',iconCls : 'icon-delete',disabled : true,
+										handler : function() {
+											this.deleteComment();
+										}
+									},'-']}
+						)]
+					},
+					bbar: new Ext.PagingToolbar({
+						pageSize: Bb.User.Config.PageSize,
+						store: Bb.User.Store.commentStore,scope:this,autoShow:true,displayInfo: true,
+						displayMsg: '当前显示 {0} - {1}条记录/共 {2}条记录。',emptyMsg: "无显示数据",
+						items: [
+							{xtype:'label', text: '每页显示'},
+							{xtype:'numberfield', value:Bb.User.Config.PageSize,minValue:1,width:35,style:'text-align:center',allowBlank: false,
+								listeners:
+								{
+									change:function(Field, newValue, oldValue){
+										var num = parseInt(newValue);
+										if (isNaN(num) || !num || num<1)
+										{
+											num = Bb.User.Config.PageSize;
+											Field.setValue(num);
+										}
+										this.ownerCt.pageSize= num;
+										Bb.User.Config.PageSize = num;
+										this.ownerCt.ownerCt.doSelectComment();
+									},
+									specialKey :function(field,e){
+										if (e.getKey() == Ext.EventObject.ENTER){
+											var num = parseInt(field.getValue());
+											if (isNaN(num) || !num || num<1)num = Bb.User.Config.PageSize;
+											this.ownerCt.pageSize= num;
+											Bb.User.Config.PageSize = num;
+											this.ownerCt.ownerCt.doSelectComment();
+										}
+									}
+								}
+							},{xtype:'label', text: '个'}
 						]
 					})
 				}, config);
-				Bb.User.View.CommentView.Grid.superclass.constructor.call(this, config); 
-			},             
+				/**
+				 * 评论数据模型获取数据Direct调用
+				 */
+				Bb.User.Store.commentStore.proxy=new Ext.data.DirectProxy({
+					api: {read:ExtServiceComment.queryPageComment}
+				});
+				Bb.User.View.CommentView.Grid.superclass.constructor.call(this, config);
+			},
 			/**
-			 * 查询符合条件的合同订单
+			 * 行选择器
+			 */
+			sm : new Ext.grid.CheckboxSelectionModel({
+				listeners : {
+					selectionchange:function(sm) {
+						// 判断删除和更新按钮是否可以激活
+						this.grid.btnRemove.setDisabled(sm.getCount() < 1);
+						this.grid.btnUpdate.setDisabled(sm.getCount() != 1);
+					}
+				}
+			}),
+			/**
+			 * 查询符合条件的评论
 			 */
 			doSelectComment : function() {
 				if (Bb.User.View.Running.userGrid&&Bb.User.View.Running.userGrid.getSelectionModel().getSelected()){
 					var user_id = Bb.User.View.Running.userGrid.getSelectionModel().getSelected().data.user_id;
-					var condition = {'user_id':user_id};
-					ExtServiceComment.queryPageComment(condition,function(provider, response) { 
-						if (response.result){  
-							if (response.result.data) {   
+					var condition = {'user_id':user_id,'start':0,'limit':Bb.User.Config.PageSize};
+					this.filter       ={'user_id':user_id};
+					ExtServiceComment.queryPageComment(condition,function(provider, response) {
+						if (response.result){
+							if (response.result.data) {
 								var result           = new Array();
-								result['data']       =response.result.data; 
-								Bb.User.Store.commentStore.loadData(result); 
+								result['data']       =response.result.data;
+								result['totalCount'] =response.result.totalCount;
+								Bb.User.Store.commentStore.loadData(result);
 							} else {
-								Bb.User.Store.commentStore.removeAll();                        
-								Ext.Msg.alert('提示', '无符合条件的合同订单！');
+								Bb.User.Store.commentStore.removeAll();
+								Ext.Msg.alert('提示', '无符合条件的评论！');
 							}
+							if (Bb.User.Store.commentStore.getTotalCount()>Bb.User.Config.PageSize){
+								 Bb.User.View.Running.commentGrid.bottomToolbar.show();
+							}else{
+								 Bb.User.View.Running.commentGrid.bottomToolbar.hide();
+							}
+							Bb.User.View.Running.userGrid.ownerCt.doLayout();
 						}
 					});
+				}
+			},
+			/**
+			 * 反选
+			 */
+			onReverseSelect:function() {
+				for (var i = this.getView().getRows().length - 1; i >= 0; i--) {
+					if (this.sm.isSelected(i)) {
+						this.sm.deselectRow(i);
+					}else {
+						this.sm.selectRow(i, true);
+					}
+				}
+			},
+			/**
+			 * 新建评论
+			 */
+			addComment : function(){
+				if (Bb.User.View.CommentView.edit_window==null){
+					Bb.User.View.CommentView.edit_window=new Bb.User.View.CommentView.EditWindow();
+				}
+				Bb.User.View.CommentView.edit_window.resetBtn.setVisible(false);
+				Bb.User.View.CommentView.edit_window.saveBtn.setText('保 存');
+				Bb.User.View.CommentView.edit_window.setTitle('添加评论');
+				Bb.User.View.CommentView.edit_window.savetype=0;
+				Bb.User.View.CommentView.edit_window.comment_id.setValue("");
+				var company_id = Bb.User.View.Running.userGrid.getSelectionModel().getSelected().data.user_id;
+				Bb.User.View.CommentView.edit_window.user_id.setValue(company_id);
+                switch (Bb.User.Config.OnlineEditor)
+                {
+                    case 2:
+                        if (Bb.User.View.CommentView.EditWindow.KindEditor_comment) Bb.User.View.CommentView.EditWindow.KindEditor_comment.html("");
+                        break
+                    case 3:
+                        break
+                    default:
+                        if (CKEDITOR.instances.comment) CKEDITOR.instances.comment.setData("");
+                }
+
+				Bb.User.View.CommentView.edit_window.show();
+				Bb.User.View.CommentView.edit_window.maximize();
+			},
+			/**
+			 * 编辑评论时先获得选中的评论信息
+			 */
+			updateComment : function() {
+				if (Bb.User.View.CommentView.edit_window==null){
+					Bb.User.View.CommentView.edit_window=new Bb.User.View.CommentView.EditWindow();
+				}
+				Bb.User.View.CommentView.edit_window.saveBtn.setText('修 改');
+				Bb.User.View.CommentView.edit_window.resetBtn.setVisible(true);
+				Bb.User.View.CommentView.edit_window.setTitle('修改评论');
+				Bb.User.View.CommentView.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
+				Bb.User.View.CommentView.edit_window.savetype=1;
+                switch (Bb.User.Config.OnlineEditor)
+                {
+                    case 2:
+                        if (Bb.User.View.CommentView.EditWindow.KindEditor_comment) Bb.User.View.CommentView.EditWindow.KindEditor_comment.html(this.getSelectionModel().getSelected().data.comment);
+                        break
+                    case 3:
+                        if (xhEditor_comment)xhEditor_comment.setSource(this.getSelectionModel().getSelected().data.comment);
+                        break
+                    default:
+                        if (CKEDITOR.instances.comment) CKEDITOR.instances.comment.setData(this.getSelectionModel().getSelected().data.comment);
+                }
+
+				Bb.User.View.CommentView.edit_window.show();
+				Bb.User.View.CommentView.edit_window.maximize();
+			},
+			/**
+			 * 删除评论
+			 */
+			deleteComment : function() {
+				Ext.Msg.confirm('提示', '确实要删除所选的评论吗?', this.confirmDeleteComment,this);
+			},
+			/**
+			 * 确认删除评论
+			 */
+			confirmDeleteComment : function(btn) {
+				if (btn == 'yes') {
+					var del_comment_ids ="";
+					var selectedRows    = this.getSelectionModel().getSelections();
+					for ( var flag = 0; flag < selectedRows.length; flag++) {
+						del_comment_ids=del_comment_ids+selectedRows[flag].data.comment_id+",";
+					}
+					ExtServiceComment.deleteByIds(del_comment_ids);
+					this.doSelectComment();
+					Ext.Msg.alert("提示", "删除成功！");
 				}
 			}
 		})
 	},
 	/**
 	 * 窗口：批量上传用户
-	 */        
-	UploadWindow:Ext.extend(Ext.Window,{ 
-		constructor : function(config) { 
-			config = Ext.apply({     
-				title : '批量用户上传',
-				width : 400,height : 110,minWidth : 300,minHeight : 100,
-				layout : 'fit',plain : true,bodyStYle : 'padding:5px;',buttonAlign : 'center',
-				closeAction : "hide",
+	 */
+	UploadWindow:Ext.extend(Ext.Window,{
+		constructor : function(config) {
+			config = Ext.apply({
+				title : '批量上传用户数据',width : 400,height : 110,minWidth : 300,minHeight : 100,
+				layout : 'fit',plain : true,bodyStyle : 'padding:5px;',buttonAlign : 'center',closeAction : "hide",
 				items : [
 					new Ext.form.FormPanel({
 						ref:'uploadForm',fileUpload: true,
@@ -487,7 +1126,7 @@ Bb.User.View={
 						frame:true,bodyStyle: 'padding: 10px 10px 10px 10px;',
 						defaults: {
 							anchor: '95%',allowBlank: false,msgTarget: 'side'
-						},              
+						},
 						items : [{
 							xtype : 'fileuploadfield',
 							fieldLabel : '文 件',name : 'upload_file',ref:'upload_file',
@@ -517,14 +1156,14 @@ Bb.User.View={
 								});
 								this.uploadForm.getForm().submit({
 									url : 'index.php?go=admin.upload.uploadUser',
-									success : function(form, action) {
+									success : function(form, response) {
 										Ext.Msg.alert('成功', '上传成功');
 										uploadWindow.hide();
 										uploadWindow.uploadForm.upload_file.setValue('');
 										Bb.User.View.Running.userGrid.doSelectUser();
 									},
-									failure : function(form, action) {
-										Ext.Msg.alert('错误', action.result.msg);
+									failure : function(form, response) {
+										Ext.Msg.alert('错误', response.result.data);
 									}
 								});
 							}
@@ -537,10 +1176,11 @@ Bb.User.View={
 							this.hide();
 						}
 					}]
-				}, config);  
-			Bb.User.View.UploadWindow.superclass.constructor.call(this, config);     
-		}        
+				}, config);
+			Bb.User.View.UploadWindow.superclass.constructor.call(this, config);
+		}
 	}),
+
 	/**
 	 * 视图：用户列表
 	 */
@@ -548,14 +1188,14 @@ Bb.User.View={
 		constructor : function(config) {
 			config = Ext.apply({
 				/**
-				 * 查询条件  
+				 * 查询条件
 				 */
 				filter:null,
 				region : 'center',
 				store : Bb.User.Store.userStore,
 				sm : this.sm,
 				frame : true,trackMouseOver : true,enableColumnMove : true,columnLines : true,
-				loadMask : true,stripeRows : true,headerAsText : false,                
+				loadMask : true,stripeRows : true,headerAsText : false,
 				defaults : {
 					autoScroll : true
 				},
@@ -564,49 +1204,52 @@ Bb.User.View={
 						width:120,sortable : true
 					},
 					columns : [
-						this.sm,        
-                          {header : '标识',dataIndex : 'user_id',hidden:true},
-						  {header : '部门',dataIndex : 'department_name'},
-						  {header : '用户名',dataIndex : 'username'},
-						  {header : '邮箱地址',dataIndex : 'email'}                                 
+						this.sm,
+                        {header : '标识',dataIndex : 'user_id',hidden:true},
+                        {header : '用户名',dataIndex : 'username'},
+                        {header : '邮箱地址',dataIndex : 'email'},
+                        {header : '手机电话',dataIndex : 'cellphone'},
+                        {header : '访问次数',dataIndex : 'loginTimes'}
 					]
-				}),                       
+				}),
 				tbar : {
-					xtype : 'container',layout : 'anchor',
-					height : 27 * 2,style:'font-size:14px',
+					xtype : 'container',layout : 'anchor',height : 27 * 2,style:'font-size:14px',
 					defaults : {
 						height : 27,anchor : '100%'
 					},
-					items : [                        
+					items : [
 						new Ext.Toolbar({
 							enableOverflow: true,width : 100,
 							defaults : {
-							   xtype : 'textfield'
+								xtype : 'textfield',
+								listeners : {
+								   specialkey : function(field, e) {
+										if (e.getKey() == Ext.EventObject.ENTER)this.ownerCt.ownerCt.ownerCt.doSelectUser();
+									}
+								}
 							},
 							items : [
-								'用户名 ','&nbsp;&nbsp;',{ref: '../uusername'},'&nbsp;&nbsp;',                                
+                                '用户名','&nbsp;&nbsp;',{ref: '../uusername'},'&nbsp;&nbsp;',
 								{
-									xtype : 'button',text : '查询',scope: this, 
+									xtype : 'button',text : '查询',scope: this,
 									handler : function() {
 										this.doSelectUser();
 									}
-								}, 
+								},
 								{
 									xtype : 'button',text : '重置',scope: this,
 									handler : function() {
-										this.topToolbar.uusername.setValue("");                                        
+                                        this.topToolbar.uusername.setValue("");
 										this.filter={};
 										this.doSelectUser();
 									}
 								}]
-						}), 
+						}),
 						new Ext.Toolbar({
-							defaults:{
-							  scope: this  
-							},
+							defaults:{scope: this},
 							items : [
 								{
-									text: '反选',iconCls : 'icon-reverse',                                             
+									text: '反选',iconCls : 'icon-reverse',
 									handler: function(){
 										this.onReverseSelect();
 									}
@@ -616,43 +1259,48 @@ Bb.User.View={
 										this.addUser();
 									}
 								},'-',{
-									text : '修改用户',ref: '../../btnUpdate',iconCls : 'icon-edit',disabled : true,  
+									text : '修改用户',ref: '../../btnUpdate',iconCls : 'icon-edit',disabled : true,
 									handler : function() {
 										this.updateUser();
 									}
 								},'-',{
-									text : '删除用户', ref: '../../btnRemove',iconCls : 'icon-delete',disabled : true,                                    
+									text : '删除用户', ref: '../../btnRemove',iconCls : 'icon-delete',disabled : true,
 									handler : function() {
 										this.deleteUser();
 									}
 								},'-',{
-									text : '导入',iconCls : 'icon-import', 
+									xtype:'tbsplit',text: '导入', iconCls : 'icon-import',
 									handler : function() {
 										this.importUser();
-									}
+									},
+									menu: {
+										xtype:'menu',plain:true,
+										items: [
+											{text:'批量导入用户',iconCls : 'icon-import',scope:this,handler:function(){this.importUser()}}
+										]}
 								},'-',{
-									text : '导出',iconCls : 'icon-export', 
-									handler : function() { 
+									text : '导出',iconCls : 'icon-export',
+									handler : function() {
 										this.exportUser();
 									}
-								},'-',{ 
+								},'-',{
 									xtype:'tbsplit',text: '查看用户', ref:'../../tvpView',iconCls : 'icon-updown',
-									enableToggle: true, disabled : true,  
+									enableToggle: true, disabled : true,
 									handler:function(){this.showUser()},
 									menu: {
 										xtype:'menu',plain:true,
 										items: [
 											{text:'上方',group:'mlayout',checked:false,iconCls:'view-top',scope:this,handler:function(){this.onUpDown(1)}},
-											{text:'下方',group:'mlayout',checked:true ,iconCls:'view-bottom',scope:this,handler:function(){this.onUpDown(2)}}, 
+											{text:'下方',group:'mlayout',checked:true ,iconCls:'view-bottom',scope:this,handler:function(){this.onUpDown(2)}},
 											{text:'左侧',group:'mlayout',checked:false,iconCls:'view-left',scope:this,handler:function(){this.onUpDown(3)}},
-											{text:'右侧',group:'mlayout',checked:false,iconCls:'view-right',scope:this,handler:function(){this.onUpDown(4)}}, 
-											{text:'隐藏',group:'mlayout',checked:false,iconCls:'view-hide',scope:this,handler:function(){this.hideUser();Bb.User.Config.View.IsShow=0;}},'-', 
-											{text: '固定',ref:'mBind',checked: true,scope:this,checkHandler:function(item, checked){this.onBindGrid(item, checked);Bb.User.Cookie.set('View.IsFix',Bb.User.Config.View.IsFix);}} 
+											{text:'右侧',group:'mlayout',checked:false,iconCls:'view-right',scope:this,handler:function(){this.onUpDown(4)}},
+											{text:'隐藏',group:'mlayout',checked:false,iconCls:'view-hide',scope:this,handler:function(){this.hideUser();Bb.User.Config.View.IsShow=0;}},'-',
+											{text: '固定',ref:'mBind',checked: true,scope:this,checkHandler:function(item, checked){this.onBindGrid(item, checked);Bb.User.Cookie.set('View.IsFix',Bb.User.Config.View.IsFix);}}
 										]}
 								},'-']}
 					)]
-				},                
-				bbar: new Ext.PagingToolbar({          
+				},
+				bbar: new Ext.PagingToolbar({
 					pageSize: Bb.User.Config.PageSize,
 					store: Bb.User.Store.userStore,
 					scope:this,autoShow:true,displayInfo: true,
@@ -661,15 +1309,15 @@ Bb.User.View={
 					listeners:{
 						change:function(thisbar,pagedata){
 							if (Bb.User.Config.View.IsShow==1){
-								Bb.User.View.IsSelectView=1;    
-							}             
+								Bb.User.View.IsSelectView=1;
+							}
 							this.ownerCt.hideUser();
-							Bb.User.Config.View.IsShow=0;                            
+							Bb.User.Config.View.IsShow=0;
 						}
-					},                    
+					},
 					items: [
 						{xtype:'label', text: '每页显示'},
-						{xtype:'numberfield', value:Bb.User.Config.PageSize,minValue:1,width:35, 
+						{xtype:'numberfield', value:Bb.User.Config.PageSize,minValue:1,width:35,
 							style:'text-align:center',allowBlank: false,
 							listeners:
 							{
@@ -683,7 +1331,7 @@ Bb.User.View={
 									this.ownerCt.pageSize= num;
 									Bb.User.Config.PageSize = num;
 									this.ownerCt.ownerCt.doSelectUser();
-								}, 
+								},
 								specialKey :function(field,e){
 									if (e.getKey() == Ext.EventObject.ENTER){
 										var num = parseInt(field.getValue());
@@ -704,7 +1352,7 @@ Bb.User.View={
 			}, config);
 			//初始化显示用户列表
 			this.doSelectUser();
-			Bb.User.View.Grid.superclass.constructor.call(this, config); 
+			Bb.User.View.Grid.superclass.constructor.call(this, config);
 			//创建在Grid里显示的用户信息Tab页
 			Bb.User.View.Running.viewTabs=new Bb.User.View.UserView.Tabs();
 			this.addListener('rowdblclick', this.onRowDoubleClick);
@@ -719,35 +1367,35 @@ Bb.User.View={
 					// 判断删除和更新按钮是否可以激活
 					this.grid.btnRemove.setDisabled(sm.getCount() < 1);
 					this.grid.btnUpdate.setDisabled(sm.getCount() != 1);
-					this.grid.tvpView.setDisabled(sm.getCount() != 1); 
+					this.grid.tvpView.setDisabled(sm.getCount() != 1);
 				},
-				rowselect: function(sm, rowIndex, record) {  
-					this.grid.updateViewUser();                     
+				rowselect: function(sm, rowIndex, record) {
+					this.grid.updateViewUser();
 					if (sm.getCount() != 1){
 						this.grid.hideUser();
 						Bb.User.Config.View.IsShow=0;
 					}else{
 						if (Bb.User.View.IsSelectView==1){
-							Bb.User.View.IsSelectView=0;  
-							this.grid.showUser();   
-						}     
-					}    
+							Bb.User.View.IsSelectView=0;
+							this.grid.showUser();
+						}
+					}
 				},
-				rowdeselect: function(sm, rowIndex, record) {  
+				rowdeselect: function(sm, rowIndex, record) {
 					if (sm.getCount() != 1){
 						if (Bb.User.Config.View.IsShow==1){
-							Bb.User.View.IsSelectView=1;    
-						}             
+							Bb.User.View.IsSelectView=1;
+						}
 						this.grid.hideUser();
 						Bb.User.Config.View.IsShow=0;
-					}    
+					}
 				}
 			}
 		}),
 		/**
 		 * 双击选行
 		 */
-		onRowDoubleClick:function(grid, rowIndex, e){  
+		onRowDoubleClick:function(grid, rowIndex, e){
 			if (!Bb.User.Config.View.IsShow){
 				this.sm.selectRow(rowIndex);
 				this.showUser();
@@ -762,22 +1410,22 @@ Bb.User.View={
 		/**
 		 * 是否绑定在本窗口上
 		 */
-		onBindGrid:function(item, checked){ 
-			if (checked){             
-			   Bb.User.Config.View.IsFix=1; 
-			}else{ 
-			   Bb.User.Config.View.IsFix=0;   
+		onBindGrid:function(item, checked){
+			if (checked){
+			   Bb.User.Config.View.IsFix=1;
+			}else{
+			   Bb.User.Config.View.IsFix=0;
 			}
 			if (this.getSelectionModel().getSelected()==null){
 				Bb.User.Config.View.IsShow=0;
 				return ;
 			}
 			if (Bb.User.Config.View.IsShow==1){
-			   this.hideUser(); 
+			   this.hideUser();
 			   Bb.User.Config.View.IsShow=0;
 			}
-			this.showUser();   
-		},   
+			this.showUser();
+		},
 		/**
 		 * 反选
 		 */
@@ -789,36 +1437,36 @@ Bb.User.View={
 					this.sm.selectRow(i, true);
 				}
 			}
-		},                
+		},
 		/**
 		 * 查询符合条件的用户
 		 */
 		doSelectUser : function() {
 			if (this.topToolbar){
-				var uusername = this.topToolbar.uusername.getValue();
-				this.filter       ={'username':uusername};
+                var uusername = this.topToolbar.uusername.getValue();
+                this.filter       ={'username':uusername};
 			}
 			var condition = {'start':0,'limit':Bb.User.Config.PageSize};
 			Ext.apply(condition,this.filter);
-			ExtServiceUser.queryPageUser(condition,function(provider, response) {   
-				if (response.result.data) {   
+			ExtServiceUser.queryPageUser(condition,function(provider, response) {
+				if (response.result&&response.result.data) {
 					var result           = new Array();
-					result['data']       =response.result.data; 
+					result['data']       =response.result.data;
 					result['totalCount'] =response.result.totalCount;
-					Bb.User.Store.userStore.loadData(result); 
+					Bb.User.Store.userStore.loadData(result);
 				} else {
-					Bb.User.Store.userStore.removeAll();                        
+					Bb.User.Store.userStore.removeAll();
 					Ext.Msg.alert('提示', '无符合条件的用户！');
 				}
 			});
-		}, 
+		},
 		/**
 		 * 显示用户视图
 		 * 显示用户的视图相对用户列表Grid的位置
 		 * 1:上方,2:下方,0:隐藏。
 		 */
 		onUpDown:function(viewDirection){
-			Bb.User.Config.View.Direction=viewDirection; 
+			Bb.User.Config.View.Direction=viewDirection;
 			switch(viewDirection){
 				case 1:
 					this.ownerCt.north.add(Bb.User.View.Running.viewTabs);
@@ -831,19 +1479,19 @@ Bb.User.View={
 					break;
 				case 4:
 					this.ownerCt.east.add(Bb.User.View.Running.viewTabs);
-					break;    
-			}  
+					break;
+			}
 			Bb.User.Cookie.set('View.Direction',Bb.User.Config.View.Direction);
 			if (this.getSelectionModel().getSelected()!=null){
 				if ((Bb.User.Config.View.IsFix==0)&&(Bb.User.Config.View.IsShow==1)){
-					this.showUser();     
+					this.showUser();
 				}
 				Bb.User.Config.View.IsFix=1;
-				Bb.User.View.Running.userGrid.tvpView.menu.mBind.setChecked(true,true);  
+				Bb.User.View.Running.userGrid.tvpView.menu.mBind.setChecked(true,true);
 				Bb.User.Config.View.IsShow=0;
-				this.showUser();     
+				this.showUser();
 			}
-		}, 
+		},
 		/**
 		 * 显示用户
 		 */
@@ -853,14 +1501,14 @@ Bb.User.View={
 				Bb.User.Config.View.IsShow=0;
 				this.tvpView.toggle(false);
 				return ;
-			} 
+			}
 			if (Bb.User.Config.View.IsFix==0){
 				if (Bb.User.View.Running.view_window==null){
 					Bb.User.View.Running.view_window=new Bb.User.View.UserView.Window();
 				}
 				if (Bb.User.View.Running.view_window.hidden){
 					Bb.User.View.Running.view_window.show();
-					Bb.User.View.Running.view_window.winTabs.hideTabStripItem(Bb.User.View.Running.view_window.winTabs.tabFix);   
+					Bb.User.View.Running.view_window.winTabs.hideTabStripItem(Bb.User.View.Running.view_window.winTabs.tabFix);
 					this.updateViewUser();
 					this.tvpView.toggle(true);
 					Bb.User.Config.View.IsShow=1;
@@ -890,11 +1538,11 @@ Bb.User.View={
 					if (!this.ownerCt.east.items.contains(Bb.User.View.Running.viewTabs)){
 						this.ownerCt.east.add(Bb.User.View.Running.viewTabs);
 					}
-					break;    
-			}  
+					break;
+			}
 			this.hideUser();
 			if (Bb.User.Config.View.IsShow==0){
-				Bb.User.View.Running.viewTabs.enableCollapse();  
+				Bb.User.View.Running.viewTabs.enableCollapse();
 				switch(Bb.User.Config.View.Direction){
 					case 1:
 						this.ownerCt.north.show();
@@ -907,8 +1555,8 @@ Bb.User.View={
 						break;
 					case 4:
 						this.ownerCt.east.show();
-						break;    
-				}  
+						break;
+				}
 				this.updateViewUser();
 				this.tvpView.toggle(true);
 				Bb.User.Config.View.IsShow=1;
@@ -923,11 +1571,11 @@ Bb.User.View={
 		hideUser : function(){
 			this.ownerCt.north.hide();
 			this.ownerCt.south.hide();
-			this.ownerCt.west.hide();   
-			this.ownerCt.east.hide(); 
+			this.ownerCt.west.hide();
+			this.ownerCt.east.hide();
 			if (Bb.User.View.Running.view_window!=null){
 				Bb.User.View.Running.view_window.hide();
-			}            
+			}
 			this.tvpView.toggle(false);
 			this.ownerCt.doLayout();
 		},
@@ -935,8 +1583,8 @@ Bb.User.View={
 		 * 更新当前用户显示信息
 		 */
 		updateViewUser : function() {
-			Bb.User.View.Running.blogGrid.doSelectBlog();
-			Bb.User.View.Running.commentGrid.doSelectComment();
+            Bb.User.View.Running.blogGrid.doSelectBlog();
+            Bb.User.View.Running.commentGrid.doSelectComment();
 			if (Bb.User.View.Running.view_window!=null){
 				Bb.User.View.Running.view_window.winTabs.tabUserDetail.update(this.getSelectionModel().getSelected().data);
 			}
@@ -945,10 +1593,10 @@ Bb.User.View={
 		/**
 		 * 新建用户
 		 */
-		addUser : function() {  
-			if (Bb.User.View.Running.edit_window==null){   
-				Bb.User.View.Running.edit_window=new Bb.User.View.EditWindow();   
-			}     
+		addUser : function() {
+			if (Bb.User.View.Running.edit_window==null){
+				Bb.User.View.Running.edit_window=new Bb.User.View.EditWindow();
+			}
 			Bb.User.View.Running.edit_window.resetBtn.setVisible(false);
 			Bb.User.View.Running.edit_window.saveBtn.setText('保 存');
 			Bb.User.View.Running.edit_window.setTitle('添加用户');
@@ -957,43 +1605,44 @@ Bb.User.View={
             var passwordObj=Bb.User.View.Running.edit_window.password;
             passwordObj.allowBlank=false;
             if (passwordObj.getEl()) passwordObj.getEl().dom.parentNode.previousSibling.innerHTML ="用户密码(<font color=red>*</font>)";
-			Bb.User.View.Running.edit_window.show();   
-			Bb.User.View.Running.edit_window.maximize();               
-		},   
+
+			Bb.User.View.Running.edit_window.show();
+			Bb.User.View.Running.edit_window.maximize();
+		},
 		/**
 		 * 编辑用户时先获得选中的用户信息
 		 */
 		updateUser : function() {
-			if (Bb.User.View.Running.edit_window==null){   
-				Bb.User.View.Running.edit_window=new Bb.User.View.EditWindow();   
-			}            
+			if (Bb.User.View.Running.edit_window==null){
+				Bb.User.View.Running.edit_window=new Bb.User.View.EditWindow();
+			}
 			Bb.User.View.Running.edit_window.saveBtn.setText('修 改');
 			Bb.User.View.Running.edit_window.resetBtn.setVisible(true);
 			Bb.User.View.Running.edit_window.setTitle('修改用户');
-			Bb.User.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());    
+			Bb.User.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
 			Bb.User.View.Running.edit_window.savetype=1;
-			
+
 			Bb.User.View.Running.edit_window.show();
-                                
+
             var passwordObj=Bb.User.View.Running.edit_window.password;
             passwordObj.allowBlank=true;
             if (passwordObj.getEl())passwordObj.getEl().dom.parentNode.previousSibling.innerHTML ="用户密码";
             Bb.User.View.Running.edit_window.password_old.setValue(Bb.User.View.Running.edit_window.password.getValue());
             Bb.User.View.Running.edit_window.password.setValue("");
-                
-			Bb.User.View.Running.edit_window.maximize();                  
-		},        
+
+			Bb.User.View.Running.edit_window.maximize();
+		},
 		/**
 		 * 删除用户
 		 */
 		deleteUser : function() {
 			Ext.Msg.confirm('提示', '确实要删除所选的用户吗?', this.confirmDeleteUser,this);
-		}, 
+		},
 		/**
 		 * 确认删除用户
 		 */
 		confirmDeleteUser : function(btn) {
-			if (btn == 'yes') {  
+			if (btn == 'yes') {
 				var del_user_ids ="";
 				var selectedRows    = this.getSelectionModel().getSelections();
 				for ( var flag = 0; flag < selectedRows.length; flag++) {
@@ -1001,70 +1650,70 @@ Bb.User.View={
 				}
 				ExtServiceUser.deleteByIds(del_user_ids);
 				this.doSelectUser();
-				Ext.Msg.alert("提示", "删除成功！");        
+				Ext.Msg.alert("提示", "删除成功！");
 			}
 		},
 		/**
 		 * 导出用户
 		 */
-		exportUser : function() {            
-			ExtServiceUser.exportUser(this.filter,function(provider, response) {  
+		exportUser : function() {
+			ExtServiceUser.exportUser(this.filter,function(provider, response) {
 				if (response.result.data) {
 					window.open(response.result.data);
 				}
-			});                        
+			});
 		},
 		/**
 		 * 导入用户
 		 */
-		importUser : function() { 
-			if (Bb.User.View.current_uploadWindow==null){   
-				Bb.User.View.current_uploadWindow=new Bb.User.View.UploadWindow();   
-			}     
+		importUser : function() {
+			if (Bb.User.View.current_uploadWindow==null){
+				Bb.User.View.current_uploadWindow=new Bb.User.View.UploadWindow();
+			}
 			Bb.User.View.current_uploadWindow.show();
-		}                
+		}
 	}),
 	/**
 	 * 核心内容区
 	 */
 	Panel:Ext.extend(Ext.form.FormPanel,{
 		constructor : function(config) {
-			Bb.User.View.Running.userGrid=new Bb.User.View.Grid();           
+			Bb.User.View.Running.userGrid=new Bb.User.View.Grid();
 			if (Bb.User.Config.View.IsFix==0){
-				Bb.User.View.Running.userGrid.tvpView.menu.mBind.setChecked(false,true);  
+				Bb.User.View.Running.userGrid.tvpView.menu.mBind.setChecked(false,true);
 			}
-			config = Ext.apply({ 
+			config = Ext.apply({
 				region : 'center',layout : 'fit', frame:true,
 				items: {
 					layout:'border',
 					items:[
-						Bb.User.View.Running.userGrid, 
+						Bb.User.View.Running.userGrid,
 						{region:'north',ref:'north',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true},
-						{region:'south',ref:'south',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true,items:[Bb.User.View.Running.viewTabs]}, 
-						{region:'west',ref:'west',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true}, 
-						{region:'east',ref:'east',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true} 
+						{region:'south',ref:'south',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true,items:[Bb.User.View.Running.viewTabs]},
+						{region:'west',ref:'west',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true},
+						{region:'east',ref:'east',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true}
 					]
 				}
-			}, config);   
-			Bb.User.View.Panel.superclass.constructor.call(this, config);  
-		}        
+			}, config);
+			Bb.User.View.Panel.superclass.constructor.call(this, config);
+		}
 	}),
 	/**
 	 * 当前运行的可视化对象
-	 */ 
-	Running:{         
+	 */
+	Running:{
 		/**
 		 * 当前用户Grid对象
 		 */
 		userGrid:null,
-		/**
-		 * 当前博客Grid对象
-		 */
-		blogGrid:null,
-		/**
-		 * 当前评论Grid对象
-		 */
-		commentGrid:null,  
+        /**
+         * 当前博客Grid对象
+         */
+        blogGrid:null,
+        /**
+         * 当前评论Grid对象
+         */
+        commentGrid:null,
 		/**
 		 * 显示用户信息及关联信息列表的Tab页
 		 */
@@ -1072,12 +1721,12 @@ Bb.User.View={
 		/**
 		 * 当前创建的编辑窗口
 		 */
-		edit_window:null,  
+		edit_window:null,
 		/**
 		 * 当前的显示窗口
 		 */
-		view_window:null                         
-	}    
+		view_window:null
+	}
 };
 /**
  * Controller:主程序
@@ -1085,14 +1734,14 @@ Bb.User.View={
 Ext.onReady(function(){
 	Ext.QuickTips.init();
 	Ext.state.Manager.setProvider(Bb.User.Cookie);
-	Ext.Direct.addProvider(Ext.app.REMOTING_API);     
+	Ext.Direct.addProvider(Ext.app.REMOTING_API);
 	Bb.User.Init();
 	/**
 	 * 用户数据模型获取数据Direct调用
-	 */        
-	Bb.User.Store.userStore.proxy=new Ext.data.DirectProxy({ 
+	 */
+	Bb.User.Store.userStore.proxy=new Ext.data.DirectProxy({
 		api: {read:ExtServiceUser.queryPageUser}
-	});   
+	});
 	/**
 	 * 用户页面布局
 	 */
@@ -1100,11 +1749,11 @@ Ext.onReady(function(){
 		layout : 'border',
 		items : [new Bb.User.View.Panel()]
 	});
-	Bb.User.Viewport.doLayout();                                  
+	Bb.User.Viewport.doLayout();
 	setTimeout(function(){
 		Ext.get('loading').remove();
 		Ext.get('loading-mask').fadeOut({
 			remove:true
 		});
 	}, 250);
-});     
+});

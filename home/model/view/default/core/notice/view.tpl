@@ -4,7 +4,7 @@
     <div><h1>查看通知</h1></div>
     <table class="viewdoblock">
         <tr class="entry"><td class="head">编号</th><td class="content">{$notice.notice_id}</td></tr> 
-        <tr class="entry"><td class="head">分类</th><td class="content">{$notice.noticeType}</td></tr> 
+        <tr class="entry"><td class="head">通知分类</th><td class="content">{$notice.noticeType}</td></tr> 
         <tr class="entry"><td class="head">标题</th><td class="content">{$notice.title}</td></tr> 
         <tr class="entry"><td class="head">通知内容</th><td class="content">{$notice.notice_content}</td></tr> 
     </table>

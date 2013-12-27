@@ -4,12 +4,12 @@
  * 控制器:网站后台管理首页<br/>
  +---------------------------------
  * @category betterlife
- * @package  web.back.admin 
+ * @package  web.back.admin
  * @subpackage action
  * @author skygreen
  */
 class Action_Betterlife extends ActionExt
-{	 
+{
 	 /**
 	  * 控制器:系统管理人员
 	  */
@@ -20,7 +20,7 @@ class Action_Betterlife extends ActionExt
 		 $this->ExtUpload();
 		 $this->loadExtJs('core/admin.js');
 	 }
-	 
+
 	 /**
 	  * 控制器:用户
 	  */
@@ -30,8 +30,9 @@ class Action_Betterlife extends ActionExt
 		 $this->ExtDirectMode();
 		 $this->ExtUpload();
 		 $this->loadExtJs('core/user.js');
+         $this->load_onlineditor(array('blog_content','comment'));
 	 }
-	
+
 	 /**
 	  * 控制器:博客
 	  */
@@ -41,7 +42,7 @@ class Action_Betterlife extends ActionExt
 		 $this->ExtDirectMode();
 		 $this->ExtUpload();
 		 $this->loadExtJs('core/blog.js');
-		 $this->load_onlineditor('blog_content');
+         $this->load_onlineditor(array('comment','blog_content'));
 	 }
 }
 ?>

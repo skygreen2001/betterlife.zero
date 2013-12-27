@@ -9,7 +9,7 @@ if (Config_AutoCode::RELATION_VIEW_FULL)
 	}
 	$realId_relation=DataObjectSpec::getRealIDColumnName($key);
 	self::$relationStore=$relationStore;
-	$editWindow_relationVars = self::model_fieldLables($appName_alias,$current_classname,$fieldInfo,$realId,"    ");
+	$editWindow_relationVars = self::model_fieldLables($tablename,$appName_alias,$current_classname,$fieldInfo,$realId,"    ");
 	$relationStore=self::$relationStore;
 	$fieldLabels_relation    = $editWindow_relationVars["fieldLabels"];
 	$treeLevelVisible_Add    = $editWindow_relationVars["treeLevelVisible_Add"];
