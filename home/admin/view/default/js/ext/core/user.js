@@ -1308,11 +1308,13 @@ Bb.User.View={
 					emptyMsg: "无显示数据",
 					listeners:{
 						change:function(thisbar,pagedata){
-							if (Bb.User.Config.View.IsShow==1){
-								Bb.User.View.IsSelectView=1;
+							if (Bb.User.Viewport){
+								if (Bb.User.Config.View.IsShow==1){
+									Bb.User.View.IsSelectView=1;
+								}
+								this.ownerCt.hideUser();
+								Bb.User.Config.View.IsShow=0;
 							}
-							this.ownerCt.hideUser();
-							Bb.User.Config.View.IsShow=0;
 						}
 					},
 					items: [

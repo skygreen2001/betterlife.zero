@@ -545,11 +545,13 @@ Bb.Admin.View={
 					emptyMsg: "无显示数据",
 					listeners:{
 						change:function(thisbar,pagedata){
-							if (Bb.Admin.Config.View.IsShow==1){
-								Bb.Admin.View.IsSelectView=1;
+							if (Bb.Admin.Viewport){
+								if (Bb.Admin.Config.View.IsShow==1){
+									Bb.Admin.View.IsSelectView=1;
+								}
+								this.ownerCt.hideAdmin();
+								Bb.Admin.Config.View.IsShow=0;
 							}
-							this.ownerCt.hideAdmin();
-							Bb.Admin.Config.View.IsShow=0;
 						}
 					},
 					items: [
