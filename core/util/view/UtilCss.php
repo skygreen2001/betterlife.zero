@@ -7,37 +7,37 @@
  * @package util.view
  * @author skygreen
  */
-class UtilCss extends Util 
+class UtilCss extends Util
 {
 	/**
 	 * 对CSS进行Gzip操作的路径
-	 * @var string 
+	 * @var string
 	 */
 	private static $CSS_GZIP="common/js/gzip.php?css=";
 	/**
 	 * JS框架名称键名称
-	 * @var string 
+	 * @var string
 	 */
 	private static $CSS_FLAG_GROUP="g";
 	/**
 	 * JS框架版本键名称
-	 * @var type 
+	 * @var type
 	 */
-	private static $CSS_FLAG_VERSION="v"; 
+	private static $CSS_FLAG_VERSION="v";
 	/**
 	 * 加载过的css文件。
 	 * $value css文件名
-	 * @var array 
+	 * @var array
 	 */
-	public static $CssLoaded=array();   
-	
+	public static $CssLoaded=array();
+
 	const CSS_REPORT_TABLE="report";
 	/**
 	 * 动态加载Ext Required CSS文件
 	 * @param ViewObject $viewobject 表示层显示对象
 	 * @param string $version javascript框架的版本号
 	 */
-	public static function loadExt($viewObject=null,$version="3.3.0") 
+	public static function loadExt($viewObject=null,$version="3.3.0")
 	{
 	   UtilAjax::init();
 	   $g_flag_ext=EnumJsFramework::JS_FW_EXTJS;
@@ -51,10 +51,10 @@ class UtilCss extends Util
 		   self::loadCss($ext_resource_root."ext-all.css",true,$g_flag_ext,$version);
 		   self::loadCss($ext_resource_root."xtheme-gray.css",true,$g_flag_ext,$version);
 		   self::loadCss($ext_resource_root."ext-patch.css",true,$g_flag_ext,$version);
-		   self::loadCss("shared/tabscroller/TabScrollerMenu.css",true,$g_flag_ext,$version);    
+		   self::loadCss("shared/tabscroller/TabScrollerMenu.css",true,$g_flag_ext,$version);
 	   }
 	}
-	
+
 	/**
 	 * 动态加载CSS文件
 	 * @param string $cssFile Css文件名
@@ -62,11 +62,11 @@ class UtilCss extends Util
 	 * @param string $version javascript框架的版本号
 	 * @param string $charset 字符集
 	 */
-	public static function loadCss($cssFile,$isGzip=false,$cssFlag=null,$version="",$charset="utf-8") 
-	{  
+	public static function loadCss($cssFile,$isGzip=false,$cssFlag=null,$version="",$charset="utf-8")
+	{
 		echo self::loadCssSentence($cssFile,$isGzip,$cssFlag,$version,$charset);
 	}
-	
+
 	/**
 	 * 预加载[不直接输出]:动态加载CSS文件
 	 * @param ViewObject $viewobject 表示层显示对象
@@ -75,7 +75,7 @@ class UtilCss extends Util
 	 * @param string $version javascript框架的版本号
 	 * @param string $charset 字符集
 	 */
-	public static function loadCssReady($viewobject,$cssFile,$isGzip=false,$cssFlag=null,$version="",$charset="utf-8") 
+	public static function loadCssReady($viewobject,$cssFile,$isGzip=false,$cssFlag=null,$version="",$charset="utf-8")
 	{
 		if ($viewobject instanceof ViewObject){
 			if (!isset($viewobject->css_ready)||empty($viewobject->css_ready)){
@@ -84,7 +84,7 @@ class UtilCss extends Util
 			$viewobject->css_ready.=self::loadCssSentence($cssFile,$isGzip,$cssFlag,$version,$charset);
 		}
 	}
-	
+
 	/**
 	 * 动态加载CSS文件的语句
 	 * @param string $cssFile Css文件名
@@ -92,8 +92,8 @@ class UtilCss extends Util
 	 * @param string $version javascript框架的版本号
 	 * @param string $charset 字符集
 	 */
-	public static function loadCssSentence($cssFile,$isGzip=false,$cssFlag=null,$version="",$charset="utf-8") 
-	{      
+	public static function loadCssSentence($cssFile,$isGzip=false,$cssFlag=null,$version="",$charset="utf-8")
+	{
 		$result="";
 		if (isset($cssFile)){
 			$url_base=UtilNet::urlbase();
@@ -103,17 +103,20 @@ class UtilCss extends Util
 				}
 				if (!empty($version)){
 					$cssFile.="&".self::$CSS_FLAG_VERSION."=".$version;
-				}        
+				}
 				if (in_array($cssFile, self::$CssLoaded)){
 					return ;
-				}   
+				}
 				$css_gzip=self::$CSS_GZIP;
-				if (contain($cssFile,Gc::$url_base)){                        
+				if (contain($cssFile,Gc::$url_base)){
 					$isLocalCssFile=str_replace(Gc::$url_base,Gc::$nav_root_path,$cssFile);
 					if (is_server_windows()){
 						$isLocalCssFile=str_replace("/","\\",$isLocalCssFile);
 					}
-					$isLocalGzip=dirname(dirname($isLocalCssFile)).DIRECTORY_SEPARATOR."gzip.php";
+					if (contain($isLocalCssFile,"resources".DIRECTORY_SEPARATOR."css")){
+						$isLocalCssFile=substr($isLocalCssFile,0,strpos($isLocalCssFile,"resources".DIRECTORY_SEPARATOR."css")+9);
+					}
+					$isLocalGzip=$isLocalCssFile.DIRECTORY_SEPARATOR."gzip.php";
 					if (file_exists($isLocalGzip)){
 						$css_gzip=str_replace(Gc::$nav_root_path,"",$isLocalGzip)."?css=";
 						$css_gzip=str_replace("\\","/",$css_gzip);
@@ -123,61 +126,60 @@ class UtilCss extends Util
 			}else{
 				if (in_array($cssFile, self::$CssLoaded)){
 					return ;
-				}                    
+				}
 				if (startWith($cssFile, "http")){
-					$result= "    <link rel=\"stylesheet\" type=\"text/css\" href=\"".$cssFile."\" />\r\n";  
+					$result= "    <link rel=\"stylesheet\" type=\"text/css\" href=\"".$cssFile."\" />\r\n";
 				}else{
-					$result= "    <link rel=\"stylesheet\" type=\"text/css\" href=\"".$url_base.$cssFile."\" />\r\n";  
+					$result= "    <link rel=\"stylesheet\" type=\"text/css\" href=\"".$url_base.$cssFile."\" />\r\n";
 				}
 			}
 			self::$CssLoaded[]=$cssFile;
-		}        
+		}
 		return $result;
 	}
-	
-	
+
 	/**
 	 * 动态加载应用指定的Css内容的语句。
 	 * @param string $cssContent：Css内容的语句
-	 */   
+	 */
 	public static function loadCssContent($cssContent)
 	{
 		echo self::loadCssContentSentence($cssContent);
 	}
-	
+
 	/**
 	 * 预加载[不直接输出]:动态加载应用指定的Css内容的语句。
 	 * @param ViewObject $viewobject 表示层显示对象,只在Web框架中使用,一般结合loadJsReady使用
 	 * @param string $cssContent：Js内容的语句
-	 */   
+	 */
 	public static function loadCssContentReady($viewobject,$cssContent)
-	{        
+	{
 		if ($viewobject instanceof ViewObject){
 			if (!isset($viewobject->css_ready)||empty($viewobject->css_ready)){
 				$viewobject->css_ready="";
 			}
 			$viewobject->css_ready.=self::loadCssContentSentence($cssContent);
 		}
-	}  
-	
+	}
+
 	/**
 	 * 动态加载应用指定的Js内容的语句。
 	 * @param string $cssContent：Css内容的语句
-	 */   
+	 */
 	public static function loadCssContentSentence($cssContent)
 	{
 		$result="    <style type=\"text/css\">\r\n";
 		$result.="      ".$cssContent."\r\n";
 		$result.="    </style>\r\n";
 		return $result;
-	}    
+	}
 
 	/**
 	 * 列表信息样式报表
 	 * @see http://www.somacon.com/p141.php
 	 * {self::CSS_REPORT_TABLE}
 	 */
-	public static function report_info() 
+	public static function report_info()
 	{
 		echo '<style type="text/css">
 			table.'.self::CSS_REPORT_TABLE.' {
@@ -206,13 +208,13 @@ class UtilCss extends Util
 			}
 			</style>';
 	}
-	
+
 	/**
 	 * 定义form的样式
 	 */
 	public static function form_css()
 	{
-		echo '<style type="text/css">    
+		echo '<style type="text/css">
 				html,body {
 					font:normal 15px SimSun,sans-serif;
 					border:0 none;
@@ -232,14 +234,14 @@ class UtilCss extends Util
 					width:500px;
 					padding-left:30px;
 					text-align:left;
-				}                
+				}
 				label {
 					vertical-align:middle;
 					width:150px;
 					height:35px;
 					text-align:right;
 					margin:2px 4px 6px;
-				}                
+				}
 				input[type=text],input[type=password]{
 					border:1px solid #FFF;
 					text-align:center;
@@ -253,7 +255,7 @@ class UtilCss extends Util
 					height:28px;
 					line-height:28px;
 					vertical-align:bottom;
-					text-align:center;                
+					text-align:center;
 				}
 				input[type=button]{
 					border:1px solid;
