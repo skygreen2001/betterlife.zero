@@ -1008,7 +1008,7 @@ MANY2MANYUPDATE;
 					$specialResult=$enumConvert["normal"];
 					$relationField=self::relationFieldShow($belong_instance_name,$belong_class,$belong_fieldInfo);
 					if ((!empty($relationField))||(!empty($enumConvert["normal"]))){
-						$specialResult.="foreach (\$data as \$$belong_instance_name) {\r\n".
+						$specialResult.="            foreach (\$data as \$$belong_instance_name) {\r\n".
 										$relationField.
 										$datetimeShow.
 										"                if({$key}::existBy(\"{$owner_idcolumn}=\${$owner_idcolumn} and $belong_idcolumn=\".\${$belong_instance_name}->{$belong_idcolumn})){\r\n".
@@ -1080,7 +1080,7 @@ MANY2MANYUPDATE;
 				   break;
 			}
 
-			$specialResult
+$specialResult
 			if (\$data==null)\$data=array();
 		}else{
 			\$data=array();

@@ -108,7 +108,7 @@ class AutoCodeAction extends AutoCode
 		$category_cap=Gc::$appName;
 		$category_cap{0}=ucfirst($category_cap{0});
 		if (self::$type==2){
-			echo "<br/><font color='#FF0000'>[需要在【后台】Action_Index或者Action_".$category_cap."里添加没有的代码]</font><br />";
+			echo "<br/><font color='#FF0000'>[需要在【后台】Action_".$category_cap."里添加没有的代码]</font><br />";
 			$category  = Gc::$appName;
 			$package   = self::$package_back;
 			$author    = self::$author;
@@ -166,10 +166,10 @@ class AutoCodeAction extends AutoCode
 							 "{\r\n".$value."}\r\n".
 							 "?>";
 					self::saveDefineToDir(self::$action_dir_full,$key.".php",$e_result);
-					echo  "新生成的$key文件路径:<font color='#0000FF'>".self::$action_dir_full.$key.".php</font><br />";
 				}
 			}
-
+            echo  "新生成的Action_{$category_cap}文件路径:<font color='#0000FF'>".self::$action_dir_full.$key.".php</font><br />";
+            
 			/*self::$echo_result=str_replace(" ","&nbsp;",self::$echo_result);
 			self::$echo_result=str_replace("\r\n","<br />",self::$echo_result);
 			echo self::$echo_result;     */
@@ -210,7 +210,7 @@ class AutoCodeAction extends AutoCode
 	*/
 	public static function createActionParent()
 	{
-		$dir_home_app=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir;
+		$dir_home_app=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR."action".DIRECTORY_SEPARATOR;
 		$author=self::$author;
 		require("view".DIRECTORY_SEPARATOR."jsmodel".DIRECTORY_SEPARATOR."actionbasicjs.php");
 		switch (self::$type) {
