@@ -90,7 +90,7 @@ $fields_many_fields,
     })
 MANY2MANYSTORE;
     $relationStore.=$jsMany2ManyStore.$fields_many['relationStore_onlyForFieldLabels'];
-    $m2m_columns=self::model_columns($belong_class,$belong_fieldInfo,"    ");
+    $m2m_columns=self::model_columns($tablename,$belong_class,$belong_fieldInfo,"    ");
     $m2m_filters=self::model_filters($appName_alias,$belong_class,$belong_instance_name,$belong_fieldInfo,"    ");
     //Ext "Grid" 中"tbar"包含的items中的items
     $m2m_filterFields   =$m2m_filters["filterFields"];

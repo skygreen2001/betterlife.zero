@@ -29,7 +29,7 @@ class View {
 	 * EaseTemplate 是否开启Memcache
 	 */
 	const TEMPLATE_EASETEMPLATE_MEMCACHE_ON=false;
-	
+
 	private $vars=array();
 	/**
 	 * 显示页面上使用的变量存储对象
@@ -39,9 +39,9 @@ class View {
 	 */
 	private $viewObject;
 	/**
-	 * 访问应用名  
+	 * 访问应用名
 	 * @var string
-	 */    
+	 */
 	private $moduleName;
 	private $template;//模板
 	private $templateMode;//模板模式
@@ -58,28 +58,29 @@ class View {
 	 * @param array 显示层需要使用的全局变量
 	 */
 	protected static $view_global=array();
-	private function init_view_global(){        
+	private function init_view_global(){
 		self::$view_global=array(
 			"url_base"=> Gc::$url_base,
 			"encoding"=> Gc::$encoding,
 			"site_name"=> Gc::$site_name,
 			"template_url"=>$this->template_url_dir(),
+			"upload_url"=>Gc::$upload_url,
 			"templateDir"=> Gc::$nav_root_path.$this->getTemplate_View_Dir($this->moduleName),
 		);
-	}                                         
+	}
 	/**
 	* @param mixed $moduleName 访问应用名
 	* @param mixed $templatefile 模板文件
 	* @return View
 	*/
 	public function __construct($moduleName,$templatefile=null) {
-		$this->moduleName=$moduleName;    
+		$this->moduleName=$moduleName;
 		self::init_view_global();
-		if (isset(Gc::$template_mode_every)&&array_key_exists($this->moduleName,Gc::$template_mode_every)){            
+		if (isset(Gc::$template_mode_every)&&array_key_exists($this->moduleName,Gc::$template_mode_every)){
 			$this->initTemplate(Gc::$template_mode_every[$this->moduleName],$templatefile);
-		}else{                       
+		}else{
 			$this->initTemplate(Gc::$template_mode,$templatefile);
-		}          
+		}
 		if (!empty(self::$view_global)) {
 			foreach (self::$view_global as $key=>$value) {
 				$this->template_set($key, $value);
@@ -92,7 +93,7 @@ class View {
 		}
 	}
 
-	public function set($key, $value,$template_mode=null) {  
+	public function set($key, $value,$template_mode=null) {
 		$this->template_set($key, $value,$template_mode);
 	}
 
@@ -139,11 +140,11 @@ class View {
 		if (property_exists($this,$property)) {
 			if ((!empty($property))&&($property=='viewObject')&&
 				!empty($this->viewObject->js_ready)&&array_key_exists('js_ready',$value)){
-			   $value->js_ready= $this->viewObject->js_ready.$value->js_ready; 
-			}              
+			   $value->js_ready= $this->viewObject->js_ready.$value->js_ready;
+			}
 			if ((!empty($property))&&($property=='viewObject')&&
 				!empty($this->viewObject->css_ready)&&array_key_exists('css_ready',$value)){
-			   $value->css_ready= $this->viewObject->css_ready.$value->css_ready; 
+			   $value->css_ready= $this->viewObject->css_ready.$value->css_ready;
 			}
 			$this->$property=$value;
 		} else {
@@ -182,13 +183,13 @@ class View {
 		return $this->templateMode;
 	}
 
-	/**  
+	/**
 	 * @return string 模板文件所在的目录
 	 */
 	public function template_dir() {
 		return $this->template_dir;
 	}
-	/**  
+	/**
 	 * @return string 模板文件所在的目录
 	 */
 	public function template_url_dir(){
@@ -216,22 +217,22 @@ class View {
 
 	/**
 	* 获取模板文件完整的路径
-	* 
+	*
 	*/
 	private function getTemplate_View_Dir(){
 	   $result="";
 	   if (strlen(Gc::$module_root)>0) {
 		  $result.=Gc::$module_root.DIRECTORY_SEPARATOR;
 	   }
-	   $result.= $this->moduleName.DIRECTORY_SEPARATOR.self::VIEW_DIR_VIEW.DIRECTORY_SEPARATOR;   
+	   $result.= $this->moduleName.DIRECTORY_SEPARATOR.self::VIEW_DIR_VIEW.DIRECTORY_SEPARATOR;
 	   if (isset(Gc::$self_theme_dir_every)&&array_key_exists($this->moduleName,Gc::$self_theme_dir_every)){
-		   $result.=Gc::$self_theme_dir_every[$this->moduleName].DIRECTORY_SEPARATOR;  
-	   }else{      
-		   $result.=Gc::$self_theme_dir.DIRECTORY_SEPARATOR; 
-	   }                                                           
+		   $result.=Gc::$self_theme_dir_every[$this->moduleName].DIRECTORY_SEPARATOR;
+	   }else{
+		   $result.=Gc::$self_theme_dir.DIRECTORY_SEPARATOR;
+	   }
 	   return $result;
-	}    
-	
+	}
+
 	/**
 	 * 初始化模板文件
 	 * @var string $template_mode 模板模式
@@ -239,7 +240,7 @@ class View {
 	private function initTemplate($template_mode,$templatefile=null) {
 		if (empty($template_mode)) {
 			$template_mode=Gc::$template_mode;
-		}                    
+		}
 		$this->template_dir=$this->getTemplate_View_Dir($this->moduleName).Config_F::VIEW_CORE.DIRECTORY_SEPARATOR;
 		$template_tmp_dir= $this->getTemplate_View_Dir($this->moduleName)."tmp".DIRECTORY_SEPARATOR;
 		$this->template_suffix_name=Gc::$template_file_suffix;
@@ -294,7 +295,7 @@ class View {
 						'Copyright'    =>'off',//版权保护<br />
 				);
 				if (self::TEMPLATE_EASETEMPLATE_MEMCACHE_ON) {
-					
+
 					$tpl_set['MemCache']="http://".Cache_Memcache::$host.":".Cache_Memcache::$port;
 				}
 				$this->template = new template($tpl_set);
@@ -315,7 +316,7 @@ class View {
 				$this->template= new HTML_Template_Flexy(array(
 								'templateDir' => $this->template_dir.$sub_dir,
 								'compileDir' => $template_tmp_dir.'compiled'.DIRECTORY_SEPARATOR,
-								'debug' => Gc::$dev_debug_on,  
+								'debug' => Gc::$dev_debug_on,
 								'forceCompile'  =>  true,  // only suggested for debugging
 								'fatalError'=> HTML_TEMPLATE_FLEXY_ERROR_DIE,
 								'globals'=>true,/*可以在页面模板中使用$_Session,$_Get*/
@@ -332,17 +333,17 @@ class View {
 				break;
 		}
 	}
-		
+
 	/**
 	 * 设置模板认知的变量
 	 */
 	public function template_set($key,$value,$template_mode=null) {
-		if (empty($template_mode)) {            
-			if (isset(Gc::$template_mode_every)&&array_key_exists($this->moduleName,Gc::$template_mode_every)){            
+		if (empty($template_mode)) {
+			if (isset(Gc::$template_mode_every)&&array_key_exists($this->moduleName,Gc::$template_mode_every)){
 				$template_mode=Gc::$template_mode_every[$this->moduleName];
-			}else{                                 
+			}else{
 				$template_mode=Gc::$template_mode;
-			}               
+			}
 		}
 		switch ($template_mode) {
 			case self::TEMPLATE_MODE_NONE:
@@ -358,14 +359,14 @@ class View {
 			case self::TEMPLATE_MODE_FLEXY:
 				if (!is_object($this->vars)) {
 					$this->vars=new stdClass();
-				}                        
+				}
 				break;
-		}  
+		}
 		if (is_array($this->vars)) {
 			$this->vars[$key]=$value;
 		} else {
 			$this->vars->$key=$value;
-		}         
+		}
 	}
 
 	/**
@@ -379,18 +380,18 @@ class View {
 		$templateFilePath=$templatefile.$this->template_suffix_name;
 		switch ($template_mode) {
 			case self::TEMPLATE_MODE_SMARTY:
-				if(!empty($this->viewObject)){  
+				if(!empty($this->viewObject)){
 				  $view_array=UtilObject::object_to_array($this->viewObject,$this->vars);
 				  foreach($view_array as $key=>$value){
 					if (!array_key_exists($key,self::$view_global)){
 					  $this->set($key,$value);
 					}
-				  }     
+				  }
 				  $name_viewObject=ViewObject::get_Class();
 				  $name_viewObject{0}=strtolower($name_viewObject{0});
 				  $this->template->assignByRef($name_viewObject,$this->viewObject);
-				} 
-																		
+				}
+
 				$this->template->display($templateFilePath);
 				break;
 			case self::TEMPLATE_MODE_SMARTTEMPLATE:
