@@ -2,105 +2,104 @@
 /**
 * 控制器:博客
 */
-class Action_Blog extends Action 
+class Action_Blog extends Action
 {
 	/**
 	* 显示博客列表
 	*/
-	public function display() 
+	public function display()
 	{
 		$this->keywords.="-博客";
 		$this->description.="-显示博客列表";
 		if (HttpSession::isHave("IsSyncUcenterOtherApp")&&isset($this->data["uid"])){
 			$this->uc_sync_login($this->data["uid"]);
-		}     
-		$user = HttpSession::get('user_id');   
-		if (!$user)  
-		if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){          
+		}
+
+		if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){
 		  $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];
 		}else{
-		  $nowpage=1; 
+		  $nowpage=1;
 		}
 
 		$count=Blog::count();
-		$bb_page=UtilPage::init($nowpage,$count); 
-		$blogs = Blog::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());     
+		$bb_page=UtilPage::init($nowpage,$count);
+		$blogs = Blog::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
 		if(!$blogs) {
 			$this->redirect("blog","write");
 		}else {
 			$view=new View_Blog($this);
 			$view->blogs=$blogs;
-			$view->countBlogs=$count;            
+			$view->countBlogs=$count;
 			$this->view->viewObject=$view;
 		}
-	} 
+	}
 	/**
 	* 编写博客
 	*/
-	public function write() 
-	{        
-		$this->view->color="green";  
+	public function write()
+	{
+		$this->view->color="green";
 		$blog_content="";
 		if (!empty($_POST)) {
-			$blog = $this->model->Blog;     
+			$blog = $this->model->Blog;
 			$blog->user_id=HttpSession::get('user_id');
-			$blog_id= $blog->getId();                   
+			$blog_id= $blog->getId();
 			if (!empty($blog_id)){
-			  $blog->update();   
-			  $view=new View_Blog($this);     
-			  $view->blog=$blog; 
-			  $this->view->viewObject=$view;        
+			  $blog->update();
+			  $view=new View_Blog($this);
+			  $view->blog=$blog;
+			  $this->view->viewObject=$view;
 			}else{
-			  $blog->save();      
-			  $this->redirect("blog","display");               
-			}    
-			$blog_content=$blog->blog_content;                                                                                                                    
+			  $blog->save();
+			  $this->redirect("blog","display");
+			}
+			$blog_content=$blog->blog_content;
 			$this->view->message="博客提交成功";
-			$this->view->color="green";                                                        
-		}else{     
+			$this->view->color="green";
+		}else{
 			$blog_id= @$this->data["blog_id"];
-			$view=new View_Blog($this); 
-			if (count($_GET)>0&&$blog_id) {  
-				$blog=Blog::get_by_id($blog_id); 
-				$view->blog=$blog; 
-			}                             
-			$this->view->viewObject=$view;                                                                     
-		}                 
-		//加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。 
-		$this->load_onlineditor("blog_content");          
+			$view=new View_Blog($this);
+			if (count($_GET)>0&&$blog_id) {
+				$blog=Blog::get_by_id($blog_id);
+				$view->blog=$blog;
+			}
+			$this->view->viewObject=$view;
+		}
+		//加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。
+		$this->load_onlineditor("blog_content");
 	}
 	/**
 	 * 删除博客
 	 */
 	public function delete()
 	{
-		$blog_id= $this->data["blog_id"]; 
+		$blog_id= $this->data["blog_id"];
 		$blog=new Blog();
 		$blog->setId($blog_id);
 		$blog->delete();
 		foreach($blog->comments() as $comment){
 			$comment->delete();
 		}
-		$this->redirect("blog","display",$this->data);       
+		$this->redirect("blog","display",$this->data);
 	}
-	
+
 	/**
-	 * 与Ucenter的其他应用同步登录，实现单点登录 
+	 * 与Ucenter的其他应用同步登录，实现单点登录
 	 */
 	private function uc_sync_login($uid)
 	{
 		if (Gc::$is_ucenter_integration){
-			$uc_client_path= Gc::$nav_root_path."data".DIRECTORY_SEPARATOR.'uc_client'.DIRECTORY_SEPARATOR.'client.php';     
+			$uc_client_path= Gc::$nav_root_path."data".DIRECTORY_SEPARATOR.'uc_client'.DIRECTORY_SEPARATOR.'client.php';
 			include_once Gc::$nav_root_path.'api'.DIRECTORY_SEPARATOR.'config.inc.php';
 			include_once($uc_client_path);
 			if($uid > 0) {
 				if(empty($this->view->viewObject))
 				{
 					$this->view->viewObject=new ViewObject();
-				}     
+				}
 				//LogMe::log('登录成功');
 				UtilJavascript::loadJsContentReady($this->view->viewObject,uc_user_synlogin($uid));
-				HttpSession::remove("IsSyncUcenterOtherApp");   
+				HttpSession::remove("IsSyncUcenterOtherApp");
 			} elseif($uid == -1) {
 				//LogMe::log('用户不存在,或者被删除');
 			} elseif($uid == -2) {
@@ -116,12 +115,12 @@ class Action_Blog extends Action
 *  Blog表示层对象
 */
 class View_Blog extends ViewObject
-{ 
-	public $blog;   
+{
+	public $blog;
 	public $blogs;
 	public $countBlogs;
 	public function count_comments($blog_id){
-		return Comment::count("blog_id=".$blog_id);     
+		return Comment::count("blog_id=".$blog_id);
 	}
 }
 ?>

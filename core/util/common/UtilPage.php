@@ -15,10 +15,13 @@ class UtilPage {
 	public static $linkUrl_pageFlag="pageNo";
 	/**
 	 * 在分页标签里显示的分页页码数
-	 *
 	 * @var mixed
 	 */
 	private static $tag_viewpagecount=10;
+	/**
+	* 默认每页显示记录数
+	*/
+	public static $default_pagesize=3;
 	private $count = 10; // 记录总数
 	private $allPageCount;//总页数
 	private $nowpage = 1; // 当前页数
@@ -31,7 +34,8 @@ class UtilPage {
 	private  $navig;// 导航条
 	private  $navigTo;// 导航条
 
-	public static function Init($nowpage,$count,$pageSize=10,$linkUrl=null){
+	public static function Init($nowpage,$count,$pageSize=null,$linkUrl=null){
+		if (empty($pageSize))$pageSize=self::$default_pagesize;
 		return new UtilPage($nowpage,$count,$pageSize,$linkUrl);
 	}
 
