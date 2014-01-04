@@ -441,6 +441,39 @@ class AutoCodeViewExt extends AutoCode
 			}
 		}
 
+		$relationSpec=self::$relation_all[$classname];
+		if (array_key_exists("has_many",$relationSpec))
+		{
+			$has_many=$relationSpec["has_many"];
+			foreach (array_keys($has_many) as $key)
+			{
+				if (self::isMany2ManyByClassname($key))
+				{
+					$tablename_m2m=self::getTablename($key);
+					$fieldInfo_m2m=self::$fieldInfos[$tablename_m2m];
+					$belong_class="";
+					foreach (array_keys($fieldInfo_m2m) as $fieldname)
+					{
+						if (!self::isNotColumnKeywork($fieldname))continue;
+						if ($fieldname==self::keyIDColumn($key))continue;
+						if (contain($fieldname,"_id")){
+							$to_class=str_replace("_id", "", $fieldname);
+							$to_class{0}=strtoupper($to_class{0});
+							if (class_exists($to_class)){
+								if ($to_class!=$classname){
+									$belong_class=$to_class;
+								}
+							}
+						}
+					}
+
+					$tablename_belong=self::getTablename($belong_class);
+					$belong_instance_name=self::getInstancename($tablename_belong);
+					$fields.="                {name: '{$belong_instance_name}Str',type: 'string'},\r\n";
+				}
+			}
+		}
+
 		$fields=substr($fields,0,strlen($fields)-3);
 		$result['fields']=$fields;
 		$result['relationStore_onlyForFieldLabels']=$relationStore;
@@ -490,6 +523,15 @@ class AutoCodeViewExt extends AutoCode
 		$relationViewGrids="";
 		$viewRelationDoSelect="";
 		$relationViewGridInit="";
+		//一选多代码生成
+		$result=array(
+			'm2mMenu'=>'',
+			'm2mRowSelect'=>'',
+			'm2mRowSelectElse'=>'',
+			'm2mShowHide'=>'',
+			'm2mRunningWindow'=>'',
+			'm2mMenuShowHide'=>''
+		);
 		//导出一对多关系规范定义(如果存在)
 		if (array_key_exists("has_many",$relationSpec))
 		{
@@ -602,12 +644,12 @@ class AutoCodeViewExt extends AutoCode
 				if (!contain($relationClassesView,"{$current_classname}View"))
 				{
 					include("jsmodel".DIRECTORY_SEPARATOR."many2many.php");
-					$result['m2mMenu']=$jsMany2ManyMenu;
-					$result['m2mRowSelect']=$jsMany2ManyRowSelect;
-					$result['m2mRowSelectElse']=$jsMany2ManyRowSelectElse;
-					$result['m2mShowHide']=$jsMany2ManyShowHide;
-					$result['m2mRunningWindow']=$jsMany2ManyRunningWindow;
-					$result['m2mMenuShowHide']=$jsMany2ManyMenuShowHide;
+					$result['m2mMenu'].=$jsMany2ManyMenu;
+					$result['m2mRowSelect'].=$jsMany2ManyRowSelect;
+					$result['m2mRowSelectElse'].=$jsMany2ManyRowSelectElse;
+					$result['m2mShowHide'].=$jsMany2ManyShowHide;
+					$result['m2mRunningWindow'].=$jsMany2ManyRunningWindow;
+					$result['m2mMenuShowHide'].=$jsMany2ManyMenuShowHide;
 					$relationClassesView.=$jsMany2ManyContent;
 					$table_comment12n=self::tableCommentKey($tablename);
 					$realId=DataObjectSpec::getRealIDColumnName($classname);

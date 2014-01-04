@@ -1,5 +1,7 @@
 <?php
-
+/**
+* 多对多关系，在主控方显示菜单可进行一选多
+*/
 $key_many=$key;
 $key_many{0}=strtoupper($key_many{0});
 $jsMany2ManyContent="";
@@ -56,8 +58,7 @@ if (self::isMany2ManyByClassname($key_many))
             successProperty: 'success',
             root: 'data',remoteSort: true,
             fields : [
-$fields_many_fields,
-                {name: 'isShow{$belong_class}Check',type: 'string'}
+$fields_many_fields
             ]}
         ),
         writer: new Ext.data.JsonWriter({
@@ -71,19 +72,16 @@ $fields_many_fields,
             },
             load : function(records,options){
                 if (records&&records.data&&records.data.items) {
-                    var result           = new Array();
-                    result['data']       =records.data.items;
+                    var selData    = $appName_alias.$classname.View.Running.select{$belong_class}Window.selData;//选中的{$comment_belong}
+                    var data       = records.data.items;
                     //把已经推荐的{$comment_belong}选中
                     var sm=$appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.sm;
                     var rows=$appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.getView().getRows();
-                    var updateData=[];//记录数据
                     for(var i=0;i<rows.length;i++){
-                        if(result['data'][i]['data'].isShow{$belong_class}Check){
+                        if(selData[data[i]['data'].$belong_idcolumn]){
                             sm.selectRow(i, true);
                         }
-                        updateData[i]={{$belong_idcolumn}:result['data'][i]['data'].{$belong_idcolumn},isShow{$belong_class}Check:false};
                     }
-                    $appName_alias.$classname.View.Running.select{$belong_class}Window.updateData=updateData;
                 }
             }
         }
@@ -116,29 +114,44 @@ MANY2MANYSTORE;
         Select{$belong_class}Window:Ext.extend(Ext.Window,{
             constructor : function(config) {
                 config = Ext.apply({
+                    selData:null,//选中的{$comment_belong}
+                    oldData:null,//已关联的{$comment_belong}
                     title:"选择{$comment_belong}",updateData:null,closeAction:"hide",constrainHeader:true,maximizable:true,collapsible:true,
                     width:720,minWidth:720,height:560,minHeight:450,layout:'fit',plain : true,buttonAlign : 'center',
                     defaults : {autoScroll : true,},
                     listeners:{
-                        hide:function(w){{$appName_alias}.$classname.View.Running.{$owner_instance_name}Grid.t{$belong_instance_name}.toggle(false);}
+                        beforehide:this.doHide
                     },
                     items : [new $appName_alias.$classname.View.{$belong_class}View.{$belong_class}Grid({ref:"{$belong_instance_name}Grid"})],
                     buttons : [ {
                         text: "确定",ref : "../saveBtn",scope:this,
                         handler : function() {
-                            var condition={{$owner_idcolumn}:this.{$belong_instance_name}Grid.{$owner_idcolumn},{$belong_instance_name}s:null};
-                            var updateData=$appName_alias.$classname.View.Running.select{$belong_class}Window.updateData;
-                            var selectedData=$appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.getSelectionModel().getSelections();
-                            for(var i=0;i<selectedData.length;i++){
-                                for(var j=0;j<updateData.length;j++){
-                                    if(updateData[j].{$belong_idcolumn}==selectedData[i].get("{$belong_idcolumn}")){
-                                        updateData[j].isShow{$belong_class}Check=true;
-                                    }
-                                }
-                            }
-                            condition.{$belong_instance_name}s=updateData;
+                            var selData = this.selData;
+                            var oldData = this.oldData;
+                            //{$comment_owner}标识
+                            var $owner_idcolumn=$appName_alias.$classname.View.Running.{$owner_instance_name}Grid.getSelectionModel().getSelected().data.{$owner_idcolumn};
+                            var condition={'selData':selData,"oldData":oldData,"{$owner_idcolumn}":$owner_idcolumn};
+                            Ext.Msg.show({
+                                title: '请等待', msg: '操作进行中，请稍后...',
+                                animEl: 'loading', icon: Ext.Msg.WARNING,
+                                closable: true, progress: true, progressText: '', width: 300
+                            });
                             ExtService{$classname}.update{$classname}{$belong_class}(condition,function(provider, response) {
-                                if(response.result.success==true) Ext.Msg.alert('提示','选择成功'); else Ext.Msg.alert('提示', '选择失败');
+                                if (response.result.success==true) {
+                                    var msg = "操作成功！";
+                                    if(response.result.del){
+                                        msg += "<font color=red>取消</font>了<font color=red>"+response.result.del+"</font>件关联货品,";
+                                    }
+                                    if(response.result.add){
+                                        msg += "<font color=green>添加</font>了<font color=green>"+response.result.add+"</font>件关联货品";
+                                    }
+                                    Ext.Msg.alert('提示', msg);
+                                } else {
+                                    $appName_alias.$classname.Store.select{$belong_class}Store.removeAll();
+                                    Ext.Msg.alert('提示', '操作失败！');
+                                }
+                                $appName_alias.$classname.View.Running.select{$belong_class}Window.hideWindow();
+                                $appName_alias.$classname.View.Running.{$owner_instance_name}Grid.doSelect{$classname}();
                             });
                         }
                     }, {
@@ -149,6 +162,56 @@ MANY2MANYSTORE;
                     }]
                 }, config);
                 $appName_alias.$classname.View.{$belong_class}View.Select{$belong_class}Window.superclass.constructor.call(this, config);
+            },
+            /**
+            * 根据选择的{$comment_belong},改变标题
+            */
+            changeTitle: function(){
+                var title   = "选择 {$comment_belong}";
+                var selData = this.selData;
+                var count   = this.objElCount(selData);
+                if(count){
+                    title += "（已经选择了<font color=green>"+count+"</font>件{$comment_belong}）";
+                }else{
+                    title += "（尚未选择任何{$comment_belong}）";
+                }
+                this.setTitle(title);
+            },
+            /**
+            * 判断自定义对象元素个数
+            */
+            objElCount: function(obj){
+                var count = 0;
+                for(var n in obj){count++}
+                return count;
+            },
+            /**
+             * 确认取消图片处理
+             * con:选择窗口
+             */
+            doHide: function (con) {
+                //window初始化时会调用,此时con为null
+                if(con){
+                    Ext.MessageBox.show({
+                        title:'提示',msg:'确定要取消么?<br /><font color=red>(所做操作将不会保存!)</font>',buttons:Ext.MessageBox.YESNO,icon:Ext.MessageBox.QUESTION,
+                        params:{con:con},
+                        fn:function(btn,text,opt) {
+                            if(btn=='yes') {
+                                con.hideWindow();
+                            }
+                        }
+                    });
+                    return false;
+                }
+            },
+            /**
+             * 隐藏窗口
+             */
+            hideWindow: function () {
+                //移除beforehide事件，为了防止hide时进入死循环
+                this.un('beforehide',this.doHide);
+                this.hide();
+                this.addListener('beforehide',this.doHide);
             }
         }),
         {$belong_class}Grid:Ext.extend(Ext.grid.GridPanel,{
@@ -159,6 +222,7 @@ MANY2MANYSTORE;
                      */
                     filter:null,{$owner_idcolumn}:null,region : 'center',store : $appName_alias.$classname.Store.select{$belong_class}Store,sm : this.sm,
                     trackMouseOver : true,enableColumnMove : true,columnLines : true,loadMask : true,stripeRows : true,headerAsText : false,
+                    loadMask : {msg : '加载数据中，请稍候...'},
                     defaults : {autoScroll : true},
                     cm : new Ext.grid.ColumnModel({
                         defaults:{width:120,sortable : true},
@@ -290,13 +354,49 @@ $m2m_filterReset
                 });
                 $appName_alias.$classname.View.{$belong_class}View.{$belong_class}Grid.superclass.constructor.call(this, config);
             },
-            sm : new Ext.grid.CheckboxSelectionModel(),
+            /**
+            * SelectionModel
+            */
+            sm : new Ext.grid.CheckboxSelectionModel({
+                listeners : {
+                    selectionchange:function(sm) {
+                        $appName_alias.$classname.View.Running.select{$belong_class}Window.changeTitle();
+                        $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.changeFilter();
+                    },
+                    rowselect: function(sm, rowIndex, record) {
+                        var sel{$belong_class}Win  = $appName_alias.$classname.View.Running.select{$belong_class}Window;
+                        var selData      = sel{$belong_class}Win.selData;
+                        var oldData      = sel{$belong_class}Win.oldData;
+                        var $belong_idcolumn     = record.data.$belong_idcolumn;
+                        //添加该货品ID
+                        selData[$belong_idcolumn] = true;
+                        //判断是否是已关联的货品
+                        if(oldData[$belong_idcolumn]){
+                            oldData[$belong_idcolumn].active = true;
+                        }
+                    },
+                    rowdeselect: function(sm, rowIndex, record) {
+                        var sel{$belong_class}Win  = $appName_alias.$classname.View.Running.select{$belong_class}Window;
+                        var selData      = sel{$belong_class}Win.selData;
+                        var oldData      = sel{$belong_class}Win.oldData;
+                        var $belong_idcolumn     = record.data.$belong_idcolumn;
+                        //删除该货品ID
+                        delete selData[$belong_idcolumn];
+                        //判断是否是已关联的货品
+                        if(oldData[$belong_idcolumn]){
+                            oldData[$belong_idcolumn].active = false;
+                        }
+                    }
+                }
+            }),
             doSelect{$belong_class} : function() {
+                var tmp_sel{$belong_class}=this.filter.sel{$belong_class};
                 if (this.topToolbar){
                     var {$owner_idcolumn}=this.{$owner_idcolumn};
                     if (!this.filter.selectType)this.filter.selectType=0;
 {$m2m_filterdoSelect}'{$owner_idcolumn}':{$owner_idcolumn},'selectType':this.filter.selectType};
                 }
+                this.filter.sel{$belong_class}=tmp_sel{$belong_class};
                 var condition = {'start':0,'limit':$appName_alias.$classname.Config.PageSize};
                 Ext.apply(condition,this.filter);
                 ExtService{$classname}.queryPage{$classname}{$belong_class}(condition,function(provider, response) {
@@ -310,6 +410,17 @@ $m2m_filterReset
                         Ext.Msg.alert('提示', '无符合条件的{$comment_belong}！');
                     }
                 });
+            },
+            /**
+            * 修改查询条件
+            */
+            changeFilter: function(){
+                var selData =$appName_alias.$classname.View.Running.select{$belong_class}Window.selData;
+                var selArr  = new Array();
+                for(var x in selData){
+                    selArr.push(x);
+                }
+                this.filter.sel{$belong_class} = selArr.join(",");
             }
         }),
     },
@@ -321,8 +432,7 @@ MANY2MANY;
      */
     $jsMany2ManyMenu=<<<MANY2MANYMENU
 ,'-',{
-                                    xtype:'tbsplit',text : '选择{$comment_belong}',ref:'../../t{$belong_instance_name}',iconCls : 'icon-edit',
-                                    enableToggle: true,disabled : true,
+                                    text : '选择{$comment_belong}',ref:'../../t{$belong_instance_name}',iconCls : 'icon-edit',disabled : true,
                                     handler : function() {
                                         if($appName_alias.$classname.View.Running.select{$belong_class}Window==null || $appName_alias.$classname.View.Running.select{$belong_class}Window.hidden){
                                             this.show{$belong_class}();
@@ -362,15 +472,34 @@ MANY2MANYMENUShowHide;
                 $appName_alias.$classname.View.Running.select{$belong_class}Window=new $appName_alias.$classname.View.{$belong_class}View.Select{$belong_class}Window();
             }
             var {$owner_idcolumn}=$appName_alias.$classname.View.Running.{$owner_instance_name}Grid.getSelectionModel().getSelected().data.{$owner_idcolumn};
-            $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.{$owner_idcolumn}={$owner_idcolumn};
-            if ($appName_alias.$classname.View.Running.select{$belong_class}Window.hidden){
-$m2m_filterSelectionDoSelect                $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.filter={};
-                $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.topToolbar.menus.all.setChecked(true);
-                $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.isSelect.toggle(false);
+
+            //关联{$comment_belong}ID组成的字符串
+            var {$belong_instance_name}Str    = $appName_alias.$classname.View.Running.{$owner_instance_name}Grid.getSelectionModel().getSelected().data.{$belong_instance_name}Str;
+            var selData    = {};
+            var oldData    = {};
+            if({$belong_instance_name}Str){
+                var {$belong_instance_name}Arr = {$belong_instance_name}Str.split(",");
+                for(var i=0;i<{$belong_instance_name}Arr.length;i++){
+                    selData[{$belong_instance_name}Arr[i]] = true;//ture为已存在的关联货品
+                    oldData[{$belong_instance_name}Arr[i]] = {};
+                    oldData[{$belong_instance_name}Arr[i]].active = true;
+                }
             }
-            $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.doSelect{$belong_class}();
-            $appName_alias.$classname.View.Running.select{$belong_class}Window.show();
-            $appName_alias.$classname.View.Running.{$owner_instance_name}Grid.t{$belong_instance_name}.toggle(true);
+            var sel{$belong_class}Win     = $appName_alias.$classname.View.Running.select{$belong_class}Window;
+            var sel{$belong_class}Grid    = sel{$belong_class}Win.{$belong_instance_name}Grid;
+            sel{$belong_class}Win.selData = selData;
+            sel{$belong_class}Win.oldData = oldData;
+            sel{$belong_class}Win.changeTitle();//根据选择的货品,修改标题
+
+            sel{$belong_class}Grid.{$owner_idcolumn} = {$owner_idcolumn};
+            if (sel{$belong_class}Win.hidden){
+$m2m_filterSelectionDoSelect                sel{$belong_class}Grid.filter = {sel{$belong_class}:{$belong_instance_name}Str};
+                sel{$belong_class}Grid.topToolbar.menus.all.setChecked(true);
+                sel{$belong_class}Grid.isSelect.toggle(false);
+                $appName_alias.$classname.Store.select{$belong_class}Store.removeAll();
+            }
+            sel{$belong_class}Grid.doSelect{$belong_class}();
+            sel{$belong_class}Win.show();
         },
         /**
          * 隐藏{$comment_belong}
@@ -379,7 +508,6 @@ $m2m_filterSelectionDoSelect                $appName_alias.$classname.View.Runni
             if ($appName_alias.$classname.View.Running.select{$belong_class}Window!=null){
                 $appName_alias.$classname.View.Running.select{$belong_class}Window.hide();
             }
-            $appName_alias.$classname.View.Running.{$owner_instance_name}Grid.t{$belong_instance_name}.toggle(false);
         },
 MANY2MANYSHOWHIDE;
 
@@ -388,6 +516,7 @@ MANY2MANYSHOWHIDE;
      * @var mixed
      */
     $jsMany2ManyRunningWindow=<<<M2MRW
+
         /**
          * 推荐{$comment_belong}
          */

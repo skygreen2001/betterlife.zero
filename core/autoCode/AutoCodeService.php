@@ -411,12 +411,14 @@ class AutoCodeService extends AutoCode
 						 "     */\r\n";
 				$enumConvert=self::enumKey2CommentInExtService($instance_name,$classname,$fieldInfo,"    ");
 				$datetimeShow=self::datetimeShow($instance_name,$fieldInfo,"    ");
+				$m2mIdStr=self::many2manyIdStr($classname,$instance_name,$fieldInfo);
 				$specialResult=$enumConvert["normal"];
 				$relationField=self::relationFieldShow($instance_name,$classname,$fieldInfo);
-				if ((!empty($relationField))||(!empty($enumConvert["normal"]))){
+				if ((!empty($relationField))||(!empty($m2mIdStr))||(!empty($datetimeShow))||(!empty($enumConvert["normal"]))){
 					$specialResult.="            foreach (\$data as \$$instance_name) {\r\n".
 									$relationField.
 									$datetimeShow.
+									$m2mIdStr.
 									"            }\r\n";
 				}
 				$result.="    public function queryPage{$classname}(\$formPacket=null)\r\n".
@@ -921,7 +923,7 @@ class AutoCodeService extends AutoCode
 					$tablename_belong=self::getTablename($belong_class);
 					$belong_instance_name=self::getInstancename($tablename_belong);
 					$comment_belong=self::tableCommentKey($tablename_belong);
-					$result=<<<MANY2MANYUPDATE
+					$result.=<<<MANY2MANYUPDATE
 	/**
 	 * 更新数据对象:{$comment_owner}包括{$comment_belong}
 	 * @param array|DataObject \$conditions
@@ -929,26 +931,54 @@ class AutoCodeService extends AutoCode
 	 */
 	public function update{$classname}{$belong_class}(\$conditions)
 	{
-		\${$owner_idcolumn}=\$conditions->{$owner_idcolumn};
-		\${$belong_instance_name}s=\$conditions->{$belong_instance_name}s;
-		\$success=true;
-		try{
-			foreach(\${$belong_instance_name}s as \${$belong_instance_name}){
-				\${$middle_instance_name}={$key}::get_one(array("$owner_idcolumn"=>\${$owner_idcolumn},"$belong_idcolumn"=>\${$belong_instance_name}->{$belong_idcolumn}));
-				if(\${$middle_instance_name}){
-					if(!\${$belong_instance_name}->isShow{$belong_class}Check)\${$middle_instance_name}->delete();
-				}else{
-					if(\${$belong_instance_name}->isShow{$belong_class}Check){
-						\${$middle_instance_name}=new {$key}(array("$owner_idcolumn"=>\${$owner_idcolumn},"$belong_idcolumn"=>\${$belong_instance_name}->{$belong_idcolumn}));
-						\${$middle_instance_name}->save();
-					}
-				}
-			}
-		}catch(Exception \$e){
-			\$success=false;
-		}
-		return array('success' =>\$success);
+        //\$selData:选中{$comment_belong}；\$oldData:已选{$comment_belong},状态标识active为false,则其在此次操作被取消 ；\${$owner_idcolumn}:{$comment_owner}标识
+        if (isset(\$conditions->selData))\$selData=\$conditions->selData;else \$selData=null;
+        if (isset(\$conditions->oldData))\$oldData=\$conditions->oldData;else \$oldData=null;
+        if (isset(\$conditions->{$owner_idcolumn}))\${$owner_idcolumn}=\$conditions->{$owner_idcolumn};else \${$owner_idcolumn}=null;
+        \$success  = false;
+        \$addcount = 0;//新增计数
+        \$delcount = 0;//取消计数
+        if(\${$owner_idcolumn}){
+            \$oldRetainArr = array();//保留的已关联货品
+            //处理已关联的货品
+            if(\$oldData){
+                foreach(\$oldData as \$okey=>\$ovalue){
+                    if(!\$ovalue->active){
+                        \${$middle_instance_name}={$key}::get_one(array("$owner_idcolumn"=>\${$owner_idcolumn},"$belong_idcolumn"=>\$okey));
+                        if(\${$middle_instance_name})\${$middle_instance_name}->delete();
+                        \$delcount++;
+                    }else{
+                        \$oldRetainArr[] = \$okey;
+                    }
+                }
+            }
+            if(\$selData){
+                \$selArr = array();//选择的货品
+                //转为goods_id数组
+                foreach(\$selData as \$skey=>\$svalue){
+                    \$selArr[] = \$skey;
+                }
+                \$insertArr = array_diff(\$selArr,\$oldRetainArr);//需新插入的货品
+                if(\$insertArr){
+                    foreach(\$insertArr as \${$belong_idcolumn}){
+                    	\${$middle_instance_name}={$key}::get_one(array("$owner_idcolumn"=>\${$owner_idcolumn},"$belong_idcolumn"=>\${$belong_idcolumn}));
+						if(!\${$middle_instance_name}){
+							\${$middle_instance_name}=new {$key}(array("$owner_idcolumn"=>\${$owner_idcolumn},"$belong_idcolumn"=>\${$belong_idcolumn}));
+							\${$middle_instance_name}->save();
+                        	\$addcount++;
+                    	}
+                    }
+                }
+            }
+            \$success = true;
+        }
+        return array(
+            'success' => \$success,
+            'add'     => \$addcount,
+            'del'     => \$delcount
+        );
 	}
+
 
 MANY2MANYUPDATE;
 				}
@@ -956,6 +986,62 @@ MANY2MANYUPDATE;
 		}
 		return $result;
 	}
+
+	/**
+	 * 多对多关系提供分页里连接编号为字符串
+	 * @param string $classname 数据对象类名
+	 * @param string $instance_name 实体变量
+	 * @param array $fieldInfo 表列信息列表
+	 */
+	private static function many2manyIdStr($classname,$instance_name,$fieldInfo)
+	{
+
+		$result="";
+		$relationSpec=self::$relation_all[$classname];
+		if (array_key_exists("has_many",$relationSpec))
+		{
+			$has_many=$relationSpec["has_many"];
+			foreach (array_keys($has_many) as $key)
+			{
+				if (self::isMany2ManyByClassname($key))
+				{
+					$tablename=self::getTablename($key);
+					$middle_classname=self::getClassname($tablename);
+					$fieldInfo=self::$fieldInfos[$tablename];
+					$belong_class="";
+					$belong_idcolumn="";
+					foreach (array_keys($fieldInfo) as $fieldname)
+					{
+						if (!self::isNotColumnKeywork($fieldname))continue;
+						if ($fieldname==self::keyIDColumn($key))continue;
+						if (contain($fieldname,"_id")){
+							$to_class=str_replace("_id", "", $fieldname);
+							$to_class{0}=strtoupper($to_class{0});
+							if (class_exists($to_class)){
+								if ($to_class!=$classname){
+									$belong_class=$to_class;
+									$belong_idcolumn=$fieldname;
+								}else{
+									$owner_idcolumn=$fieldname;
+								}
+							}
+						}
+					}
+
+					$owner_tablename=self::getTablename($classname);
+					$owner_instance_name=self::getInstancename($owner_tablename);
+					$tablename_belong=self::getTablename($belong_class);
+					$belong_instance_name=self::getInstancename($tablename_belong);
+					$comment_belong=self::tableCommentKey($tablename_belong);
+					$belong_fieldInfo=self::$fieldInfos[$tablename_belong];
+
+        			$result.="                \${$belong_instance_name}Arr={$middle_classname}::select(\"{$belong_idcolumn}\",\"{$owner_idcolumn}='\".\${$owner_instance_name}->{$owner_idcolumn}.\"'\");\r\n";
+        			$result.="                \${$owner_instance_name}->{$belong_instance_name}Str = implode(\",\",\${$belong_instance_name}Arr);\r\n";
+        		}
+			}
+		}
+		return $result;
+    }
 
 	/**
 	 * 多对多关系提供分页方法功能
@@ -1016,7 +1102,7 @@ MANY2MANYUPDATE;
 										"                }\r\n".
 										"            }\r\n";
 					}
-					$result=<<<MANY2MANYQUERYPAGE
+					$result.=<<<MANY2MANYQUERYPAGE
 	/**
 	 * 数据对象:{$comment_owner}包括{$comment_belong}分页查询
 	 * @param stdclass \$formPacket  查询条件对象
@@ -1037,20 +1123,23 @@ MANY2MANYUPDATE;
 		if (isset(\$condition['start']))\$start=\$condition['start']+1;
 		if (isset(\$condition['limit']))\$limit=\$start+\$condition['limit']-1;
 		unset(\$condition['start'],\$condition['limit']);
+        if (isset(\$condition['sel{$belong_class}'])){
+        	\$sel{$belong_class}=\$condition['sel{$belong_class}'];
+        	unset(\$condition['sel{$belong_class}']);
+        }
+        if (!\$sel{$belong_class}) \$sel{$belong_class} = "''";
 		\$condition=\$this->filtertoCondition(\$condition);
 		switch (\$selectType) {
 		   case 0:
 			 \$count={$belong_class}::count(\$condition);
 			 break;
 		   case 1:
-			 \$sql_child_query="(select $belong_idcolumn from ".{$key}::tablename()." where {$owner_idcolumn}=".\${$owner_idcolumn}.")";
-			 \$sql_count="select count(1) from ".{$belong_class}::tablename()." a,\$sql_child_query b where a.{$belong_idcolumn}=b.{$belong_idcolumn} ";
+			 \$sql_count="select count(1) from ".{$belong_class}::tablename()." where {$belong_idcolumn} in (".\$sel{$belong_class}.") ";
 			 if (!empty(\$condition))\$sql_count.=" and ".\$condition;
 			 \$count=sqlExecute(\$sql_count);
 			 break;
 		   case 2:
-			 \$sql_child_query=" left join (select $belong_idcolumn from ".{$key}::tablename()." where {$owner_idcolumn}=".\${$owner_idcolumn}.")  b on b.{$belong_idcolumn}=a.{$belong_idcolumn} where b.{$belong_idcolumn} is null ";
-			 \$sql_count="select count(1) from ".{$belong_class}::tablename()." a \$sql_child_query ";
+			 \$sql_count="select count(1) from ".{$belong_class}::tablename()." where {$belong_idcolumn} not in (".\$sel{$belong_class}.") ";
 			 if (!empty(\$condition))\$sql_count.=" and ".\$condition;
 			 \$count=sqlExecute(\$sql_count);
 			 break;
@@ -1063,16 +1152,14 @@ MANY2MANYUPDATE;
 				   \$data ={$belong_class}::queryPage(\$start,\$limit,\$condition);
 				   break;
 			   case 1:
-				   \$sql_child_query="(select $belong_idcolumn from ".{$key}::tablename()." where {$owner_idcolumn}=".\${$owner_idcolumn}.")";
-				   \$sql_data="select a.* from ".{$belong_class}::tablename()." a,\$sql_child_query b where a.{$belong_idcolumn}=b.{$belong_idcolumn} ";
+				   \$sql_data="select * from ".{$belong_class}::tablename()." where {$belong_idcolumn} in (".\$sel{$belong_class}.") ";
 				   if (!empty(\$condition))\$sql_data.=" and ".\$condition;
 				   if (\$start)\$start=\$start-1;
 				   \$sql_data.=" limit \$start,".(\$limit-\$start+1);
 				   \$data=sqlExecute(\$sql_data,"{$belong_class}");
 				   break;
 			   case 2:
-				   \$sql_child_query=" left join (select $belong_idcolumn from ".{$key}::tablename()." where {$owner_idcolumn}=".\${$owner_idcolumn}.")  b on b.{$belong_idcolumn}=a.{$belong_idcolumn} where b.{$belong_idcolumn} is null ";
-				   \$sql_data="select a.* from ".{$belong_class}::tablename()." a \$sql_child_query ";
+				   \$sql_data="select * from ".{$belong_class}::tablename()." where {$belong_idcolumn} not in (".\$sel{$belong_class}.") ";
 				   if (!empty(\$condition))\$sql_data.=" and ".\$condition;
 				   if (\$start)\$start=\$start-1;
 				   \$sql_data.=" limit \$start,".(\$limit-\$start+1);

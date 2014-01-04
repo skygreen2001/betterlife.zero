@@ -375,11 +375,16 @@ class UtilFileSystem extends Util
 					if ($file!=="Thumbs.db") {
 						if ($agreesuffix=="*") {
 							$data[dirname($nextpath).DIRECTORY_SEPARATOR.'a'.basename($nextpath)]=$nextpath;
-						}else  if (is_string($agreesuffix)) {
+						}else if (is_string($agreesuffix)) {
 							if (strcasecmp(end(explode('.', $file)),$agreesuffix)===0) {
-								$data[dirname($nextpath).DIRECTORY_SEPARATOR.'a'.basename($nextpath)]=$nextpath;
+								$isChinese=UtilString::is_chinese($nextpath);
+								if ($isChinese){
+									$is_utf8=UtilString::is_utf8($nextpath);
+									if (!$is_utf8)$nextpath_tmp=UtilString::gbk2utf8($nextpath);
+								}
+								$data[dirname($nextpath_tmp).DIRECTORY_SEPARATOR.'a'.basename($nextpath_tmp)]=$nextpath;
 							}
-						}else  if (is_array($agreesuffix)) {
+						}else if (is_array($agreesuffix)) {
 							foreach ($agreesuffix as $suffix) {
 								if (strcasecmp(end(explode('.', $file)),$suffix)===0) {
 									$data[dirname($nextpath).DIRECTORY_SEPARATOR.'a'.basename($nextpath)]=$nextpath;

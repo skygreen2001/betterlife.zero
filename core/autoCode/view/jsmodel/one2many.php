@@ -358,6 +358,7 @@ $columns_relation
 								$appName_alias.$classname.Store.{$current_instancename}Store.removeAll();
 								Ext.Msg.alert('提示', '无符合条件的{$table_comment12n}！');
 							}
+
 							if ($appName_alias.$classname.Store.{$current_instancename}Store.getTotalCount()>$appName_alias.$classname.Config.PageSize){
 								 $appName_alias.$classname.View.Running.{$current_instancename}Grid.bottomToolbar.show();
 							}else{
