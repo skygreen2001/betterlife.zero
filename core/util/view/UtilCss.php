@@ -248,6 +248,7 @@ class UtilCss extends Util
 					width:200px;
 					height:28px;
 					line-height:28px;
+					color:white;
 					background:gray;
 				}
 				select{

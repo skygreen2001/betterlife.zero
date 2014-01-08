@@ -351,7 +351,7 @@ class UtilFileSystem extends Util
 	}
 
 	/**
-	 * 递归执行查看指定目录下的所有文件
+	 * 递归执行查看指定目录下的所有文件[完美解决中文文件名的问题]
 	 * @param string $dir 指定目录
 	 * @param string|array $agreesuffix 是否要求文件后缀名为指定
 	 *		1.当$agreesuffix='*'为查找所有后缀名的文件
@@ -381,8 +381,13 @@ class UtilFileSystem extends Util
 								if ($isChinese){
 									$is_utf8=UtilString::is_utf8($nextpath);
 									if (!$is_utf8)$nextpath_tmp=UtilString::gbk2utf8($nextpath);
+									$nextpath_basename=basename($nextpath_tmp);
+									$nextpath_tmp=substr($nextpath_tmp,0,strrpos($nextpath_tmp,"\\"));
+								}else{
+									$nextpath_tmp=dirname($nextpath);
+									$nextpath_basename=basename($nextpath);
 								}
-								$data[dirname($nextpath_tmp).DIRECTORY_SEPARATOR.'a'.basename($nextpath_tmp)]=$nextpath;
+								$data[$nextpath_tmp.DIRECTORY_SEPARATOR.'a'.$nextpath_basename]=$nextpath;
 							}
 						}else if (is_array($agreesuffix)) {
 							foreach ($agreesuffix as $suffix) {

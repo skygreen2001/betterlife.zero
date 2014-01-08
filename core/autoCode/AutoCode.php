@@ -256,11 +256,14 @@ class AutoCode extends Object
 		echo "<form>";
 		echo "  <div style='line-height:1.5em;'>";
 		$default_dir=Gc::$nav_root_path."model".DIRECTORY_SEPARATOR;
-		echo "      <label>输出文件路径:</label><input type=\"text\" name=\"save_dir\" value=\"$default_dir\" id=\"save_dir\" />
-						<input type=\"button\" onclick=\"browseFolder('save_dir')\" value=\"浏览...\" /><br/><br/>";
+		echo "      <label>输出文件路径:</label><input style=\"width:400px;text-align:left;padding-left:10px;\" type=\"text\" name=\"save_dir\" value=\"$default_dir\" id=\"save_dir\" />";
+/*		$browser=getbrowser();
+		if (contain($browser,"Internet Explorer")){
+			echo "			<input type=\"button\" onclick=\"browseFolder('save_dir')\" value=\"浏览...\" /><br/><br/>";
+		}*/
 		if (!empty($inputArr)){
-			echo "
-					<label>生成模式:</label><select name=\"type\">";
+			echo "<br/><br/>
+					<label>&nbsp;&nbsp;&nbsp;生成模式:</label><select style=\"width:400px;\" name=\"type\">";
 			foreach ($inputArr as $key=>$value) {
 				echo "        <option value='$key'>$value</option>";
 			}
@@ -268,12 +271,15 @@ class AutoCode extends Object
 		}
 		echo "  </div>";
 		echo "  <input type=\"submit\" value='生成' /><br/>";
-		echo "  <p id='indexPage'>说明： <br/>
+
+/*		if (contain($browser,"Internet Explorer")){
+			echo "  <p id='indexPage'>说明： <br/>
 					* 可手动输入文件路径，也可选择浏览指定文件夹。<br/>
 					* 如果您希望选择指定文件夹，特别注意的是,由于安全方面的问题,你还需要如下设置才能使本JS代码正确运行,否则会出现\"没有权限\"的问题。<br/>
 					1.设置可信任站点（例如本地的可以为：http://localhost）<br/>
 					2.其次：可信任站点安全级别自定义设置中：设置下面的选项<br/>
 					\"对没有标记为安全的ActiveX控件进行初始化和脚本运行\"----\"启用\"</p>";
+		}*/
 		echo "</form>";
 		echo "</div>";
 		echo "</body>";
