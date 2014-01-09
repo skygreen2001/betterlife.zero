@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50520
 File Encoding         : 65001
 
-Date: 2013-12-26 17:05:23
+Date: 2014-01-09 19:46:42
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -3735,19 +3735,22 @@ CREATE TABLE `bb_user_userdetail` (
   `userdetail_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '标识',
   `user_id` int(11) NOT NULL COMMENT '用户标识',
   `realname` varchar(45) DEFAULT NULL COMMENT '真实姓名',
-  `region_id` int(11) NOT NULL COMMENT '地区标识',
   `profile` varchar(500) DEFAULT NULL COMMENT '头像\n头像图片路径',
+  `country` int(11) DEFAULT NULL COMMENT '国家\n参考region表的region_id字段',
+  `province` int(11) DEFAULT NULL COMMENT '省\n参考region表的region_id字段',
+  `city` int(11) DEFAULT NULL COMMENT '市\n参考region表的region_id字段',
+  `district` int(11) DEFAULT NULL COMMENT '区\n参考region表的region_id字段',
   `address` varchar(500) DEFAULT NULL COMMENT '家庭住址',
   `qq` varchar(100) DEFAULT NULL COMMENT 'QQ号',
   `sex` enum('-1','0','1') DEFAULT NULL COMMENT '会员性别\n0：女-female\n1：男-male\n-1：待确认-unknown\n默认男',
   `birthday` date DEFAULT NULL COMMENT '生日',
   `commitTime` int(11) DEFAULT NULL COMMENT '提交时间',
   `updateTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  PRIMARY KEY (`userdetail_id`,`user_id`,`region_id`),
+  PRIMARY KEY (`userdetail_id`,`user_id`),
   KEY `fk_bb_user_userdetail_bb_user_user1` (`user_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户详细信息';
 
 -- ----------------------------
 -- Records of bb_user_userdetail
 -- ----------------------------
-INSERT INTO `bb_user_userdetail` VALUES ('1', '2', '周月璞', '0', null, '上海市石岚三村80号404室', '412731900', '1', '1979-03-10', '1331953386', '2013-12-26 14:32:43');
+INSERT INTO `bb_user_userdetail` VALUES ('1', '1', '周月璞', null, '1', '25', '321', '2709', '上海市石岚三村80号404室', '412731900', '1', '1979-03-10', '1331953386', '2014-01-09 19:39:52');

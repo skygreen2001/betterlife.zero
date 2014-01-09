@@ -252,11 +252,15 @@ class UtilCss extends Util
 					background:gray;
 				}
 				select{
-					width:350px;
+					width:400px;
+					text-align:left;
+					padding-left:10px;
 					height:28px;
 					line-height:28px;
 					vertical-align:bottom;
-					text-align:center;
+    				box-sizing: content-box;
+    				-moz-box-sizing:content-box;
+    				-webkit-box-sizing:content-box;
 				}
 				input[type=button]{
 					border:1px solid;

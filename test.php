@@ -1,9 +1,16 @@
 <?php
 require_once ("init.php");
-$blog=Blog::get_one();
-$blog["user"]=array("test1"=>"aaa","test2"=>array("good"=>"mscrift"));
-$result=UtilObject::object_to_xml($blog);
-echo $result;
+$user=User::get_by_id(1);
+$userDetail=$user->userDetail;
+$country=$userDetail->country_r;
+$province=$userDetail->province_r;
+$city=$userDetail->city_r;        
+$district=$userDetail->district_r;
+print_r($country);
+print_r($province);
+print_r($city);
+print_r($district);
+
 //$blog=Blog::get_one();
 //print_r($blog);
 /*$blogs=Blog::select('name,content');

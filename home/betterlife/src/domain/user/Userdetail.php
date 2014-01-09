@@ -29,18 +29,40 @@ class Userdetail extends DataObject
      */
     public $realname;
     /**
-     * 地区标识
-     * @var int
-     * @access public
-     */
-    public $region_id;
-    /**
      * 头像<br/>
      * 头像图片路径
      * @var string
      * @access public
      */
     public $profile;
+    /**
+     * 国家<br/>
+     * 参考region表的region_id字段
+     * @var int
+     * @access public
+     */
+    public $country;
+    /**
+     * 省<br/>
+     * 参考region表的region_id字段
+     * @var int
+     * @access public
+     */
+    public $province;
+    /**
+     * 市<br/>
+     * 参考region表的region_id字段
+     * @var int
+     * @access public
+     */
+    public $city;
+    /**
+     * 区<br/>
+     * 参考region表的region_id字段
+     * @var int
+     * @access public
+     */
+    public $district;
     /**
      * 家庭住址
      * @var string
@@ -75,7 +97,24 @@ class Userdetail extends DataObject
      * 从属一对一关系
      */
     static $belong_has_one=array(
-        "user"=>"User"
+        "user"=>"User",
+        'country_r'=>"Region",
+        'province_r'=>"Region",
+        'city_r'=>"Region",
+        'district_r'=>"Region"
+    );
+
+    /**
+     * 规格说明:外键声明
+     * @var mixed
+     */
+    public $field_spec=array(
+        EnumDataSpec::FOREIGN_ID=>array(
+            'country_r'=>"country",
+            "province_r"=>"province",
+            "city_r"=>"city",
+            'district_r'=>"district"
+        )
     );
 
     /**

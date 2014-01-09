@@ -39,6 +39,10 @@ class Action_Userdetail extends ActionModel
      */
     public function edit()
     {
+        $this->loadCss("common/js/ajax/jquery/css/fileupload.css");
+        $this->loadJs("common/js/ajax/jquery/fileupload/jquery.ui.widget.js");
+        $this->loadJs("common/js/ajax/jquery/fileupload/js/jquery.iframe-transport.js");
+        $this->loadJs("common/js/ajax/jquery/fileupload/jquery.fileupload.js");
         if (!empty($_POST)) {
             $userdetail = $this->model->Userdetail;
             $id= $userdetail->getId(); 

@@ -263,7 +263,7 @@ class AutoCode extends Object
 		}*/
 		if (!empty($inputArr)){
 			echo "<br/><br/>
-					<label>&nbsp;&nbsp;&nbsp;生成模式:</label><select style=\"width:400px;\" name=\"type\">";
+					<label>&nbsp;&nbsp;&nbsp;生成模式:</label><select name=\"type\">";
 			foreach ($inputArr as $key=>$value) {
 				echo "        <option value='$key'>$value</option>";
 			}

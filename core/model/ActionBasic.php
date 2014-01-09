@@ -132,8 +132,12 @@ class ActionBasic extends Object
 	 * 默认:当前模板目录下:resources/css/index.css<br/>      
 	 */
 	public function loadCss($defaultCssFile="resources/css/index.css")
-	{                                                                       
-		$defaultCssFile=$this->view->template_url.$defaultCssFile;
+	{                           
+        if (contain($defaultCssFile,"common/js/ajax/")){                                            
+		    $defaultCssFile=Gc::$url_base.$defaultCssFile;    
+        }else{
+            $defaultCssFile=$this->view->template_url.$defaultCssFile;    
+        }
 		$viewObject=$this->view->viewObject;
 		if(empty($viewObject))
 		{
@@ -153,8 +157,12 @@ class ActionBasic extends Object
 	 * @param string $defaultJsFile 默认需加载JS文件
 	 */
 	public function loadJs($defaultJsFile="js/index.js")
-	{
-		$defaultJsFile=$this->view->template_url.$defaultJsFile;
+	{                                        
+        if (startWith($defaultJsFile,"common/js/ajax/")){  
+		    $defaultJsFile=Gc::$url_base.$defaultJsFile;
+        }else{
+            $defaultJsFile=$this->view->template_url.$defaultJsFile;
+        }
 		$viewObject=$this->view->viewObject;
 		if(empty($viewObject))
 		{

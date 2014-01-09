@@ -1,4 +1,4 @@
-<?php  
+<?php
 //<editor-fold defaultstate="collapsed" desc="枚举类型">
 /**
  +---------------------------------------<br/>
@@ -208,7 +208,7 @@ class EnumDataSpec extends Enum
  *                   注意表类名头字母小写，Id头字母大写。<br/>
  *                   主表类外键名称：【主表类名+Id】，关系表类外键名称：【关系表类名+Id】<br/>
  * 说明：$field_spec_default为默认的数据对象的列规格说明，它全局的定义了当前应用的列规格说明；<br/>
- *      数据对象定义需定义字段：public $field_spec，它定义了当前数据对象的列规格说明。 
+ *      数据对象定义需定义字段：public $field_spec，它定义了当前数据对象的列规格说明。
  * @category betterlife
  * @package core.model
  * @subpackage dataobject
@@ -232,6 +232,7 @@ class DataObjectSpec
 		),
 		EnumDataSpec::FOREIGN_ID=>array(
 			//类名=>外键名
+			//实例对象名=>外键名[在从属于一对一关系类名中经常遇到，比如家庭地址中省|市|区都关联同一个类:地区；需要用实例对象名]
 		)
 	);
 
@@ -248,7 +249,7 @@ class DataObjectSpec
 	 * 2.当前数据对象的列数据规格:$field_spec
 	 *   它可以重载或重写全局列规格的属性说明。
 	 * @param DataObject $dataobject 数据对象实体
-	 * @return array 当前数据对象的列规格说明 
+	 * @return array 当前数据对象的列规格说明
 	 */
 	public static function real_field_spec_static($dataobject)
 	{
@@ -367,7 +368,7 @@ class DataObjectSpec
 	/**
 	 * 存放当前数据对象的列规格说明的名称。
 	 */
-	const NAME_REAL_FIELDSPEC="real_fieldspec"; 
+	const NAME_REAL_FIELDSPEC="real_fieldspec";
 	/**
 	 * 当前数据对象的列规格说明
 	 * 由两部分组成：
@@ -375,7 +376,7 @@ class DataObjectSpec
 	 * 2.当前数据对象的列数据规格:$field_spec
 	 *   它可以重载或重写全局列规格的属性说明。
 	 * @param string $dataobject 当前对象
-	 * @return array 当前数据对象的列规格说明 
+	 * @return array 当前数据对象的列规格说明
 	 */
 	public static function real_field_spec($dataobject){
 		if (!isset($dataobject->real_fieldspec)){
@@ -405,7 +406,7 @@ class DataObjectSpec
 	 * 为数据对象实际的默认列名设置列值
 	 * @param string $dataobject 当前对象
 	 * @param string 列名
-	 * @param mixed 列值 
+	 * @param mixed 列值
 	 */
 	public static function setRealProperty($dataobject,$columnFlag,$value){
 		if ($dataobject instanceof DataObject){
@@ -422,11 +423,11 @@ class DataObjectSpec
 	 * @param string $columnName 列名称
 	 */
 	public static function isColumnRemove($dataobject,$columnName){
-		if ($dataobject instanceof DataObject){ 
-			$field_spec_remove=self::getRealColumnName($dataobject,EnumDataSpec::REMOVE); 
+		if ($dataobject instanceof DataObject){
+			$field_spec_remove=self::getRealColumnName($dataobject,EnumDataSpec::REMOVE);
 			if (is_array($field_spec_remove)){
 				$columnNameLcfirst=$columnName;
-				$columnNameLcfirst{0} = strtolower($columnNameLcfirst{0}); 
+				$columnNameLcfirst{0} = strtolower($columnNameLcfirst{0});
 				if (in_array($columnNameLcfirst, $field_spec_remove)||
 					in_array(ucfirst($columnName), $field_spec_remove)){
 					return true;
@@ -490,7 +491,7 @@ class DataObjectSpec
 			return false;
 		}
 		return true;
-	} 
+	}
 
 	/**
 	* 检验是否需要记录CommitTime
@@ -498,7 +499,7 @@ class DataObjectSpec
 	* @param string $dataobject 当前对象
 	* return bool 是否需要记录CommitTime
 	*/
-	public static function isNeedCommitTime($dataobject){ 
+	public static function isNeedCommitTime($dataobject){
 		$commitTimeName=self::getRealColumnName($dataobject,EnumColumnNameDefault::COMMITTIME);
 		if (self::isColumnRemove($dataobject,$commitTimeName)){
 			return false;
@@ -519,6 +520,6 @@ class DataObjectSpec
 		return true;
 	}
 	//</editor-fold>
-	
+
 }
 ?>

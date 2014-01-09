@@ -1,6 +1,6 @@
 <?php
 /**
- * 数据对象间关系处理 
+ * 数据对象间关系处理
  * @category betterlife
  * @package core.model
  * @subpackage dataobject
@@ -15,54 +15,61 @@ class DataObjectRelation extends Object
 	 * @param string $classname_belong  从属于多对多关系对象类名
 	 * @return string 多对多关系表名称
 	 */
-	public static function getRealManyManyTable($dataobject,$classname_has,$classname_belong){ 
+	public static function getRealManyManyTable($dataobject,$classname_has,$classname_belong)
+	{
 		if ($dataobject instanceof DataObject){
-			$field_spec_manymanytable=DataObjectSpec::getRealColumnName($dataobject,EnumDataSpec::MANY_MANY_TABLE);        
+			$field_spec_manymanytable=DataObjectSpec::getRealColumnName($dataobject,EnumDataSpec::MANY_MANY_TABLE);
 			if(is_array($field_spec_manymanytable)){
 				if (array_key_exists($classname_has, $field_spec_manymanytable)){
 				   return $field_spec_manymanytable[$classname_has];
 				}
 				if (array_key_exists($classname_belong, $field_spec_manymanytable)){
 				   return $field_spec_manymanytable[$classname_belong];
-				}            
-			} 
-			
-			$tablename =Config_Db::orm($classname_has);       
-			$tncount=explode(Config_Db::TABLENAME_CONCAT,$tablename);               
+				}
+			}
+
+			$tablename =Config_Db::orm($classname_has);
+			$tncount=explode(Config_Db::TABLENAME_CONCAT,$tablename);
 			if (count($tncount)>2){
 				$tablename= substr($tablename,0,strrpos($tablename, Config_Db::TABLENAME_CONCAT));
 			}
 			$tablename.=Config_Db::TABLENAME_RELATION.Config_Db::TABLENAME_CONCAT;
 			$tablename.=strtolower($classname_has.$classname_belong);
-			return $tablename;   
+			return $tablename;
 		}else{
 			LogMe::record(Wl::ERROR_INFO_EXTENDS_CLASS);
-		}     
+		}
 	}
 
 	/**
 	 * 获取数据对象关系类外键标识列名<br/>
 	 * @param string $dataobject 当前对象
 	 * @param string $classname 关系对应数据对象表类名。如UserDetail有一对一关系$belong_has_one包含User,则类名$classname为User。
+	 * @param string $instance_name 实例对象名称[只用于从属于一对一关系]
 	 * @return string 数据对象关系类外键标识列名
 	 */
-	public static function getRealForeignIDColumnName($dataobject,$classname){ 
-		if ($dataobject instanceof DataObject){           
+	public static function getRealForeignIDColumnName($dataobject,$classname,$instance_name=null)
+	{
+		if ($dataobject instanceof DataObject){
 			$field_spec_foreignid=DataObjectSpec::getRealColumnName($dataobject,EnumDataSpec::FOREIGN_ID);
 			if(is_array($field_spec_foreignid)){
 				if (array_key_exists($classname, $field_spec_foreignid)){
 				   return $field_spec_foreignid[$classname];
 				}
-			}                 
+
+				if (array_key_exists($instance_name,$field_spec_foreignid)){
+				   return $field_spec_foreignid[$instance_name];
+				}
+			}
 			$classname{0} = strtolower($classname{0});
-			
+
 			$classname_dataobject=get_class($dataobject);
 			$foreignid_name_strategy=UtilReflection::getClassStaticPropertyValue($classname_dataobject,EnumDataObjectDefaultKeyword::NAME_FOREIGNIDNAME_STRATEGY);
 			switch ($foreignid_name_strategy) {
 				case EnumForeignIDNameStrategy::TABLENAMEID:
 					$columnName=$classname.ucfirst(EnumColumnNameDefault::ID);
 					break;
-				case EnumForeignIDNameStrategy::TABLENAME_ID:        
+				case EnumForeignIDNameStrategy::TABLENAME_ID:
 					$columnName=$classname.DataObject::$foreignid_concat.EnumColumnNameDefault::ID;
 					break;
 				default:
@@ -71,10 +78,10 @@ class DataObjectRelation extends Object
 			}
 			return $columnName;
 		}else{
-			LogMe::record(Wl::ERROR_INFO_EXTENDS_CLASS);            
+			LogMe::record(Wl::ERROR_INFO_EXTENDS_CLASS);
 		}
 	}
-	
+
 	/**
 	 * 处理表之间一对一，一对多，多对多的关系
 	 * @param string $dataobject 当前对象
@@ -129,7 +136,7 @@ class DataObjectRelation extends Object
 					}
 				}
 				//</editor-fold>
-				
+
 				/**
 				 * 调用多对多【主控的一方】
 				 * 定义如下：
@@ -163,7 +170,7 @@ class DataObjectRelation extends Object
 							$detail_class= $many_many[$property];
 							$_SQL=new Crud_Sql_Select();
 							$relation_tablename= self::getRealManyManyTable($dataobject,$dataobject->classname(),$detail_class);
-							$self_foreignId=self::getRealForeignIDColumnName($dataobject,$dataobject->classname());                        
+							$self_foreignId=self::getRealForeignIDColumnName($dataobject,$dataobject->classname());
 							$relationObject_tablename=Config_Db::orm($detail_class);
 							$relationObject_IdName=DataObjectSpec::getRealIDColumnNameStatic($detail_class);
 							$relationObject_foreignId=self::getRealForeignIDColumnName($dataobject,$detail_class);
@@ -173,7 +180,7 @@ class DataObjectRelation extends Object
 					}
 				}
 				//</editor-fold>
-				
+
 				/**
 				 * 调用多对多【被控的一方】
 				 * 定义如下：
@@ -203,19 +210,19 @@ class DataObjectRelation extends Object
 						$isRelation=true;
 						if ($dataobject->getId()) {
 							$mainClass= $belong_to[$property];
-							$_SQL=new Crud_Sql_Select();                                 
-							$self_foreignId=self::getRealForeignIDColumnName($dataobject,$dataobject->classname());                 
+							$_SQL=new Crud_Sql_Select();
+							$self_foreignId=self::getRealForeignIDColumnName($dataobject,$dataobject->classname());
 							$relation_tablename= self::getRealManyManyTable($dataobject,$mainClass,$dataobject->classname());
 							$relationObject_tablename=Config_Db::orm($mainClass);
 							$relationObject_IdName=DataObjectSpec::getRealIDColumnNameStatic($mainClass);
-							$relationObject_foreignId=self::getRealForeignIDColumnName($dataobject,$mainClass);   
+							$relationObject_foreignId=self::getRealForeignIDColumnName($dataobject,$mainClass);
 							$query=$_SQL->select("b.*")->ignoreQuotes(true)->from($relation_tablename." a,".$relationObject_tablename." b")->where("a.".$self_foreignId."='".$dataobject->getId()."',b.".$relationObject_IdName."=a.".$relationObject_foreignId)->ignoreQuotes(false)->result();
 							return  DataObject::dao()->sqlExecute($query,$mainClass);
 						}
 					}
 				}
 				//</editor-fold>
-				
+
 				/**
 				 * 调用一对一
 				 * 定义如下：
@@ -255,7 +262,7 @@ class DataObjectRelation extends Object
 					}
 				}
 				//</editor-fold>
-				
+
 				/**
 				 * 调用从属一对一
 				 * 定义如下：
@@ -285,8 +292,8 @@ class DataObjectRelation extends Object
 					}
 					if ($isExist) {
 						$detail_class= $belong_has_one[$property];
-						$isRelation=true;                    
-						$foreignId=self::getRealForeignIDColumnName($dataobject,$detail_class);
+						$isRelation=true;
+						$foreignId=self::getRealForeignIDColumnName($dataobject,$detail_class,$property);
 						$relationvalue=$dataobject->$foreignId;
 						$relationObject_IdName=DataObjectSpec::getRealIDColumnNameStatic($detail_class);
 						if (isset($relationvalue)){
@@ -297,11 +304,11 @@ class DataObjectRelation extends Object
 				//</editor-fold>
 			}
 		}else{
-			LogMe::record(Wl::ERROR_INFO_EXTENDS_CLASS);    
+			LogMe::record(Wl::ERROR_INFO_EXTENDS_CLASS);
 		}
         return null;
-	}    
-	
+	}
+
 	/**
 	 +----------------------------------------------------<br>
 	 * 数据对象存在多对多|从属于多对多关系时，因为存在一张中间表。<br>
@@ -327,9 +334,9 @@ class DataObjectRelation extends Object
 	 * @param mixed $relation_object 多对多|从属于多对多关系定义对象
 	 * @param mixed $relation_id_value 关系对象的主键ID值。
 	 * @param array $other_column_values  其他列值键值对【冗余字段便于查询的数据列值】，如有一列：记录关系创建时间。
-	 * @return mixed 保存对象后的主键 
+	 * @return mixed 保存对象后的主键
 	 */
-	public static function saveRelationForManyToMany($dataobject,$relation_object,$relation_id_value,$other_column_values=null){ 
+	public static function saveRelationForManyToMany($dataobject,$relation_object,$relation_id_value,$other_column_values=null){
 		if ($dataobject instanceof DataObject){
 			$properties=UtilReflection::getClassStaticProperties($dataobject);
 			$properties=DataObjectSpec::removeNotObjectDataField($properties,$dataobject);
@@ -358,7 +365,7 @@ class DataObjectRelation extends Object
 				$_SQL=new Crud_Sql_Insert();
 				$_SQL->isPreparedStatement=false;
 				$array_properties=array();
-				$self_foreignId=self::getRealForeignIDColumnName($dataobject,$dataobject->classname()); 
+				$self_foreignId=self::getRealForeignIDColumnName($dataobject,$dataobject->classname());
 				$relationObject_foreignId=self::getRealForeignIDColumnName($dataobject,$relation_class);
 				$array_properties[$self_foreignId]=$dataobject->getId();
 				$array_properties[$relationObject_foreignId]=$relation_id_value;
@@ -371,8 +378,8 @@ class DataObjectRelation extends Object
 				LogMe::log($dataobject->classname()."在多对多关系中对".$relation_object."-".$relation_id_value."映射不正确，请确认代码中变量定义是否正确！");
 			}
 		}else{
-			LogMe::record(Wl::ERROR_INFO_EXTENDS_CLASS);   
+			LogMe::record(Wl::ERROR_INFO_EXTENDS_CLASS);
 		}
-	}    
+	}
 }
 ?>

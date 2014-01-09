@@ -85,9 +85,9 @@ div#content{
 			<h1 align="center">欢迎来到&nbsp;&nbsp;<span class="en-head"><?php echo Gc::$site_name ?></span></h1>
 			<div align="center">
 				<div id="content" align="center">
-					<p><a href="<?php echo Gc::$url_base?>index.php?go=<?php echo Gc::$appName ?>.index.index">网站前台</a></p>
-					<p><a href="<?php echo Gc::$url_base?>index.php?go=admin.index.index">网站后台</a></p>
-					<p><a href="<?php echo Gc::$url_base?>index.php?go=model.index.index">通用模板</a></p>
+					<p><a target="_blank" href="<?php echo Gc::$url_base?>index.php?go=<?php echo Gc::$appName ?>.index.index">网站前台</a></p>
+					<p><a target="_blank" href="<?php echo Gc::$url_base?>index.php?go=admin.index.index">网站后台</a></p>
+					<p><a target="_blank" href="<?php echo Gc::$url_base?>index.php?go=model.index.index">通用模板</a></p>
 				</div>
 			</div>
 		</div>
