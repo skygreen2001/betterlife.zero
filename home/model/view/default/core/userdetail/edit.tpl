@@ -10,7 +10,7 @@
         background: green;
     }
  </style>
- <script>
+ <script>    
 $(function () {
     $('#profile').fileupload({
         dataType: 'json',
@@ -48,7 +48,7 @@ $(function () {
         <tr class="entry"><td class="head">用户标识</th><td class="content"><input type="text" class="edit" name="user_id" value="{$userdetail.user_id}"/></td></tr>
         <tr class="entry"><td class="head">真实姓名</th><td class="content"><input type="text" class="edit" name="realname" value="{$userdetail.realname}"/></td></tr>
         <tr class="entry"><td class="head">地区标识</th><td class="content"><input type="text" class="edit" name="region_id" value="{$userdetail.region_id}"/></td></tr>
-        <tr class="entry"><td class="head">头像</th><td class="content"><input type="file" multiple id="profile" name="profile" value="{$userdetail.profile}"/>
+        <tr class="entry"><td class="head">头像</th><td class="content"><input type="file" id="profile" name="profile" value="{$userdetail.profile}"/>
         <div id="progress"><div class="bar" style="width: 0%;"></div></div>
         </td></tr>
         <tr class="entry"><td class="head">QQ号</th><td class="content"><input type="text" class="edit" name="qq" value="{$userdetail.qq}"/></td></tr>
