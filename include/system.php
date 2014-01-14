@@ -3,23 +3,27 @@
  * 加载指定模块下的模块文件
  * @var string $moduleName 模块名
  * @var string $module_dir 模块目录
- * @var array $excludes 排除在外要加载的子文件夹
+ * @var string|array $excludes 排除在外要加载的子文件夹[只有一个文件夹就是字符串，超过一个就是数组]
  */
-function load_module($moduleName,$module_dir,$excludes=null) 
+function load_module($moduleName,$module_dir,$excludes=null)
 {
 	$require_dirs=UtilFileSystem::getSubDirsInDirectory($module_dir);
 	///需要包含本目录下的文件。
-	
+
 	$tmps=UtilFileSystem::getFilesInDirectory($module_dir);
 	foreach ($tmps as $tmp) {
 		Initializer::$moduleFiles[$moduleName][basename($tmp,".php")]=$tmp;
 	}
-	
+
 	if (!empty($excludes)) {
-		foreach ($excludes as $exclude) {
-			if (array_key_exists($exclude, $require_dirs)) {
-				unset ($require_dirs[$exclude]);
+		if (is_array($excludes)){
+			foreach ($excludes as $exclude) {
+				if (array_key_exists($exclude, $require_dirs)) {
+					unset ($require_dirs[$exclude]);
+				}
 			}
+		}else if (is_string($excludes)){
+			unset ($require_dirs[$excludes]);
 		}
 	}
 	foreach ($require_dirs as $dir) {
@@ -45,7 +49,7 @@ function object_reflection($object)
 		if (is_string($object)){
 			if (class_exists($object)) {
 				$class=new ReflectionClass($object);
-			}            
+			}
 		}
 	}
 	return $class;
@@ -105,7 +109,7 @@ function ping_url($url,$data=null)
  * @return string
  +----------------------------------------------------------
  */
-function parse_name($name,$type=0) 
+function parse_name($name,$type=0)
 {
 	if($type) {
 		return ucfirst(preg_replace("/_([a-zA-Z])/e", "strtoupper('\\1')", $name));
@@ -117,46 +121,46 @@ function parse_name($name,$type=0)
 
 /**
  * 字母转换成数字【无视大小写，如a和A都返回1】
- * 字母是26个,因此就是二十六进制。如果是AA就是AA=1*26+1=27,ZZ就是ZZ=26*26+26=702 
+ * 字母是26个,因此就是二十六进制。如果是AA就是AA=1*26+1=27,ZZ就是ZZ=26*26+26=702
  * 字母a-z【A-Z】转换成数字就是1-26,如果是AA-ZZ转换成数字就是【27-702】
  * @param string $alphabet 字母字符串
  * @return int 数字
  */
 function alphatonumber($alphabet)
-{  
+{
 	if (!empty($alphabet)){
 		if (!preg_match("/^[a-zA-Z]*$/", $alphabet)) {
 			return 0;
-		}              
-		$count=strlen($alphabet);   
+		}
+		$count=strlen($alphabet);
 		$result=0;$base=26;
-		for($j=1;$j<=$count;$j++){  
-			$number=1;	
+		for($j=1;$j<=$count;$j++){
+			$number=1;
 			$alphabet[$j-1]=strtoupper($alphabet[$j-1]);
-			for($i='A';$i<='Z';$i++){   
+			for($i='A';$i<='Z';$i++){
 				if ($alphabet[$j-1]==$i){
-					break;	
+					break;
 				}
 				++$number;
-			} 
-			$result+=pow($base,$count-$j)*$number;   
-		}  
+			}
+			$result+=pow($base,$count-$j)*$number;
+		}
 		return $result;
 	}else{
 		return 0;
-	} 
+	}
 }
 
 /**
- * 判断服务器是否Linux 
+ * 判断服务器是否Linux
  */
 function is_server_windows()
 {
-	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {  
-		return true;  
-	} else {  
-		return false;  
-	}  
+	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+		return true;
+	} else {
+		return false;
+	}
 }
 
 /**

@@ -77,18 +77,20 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 				 * ***************************************************************************
 				 */
 				$i = 0;
-				if (count($this->saParams)>0) {
-					foreach ($this->saParams as $param) {
-						$bind_name = 'bind' . $i++;
-						$$bind_name = $param;
-						$bind_params[] = &$$bind_name;
-					}
-					array_unshift($bind_params, self::getPreparedTypeString($this->saParams));
-					array_unshift($bind_params, $this->stmt);
-					if (is_object($bind_params[0])){
-						call_user_func_array('mysqli_stmt_bind_param', $bind_params);
-					}else{
-						Exception_Mysqli::record(Wl::ERROR_INFO_DB_HANDLE);
+				if (contain($this->sQuery,"?")){
+					if (count($this->saParams)>0) {
+						foreach ($this->saParams as $param) {
+							$bind_name = 'bind' . $i++;
+							$$bind_name = $param;
+							$bind_params[] = &$$bind_name;
+						}
+						array_unshift($bind_params, self::getPreparedTypeString($this->saParams));
+						array_unshift($bind_params, $this->stmt);
+						if (is_object($bind_params[0])){
+							call_user_func_array('mysqli_stmt_bind_param', $bind_params);
+						}else{
+							Exception_Mysqli::record(Wl::ERROR_INFO_DB_HANDLE);
+						}
 					}
 				}
 			}
@@ -575,7 +577,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	/**
 	 * 保存或更新当前对象
 	 * @param Object $dataobject
-	 * @return boolen|int 更新:是否更新成功；true为操作正常|保存:保存对象记录的ID标识号 
+	 * @return boolen|int 更新:是否更新成功；true为操作正常|保存:保存对象记录的ID标识号
 	 */
 	public function saveOrUpdate($dataobject)
 	{

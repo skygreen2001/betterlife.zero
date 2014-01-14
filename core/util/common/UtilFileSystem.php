@@ -391,7 +391,8 @@ class UtilFileSystem extends Util
 							}
 						}else if (is_array($agreesuffix)) {
 							foreach ($agreesuffix as $suffix) {
-								if (strcasecmp(end(explode('.', $file)),$suffix)===0) {
+								$fileSuffix=strcasecmp(end(explode('.', $file)),$suffix);
+								if ($fileSuffix===0) {
 									$data[dirname($nextpath).DIRECTORY_SEPARATOR.'a'.basename($nextpath)]=$nextpath;
 								}
 							}

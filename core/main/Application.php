@@ -30,23 +30,31 @@ class Application
 	 */
 	public static function init($environment=null)
 	{
-		require_once ("init.php");
-		/**
-		 * 启动计划任务定时运行 
-		 */
-		if (class_exists("Cron")){
-			Cron::run();
-		}
-		
+		require_once ("Gc.php");
+
 		if (!empty($environment)){
 			foreach ($environment as $key=>$value){
 				if (isset(Gc::$$key)){
 					Gc::$$key=$value;
 				}
+			}
+		}
+
+		require_once ("init.php");
+
+		if (!empty($environment)){
+			foreach ($environment as $key=>$value){
 				if (isset(Config_Db::$$key)){
 					Config_Db::$$key=$value;
 				}
 			}
+		}
+
+		/**
+		 * 启动计划任务定时运行
+		 */
+		if (class_exists("Cron")){
+			Cron::run();
 		}
 	}
 

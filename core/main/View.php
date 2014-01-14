@@ -256,7 +256,7 @@ class View {
 				$this->template->compile_check = true;
 				$this->template->allow_php_templates= true;
 				$this->template->allow_php_tag=true;
-				$this->template->debugging = Gc::$dev_debug_on;
+				$this->template->debugging = Gc::$dev_smarty_on;
 				$this->template->force_compile = false;
 				$this->template->caching = Gc::$is_online_optimize;
 				$this->template->cache_lifetime = 86400;//缓存一周

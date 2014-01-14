@@ -8,7 +8,7 @@
  * @author skygreen
  */
 class DataObjectArray extends Object implements ArrayAccess
-{	
+{
 	//<editor-fold defaultstate="collapsed" desc="魔术方法">
 	/**
 	* 从数组创建对象。
@@ -18,7 +18,7 @@ class DataObjectArray extends Object implements ArrayAccess
 	public function __construct($array=null)
 	{
 		if (!empty($array)&&is_array($array))
-			foreach ($array as $key=>$value) 
+			foreach ($array as $key=>$value)
 				$this->$key=$value;
 	}
 
@@ -30,7 +30,8 @@ class DataObjectArray extends Object implements ArrayAccess
 	 */
 	public function __get($property)
 	{
-		return $this->$property;
+		if (property_exists($this,$property)) return $this->$property;
+		return null;
 	}
 
 	/**
@@ -43,7 +44,7 @@ class DataObjectArray extends Object implements ArrayAccess
 	{
 		return $this->$property=$value;
 	}
-	
+
 	 /**
 	 * 打印当前对象的数据结构
 	 * @return string 描述当前对象。
@@ -52,7 +53,7 @@ class DataObjectArray extends Object implements ArrayAccess
 		return DataObjectFunc::toString($this);
 	}
 	//</editor-fold>
-	
+
 	//<editor-fold defaultstate="collapsed" desc="定义数组进入对象方式">
 	public function offsetExists($key)
 	{
@@ -72,5 +73,5 @@ class DataObjectArray extends Object implements ArrayAccess
 		unset($this->$key);
 	}
 	//</editor-fold>
-}	
+}
 ?>

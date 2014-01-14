@@ -54,17 +54,17 @@ abstract class Crud_SQL {
 	 * 默认是where的值如何是字符串必须带引号。
 	 * 但是表达关系的时候不能将where所带的值带引号，如：<br/>
 	 * select b.* from bb_user_re_userrole a,bb_user_role b where (a.userId=1 and b.id=a.roleId)
-	 * @var bool 是否忽略字符串值带引号。<br/> 
+	 * @var bool 是否忽略字符串值带引号。<br/>
 	 */
 	private $ignore_quotes=false;
-	
+
 	/**
 	 * 保证能实时开关该参数。
 	 * 默认是where的值如何是字符串必须带引号。
 	 * 但是表达关系的时候不能将where所带的值带引号，如：<br/>
 	 * select b.* from bb_user_re_userrole a,bb_user_role b where (a.userId=1 and b.id=a.roleId)
 	 * @param bool $ignore_quotes
-	 * @return Crud_SQL 
+	 * @return Crud_SQL
 	 */
 	public function ignoreQuotes($ignore_quotes)
 	{
@@ -86,7 +86,7 @@ abstract class Crud_SQL {
 	 +-------------------------------------------------------------------------------------------------
 	 * @return SQL构造器本身
 	 */
-	public function where() 
+	public function where()
 	{
 		$clause=func_get_args();
 		$whereClause="";
@@ -141,7 +141,7 @@ abstract class Crud_SQL {
 						return $this;
 					}
 				}
-				
+
 				$detailclause=str_replace(trim(self::SQL_AND),",",$clause);
 				$detailclause=implode(",", $detailclause);
 				if (!empty($detailclause)) {
@@ -152,53 +152,55 @@ abstract class Crud_SQL {
 			}
 
 			$asWhereClause=array();
-			foreach ($detailclause as $key => $value) {
-				if ($this->isPreparedStatement) {
-					if ( $this->isLike) {
-						$asWhereClause[$key]=$key.self::SQL_LIKE." '%?%' ";
-					}else {
-						if (contains($value,array('>',"<","=",">=","<="))||(contains(strtolower($value),array("like ","between ")))){
-							if (is_numeric($key)){
-								$asWhereClause[$key]=$value;
-							}else{
-								$asWhereClause[$key]=$key." ".$value." ";
-							}
-						}else{
-							$asWhereClause[$key]=$key."=?";
-						}
-					}
-				}else {
-					if ( $this->isLike) {
-						$asWhereClause[$key]=$key.self::SQL_LIKE." '%$value%' ";
-					}else {
-						if (is_int($key)) {
-							$asWhereClause[$key]=$value;
+			if (is_array($detailclause)){
+				foreach ($detailclause as $key => $value) {
+					if ($this->isPreparedStatement) {
+						if ( $this->isLike) {
+							$asWhereClause[$key]=$key.self::SQL_LIKE." '%?%' ";
 						}else {
-							if (is_numeric($value)) {
-								$asWhereClause[$key]=$key."='".$value."'";//$key."=".$value;
-							} else {
-								$quotes="";
-								if (!$this->ignore_quotes){
-									if (!preg_match("/^['\"]/",trim($value))) {
-										$quotes='\'';
-									}
+							if (contains($value,array('>',"<","=",">=","<="))||(contains(strtolower($value),array("like ","between ")))){
+								if (is_numeric($key)){
+									$asWhereClause[$key]=$value;
+								}else{
+									$asWhereClause[$key]=$key." ".$value." ";
 								}
-								if (Config_Db::$db==EnumDbSource::DB_SQLSERVER&&((trim(strtoupper(Gc::$encoding))==Config_C::CHARACTER_UTF_8)||(trim(strtolower(Gc::$encoding))==Config_C::CHARACTER_UTF8))) {
-									if (contains($value,array('>',"<","=",">=","<="))||(contains(strtolower($value),array("like ","between ")))){
-										$asWhereClause[$key]=$key." ".$value." ";
-									}else{
-										$asWhereClause[$key]=$key."=".$quotes;
-										if (UtilString::is_utf8($value)&&Config_Adodb::driver()!=Config_Adodb::DRIVER_MSSQL_UTF8) {
-											$asWhereClause[$key].=UtilString::utf82gbk($value).$quotes;
-										}else{
-											$asWhereClause[$key].=$value.$quotes;
+							}else{
+								$asWhereClause[$key]=$key."=?";
+							}
+						}
+					}else {
+						if ( $this->isLike) {
+							$asWhereClause[$key]=$key.self::SQL_LIKE." '%$value%' ";
+						}else {
+							if (is_int($key)) {
+								$asWhereClause[$key]=$value;
+							}else {
+								if (is_numeric($value)) {
+									$asWhereClause[$key]=$key."='".$value."'";//$key."=".$value;
+								} else {
+									$quotes="";
+									if (!$this->ignore_quotes){
+										if (!preg_match("/^['\"]/",trim($value))) {
+											$quotes='\'';
 										}
 									}
-								}else{
-									if (contains($value,array('>',"<","=",">=","<="))||(contains(strtolower($value),array("like ","between ")))){
-										$asWhereClause[$key]=$key." ".$value." ";
+									if (Config_Db::$db==EnumDbSource::DB_SQLSERVER&&((trim(strtoupper(Gc::$encoding))==Config_C::CHARACTER_UTF_8)||(trim(strtolower(Gc::$encoding))==Config_C::CHARACTER_UTF8))) {
+										if (contains($value,array('>',"<","=",">=","<="))||(contains(strtolower($value),array("like ","between ")))){
+											$asWhereClause[$key]=$key." ".$value." ";
+										}else{
+											$asWhereClause[$key]=$key."=".$quotes;
+											if (UtilString::is_utf8($value)&&Config_Adodb::driver()!=Config_Adodb::DRIVER_MSSQL_UTF8) {
+												$asWhereClause[$key].=UtilString::utf82gbk($value).$quotes;
+											}else{
+												$asWhereClause[$key].=$value.$quotes;
+											}
+										}
 									}else{
-										$asWhereClause[$key]=$key."=".$quotes.$value.$quotes;
+										if (contains($value,array('>',"<","=",">=","<="))||(contains(strtolower($value),array("like ","between ")))){
+											$asWhereClause[$key]=$key." ".$value." ";
+										}else{
+											$asWhereClause[$key]=$key."=".$quotes.$value.$quotes;
+										}
 									}
 								}
 							}
@@ -298,7 +300,7 @@ abstract class Crud_SQL {
 	 * 示例如下：
 	 *     array("id"=>"1","name"=>"sky")
 	 */
-	public function parseValidInputParam($param) 
+	public function parseValidInputParam($param)
 	{
 		$result=null;
 		if (empty($param)) {

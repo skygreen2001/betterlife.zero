@@ -167,12 +167,21 @@ class Gc
 	 * @static
 	 */
 	public static $url_model=0;
+
 	/**
 	 * 是否打开Debug模式
 	 * @var bool
 	 * @static
 	 */
-	public static $dev_debug_on=false;
+	public static $dev_debug_on=true;
+
+	/**
+	 * 是否打开Smarty Debug Console窗口
+	 * @var bool
+	 * @static
+	 */
+	public static $dev_smarty_on=false;
+
 	/**
 	 * 是否要Profile网站性能
 	 * @var bool
