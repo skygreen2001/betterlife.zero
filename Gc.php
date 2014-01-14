@@ -57,6 +57,12 @@ class Gc
 	 */
 	public static $is_online_optimize=false;
 	/**
+	 * 是否gzip压缩[css和Js文件]
+	 *
+	 * @var boolean
+	 */
+	public static $isGzip=true;
+	/**
 	 * 网站应用的名称<br/>
 	 * 展示给网站用户
 	 * @var string

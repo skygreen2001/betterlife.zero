@@ -97,7 +97,7 @@ class UtilCss extends Util
 		$result="";
 		if (isset($cssFile)){
 			$url_base=UtilNet::urlbase();
-			if ($isGzip){
+			if ($isGzip&&Gc::$isGzip){
 				if (isset($cssFlag)){
 					$cssFile.="&".self::$CSS_FLAG_GROUP."=".$cssFlag;
 				}
