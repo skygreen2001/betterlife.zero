@@ -174,7 +174,7 @@ class UtilFileSystem extends Util
 			if ($files[$uploadFieldName]["error"] > 0) {
 				switch($files[$uploadFieldName]['error']) {
 					case 1:
-						$errorInfo="文件大小超出了服务器的空间大小";//The file is too large (server)
+						$errorInfo="超出了限制上传的文件大小";//The file is too large (server)
 						break;
 					case 2:
 						$errorInfo="要上传的文件大小超出浏览器限制";//The file is too large (form)
@@ -192,7 +192,7 @@ class UtilFileSystem extends Util
 						$errorInfo="文件写入到临时文件夹出错";//Failed to write to the temporary folder.
 						break;
 				}
-				$errorInfo.="[错误号：".$files[$uploadFieldName]["error"]."],详情查看：<br/>http://php.net/manual/zh/features.file-upload.errors.php";
+				$errorInfo.="<br/>[错误号：".$files[$uploadFieldName]["error"]."],详情查看：<br/>http://php.net/manual/zh/features.file-upload.errors.php";
 				return array('success' => false, 'msg' =>  $errorInfo);
 			} else {
 				//获得临时文件名
