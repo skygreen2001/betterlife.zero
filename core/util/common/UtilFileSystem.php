@@ -270,7 +270,10 @@ class UtilFileSystem extends Util
 				while (($file = readdir($dh)) !== false) {
 					 if($file!='.'&& $file!='..'&& $file!='.svn' && $file!='.git'&&UtilString::contain($file,".")) {
 						 foreach ($agreesuffix as $suffix) {
-							if (strcasecmp(end(explode('.', $file)),$suffix)===0) {
+							$fileSuffix=explode('.', $file);
+							$fileSuffix=end($fileSuffix);
+							$fileSuffix=strcasecmp($fileSuffix,$suffix);
+							if ($fileSuffix===0) {
 								$result[]=$dir.$file;
 								//echo "filename: $file : filetype: " . filetype($dir . $file) . "\n";
 							}
@@ -376,7 +379,10 @@ class UtilFileSystem extends Util
 						if ($agreesuffix=="*") {
 							$data[dirname($nextpath).DIRECTORY_SEPARATOR.'a'.basename($nextpath)]=$nextpath;
 						}else if (is_string($agreesuffix)) {
-							if (strcasecmp(end(explode('.', $file)),$agreesuffix)===0) {
+							$fileSuffix=explode('.', $file);
+							$fileSuffix=end($fileSuffix);
+							$fileSuffix=strcasecmp($fileSuffix,$agreesuffix);
+							if ($fileSuffix===0) {
 								$isChinese=UtilString::is_chinese($nextpath);
 								if ($isChinese){
 									$is_utf8=UtilString::is_utf8($nextpath);
@@ -391,7 +397,9 @@ class UtilFileSystem extends Util
 							}
 						}else if (is_array($agreesuffix)) {
 							foreach ($agreesuffix as $suffix) {
-								$fileSuffix=strcasecmp(end(explode('.', $file)),$suffix);
+								$fileSuffix=explode('.', $file);
+								$fileSuffix=end($fileSuffix);
+								$fileSuffix=strcasecmp($fileSuffix,$suffix);
 								if ($fileSuffix===0) {
 									$data[dirname($nextpath).DIRECTORY_SEPARATOR.'a'.basename($nextpath)]=$nextpath;
 								}
