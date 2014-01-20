@@ -16,7 +16,26 @@ class EnumDateTimeFORMAT extends Enum
 	* 日期字符串时间形式
 	*/
 	const STRING=2;
-}  
+}
+
+/**
+* 输出日期时间的格式
+*/
+class EnumDateTimeShow extends Enum
+{
+	/**
+	* 显示日期时间
+	*/
+	const DATETIME=0;
+	/**
+	* 只显示日期
+	*/
+	const DATE=1;
+	/**
+	* 只显示时间
+	*/
+	const TIME=2;
+}
 
 /**
  +---------------------------------<br/>
@@ -27,8 +46,8 @@ class EnumDateTimeFORMAT extends Enum
  * @subpackage datetime
  * @author skygreen
  */
-class UtilDateTime extends Util 
-{    
+class UtilDateTime extends Util
+{
 	/**
 	 * 标准日期时间格式：年-月-日 时:分:秒
 	 */
@@ -37,6 +56,10 @@ class UtilDateTime extends Util
 	 * 标准日期时间格式：年-月-日 时:分:秒
 	 */
 	const TIMEFORMAT_YMD="Y-m-d";
+	/**
+	 * 标准日期时间格式：时:分:秒
+	 */
+	const TIMEFORMAT_HIS="H:i:s";
 	/**
 	 * 设置当前为中国时区的时间。
 	 */
@@ -47,42 +70,41 @@ class UtilDateTime extends Util
 
 	/**
 	 +----------------------------------------------------------<br/>
-	 * 获取现在的时间显示<br/>
-	 * 格式：年-月-日 小时:分钟:秒<br/> 
-	 +----------------------------------------------------------<br/>      
-	 */
-	public static function nowDate($type=EnumDateTimeFormat::DATE)
-	{
-		date_default_timezone_set('Asia/Shanghai');
-		$now= date(self::TIMEFORMAT_YMD);
-		switch ($type){
-			case EnumDateTimeFORMAT::TIMESTAMP: 
-				return UtilDateTime::dateToTimestamp($now);      
-			case EnumDateTimeFORMAT::DATE:
-				return $now;        
-			case EnumDateTimeFORMAT::STRING:
-				return $now."";        
-		}
-		return $now;
-	}
-	
-	/**
+	 * 获取现在的日期时间显示<br/>
+	 * 输出不同数据格式的日期｜时间｜日期时间
+	 * @param int $type 输出数据类型
+	 * 0:输出数据类型：Timestamp<br/>
+	 * 1:输出数据类型：日期时间<br/>
+	 * 2:输出数据类型：日期时间字符串形式<br/>
+	 *
+	 * @param int $timeformat 显示日期时间类型
+	 * 0:格式：年-月-日 小时:分钟:秒<br/>
+	 * 1:格式：年-月-日<br/>
+	 * 2:格式：小时:分钟:秒<br/>
 	 +----------------------------------------------------------<br/>
-	 * 获取现在的时间显示<br/>
-	 * 格式：年-月-日 小时:分钟:秒<br/> 
-	 +----------------------------------------------------------<br/>      
 	 */
-	public static function now($type=EnumDateTimeFormat::DATE)
+	public static function now($type=EnumDateTimeFormat::DATE,$timeformat=EnumDateTimeShow::DATETIME)
 	{
 		date_default_timezone_set('Asia/Shanghai');
-		$now= date(self::TIMEFORMAT_YMDHIS);
+		switch ($timeformat) {
+			case EnumDateTimeShow::DATE:
+				$now= date(self::TIMEFORMAT_YMD);
+				break;
+			case EnumDateTimeShow::TIME:
+				$now= date(self::TIMEFORMAT_HIS);
+				break;
+			default:
+				$now= date(self::TIMEFORMAT_YMDHIS);
+				break;
+		}
+
 		switch ($type){
-			case EnumDateTimeFORMAT::TIMESTAMP: 
-				return UtilDateTime::dateToTimestamp($now);      
+			case EnumDateTimeFORMAT::TIMESTAMP:
+				return UtilDateTime::dateToTimestamp($now);
 			case EnumDateTimeFORMAT::DATE:
-				return $now;        
+				return $now;
 			case EnumDateTimeFORMAT::STRING:
-				return $now."";        
+				return $now."";
 		}
 		return $now;
 	}
@@ -96,28 +118,28 @@ class UtilDateTime extends Util
 	{
 		return date($format, $timestamp);
 	}
-	
+
 	/**
 	 * 将日期时间格式年-月-日 时:分:秒转成时间戳
 	 * @param string $str 日期时间格式年-月-日 时:分:秒
 	 * @return 时间戳
 	 */
 	public static function dateToTimestamp($str='')
-	{      
+	{
 		if (empty($str)){
 			$str=self::now();
 		}
-		@list($date, $time) = explode(' ', $str); 
-		list($year, $month, $day) = explode('-', $date); 
+		@list($date, $time) = explode(' ', $str);
+		list($year, $month, $day) = explode('-', $date);
 		if(empty($time)){
-			$timestamp = mktime(0, 0, 0, $month, $day, $year); 
+			$timestamp = mktime(0, 0, 0, $month, $day, $year);
 		}else{
-			list($hour, $minute, $second) = explode(':', $time); 
+			list($hour, $minute, $second) = explode(':', $time);
 			$timestamp = mktime($hour, $minute, $second, $month, $day, $year);
 		}
 		return $timestamp;
 	}
-	
+
 	/**
 	 +----------------------------------------------------------<br/>
 	 * 是否为闰年<br/>
@@ -130,7 +152,7 @@ class UtilDateTime extends Util
 	 * @throws ThinkExecption
 	 +----------------------------------------------------------
 	 */
-	public static function isLeapYear($year='') 
+	public static function isLeapYear($year='')
 	{
 		if(empty($year)) {
 			$year = $this->year;
@@ -154,7 +176,7 @@ class UtilDateTime extends Util
 	 * @throws ThinkExecption
 	 +----------------------------------------------------------
 	 */
-	public static function magicInfo($year,$month,$day,$type="SX") 
+	public static function magicInfo($year,$month,$day,$type="SX")
 	{
 		$result = '';
 		$m      =   $month;
@@ -187,10 +209,10 @@ class UtilDateTime extends Util
 				break;
 		}
 		return $result;
-	}        
-	   
+	}
+
 	/**
-	 * 将出生年月日转换成岁数 
+	 * 将出生年月日转换成岁数
 	 * @param mixed $birthday 出生年月日。格式如："1979-03-10"
 	 */
 	public static function birthdayToAge($birthday)
@@ -202,7 +224,7 @@ class UtilDateTime extends Util
 		if ($month_diff < 0) $year_diff--;
 		elseif (($month_diff==0) && ($day_diff < 0)) $year_diff--;
 		return $year_diff;
-	} 
+	}
 }
 //echo UtilDateTime::magicInfo("1979", "3", "10","XZ")
 ?>

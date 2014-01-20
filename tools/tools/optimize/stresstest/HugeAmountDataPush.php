@@ -11,7 +11,7 @@ class HugeAmountDataPush
 	 * @return boolean
 	 */
 	public static $isShowReport=true;
-	
+
 	 /**
 	 * 是否显示sql语句
 	 * @return boolean
@@ -63,14 +63,14 @@ class HugeAmountDataPush
 	 * @return array
 	 */
 	public static $fieldInfos=array();
-	
+
 	public static function init()
 	{
-		self::$nowtime=UtilDateTime::dateToTimestamp(UtilDateTime::nowDate());
+		self::$nowtime=UtilDateTime::now(EnumDateTimeFormat::TIMESTAMP);
 		self::$script_sql_path=Gc::$nav_root_path."stressdata".DIRECTORY_SEPARATOR;
-        UtilFileSystem::createDir(self::$script_sql_path);
-        self::$script_sql_path.="StresstTest".self::$nowtime.".txt";
-	    self::$result="";
+		UtilFileSystem::createDir(self::$script_sql_path);
+		self::$script_sql_path.="StresstTest".self::$nowtime.".txt";
+		self::$result="";
 	    file_put_contents(self::$script_sql_path,"");
 	}
 
@@ -86,7 +86,7 @@ class HugeAmountDataPush
 		if (is_string($tablenames)) {
 			$tablenames=array($tablenames);
 		}
-		
+
 		foreach ($tablenames as $tablename) {
 			$count=self::getOneTableData($tablename);
 			if(self::$isShowReport){
@@ -106,10 +106,10 @@ class HugeAmountDataPush
 	/**
 	 +----------------------------------------------------------<br/>
 	 * 获取单个数据表数据<br/>
-	 +----------------------------------------------------------<br/>  
-	 * @param string $tablename 数据表名称 
+	 +----------------------------------------------------------<br/>
+	 * @param string $tablename 数据表名称
 	 * @param int $num 需要测试的数据数量级
-	 * @return int 添加数据的数量 
+	 * @return int 添加数据的数量
 	 */
 	private static function getOneTableData($tablename)
 	{
@@ -135,7 +135,7 @@ class HugeAmountDataPush
 		$countStr="select count(*) from $tablename";
 		$count=sqlExecute($countStr);//获取数据表当前数据数目
 		$fields=self::fieldnames($tablename);
-	
+
 		$isRelationTable=UtilHugeAmount::isRelationTable($tablename);
 		if ($isRelationTable) {
 			if ($count>=self::$num){
@@ -173,11 +173,11 @@ class HugeAmountDataPush
 		self::$result.=self::$cache_result;
 		return $count;
 	}
-	
+
 	/**
 	 +----------------------------------------------------------<br/>
 	 * 压力测试，数据库测试<br/>
-	 +----------------------------------------------------------<br/>  
+	 +----------------------------------------------------------<br/>
 	 */
 	public static function createDatabaseData()
 	{
@@ -216,23 +216,23 @@ class HugeAmountDataPush
 				$show_result= strtr(self::$cache_result,$table_change);
 				$echo_showresult.= $show_result."<br/>";
 			}
-	    }  
+	    }
 		if(self::$isShowReport){
 			$num_relation_table=self::$num_relation_table;
 			$num_main_table=self::$num_table-$num_relation_table-$count_undo;
 	    	echo "主要实体表数:".$num_main_table.",中间关系表数:".$num_relation_table.",数据字典表:$count_dic,日志表:$count_log,无关的表:".$count_undo."<br/><br/>";
 		}
 		echo $echo_showresult;
-	    file_put_contents(self::$script_sql_path,self::$result);//,FILE_APPEND                                         
+	    file_put_contents(self::$script_sql_path,self::$result);//,FILE_APPEND
 	}
 
 	/**
 	 +----------------------------------------------------------<br/>
 	 * 初始化数据,自动生成随机数据<br/>
-	 +----------------------------------------------------------<br/>  
-	 */ 
+	 +----------------------------------------------------------<br/>
+	 */
 	public static function fieldnames($tablename)
-	{       
+	{
 		$field_arr=self::$fieldInfos[$tablename];
 		$field_names=array_keys($field_arr);
 	   	$classname=UtilHugeAmount::getClassname($tablename);
@@ -253,8 +253,8 @@ class HugeAmountDataPush
 	 * @param string $tablename 表名称
 	 * @param string $classname 列名称
 	 * @param string $fields 需要插入的列规格
-	 +----------------------------------------------------------<br/>  
-	 */ 
+	 +----------------------------------------------------------<br/>
+	 */
 	public static function relationTableData($tablename,$classname,$fields)
 	{
 		$i=0;
@@ -321,7 +321,7 @@ class HugeAmountDataPush
 							break;
 	                    case "timestamp":
 							$values[$fieldname] = "'".UtilDateTime::now()."'";
-	                        break;    
+	                        break;
 						case "datetime":
 							$values[$fieldname] = "'".UtilDateTime::now()."'";
 							break;
@@ -359,7 +359,7 @@ class HugeAmountDataPush
 													$text=implode(UtilString::build_format_rand("#",6));
 												}else{
 													$isMobile=UtilHugeAmount::columnIsMobile($fieldname,$comment);
-													if ($isMobile) {						
+													if ($isMobile) {
 														$text=UtilMobile::randMobile(1);
 														$text=$text[0];
 													} else {
@@ -400,10 +400,10 @@ class HugeAmountDataPush
 	 * @param string $tablename 表名称
 	 * @param string $classname 列名称
 	 * @param string $fields 需要插入的列规格
-	 +----------------------------------------------------------<br/>  
-	 */ 
+	 +----------------------------------------------------------<br/>
+	 */
 	public static function tableInitData($tablename,$classname,$fields)
-	{       
+	{
 		$i=0;
 	   	$result="";
 		$field_arr=self::$fieldInfos[$tablename];
@@ -440,7 +440,7 @@ class HugeAmountDataPush
 						break;
                     case "timestamp":
 						$values[$fieldname] = "'".UtilDateTime::now()."'";
-                        break;    
+                        break;
 					case "datetime":
 						$values[$fieldname] = "'".UtilDateTime::now()."'";
 						break;
@@ -478,7 +478,7 @@ class HugeAmountDataPush
 												$text=implode(UtilString::build_format_rand("#",6));
 											}else{
 												$isMobile=UtilHugeAmount::columnIsMobile($fieldname,$comment);
-												if ($isMobile) {						
+												if ($isMobile) {
 													$text=UtilMobile::randMobile(1);
 													$text=$text[0];
 												} else {
@@ -515,8 +515,8 @@ class HugeAmountDataPush
 	/**
 	 +----------------------------------------------------------<br/>
 	 * 特定表和列的处理<br/>
-	 +----------------------------------------------------------<br/>  
-	 */    
+	 +----------------------------------------------------------<br/>
+	 */
 	public static function aiForBusiness()
 	{
 		$filter=array(
@@ -596,7 +596,7 @@ class UtilHugeAmount
 		$column_name=strtoupper($column_name);
 		if (contain($column_name,"ID")){
 			return false;
-		}		
+		}
 		if (((self::column_length($column_type)>=500)&&(!contain($column_name,"IMAGES"))&&(!contain($column_name,"LINK"))&&(!contain($column_name,"ICO")))
 			 ||(contains($column_name,array("INTRO","MEMO","CONTENT")))||(self::column_type($column_type)=='text')||(self::column_type($column_type)=='longtext')){  //&&(!contain($column_name,"addr"))
 			return true;
@@ -689,7 +689,7 @@ class UtilHugeAmount
 		}
 		return false;
 	}
-		
+
 	/**
 	 * 表中列的长度定义
 	 * @param string $type
@@ -717,10 +717,10 @@ class UtilHugeAmount
 		}
 		return $typep;
 	}
-	
+
 	/**
 	 * 抓取枚举类型的值并存入数组
-	 */ 
+	 */
 	public static function getEnmu($enmu)
 	{
 		list($typep,$value)=split('[()]',$enmu);

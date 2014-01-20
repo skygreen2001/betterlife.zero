@@ -1,21 +1,22 @@
 <?php
 require_once ("init.php");
-$user=User::get_by_id(1);
-$userDetail=$user->userDetail;
-$country=$userDetail->country_r;
-$province=$userDetail->province_r;
-$city=$userDetail->city_r;        
-$district=$userDetail->district_r;
-print_r($country);
-print_r($province);
-print_r($city);
-print_r($district);
+// print_r(UtilDateTime::now(EnumDateTimeFORMAT::DATE,EnumDateTimeShow::TIME));
+// $user=User::get_by_id(1);
+// $userDetail=$user->userDetail;
+// $country=$userDetail->country_r;
+// $province=$userDetail->province_r;
+// $city=$userDetail->city_r;
+// $district=$userDetail->district_r;
+// print_r($country);
+// print_r($province);
+// print_r($city);
+// print_r($district);
 
 //$blog=Blog::get_one();
 //print_r($blog);
 /*$blogs=Blog::select('name,content');
-print_r($blogs);            
-UtilBarCode::upc_a("12207201213");                                      
+print_r($blogs);
+UtilBarCode::upc_a("12207201213");
 
 Blog::queryPage(0,10,
     array(
@@ -23,29 +24,29 @@ Blog::queryPage(0,10,
         "blog_id<4",
         "user_id"=>1
     ));
-    
+
 $user=new User();
 $user->user_id=2;
 print_r($user->userDetail);
 
-print_r(User::get(array(username=> "like '%ad%'")));    
+print_r(User::get(array(username=> "like '%ad%'")));
 $serverCache=Manager_Cache::singleton()->server(EnumCacheDriverType::REDIS);
 $serverCache->TestRun();
-					       
-print_r(SystemService::doLibrarySelect(array("name"=>"m")));                                             
-LogMe::log("我在想事情呢！等等我");     
+
+print_r(SystemService::doLibrarySelect(array("name"=>"m")));
+LogMe::log("我在想事情呢！等等我");
 LogMe::log("装深沉，你就装吧！");
 
 //PHP 与 Linq
 //Create data source
-$names = array("John", "Peter", "Joe", "Patrick", "Donald", "Eric"); 
+$names = array("John", "Peter", "Joe", "Patrick", "Donald", "Eric");
 
 $result = from('$name')->in($names)
             ->where('$name => strlen($name) < 5')
-            ->select('$name'); 
+            ->select('$name');
 print_r($result);
-			
-//加载配置             
+
+//加载配置
 $xml=UtilConfig::Instance();
 $xml->load(Gc::$nav_root_path."core\\util\\config\\xml\\"."setting.xml");
 echo 'PHP:'. $xml->get('db.host').'';
@@ -85,4 +86,4 @@ $role->setId(5);
 UtilDateTime::ChinaTime();
 $role->saveRelationForManyToMany("users","6",array("commitTime"=>date("Y-m-d H:i:s"))); */
 
-?> 
+?>
