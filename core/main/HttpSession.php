@@ -14,7 +14,7 @@ class HttpSession
 	 */
 	public static function init()
 	{
-		session_start();
+		if(!isset($_SESSION))session_start();
 	}
 
 	/**
