@@ -2,7 +2,7 @@
 /**
  +---------------------------------<br/>
  * 功能:将多个文件压缩成zip文件的工具类<br/>
- +---------------------------------<br/>                                        
+ +---------------------------------<br/>
  * @category betterlife
  * @package util.common
  * @author skygreen
@@ -12,16 +12,16 @@ class UtilZipfile
 	/**
 	 * Array to store compressed data
 	 *
-	 * @var  array    $datasec
+	 * @var  array	$datasec
 	 */
-	private $datasec      = array();
+	private $datasec	  = array();
 
 	/**
 	 * Central directory
 	 *
-	 * @var  array    $ctrl_dir
+	 * @var  array	$ctrl_dir
 	 */
-	private $ctrl_dir     = array();
+	private $ctrl_dir	 = array();
 
 	/**
 	 * End of central directory record
@@ -48,13 +48,14 @@ class UtilZipfile
 	 *
 	 * @access private
 	 */
-	private function unix2DosTime($unixtime = 0) {
+	private function unix2DosTime($unixtime = 0)
+	{
 		$timearray = ($unixtime == 0) ? getdate() : getdate($unixtime);
 
 		if ($timearray['year'] < 1980) {
-			$timearray['year']    = 1980;
-			$timearray['mon']     = 1;
-			$timearray['mday']    = 1;
+			$timearray['year']	= 1980;
+			$timearray['mon']	 = 1;
+			$timearray['mday']	= 1;
 			$timearray['hours']   = 0;
 			$timearray['minutes'] = 0;
 			$timearray['seconds'] = 0;
@@ -76,9 +77,9 @@ class UtilZipfile
 	 */
 	private function addFile($data, $name, $time = 0)
 	{   //$name=Util_String::utf82gbk($name);
-		$name     = str_replace('\\', '/', $name);
-		
-		$dtime    = dechex($this->unix2DosTime($time));
+		$name	 = str_replace('\\', '/', $name);
+		$name=basename($name);
+		$dtime	= dechex($this->unix2DosTime($time));
 		$hexdtime = '\x' . $dtime[6] . $dtime[7]
 				  . '\x' . $dtime[4] . $dtime[5]
 				  . '\x' . $dtime[2] . $dtime[3]
@@ -87,52 +88,52 @@ class UtilZipfile
 
 		$fr   = "\x50\x4b\x03\x04";
 
-		$fr   .= "\x14\x00";            // ver needed to extract
-		$fr   .= "\x00\x00";            // gen purpose bit flag
-		$fr   .= "\x08\x00";            // compression method
-		$fr   .= $hexdtime;             // last mod time and date
-	   
+		$fr   .= "\x14\x00";			// ver needed to extract
+		$fr   .= "\x00\x00";			// gen purpose bit flag
+		$fr   .= "\x08\x00";			// compression method
+		$fr   .= $hexdtime;			 // last mod time and date
+
 		// "local file header" segment
 		$unc_len = strlen($data);
-		$crc     = crc32($data);
+		$crc	 = crc32($data);
 		$zdata   = gzcompress($data);
 		$zdata   = substr(substr($zdata, 0, strlen($zdata) - 4), 2); // fix crc bug
 		$c_len   = strlen($zdata);
-		$fr      .= pack('V', $crc);             // crc32
-		$fr      .= pack('V', $c_len);           // compressed filesize
-		$fr      .= pack('V', $unc_len);         // uncompressed filesize
-		$fr      .= pack('v', strlen($name));    // length of filename
-		$fr      .= pack('v', 0);                // extra field length
-		$fr      .= $name;
+		$fr	  .= pack('V', $crc);			 // crc32
+		$fr	  .= pack('V', $c_len);		   // compressed filesize
+		$fr	  .= pack('V', $unc_len);		 // uncompressed filesize
+		$fr	  .= pack('v', strlen($name));	// length of filename
+		$fr	  .= pack('v', 0);				// extra field length
+		$fr	  .= $name;
 
 		// "file data" segment
 		$fr .= $zdata;
 
 		// "data descriptor" segment (optional but necessary if archive is not
 		// served as file)
-		$fr .= pack('V', $crc);                 // crc32
-		$fr .= pack('V', $c_len);               // compressed filesize
-		$fr .= pack('V', $unc_len);             // uncompressed filesize
+		$fr .= pack('V', $crc);				 // crc32
+		$fr .= pack('V', $c_len);			   // compressed filesize
+		$fr .= pack('V', $unc_len);			 // uncompressed filesize
 
 		// add this entry to array
 		$this -> datasec[] = $fr;
 
 		// now add to central directory record
 		$cdrec = "\x50\x4b\x01\x02";
-		$cdrec .= "\x00\x00";                // version made by
-		$cdrec .= "\x14\x00";                // version needed to extract
-		$cdrec .= "\x00\x00";                // gen purpose bit flag
-		$cdrec .= "\x08\x00";                // compression method
-		$cdrec .= $hexdtime;                 // last mod time & date
-		$cdrec .= pack('V', $crc);           // crc32
-		$cdrec .= pack('V', $c_len);         // compressed filesize
-		$cdrec .= pack('V', $unc_len);       // uncompressed filesize
+		$cdrec .= "\x00\x00";				// version made by
+		$cdrec .= "\x14\x00";				// version needed to extract
+		$cdrec .= "\x00\x00";				// gen purpose bit flag
+		$cdrec .= "\x08\x00";				// compression method
+		$cdrec .= $hexdtime;				 // last mod time & date
+		$cdrec .= pack('V', $crc);		   // crc32
+		$cdrec .= pack('V', $c_len);		 // compressed filesize
+		$cdrec .= pack('V', $unc_len);	   // uncompressed filesize
 		$cdrec .= pack('v', strlen($name) ); // length of filename
-		$cdrec .= pack('v', 0 );             // extra field length
-		$cdrec .= pack('v', 0 );             // file comment length
-		$cdrec .= pack('v', 0 );             // disk number start
-		$cdrec .= pack('v', 0 );             // internal file attributes
-		$cdrec .= pack('V', 32 );            // external file attributes - 'archive' bit set
+		$cdrec .= pack('v', 0 );			 // extra field length
+		$cdrec .= pack('v', 0 );			 // file comment length
+		$cdrec .= pack('v', 0 );			 // disk number start
+		$cdrec .= pack('v', 0 );			 // internal file attributes
+		$cdrec .= pack('V', 32 );			// external file attributes - 'archive' bit set
 
 		$cdrec .= pack('V', $this -> old_offset ); // relative offset of local header
 		$this -> old_offset += strlen($fr);
@@ -142,7 +143,7 @@ class UtilZipfile
 		// optional extra field, file comment goes here
 		// save to central directory
 		$this -> ctrl_dir[] = $cdrec;
-	} // end of the 'addFile()' method    
+	} // end of the 'addFile()' method
 
 	/**
 	 * Dumps out file
@@ -153,7 +154,7 @@ class UtilZipfile
 	 */
 	private function file()
 	{
-		$data    = implode('', $this -> datasec);
+		$data	= implode('', $this -> datasec);
 		$ctrldir = implode('', $this -> ctrl_dir);
 
 		return
@@ -162,9 +163,9 @@ class UtilZipfile
 			$this -> eof_ctrl_dir .
 			pack('v', sizeof($this -> ctrl_dir)) .  // total # of entries "on this disk"
 			pack('v', sizeof($this -> ctrl_dir)) .  // total # of entries overall
-			pack('V', strlen($ctrldir)) .           // size of central dir
-			pack('V', strlen($data)) .              // offset to start of central dir
-			"\x00\x00";                             // .zip file comment length
+			pack('V', strlen($ctrldir)) .		   // size of central dir
+			pack('V', strlen($data)) .			  // offset to start of central dir
+			"\x00\x00";							 // .zip file comment length
 	} // end of the 'file()' method
 
 
@@ -177,15 +178,23 @@ class UtilZipfile
 	 *
 	 * @access public
 	 */
-	public function addFiles($files)/*Only Pass Array*/
+	private function addFiles($files)/*Only Pass Array*/
 	{
-		foreach($files as $file)
-		{   
-			$file=UtilString::utf82gbk($file);
-			if (is_file($file)) //directory check
+		if (is_array($files)){
+			foreach($files as $file)
 			{
-				$data = implode("",file($file));
-				$this->addFile($data,$file);
+				if (UtilString::is_utf8($file)) $file=UtilString::utf82gbk($file);
+				if (is_file($file)) //directory check
+				{
+					$data = implode("",file($file));
+					$this->addFile($data,$file);
+				}
+			}
+		}else if (is_string($files)){
+			if (UtilString::is_utf8($file)) $file=UtilString::utf82gbk($file);
+			if (is_file($files)){
+				$data = implode("",file($files));
+				$this->addFile($data,$files);
 			}
 		}
 	}
@@ -199,29 +208,29 @@ class UtilZipfile
 	 *
 	 * @access public
 	 */
-	public function output($file)
+	private function output($file)
 	{
 		$fp=fopen($file,"w");
 		fwrite($fp,$this->file());
 		fclose($fp);
 	}
-	
+
 	/**
 	* 将若干个文件压缩成一个文件下载
 	* 调用示例:
-	*     UtilZipfile::zip(array("attachment\\20111221034439.xlsx","attachment\\20111221034612.xlsx"),Gc::$attachment_path."goodjob.zip");
+	*	 UtilZipfile::zip(array("attachment\\20111221034439.xlsx","attachment\\20111221034612.xlsx"),Gc::$attachment_path."goodjob.zip");
 	* @param mixed $arr_filename 需要压缩的文件名称列表
 	* @param mixed $outputfile 压缩后输出的压缩文件
 	*/
 	public static function zip($arr_filename,$outputfile)
-	{                            
+	{
 		$ziper=new UtilZipfile();
 		$ziper->addFiles($arr_filename);
 		//array of files
 		$ziper->output($outputfile);
 		return true;
-	}    
-} 
+	}
+}
 
 /* $Id: zip.lib.php,v 1.1 2004/02/14 15:21:18 anoncvs_tusedb Exp $ */
 // vim: expandtab sw=4 ts=4 sts=4:
