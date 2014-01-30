@@ -219,9 +219,9 @@ class AutoCodeConfig extends AutoCode
                 if (class_exists($relation_classname)) {
                     $relation_class=new $relation_classname();
                 }
-                if ($relation_class instanceof DataObject){
+                if ($relation_class instanceof DataObject){    
                     //belong_has_one:[当前表有归属表的标识，归属表没有当前表的标识]
-                    if (!array_key_exists($realId, $relation_classname))
+                    if (!array_key_exists($realId, $relation_class))
                     {
                         $instance_name=$relation_classname;
                         $instance_name{0}=strtolower($instance_name);
@@ -235,7 +235,7 @@ class AutoCodeConfig extends AutoCode
 
                     //has_many[当前表没有归属表的标识，归属表有当前表的标识]
                     //has_one:[当前表没有归属表的标识，归属表有当前表的标识，并且归属表里当前表的标识为Unique]
-                    if (!array_key_exists($realId, $relation_classname))
+                    if (!array_key_exists($realId, $relation_class))
                     {
                         if (array_key_exists($relation_classname, self::$table_key_map)){
                             $relation_tablename_key=self::$table_key_map[$relation_classname];
