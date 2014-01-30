@@ -502,7 +502,12 @@ class AutoCode extends Object
 		$fieldNames=array_keys($fieldInfo);
 		foreach ($fieldNames as $fieldname)
 		{
-			if (contains($fieldname,array("name","title"))&&(!contain($fieldname,"_id")))return $fieldname;
+			$fieldname_filter=strtolower($fieldname);
+			if (!contain($fieldname,"id")){
+				if (contains($fieldname,array("name","title")))return $fieldname;
+				$classname_filter=strtolower($classname);
+				if (contain($fieldname,$classname_filter))return $fieldname;
+			}
 		}
 		if ($isReturnNull){
 			return "";

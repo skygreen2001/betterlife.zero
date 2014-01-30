@@ -271,7 +271,7 @@ class AutoCodeService extends AutoCode
 	/**
 	 * 用户输入需求
 	 */
-	public static function UserInput()
+	public static function UserInput($title=null,$inputArr=null)
 	{
 		$inputArr=array(
 			"1"=>"继承具有标准方法的Service。",
@@ -839,33 +839,36 @@ class AutoCodeService extends AutoCode
 		$result="";
 		$many2manyUpdate="";
 		$many2manyQueryPageXml="";
-		$relationSpec=self::$relation_all[$classname];
-		if (array_key_exists("has_many",$relationSpec))
+		if (array_key_exists($classname, self::$relation_all))
 		{
-			$has_many=$relationSpec["has_many"];
-			foreach (array_keys($has_many) as $key)
+			$relationSpec=self::$relation_all[$classname];
+			if (array_key_exists("has_many",$relationSpec))
 			{
-				if (self::isMany2ManyByClassname($key))
+				$has_many=$relationSpec["has_many"];
+				foreach (array_keys($has_many) as $key)
 				{
-					$tablename=self::getTablename($key);
-					$fieldInfo=self::$fieldInfos[$tablename];
-					$belong_class="";
-					foreach (array_keys($fieldInfo) as $fieldname)
+					if (self::isMany2ManyByClassname($key))
 					{
-						if (!self::isNotColumnKeywork($fieldname))continue;
-						if ($fieldname==self::keyIDColumn($key))continue;
-						if (contain($fieldname,"_id")){
-							$to_class=str_replace("_id", "", $fieldname);
-							$to_class{0}=strtoupper($to_class{0});
-							if (class_exists($to_class)){
-								if ($to_class!=$classname){
-									$belong_class=$to_class;
-									$many2manyUpdate.="            <method name=\"update{$classname}{$belong_class}\">\r\n".
-													  "                <param name=\"len\">1</param>\r\n".
-													  "            </method>\r\n";
-									$many2manyQueryPageXml.="            <method name=\"queryPage{$classname}{$belong_class}\">\r\n".
-													  "                <param name=\"len\">1</param>\r\n".
-													  "            </method>\r\n";
+						$tablename=self::getTablename($key);
+						$fieldInfo=self::$fieldInfos[$tablename];
+						$belong_class="";
+						foreach (array_keys($fieldInfo) as $fieldname)
+						{
+							if (!self::isNotColumnKeywork($fieldname))continue;
+							if ($fieldname==self::keyIDColumn($key))continue;
+							if (contain($fieldname,"_id")){
+								$to_class=str_replace("_id", "", $fieldname);
+								$to_class{0}=strtoupper($to_class{0});
+								if (class_exists($to_class)){
+									if ($to_class!=$classname){
+										$belong_class=$to_class;
+										$many2manyUpdate.="            <method name=\"update{$classname}{$belong_class}\">\r\n".
+														  "                <param name=\"len\">1</param>\r\n".
+														  "            </method>\r\n";
+										$many2manyQueryPageXml.="            <method name=\"queryPage{$classname}{$belong_class}\">\r\n".
+														  "                <param name=\"len\">1</param>\r\n".
+														  "            </method>\r\n";
+									}
 								}
 							}
 						}
@@ -873,6 +876,7 @@ class AutoCodeService extends AutoCode
 				}
 			}
 		}
+
 		$result["many2manyUpdate"]=$many2manyUpdate;
 		$result["many2manyQueryPageXml"]=$many2manyQueryPageXml;
 		return $result;

@@ -92,7 +92,7 @@ class AutoCodeViewDefault extends AutoCode
     /**
      * 用户输入需求
      */
-    public static function UserInput()
+    public static function UserInput($title=null,$inputArr=null)
     {
         $inputArr=array(
             "0"=>"生成前台所需的表示层页面。",

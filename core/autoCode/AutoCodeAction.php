@@ -132,8 +132,8 @@ class AutoCodeAction extends AutoCode
 					 "     }\r\n\r\n".
 					 "     /**\r\n".
 					 "      * 预加载首页JS定义库。\r\n".
-					 "      * @param ViewObject $viewobject 表示层显示对象 \r\n".
-					 "      * @param string $templateurl\r\n".
+					 "      * @param ViewObject \$viewobject 表示层显示对象 \r\n".
+					 "      * @param string \$templateurl\r\n".
 					 "      */\r\n".
 					 "     private function loadIndexJs()\r\n".
 					 "     {\r\n".
@@ -169,7 +169,7 @@ class AutoCodeAction extends AutoCode
 				}
 			}
             echo  "新生成的Action_{$category_cap}文件路径:<font color='#0000FF'>".self::$action_dir_full.$key.".php</font><br />";
-            
+
 			/*self::$echo_result=str_replace(" ","&nbsp;",self::$echo_result);
 			self::$echo_result=str_replace("\r\n","<br />",self::$echo_result);
 			echo self::$echo_result;     */
@@ -229,7 +229,7 @@ class AutoCodeAction extends AutoCode
 	/**
 	 * 用户输入需求
 	 */
-	public static function UserInput()
+	public static function UserInput($title=null,$inputArr=null)
 	{
 		$inputArr=array(
 			"0"=>"前端Action，继承基本Action。",
@@ -264,7 +264,11 @@ class AutoCodeAction extends AutoCode
 				$result.="         \$this->init();\r\n";
 				$result.="         \$this->ExtDirectMode();\r\n";
 				$result.="         \$this->ExtUpload();\r\n";
-				$relationSpecs=self::$relation_viewfield[$classname];
+
+				if (array_key_exists($classname, self::$relation_viewfield))
+				{
+					$relationSpecs=self::$relation_viewfield[$classname];
+				}
 				$redundancy_table_fields=self::$redundancy_table_fields[$classname];
 				$redundancy_fields=array();
 				$isNeedTextarea=true;
@@ -275,13 +279,15 @@ class AutoCodeAction extends AutoCode
 				}
 				foreach ($fieldInfo as $fieldname=>$field)
 				{
-					if (array_key_exists($fieldname,$relationSpecs)){
-						$relationShow=$relationSpecs[$fieldname];
-						foreach ($relationShow as $key=>$value) {
-							$fieldInfos=self::$fieldInfos[self::getTablename($key)];
-							if (array_key_exists("parent_id",$fieldInfos)){
-								$result.="         \$this->loadExtComponent(\"ComboBoxTree.js\");\r\n";
-								break 2;
+					if (isset($relationSpecs)){
+						if (array_key_exists($fieldname,$relationSpecs)){
+							$relationShow=$relationSpecs[$fieldname];
+							foreach ($relationShow as $key=>$value) {
+								$fieldInfos=self::$fieldInfos[self::getTablename($key)];
+								if (array_key_exists("parent_id",$fieldInfos)){
+									$result.="         \$this->loadExtComponent(\"ComboBoxTree.js\");\r\n";
+									break 2;
+								}
 							}
 						}
 					}

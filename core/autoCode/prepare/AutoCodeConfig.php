@@ -2,13 +2,13 @@
 /**
  +---------------------------------<br/>
  * 工具类:自动生成配置文件<br/>
- +---------------------------------<br/>  
+ +---------------------------------<br/>
  * @category betterlife
- * @package core.autoCode   
+ * @package core.autoCode
  * @author skygreen skygreen2001@gmail.com
  */
 class AutoCodeConfig extends AutoCode
-{      
+{
     /**
      * 生成条件的个数
      */
@@ -35,7 +35,7 @@ class AutoCodeConfig extends AutoCode
         }
         self::$config_classes=array("class"=>array());
         self::$table_key_map=array();
-        self::init();     
+        self::init();
         foreach (self::$fieldInfos as $tablename=>$fieldInfo){
             $classname=self::getClassname($tablename);
             $current_class_config=array(
@@ -55,7 +55,7 @@ class AutoCodeConfig extends AutoCode
 
             //添加查询条件配置
             $conditions=self::conditionsToConfig($classname,$tablename,$fieldInfo,$conditions);
-            //表关系主键显示配置 
+            //表关系主键显示配置
             $relationShows=self::relationShowsToConfig($classname,$fieldInfo,$relationShows);
 
             $current_class_config["conditions"]["condition"]= $conditions;
@@ -86,16 +86,16 @@ class AutoCodeConfig extends AutoCode
             //数据对象之间关系配置
             $relation_fives=self::relationFives($classname,$tablename,$fieldInfo,$relation_fives);
             foreach ($relation_keys as $relation_key) {
-                $current_class_config[$relation_key]  = $relation_fives[$relation_key];  
+                $current_class_config[$relation_key]  = $relation_fives[$relation_key];
             }
             self::$config_classes["class"][self::$table_key_map[$classname]]=$current_class_config;
         }
-        foreach (self::$fieldInfos as $tablename=>$fieldInfo){                      
-            foreach ($relation_keys as $relation_key) {   
+        foreach (self::$fieldInfos as $tablename=>$fieldInfo){
+            foreach ($relation_keys as $relation_key) {
                 if (count(self::$config_classes["class"][self::$table_key_map[$classname]][$relation_key])==0){
                     unset(self::$config_classes["class"][self::$table_key_map[$classname]][$relation_key]);
-                } 
-            }                                                                                          
+                }
+            }
         }
         $result =UtilArray::saveXML($filename,self::$config_classes,"classes");
         echo "&nbsp;&nbsp;"."成功生成配置文件：".$filename."<br /><br />";
@@ -105,11 +105,11 @@ class AutoCodeConfig extends AutoCode
     /**
      * 添加查询条件配置
      * @param array $classname 数据对象类名
-     * @param string $tablename 表名称  
-     * @param array $fieldInfo 表列信息列表  
+     * @param string $tablename 表名称
+     * @param array $fieldInfo 表列信息列表
      * @param array $conditions 查询条件
      */
-    private static function conditionsToConfig($classname,$tablename,$fieldInfo,$conditions,$showfieldname)
+    private static function conditionsToConfig($classname,$tablename,$fieldInfo,$conditions)
     {
         if (!self::isMany2ManyByClassname($classname)){
             $showfieldname=self::getShowFieldNameByClassname($classname,true);
@@ -125,47 +125,50 @@ class AutoCodeConfig extends AutoCode
         {
             if (!self::isNotColumnKeywork($fieldname))continue;
             if ($fieldname==self::keyIDColumn($classname))continue;
-            
-            if ((!in_array($fieldname,$exists_condition))&&contains($fieldname,array("name","title"))&&($fieldname!=$showfieldname)&&(!contain($fieldname,"_id"))){
-                $conditions[]=array("@value"=>$fieldname);
-                $exists_condition[]=$fieldname;
-            }
-            if (count($conditions)<self::$count_condition){
-                if ((!in_array($fieldname,$exists_condition))&&contains($fieldname,array("code","_no","status","type"))&&(!contain($fieldname,"_id"))){
+            if (!empty($showfieldname)){
+                if ((!in_array($fieldname,$exists_condition))&&contains($fieldname,array("name","title"))&&($fieldname!=$showfieldname)&&(!contain($fieldname,"_id"))){
                     $conditions[]=array("@value"=>$fieldname);
                     $exists_condition[]=$fieldname;
                 }
-                if (contain($fieldname,"_id")&&(!contain($fieldname,"parent_id"))){
-                    $relation_classname=str_replace("_id", "", $fieldname);
-                    $relation_classname{0}=strtoupper($relation_classname{0});
-                    $relation_class=null;
-                    if (class_exists($relation_classname)) {
-                        $relation_class=new $relation_classname();
+
+                if (count($conditions)<self::$count_condition){
+                    if ((!in_array($fieldname,$exists_condition))&&contains($fieldname,array("code","_no","status","type"))&&(!contain($fieldname,"_id"))){
+                        $conditions[]=array("@value"=>$fieldname);
+                        $exists_condition[]=$fieldname;
                     }
-                    if ((!in_array($fieldname,$exists_condition))&&($relation_class instanceof DataObject)){
-                        $showfieldname_relation=self::getShowFieldNameByClassname($relation_classname);
-                        if (!in_array($showfieldname_relation,$exists_condition)){
-                            $conditions[]=array(
-                                '@attributes' => array(
-                                    "relation_class"=>$relation_classname,
-                                    "show_name"=>$showfieldname_relation
-                                ),
-                                "@value"=>$fieldname);
-                            $exists_condition[]=$fieldname;
+                    if (contain($fieldname,"_id")&&(!contain($fieldname,"parent_id"))){
+                        $relation_classname=str_replace("_id", "", $fieldname);
+                        $relation_classname{0}=strtoupper($relation_classname{0});
+                        $relation_class=null;
+                        if (class_exists($relation_classname)) {
+                            $relation_class=new $relation_classname();
+                        }
+                        if ((!in_array($fieldname,$exists_condition))&&($relation_class instanceof DataObject)){
+                            $showfieldname_relation=self::getShowFieldNameByClassname($relation_classname);
+                            if (!in_array($showfieldname_relation,$exists_condition)){
+                                $conditions[]=array(
+                                    '@attributes' => array(
+                                        "relation_class"=>$relation_classname,
+                                        "show_name"=>$showfieldname_relation
+                                    ),
+                                    "@value"=>$fieldname);
+                                $exists_condition[]=$fieldname;
+                            }
                         }
                     }
+                }else{
+                    break;
                 }
-            }else{
-                break;
             }
+
         }
         return $conditions;
     }
 
     /**
-     * 表关系主键显示配置 
+     * 表关系主键显示配置
      * @param array $classname 数据对象类名
-     * @param array $fieldInfo 表列信息列表  
+     * @param array $fieldInfo 表列信息列表
      * @param array $relationShows 表关系主键显示
      */
     private static function relationShowsToConfig($classname,$fieldInfo,$relationShows)
@@ -196,9 +199,9 @@ class AutoCodeConfig extends AutoCode
     }
 
     /**
-     * 表关系主键显示配置 
+     * 表关系主键显示配置
      * @param array $classname 数据对象类名
-     * @param array $fieldInfo 表列信息列表  
+     * @param array $fieldInfo 表列信息列表
      * @param array $relation_fives 表关系主键显示
      */
     private static function relationFives($classname,$tablename,$fieldInfo,$relation_fives)
@@ -208,7 +211,7 @@ class AutoCodeConfig extends AutoCode
             if (!self::isNotColumnKeywork($fieldname))continue;
             if ($fieldname==self::keyIDColumn($classname))continue;
 
-            $realId=DataObjectSpec::getRealIDColumnName($classname);   
+            $realId=DataObjectSpec::getRealIDColumnName($classname);
             if (contain($fieldname,"_id")&&(!contain($fieldname,"parent_id"))){
                 $relation_classname=str_replace("_id", "", $fieldname);
                 $relation_classname{0}=strtoupper($relation_classname{0});
@@ -266,7 +269,7 @@ class AutoCodeConfig extends AutoCode
                             }
                         }
                     }
-                }  
+                }
             }
         }
 
@@ -275,13 +278,13 @@ class AutoCodeConfig extends AutoCode
             {
                 $fieldInfo_m2m=self::$fieldInfos[self::getTablename($classname)];
                 unset($fieldInfo_m2m['updateTime'],$fieldInfo_m2m['commitTime']);
-                $realId=DataObjectSpec::getRealIDColumnName($classname);   
+                $realId=DataObjectSpec::getRealIDColumnName($classname);
                 unset($fieldInfo_m2m[$realId]);
                 if (count($fieldInfo_m2m)==2){
                     //many_many[在关系表中有两个关系主键，并且表名的前半部分是其中一个主键]
                     //belongs_many_many[在关系表中有两个关系主键，并且表名的后半部分是其中一个主键]
                     $class_onetwo=array();
-                    foreach (array_keys($fieldInfo_m2m) as $fieldname_m2m) 
+                    foreach (array_keys($fieldInfo_m2m) as $fieldname_m2m)
                     {
                         $class_onetwo_element=str_replace("_id", "", $fieldname_m2m);
                         $class_onetwo[]=$class_onetwo_element;
@@ -291,16 +294,16 @@ class AutoCodeConfig extends AutoCode
                         $ownerClassname=$class_onetwo[0];
                         $belongClassname=$class_onetwo[1];
                         $ownerInstancename=$class_onetwo[0]."s";
-                        $belongInstancename=$class_onetwo[1]."s";                 
+                        $belongInstancename=$class_onetwo[1]."s";
                     }else if ($class_onetwo[1].$class_onetwo[0]==strtolower($classname)){
                         $ownerClassname=$class_onetwo[1];
                         $belongClassname=$class_onetwo[0];
                         $ownerInstancename=$class_onetwo[1]."s";
-                        $belongInstancename=$class_onetwo[0]."s";  
+                        $belongInstancename=$class_onetwo[0]."s";
                     }
                     $ownerClassname{0}=strtoupper($ownerClassname{0});
-                    $belongClassname{0}=strtoupper($belongClassname{0});  
-                    
+                    $belongClassname{0}=strtoupper($belongClassname{0});
+
                     $relation_tablename_key_m2m=self::$table_key_map[$ownerClassname];
                     if (self::$config_classes["class"][$relation_tablename_key_m2m]){
                         self::$config_classes["class"][$relation_tablename_key_m2m]
@@ -310,20 +313,20 @@ class AutoCodeConfig extends AutoCode
                             ),
                             '@value' => $belongInstancename
                         );
-                    } 
+                    }
                     $relation_tablename_key_m2m=self::$table_key_map[$belongClassname];
-                    if (self::$config_classes["class"][$relation_tablename_key_m2m]){        
+                    if (self::$config_classes["class"][$relation_tablename_key_m2m]){
                         self::$config_classes["class"][$relation_tablename_key_m2m]
                                              ["belongs_many_many"]["relationclass"][]=array(
                             '@attributes' => array(
                                 "name"=>$ownerClassname
                             ),
                             '@value' => $ownerInstancename
-                        );    
+                        );
                     }
                 }
-            }    
-        }         
+            }
+        }
         return $relation_fives;
     }
 }

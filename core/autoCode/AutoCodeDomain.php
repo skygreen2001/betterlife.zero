@@ -62,7 +62,7 @@ class AutoCodeDomain extends AutoCode
     /**
      * 用户输入需求
      */
-    public static function UserInput()
+    public static function UserInput($title=null,$inputArr=null)
     {
         $inputArr=array(
             "1"=>"对象属性都是private,定义setter和getter方法。",
