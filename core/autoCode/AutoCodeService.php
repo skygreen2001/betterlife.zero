@@ -894,7 +894,7 @@ class AutoCodeService extends AutoCode
 	{
 		$result="";
 		$relationSpec=self::$relation_all[$classname];
-		if ((is_array($relationSpec))&&(coutn($relationSpec)>0)){
+		if ((is_array($relationSpec))&&(count($relationSpec)>0)){
 			if (array_key_exists("has_many",$relationSpec))
 			{
 				$has_many=$relationSpec["has_many"];
