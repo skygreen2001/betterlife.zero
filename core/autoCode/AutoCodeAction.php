@@ -265,7 +265,7 @@ class AutoCodeAction extends AutoCode
 				$result.="         \$this->ExtDirectMode();\r\n";
 				$result.="         \$this->ExtUpload();\r\n";
 
-				if (array_key_exists($classname, self::$relation_viewfield))
+				if ((is_array(self::$relation_viewfield))&&(array_key_exists($classname, self::$relation_viewfield)))
 				{
 					$relationSpecs=self::$relation_viewfield[$classname];
 				}
@@ -314,7 +314,7 @@ class AutoCodeAction extends AutoCode
 
 						if (Config_AutoCode::RELATION_VIEW_FULL)
 						{
-							if (array_key_exists($classname,self::$relation_all))
+							if ((is_array(self::$relation_all))&&(array_key_exists($classname,self::$relation_all)))
 							{
 								$relationSpec=self::$relation_all[$classname];
 								if (array_key_exists("has_many",$relationSpec))

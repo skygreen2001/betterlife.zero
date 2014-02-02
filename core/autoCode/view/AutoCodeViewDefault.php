@@ -281,7 +281,7 @@ EDIT;
     <table class="viewdoblock">
 $headerscontents
     </table>
-    <div align="center"><my:a href='{$url_base}index.php?go=$appname.{$instancename}.lists&pageNo={\$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{$url_base}index.php?go=$appname.{$instancename}.edit&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}'>修改{$table_comment}</my:a></div>
+    <div align="center"><my:a href='{\$url_base}index.php?go=$appname.{$instancename}.lists&pageNo={\$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{\$url_base}index.php?go=$appname.{$instancename}.edit&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}'>修改{$table_comment}</my:a></div>
 </div>
 VIEW;
         $result=self::tableToViewTplDefine($result);

@@ -92,8 +92,11 @@ class AutoCodeConfig extends AutoCode
         }
         foreach (self::$fieldInfos as $tablename=>$fieldInfo){
             foreach ($relation_keys as $relation_key) {
-                if (count(self::$config_classes["class"][self::$table_key_map[$classname]][$relation_key])==0){
-                    unset(self::$config_classes["class"][self::$table_key_map[$classname]][$relation_key]);
+                $t_k_m=self::$table_key_map[$classname];
+                $c_c=self::$config_classes["class"][$t_k_m];
+                if (array_key_exists($relation_key, $c_c)){
+                    $c_c_r=$c_c[$relation_key];
+                    if (count($c_c_r)==0)unset($c_c_r);
                 }
             }
         }
@@ -219,7 +222,7 @@ class AutoCodeConfig extends AutoCode
                 if (class_exists($relation_classname)) {
                     $relation_class=new $relation_classname();
                 }
-                if ($relation_class instanceof DataObject){    
+                if ($relation_class instanceof DataObject){
                     //belong_has_one:[当前表有归属表的标识，归属表没有当前表的标识]
                     if (!array_key_exists($realId, $relation_class))
                     {

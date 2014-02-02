@@ -815,18 +815,20 @@ class AutoCodeService extends AutoCode
 	{
 		$result="";
 		$redundancy_table_fields=self::$redundancy_table_fields[$classname];
-		foreach ($redundancy_table_fields as $relation_classname => $redundancy_table_field) {
-			$relation_instance_name=$relation_classname;
-			$relation_instance_name{0}=strtolower($relation_instance_name{0});
-			$realId=DataObjectSpec::getRealIDColumnName($relation_classname);
-			$result.="        if (\${$instance_name}[\"{$realId}\"]){\r\n".
-					 "            \${$relation_instance_name}=$relation_classname::get_by_id(\${$instance_name}[\"{$realId}\"]);\r\n".
-					 "            if (\${$relation_instance_name}){\r\n";
-			foreach ($redundancy_table_field as $relation_fieldname => $come) {
-				$result.="                \${$instance_name}[\"$relation_fieldname\"]=\${$relation_instance_name}->{$come};\r\n";
+		if ((is_array($redundancy_table_fields))&&(count($redundancy_table_fields)>0)) {
+			foreach ($redundancy_table_fields as $relation_classname => $redundancy_table_field) {
+				$relation_instance_name=$relation_classname;
+				$relation_instance_name{0}=strtolower($relation_instance_name{0});
+				$realId=DataObjectSpec::getRealIDColumnName($relation_classname);
+				$result.="        if (\${$instance_name}[\"{$realId}\"]){\r\n".
+						 "            \${$relation_instance_name}=$relation_classname::get_by_id(\${$instance_name}[\"{$realId}\"]);\r\n".
+						 "            if (\${$relation_instance_name}){\r\n";
+				foreach ($redundancy_table_field as $relation_fieldname => $come) {
+					$result.="                \${$instance_name}[\"$relation_fieldname\"]=\${$relation_instance_name}->{$come};\r\n";
+				}
+				$result.="            }\r\n".
+						 "        }\r\n";
 			}
-			$result.="            }\r\n".
-					 "        }\r\n";
 		}
 		return $result;
 	}
@@ -839,7 +841,7 @@ class AutoCodeService extends AutoCode
 		$result="";
 		$many2manyUpdate="";
 		$many2manyQueryPageXml="";
-		if (array_key_exists($classname, self::$relation_all))
+		if ((is_array(self::$relation_all))&&(array_key_exists($classname, self::$relation_all)))
 		{
 			$relationSpec=self::$relation_all[$classname];
 			if (array_key_exists("has_many",$relationSpec))
@@ -892,42 +894,43 @@ class AutoCodeService extends AutoCode
 	{
 		$result="";
 		$relationSpec=self::$relation_all[$classname];
-		if (array_key_exists("has_many",$relationSpec))
-		{
-			$has_many=$relationSpec["has_many"];
-			foreach (array_keys($has_many) as $key)
+		if ((is_array($relationSpec))&&(coutn($relationSpec)>0)){
+			if (array_key_exists("has_many",$relationSpec))
 			{
-				if (self::isMany2ManyByClassname($key))
+				$has_many=$relationSpec["has_many"];
+				foreach (array_keys($has_many) as $key)
 				{
-					$tablename=self::getTablename($key);
-					$fieldInfo=self::$fieldInfos[$tablename];
-					$middle_instance_name=self::getInstancename($tablename);
-					$owner_idcolumn="";
-					$belong_class="";
-					$belong_idcolumn="";
-					foreach (array_keys($fieldInfo) as $fieldname)
+					if (self::isMany2ManyByClassname($key))
 					{
-						if (!self::isNotColumnKeywork($fieldname))continue;
-						if ($fieldname==self::keyIDColumn($key))continue;
-						if (contain($fieldname,"_id")){
-							$to_class=str_replace("_id", "", $fieldname);
-							$to_class{0}=strtoupper($to_class{0});
-							if (class_exists($to_class)){
-								if ($to_class!=$classname){
-									$belong_class=$to_class;
-									$belong_idcolumn=$fieldname;
-								}else{
-									$owner_idcolumn=$fieldname;
+						$tablename=self::getTablename($key);
+						$fieldInfo=self::$fieldInfos[$tablename];
+						$middle_instance_name=self::getInstancename($tablename);
+						$owner_idcolumn="";
+						$belong_class="";
+						$belong_idcolumn="";
+						foreach (array_keys($fieldInfo) as $fieldname)
+						{
+							if (!self::isNotColumnKeywork($fieldname))continue;
+							if ($fieldname==self::keyIDColumn($key))continue;
+							if (contain($fieldname,"_id")){
+								$to_class=str_replace("_id", "", $fieldname);
+								$to_class{0}=strtoupper($to_class{0});
+								if (class_exists($to_class)){
+									if ($to_class!=$classname){
+										$belong_class=$to_class;
+										$belong_idcolumn=$fieldname;
+									}else{
+										$owner_idcolumn=$fieldname;
+									}
 								}
 							}
 						}
-					}
-					$tablename_owner=self::getTablename($classname);
-					$comment_owner=self::tableCommentKey($tablename_owner);
-					$tablename_belong=self::getTablename($belong_class);
-					$belong_instance_name=self::getInstancename($tablename_belong);
-					$comment_belong=self::tableCommentKey($tablename_belong);
-					$result.=<<<MANY2MANYUPDATE
+						$tablename_owner=self::getTablename($classname);
+						$comment_owner=self::tableCommentKey($tablename_owner);
+						$tablename_belong=self::getTablename($belong_class);
+						$belong_instance_name=self::getInstancename($tablename_belong);
+						$comment_belong=self::tableCommentKey($tablename_belong);
+						$result.=<<<MANY2MANYUPDATE
 	/**
 	 * 更新数据对象:{$comment_owner}包括{$comment_belong}
 	 * @param array|DataObject \$conditions
@@ -985,6 +988,7 @@ class AutoCodeService extends AutoCode
 
 
 MANY2MANYUPDATE;
+					}
 				}
 			}
 		}
@@ -1002,46 +1006,49 @@ MANY2MANYUPDATE;
 
 		$result="";
 		$relationSpec=self::$relation_all[$classname];
-		if (array_key_exists("has_many",$relationSpec))
+		if (is_array($relationSpec)&&(count($relationSpec)>0))
 		{
-			$has_many=$relationSpec["has_many"];
-			foreach (array_keys($has_many) as $key)
+			if (array_key_exists("has_many",$relationSpec))
 			{
-				if (self::isMany2ManyByClassname($key))
+				$has_many=$relationSpec["has_many"];
+				foreach (array_keys($has_many) as $key)
 				{
-					$tablename=self::getTablename($key);
-					$middle_classname=self::getClassname($tablename);
-					$fieldInfo=self::$fieldInfos[$tablename];
-					$belong_class="";
-					$belong_idcolumn="";
-					foreach (array_keys($fieldInfo) as $fieldname)
+					if (self::isMany2ManyByClassname($key))
 					{
-						if (!self::isNotColumnKeywork($fieldname))continue;
-						if ($fieldname==self::keyIDColumn($key))continue;
-						if (contain($fieldname,"_id")){
-							$to_class=str_replace("_id", "", $fieldname);
-							$to_class{0}=strtoupper($to_class{0});
-							if (class_exists($to_class)){
-								if ($to_class!=$classname){
-									$belong_class=$to_class;
-									$belong_idcolumn=$fieldname;
-								}else{
-									$owner_idcolumn=$fieldname;
+						$tablename=self::getTablename($key);
+						$middle_classname=self::getClassname($tablename);
+						$fieldInfo=self::$fieldInfos[$tablename];
+						$belong_class="";
+						$belong_idcolumn="";
+						foreach (array_keys($fieldInfo) as $fieldname)
+						{
+							if (!self::isNotColumnKeywork($fieldname))continue;
+							if ($fieldname==self::keyIDColumn($key))continue;
+							if (contain($fieldname,"_id")){
+								$to_class=str_replace("_id", "", $fieldname);
+								$to_class{0}=strtoupper($to_class{0});
+								if (class_exists($to_class)){
+									if ($to_class!=$classname){
+										$belong_class=$to_class;
+										$belong_idcolumn=$fieldname;
+									}else{
+										$owner_idcolumn=$fieldname;
+									}
 								}
 							}
 						}
-					}
 
-					$owner_tablename=self::getTablename($classname);
-					$owner_instance_name=self::getInstancename($owner_tablename);
-					$tablename_belong=self::getTablename($belong_class);
-					$belong_instance_name=self::getInstancename($tablename_belong);
-					$comment_belong=self::tableCommentKey($tablename_belong);
-					$belong_fieldInfo=self::$fieldInfos[$tablename_belong];
+						$owner_tablename=self::getTablename($classname);
+						$owner_instance_name=self::getInstancename($owner_tablename);
+						$tablename_belong=self::getTablename($belong_class);
+						$belong_instance_name=self::getInstancename($tablename_belong);
+						$comment_belong=self::tableCommentKey($tablename_belong);
+						$belong_fieldInfo=self::$fieldInfos[$tablename_belong];
 
-        			$result.="                \${$belong_instance_name}Arr={$middle_classname}::select(\"{$belong_idcolumn}\",\"{$owner_idcolumn}='\".\${$owner_instance_name}->{$owner_idcolumn}.\"'\");\r\n";
-        			$result.="                \${$owner_instance_name}->{$belong_instance_name}Str = implode(\",\",\${$belong_instance_name}Arr);\r\n";
-        		}
+	        			$result.="                \${$belong_instance_name}Arr={$middle_classname}::select(\"{$belong_idcolumn}\",\"{$owner_idcolumn}='\".\${$owner_instance_name}->{$owner_idcolumn}.\"'\");\r\n";
+	        			$result.="                \${$owner_instance_name}->{$belong_instance_name}Str = implode(\",\",\${$belong_instance_name}Arr);\r\n";
+	        		}
+				}
 			}
 		}
 		return $result;
@@ -1057,56 +1064,58 @@ MANY2MANYUPDATE;
 	{
 		$result="";
 		$relationSpec=self::$relation_all[$classname];
-		if (array_key_exists("has_many",$relationSpec))
+		if (is_array($relationSpec)&&(count($relationSpec)>0))
 		{
-			$has_many=$relationSpec["has_many"];
-			foreach (array_keys($has_many) as $key)
+			if (array_key_exists("has_many",$relationSpec))
 			{
-				if (self::isMany2ManyByClassname($key))
+				$has_many=$relationSpec["has_many"];
+				foreach (array_keys($has_many) as $key)
 				{
-					$tablename=self::getTablename($key);
-					$fieldInfo=self::$fieldInfos[$tablename];
-					$middle_instance_name=self::getInstancename($tablename);
-					$owner_idcolumn="";
-					$belong_class="";
-					$belong_idcolumn="";
-					foreach (array_keys($fieldInfo) as $fieldname)
+					if (self::isMany2ManyByClassname($key))
 					{
-						if (!self::isNotColumnKeywork($fieldname))continue;
-						if ($fieldname==self::keyIDColumn($key))continue;
-						if (contain($fieldname,"_id")){
-							$to_class=str_replace("_id", "", $fieldname);
-							$to_class{0}=strtoupper($to_class{0});
-							if (class_exists($to_class)){
-								if ($to_class!=$classname){
-									$belong_class=$to_class;
-									$belong_idcolumn=$fieldname;
-								}else{
-									$owner_idcolumn=$fieldname;
+						$tablename=self::getTablename($key);
+						$fieldInfo=self::$fieldInfos[$tablename];
+						$middle_instance_name=self::getInstancename($tablename);
+						$owner_idcolumn="";
+						$belong_class="";
+						$belong_idcolumn="";
+						foreach (array_keys($fieldInfo) as $fieldname)
+						{
+							if (!self::isNotColumnKeywork($fieldname))continue;
+							if ($fieldname==self::keyIDColumn($key))continue;
+							if (contain($fieldname,"_id")){
+								$to_class=str_replace("_id", "", $fieldname);
+								$to_class{0}=strtoupper($to_class{0});
+								if (class_exists($to_class)){
+									if ($to_class!=$classname){
+										$belong_class=$to_class;
+										$belong_idcolumn=$fieldname;
+									}else{
+										$owner_idcolumn=$fieldname;
+									}
 								}
 							}
 						}
-					}
-					$tablename_owner=self::getTablename($classname);
-					$comment_owner=self::tableCommentKey($tablename_owner);
-					$tablename_belong=self::getTablename($belong_class);
-					$belong_instance_name=self::getInstancename($tablename_belong);
-					$comment_belong=self::tableCommentKey($tablename_belong);
-					$belong_fieldInfo=self::$fieldInfos[$tablename_belong];
-					$enumConvert=self::enumKey2CommentInExtService($belong_instance_name,$belong_class,$belong_fieldInfo,"    ");
-					$datetimeShow=self::datetimeShow($belong_instance_name,$belong_fieldInfo,"    ");
-					$specialResult=$enumConvert["normal"];
-					$relationField=self::relationFieldShow($belong_instance_name,$belong_class,$belong_fieldInfo);
-					if ((!empty($relationField))||(!empty($enumConvert["normal"]))){
-						$specialResult.="            foreach (\$data as \$$belong_instance_name) {\r\n".
-										$relationField.
-										$datetimeShow.
-										"                if({$key}::existBy(\"{$owner_idcolumn}=\${$owner_idcolumn} and $belong_idcolumn=\".\${$belong_instance_name}->{$belong_idcolumn})){\r\n".
-										"                   \${$belong_instance_name}->isShow{$belong_class}Check=true;\r\n".
-										"                }\r\n".
-										"            }\r\n";
-					}
-					$result.=<<<MANY2MANYQUERYPAGE
+						$tablename_owner=self::getTablename($classname);
+						$comment_owner=self::tableCommentKey($tablename_owner);
+						$tablename_belong=self::getTablename($belong_class);
+						$belong_instance_name=self::getInstancename($tablename_belong);
+						$comment_belong=self::tableCommentKey($tablename_belong);
+						$belong_fieldInfo=self::$fieldInfos[$tablename_belong];
+						$enumConvert=self::enumKey2CommentInExtService($belong_instance_name,$belong_class,$belong_fieldInfo,"    ");
+						$datetimeShow=self::datetimeShow($belong_instance_name,$belong_fieldInfo,"    ");
+						$specialResult=$enumConvert["normal"];
+						$relationField=self::relationFieldShow($belong_instance_name,$belong_class,$belong_fieldInfo);
+						if ((!empty($relationField))||(!empty($enumConvert["normal"]))){
+							$specialResult.="            foreach (\$data as \$$belong_instance_name) {\r\n".
+											$relationField.
+											$datetimeShow.
+											"                if({$key}::existBy(\"{$owner_idcolumn}=\${$owner_idcolumn} and $belong_idcolumn=\".\${$belong_instance_name}->{$belong_idcolumn})){\r\n".
+											"                   \${$belong_instance_name}->isShow{$belong_class}Check=true;\r\n".
+											"                }\r\n".
+											"            }\r\n";
+						}
+						$result.=<<<MANY2MANYQUERYPAGE
 	/**
 	 * 数据对象:{$comment_owner}包括{$comment_belong}分页查询
 	 * @param stdclass \$formPacket  查询条件对象
@@ -1185,6 +1194,7 @@ $specialResult
 
 
 MANY2MANYQUERYPAGE;
+					}
 				}
 			}
 		}
@@ -1324,52 +1334,55 @@ MANY2MANYQUERYPAGE;
 	private static function relationFieldShow($instance_name,$classname,$fieldInfo)
 	{
 		$result="";
-		if (array_key_exists($classname,self::$relation_viewfield)){
-			$relationSpecs=self::$relation_viewfield[$classname];
-			$isTreeLevelHad=false;
-			foreach ($fieldInfo as $fieldname=>$field){
-				if (array_key_exists($fieldname,$relationSpecs)){
-					$relationShow=$relationSpecs[$fieldname];
-					foreach ($relationShow as $key=>$value) {
-						$realId=DataObjectSpec::getRealIDColumnName($key);
-						$show_fieldname=$value;
-						if ($realId!=$fieldname){
-							$show_fieldname.="_".$fieldname;
-							if (contain($show_fieldname,"_id")){
-								$show_fieldname=str_replace("_id","",$show_fieldname);
+		if (is_array(self::$relation_viewfield)&&(count(self::$relation_viewfield)>0))
+		{
+			if (array_key_exists($classname,self::$relation_viewfield)){
+				$relationSpecs=self::$relation_viewfield[$classname];
+				$isTreeLevelHad=false;
+				foreach ($fieldInfo as $fieldname=>$field){
+					if (array_key_exists($fieldname,$relationSpecs)){
+						$relationShow=$relationSpecs[$fieldname];
+						foreach ($relationShow as $key=>$value) {
+							$realId=DataObjectSpec::getRealIDColumnName($key);
+							$show_fieldname=$value;
+							if ($realId!=$fieldname){
+								$show_fieldname.="_".$fieldname;
+								if (contain($show_fieldname,"_id")){
+									$show_fieldname=str_replace("_id","",$show_fieldname);
+								}
 							}
-						}
-						if ($show_fieldname=="name")$show_fieldname=strtolower($key)."_".$value;
-						$i_name=$key;
-						$i_name{0}=strtolower($i_name{0});
-						if (!array_key_exists("$show_fieldname",$fieldInfo)){
-							$result.="                if (\${$instance_name}->$fieldname){\r\n";
-							$result.="                    \${$i_name}_instance=$key::get_by_id(\${$instance_name}->$fieldname);\r\n";
-							$result.="                    \$".$instance_name."['$show_fieldname']=\${$i_name}_instance->$value;\r\n";
-							$result.="                }\r\n";
-						}
-						$fieldInfo=self::$fieldInfos[self::getTablename($key)];
-						if (!$isTreeLevelHad){
-							if (array_key_exists("parent_id",$fieldInfo)&&array_key_exists("level",$fieldInfo)){
-								$classNameField=self::getShowFieldNameByClassname($key);
-								$result.="                if (\${$i_name}_instance){\r\n".
-										 "                    \$level=\${$i_name}_instance->level;\r\n".
-										 "                    \${$i_name}ShowAll=\${$i_name}_instance->$classNameField;\r\n".
-										 "                    switch (\$level) {\r\n".
-										 "                       case 2:\r\n".
-										 "                         \${$i_name}=$key::get_by_id(\${$i_name}_instance->parent_id);\r\n".
-										 "                         \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
-										 "                         break;\r\n".
-										 "                       case 3:\r\n".
-										 "                         \${$i_name}=$key::get_by_id(\${$i_name}_instance->parent_id);\r\n".
-										 "                         \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
-										 "                         \${$i_name}=$key::get_by_id(\${$i_name}->parent_id);\r\n".
-										 "                         \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
-										 "                         break;\r\n".
-										 "                    }\r\n".
-										 "                    \${$instance_name}[\"{$i_name}ShowAll\"]=\${$i_name}ShowAll;\r\n".
-										 "                }\r\n";
-								$isTreeLevelHad=true;
+							if ($show_fieldname=="name")$show_fieldname=strtolower($key)."_".$value;
+							$i_name=$key;
+							$i_name{0}=strtolower($i_name{0});
+							if (!array_key_exists("$show_fieldname",$fieldInfo)){
+								$result.="                if (\${$instance_name}->$fieldname){\r\n";
+								$result.="                    \${$i_name}_instance=$key::get_by_id(\${$instance_name}->$fieldname);\r\n";
+								$result.="                    \$".$instance_name."['$show_fieldname']=\${$i_name}_instance->$value;\r\n";
+								$result.="                }\r\n";
+							}
+							$fieldInfo=self::$fieldInfos[self::getTablename($key)];
+							if (!$isTreeLevelHad){
+								if (array_key_exists("parent_id",$fieldInfo)&&array_key_exists("level",$fieldInfo)){
+									$classNameField=self::getShowFieldNameByClassname($key);
+									$result.="                if (\${$i_name}_instance){\r\n".
+											 "                    \$level=\${$i_name}_instance->level;\r\n".
+											 "                    \${$i_name}ShowAll=\${$i_name}_instance->$classNameField;\r\n".
+											 "                    switch (\$level) {\r\n".
+											 "                       case 2:\r\n".
+											 "                         \${$i_name}=$key::get_by_id(\${$i_name}_instance->parent_id);\r\n".
+											 "                         \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
+											 "                         break;\r\n".
+											 "                       case 3:\r\n".
+											 "                         \${$i_name}=$key::get_by_id(\${$i_name}_instance->parent_id);\r\n".
+											 "                         \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
+											 "                         \${$i_name}=$key::get_by_id(\${$i_name}->parent_id);\r\n".
+											 "                         \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
+											 "                         break;\r\n".
+											 "                    }\r\n".
+											 "                    \${$instance_name}[\"{$i_name}ShowAll\"]=\${$i_name}ShowAll;\r\n".
+											 "                }\r\n";
+									$isTreeLevelHad=true;
+								}
 							}
 						}
 					}
@@ -1388,58 +1401,61 @@ MANY2MANYQUERYPAGE;
 	private static function relationFieldOutput($instance_name,$classname,$fieldInfo)
 	{
 		$result="";
-		if (array_key_exists($classname,self::$relation_viewfield)){
-			$relationSpecs=self::$relation_viewfield[$classname];
-			$isTreeLevelHad=false;
-			foreach ($fieldInfo as $fieldname=>$field){
-				if (array_key_exists($fieldname,$relationSpecs)){
-					$relationShow=$relationSpecs[$fieldname];
-					foreach ($relationShow as $key=>$value) {
-						$realId=DataObjectSpec::getRealIDColumnName($key);
-						$show_fieldname=$value;
-						if ($realId!=$fieldname){
-							$show_fieldname.="_".$fieldname;
-							if (contain($show_fieldname,"_id")){
-								$show_fieldname=str_replace("_id","",$show_fieldname);
+		if (is_array(self::$relation_viewfield)&&(count(self::$relation_viewfield)>0))
+		{
+			if (array_key_exists($classname,self::$relation_viewfield)){
+				$relationSpecs=self::$relation_viewfield[$classname];
+				$isTreeLevelHad=false;
+				foreach ($fieldInfo as $fieldname=>$field){
+					if (array_key_exists($fieldname,$relationSpecs)){
+						$relationShow=$relationSpecs[$fieldname];
+						foreach ($relationShow as $key=>$value) {
+							$realId=DataObjectSpec::getRealIDColumnName($key);
+							$show_fieldname=$value;
+							if ($realId!=$fieldname){
+								$show_fieldname.="_".$fieldname;
+								if (contain($show_fieldname,"_id")){
+									$show_fieldname=str_replace("_id","",$show_fieldname);
+								}
 							}
-						}
-						if ($show_fieldname=="name")$show_fieldname=strtolower($key)."_".$value;
-						$i_name=$key;
-						$i_name{0}=strtolower($i_name{0});
-						if (!array_key_exists("$show_fieldname",$fieldInfo)){
-							$result.="            if (\${$instance_name}->$fieldname){\r\n";
-							$result.="                \${$i_name}_instance=$key::get_by_id(\${$instance_name}->$fieldname);\r\n";
-							$result.="                \$".$instance_name."['$fieldname']=\${$i_name}_instance->$value;\r\n";
-							$result.="            }\r\n";
-						}else{
-							$result.="            unset(\$arr_output_header[\"$fieldname\"]);\r\n";
-						}
-						$fieldInfos=self::$fieldInfos[self::getTablename($key)];
-						if (!$isTreeLevelHad){
-							if (array_key_exists("parent_id",$fieldInfos)&&array_key_exists("level",$fieldInfos)){
-								$classNameField=self::getShowFieldNameByClassname($key);
-								$field_comment=$field["Comment"];
-								$field_comment=self::columnCommentKey($field_comment,$fieldname);
-								$result.="            if (\${$i_name}_instance){\r\n".
-										 "                \$level=\${$i_name}_instance->level;\r\n".
-										 "                \${$i_name}ShowAll=\${$i_name}_instance->$classNameField;\r\n".
-										 "                switch (\$level) {\r\n".
-										 "                   case 2:\r\n".
-										 "                     \${$i_name}=$key::get_by_id(\${$i_name}_instance->parent_id);\r\n".
-										 "                     \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
-										 "                     break;\r\n".
-										 "                   case 3:\r\n".
-										 "                     \${$i_name}=$key::get_by_id(\${$i_name}_instance->parent_id);\r\n".
-										 "                     \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
-										 "                     \${$i_name}=$key::get_by_id(\${$i_name}->parent_id);\r\n".
-										 "                     \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
-										 "                     break;\r\n".
-										 "                }\r\n".
-										 "                \${$instance_name}[\"{$i_name}ShowAll\"]=\${$i_name}ShowAll;\r\n".
-										 "                \$pos=UtilArray::keyPosition(\$arr_output_header,\"$fieldname\");\r\n".
-										 "                UtilArray::insert(\$arr_output_header,\$pos+1,array('{$i_name}ShowAll'=>\"{$field_comment}[全]\"));\r\n".
-										 "            }\r\n";
-								$isTreeLevelHad=true;
+							if ($show_fieldname=="name")$show_fieldname=strtolower($key)."_".$value;
+							$i_name=$key;
+							$i_name{0}=strtolower($i_name{0});
+							if (!array_key_exists("$show_fieldname",$fieldInfo)){
+								$result.="            if (\${$instance_name}->$fieldname){\r\n";
+								$result.="                \${$i_name}_instance=$key::get_by_id(\${$instance_name}->$fieldname);\r\n";
+								$result.="                \$".$instance_name."['$fieldname']=\${$i_name}_instance->$value;\r\n";
+								$result.="            }\r\n";
+							}else{
+								$result.="            unset(\$arr_output_header[\"$fieldname\"]);\r\n";
+							}
+							$fieldInfos=self::$fieldInfos[self::getTablename($key)];
+							if (!$isTreeLevelHad){
+								if (array_key_exists("parent_id",$fieldInfos)&&array_key_exists("level",$fieldInfos)){
+									$classNameField=self::getShowFieldNameByClassname($key);
+									$field_comment=$field["Comment"];
+									$field_comment=self::columnCommentKey($field_comment,$fieldname);
+									$result.="            if (\${$i_name}_instance){\r\n".
+											 "                \$level=\${$i_name}_instance->level;\r\n".
+											 "                \${$i_name}ShowAll=\${$i_name}_instance->$classNameField;\r\n".
+											 "                switch (\$level) {\r\n".
+											 "                   case 2:\r\n".
+											 "                     \${$i_name}=$key::get_by_id(\${$i_name}_instance->parent_id);\r\n".
+											 "                     \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
+											 "                     break;\r\n".
+											 "                   case 3:\r\n".
+											 "                     \${$i_name}=$key::get_by_id(\${$i_name}_instance->parent_id);\r\n".
+											 "                     \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
+											 "                     \${$i_name}=$key::get_by_id(\${$i_name}->parent_id);\r\n".
+											 "                     \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
+											 "                     break;\r\n".
+											 "                }\r\n".
+											 "                \${$instance_name}[\"{$i_name}ShowAll\"]=\${$i_name}ShowAll;\r\n".
+											 "                \$pos=UtilArray::keyPosition(\$arr_output_header,\"$fieldname\");\r\n".
+											 "                UtilArray::insert(\$arr_output_header,\$pos+1,array('{$i_name}ShowAll'=>\"{$field_comment}[全]\"));\r\n".
+											 "            }\r\n";
+									$isTreeLevelHad=true;
+								}
 							}
 						}
 					}
@@ -1458,63 +1474,66 @@ MANY2MANYQUERYPAGE;
 	private static function relationFieldImport($instance_name,$classname,$fieldInfo)
 	{
 		$result="";
-		if (array_key_exists($classname,self::$relation_viewfield)){
-			$relationSpecs=self::$relation_viewfield[$classname];
-			$isTreeLevelHad=false;
-			foreach ($fieldInfo as $fieldname=>$field){
-				if (array_key_exists($fieldname,$relationSpecs)){
-					$relationShow=$relationSpecs[$fieldname];
-					foreach ($relationShow as $key=>$value) {
-						$i_name=$key;
-						$show_fieldname=self::getShowFieldNameByClassname($key);
-						$i_name{0}=strtolower($i_name{0});
-						$fieldInfo_relation=self::$fieldInfos[self::getTablename($key)];
-						if (array_key_exists("parent_id",$fieldInfo_relation)&&array_key_exists("level",$fieldInfo_relation)){
-							if (!$isTreeLevelHad){
-								$classNameField=self::getShowFieldNameByClassname($key);
-								$field_comment=$field["Comment"];
-								$field_comment=self::columnCommentKey($field_comment,$fieldname);
-								$result.="                        if (!is_numeric(\${$instance_name}[\"$fieldname\"])){\r\n".
-										 "                            \${$i_name}_all=\${$instance_name}[\"{$field_comment}[全]\"];\r\n".
-										 "                            if (\${$i_name}_all){\r\n".
-										 "                                \${$i_name}_all_arr=explode(\"->\",\${$i_name}_all);\r\n".
-										 "                                if (\${$i_name}_all_arr){\r\n".
-										 "                                    \$level=count(\${$i_name}_all_arr);\r\n".
-										 "                                    switch (\$level) {\r\n".
-										 "                                        case 1:\r\n".
-										 "                                            \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[0],\"level\"=>1));\r\n".
-										 "                                            if (\${$i_name})\${$instance_name}[\"{$fieldname}\"]=\${$i_name}->{$fieldname};\r\n".
-										 "                                            break;\r\n".
-										 "                                        case 2:\r\n".
-										 "                                            \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[0],\"level\"=>1));\r\n".
-										 "                                            if (\${$i_name}){\r\n".
-										 "                                                \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[1],\"level\"=>2,\"parent_id\"=>\${$i_name}->{$fieldname}));\r\n".
-										 "                                                if (\${$i_name})\${$instance_name}[\"{$fieldname}\"]=\${$i_name}->{$fieldname};\r\n".
-										 "                                            }\r\n".
-										 "                                            break;\r\n".
-										 "                                        case 3:\r\n".
-										 "                                            \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[0],\"level\"=>1));\r\n".
-										 "                                            if (\${$i_name}){\r\n".
-										 "                                                \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[1],\"level\"=>2,\"parent_id\"=>\${$i_name}->{$fieldname}));\r\n".
-										 "                                                if (\${$i_name}){\r\n".
-										 "                                                    \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[2],\"level\"=>3,\"parent_id\"=>\${$i_name}->{$fieldname}));\r\n".
-										 "                                                    if (\${$i_name})\${$instance_name}[\"{$fieldname}\"]=\${$i_name}->{$fieldname};\r\n".
-										 "                                                }\r\n".
-										 "                                            }\r\n".
-										 "                                            break;\r\n".
-										 "                                       }\r\n".
-										 "                                  }\r\n".
-										 "                            }\r\n".
-										 "                        }\r\n";
-								$isTreeLevelHad=true;
+		if (is_array(self::$relation_viewfield)&&(count(self::$relation_viewfield)>0))
+		{
+			if (array_key_exists($classname,self::$relation_viewfield)){
+				$relationSpecs=self::$relation_viewfield[$classname];
+				$isTreeLevelHad=false;
+				foreach ($fieldInfo as $fieldname=>$field){
+					if (array_key_exists($fieldname,$relationSpecs)){
+						$relationShow=$relationSpecs[$fieldname];
+						foreach ($relationShow as $key=>$value) {
+							$i_name=$key;
+							$show_fieldname=self::getShowFieldNameByClassname($key);
+							$i_name{0}=strtolower($i_name{0});
+							$fieldInfo_relation=self::$fieldInfos[self::getTablename($key)];
+							if (array_key_exists("parent_id",$fieldInfo_relation)&&array_key_exists("level",$fieldInfo_relation)){
+								if (!$isTreeLevelHad){
+									$classNameField=self::getShowFieldNameByClassname($key);
+									$field_comment=$field["Comment"];
+									$field_comment=self::columnCommentKey($field_comment,$fieldname);
+									$result.="                        if (!is_numeric(\${$instance_name}[\"$fieldname\"])){\r\n".
+											 "                            \${$i_name}_all=\${$instance_name}[\"{$field_comment}[全]\"];\r\n".
+											 "                            if (\${$i_name}_all){\r\n".
+											 "                                \${$i_name}_all_arr=explode(\"->\",\${$i_name}_all);\r\n".
+											 "                                if (\${$i_name}_all_arr){\r\n".
+											 "                                    \$level=count(\${$i_name}_all_arr);\r\n".
+											 "                                    switch (\$level) {\r\n".
+											 "                                        case 1:\r\n".
+											 "                                            \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[0],\"level\"=>1));\r\n".
+											 "                                            if (\${$i_name})\${$instance_name}[\"{$fieldname}\"]=\${$i_name}->{$fieldname};\r\n".
+											 "                                            break;\r\n".
+											 "                                        case 2:\r\n".
+											 "                                            \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[0],\"level\"=>1));\r\n".
+											 "                                            if (\${$i_name}){\r\n".
+											 "                                                \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[1],\"level\"=>2,\"parent_id\"=>\${$i_name}->{$fieldname}));\r\n".
+											 "                                                if (\${$i_name})\${$instance_name}[\"{$fieldname}\"]=\${$i_name}->{$fieldname};\r\n".
+											 "                                            }\r\n".
+											 "                                            break;\r\n".
+											 "                                        case 3:\r\n".
+											 "                                            \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[0],\"level\"=>1));\r\n".
+											 "                                            if (\${$i_name}){\r\n".
+											 "                                                \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[1],\"level\"=>2,\"parent_id\"=>\${$i_name}->{$fieldname}));\r\n".
+											 "                                                if (\${$i_name}){\r\n".
+											 "                                                    \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[2],\"level\"=>3,\"parent_id\"=>\${$i_name}->{$fieldname}));\r\n".
+											 "                                                    if (\${$i_name})\${$instance_name}[\"{$fieldname}\"]=\${$i_name}->{$fieldname};\r\n".
+											 "                                                }\r\n".
+											 "                                            }\r\n".
+											 "                                            break;\r\n".
+											 "                                       }\r\n".
+											 "                                  }\r\n".
+											 "                            }\r\n".
+											 "                        }\r\n";
+									$isTreeLevelHad=true;
+								}
+							}else{
+								$result.="                        if (!is_numeric(\${$instance_name}[\"$fieldname\"])){\r\n";
+								$result.="                            \${$i_name}=$key::get_one(\"{$show_fieldname}='\".\${$instance_name}[\"$fieldname\"].\"'\");\r\n";
+								$result.="                            if (\${$i_name}) \${$instance_name}[\"$fieldname\"]=\${$i_name}->$fieldname;\r\n";
+								$result.="                        }\r\n";
 							}
-						}else{
-							$result.="                        if (!is_numeric(\${$instance_name}[\"$fieldname\"])){\r\n";
-							$result.="                            \${$i_name}=$key::get_one(\"{$show_fieldname}='\".\${$instance_name}[\"$fieldname\"].\"'\");\r\n";
-							$result.="                            if (\${$i_name}) \${$instance_name}[\"$fieldname\"]=\${$i_name}->$fieldname;\r\n";
-							$result.="                        }\r\n";
-						}
 
+						}
 					}
 				}
 			}

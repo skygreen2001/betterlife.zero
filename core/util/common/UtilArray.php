@@ -7,8 +7,8 @@
   * @package util.common
   * @author skygreen
   */
-class UtilArray extends Util 
-{       
+class UtilArray extends Util
+{
     //<editor-fold defaultstate="collapsed" desc="array and xml">
     /**
      * 将数组类型转换成xml<br/>
@@ -16,7 +16,7 @@ class UtilArray extends Util
      * 在数组里添加@attributes,@value,@cdata;可以添加Xml中Node的属性，值和CDATA<br/>
      * The main function for converting to an XML document.<br/>
      * Pass in a multi dimensional array and this recrusively loops through and builds up an XML document.<br/>
-     * @example 
+     * @example
      * 示例：<br/>
      *     $data=array("id"=>"8","member_id"=>"5","app_name"=>"mall","username"=>"pass","relation"=>array("Role"=>"roleId","Function"=>"functionId"));<br/>
      *     $data=array("a","b","c","d","e"=>array("a","b","c"));<br/>
@@ -35,9 +35,9 @@ class UtilArray extends Util
      *                            '@value' => "blog_id"
      *                        ),
      *                        array(
-     *                            "@value"=>"comment_name"    
+     *                            "@value"=>"comment_name"
      *                        )
-     *                    )                    
+     *                    )
      *                )
      *            )
      *        );
@@ -85,22 +85,21 @@ class UtilArray extends Util
             }
 
             if ($key=="@cdata"){
-                $node = dom_import_simplexml($xml); 
-                $no   = $node->ownerDocument; 
-                $node->appendChild($no->createCDATASection($value)); 
+                $node = dom_import_simplexml($xml);
+                $no   = $node->ownerDocument;
+                $node->appendChild($no->createCDATASection($value));
                 continue;
-            }            
+            }
             // delete any char not allowed in XML element names
             $key = preg_replace('/[^a-z0-9\-\_\.\:]/i', '', $key);
 
             if( is_object( $value ) ) {
-                $value = get_object_vars( $value );         
+                $value = get_object_vars( $value );
             }
 
             // if there is another array found recrusively call this function
             if ( is_array( $value ) ) {
-                $node = self::is_assoc( $value ) || $numeric ? $xml->addChild( $key ) : $xml;
-
+                $node = self::is_assoc( $value ) || is_numeric($value)  ? $xml->addChild( $key ) : $xml;
                 self::array_to_xml( $value, $key, $node);
             } else {
                 // add single node.
@@ -117,14 +116,14 @@ class UtilArray extends Util
         $doc->preserveWhiteSpace = false;
         $doc->loadXML( $xml->asXML() );
         $doc->formatOutput = true;
-        return $doc->saveXML();        
+        return $doc->saveXML();
     }
-    
+
     /**
      * 转换数组保存符合规范的XML到指定的文件
      * @param array $filename 文件名
      * @param array $data 符合cml格式的数据
-     * @example 
+     * @example
      * 示例：<br/>
      *     $data=array("id"=>"8","member_id"=>"5","app_name"=>"mall","username"=>"pass","relation"=>array("Role"=>"roleId","Function"=>"functionId"));<br/>
      *     $data=array("a","b","c","d","e"=>array("a","b","c"));<br/>
@@ -143,9 +142,9 @@ class UtilArray extends Util
      *                            '@value' => "blog_id"
      *                        ),
      *                        array(
-     *                            "@value"=>"comment_name"    
+     *                            "@value"=>"comment_name"
      *                        )
-     *                    )                    
+     *                    )
      *                )
      *            )
      *        );
@@ -168,7 +167,7 @@ class UtilArray extends Util
     {
         $result =UtilArray::array_to_xml($data,$rootNodeName);
         $result=str_replace("  ","    ",$result);
-        file_put_contents($filename,$result); 
+        file_put_contents($filename,$result);
     }
 
     /**
@@ -183,14 +182,14 @@ class UtilArray extends Util
      * @param string $xml - XML document - can optionally be a SimpleXMLElement object
      * @return array ARRAY
      */
-    public static function xml_to_array( $xml,$rootNodeName = 'data') 
+    public static function xml_to_array( $xml,$rootNodeName = 'data')
     {
         if ( is_string( $xml ) ){
             $xmlSxe = new SimpleXMLElement( $xml );
         }else{
             $xmlSxe=$xml;
         }
-        $children = $xmlSxe->children();        
+        $children = $xmlSxe->children();
         if ( !$children ) {
             return (string) $xml;
         }
@@ -202,7 +201,7 @@ class UtilArray extends Util
 
             // support for 'anon' non-associative arrays
             if (UtilString::contain($key, $rootNodeName."_")) {
-               $key = count( $arr ); 
+               $key = count( $arr );
             }
             //if ( $key == 'anon' ) $key = count( $arr );
 
@@ -220,12 +219,12 @@ class UtilArray extends Util
     }
 
     // determine if a variable is an associative array
-    public static function is_assoc( $array ) 
+    public static function is_assoc( $array )
     {
         return (is_array($array) && 0 !== count(array_diff_key($array, array_keys(array_keys($array)))));
     }
     //</editor-fold>
-    
+
     /**
     * 获取多重数组指定key的值<br/>
     * 当数据为多重时，可以通过点隔开的key获取指定key的值  <br/>
@@ -235,7 +234,7 @@ class UtilArray extends Util
     * 如$row=array("db"=>array("table"=>array("row"=>15)))
     *   可通过$array_multi_key="db.table.row"获得
     */
-    public static function array_multi_direct_get($array_multi,$array_multi_key) 
+    public static function array_multi_direct_get($array_multi,$array_multi_key)
     {
          $var = explode('.', $array_multi_key);
          $result = $array_multi;
@@ -245,7 +244,7 @@ class UtilArray extends Util
          }
          return $result;
     }
-    
+
     /**
      * 获取数组中指定键数组的数组
      * @param array $array 数组,如array("key1"=>1,"key2"=>2,"key3"=>3,"key4"=>4);
@@ -261,13 +260,13 @@ class UtilArray extends Util
             }
         }
         return $return;
-    }         
+    }
 
     /**
      * 多维数组转为一维数组
      * @param array $array 数组
      */
-    public static function array_multi2single($array) 
+    public static function array_multi2single($array)
     {
         static $result_array = array();
         foreach ($array as $value) {
@@ -277,8 +276,8 @@ class UtilArray extends Util
                 $result_array[] = $value;
         }
         return $result_array;
-    }   
-    
+    }
+
      /**
      * 返回数组中指定值的键名称。
      * @param array $arr 数组
@@ -288,46 +287,46 @@ class UtilArray extends Util
      * @return string 数组中指定值的键名称
      */
     public static function array_search($arr,$propertyValue,$pre1sufix="",$isprefix=true)
-    {           
-        $result=null;        
+    {
+        $result=null;
         if (isset($propertyValue)&&isset($arr)&&in_array($propertyValue,$arr)){
             if (!empty($pre1sufix)){
                 if ($isprefix){
                     foreach ($arr as $key => $value) {
-                        if ($propertyValue==$value){                        
+                        if ($propertyValue==$value){
                             if (startWith($key, $pre1sufix)){
                                 return $key;
                             }
-                        }                        
+                        }
                     }
                 }else{
-                    foreach ($arr as $key => $value) { 
-                        if ($propertyValue==$value){    
-                            if (endWith($key, $pre1sufix)){ 
+                    foreach ($arr as $key => $value) {
+                        if ($propertyValue==$value){
+                            if (endWith($key, $pre1sufix)){
                                 return $key;
                             }
-                        } 
+                        }
                     }
                 }
             }else{
-                $result=array_search($propertyValue, $arr);   
+                $result=array_search($propertyValue, $arr);
             }
         }
         return $result;
     }
 
-    /** 
+    /**
      * convert a multidimensional array to url save and encoded string
      *  usage: string Array2String( array Array )
      *  @link http://php.net/manual/en/ref.array.php
      */
-    public static function Array2String($Array) 
+    public static function Array2String($Array)
     {
         $Return='';
         $NullValue="^^^";
         foreach ($Array as $Key => $Value) {
             if (is_object($Value)){
-               $Value=UtilObject::object_to_array($Value); 
+               $Value=UtilObject::object_to_array($Value);
             }
             if(is_array($Value)){
               $ReturnValue='^^array^'.self::Array2String($Value);
@@ -340,11 +339,11 @@ class UtilArray extends Util
         return urlencode(substr($Return,0,-2));
     }
 
-    /** 
+    /**
      * convert a string generated with Array2String() back to the original (multidimensional) array
      * usage: array String2Array ( string String)
-     */ 
-    public static function String2Array($String) 
+     */
+    public static function String2Array($String)
     {
         $Return=array();
         $String=urldecode($String);
@@ -365,14 +364,14 @@ class UtilArray extends Util
             }
         }
         return $Return;
-    }  
-    
+    }
+
     /**
      *  return depth of given array
      * if Array is a string ArrayDepth() will return 0
      * usage: int ArrayDepth(array Array)
-     */ 
-    public static function ArrayDepth($Array,$DepthCount=-1,$DepthArray=array()) 
+     */
+    public static function ArrayDepth($Array,$DepthCount=-1,$DepthArray=array())
     {
         $DepthCount++;
         if (is_array($Array)){
@@ -386,12 +385,12 @@ class UtilArray extends Util
         foreach($DepthArray as $Value){
             $Depth=$Value>$Depth?$Value:$Depth;
         }
-        return $Depth;    
-    }    
+        return $Depth;
+    }
     /**
      * 查询数组中key所在的位置
      * @param mixed $array 查询数组
-     * @param mixed $key 
+     * @param mixed $key
      * @return 数组中key所在的位置【从1开始】
      */
     public static function keyPosition($array,$key)
@@ -402,9 +401,9 @@ class UtilArray extends Util
             return -1;
         }
     }
-    
+
     /**
-     * 在数组指定位置插入值 
+     * 在数组指定位置插入值
      * @param mixed $index 指定位置【从1开始】
      * @param mixed $value
      */

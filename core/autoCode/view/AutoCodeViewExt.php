@@ -139,26 +139,29 @@ class AutoCodeViewExt extends AutoCode
 	public static function tableToAjaxPhpDefine()
 	{
 		$isNeedCreate=false;
-		foreach (self::$relation_viewfield as $relation_viewfield) {
-			foreach ($relation_viewfield as $key=>$showClasses) {
-				foreach ($showClasses as $key=>$value) {
-					$fieldInfo=self::$fieldInfos[self::getTablename($key)];
-					$key{0}=strtolower($key{0});
-					$filename =$key.Config_F::SUFFIX_FILE_PHP;
-					if (!file_exists(self::$ajax_dir_full.$filename)){
-						$isNeedCreate=true;
-						break 3;
-					}
-					if (array_key_exists("parent_id",$fieldInfo)){
-						$filename =$key."Tree".Config_F::SUFFIX_FILE_PHP;
+		if (is_array(self::$relation_viewfield)&&(count(self::$relation_viewfield)>0)) {
+			foreach (self::$relation_viewfield as $relation_viewfield) {
+				foreach ($relation_viewfield as $showClasses) {
+					foreach ($showClasses as $key=>$value) {
+						$fieldInfo=self::$fieldInfos[self::getTablename($key)];
+						$key{0}=strtolower($key{0});
+						$filename =$key.Config_F::SUFFIX_FILE_PHP;
 						if (!file_exists(self::$ajax_dir_full.$filename)){
 							$isNeedCreate=true;
 							break 3;
+						}
+						if (array_key_exists("parent_id",$fieldInfo)){
+							$filename =$key."Tree".Config_F::SUFFIX_FILE_PHP;
+							if (!file_exists(self::$ajax_dir_full.$filename)){
+								$isNeedCreate=true;
+								break 3;
+							}
 						}
 					}
 				}
 			}
 		}
+
 		if ($isNeedCreate){
 			echo "<br />";
 			AutoCodeFoldHelper::foldEffectCommon("Content_53");
@@ -290,7 +293,7 @@ class AutoCodeViewExt extends AutoCode
 		$fieldLabels=$editWindowVars["fieldLabels"];
 		$password_Add=$editWindowVars["password_Add"];
 		$password_update=$editWindowVars["password_update"];
-		$isFileUpload=$editWindowVars["isFileUpload"];
+		$isFileUpload=array_key_exists("isFileUpload", $editWindowVars) ? $editWindowVars["isFileUpload"]:"";
 
 		$treeLevelVisible_Add   =$editWindowVars["treeLevelVisible_Add"];
 		$treeLevelVisible_Update=$editWindowVars["treeLevelVisible_Update"];
@@ -366,74 +369,78 @@ class AutoCodeViewExt extends AutoCode
 					$fields.=",dateFormat:'Y-m-d H:i:s'";
 				}
 				$fields.="},\r\n";
-				if (array_key_exists($classname,self::$relation_viewfield))
+
+				if (is_array(self::$relation_viewfield)&&(count(self::$relation_viewfield)>0))
 				{
-					$relationSpecs=self::$relation_viewfield[$classname];
-					if (array_key_exists($fieldname,$relationSpecs))
+					if (array_key_exists($classname,self::$relation_viewfield))
 					{
-						$relationShow=$relationSpecs[$fieldname];
-						foreach ($relationShow as $key=>$value) {
-							$realId=DataObjectSpec::getRealIDColumnName($key);
-							if (empty($realId))$realId=$fieldname;
-							if ((!array_key_exists($value,$fieldInfo))||($classname==$key)){
-								$show_fieldname=$value;
-								if ($realId!=$fieldname){
-									if (contain($fieldname,"_id")){
-										$fieldname=str_replace("_id","",$fieldname);
+						$relationSpecs=self::$relation_viewfield[$classname];
+						if (array_key_exists($fieldname,$relationSpecs))
+						{
+							$relationShow=$relationSpecs[$fieldname];
+							foreach ($relationShow as $key=>$value) {
+								$realId=DataObjectSpec::getRealIDColumnName($key);
+								if (empty($realId))$realId=$fieldname;
+								if ((!array_key_exists($value,$fieldInfo))||($classname==$key)){
+									$show_fieldname=$value;
+									if ($realId!=$fieldname){
+										if (contain($fieldname,"_id")){
+											$fieldname=str_replace("_id","",$fieldname);
+										}
+										$show_fieldname.="_".$fieldname;
 									}
-									$show_fieldname.="_".$fieldname;
-								}
-								if ($show_fieldname=="name"){
-									$show_fieldname= strtolower($key)."_".$value;
-								}
-								if (!array_key_exists("$show_fieldname",$fieldInfo)){
-									$fields.="                {name: '$show_fieldname',type: 'string'},\r\n";
-								}
-							}else{
-								if ($value=="name"){
-									$show_fieldname= strtolower($key)."_".$value;
+									if ($show_fieldname=="name"){
+										$show_fieldname= strtolower($key)."_".$value;
+									}
 									if (!array_key_exists("$show_fieldname",$fieldInfo)){
 										$fields.="                {name: '$show_fieldname',type: 'string'},\r\n";
 									}
+								}else{
+									if ($value=="name"){
+										$show_fieldname= strtolower($key)."_".$value;
+										if (!array_key_exists("$show_fieldname",$fieldInfo)){
+											$fields.="                {name: '$show_fieldname',type: 'string'},\r\n";
+										}
+									}
 								}
-							}
-							$relation_classcomment=self::relation_classcomment(self::$class_comments[$key]);
+								$relation_classcomment=self::relation_classcomment(self::$class_comments[$key]);
 
-							$fieldInfo_relationshow=self::$fieldInfos[self::getTablename($key)];
-							$key{0}=strtolower($key{0});
-							if (!$isTreelevelStoreHad){
-								if (array_key_exists("parent_id",$fieldInfo_relationshow)){
-									$fields.="                {name: '{$key}ShowAll',type: 'string'},\r\n";
-									$isTreelevelStoreHad=true;
+								$fieldInfo_relationshow=self::$fieldInfos[self::getTablename($key)];
+								$key{0}=strtolower($key{0});
+								if (!$isTreelevelStoreHad){
+									if (array_key_exists("parent_id",$fieldInfo_relationshow)){
+										$fields.="                {name: '{$key}ShowAll',type: 'string'},\r\n";
+										$isTreelevelStoreHad=true;
+									}
 								}
-							}
-							if ((!$isTreelevelStoreHad)&&(!contain(self::$relationStore,"{$key}StoreForCombo"))){
-								$showValue=$value;
-								if ($value=="name") $showValue=strtolower($key)."_".$value;
-								$relationStore_combo=",\r\n".
-												"    /**\r\n".
-												"     * {$relation_classcomment}\r\n".
-												"     */\r\n".
-												"    {$key}StoreForCombo:new Ext.data.Store({\r\n".
-												"        proxy: new Ext.data.HttpProxy({\r\n".
-												"            url: 'home/admin/src/httpdata/{$key}.php'\r\n".
-												"        }),\r\n".
-												"        reader: new Ext.data.JsonReader({\r\n".
-												"            root: '{$key}s',\r\n".
-												"            autoLoad: true,\r\n".
-												"            totalProperty: 'totalCount',\r\n".
-												"            idProperty: '$realId'\r\n".
-												"        }, [\r\n".
-												"            {name: '$realId', mapping: '$realId'},\r\n";
-								if (array_key_exists("level",$fieldInfo_relationshow)){
-									$showLevel=strtolower($key)."_level";
-									$relationStore_combo.="            {name: '$showLevel', mapping: 'level'},\r\n";
+								if ((!$isTreelevelStoreHad)&&(!contain(self::$relationStore,"{$key}StoreForCombo"))){
+									$showValue=$value;
+									if ($value=="name") $showValue=strtolower($key)."_".$value;
+									$relationStore_combo=",\r\n".
+													"    /**\r\n".
+													"     * {$relation_classcomment}\r\n".
+													"     */\r\n".
+													"    {$key}StoreForCombo:new Ext.data.Store({\r\n".
+													"        proxy: new Ext.data.HttpProxy({\r\n".
+													"            url: 'home/admin/src/httpdata/{$key}.php'\r\n".
+													"        }),\r\n".
+													"        reader: new Ext.data.JsonReader({\r\n".
+													"            root: '{$key}s',\r\n".
+													"            autoLoad: true,\r\n".
+													"            totalProperty: 'totalCount',\r\n".
+													"            idProperty: '$realId'\r\n".
+													"        }, [\r\n".
+													"            {name: '$realId', mapping: '$realId'},\r\n";
+									if (array_key_exists("level",$fieldInfo_relationshow)){
+										$showLevel=strtolower($key)."_level";
+										$relationStore_combo.="            {name: '$showLevel', mapping: 'level'},\r\n";
+									}
+									$relationStore_combo.="            {name: '$showValue', mapping: '$value'}\r\n".
+													"        ])\r\n".
+													"    })";
+									$relationStore.=$relationStore_combo;
+									self::$relationStore.=$relationStore_combo;
 								}
-								$relationStore_combo.="            {name: '$showValue', mapping: '$value'}\r\n".
-												"        ])\r\n".
-												"    })";
-								$relationStore.=$relationStore_combo;
-								self::$relationStore.=$relationStore_combo;
 							}
 						}
 					}
@@ -442,34 +449,37 @@ class AutoCodeViewExt extends AutoCode
 		}
 
 		$relationSpec=self::$relation_all[$classname];
-		if (array_key_exists("has_many",$relationSpec))
+		if (is_array($relationSpec)&&(count($relationSpec)>0))
 		{
-			$has_many=$relationSpec["has_many"];
-			foreach (array_keys($has_many) as $key)
+			if (array_key_exists("has_many",$relationSpec))
 			{
-				if (self::isMany2ManyByClassname($key))
+				$has_many=$relationSpec["has_many"];
+				foreach (array_keys($has_many) as $key)
 				{
-					$tablename_m2m=self::getTablename($key);
-					$fieldInfo_m2m=self::$fieldInfos[$tablename_m2m];
-					$belong_class="";
-					foreach (array_keys($fieldInfo_m2m) as $fieldname)
+					if (self::isMany2ManyByClassname($key))
 					{
-						if (!self::isNotColumnKeywork($fieldname))continue;
-						if ($fieldname==self::keyIDColumn($key))continue;
-						if (contain($fieldname,"_id")){
-							$to_class=str_replace("_id", "", $fieldname);
-							$to_class{0}=strtoupper($to_class{0});
-							if (class_exists($to_class)){
-								if ($to_class!=$classname){
-									$belong_class=$to_class;
+						$tablename_m2m=self::getTablename($key);
+						$fieldInfo_m2m=self::$fieldInfos[$tablename_m2m];
+						$belong_class="";
+						foreach (array_keys($fieldInfo_m2m) as $fieldname)
+						{
+							if (!self::isNotColumnKeywork($fieldname))continue;
+							if ($fieldname==self::keyIDColumn($key))continue;
+							if (contain($fieldname,"_id")){
+								$to_class=str_replace("_id", "", $fieldname);
+								$to_class{0}=strtoupper($to_class{0});
+								if (class_exists($to_class)){
+									if ($to_class!=$classname){
+										$belong_class=$to_class;
+									}
 								}
 							}
 						}
-					}
 
-					$tablename_belong=self::getTablename($belong_class);
-					$belong_instance_name=self::getInstancename($tablename_belong);
-					$fields.="                {name: '{$belong_instance_name}Str',type: 'string'},\r\n";
+						$tablename_belong=self::getTablename($belong_class);
+						$belong_instance_name=self::getInstancename($tablename_belong);
+						$fields.="                {name: '{$belong_instance_name}Str',type: 'string'},\r\n";
+					}
 				}
 			}
 		}
@@ -533,184 +543,189 @@ class AutoCodeViewExt extends AutoCode
 			'm2mMenuShowHide'=>''
 		);
 		//导出一对多关系规范定义(如果存在)
-		if (array_key_exists("has_many",$relationSpec))
-		{
-			$has_many=$relationSpec["has_many"];
-			foreach ($has_many as $key=>$value)
-			{
-				$current_classname=$key;
-				$key{0}=strtolower($key{0});
-				$tablename=self::getTablename($current_classname);
-				if (empty($tablename))continue;
-				$current_instancename=self::getInstancename($tablename);
 
-				$relation_classcomment=self::relation_classcomment(self::$class_comments[$current_classname]);
-				if (self::isMany2ManyShowHasMany($current_classname))
+		if (is_array($relationSpec)&&(count($relationSpec)>0))
+		{
+			if (array_key_exists("has_many",$relationSpec))
+			{
+				$has_many=$relationSpec["has_many"];
+				foreach ($has_many as $key=>$value)
 				{
-					$relationViewAdds.="                    {title: '$relation_classcomment',iconCls:'tabs',tabWidth:150,\r\n".
-									   "                     items:[$appName_alias.$classname.View.Running.{$current_instancename}Grid]\r\n".
-									   "                    },\r\n";
-					$relationViewGrids.="        /**\r\n".
-										"         * 当前{$relation_classcomment}Grid对象\r\n".
-										"         */\r\n".
-										"        {$current_instancename}Grid:null,\r\n";
-					$viewRelationDoSelect.="            $appName_alias.$classname.View.Running.{$current_instancename}Grid.doSelect{$current_classname}();\r\n";
-					$relationViewGridInit.="                $appName_alias.$classname.View.Running.{$current_instancename}Grid=new $appName_alias.$classname.View.{$current_classname}View.Grid();\r\n";
-				}
-				if (!contain($relationStore,"{$key}Store:"))
-				{
-					$fieldInfo=self::$fieldInfos[$tablename];
-					$fields_relation="";
-					foreach ($fieldInfo as $fieldname=>$field)
-					{
-						if (!self::isNotColumnKeywork($fieldname))continue;
-						$datatype=self::comment_type($field["Type"]);
-						if ($fieldname==self::keyIDColumn($current_classname))
-						{
-							$fields_relation.="                {name: '$fieldname',type: '$datatype'},\r\n";
-							continue;
-						}
-						$field_comment=$field["Comment"];
-						$isMoreShowAll=false;
-						if (contain($fieldname,"_id")){
-							$maybe_classname=str_replace("_id","",$fieldname);
-							$maybe_classname{0}=strtoupper($maybe_classname{0});
-							if (class_exists($maybe_classname))
-							{
-								$fieldname=self::getShowFieldNameByClassname($maybe_classname);
-								if ($fieldname=="name")$fieldname=strtolower($maybe_classname)."_".$fieldname;
-								$datatype="string";
-								$fieldInfo_maybe=self::$fieldInfos[self::getTablename($maybe_classname)];
-								if (array_key_exists("parent_id",$fieldInfo_maybe)&&array_key_exists("level",$fieldInfo_maybe)){
-									$isMoreShowAll=true;
-								}
-							}
-						}
-						if (contains($field_comment,array("日期","时间")))
-						{
-							$datatype='date';
-						}
-						$datatype_origin=$datatype;
-						if ($datatype=='enum'){
-							$datatype='string';
-						}
-						$fields_relation.="                {name: '$fieldname',type: '".$datatype."'";
-						if ($datatype=='date')
-						{
-							$fields_relation.=",dateFormat:'Y-m-d H:i:s'";
-						}
-						$fields_relation.="},\r\n";
-						if ($datatype_origin=='enum'){
-							$fieldname=$fieldname."Show";
-							$fields_relation.="                {name: '$fieldname',type: '".$datatype."'},\r\n";
-						}
-						if ($isMoreShowAll){
-							$i_name=$maybe_classname;
-							$i_name{0}=strtolower($i_name{0});
-							$fields_relation.="                {name: '{$i_name}ShowAll',type: '".$datatype."'},\r\n";
-						}
-					}
-					$fields_relation=substr($fields_relation,0,strlen($fields_relation)-3);
+					$current_classname=$key;
+					$key{0}=strtolower($key{0});
+					$tablename=self::getTablename($current_classname);
+					if (empty($tablename))continue;
+					$current_instancename=self::getInstancename($tablename);
+
+					$relation_classcomment=self::relation_classcomment(self::$class_comments[$current_classname]);
 					if (self::isMany2ManyShowHasMany($current_classname))
 					{
-						$relation_classcomment=self::relation_classcomment(self::$class_comments[$current_classname]);
-						$relationStore.=",\r\n".
-										"    /**\r\n".
-										"     * {$relation_classcomment}\r\n".
-										"     */\r\n".
-										"    {$key}Store:new Ext.data.Store({\r\n".
-										"        reader: new Ext.data.JsonReader({\r\n".
-										"            totalProperty: 'totalCount',\r\n".
-										"            successProperty: 'success',\r\n".
-										"            root: 'data',remoteSort: true,\r\n".
-										"            fields : [\r\n".
-										"$fields_relation\r\n".
-										"            ]}\r\n".
-										"        ),\r\n".
-										"        writer: new Ext.data.JsonWriter({\r\n".
-										"            encode: false \r\n".
-										"        }),\r\n".
-										"        listeners : {\r\n".
-										"            beforeload : function(store, options) {\r\n".
-										"                if (Ext.isReady) {\r\n".
-										"                    if (!options.params.limit)options.params.limit=$appName_alias.$classname.Config.PageSize;\r\n".
-										"                    Ext.apply(options.params, $appName_alias.$classname.View.Running.{$current_instancename}Grid.filter);//保证分页也将查询条件带上\r\n".
-										"                }\r\n".
-										"            }\r\n".
-										"        }\r\n".
-										"    })";
+						$relationViewAdds.="                    {title: '$relation_classcomment',iconCls:'tabs',tabWidth:150,\r\n".
+										   "                     items:[$appName_alias.$classname.View.Running.{$current_instancename}Grid]\r\n".
+										   "                    },\r\n";
+						$relationViewGrids.="        /**\r\n".
+											"         * 当前{$relation_classcomment}Grid对象\r\n".
+											"         */\r\n".
+											"        {$current_instancename}Grid:null,\r\n";
+						$viewRelationDoSelect.="            $appName_alias.$classname.View.Running.{$current_instancename}Grid.doSelect{$current_classname}();\r\n";
+						$relationViewGridInit.="                $appName_alias.$classname.View.Running.{$current_instancename}Grid=new $appName_alias.$classname.View.{$current_classname}View.Grid();\r\n";
 					}
-				}
-				if (!contain($relationClassesView,"{$current_classname}View"))
-				{
-					include("jsmodel".DIRECTORY_SEPARATOR."many2many.php");
-					$result['m2mMenu'].=$jsMany2ManyMenu;
-					$result['m2mRowSelect'].=$jsMany2ManyRowSelect;
-					$result['m2mRowSelectElse'].=$jsMany2ManyRowSelectElse;
-					$result['m2mShowHide'].=$jsMany2ManyShowHide;
-					$result['m2mRunningWindow'].=$jsMany2ManyRunningWindow;
-					$result['m2mMenuShowHide'].=$jsMany2ManyMenuShowHide;
-					$relationClassesView.=$jsMany2ManyContent;
-					$table_comment12n=self::tableCommentKey($tablename);
-					$realId=DataObjectSpec::getRealIDColumnName($classname);
-					$columns_relation="";
-					$fieldInfo=self::$fieldInfos[$tablename];
-					foreach ($fieldInfo as $fieldname=>$field)
+					if (!contain($relationStore,"{$key}Store:"))
 					{
-						if (!self::isNotColumnKeywork($fieldname))
+						$fieldInfo=self::$fieldInfos[$tablename];
+						$fields_relation="";
+						foreach ($fieldInfo as $fieldname=>$field)
 						{
-						   continue;
-						}
-						if ($fieldname==self::keyIDColumn($current_classname))
-						{
-							$columns_relation.="                            {header : '标识',dataIndex : '{$fieldname}',hidden:true},\r\n";
-							continue;
-						}
-						if ($realId==$fieldname) continue;
-
-						$field_comment=$field["Comment"];
-						$field_comment=self::columnCommentKey($field_comment,$fieldname);
-						$datatype=self::comment_type($field["Type"]);
-						$isMoreShowAll=false;
-						if (contain($fieldname,"_id")){
-							$maybe_classname=str_replace("_id","",$fieldname);
-							$maybe_classname{0}=strtoupper($maybe_classname{0});
-							if (class_exists($maybe_classname))
+							if (!self::isNotColumnKeywork($fieldname))continue;
+							$datatype=self::comment_type($field["Type"]);
+							if ($fieldname==self::keyIDColumn($current_classname))
 							{
-								$fieldname=self::getShowFieldNameByClassname($maybe_classname);
-								if ($fieldname=="name")$fieldname=strtolower($maybe_classname)."_".$fieldname;
-								$fieldInfo_maybe=self::$fieldInfos[self::getTablename($maybe_classname)];
-								if (array_key_exists("parent_id",$fieldInfo_maybe)&&array_key_exists("level",$fieldInfo_maybe)){
-									$isMoreShowAll=true;
+								$fields_relation.="                {name: '$fieldname',type: '$datatype'},\r\n";
+								continue;
+							}
+							$field_comment=$field["Comment"];
+							$isMoreShowAll=false;
+							if (contain($fieldname,"_id")){
+								$maybe_classname=str_replace("_id","",$fieldname);
+								$maybe_classname{0}=strtoupper($maybe_classname{0});
+								if (class_exists($maybe_classname))
+								{
+									$fieldname=self::getShowFieldNameByClassname($maybe_classname);
+									if ($fieldname=="name")$fieldname=strtolower($maybe_classname)."_".$fieldname;
+									$datatype="string";
+									$fieldInfo_maybe=self::$fieldInfos[self::getTablename($maybe_classname)];
+									if (array_key_exists("parent_id",$fieldInfo_maybe)&&array_key_exists("level",$fieldInfo_maybe)){
+										$isMoreShowAll=true;
+									}
 								}
 							}
+							if (contains($field_comment,array("日期","时间")))
+							{
+								$datatype='date';
+							}
+							$datatype_origin=$datatype;
+							if ($datatype=='enum'){
+								$datatype='string';
+							}
+							$fields_relation.="                {name: '$fieldname',type: '".$datatype."'";
+							if ($datatype=='date')
+							{
+								$fields_relation.=",dateFormat:'Y-m-d H:i:s'";
+							}
+							$fields_relation.="},\r\n";
+							if ($datatype_origin=='enum'){
+								$fieldname=$fieldname."Show";
+								$fields_relation.="                {name: '$fieldname',type: '".$datatype."'},\r\n";
+							}
+							if ($isMoreShowAll){
+								$i_name=$maybe_classname;
+								$i_name{0}=strtolower($i_name{0});
+								$fields_relation.="                {name: '{$i_name}ShowAll',type: '".$datatype."'},\r\n";
+							}
 						}
-						if ($datatype=='enum'){
-							$fieldname=$fieldname."Show";
-						}
-						$columns_relation.="                            {header : '$field_comment',dataIndex : '{$fieldname}'";
-						if (($datatype=='date')||contains($field_comment,array("日期","时间")))
+						$fields_relation=substr($fields_relation,0,strlen($fields_relation)-3);
+						if (self::isMany2ManyShowHasMany($current_classname))
 						{
-							$columns_relation.=",renderer:Ext.util.Format.dateRenderer('Y-m-d')";
-						}
-
-						$column_type=self::column_type($field["Type"]);
-						if ($column_type=='bit'){
-							$columns_relation.=",renderer:function(value){if (value == true) {return \"是\";}else{return \"否\";}}";
-						}
-						$columns_relation.="},\r\n";
-						if ($isMoreShowAll){
-							$i_name=$maybe_classname;
-							$i_name{0}=strtolower($i_name{0});
-							$columns_relation.="                            {header : '{$field_comment}[全]',dataIndex :'{$i_name}ShowAll'},\r\n";
+							$relation_classcomment=self::relation_classcomment(self::$class_comments[$current_classname]);
+							$relationStore.=",\r\n".
+											"    /**\r\n".
+											"     * {$relation_classcomment}\r\n".
+											"     */\r\n".
+											"    {$key}Store:new Ext.data.Store({\r\n".
+											"        reader: new Ext.data.JsonReader({\r\n".
+											"            totalProperty: 'totalCount',\r\n".
+											"            successProperty: 'success',\r\n".
+											"            root: 'data',remoteSort: true,\r\n".
+											"            fields : [\r\n".
+											"$fields_relation\r\n".
+											"            ]}\r\n".
+											"        ),\r\n".
+											"        writer: new Ext.data.JsonWriter({\r\n".
+											"            encode: false \r\n".
+											"        }),\r\n".
+											"        listeners : {\r\n".
+											"            beforeload : function(store, options) {\r\n".
+											"                if (Ext.isReady) {\r\n".
+											"                    if (!options.params.limit)options.params.limit=$appName_alias.$classname.Config.PageSize;\r\n".
+											"                    Ext.apply(options.params, $appName_alias.$classname.View.Running.{$current_instancename}Grid.filter);//保证分页也将查询条件带上\r\n".
+											"                }\r\n".
+											"            }\r\n".
+											"        }\r\n".
+											"    })";
 						}
 					}
-					$columns_relation=substr($columns_relation,0,strlen($columns_relation)-3);
-					include("jsmodel".DIRECTORY_SEPARATOR."one2many.php");
-					$relationClassesView.=$jsOne2ManyContent;
+					if (!contain($relationClassesView,"{$current_classname}View"))
+					{
+						include("jsmodel".DIRECTORY_SEPARATOR."many2many.php");
+						$result['m2mMenu'].=$jsMany2ManyMenu;
+						$result['m2mRowSelect'].=$jsMany2ManyRowSelect;
+						$result['m2mRowSelectElse'].=$jsMany2ManyRowSelectElse;
+						$result['m2mShowHide'].=$jsMany2ManyShowHide;
+						$result['m2mRunningWindow'].=$jsMany2ManyRunningWindow;
+						$result['m2mMenuShowHide'].=$jsMany2ManyMenuShowHide;
+						$relationClassesView.=$jsMany2ManyContent;
+						$table_comment12n=self::tableCommentKey($tablename);
+						$realId=DataObjectSpec::getRealIDColumnName($classname);
+						$columns_relation="";
+						$fieldInfo=self::$fieldInfos[$tablename];
+						foreach ($fieldInfo as $fieldname=>$field)
+						{
+							if (!self::isNotColumnKeywork($fieldname))
+							{
+							   continue;
+							}
+							if ($fieldname==self::keyIDColumn($current_classname))
+							{
+								$columns_relation.="                            {header : '标识',dataIndex : '{$fieldname}',hidden:true},\r\n";
+								continue;
+							}
+							if ($realId==$fieldname) continue;
+
+							$field_comment=$field["Comment"];
+							$field_comment=self::columnCommentKey($field_comment,$fieldname);
+							$datatype=self::comment_type($field["Type"]);
+							$isMoreShowAll=false;
+							if (contain($fieldname,"_id")){
+								$maybe_classname=str_replace("_id","",$fieldname);
+								$maybe_classname{0}=strtoupper($maybe_classname{0});
+								if (class_exists($maybe_classname))
+								{
+									$fieldname=self::getShowFieldNameByClassname($maybe_classname);
+									if ($fieldname=="name")$fieldname=strtolower($maybe_classname)."_".$fieldname;
+									$fieldInfo_maybe=self::$fieldInfos[self::getTablename($maybe_classname)];
+									if (array_key_exists("parent_id",$fieldInfo_maybe)&&array_key_exists("level",$fieldInfo_maybe)){
+										$isMoreShowAll=true;
+									}
+								}
+							}
+							if ($datatype=='enum'){
+								$fieldname=$fieldname."Show";
+							}
+							$columns_relation.="                            {header : '$field_comment',dataIndex : '{$fieldname}'";
+							if (($datatype=='date')||contains($field_comment,array("日期","时间")))
+							{
+								$columns_relation.=",renderer:Ext.util.Format.dateRenderer('Y-m-d')";
+							}
+
+							$column_type=self::column_type($field["Type"]);
+							if ($column_type=='bit'){
+								$columns_relation.=",renderer:function(value){if (value == true) {return \"是\";}else{return \"否\";}}";
+							}
+							$columns_relation.="},\r\n";
+							if ($isMoreShowAll){
+								$i_name=$maybe_classname;
+								$i_name{0}=strtolower($i_name{0});
+								$columns_relation.="                            {header : '{$field_comment}[全]',dataIndex :'{$i_name}ShowAll'},\r\n";
+							}
+						}
+						$columns_relation=substr($columns_relation,0,strlen($columns_relation)-3);
+						include("jsmodel".DIRECTORY_SEPARATOR."one2many.php");
+						$relationClassesView.=$jsOne2ManyContent;
+					}
 				}
 			}
 		}
+
 		$result['relationStore']=$relationStore;
 		if (empty($relationViewAdds)){
 			$relationViewAdds.="                    {title: '其他',iconCls:'tabs'}";
@@ -777,145 +792,149 @@ class AutoCodeViewExt extends AutoCode
 
 			if (self::isNotColumnKeywork($fieldname))
 			{
-				if (array_key_exists($classname,self::$relation_viewfield)){
-					$relationSpecs=self::$relation_viewfield[$classname];
-					if (array_key_exists($fieldname,$relationSpecs)){
-						$relationShow=$relationSpecs[$fieldname];
-						foreach ($relationShow as $key=>$value) {
-							if ((!array_key_exists($value,$fieldInfo))||($classname==$key)){
-								$field_comment=$field["Comment"];
-								$field_comment=self::columnCommentKey($field_comment,$fieldname);
-							}else{
-								$field_comment=self::$fieldInfos[self::getTablename($key)][$value]["Comment"];
-								$field_comment=self::columnCommentKey($field_comment,$value);
-								if ($field_comment=="名称"){
+				if (is_array(self::$relation_viewfield)&&(count(self::$relation_viewfield)>0))
+				{
+					if (array_key_exists($classname,self::$relation_viewfield))
+					{
+						$relationSpecs=self::$relation_viewfield[$classname];
+						if (array_key_exists($fieldname,$relationSpecs)){
+							$relationShow=$relationSpecs[$fieldname];
+							foreach ($relationShow as $key=>$value) {
+								if ((!array_key_exists($value,$fieldInfo))||($classname==$key)){
 									$field_comment=$field["Comment"];
 									$field_comment=self::columnCommentKey($field_comment,$fieldname);
+								}else{
+									$field_comment=self::$fieldInfos[self::getTablename($key)][$value]["Comment"];
+									$field_comment=self::columnCommentKey($field_comment,$value);
+									if ($field_comment=="名称"){
+										$field_comment=$field["Comment"];
+										$field_comment=self::columnCommentKey($field_comment,$fieldname);
+									}
+									$ignord_field=$value;
 								}
-								$ignord_field=$value;
-							}
-							$realId=DataObjectSpec::getRealIDColumnName($key);
-							if (empty($realId))$realId=$fieldname;
-							//避免name和本表的name冲突可能
-							if ($value=="name") $value=strtolower($key)."_".$value;
-							$show_name_diff=$value;
+								$realId=DataObjectSpec::getRealIDColumnName($key);
+								if (empty($realId))$realId=$fieldname;
+								//避免name和本表的name冲突可能
+								if ($value=="name") $value=strtolower($key)."_".$value;
+								$show_name_diff=$value;
 
-							if ($realId!=$fieldname){
-								if (contain($fieldname,"_id")){
-									$fieldname_modify=str_replace("_id","",$fieldname);
+								if ($realId!=$fieldname){
+									if (contain($fieldname,"_id")){
+										$fieldname_modify=str_replace("_id","",$fieldname);
+									}
+									$show_name_diff.="_".$fieldname_modify;
 								}
-								$show_name_diff.="_".$fieldname_modify;
-							}
-							$fieldInfo_relationshow=self::$fieldInfos[self::getTablename($key)];
-							$current_classname=$key;
-							$key{0}=strtolower($key{0});
-							if (array_key_exists("parent_id",$fieldInfo_relationshow)){
-								$treeLevelVisible_Add="\r\n".
-													  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(false);\r\n".
-													  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(false);\r\n";
-								$treeLevelVisible_Update="\r\n".
-														 $blank_pre."            if (this.getSelectionModel().getSelected().data.{$key}ShowAll){\r\n".
-														 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(true);\r\n".
-														 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(true);\r\n".
-														 $blank_pre."            }else{\r\n".
-														 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(false);\r\n".
-														 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(false);\r\n".
-														 $blank_pre."            }\r\n";
-								$fieldLabels.=$blank_pre."                            {xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'},\r\n".
-											  $blank_pre."                            {\r\n".
-											  $blank_pre."                                  xtype: 'compositefield',ref: '../{$key}comp',\r\n".
-											  $blank_pre."                                  items: [\r\n".
-											  $blank_pre."                                      {\r\n".
-											  $blank_pre."                                          xtype:'combotree', fieldLabel:'{$field_comment}',ref:'{$key}_name',name: '{$key}_name',grid:this,\r\n".
-											  $blank_pre."                                          emptyText: '请选择{$field_comment}',canFolderSelect:false,flex:1,editable:false,\r\n".
-											  $blank_pre."                                          tree: new Ext.tree.TreePanel({\r\n".
-											  $blank_pre."                                              dataUrl: 'home/admin/src/httpdata/{$key}Tree.php',\r\n".
-											  $blank_pre."                                              root: {nodeType: 'async'},border: false,rootVisible: false,\r\n".
-											  $blank_pre."                                              listeners: {\r\n".
-											  $blank_pre."                                                  beforeload: function(n) {if (n) {this.getLoader().baseParams.id = n.attributes.id;}}\r\n".
-											  $blank_pre."                                              }\r\n".
-											  $blank_pre."                                          }),\r\n".
-											  $blank_pre."                                          onSelect: function(cmb, node) {\r\n".
-											  $blank_pre."                                              this.grid.{$fieldname}.setValue(node.attributes.id);\r\n".
-											  $blank_pre."                                              this.setValue(node.attributes.text);\r\n".
-											  $blank_pre."                                          }\r\n".
-											  $blank_pre."                                      },\r\n".
-											  $blank_pre."                                      {xtype:'displayfield',value:'所选{$field_comment}:',ref: '{$key}ShowLabel'},{xtype:'displayfield',name:'{$key}ShowAll',flex:1,ref: '{$key}ShowValue'}]\r\n".
-											  $blank_pre."                            },\r\n";
-							}else{
-								$show_name_diff_name= $show_name_diff;
-								if ($show_name_diff=="title")$show_name_diff=$key."_".$show_name_diff;
-								$dorefresh="";
-								if (Config_AutoCode::COMBO_REFRESH){
-									$dorefresh=$blank_pre."                                 listeners:{\r\n".
-											   $blank_pre."                                     'beforequery': function(event){delete event.combo.lastQuery;}\r\n".
-											   $blank_pre."                                 },\r\n";
-								}
-								$fieldLabels.=$blank_pre."                            {xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'},\r\n".
-											  $blank_pre."                            {\r\n".
-											  $blank_pre."                                 fieldLabel : '{$field_comment}',xtype: 'combo',name : '$show_name_diff_name',ref : '../$show_name_diff',\r\n".
-											  $blank_pre."                                 store:$appName_alias.$classname.Store.{$key}StoreForCombo,emptyText: '请选择{$field_comment}',itemSelector: 'div.search-item',\r\n".
-											  $blank_pre."                                 loadingText: '查询中...',width: 570, pageSize:$appName_alias.$classname.Config.PageSize,\r\n".
-											  $blank_pre."                                 displayField:'$value',grid:this,\r\n".
-											  $blank_pre."                                 mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,\r\n".
-											  $blank_pre."                                 forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,\r\n".
-											  $blank_pre."                                 tpl:new Ext.XTemplate(\r\n".
-											  $blank_pre."                                     '<tpl for=\".\"><div class=\"search-item\">',\r\n".
-											  $blank_pre."                                         '<h3>{{$value}}</h3>',\r\n".
-											  $blank_pre."                                     '</div></tpl>'\r\n".
-											  $blank_pre."                                 ),\r\n".$dorefresh.
-											  $blank_pre."                                 onSelect:function(record,index){\r\n".
-											  $blank_pre."                                     if(this.fireEvent('beforeselect', this, record, index) !== false){\r\n".
-											  $blank_pre."                                        this.grid.$fieldname.setValue(record.data.$realId);\r\n".
-											  $blank_pre."                                        this.grid.$show_name_diff.setValue(record.data.$value);\r\n".
-											  $blank_pre."                                        this.collapse();\r\n".
-											  $blank_pre."                                     }\r\n".
-											  $blank_pre."                                 }\r\n".
-											  $blank_pre."                            },\r\n";
+								$fieldInfo_relationshow=self::$fieldInfos[self::getTablename($key)];
+								$current_classname=$key;
+								$key{0}=strtolower($key{0});
+								if (array_key_exists("parent_id",$fieldInfo_relationshow)){
+									$treeLevelVisible_Add="\r\n".
+														  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(false);\r\n".
+														  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(false);\r\n";
+									$treeLevelVisible_Update="\r\n".
+															 $blank_pre."            if (this.getSelectionModel().getSelected().data.{$key}ShowAll){\r\n".
+															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(true);\r\n".
+															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(true);\r\n".
+															 $blank_pre."            }else{\r\n".
+															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(false);\r\n".
+															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(false);\r\n".
+															 $blank_pre."            }\r\n";
+									$fieldLabels.=$blank_pre."                            {xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'},\r\n".
+												  $blank_pre."                            {\r\n".
+												  $blank_pre."                                  xtype: 'compositefield',ref: '../{$key}comp',\r\n".
+												  $blank_pre."                                  items: [\r\n".
+												  $blank_pre."                                      {\r\n".
+												  $blank_pre."                                          xtype:'combotree', fieldLabel:'{$field_comment}',ref:'{$key}_name',name: '{$key}_name',grid:this,\r\n".
+												  $blank_pre."                                          emptyText: '请选择{$field_comment}',canFolderSelect:false,flex:1,editable:false,\r\n".
+												  $blank_pre."                                          tree: new Ext.tree.TreePanel({\r\n".
+												  $blank_pre."                                              dataUrl: 'home/admin/src/httpdata/{$key}Tree.php',\r\n".
+												  $blank_pre."                                              root: {nodeType: 'async'},border: false,rootVisible: false,\r\n".
+												  $blank_pre."                                              listeners: {\r\n".
+												  $blank_pre."                                                  beforeload: function(n) {if (n) {this.getLoader().baseParams.id = n.attributes.id;}}\r\n".
+												  $blank_pre."                                              }\r\n".
+												  $blank_pre."                                          }),\r\n".
+												  $blank_pre."                                          onSelect: function(cmb, node) {\r\n".
+												  $blank_pre."                                              this.grid.{$fieldname}.setValue(node.attributes.id);\r\n".
+												  $blank_pre."                                              this.setValue(node.attributes.text);\r\n".
+												  $blank_pre."                                          }\r\n".
+												  $blank_pre."                                      },\r\n".
+												  $blank_pre."                                      {xtype:'displayfield',value:'所选{$field_comment}:',ref: '{$key}ShowLabel'},{xtype:'displayfield',name:'{$key}ShowAll',flex:1,ref: '{$key}ShowValue'}]\r\n".
+												  $blank_pre."                            },\r\n";
+								}else{
+									$show_name_diff_name= $show_name_diff;
+									if ($show_name_diff=="title")$show_name_diff=$key."_".$show_name_diff;
+									$dorefresh="";
+									if (Config_AutoCode::COMBO_REFRESH){
+										$dorefresh=$blank_pre."                                 listeners:{\r\n".
+												   $blank_pre."                                     'beforequery': function(event){delete event.combo.lastQuery;}\r\n".
+												   $blank_pre."                                 },\r\n";
+									}
+									$fieldLabels.=$blank_pre."                            {xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'},\r\n".
+												  $blank_pre."                            {\r\n".
+												  $blank_pre."                                 fieldLabel : '{$field_comment}',xtype: 'combo',name : '$show_name_diff_name',ref : '../$show_name_diff',\r\n".
+												  $blank_pre."                                 store:$appName_alias.$classname.Store.{$key}StoreForCombo,emptyText: '请选择{$field_comment}',itemSelector: 'div.search-item',\r\n".
+												  $blank_pre."                                 loadingText: '查询中...',width: 570, pageSize:$appName_alias.$classname.Config.PageSize,\r\n".
+												  $blank_pre."                                 displayField:'$value',grid:this,\r\n".
+												  $blank_pre."                                 mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,\r\n".
+												  $blank_pre."                                 forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,\r\n".
+												  $blank_pre."                                 tpl:new Ext.XTemplate(\r\n".
+												  $blank_pre."                                     '<tpl for=\".\"><div class=\"search-item\">',\r\n".
+												  $blank_pre."                                         '<h3>{{$value}}</h3>',\r\n".
+												  $blank_pre."                                     '</div></tpl>'\r\n".
+												  $blank_pre."                                 ),\r\n".$dorefresh.
+												  $blank_pre."                                 onSelect:function(record,index){\r\n".
+												  $blank_pre."                                     if(this.fireEvent('beforeselect', this, record, index) !== false){\r\n".
+												  $blank_pre."                                        this.grid.$fieldname.setValue(record.data.$realId);\r\n".
+												  $blank_pre."                                        this.grid.$show_name_diff.setValue(record.data.$value);\r\n".
+												  $blank_pre."                                        this.collapse();\r\n".
+												  $blank_pre."                                     }\r\n".
+												  $blank_pre."                                 }\r\n".
+												  $blank_pre."                            },\r\n";
 
-								if (Config_AutoCode::RELATION_VIEW_FULL){
-									if (array_key_exists($fieldname,$relationSpecs))
-									{
-										$relationShow=$relationSpecs[$fieldname];
-										foreach ($relationShow as $key_relation=>$value_relation) {
-											$realId=DataObjectSpec::getRealIDColumnName($key_relation);
-											$fieldInfo_relationshow=self::$fieldInfos[self::getTablename($key_relation)];
-											$key_relation{0}=strtolower($key_relation{0});
-											if (!contain(self::$relationStore,"{$key}StoreForCombo")){
-												$showValue=$value;
-												if ($value=="name") $showValue=strtolower($key_relation)."_".$value_relation;
-												$relation_classcomment=self::relation_classcomment(self::$class_comments[$current_classname]);
-												$relationStore_combo=",\r\n".
-																"    /**\r\n".
-																"     * {$relation_classcomment}\r\n".
-																"     */\r\n".
-																"    {$key}StoreForCombo:new Ext.data.Store({\r\n".
-																"        proxy: new Ext.data.HttpProxy({\r\n".
-																"            url: 'home/admin/src/httpdata/{$key_relation}.php'\r\n".
-																"        }),\r\n".
-																"        reader: new Ext.data.JsonReader({\r\n".
-																"            root: '{$key}s',\r\n".
-																"            autoLoad: true,\r\n".
-																"            totalProperty: 'totalCount',\r\n".
-																"            idProperty: '$realId'\r\n".
-																"        }, [\r\n".
-																"            {name: '$realId', mapping: '$realId'},\r\n";
-												if (array_key_exists("level",$fieldInfo_relationshow)){
-													$showLevel=strtolower($key)."_level";
-													$relationStore_combo.="            {name: '$showLevel', mapping: 'level'},\r\n";
+									if (Config_AutoCode::RELATION_VIEW_FULL){
+										if (array_key_exists($fieldname,$relationSpecs))
+										{
+											$relationShow=$relationSpecs[$fieldname];
+											foreach ($relationShow as $key_relation=>$value_relation) {
+												$realId=DataObjectSpec::getRealIDColumnName($key_relation);
+												$fieldInfo_relationshow=self::$fieldInfos[self::getTablename($key_relation)];
+												$key_relation{0}=strtolower($key_relation{0});
+												if (!contain(self::$relationStore,"{$key}StoreForCombo")){
+													$showValue=$value;
+													if ($value=="name") $showValue=strtolower($key_relation)."_".$value_relation;
+													$relation_classcomment=self::relation_classcomment(self::$class_comments[$current_classname]);
+													$relationStore_combo=",\r\n".
+																	"    /**\r\n".
+																	"     * {$relation_classcomment}\r\n".
+																	"     */\r\n".
+																	"    {$key}StoreForCombo:new Ext.data.Store({\r\n".
+																	"        proxy: new Ext.data.HttpProxy({\r\n".
+																	"            url: 'home/admin/src/httpdata/{$key_relation}.php'\r\n".
+																	"        }),\r\n".
+																	"        reader: new Ext.data.JsonReader({\r\n".
+																	"            root: '{$key}s',\r\n".
+																	"            autoLoad: true,\r\n".
+																	"            totalProperty: 'totalCount',\r\n".
+																	"            idProperty: '$realId'\r\n".
+																	"        }, [\r\n".
+																	"            {name: '$realId', mapping: '$realId'},\r\n";
+													if (array_key_exists("level",$fieldInfo_relationshow)){
+														$showLevel=strtolower($key)."_level";
+														$relationStore_combo.="            {name: '$showLevel', mapping: 'level'},\r\n";
+													}
+													$relationStore_combo.="            {name: '$showValue', mapping: '$value'}\r\n".
+																	"        ])\r\n".
+																	"    })";
+													$relationStore.=$relationStore_combo;
+													self::$relationStore.=$relationStore_combo;
 												}
-												$relationStore_combo.="            {name: '$showValue', mapping: '$value'}\r\n".
-																"        ])\r\n".
-																"    })";
-												$relationStore.=$relationStore_combo;
-												self::$relationStore.=$relationStore_combo;
-											}
-										 }
+											 }
+										}
 									}
 								}
 							}
+							continue;
 						}
-						continue;
 					}
 				}
 
@@ -1214,42 +1233,46 @@ class AutoCodeViewExt extends AutoCode
 		$isTreelevelViewInfoHad=false;
 		foreach ($fieldInfo as $fieldname=>$field)
 		{
-			if (array_key_exists($classname,self::$relation_viewfield)){
-				$relationSpecs=self::$relation_viewfield[$classname];
-				if (array_key_exists($fieldname,$relationSpecs)){
-					$relationShow=$relationSpecs[$fieldname];
-					foreach ($relationShow as $key=>$value) {
-						if ((!array_key_exists($value,$fieldInfo))||($classname==$key)||($value=='name')){
-							$field_comment=$field["Comment"];
-							$field_comment=self::columnCommentKey($field_comment,$fieldname);
-							foreach ($relationShow as $key=>$value) {
-								$realId=DataObjectSpec::getRealIDColumnName($key);
-								$show_fieldname=$value;
-								if ($realId!=$fieldname){
-									if (contain($fieldname,"_id")){
-										$fieldname=str_replace("_id","",$fieldname);
+
+			if (is_array(self::$relation_viewfield)&&(count(self::$relation_viewfield)>0))
+			{
+				if (array_key_exists($classname,self::$relation_viewfield)){
+					$relationSpecs=self::$relation_viewfield[$classname];
+					if (array_key_exists($fieldname,$relationSpecs)){
+						$relationShow=$relationSpecs[$fieldname];
+						foreach ($relationShow as $key=>$value) {
+							if ((!array_key_exists($value,$fieldInfo))||($classname==$key)||($value=='name')){
+								$field_comment=$field["Comment"];
+								$field_comment=self::columnCommentKey($field_comment,$fieldname);
+								foreach ($relationShow as $key=>$value) {
+									$realId=DataObjectSpec::getRealIDColumnName($key);
+									$show_fieldname=$value;
+									if ($realId!=$fieldname){
+										if (contain($fieldname,"_id")){
+											$fieldname=str_replace("_id","",$fieldname);
+										}
+										$show_fieldname.="_".$fieldname;
 									}
-									$show_fieldname.="_".$fieldname;
-								}
-								if ($show_fieldname=="name"){
-									$show_fieldname= strtolower($key)."_".$value;
-								}
-								$fieldInfo_relationshow=self::$fieldInfos[self::getTablename($key)];
-								$show_TreelevelViewInfo="";
-								if (!$isTreelevelViewInfoHad){
-									if (array_key_exists("parent_id",$fieldInfo_relationshow)){
-										$key{0}=strtolower($key{0});
-										$show_TreelevelViewInfo="<tpl if=\"$show_fieldname\">({{$key}ShowAll})</tpl>";
-										$isTreelevelViewInfoHad=true;
+									if ($show_fieldname=="name"){
+										$show_fieldname= strtolower($key)."_".$value;
 									}
-								}
-								if (!array_key_exists("$show_fieldname",$fieldInfo)){
-									$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$show_fieldname}}$show_TreelevelViewInfo</td></tr>',\r\n";
+									$fieldInfo_relationshow=self::$fieldInfos[self::getTablename($key)];
+									$show_TreelevelViewInfo="";
+									if (!$isTreelevelViewInfoHad){
+										if (array_key_exists("parent_id",$fieldInfo_relationshow)){
+											$key{0}=strtolower($key{0});
+											$show_TreelevelViewInfo="<tpl if=\"$show_fieldname\">({{$key}ShowAll})</tpl>";
+											$isTreelevelViewInfoHad=true;
+										}
+									}
+									if (!array_key_exists("$show_fieldname",$fieldInfo)){
+										$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$show_fieldname}}$show_TreelevelViewInfo</td></tr>',\r\n";
+									}
 								}
 							}
 						}
+						continue;
 					}
-					continue;
 				}
 			}
 			if (self::isNotColumnKeywork($fieldname))
@@ -1300,42 +1323,45 @@ class AutoCodeViewExt extends AutoCode
 		$columns="";//Ext "Grid" 中包含的columns
 		foreach ($fieldInfo as $fieldname=>$field)
 		{
-			if (array_key_exists($classname,self::$relation_viewfield)){
-				$relationSpecs=self::$relation_viewfield[$classname];
-				if (array_key_exists($fieldname,$relationSpecs)){
-					$relationShow=$relationSpecs[$fieldname];
-					foreach ($relationShow as $key=>$value) {
-						if ((!array_key_exists($value,$fieldInfo))||($classname==$key)){
-							$field_comment=$field["Comment"];
-							$field_comment=self::columnCommentKey($field_comment,$fieldname);
-							foreach ($relationShow as $key=>$value) {
-								$realId=DataObjectSpec::getRealIDColumnName($key);
-								$show_fieldname=$value;
-								if ($realId!=$fieldname){
-									if (contain($fieldname,"_id")){
-										$fieldname=str_replace("_id","",$fieldname);
-									}
-									$show_fieldname.="_".$fieldname;
-								}
-								if ($show_fieldname=="name"){
-									$show_fieldname=strtolower($key)."_".$show_fieldname;
-								}
-								if (!array_key_exists("$show_fieldname",$fieldInfo)){
-									$columns.=$blank_pre."                        {header : '$field_comment',dataIndex : '{$show_fieldname}'},\r\n";
-								}
-							}
-						}else{
-							if ($value=="name"){
+			if (is_array(self::$relation_viewfield)&&(count(self::$relation_viewfield)>0))
+			{
+				if (array_key_exists($classname,self::$relation_viewfield)){
+					$relationSpecs=self::$relation_viewfield[$classname];
+					if (array_key_exists($fieldname,$relationSpecs)){
+						$relationShow=$relationSpecs[$fieldname];
+						foreach ($relationShow as $key=>$value) {
+							if ((!array_key_exists($value,$fieldInfo))||($classname==$key)){
 								$field_comment=$field["Comment"];
 								$field_comment=self::columnCommentKey($field_comment,$fieldname);
-								$show_fieldname= strtolower($key)."_".$value;
-								if (!array_key_exists("$show_fieldname",$fieldInfo)){
-									$columns.=$blank_pre."                        {header : '$field_comment',dataIndex : '{$show_fieldname}'},\r\n";
+								foreach ($relationShow as $key=>$value) {
+									$realId=DataObjectSpec::getRealIDColumnName($key);
+									$show_fieldname=$value;
+									if ($realId!=$fieldname){
+										if (contain($fieldname,"_id")){
+											$fieldname=str_replace("_id","",$fieldname);
+										}
+										$show_fieldname.="_".$fieldname;
+									}
+									if ($show_fieldname=="name"){
+										$show_fieldname=strtolower($key)."_".$show_fieldname;
+									}
+									if (!array_key_exists("$show_fieldname",$fieldInfo)){
+										$columns.=$blank_pre."                        {header : '$field_comment',dataIndex : '{$show_fieldname}'},\r\n";
+									}
+								}
+							}else{
+								if ($value=="name"){
+									$field_comment=$field["Comment"];
+									$field_comment=self::columnCommentKey($field_comment,$fieldname);
+									$show_fieldname= strtolower($key)."_".$value;
+									if (!array_key_exists("$show_fieldname",$fieldInfo)){
+										$columns.=$blank_pre."                        {header : '$field_comment',dataIndex : '{$show_fieldname}'},\r\n";
+									}
 								}
 							}
 						}
+						continue;
 					}
-					continue;
 				}
 			}
 			if (self::isNotColumnKeywork($fieldname))
@@ -1390,6 +1416,7 @@ class AutoCodeViewExt extends AutoCode
 		$filterReset              ="";//重置语句
 		$filterdoSelect           ="";//查询中的语句
 		$filterwordNames          =array();
+		$filterfilter			  ="";
 		if (array_key_exists($classname, self::$filter_fieldnames))
 		{
 			$filterwords=self::$filter_fieldnames[$classname];
@@ -1534,8 +1561,11 @@ class AutoCodeViewExt extends AutoCode
 		{
 			if (!$isRedundancyCurrentHad){
 				$redundancy_fields=array();
-				foreach ($redundancy_table_fields as $redundancy_table_field) {
-					$redundancy_fields=array_merge($redundancy_fields,$redundancy_table_field);
+				if (is_array($redundancy_table_fields)&&(count($redundancy_table_fields)>0))
+				{
+					foreach ($redundancy_table_fields as $redundancy_table_field) {
+						$redundancy_fields=array_merge($redundancy_fields,$redundancy_table_field);
+					}
 				}
 				$isRedundancyCurrentHad=true;
 			}
@@ -1655,7 +1685,7 @@ BATCHUPLOADIMAGESWINDOW;
 BATCHUPLOADIMAGES;
 		}
 		$menu_uploadImg=substr($menu_uploadImg,0,strlen($menu_uploadImg)-3);
-		$openBatchUploadImagesWindow=substr($openBatchUploadImagesWindow,0,strlen($openBatchUploadImagesWindow)-1);
+		$openBatchUploadImagesWindow=isset($openBatchUploadImagesWindow) ? $openBatchUploadImagesWindow=substr($openBatchUploadImagesWindow,0,strlen($openBatchUploadImagesWindow)-1) : "";
 		$batchUploadImagesWinow=substr($batchUploadImagesWinow,0,strlen($batchUploadImagesWinow)-1);
 		$result["menu_uploadImg"]   =$menu_uploadImg;
 		$result["openBatchUploadImagesWindow"]   =$openBatchUploadImagesWindow;
@@ -1688,7 +1718,7 @@ BATCHUPLOADIMAGES;
 				 "{block name=body}\r\n".
 				 "    <div id=\"loading-mask\"></div>\r\n".
 				 "    <div id=\"loading\">\r\n".
-				 "        <div class=\"loading-indicator\"><img src=\"{$url_base}common/js/ajax/ext/resources/images/extanim32.gif\" width=\"32\" height=\"32\" style=\"margin-right:8px;\" align=\"absmiddle\"/>正在加载中...</div>\r\n".
+				 "        <div class=\"loading-indicator\"><img src=\"{\$url_base}common/js/ajax/ext/resources/images/extanim32.gif\" width=\"32\" height=\"32\" style=\"margin-right:8px;\" align=\"absmiddle\"/>正在加载中...</div>\r\n".
 				 "    </div>\r\n".
 				 "    <div id=\"win1\" class=\"x-hide-display\"></div>\r\n";
 		foreach ($fieldInfo as $fieldname=>$field)
@@ -1702,21 +1732,25 @@ BATCHUPLOADIMAGES;
 			if (Config_AutoCode::RELATION_VIEW_FULL)
 			{
 				$classname=self::getClassname($tablename);
-				if (array_key_exists($classname,self::$relation_all))
+
+				if (is_array(self::$relation_all)&&(count(self::$relation_all)>0))
 				{
-					$relationSpec=self::$relation_all[$classname];
-					if (array_key_exists("has_many",$relationSpec))
+					if (array_key_exists($classname,self::$relation_all))
 					{
-						$has_many=$relationSpec["has_many"];
-						foreach ($has_many as $current_classname=>$value)
+						$relationSpec=self::$relation_all[$classname];
+						if (array_key_exists("has_many",$relationSpec))
 						{
-							$tablename_relation=self::getTablename($current_classname);
-							$fieldInfos_relation=self::$fieldInfos[$tablename_relation];
-							foreach ($fieldInfos_relation as $fieldname_relation=>$fields_relation) {
-								if (self::columnIsTextArea($fieldname_relation,$fields_relation["Type"]))
-								{
-									$result.="    {\$editorHtml}\r\n";
-									break 3;
+							$has_many=$relationSpec["has_many"];
+							foreach ($has_many as $current_classname=>$value)
+							{
+								$tablename_relation=self::getTablename($current_classname);
+								$fieldInfos_relation=self::$fieldInfos[$tablename_relation];
+								foreach ($fieldInfos_relation as $fieldname_relation=>$fields_relation) {
+									if (self::columnIsTextArea($fieldname_relation,$fields_relation["Type"]))
+									{
+										$result.="    {\$editorHtml}\r\n";
+										break 3;
+									}
 								}
 							}
 						}

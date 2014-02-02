@@ -81,7 +81,7 @@ class DataObjectFunc
 	 * @param mixed $property 属性名
 	 * @param mixed $value 属性值
 	 */
-	public function set($dataobject,$property, $value)
+	public static function set($dataobject,$property, $value)
 	{
 		if (method_exists($dataobject, "set".ucfirst($property))) {
 			$methodname="set".ucfirst($property);
