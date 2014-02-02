@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<classes>
+	<class name="Blog">
+		<conditions>
+			<condition relation_class="User" show_name="username">user_id</condition>
+			<condition>blog_name</condition>
+			<condition>content</condition>
+		</conditions>
+		<relationShows>
+			<show local_key="user_id" relation_class="User">username</show>
+		</relationShows>
+		<has_many>
+			<relationclass name="Comment">comments</relationclass>
+		</has_many>
+		<belong_has_one>
+			<relationclass name="User">user</relationclass>
+		</belong_has_one>
+	</class>
+	<class name="Admin">
+		<conditions>
+			<condition>username</condition>
+		</conditions>
+		<relationShows>
+			<show local_key="department_id" relation_class="Department">department_name</show>
+		</relationShows>
+		<belong_has_one>
+			<relationclass name="Department">department</relationclass>
+		</belong_has_one>
+	</class>
+	<class name="Comment">
+		<conditions>
+			<condition>comment</condition>
+		</conditions>
+		<relationShows>
+			<show local_key="user_id" relation_class="User">username</show>
+			<show local_key="blog_id" relation_class="Blog">blog_name</show>
+		</relationShows>
+		<belong_has_one>
+			<relationclass name="User">user</relationclass>
+			<relationclass name="Blog">blog</relationclass>
+		</belong_has_one>
+	</class>
+	<class name="User">
+		<conditions>
+			<condition>username</condition>
+		</conditions>
+		<has_one>
+			<relationclass name="Userdetail">userDetail</relationclass>
+		</has_one>
+		<many_many>
+			<relationclass name="Role">roles</relationclass>
+		</many_many>
+		<has_many>
+			<relationclass name="Blog">blogs</relationclass>
+			<relationclass name="Comment">comment</relationclass>
+		</has_many>
+	</class>
+	<class name="Department">
+		<conditions>
+			<condition>department_name</condition>
+		</conditions>
+		<has_many>
+			<relationclass name="User">users</relationclass>
+		</has_many>
+	</class>
+	<class name="Userdetail">
+		<conditions>
+			<condition>email</condition>
+			<condition>cellphone</condition>
+		</conditions>
+		<belong_has_one>
+			<relationclass name="User">user</relationclass>
+		</belong_has_one>
+	</class>
+	<class name="Role">
+		<conditions>
+			<condition>role_name</condition>
+		</conditions>
+		<belongs_many_many>
+			<relationclass name="User">users</relationclass>
+		</belongs_many_many>
+	</class>
+</classes>
