@@ -101,7 +101,7 @@ class AutoCodeConfig extends AutoCode
             }
         }
         $result =UtilArray::saveXML($filename,self::$config_classes,"classes");
-        echo "&nbsp;&nbsp;"."成功生成配置文件：".$filename."<br /><br />";
+        echo "&nbsp;&nbsp;成功生成配置文件：".$filename."<br /><br />";
         return true;
     }
 

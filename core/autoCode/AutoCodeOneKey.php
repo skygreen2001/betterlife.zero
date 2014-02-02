@@ -20,7 +20,7 @@ class AutoCodeOneKey extends AutoCode
         AutoCodeValidate::run();
         if (!file_exists($filename)){
             AutoCodeConfig::run();
-            die("自动生成代码的配置文件已生成，请再次运行以生成所有web应用代码！");
+            die("&nbsp;&nbsp;自动生成代码的配置文件已生成，请再次运行以生成所有web应用代码！");
         }
         AutoCodeFoldHelper::foldEffectReady();
         //生成实体数据对象类
