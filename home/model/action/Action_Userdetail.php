@@ -38,14 +38,20 @@ class Action_Userdetail extends ActionModel
      * 编辑用户详细信息
      */
     public function edit()
-    {
-        $this->loadCss("common/js/ajax/jquery/css/fileupload.css");
-        $this->loadJs("common/js/ajax/jquery/fileupload/jquery.ui.widget.js");
-        $this->loadJs("common/js/ajax/jquery/fileupload/jquery.iframe-transport.js");
-        $this->loadJs("common/js/ajax/jquery/fileupload/jquery.fileupload.js");
+    {                                                                               
         if (!empty($_POST)) {
             $userdetail = $this->model->Userdetail;
             $id= $userdetail->getId(); 
+                               
+            if (!empty($_FILES)&&!empty($_FILES["profileUpload"]["name"])){
+                $result=$this->uploadImg($_FILES,"profileUpload","profile");
+                if ($result&&($result['success']==true)){
+                    if (array_key_exists('file_name',$result)){ 
+                        $userdetail->profile = $result['file_name'];
+                    }
+                }
+            }
+            
             if (!empty($id)){
               $userdetail->update(); 
             }else{
@@ -60,6 +66,27 @@ class Action_Userdetail extends ActionModel
             $this->load_onlineditor('address');
         }
     }
+    
+    /**
+     * 上传用户详细信息图片文件
+     */
+    public function uploadImg($files,$uploadFlag,$upload_dir)
+    {
+        $diffpart=date("YmdHis");
+        $result="";
+        if (!empty($files[$uploadFlag])&&!empty($files[$uploadFlag]["name"])){
+            $tmptail = end(explode('.', $files[$uploadFlag]["name"]));
+            $uploadPath =GC::$upload_path."images".DIRECTORY_SEPARATOR."userdetail".DIRECTORY_SEPARATOR.$upload_dir.DIRECTORY_SEPARATOR.$diffpart.".".$tmptail;
+            $result     =UtilFileSystem::uploadFile($files,$uploadPath,$uploadFlag);
+            if ($result&&($result['success']==true)){
+                $result['file_name']="userdetail/$upload_dir/$diffpart.$tmptail";
+            }else{
+                return $result;
+            }
+        }
+        return $result;
+    }
+    
     /**
      * 删除用户详细信息
      */

@@ -8,7 +8,6 @@
             <th class="header">用户标识</th>
             <th class="header">真实姓名</th>
             <th class="header">地区标识</th>
-            <th class="header">头像</th>
             <th class="header">家庭住址</th>
             <th class="header">QQ号</th>
             <th class="header">会员性别</th>
@@ -21,7 +20,6 @@
             <td class="content">{$userdetail.user_id}</td>
             <td class="content">{$userdetail.realname}</td>
             <td class="content">{$userdetail.region_id}</td>
-            <td class="content">{$userdetail.profile}</td>
             <td class="content">{$userdetail.address}</td>
             <td class="content">{$userdetail.qq}</td>
             <td class="content">{$userdetail.sex}</td>

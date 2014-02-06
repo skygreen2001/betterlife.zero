@@ -4,12 +4,12 @@
     <div><h1>编辑用户所属部门</h1></div>
     <form name="departmentForm" method="post"><input type="hidden" name="department_id" value="{$department.department_id}"/>
     <table class="viewdoblock">
-        <tr class="entry"><td class="head">部门名称</th><td class="content"><input type="text" class="edit" name="department_name" value="{$department.department_name}"/></td></tr>
-        <tr class="entry"><td class="head">管理者</th><td class="content"><input type="text" class="edit" name="manager" value="{$department.manager}"/></td></tr>
-        <tr class="entry"><td class="head">预算</th><td class="content"><input type="text" class="edit" name="budget" value="{$department.budget}"/></td></tr>
-        <tr class="entry"><td class="head">实际开销</th><td class="content"><input type="text" class="edit" name="actualexpenses" value="{$department.actualexpenses}"/></td></tr>
-        <tr class="entry"><td class="head">预估平均工资</th><td class="content"><input type="text" class="edit" name="estsalary" value="{$department.estsalary}"/></td></tr>
-        <tr class="entry"><td class="head">实际工资</th><td class="content"><input type="text" class="edit" name="actualsalary" value="{$department.actualsalary}"/></td></tr>
+        <tr class="entry"><th class="head">部门名称</th><td class="content"><input type="text" class="edit" name="department_name" value="{$department.department_name}"/></td></tr>
+        <tr class="entry"><th class="head">管理者</th><td class="content"><input type="text" class="edit" name="manager" value="{$department.manager}"/></td></tr>
+        <tr class="entry"><th class="head">预算</th><td class="content"><input type="text" class="edit" name="budget" value="{$department.budget}"/></td></tr>
+        <tr class="entry"><th class="head">实际开销</th><td class="content"><input type="text" class="edit" name="actualexpenses" value="{$department.actualexpenses}"/></td></tr>
+        <tr class="entry"><th class="head">预估平均工资</th><td class="content"><input type="text" class="edit" name="estsalary" value="{$department.estsalary}"/></td></tr>
+        <tr class="entry"><th class="head">实际工资</th><td class="content"><input type="text" class="edit" name="actualsalary" value="{$department.actualsalary}"/></td></tr>
         <tr class="entry"><td class="content" colspan="2" align="center"><input type="submit" value="提交" class="btnSubmit" /></td></tr>
     </table>
     </form>

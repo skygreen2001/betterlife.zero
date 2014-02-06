@@ -14,9 +14,9 @@
     <div><h1>编辑博客</h1></div>
     <form name="blogForm" method="post"><input type="hidden" name="blog_id" value="{$blog.blog_id}"/>
     <table class="viewdoblock">
-        <tr class="entry"><td class="head">用户标识</th><td class="content"><input type="text" class="edit" name="user_id" value="{$blog.user_id}"/></td></tr>
-        <tr class="entry"><td class="head">博客标题</th><td class="content"><input type="text" class="edit" name="blog_name" value="{$blog.blog_name}"/></td></tr>
-        <tr class="entry"><td class="head">博客内容</th><td class="content">
+        <tr class="entry"><th class="head">用户标识</th><td class="content"><input type="text" class="edit" name="user_id" value="{$blog.user_id}"/></td></tr>
+        <tr class="entry"><th class="head">博客标题</th><td class="content"><input type="text" class="edit" name="blog_name" value="{$blog.blog_name}"/></td></tr>
+        <tr class="entry"><th class="head">博客内容</th><td class="content">
         <textarea id="blog_content" name="blog_content" style="width:93%;height:300px;visibility:hidden;">{$blog.blog_content}</textarea>
         </td></tr>
         <tr class="entry"><td class="content" colspan="2" align="center"><input type="submit" value="提交" class="btnSubmit" /></td></tr>

@@ -192,7 +192,7 @@ LISTS;
         foreach ($fieldNameAndComments as $key=>$value) {
             $idColumnName=DataObjectSpec::getRealIDColumnName($classname);
             if (self::isNotColumnKeywork($key)&&($idColumnName!=$key)){
-                $headerscontents.="        <tr class=\"entry\"><td class=\"head\">$value</th><td class=\"content\"><input type=\"text\" class=\"edit\" name=\"$key\" value=\"{\${$instancename}.$key}\"/></td></tr>\r\n";
+                $headerscontents.="        <tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\"><input type=\"text\" class=\"edit\" name=\"$key\" value=\"{\${$instancename}.$key}\"/></td></tr>\r\n";
             }
         }
 
@@ -201,7 +201,7 @@ LISTS;
             $ckeditor_prepare="    ";
             $xhEditor_prepare="    ";
             foreach ($text_area_fieldname as $key=>$value) {
-                $headerscontents.="        <tr class=\"entry\"><td class=\"head\">$value</th><td class=\"content\">\r\n".
+                $headerscontents.="        <tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\">\r\n".
                                   "        <textarea id=\"$key\" name=\"$key\" style=\"width:93%;height:300px;visibility:hidden;\">{\${$instancename}.$key}</textarea>\r\n".
                                   "        </td></tr>\r\n";
                 $kindEditor_prepare.="showHtmlEditor(\"$key\");";

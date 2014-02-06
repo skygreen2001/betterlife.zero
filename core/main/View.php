@@ -65,6 +65,7 @@ class View {
 			"site_name"=> Gc::$site_name,
 			"template_url"=>$this->template_url_dir(),
 			"upload_url"=>Gc::$upload_url,
+            "uploadImg_url"=>Gc::$upload_url."images/",
 			"templateDir"=> Gc::$nav_root_path.$this->getTemplate_View_Dir($this->moduleName),
 		);
 	}
