@@ -15,9 +15,9 @@ class Action_Notice extends ActionModel
     public function lists()
     {
         if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){
-          $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
+            $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
         }else{   
-          $nowpage=1; 
+            $nowpage=1; 
         }
         $count=Notice::count();
         $bb_page=UtilPage::init($nowpage,$count);
@@ -42,19 +42,22 @@ class Action_Notice extends ActionModel
         if (!empty($_POST)) {
             $notice = $this->model->Notice;
             $id= $notice->getId(); 
+            $isRedirect=true;
             if (!empty($id)){
-              $notice->update(); 
+                $notice->update(); 
             }else{
-              $id=$notice->save();  
+                $id=$notice->save();  
             }
-            $this->redirect("notice","view","id=$id");
-        }else{
-            $noticeId=$this->data["id"];
-            $notice = Notice::get_by_id($noticeId);
-            $this->view->set("notice",$notice); 
-            //加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。
-            $this->load_onlineditor('notice_content');
+            if ($isRedirect){
+                $this->redirect("notice","view","id=$id");
+                exit;
+            }
         }
+        $noticeId=$this->data["id"];
+        $notice = Notice::get_by_id($noticeId);
+        $this->view->set("notice",$notice); 
+        //加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。
+        $this->load_onlineditor('notice_content');
     }
     /**
      * 删除通知

@@ -15,9 +15,9 @@ class Action_Msg extends ActionModel
     public function lists()
     {
         if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){
-          $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
+            $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
         }else{   
-          $nowpage=1; 
+            $nowpage=1; 
         }
         $count=Msg::count();
         $bb_page=UtilPage::init($nowpage,$count);
@@ -42,19 +42,22 @@ class Action_Msg extends ActionModel
         if (!empty($_POST)) {
             $msg = $this->model->Msg;
             $id= $msg->getId(); 
+            $isRedirect=true;
             if (!empty($id)){
-              $msg->update(); 
+                $msg->update(); 
             }else{
-              $id=$msg->save();  
+                $id=$msg->save();  
             }
-            $this->redirect("msg","view","id=$id");
-        }else{
-            $msgId=$this->data["id"];
-            $msg = Msg::get_by_id($msgId);
-            $this->view->set("msg",$msg); 
-            //加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。
-            $this->load_onlineditor('content');
+            if ($isRedirect){
+                $this->redirect("msg","view","id=$id");
+                exit;
+            }
         }
+        $msgId=$this->data["id"];
+        $msg = Msg::get_by_id($msgId);
+        $this->view->set("msg",$msg); 
+        //加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。
+        $this->load_onlineditor('content');
     }
     /**
      * 删除消息

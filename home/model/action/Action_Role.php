@@ -15,9 +15,9 @@ class Action_Role extends ActionModel
     public function lists()
     {
         if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){
-          $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
+            $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
         }else{   
-          $nowpage=1; 
+            $nowpage=1; 
         }
         $count=Role::count();
         $bb_page=UtilPage::init($nowpage,$count);
@@ -42,17 +42,20 @@ class Action_Role extends ActionModel
         if (!empty($_POST)) {
             $role = $this->model->Role;
             $id= $role->getId(); 
+            $isRedirect=true;
             if (!empty($id)){
-              $role->update(); 
+                $role->update(); 
             }else{
-              $id=$role->save();  
+                $id=$role->save();  
             }
-            $this->redirect("role","view","id=$id");
-        }else{
-            $roleId=$this->data["id"];
-            $role = Role::get_by_id($roleId);
-            $this->view->set("role",$role); 
+            if ($isRedirect){
+                $this->redirect("role","view","id=$id");
+                exit;
+            }
         }
+        $roleId=$this->data["id"];
+        $role = Role::get_by_id($roleId);
+        $this->view->set("role",$role); 
     }
     /**
      * 删除角色

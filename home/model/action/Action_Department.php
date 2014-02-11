@@ -15,9 +15,9 @@ class Action_Department extends ActionModel
     public function lists()
     {
         if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){
-          $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
+            $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
         }else{   
-          $nowpage=1; 
+            $nowpage=1; 
         }
         $count=Department::count();
         $bb_page=UtilPage::init($nowpage,$count);
@@ -42,17 +42,20 @@ class Action_Department extends ActionModel
         if (!empty($_POST)) {
             $department = $this->model->Department;
             $id= $department->getId(); 
+            $isRedirect=true;
             if (!empty($id)){
-              $department->update(); 
+                $department->update(); 
             }else{
-              $id=$department->save();  
+                $id=$department->save();  
             }
-            $this->redirect("department","view","id=$id");
-        }else{
-            $departmentId=$this->data["id"];
-            $department = Department::get_by_id($departmentId);
-            $this->view->set("department",$department); 
+            if ($isRedirect){
+                $this->redirect("department","view","id=$id");
+                exit;
+            }
         }
+        $departmentId=$this->data["id"];
+        $department = Department::get_by_id($departmentId);
+        $this->view->set("department",$department); 
     }
     /**
      * 删除用户所属部门

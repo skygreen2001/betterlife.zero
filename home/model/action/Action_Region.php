@@ -15,9 +15,9 @@ class Action_Region extends ActionModel
     public function lists()
     {
         if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){
-          $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
+            $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
         }else{   
-          $nowpage=1; 
+            $nowpage=1; 
         }
         $count=Region::count();
         $bb_page=UtilPage::init($nowpage,$count);
@@ -42,17 +42,20 @@ class Action_Region extends ActionModel
         if (!empty($_POST)) {
             $region = $this->model->Region;
             $id= $region->getId(); 
+            $isRedirect=true;
             if (!empty($id)){
-              $region->update(); 
+                $region->update(); 
             }else{
-              $id=$region->save();  
+                $id=$region->save();  
             }
-            $this->redirect("region","view","id=$id");
-        }else{
-            $regionId=$this->data["id"];
-            $region = Region::get_by_id($regionId);
-            $this->view->set("region",$region); 
+            if ($isRedirect){
+                $this->redirect("region","view","id=$id");
+                exit;
+            }
         }
+        $regionId=$this->data["id"];
+        $region = Region::get_by_id($regionId);
+        $this->view->set("region",$region); 
     }
     /**
      * 删除地区

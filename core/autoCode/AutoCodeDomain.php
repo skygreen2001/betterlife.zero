@@ -283,8 +283,8 @@ class AutoCodeDomain extends AutoCode
 	private static function domainDataobjectRelationSpec($fieldInfo,$classname)
 	{
 		$result="";
-		$relationSpec=self::$relation_all[$classname];
-		if (is_array($relationSpec)&&(count($relationSpec)>0))
+		if (array_key_exists($classname, self::$relation_all))$relationSpec=self::$relation_all[$classname];
+		if (isset($relationSpec)&&is_array($relationSpec)&&(count($relationSpec)>0))
 		{
 			//导出一对一关系规范定义(如果存在)
 			if (array_key_exists("has_one",$relationSpec))

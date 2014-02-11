@@ -15,9 +15,9 @@ class Action_Admin extends ActionModel
     public function lists()
     {
         if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){
-          $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
+            $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
         }else{   
-          $nowpage=1; 
+            $nowpage=1; 
         }
         $count=Admin::count();
         $bb_page=UtilPage::init($nowpage,$count);
@@ -42,17 +42,20 @@ class Action_Admin extends ActionModel
         if (!empty($_POST)) {
             $admin = $this->model->Admin;
             $id= $admin->getId(); 
+            $isRedirect=true;
             if (!empty($id)){
-              $admin->update(); 
+                $admin->update(); 
             }else{
-              $id=$admin->save();  
+                $id=$admin->save();  
             }
-            $this->redirect("admin","view","id=$id");
-        }else{
-            $adminId=$this->data["id"];
-            $admin = Admin::get_by_id($adminId);
-            $this->view->set("admin",$admin); 
+            if ($isRedirect){
+                $this->redirect("admin","view","id=$id");
+                exit;
+            }
         }
+        $adminId=$this->data["id"];
+        $admin = Admin::get_by_id($adminId);
+        $this->view->set("admin",$admin); 
     }
     /**
      * 删除系统管理人员

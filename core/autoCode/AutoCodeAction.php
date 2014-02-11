@@ -391,9 +391,9 @@ class AutoCodeAction extends AutoCode
 						 "    public function lists()\r\n".
 						 "    {\r\n".
 						 "        if (\$this->isDataHave(UtilPage::\$linkUrl_pageFlag)){\r\n".
-						 "          \$nowpage=\$this->data[UtilPage::\$linkUrl_pageFlag];  \r\n".
+						 "            \$nowpage=\$this->data[UtilPage::\$linkUrl_pageFlag];  \r\n".
 						 "        }else{   \r\n".
-						 "          \$nowpage=1; \r\n".
+						 "            \$nowpage=1; \r\n".
 						 "        }\r\n".
 						 "        \$count={$classname}::count();\r\n".
 						 "        \${$appname_alias}_page=UtilPage::init(\$nowpage,\$count);\r\n".
@@ -418,16 +418,21 @@ class AutoCodeAction extends AutoCode
 						 "        if (!empty(\$_POST)) {\r\n".
 						 "            \${$instancename} = \$this->model->{$classname};\r\n".
 						 "            \$id= \${$instancename}->getId(); \r\n".
+						 "            \$isRedirect=true;\r\n".
+						 self::uploadImgInEdit($instancename,$fieldInfo).
 						 "            if (!empty(\$id)){\r\n".
-						 "              \${$instancename}->update(); \r\n".
+						 "                \${$instancename}->update(); \r\n".
 						 "            }else{\r\n".
-						 "              \$id=\${$instancename}->save();  \r\n".
+						 "                \$id=\${$instancename}->save();  \r\n".
 						 "            }\r\n".
-						 "            \$this->redirect(\"{$instancename}\",\"view\",\"id=\$id\");\r\n".
-						 "        }else{\r\n".
-						 "            \${$instancename}Id=\$this->data[\"id\"];\r\n".
-						 "            \${$instancename} = {$classname}::get_by_id(\${$instancename}Id);\r\n".
-						 "            \$this->view->set(\"{$instancename}\",\${$instancename}); \r\n";
+						 "            if (\$isRedirect){\r\n".
+						 "                \$this->redirect(\"{$instancename}\",\"view\",\"id=\$id\");\r\n".
+						 "                exit;\r\n".
+						 "            }\r\n".
+						 "        }\r\n".
+						 "        \${$instancename}Id=\$this->data[\"id\"];\r\n".
+						 "        \${$instancename} = {$classname}::get_by_id(\${$instancename}Id);\r\n".
+						 "        \$this->view->set(\"{$instancename}\",\${$instancename}); \r\n";
 				$text_area_fieldname=array();
 				foreach ($fieldInfo as $fieldname=>$field)
 				{
@@ -437,15 +442,14 @@ class AutoCodeAction extends AutoCode
 					}
 				}
 				if (count($text_area_fieldname)==1){
-					$result.="            //加载在线编辑器的语句要放在:\$this->view->viewObject[如果有这一句]之后。\r\n".
-							 "            \$this->load_onlineditor({$text_area_fieldname[0]});\r\n";
+					$result.="        //加载在线编辑器的语句要放在:\$this->view->viewObject[如果有这一句]之后。\r\n".
+							 "        \$this->load_onlineditor({$text_area_fieldname[0]});\r\n";
 				}else if (count($text_area_fieldname)>1){
 					$fieldnames=implode(",", $text_area_fieldname);
-					$result.="            //加载在线编辑器的语句要放在:\$this->view->viewObject[如果有这一句]之后。\r\n".
-							 "            \$this->load_onlineditor(array({$fieldnames}));\r\n";
+					$result.="        //加载在线编辑器的语句要放在:\$this->view->viewObject[如果有这一句]之后。\r\n".
+							 "        \$this->load_onlineditor(array({$fieldnames}));\r\n";
 				}
-				$result.="        }\r\n".
-						 "    }\r\n".
+				$result.="    }\r\n".
 						 "    /**\r\n".
 						 "     * 删除{$table_comment}\r\n".
 						 "     */\r\n".
@@ -500,6 +504,50 @@ class AutoCodeAction extends AutoCode
 						 "}\r\n\r\n";
 				$result.="?>";
 				break;
+		}
+		return $result;
+	}
+
+	/**
+	 * 是否需要在编辑页面上传图片
+	 * @param string $instancename 实体变量
+	 * @param array $fieldInfo 表列信息列表
+	 */
+	private static function uploadImgInEdit($instancename,$fieldInfo)
+	{
+		$result="";
+		$fieldNameAndComments=array();
+		foreach ($fieldInfo as $fieldname=>$field)
+		{
+			$field_comment=$field["Comment"];
+			if (contain($field_comment,"\r")||contain($field_comment,"\n"))
+			{
+				$field_comment=preg_split("/[\s,]+/", $field_comment);
+				$field_comment=$field_comment[0];
+			}
+			$fieldNameAndComments[$fieldname]=$field_comment;
+		}
+		$img_fieldname=array();
+		foreach ($fieldNameAndComments as $key=>$value) {
+			$isImage =self::columnIsImage($key,$value);
+			if ($isImage)
+			{
+				$img_fieldname[]=$key;
+			}
+		}
+
+		if (count($img_fieldname>0)){
+			foreach ($img_fieldname as $fieldname) {
+				$result.="            if (!empty(\$_FILES)&&!empty(\$_FILES[\"{$fieldname}Upload\"][\"name\"])){\r\n".
+						 "                \$result=\$this->uploadImg(\$_FILES,\"{$fieldname}Upload\",\"{$fieldname}\",\"$instancename\");\r\n".
+						 "                if (\$result&&(\$result['success']==true)){\r\n".
+						 "                    if (array_key_exists('file_name',\$result))\${$instancename}->$fieldname = \$result['file_name'];\r\n".
+						 "                }else{\r\n".
+						 "                    \$isRedirect=false;\r\n".
+						 "                    \$this->view->set(\"message\",\$result[\"msg\"]);\r\n".
+						 "                }\r\n".
+						 "            }\r\n";
+			}
 		}
 		return $result;
 	}

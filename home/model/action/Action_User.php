@@ -15,9 +15,9 @@ class Action_User extends ActionModel
     public function lists()
     {
         if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){
-          $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
+            $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
         }else{   
-          $nowpage=1; 
+            $nowpage=1; 
         }
         $count=User::count();
         $bb_page=UtilPage::init($nowpage,$count);
@@ -42,17 +42,20 @@ class Action_User extends ActionModel
         if (!empty($_POST)) {
             $user = $this->model->User;
             $id= $user->getId(); 
+            $isRedirect=true;
             if (!empty($id)){
-              $user->update(); 
+                $user->update(); 
             }else{
-              $id=$user->save();  
+                $id=$user->save();  
             }
-            $this->redirect("user","view","id=$id");
-        }else{
-            $userId=$this->data["id"];
-            $user = User::get_by_id($userId);
-            $this->view->set("user",$user); 
+            if ($isRedirect){
+                $this->redirect("user","view","id=$id");
+                exit;
+            }
         }
+        $userId=$this->data["id"];
+        $user = User::get_by_id($userId);
+        $this->view->set("user",$user); 
     }
     /**
      * 删除用户

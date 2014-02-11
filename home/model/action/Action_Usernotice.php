@@ -15,9 +15,9 @@ class Action_Usernotice extends ActionModel
     public function lists()
     {
         if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){
-          $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
+            $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
         }else{   
-          $nowpage=1; 
+            $nowpage=1; 
         }
         $count=Usernotice::count();
         $bb_page=UtilPage::init($nowpage,$count);
@@ -42,17 +42,20 @@ class Action_Usernotice extends ActionModel
         if (!empty($_POST)) {
             $usernotice = $this->model->Usernotice;
             $id= $usernotice->getId(); 
+            $isRedirect=true;
             if (!empty($id)){
-              $usernotice->update(); 
+                $usernotice->update(); 
             }else{
-              $id=$usernotice->save();  
+                $id=$usernotice->save();  
             }
-            $this->redirect("usernotice","view","id=$id");
-        }else{
-            $usernoticeId=$this->data["id"];
-            $usernotice = Usernotice::get_by_id($usernoticeId);
-            $this->view->set("usernotice",$usernotice); 
+            if ($isRedirect){
+                $this->redirect("usernotice","view","id=$id");
+                exit;
+            }
         }
+        $usernoticeId=$this->data["id"];
+        $usernotice = Usernotice::get_by_id($usernoticeId);
+        $this->view->set("usernotice",$usernotice); 
     }
     /**
      * 删除用户收到通知

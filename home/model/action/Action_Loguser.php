@@ -15,9 +15,9 @@ class Action_Loguser extends ActionModel
     public function lists()
     {
         if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){
-          $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
+            $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
         }else{   
-          $nowpage=1; 
+            $nowpage=1; 
         }
         $count=Loguser::count();
         $bb_page=UtilPage::init($nowpage,$count);
@@ -42,19 +42,22 @@ class Action_Loguser extends ActionModel
         if (!empty($_POST)) {
             $loguser = $this->model->Loguser;
             $id= $loguser->getId(); 
+            $isRedirect=true;
             if (!empty($id)){
-              $loguser->update(); 
+                $loguser->update(); 
             }else{
-              $id=$loguser->save();  
+                $id=$loguser->save();  
             }
-            $this->redirect("loguser","view","id=$id");
-        }else{
-            $loguserId=$this->data["id"];
-            $loguser = Loguser::get_by_id($loguserId);
-            $this->view->set("loguser",$loguser); 
-            //加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。
-            $this->load_onlineditor('log_content');
+            if ($isRedirect){
+                $this->redirect("loguser","view","id=$id");
+                exit;
+            }
         }
+        $loguserId=$this->data["id"];
+        $loguser = Loguser::get_by_id($loguserId);
+        $this->view->set("loguser",$loguser); 
+        //加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。
+        $this->load_onlineditor('log_content');
     }
     /**
      * 删除用户日志

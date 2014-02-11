@@ -15,9 +15,9 @@ class Action_Blog extends ActionModel
     public function lists()
     {
         if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){
-          $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
+            $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];  
         }else{   
-          $nowpage=1; 
+            $nowpage=1; 
         }
         $count=Blog::count();
         $bb_page=UtilPage::init($nowpage,$count);
@@ -42,19 +42,22 @@ class Action_Blog extends ActionModel
         if (!empty($_POST)) {
             $blog = $this->model->Blog;
             $id= $blog->getId(); 
+            $isRedirect=true;
             if (!empty($id)){
-              $blog->update(); 
+                $blog->update(); 
             }else{
-              $id=$blog->save();  
+                $id=$blog->save();  
             }
-            $this->redirect("blog","view","id=$id");
-        }else{
-            $blogId=$this->data["id"];
-            $blog = Blog::get_by_id($blogId);
-            $this->view->set("blog",$blog); 
-            //加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。
-            $this->load_onlineditor('blog_content');
+            if ($isRedirect){
+                $this->redirect("blog","view","id=$id");
+                exit;
+            }
         }
+        $blogId=$this->data["id"];
+        $blog = Blog::get_by_id($blogId);
+        $this->view->set("blog",$blog); 
+        //加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。
+        $this->load_onlineditor('blog_content');
     }
     /**
      * 删除博客

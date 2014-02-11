@@ -448,8 +448,8 @@ class AutoCodeViewExt extends AutoCode
 			}
 		}
 
-		$relationSpec=self::$relation_all[$classname];
-		if (is_array($relationSpec)&&(count($relationSpec)>0))
+		if (array_key_exists($classname, self::$relation_all))$relationSpec=self::$relation_all[$classname];
+		if (isset($relationSpec)&&is_array($relationSpec)&&(count($relationSpec)>0))
 		{
 			if (array_key_exists("has_many",$relationSpec))
 			{
@@ -526,7 +526,7 @@ class AutoCodeViewExt extends AutoCode
 	 */
 	private static function relationViewDefine($tablename,$classname,$instancename,$relationStore)
 	{
-		$relationSpec=self::$relation_all[$classname];
+		if (array_key_exists($classname, self::$relation_all))$relationSpec=self::$relation_all[$classname];
 		$relationClassesView="";
 		$appName_alias=Gc::$appName_alias;
 		$relationViewAdds="";
@@ -544,7 +544,7 @@ class AutoCodeViewExt extends AutoCode
 		);
 		//导出一对多关系规范定义(如果存在)
 
-		if (is_array($relationSpec)&&(count($relationSpec)>0))
+		if (isset($relationSpec)&&is_array($relationSpec)&&(count($relationSpec)>0))
 		{
 			if (array_key_exists("has_many",$relationSpec))
 			{
@@ -658,11 +658,11 @@ class AutoCodeViewExt extends AutoCode
 					{
 						include("jsmodel".DIRECTORY_SEPARATOR."many2many.php");
 						$result['m2mMenu'].=$jsMany2ManyMenu;
-						$result['m2mRowSelect'].=$jsMany2ManyRowSelect;
-						$result['m2mRowSelectElse'].=$jsMany2ManyRowSelectElse;
+						if(isset($jsMany2ManyRowSelect))$result['m2mRowSelect'].=$jsMany2ManyRowSelect;
+						if(isset($m2mRowSelectElse))$result['m2mRowSelectElse'].=$jsMany2ManyRowSelectElse;
 						$result['m2mShowHide'].=$jsMany2ManyShowHide;
 						$result['m2mRunningWindow'].=$jsMany2ManyRunningWindow;
-						$result['m2mMenuShowHide'].=$jsMany2ManyMenuShowHide;
+						if(isset($jsMany2ManyMenuShowHide))$result['m2mMenuShowHide'].=$jsMany2ManyMenuShowHide;
 						$relationClassesView.=$jsMany2ManyContent;
 						$table_comment12n=self::tableCommentKey($tablename);
 						$realId=DataObjectSpec::getRealIDColumnName($classname);

@@ -91,7 +91,7 @@ input {
 	color:#FFF;
 	background-color:gray;
 }
-  
+       
 .btnSubmit{
 	width:100px;
 	height:32px;
@@ -170,6 +170,13 @@ br {
 	border-right-width : 0px;    
 } 
 .viewdoblock .edit{
-	width: 800px;
+	width: 98%;
 }
+
+
+/* 图片自适应显示 table-cell方式 */
+.wrap_2_outer { border:0px solid #ccc; width:600px; height:auto; display:table-cell; font-size:0; text-align:center; vertical-align:middle; *position:relative;padding:0; overflow:hidden; }
+.wrap_2_inner { text-align:center; vertical-align:middle; width:600px; *width:auto;font-size:0; *position:absolute;*top:50%;*left:50%;}
+.wrap_2_inner img { max-height:600px; max-width:600px; *position:relative;*bottom:50%;*right:50%;margin:0 auto;}
+      
 /* END */

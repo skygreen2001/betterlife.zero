@@ -893,8 +893,8 @@ class AutoCodeService extends AutoCode
 	private static function many2manyUpdate($classname,$instance_name,$fieldInfo)
 	{
 		$result="";
-		$relationSpec=self::$relation_all[$classname];
-		if ((is_array($relationSpec))&&(count($relationSpec)>0)){
+		if (array_key_exists($classname, self::$relation_all))$relationSpec=self::$relation_all[$classname];
+		if (isset($relationSpec)&&(is_array($relationSpec))&&(count($relationSpec)>0)){
 			if (array_key_exists("has_many",$relationSpec))
 			{
 				$has_many=$relationSpec["has_many"];
@@ -1005,8 +1005,8 @@ MANY2MANYUPDATE;
 	{
 
 		$result="";
-		$relationSpec=self::$relation_all[$classname];
-		if (is_array($relationSpec)&&(count($relationSpec)>0))
+		if (array_key_exists($classname, self::$relation_all))$relationSpec=self::$relation_all[$classname];
+		if (isset($relationSpec)&&is_array($relationSpec)&&(count($relationSpec)>0))
 		{
 			if (array_key_exists("has_many",$relationSpec))
 			{
@@ -1063,8 +1063,8 @@ MANY2MANYUPDATE;
 	private static function many2manyQueryPage($classname,$instance_name,$fieldInfo)
 	{
 		$result="";
-		$relationSpec=self::$relation_all[$classname];
-		if (is_array($relationSpec)&&(count($relationSpec)>0))
+		if (array_key_exists($classname, self::$relation_all))$relationSpec=self::$relation_all[$classname];
+		if (isset($relationSpec)&&is_array($relationSpec)&&(count($relationSpec)>0))
 		{
 			if (array_key_exists("has_many",$relationSpec))
 			{
