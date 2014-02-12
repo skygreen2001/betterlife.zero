@@ -1,9 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 {* xhtml1-transitional.dtd *}
-<html lang="zh-CN" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">           
+<html lang="zh-CN" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
   <head>
 {include file="$templateDir/layout/normal/header.tpl"}
-  <link rel="icon" href="favicon.ico" mce_href="favicon.ico" type="image/x-icon" />   
+
+    <link rel="icon" href="favicon.ico" mce_href="favicon.ico" type="image/x-icon" />
 	<link rel="stylesheet" type="text/css" href="{$template_url}resources/css/public.css" />
 {$viewObject->css_ready|default:""}
 {$viewObject->js_ready|default:""}
@@ -11,7 +12,7 @@
   </head>
   {php}
    flush();
-  {/php}  
+  {/php}
   <body>
   {block name=body}{/block}
   </body>

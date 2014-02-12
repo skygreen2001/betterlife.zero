@@ -18,7 +18,7 @@
 *.查询条件配置[允许配置关系主键查询]
     <conditions>
         <condition>name</condition>
-	<condition relation_class="Member" show_name="username">member_id</condition>
+		<condition relation_class="Member" show_name="username">member_id</condition>
     </conditions>
 
     - relation_class :关系主键对应的表数据对象
@@ -43,39 +43,39 @@
 
    示例：
        一对一：用户和用户详情
-	<class name="User">       
-		<has_one>  
+	<class name="User">
+		<has_one>
 			<relationclass name="Userdetail">userDetail</relationclass>
-		</has_one> 
-	</class>   
-    
+		</has_one>
+	</class>
+
        从属一对一：用户和部门
-	<class name="User">   
-		<belong_has_one>  
-			<relationclass name="Department">department</relationclass> 
-		</belong_has_one>  
-	</class>  
+	<class name="User">
+		<belong_has_one>
+			<relationclass name="Department">department</relationclass>
+		</belong_has_one>
+	</class>
 
        一对多：用户和评论
-	<class name="User">   
-		<has_many>  
+	<class name="User">
+		<has_many>
 			<relationclass name="Comment">comment</relationclass>
-		</has_many> 
-	</class>      
+		</has_many>
+	</class>
 
-       多对多：用户和角色 【表中间名最后一段是：userrole】  
+       多对多：用户和角色 【表中间名最后一段是：userrole】
 	<class name="User">
 		<many_many>
 			<relationclass name="Role">roles</relationclass>
 		</many_many>
-	</class>      
+	</class>
 
-       从属多对多：角色和用户 【表中间名最后一段是：userrole】          
+       从属多对多：角色和用户 【表中间名最后一段是：userrole】
 	<class name="Role">
 		<belongs_many_many>
 			<relationclass name="User">users</relationclass>
-		</belongs_many_many>     
-	</class>      
+		</belongs_many_many>
+	</class>
 
 *.冗余字段配置
       主要用于中间表为了减少联表查询保存的冗余字段数据。
@@ -91,4 +91,14 @@
 				<field name="level"/>
 			</table>
 		</redundancy>
-	</class> 
+	</class>
+
+
+*.支持一选多[全部|已选|未选择]
+  一选多中配置的是中间关系表才会生成
+    <class name="User">
+        <has_many>
+            <relationclass name="Userrole">userrole</relationclass>
+        </has_many>
+    </class>
+  说明:中间表对象类必须配置查询条件配置conditions才能正常使用

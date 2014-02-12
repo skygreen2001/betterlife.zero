@@ -48,10 +48,7 @@ class ActionExt extends ActionBasic
 	{
 		$templateurl=$this->view->template_url;
 		$viewObject=$this->view->viewObject;
-		if(empty($viewObject))
-		{
-			$this->view->viewObject=new ViewObject();
-		}
+		if(empty($viewObject))$this->view->viewObject=new ViewObject();
 		if ($this->view->viewObject)
 		{
 			if ($isGzip&&startWith($viewCss,'shared')){
@@ -180,7 +177,9 @@ class ActionExt extends ActionBasic
 				if ($this->data["go"]=="admin.index.index"){
                     $this->redirect("index","login");
                 }else{
-                    UtilJavascript::loadJsContent("window.parent.location='".Gc::$url_base."index.php?go=admin.index.login");
+					if(empty($viewObject))$this->view->viewObject=new ViewObject();
+                    UtilJavascript::loadJsContentReady($this->view->viewObject,"window.parent.location='".Gc::$url_base."index.php?go=admin.index.login'");
+                    return;
                 }
 			}
 			if (HttpCookie::get("OnlineEditor")){
