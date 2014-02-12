@@ -15,37 +15,37 @@ class DirectAction {
 class RemoteServiceCall
 {
 	/**
-	 * 是否数据对象转换成数组 
+	 * 是否数据对象转换成数组
 	 */
 	const ISOBJECTTOARRAY=true;
 	/**
 	 * 是否提交Form
-	 * @var bool 
+	 * @var bool
 	 */
 	private $isForm = false;
 	/**
 	 * 是否上传文件
-	 * @var bool 
+	 * @var bool
 	 */
 	private $isUpload = false;
 	/**
 	 * 需要传送的数据
-	 * @var mixed 
+	 * @var mixed
 	 */
 	private $data;
 	/**
 	 * Ext Direct Remote通信配置API
-	 * @var array 
+	 * @var array
 	 */
 	private static $configApi;
-	
+
 	/**
 	 * 获取需要传送的数据
 	 * @param $post_data 源Post的数据
 	 */
 	public function initData($post_data)
 	{
-		//$post_data = file_get_contents("php://input"); 
+		//$post_data = file_get_contents("php://input");
 		//$post_data='{"url":"http:\/\/localhost\/enjoyoung\/core\/util\/view\/ajax\/extjs\/direct\/router.php","type":"remoting","actions":{"MemberService":[{"name":"doSelect","len":2,"formHandler":true},{"name":"getInfo","len":1},{"name":"getApp","len":1}]}}';
 		if (isset($post_data)) {
 			header('Content-Type: text/javascript');
@@ -60,9 +60,9 @@ class RemoteServiceCall
 			$data->data = array($_POST, $_FILES);
 		} else {
 			die('非法的请求.');
-		}        
+		}
 		$this->data=$data;
-		self::$configApi=Config_Service::serviceConfig();  
+		self::$configApi=Config_Service::serviceConfig();
 	}
 	/**
 	 * 发送请求
@@ -85,7 +85,7 @@ class RemoteServiceCall
 			if (self::ISOBJECTTOARRAY){
 				if (!isset($response["result"])){
 					foreach ($response as $key=>$response_sub) {
-						$response[$key]["result"]["data"]=$this->data_object2array($response_sub["result"]["data"]); 
+						$response[$key]["result"]["data"]=$this->data_object2array($response_sub["result"]["data"]);
 					}
 				}else{
 					$response["result"]["data"]=$this->data_object2array($response["result"]["data"]);
@@ -94,13 +94,13 @@ class RemoteServiceCall
 			echo json_encode($response);
 		}
 	}
-	
+
 	/**
-	 * 数据对象转换成数组 
+	 * 数据对象转换成数组
 	 * @param $responsedata 响应数据数组
 	 */
 	private function data_object2array($responsedata)
-	{              
+	{
 		if ((!empty($responsedata))&&(count($responsedata)>0)){
 			foreach ($responsedata as $key=>$data) {
 				if (is_object($data)){
@@ -110,11 +110,11 @@ class RemoteServiceCall
 		}
 		return $responsedata;
 	}
-   
+
 	/**
 	 * 发送远程请求调用
 	 * @param type $cdata
-	 * @return type 
+	 * @return type
 	 */
 	private function doRpc($cdata) {
 		try {
@@ -126,18 +126,18 @@ class RemoteServiceCall
 			$action = $cdata->action;
 			$a = self::$configApi[$action];
 
-			$this->doAroundCalls($a['before'], $cdata);
+			if (array_key_exists("before",$a))$this->doAroundCalls($a['before'], $cdata);
 
 			//$cdata->method="doSelect";
 			//$cdata->tid=100;
 
-			$method = $cdata->method; 
+			$method = $cdata->method;
 
 			$mdef = $a['methods'][$method];
 			if (!$mdef) {
 				throw new Exception("在Service里 $action 调用未定义的方法: $method ");
 			}
-			$this->doAroundCalls($mdef['before'], $cdata);
+			if (array_key_exists("before",$mdef))$this->doAroundCalls($mdef['before'], $cdata);
 
 			$r = array(
 				'type' => 'rpc',
@@ -147,21 +147,21 @@ class RemoteServiceCall
 			);
 			$o = new $action();
 			$params = isset($cdata->data) && is_array($cdata->data) ? $cdata->data : array();
-			
-			$params=$this->clearValuelessData($params);     
+
+			$params=$this->clearValuelessData($params);
 
 			$r['result'] = call_user_func_array(array($o, $method), $params);
 
-			$this->doAroundCalls($mdef['after'], $cdata, $r);
-			$this->doAroundCalls($a['after'], $cdata, $r);
+			if (array_key_exists("after",$mdef))$this->doAroundCalls($mdef['after'], $cdata, $r);
+			if (array_key_exists("after",$a))$this->doAroundCalls($a['after'], $cdata, $r);
 		} catch (Exception $e) {
 			$r['type'] = 'exception';
 			$r['message'] = $e->getMessage();
 			$r['where'] = $e->getTraceAsString();
 		}
 		return $r;
-	}    
-	
+	}
+
 	/**
 	 * 清除无价值的数据
 	 */
@@ -172,23 +172,23 @@ class RemoteServiceCall
 			if (is_array($params[0])&&count($params[0]>0))
 			{
 				unset($params[0]["extAction"]);
-				unset($params[0]["extMethod"]);  
+				unset($params[0]["extMethod"]);
 				unset($params[0]["extTID"]);
-				unset($params[0]["extType"]); 
-				unset($params[0]["extUpload"]);             
+				unset($params[0]["extType"]);
+				unset($params[0]["extUpload"]);
 			}
-		}                           
+		}
 		return $params;
-	}    
-	
+	}
+
 	/**
 	 * 在主程序前或者后执行方法。
 	 * @param type $fns
 	 * @param type $cdata
 	 * @param type $returnData
-	 * @return type 
+	 * @return type
 	 */
-	private function doAroundCalls($fns, $cdata, $returnData=null) 
+	private function doAroundCalls($fns, $cdata, $returnData=null)
 	{
 		if (!$fns) {
 			return;

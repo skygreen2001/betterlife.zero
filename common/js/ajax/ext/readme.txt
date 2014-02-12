@@ -13,3 +13,13 @@
   原为：inner.style.width = (each - (tw-iw)) + 'px';
   现为：if(this.tabWidth!=='auto'){inner.style.width = (each - (tw-iw)) + 'px';}else{inner.style.width ='auto';}
 
+2.在TabCloseMenu.js里添加以下代码使Grid 的单元格可复制文本:
+Ext.override(Ext.grid.GridView, {
+    templates: {
+        cell: new Ext.Template(
+                    '<td class="x-grid3-col x-grid3-cell x-grid3-td-{id} {css}" style="{style}" tabIndex="0" {cellAttr}>',
+                    '<div class="x-grid3-cell-inner x-grid3-col-{id}" {attr}>{value}</div>',
+                    "</td>"
+            )
+    }
+});

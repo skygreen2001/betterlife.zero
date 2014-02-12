@@ -179,7 +179,7 @@ class Gc
 	 * @var bool
 	 * @static
 	 */
-	public static $dev_debug_on=true;
+	public static $dev_debug_on=false;
 
 	/**
 	 * 是否打开Smarty Debug Console窗口
