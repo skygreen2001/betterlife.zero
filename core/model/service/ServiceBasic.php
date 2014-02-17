@@ -403,7 +403,7 @@ class ServiceBasic extends Service implements IServiceBasic
 	 * @param array $categoryId 上传文件所在的目录标识，一般为类实例名称
 	 * @return array 是否创建成功。
 	 */
-	public function uploadImage($files,$uploadFlag,$upload_dir,$categoryId,$categoryId="default")
+	public function uploadImage($files,$uploadFlag,$upload_dir,$categoryId="default")
 	{
 		$diffpart=date("YmdHis");
 		$result="";

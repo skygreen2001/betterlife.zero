@@ -1534,6 +1534,7 @@ class AutoCodeViewExt extends AutoCode
 		$result["filterwordNames"]=$filterwordNames;
 		$result["filterFields"]   =$filterFields;
 		$result["filterReset"]    =$filterReset;
+		if (endWith($filterfilter,"{"))$filterfilter="";
 		$result["filterdoSelect"] =$filterdoSelect."\r\n".$filterfilter;
 		return $result;
 	}

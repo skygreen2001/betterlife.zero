@@ -382,8 +382,6 @@ class AutoCodeService extends AutoCode
 						 "    }\r\n\r\n";
 				//update多对多
 				$result.=self::many2manyUpdate($classname,$instance_name,$fieldInfo);
-				//uploadImg:有图片的上传图片功能
-				$result.=self::imageUploadFunctionInExtService($classname,$instance_name,$fieldInfo,$object_desc);
 				//deleteByIds
 				$result.="    /**\r\n".
 						 "     * 根据主键删除数据对象:{$object_desc}的多条数据记录\r\n".
@@ -791,7 +789,7 @@ class AutoCodeService extends AutoCode
 			$isImage =self::columnIsImage($fieldname,$field["Comment"]);
 			if ($isImage){
 				$result.="        if (!empty(\$_FILES)&&!empty(\$_FILES[\"{$fieldname}Upload\"][\"name\"])){\r\n".
-						 "            \$result=\$this->uploadImg(\$_FILES,\"{$fieldname}Upload\",\"{$fieldname}\");\r\n".
+						 "            \$result=\$this->uploadImage(\$_FILES,\"{$fieldname}Upload\",\"{$fieldname}\",\"{$instance_name}\");\r\n".
 						 "            if (\$result&&(\$result['success']==true)){\r\n".
 						 "                if (array_key_exists('file_name',\$result)){ \r\n".
 						 "                    \${$instance_name}[\"{$fieldname}\"]= \$result['file_name'];\r\n".
@@ -1200,59 +1198,6 @@ MANY2MANYQUERYPAGE;
 		}
 		return $result;
 	}
-
-	/**
-	 * 将表列为上传图片路径类型的列提供上传图片的函数,为图片上传功能提供支持
-	 * @param string $classname 数据对象类名
-	 * @param string $instance_name 实体变量
-	 * @param array $fieldInfo 表列信息列表
-	 * @param string $object_desc
-	 */
-	private static function imageUploadFunctionInExtService($classname,$instance_name,$fieldInfo,$object_desc)
-	{
-		$result="";
-		$onlyonce=true;
-		$isRedundancyCurrentHad=false;
-		$redundancy_table_fields=self::$redundancy_table_fields[$classname];
-		foreach ($fieldInfo as $fieldname=>$field){
-			if ($redundancy_table_fields){
-				if (!$isRedundancyCurrentHad){
-					$redundancy_fields=array();
-					foreach ($redundancy_table_fields as $redundancy_table_field) {
-						$redundancy_fields=array_merge($redundancy_fields,$redundancy_table_field);
-					}
-					$isRedundancyCurrentHad=true;
-				}
-				if (array_key_exists($fieldname, $redundancy_fields))continue;
-			}
-			$isImage =self::columnIsImage($fieldname,$field["Comment"]);
-			if ($isImage&&$onlyonce){
-				$result.="\r\n".
-						 "    /**\r\n".
-						 "     * 上传{$object_desc}图片文件\r\n".
-						 "     */\r\n".
-						 "    public function uploadImg(\$files,\$uploadFlag,\$upload_dir)\r\n".
-						 "    {\r\n".
-						 "        \$diffpart=date(\"YmdHis\");\r\n".
-						 "        \$result=\"\";\r\n".
-						 "        if (!empty(\$files[\$uploadFlag])&&!empty(\$files[\$uploadFlag][\"name\"])){\r\n".
-						 "            \$tmptail = end(explode('.', \$files[\$uploadFlag][\"name\"]));\r\n".
-						 "            \$uploadPath =GC::\$upload_path.\"images\".DIRECTORY_SEPARATOR.\"{$instance_name}\".DIRECTORY_SEPARATOR.\$upload_dir.DIRECTORY_SEPARATOR.\$diffpart.\".\".\$tmptail;\r\n".
-						 "            \$result     =UtilFileSystem::uploadFile(\$files,\$uploadPath,\$uploadFlag);\r\n".
-						 "            if (\$result&&(\$result['success']==true)){\r\n".
-						 "                \$result['file_name']=\"{$instance_name}/\$upload_dir/\$diffpart.\$tmptail\";\r\n".
-						 "            }else{\r\n".
-						 "                return \$result;\r\n".
-						 "            }\r\n".
-						 "        }\r\n".
-						 "        return \$result;\r\n".
-						 "    }\r\n";
-				$onlyonce=false;
-			}
-		}
-		return $result;
-	}
-
 
 	/**
 	 * 将表列为bit类型的列转换成需要存储在数据库里的bool值
