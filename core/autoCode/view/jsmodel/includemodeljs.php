@@ -523,7 +523,6 @@ $filterReset
 					this.grid.tvpView.setDisabled(sm.getCount() != 1);$relationM2mMenuShowHide
 				},
 				rowselect: function(sm, rowIndex, record) {
-					this.grid.updateView$classname();
 					if (sm.getCount() != 1){
 						this.grid.hide$classname();
 						$appName_alias.$classname.Config.View.IsShow=0;$relationM2mRowSelect

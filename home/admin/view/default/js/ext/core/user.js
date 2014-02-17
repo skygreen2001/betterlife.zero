@@ -1372,7 +1372,6 @@ Bb.User.View={
 					this.grid.tvpView.setDisabled(sm.getCount() != 1);
 				},
 				rowselect: function(sm, rowIndex, record) {
-					this.grid.updateViewUser();
 					if (sm.getCount() != 1){
 						this.grid.hideUser();
 						Bb.User.Config.View.IsShow=0;

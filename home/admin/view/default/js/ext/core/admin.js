@@ -609,7 +609,6 @@ Bb.Admin.View={
 					this.grid.tvpView.setDisabled(sm.getCount() != 1);
 				},
 				rowselect: function(sm, rowIndex, record) {
-					this.grid.updateViewAdmin();
 					if (sm.getCount() != 1){
 						this.grid.hideAdmin();
 						Bb.Admin.Config.View.IsShow=0;
