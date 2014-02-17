@@ -87,6 +87,7 @@ class UtilFileSystem extends Util
 		if (UtilString::is_utf8($filename)){
 			$filename=rawurldecode(self::charsetConvert($filename));
 		}
+		self::createDir(dirname($filename));
 		$cFile = fopen ($filename, 'w' );
 		if ($cFile){
 			file_put_contents($filename, $content);
