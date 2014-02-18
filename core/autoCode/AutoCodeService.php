@@ -1238,7 +1238,7 @@ MANY2MANYQUERYPAGE;
 		foreach ($fieldInfo as $fieldname=>$field){
 			$datatype =self::column_type($field["Type"]);
 			if ($datatype=='bit'){
-				$result.="        if (isset(\${$instance_name}[\"$fieldname\"])&&(\${$instance_name}[\"$fieldname\"]=='1'))\${$instance_name}[\"$fieldname\"]=true; else \${$instance_name}[\"$fieldname\"]=false;\r\n";
+				$result.="        if (isset(\${$instance_name}[\"$fieldname\"])&&(\${$instance_name}[\"$fieldname\"]=='1'))\${$instance_name}[\"$fieldname\"]=1; else \${$instance_name}[\"$fieldname\"]=0;\r\n";
 			}
 		}
 		return $result;
