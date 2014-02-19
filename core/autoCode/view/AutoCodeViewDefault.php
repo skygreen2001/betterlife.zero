@@ -280,7 +280,7 @@ EDIT;
 				$isImage =self::columnIsImage($key,$value);
 				if ($isImage){
 					$headerscontents.="        <tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\">\r\n".
-					"            <div class=\"wrap_2_outer\"><div class=\"wrap_2_inner\"><img src=\"{\$uploadImg_url|cat:\$$instancename.$key}\" alt=\"$value\"></div></div>\r\n".
+					"            <div class=\"wrap_2_inner\"><img src=\"{\$uploadImg_url|cat:\$$instancename.$key}\" alt=\"$value\"></div>\r\n".
             		"            <br/>存储相对路径:{\$$instancename.$key}</td></tr>\r\n";
 				}else{
 					$headerscontents.="        <tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\">{\$$instancename.$key}</td></tr> \r\n";

@@ -125,12 +125,12 @@ div.x-tab-strip-wrap .add-tab a span.x-tab-strip-inner {
 
 /** 数据对象模板显示样式 */
 .viewdoblock {
-	width          : 98%;
+	width		  : 98%;
 	border-collapse: collapse;
-	margin         : 10px;
-	border-left    : 1px solid #99BBE8;
+	margin		 : 10px;
+	border-left	: 1px solid #99BBE8;
 	border-right   : 1px solid #99BBE8;
-	border-top     : 5px solid #ccc;
+	border-top	 : 5px solid #ccc;
 	border-bottom  : 5px solid #ccc;
 }
 .viewdoblock .entry{
@@ -139,21 +139,31 @@ div.x-tab-strip-wrap .add-tab a span.x-tab-strip-inner {
 .viewdoblock span{
 }
 .viewdoblock .head{
-	width      :32%;
+	width	  :32%;
+	min-width  :150px;
+	white-space:nowrap;
 	text-align :right;
 	font-weight:bold;
-	line-height        : 1.5em;
-	padding-right      : 5px;
-	border             : 1px solid #ccc ;
+	line-height		: 1.5em;
+	padding-right	  : 5px;
+	border			 : 1px solid #ccc ;
 	border-bottom-width: 0px;
 	border-left-width  : 0px;
 }
 .viewdoblock .content{
 	line-height :1.5em;
 	padding-left:20px;
-	border      : 1px solid #ccc ;
+	border	  : 1px solid #ccc ;
 	border-bottom-width: 0px;
 	border-right-width : 0px;
+}
+
+.viewdoblock .content img{
+	max-height:600px;
+	max-width:600px;
+	*bottom:50%;*
+	right:50%;
+	margin:0 auto;
 }
 
 /**Grid 的单元格可复制文本*/
@@ -166,7 +176,7 @@ div.x-tab-strip-wrap .add-tab a span.x-tab-strip-inner {
 	-moz-user-select:inherit;
 	-khtml-user-select:text;
 	-user-select: text! important;
-    -o-user-select: text! important;
-    -webkit-user-select: text! important;
+	-o-user-select: text! important;
+	-webkit-user-select: text! important;
 }
 /* END */

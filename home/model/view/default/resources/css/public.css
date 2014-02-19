@@ -91,7 +91,7 @@ input {
 	color:#FFF;
 	background-color:gray;
 }
-       
+
 .btnSubmit{
 	width:100px;
 	height:32px;
@@ -101,7 +101,7 @@ input {
 	background-color:#000;
 	border:1px solid;
 	border-color:#696 #363 #363 #696;
-} 
+}
 
 label {
 	vertical-align:middle;
@@ -115,68 +115,68 @@ br {
 	clear:left;
 }
 
-/** 数据对象模板显示样式 */ 
+/** 数据对象模板显示样式 */
 .block {
 	margin-top:10px;
-	border:1px solid #cfcfcf; 
+	border:1px solid #cfcfcf;
 	padding:10px;
 }
-.viewdoblock {  
+.viewdoblock {
 	width          : 98%;
-	border-collapse: collapse;      
-	margin         : 10px;         
-	border-left    : 1px solid #99BBE8; 
-	border-right   : 1px solid #99BBE8; 
-	border-top     : 5px solid #ccc; 
-	border-bottom  : 5px solid #ccc; 
+	border-collapse: collapse;
+	margin         : 10px;
+	border-left    : 1px solid #99BBE8;
+	border-right   : 1px solid #99BBE8;
+	border-top     : 5px solid #ccc;
+	border-bottom  : 5px solid #ccc;
 }
-.viewdoblock .entry{      
-	font-size:14px;   
+.viewdoblock .entry{
+	font-size:14px;
 }
-.viewdoblock span{   
-}           
-.viewdoblock .head{   
-	width      :32%;             
+.viewdoblock span{
+}
+.viewdoblock .head{
+	width      :32%;
+	min-width  :150px;
+	white-space:nowrap;
 	text-align :right;
-	font-weight:bold;  
-	line-height        : 1.5em;    
-	padding-right      : 5px;    
-	border             : 1px solid #ccc ;          
-	border-bottom-width: 0px;   
-	border-left-width  : 0px;   
+	font-weight:bold;
+	line-height        : 1.5em;
+	padding-right      : 5px;
+	border             : 1px solid #ccc ;
+	border-bottom-width: 0px;
+	border-left-width  : 0px;
 }
-.viewdoblock .header{  
+.viewdoblock .header{
 	text-align :center;
-	font-weight:bold;  
-	line-height        : 1.5em;    
-	padding-right      : 5px;    
-	border             : 1px solid #ccc ;          
-	border-bottom-width: 0px;   
-	border-left-width  : 0px;   
-}                      
-.viewdoblock .content{    
-	line-height :1.5em;    
+	font-weight:bold;
+	line-height        : 1.5em;
+	padding-right      : 5px;
+	border             : 1px solid #ccc ;
+	border-bottom-width: 0px;
+	border-left-width  : 0px;
+}
+.viewdoblock .content{
+	line-height :1.5em;
 	padding-left:20px;
-	border      : 1px solid #ccc ;    
-	border-bottom-width: 0px;   
-	border-right-width : 0px;    
-} 
-.viewdoblock .btnCol{  
-	width:100px;     
+	border      : 1px solid #ccc ;
+	border-bottom-width: 0px;
+	border-right-width : 0px;
+}
+.viewdoblock .btnCol{
+	width:100px;
 	text-align :center;
-	line-height :1.5em;  
-	border      : 1px solid #ccc ;    
-	border-bottom-width: 0px;   
-	border-right-width : 0px;    
-} 
+	line-height :1.5em;
+	border      : 1px solid #ccc ;
+	border-bottom-width: 0px;
+	border-right-width : 0px;
+}
 .viewdoblock .edit{
 	width: 98%;
 }
 
 
 /* 图片自适应显示 table-cell方式 */
-.wrap_2_outer { border:0px solid #ccc; width:600px; height:auto; display:table-cell; font-size:0; text-align:center; vertical-align:middle; *position:relative;padding:0; overflow:hidden; }
-.wrap_2_inner { text-align:center; vertical-align:middle; width:600px; *width:auto;font-size:0; *position:absolute;*top:50%;*left:50%;}
-.wrap_2_inner img { max-height:600px; max-width:600px; *position:relative;*bottom:50%;*right:50%;margin:0 auto;}
-      
+.wrap_2_inner img { max-height:600px; max-width:600px; *bottom:50%;*right:50%;margin:0 auto;}
+
 /* END */
