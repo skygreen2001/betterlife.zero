@@ -19,8 +19,8 @@ require_once ("../../../init.php");
 $type_create_watermark=1;
 //图片水印:是否上传文件]
 $is_watermark_file_upload=true;
-if(!empty($_GET["type"]))$type_create_watermark=$_GET["type"];
-if(!empty($_GET["f"]))$is_watermark_file_upload=$_GET["f"];
+if(isset($_GET["type"]))$type_create_watermark=$_GET["type"];
+if(isset($_GET["f"]))$is_watermark_file_upload=$_GET["f"];
 
 switch ($type_create_watermark) {
    case 0:
@@ -78,7 +78,7 @@ FORMCONTENT;
 		$result = UtilWatermark::createWordsWatermark(
 			Gc::$upload_path."watermark".DIRECTORY_SEPARATOR."originals".DIRECTORY_SEPARATOR."1.jpg",
 			Gc::$upload_path."watermark".DIRECTORY_SEPARATOR."images".DIRECTORY_SEPARATOR."1.jpg",
-			'漫豆网|mandou',
+			'完美生活|betterlife',
 			1,"255,0,0"
 		);
 		if ($result === false) {

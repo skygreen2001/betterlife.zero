@@ -130,6 +130,8 @@ class UtilWatermark
 	public static function createWordsWatermark($source_file_path, $output_file_path, $watermark_content, $direction = 1,$font_color="255,255,255")
 	{
 		$font_type = Gc::$upload_path."font".DIRECTORY_SEPARATOR."msyh.ttc"; //字体
+		if (!file_exists($font_type))die("请在指定路径下放置指定字体文件，默认是微软雅黑字体:".$font_type);
+
 		$font_size = 22; //字体大小
 		$angle=0;//旋转角度  允许值:0-90 270-360不含
 
@@ -276,6 +278,7 @@ class UtilWatermark
 	public static function watermark_text($source_file_path, $output_file_path,$watermark_content,$direction=1,$font_color="255,255,255")
 	{
 		$font_type = Gc::$upload_path."font".DIRECTORY_SEPARATOR."msyh.ttc"; //字体
+		if (!file_exists($font_type))die("请在指定路径下放置指定字体文件，默认是微软雅黑字体:".$font_type);
 		$font_size = 22; //字体大小
 		$angle=0;//旋转角度
 
