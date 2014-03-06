@@ -210,6 +210,7 @@ class UtilZipfile
 	 */
 	private function output($file)
 	{
+		UtilFileSystem::createDir(dirname($file));
 		$fp=fopen($file,"w");
 		fwrite($fp,$this->file());
 		fclose($fp);
