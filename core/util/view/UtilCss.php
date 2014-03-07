@@ -254,8 +254,9 @@ class UtilCss extends Util
 				select{
 					width:400px;
 					text-align:left;
-					padding-left:10px;
-					height:28px;
+					padding:6px 0px 4px 10px;
+					font-size:14px;
+					height:22px;
 					line-height:28px;
 					vertical-align:bottom;
     				box-sizing: content-box;

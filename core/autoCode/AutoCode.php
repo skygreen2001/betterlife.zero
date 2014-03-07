@@ -248,7 +248,7 @@ class AutoCode extends Object
 		echo "<head>\r\n";
 		echo UtilCss::form_css()."\r\n";
 		$url_base=UtilNet::urlbase();
-		echo "<script type='text/javascript' src='".$url_base."common/js/util/file.js'></script>";
+		//echo "<script type='text/javascript' src='".$url_base."common/js/util/file.js'></script>";
 		echo "</head>";
 		echo "<body>";
 		echo "<br/><br/><br/><br/><br/><h1 align='center'>$title</h1>";

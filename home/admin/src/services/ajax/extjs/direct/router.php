@@ -78,6 +78,7 @@ class RemoteServiceCall
 			$response = $this->doRpc($this->data);
 		}
 		if ($this->isForm && $this->isUpload) {
+			ob_clean();
 			echo '<html><body><textarea>';
 			echo json_encode($response);
 			echo '</textarea></body></html>';

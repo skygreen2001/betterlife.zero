@@ -78,7 +78,7 @@ class UtilWatermark
 	 * 3:左下角[SouthWest] 2:正下角[South] 1:右下角[SouthEast]
 	 * @return mixed bool 生成失败;array[file_path:生成水印图片的物理路径,url:生成水印图片的网络路径,origin_file_path:原图片物理路径,origin_url:原图片网络路径]
 	 */
-	public static function process_create_watermark($files,$uploadFieldName="upload_file",$watermark_image_filename="watermark.png",$direction=1)
+	public static function upload_watermark_source_files($files,$uploadFieldName="upload_file",$watermark_image_filename="watermark.png",$direction=1)
 	{
 		if (empty(self::$uploaded_image_destination))self::init();
 		if (!file_exists($watermark_image_filename)){
@@ -110,9 +110,10 @@ class UtilWatermark
 		UtilFileSystem::createDir(dirname($uploaded_file_path));
 		UtilFileSystem::createDir(dirname($processed_file_path));
 		move_uploaded_file($temp_file_path, $uploaded_file_path);
+		return $uploaded_file_path;
 
-		$result = self::create_watermark($uploaded_file_path, $processed_file_path,$watermark_image_filename, $direction);
-		return $result;
+//		$result = self::create_watermark($uploaded_file_path, $processed_file_path,$watermark_image_filename, $direction);
+//		return $result;
 	}
 
 	/**
