@@ -369,6 +369,9 @@ class AutoCodeViewExt extends AutoCode
 					$fields.=",dateFormat:'Y-m-d H:i:s'";
 				}
 				$fields.="},\r\n";
+				if (self::columnIsTextArea($fieldname,$field["Type"])){
+					$fields.="                {name: '{$fieldname}Show',type:'string'},\r\n";
+				}
 
 				if (is_array(self::$relation_viewfield)&&(count(self::$relation_viewfield)>0))
 				{
@@ -1292,16 +1295,19 @@ class AutoCodeViewExt extends AutoCode
 				$isImage =self::columnIsImage($fieldname,$field["Comment"]);
 				$column_type=self::column_type($field["Type"]);
 				$isPassword=self::columnIsPassword($tablename,$fieldname);
+				$isTextarea=self::columnIsTextArea($fieldname,$field["Type"]);
 				if ($isImage){
 					if (contain($field_comment,"路径"))$field_comment=str_replace("路径", "", $field_comment);
 					$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">{$field_comment}路径</td><td class=\"content\">{{$fieldname}}</td></tr>',\r\n";
-					$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\"><tpl if=\"{$fieldname}\"><img src=\"upload/images/{{$fieldname}}\" /></tpl></td></tr>',\r\n";
+					$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\"><tpl if=\"{$fieldname}\"><a href=\"upload/images/{{$fieldname}}\" target=\"_blank\"><img src=\"upload/images/{{$fieldname}}\" /></a></tpl></td></tr>',\r\n";
 				}else if ($column_type=='bit'){
 					$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\"><tpl if=\"{$fieldname} == true\">是</tpl><tpl if=\"{$fieldname} == false\">否</tpl></td></tr>',\r\n";
 				}else if ($datatype=='enum'){
 					$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$fieldname}Show}</td></tr>',\r\n";
 				}else if ($isPassword){
 					$viewdoblock.="";
+				}else if ($isTextarea){
+					$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$fieldname}Show}</td></tr>',\r\n";
 				}else{
 					$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$fieldname}{$dateformat}}</td></tr>',\r\n";
 				}

@@ -412,11 +412,13 @@ class AutoCodeService extends AutoCode
 				$m2mIdStr=self::many2manyIdStr($classname,$instance_name,$fieldInfo);
 				$specialResult=$enumConvert["normal"];
 				$relationField=self::relationFieldShow($instance_name,$classname,$fieldInfo);
-				if ((!empty($relationField))||(!empty($m2mIdStr))||(!empty($datetimeShow))||(!empty($enumConvert["normal"]))){
+				$textareaReplaceImage=self::textareaReplaceImage($instance_name,$fieldInfo);
+				if ((!empty($relationField))||(!empty($m2mIdStr))||(!empty($datetimeShow))||(!empty($textareaReplaceImage))){
 					$specialResult.="            foreach (\$data as \$$instance_name) {\r\n".
 									$relationField.
 									$datetimeShow.
 									$m2mIdStr.
+									$textareaReplaceImage.
 									"            }\r\n";
 				}
 				$result.="    public function queryPage{$classname}(\$formPacket=null)\r\n".
@@ -1268,6 +1270,25 @@ MANY2MANYQUERYPAGE;
 			}
 		}
 		return $result;
+	}
+
+
+	/**
+	 * 在线编辑器里的图片可以预览完整大小的图片
+	 * @param mixed $instance_name 实体变量
+	 * @param mixed $fieldInfo 表列信息列表
+	 */
+	private static function textareaReplaceImage($instance_name,$fieldInfo)
+	{
+		$result="";
+		foreach ($fieldInfo as $fieldname=>$field){
+			if (self::columnIsTextArea($fieldname,$field["Type"]))
+			{
+				$result="                \${$instance_name}->{$fieldname}Show=preg_replace(\"/<\s*img\s+[^>]*?src\s*=\s*(\'|\\\")(.*?)\\\\1[^>]*?\/?\s*>/i\",\"<a href='\\\${2}' target='_blank'>\\\${0}</a>\",\${$instance_name}->{$fieldname});\r\n";
+			}
+		}
+		return $result;
+
 	}
 
 	/**

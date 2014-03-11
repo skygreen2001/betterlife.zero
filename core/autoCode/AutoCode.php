@@ -461,6 +461,7 @@ class AutoCode extends Object
 		{
 			$table_comment=self::$tableInfoList[$tablename]["Comment"];
 			$table_comment=str_replace("关系表","",$table_comment);
+			$table_comment=str_replace("表","",$table_comment);
 			if (contain($table_comment,"\r")||contain($table_comment,"\n")){
 				$table_comment=preg_split("/[\s,]+/", $table_comment);
 				$table_comment=$table_comment[0];
