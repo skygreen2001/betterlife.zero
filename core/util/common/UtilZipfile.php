@@ -36,6 +36,10 @@ class UtilZipfile
 	 * @var  integer  $old_offset
 	 */
 	private $old_offset   = 0;
+    /**
+     * 是否压缩包里包括文件夹信息
+     */
+	public $is_dir_info_include=false;
 
 
 	/**
@@ -75,10 +79,20 @@ class UtilZipfile
 	 *
 	 * @access public
 	 */
-	private function addFile($data, $name, $time = 0)
-	{   //$name=Util_String::utf82gbk($name);
-		$name	 = str_replace('\\', '/', $name);
-		$name=basename($name);
+	private function addFile($data, $name, $showName, $time = 0)
+	{
+		//$name=Util_String::utf82gbk($name);
+		if ($this->is_dir_info_include){
+			if (is_int($showName)){
+				$name    = str_replace(Gc::$nav_root_path, "", $name);
+				$name	 = str_replace('\\', '/', $name);
+			}else{
+				$name=$showName;
+			}
+		}else{
+			$name=basename($name);
+			if (!is_int($showName))$name=$showName;
+		}
 		$dtime	= dechex($this->unix2DosTime($time));
 		$hexdtime = '\x' . $dtime[6] . $dtime[7]
 				  . '\x' . $dtime[4] . $dtime[5]
@@ -174,27 +188,29 @@ class UtilZipfile
 	 *
 	 * Created By Hasin Hayder at 29th Jan, 1:29 AM
 	 *
-	 * @param array An Array of files with relative/absolute path to be added in Zip File
-	 *
+	 * @param array 需要压缩的文件名的数组 relative/absolute path to be added in Zip File
+	 *              key 键是压缩后的文件名称，如果没有指定，则默认为原来的文件名称
+	 * 示例:UtilZipFile::addFiles(array("abc.txt"=>Gc::$attachment_path."test.txt"),Gc::$attachment_path."test.zip");
+	 *      就是将原来文件名为test.txt压缩到test.zip文件，它的新名称就是test.txt。
 	 * @access public
 	 */
 	private function addFiles($files)/*Only Pass Array*/
 	{
 		if (is_array($files)){
-			foreach($files as $file)
+			foreach($files as $showName => $file)
 			{
 				if (UtilString::is_utf8($file)) $file=UtilString::utf82gbk($file);
 				if (is_file($file)) //directory check
 				{
 					$data = implode("",file($file));
-					$this->addFile($data,$file);
+					$this->addFile($data,$file,$showName);
 				}
 			}
 		}else if (is_string($files)){
 			if (UtilString::is_utf8($file)) $file=UtilString::utf82gbk($file);
 			if (is_file($files)){
 				$data = implode("",file($files));
-				$this->addFile($data,$files);
+				$this->addFile($data,$files,$showName);
 			}
 		}
 	}
@@ -210,7 +226,6 @@ class UtilZipfile
 	 */
 	private function output($file)
 	{
-		UtilFileSystem::createDir(dirname($file));
 		$fp=fopen($file,"w");
 		fwrite($fp,$this->file());
 		fclose($fp);
@@ -219,13 +234,17 @@ class UtilZipfile
 	/**
 	* 将若干个文件压缩成一个文件下载
 	* 调用示例:
-	*	 UtilZipfile::zip(array("attachment\\20111221034439.xlsx","attachment\\20111221034612.xlsx"),Gc::$attachment_path."goodjob.zip");
+	*	 1.UtilZipfile::zip(array(Gc::$attachment_path."attachment".DIRECTORY_SEPARATOR."20111221034439.xlsx","attachment".DIRECTORY_SEPARATOR."20111221034612.xlsx"),Gc::$attachment_path."goodjob.zip",true);
+	*    2.UtilZipFile::zip(array("a/b/c/abc.txt"=>Gc::$attachment_path."test.txt"),Gc::$attachment_path."test.zip");
+	*      				就是将原来文件名为test.txt压缩到test.zip文件，它的新名称就是test.txt。
 	* @param mixed $arr_filename 需要压缩的文件名称列表
 	* @param mixed $outputfile 压缩后输出的压缩文件
+	* @param bool $is_dir_info_include 是否包含文件夹在内,默认为false,即所有来自不同位置的文件都在压缩文件根目录下;$arr_filename如果没有指定key时有效，若指定可以则以key为基准，文件夹以/隔开
 	*/
-	public static function zip($arr_filename,$outputfile)
+	public static function zip($arr_filename,$outputfile,$is_dir_info_include=false)
 	{
 		$ziper=new UtilZipfile();
+		$ziper->is_dir_info_include=$is_dir_info_include;
 		$ziper->addFiles($arr_filename);
 		//array of files
 		$ziper->output($outputfile);
@@ -233,33 +252,4 @@ class UtilZipfile
 	}
 }
 
-/* $Id: zip.lib.php,v 1.1 2004/02/14 15:21:18 anoncvs_tusedb Exp $ */
-// vim: expandtab sw=4 ts=4 sts=4:
-/**
-* Zip file creation class.
-* Makes zip files.
-*
-* Last Modification and Extension By :
-*
-*  Hasin Hayder
-*  HomePage : [url]www.hasinme.info[/url]
-*  Email : [email]countdraculla@gmail.com[/email]
-*  IDE : PHP Designer 2005
-*
-*
-* Originally Based on :
-*
-*  [url]http://www.zend.com/codex.php?id=535&single=1[/url]
-*  By Eric Mueller <[email]eric@themepark.com[/email]>
-*
-*  [url]http://www.zend.com/codex.php?id=470&single=1[/url]
-*  by Denis125 <[email]webmaster@atlant.ru[/email]>
-*
-*  a patch from Peter Listiak <[email]mlady@users.sourceforge.net[/email]> for last modified
-*  date and time of the compressed file
-*
-* Official ZIP file format: [url]http://www.pkware.com/appnote.txt[/url]
-*
-* @access  public
-*/
 ?>
