@@ -1,12 +1,12 @@
 <?php
-  /**
-  +---------------------------------<br/>
-  * 工具类：数组<br/>
-  +---------------------------------
-  * @category betterlife
-  * @package util.common
-  * @author skygreen
-  */
+/**
+ +---------------------------------<br/>
+ * 工具类：数组<br/>
+ +---------------------------------
+ * @category betterlife
+ * @package util.common
+ * @author skygreen
+ */
 class UtilArray extends Util
 {
     //<editor-fold defaultstate="collapsed" desc="array and xml">

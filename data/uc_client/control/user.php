@@ -29,7 +29,7 @@ class usercontrol extends base {
 		$this->app = $this->cache['apps'][UC_APPID];
 	}
 
-	// -1 δ����
+	// -1 Î´¿ªÆô
 	function onsynlogin() {
 		$this->init_input();
 		$uid = $this->input('uid');
@@ -102,6 +102,15 @@ class usercontrol extends base {
 		}
 		return $status;
 	}
+
+	//skygreen:新增ucenter底层函数定制:renameuser
+    function onrenameuser(){
+        $this->init_input();
+        $newusername = $this->input('newusername');
+        $oldusername = $this->input('oldusername');
+        $countUpdates=$_ENV['user']->renameuser($newusername,$oldusername);
+        return ($countUpdates>0)?true:false;
+    }
 
 	function onlogin() {
 		$this->init_input();

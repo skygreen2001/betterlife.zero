@@ -307,6 +307,12 @@ function uc_user_login($username, $password, $isuid = 0, $checkques = 0, $questi
 	return UC_CONNECT == 'mysql' ? $return : uc_unserialize($return);
 }
 
+//skygreen:新增ucenter底层函数定制:renameuser
+function uc_user_renameuser($newusername, $oldusername) {
+    $return = call_user_func(UC_API_FUNC, 'user', 'renameuser', array('newusername'=>$newusername, 'oldusername'=>$oldusername));
+    return UC_CONNECT == 'mysql' ? $return : uc_unserialize($return);
+}
+
 function uc_user_synlogin($uid) {
 	$uid = intval($uid);
 	if(@include UC_ROOT.'./data/cache/apps.php') {

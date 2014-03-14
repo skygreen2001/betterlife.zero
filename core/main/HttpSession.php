@@ -25,6 +25,7 @@ class HttpSession
 	 */
 	public static function isHave($key)
 	{
+		if (empty($_SESSION))self::init();
 		return isset($_SESSION[$key]);
 	}
 
@@ -121,7 +122,7 @@ class HttpSession
 	 */
 	public static function removeAll()
 	{
-		session_destroy();
+		session_unset();
 	}
 }
 ?>

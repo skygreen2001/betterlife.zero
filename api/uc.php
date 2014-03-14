@@ -128,7 +128,7 @@ class UcApp
 		}
 	
 		//note 同步登录 API 接口
-		obclean();
+		ob_clean();
 		header('P3P: CP="CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR"');
 	
 		$cookietime = 31536000;
@@ -169,7 +169,7 @@ class UcApp
 		}  
 		HttpSession::remove("user_id");	
 		//note 同步登出 API 接口
-		obclean();
+		ob_clean();
 		header('P3P: CP="CURa ADMa DEVa PSAo PSDo OUR BUS UNI PUR INT DEM STA PRE COM NAV OTC NOI DSP COR"');
 		clearcookie();
 	}
@@ -309,7 +309,7 @@ function ssetcookie($var, $value, $life=0)
 function clearcookie() 
 {
 	global $_SGLOBAL;
-	obclean();
+	ob_clean();
 	ssetcookie('auth', '', -86400 * 365);
 	$_SGLOBAL['supe_uid'] = 0;
 	$_SGLOBAL['supe_username'] = '';

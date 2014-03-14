@@ -135,6 +135,17 @@ class usermodel {
 		$this->db->query("INSERT INTO ".UC_DBTABLEPRE."members SET $sqladd username='$username', password='$password', email='$email', regip='$regip', regdate='".$this->base->time."', salt='$salt'");
 		$uid = $this->db->insert_id();
 		$this->db->query("INSERT INTO ".UC_DBTABLEPRE."memberfields SET uid='$uid'");
+
+		/**加入同步注册其他应用如Discuz！:http://www.ngro.org/tech/ucenter-synclogin-activation.html*/
+		// BEGIN
+		$this->db->query("INSERT INTO ".DISCUZ_DBTABLEPRE."member SET uid='$uid', username='$username', password='$password', email='$email', adminid='0', groupid='10', regdate='".$this->base->time."', credits='0', timeoffset='9999'");
+		$this->db->query("INSERT INTO ".DISCUZ_DBTABLEPRE."member_status SET uid='$uid', regip='$regip', lastip='$regip', lastvisit='".$this->base->time."', lastactivity='".$this->base->time."', lastpost='0', lastsendmail='0'");
+		$this->db->query("INSERT INTO ".DISCUZ_DBTABLEPRE."member_profile SET uid='$uid'");
+		$this->db->query("INSERT INTO ".DISCUZ_DBTABLEPRE."member_field_forum SET uid='$uid'");
+		$this->db->query("INSERT INTO ".DISCUZ_DBTABLEPRE."member_field_home SET uid='$uid'");
+		$this->db->query("INSERT INTO ".DISCUZ_DBTABLEPRE."member_count SET uid='$uid', extcredits1='0', extcredits2='0', extcredits3='0', extcredits4='0', extcredits5='0', extcredits6='0', extcredits7='0', extcredits8='0'");
+		// END
+
 		return $uid;
 	}
 
@@ -168,6 +179,13 @@ class usermodel {
 			return -7;
 		}
 	}
+
+    //skygreen:新增ucenter底层函数定制:renameuser
+    function renameuser($newusername,$oldusername)
+    {
+        $this->db->query("UPDATE ".UC_DBTABLEPRE."members SET username='$newusername' where username='$oldusername'");
+        return $this->db->affected_rows();
+    }
 
 	function delete_user($uidsarr) {
 		$uidsarr = (array)$uidsarr;
