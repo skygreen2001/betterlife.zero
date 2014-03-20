@@ -1,0 +1,16 @@
+﻿数据库原型设计：MysqlWorkBench
+代码原型      ：Betterlife框架的代码生成工具
+
+页面原型设计    ：Axure      [Visio]
+设计图到静态页面：Dreamweaver[Firework]
+
+中间件服务器：Apache
+部署工具：Wamp
+开发语言：Php
+数据库  ：Mysql
+
+
+流程：
+1.数据层：MysqlWorkBench->Mysql->Betterlife框架的代码生成工具->生成前端和后端代码
+2.表示层：Axure-〉Dreamweaver-〉静态标准Html页面
+3.逻辑层：整合数据层<=〉表示层

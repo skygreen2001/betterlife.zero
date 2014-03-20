@@ -4,12 +4,12 @@
 *.以下规范中定义的"_"是半角，不是全角。
 
 *.表名定义:库名缩写+“_”+目录名+"_"+类名[头字母小写]
-  如易乐团购的订单表：
-      库名缩写：ele
-      目录名：shop
-      类名：order
-     所以订单表名:ele_shop_order
-  表名最后一段不能命名为特殊关键字如new：如ele_brand_new
+  如乐活的订单表：
+      库名缩写：bb
+      目录名：core
+      类名：Blog
+     所以订单表名:bb_core_blog
+  表名最后一段不能命名为特殊关键字如new：如bb_core_new
 
 *.每张表需定义字段：
   标识    :类名[头字母小写]+“_”+"id"
@@ -17,23 +17,23 @@
   更新时间:updateTime
 
 *.标识列名定义为：类名[头字母小写]+“_”+"id"
-  如易乐团购的订单表：order_id
+  如乐活的博客表：blog_id
 
 *.标识列为自增长，AI列勾选。
 
 *.列类型为int时，默认值为0
 
-*.列名不能为name，最好加前缀，如商品表就为product_name。
+*.列名不能为name，最好加前缀，如博客表就为blog_name。
 
 *.枚举类型注释定义:
   枚举值:枚举值说明-枚举值英文名(或拼音名)
   每句之间以回车或者;分割
-  如订单表中的支付状态定义为：pay_status
+  如用户详情表中的性别定义为：sexType
   类型:enum('0','1','2')
-  支付状态
-	0:准备支付-ready
-	1:支付成功-succ
-	2:支付中-progress
+  性别
+	0:女-female
+	1:男-male
+	2:待确认-unknown
 
 *.updateTime默认值是CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 

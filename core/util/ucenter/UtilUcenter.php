@@ -119,7 +119,7 @@ class UtilUcenter extends Util
 	public static function synEdit($username ,$oldpassword ,$newpassword ,$emailnew)
 	{
 		self::init();
-		$ucresult = uc_user_edit($username ,$oldpassword ,$newpassword ,$emailnew);
+		$ucresult = uc_user_edit($username ,$oldpassword ,$newpassword ,$emailnew,true);
 
 		if ($ucresult == 1) {
 			return 'ok';

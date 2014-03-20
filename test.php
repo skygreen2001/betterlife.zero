@@ -1,6 +1,8 @@
 <?php
 require_once ("init.php");
+// UtilBarCode::upc_a("12207201213");
 // print_r(UtilDateTime::now(EnumDateTimeFORMAT::DATE,EnumDateTimeShow::TIME));
+
 // $user=User::get_by_id(1);
 // $userDetail=$user->userDetail;
 // $country=$userDetail->country_r;
@@ -12,15 +14,19 @@ require_once ("init.php");
 // print_r($city);
 // print_r($district);
 
-//$blog=Blog::get_one();
-//print_r($blog);
-/*$blogs=Blog::select('name,content');
-print_r($blogs);
-UtilBarCode::upc_a("12207201213");
+// $serverCache=Manager_Cache::singleton()->server(EnumCacheDriverType::REDIS);
+// $serverCache->TestRun();
+
+/**
+$blogs=Blog::select('blog_name,blog_content');
+print_r($blogs);                               
+
+$blog=Blog::get_one();
+print_r($blog);
 
 Blog::queryPage(0,10,
     array(
-        //"(content like '%关键字%' or content like '%公开课%')",
+        //"(blog_content like '%关键字%' or blog_content like '%公开课%')",
         "blog_id<4",
         "user_id"=>1
     ));
@@ -28,10 +34,7 @@ Blog::queryPage(0,10,
 $user=new User();
 $user->user_id=2;
 print_r($user->userDetail);
-
-print_r(User::get(array(username=> "like '%ad%'")));
-$serverCache=Manager_Cache::singleton()->server(EnumCacheDriverType::REDIS);
-$serverCache->TestRun();
+print_r(User::get(array(username=> "like '%ad%'")));            
 
 print_r(SystemService::doLibrarySelect(array("name"=>"m")));
 LogMe::log("我在想事情呢！等等我");
