@@ -1,4 +1,7 @@
 ### Better Life START ###
+Options -Indexes
+ErrorDocument 403 /
+ErrorDocument 404 /
 <IfModule mod_rewrite.c>
 #       RewriteEngine On
        RewriteCond $1 !^(index\.php|public|robots\.txt)
