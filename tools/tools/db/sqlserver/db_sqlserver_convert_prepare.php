@@ -17,10 +17,11 @@ foreach ($tableList as $tablename){
 		$fieldInfos[$tablename][$fieldname]["Field"]=$field["Field"];
 		$fieldInfos[$tablename][$fieldname]["Type"]=$field["Type"];
 		$fieldInfos[$tablename][$fieldname]["Comment"]=$field["Comment"];
+		$fieldInfos[$tablename][$fieldname]["Default"]=$field["Default"];
 	}
 }
 
-$tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
+$tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList();
 $filterTableColumns=array();
 if ($isComment) {
 	echo "1.列名头字母大写<br/>";
@@ -40,11 +41,11 @@ if ($isComment) {
 if ($isComment) {
 	echo str_repeat("*",40)."1.列名头字母大写".str_repeat("*",40)."<br/><br/>";
 }
-foreach ($fieldInfos as $tablename=>$fieldInfo){  
+foreach ($fieldInfos as $tablename=>$fieldInfo){
 	if ($isComment) {
 		echo "表名:$tablename<br/>";
 	}
-	
+
 	foreach ($fieldInfo as $fieldname=>$field){
 		$is_auto_increment=false;
 		$newwords=ucfirst($fieldname);
@@ -68,11 +69,16 @@ foreach ($fieldInfos as $tablename=>$fieldInfo){
 				$fname=ucfirst($fname);
 			}
 			$newwords=substr($newwords,0,$index)."_".$fname;
-		}		
+		}
+		if (contain($type,"timestamp")){
+            if (empty($field["Default"]))$default=" default 0 ";
+		}else $default=" ";
+
 		$comments=$fieldInfos[$tablename][$fieldname]["Comment"];
 		$comments=str_replace("\r","\\r",$comments);
-		$comments=str_replace("\n","\\n",$comments); 
-		echo "alter table $tablename change column $fieldname $newwords ".$type.$auto_increment." COMMENT '".$comments."';<br/>";
+		$comments=str_replace("\n","\\n",$comments);
+		$comments=str_replace("'","",$comments);
+		echo "alter table $tablename change column $fieldname $newwords ".$type.$auto_increment.$default." COMMENT '".$comments."';<br/>";
 	}
 }
 
@@ -95,7 +101,7 @@ function getClassname($tablename)
 if ($isComment) {
 	echo "<br/>".str_repeat("*",40)."2.表主键字段统一成ID".str_repeat("*",40)."<br/>";
 }
-foreach ($fieldInfos as $tablename=>$fieldInfo){  
+foreach ($fieldInfos as $tablename=>$fieldInfo){
 	if ($isComment) {
 		echo "表名:$tablename<br/>";
 	}
@@ -104,9 +110,9 @@ foreach ($fieldInfos as $tablename=>$fieldInfo){
 	$old_fieldname=$classname."_id";
 	$comments=$fieldInfos[$tablename][$old_fieldname]["Comment"];
 	$comments=str_replace("\r","\\r",$comments);
-	$comments=str_replace("\n","\\n",$comments); 
+	$comments=str_replace("\n","\\n",$comments);
 	echo "alter table $tablename change column $old_fieldname ID ".$fieldInfos[$tablename][$old_fieldname]["Type"]." auto_increment COMMENT '".$comments."';<br/>";
-	// if (!Manager_Db::newInstance()->dbinfo()->hasUnique($tablename,array("ID",$old_fieldname))){ 
+	// if (!Manager_Db::newInstance()->dbinfo()->hasUnique($tablename,array("ID",$old_fieldname))){
 	// 	echo "alter table $tablename add unique(ID);<br/>";
 	// }
 }
@@ -129,10 +135,15 @@ if ($isComment) {
 }
 
 
-foreach ($fieldInfos as $tablename=>$fieldInfo){  
+foreach ($fieldInfos as $tablename=>$fieldInfo){
 	foreach ($fieldInfo as $fieldname=>$field){
 		$new_table_name=getClassname($tablename);
 		$ufieldname=strtoupper($fieldname);
+
+		$new_table_names=strtoupper($new_table_name);
+		if (contain($mysql_keywords,",".$new_table_names.",")){
+			$new_table_name=$new_table_name."s";
+		}
 		if($ufieldname=="COMMITTIME"){
 			echo "update $new_table_name set $fieldname = now();<br/>";
 		}
