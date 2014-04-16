@@ -131,7 +131,7 @@ foreach ($tableList as $tablename){
 }
 
 if ($isComment) {
-	echo "5.初始化commitTime<br/>";
+	echo "<br/>".str_repeat("*",40)."5.初始化commitTime".str_repeat("*",40)."<br/>";
 }
 
 
