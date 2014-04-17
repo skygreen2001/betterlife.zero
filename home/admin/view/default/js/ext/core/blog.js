@@ -71,9 +71,7 @@ Bb.Blog.Store = {
 				{name: 'user_id',type: 'int'},
 				{name: 'username',type: 'string'},
 				{name: 'blog_name',type: 'string'},
-				{name: 'blog_content',type: 'string'},
-				{name: 'commitTime',type: 'date',dateFormat:'Y-m-d H:i:s'},
-				{name: 'updateTime',type: 'date',dateFormat:'Y-m-d H:i:s'}
+				{name: 'blog_content',type: 'string'}
 			]}
 		),
 		writer: new Ext.data.JsonWriter({
@@ -90,7 +88,7 @@ Bb.Blog.Store = {
 	/**
 	 * 用户
 	 */
-	userStore : new Ext.data.Store({
+	userStoreForCombo : new Ext.data.Store({
 		proxy: new Ext.data.HttpProxy({
 			url: 'home/admin/src/httpdata/user.php'
 		}),
@@ -113,14 +111,12 @@ Bb.Blog.Store = {
 			successProperty: 'success',
 			root: 'data',remoteSort: true,
 			fields : [
-					{name: 'comment_id',type: 'int'},
-					{name: 'user_id',type: 'int'},
-					{name: 'username',type: 'string'},
-					{name: 'comment',type: 'string'},
-					{name: 'blog_id',type: 'int'},
-					{name: 'blog_name',type: 'string'},
-					{name: 'commitTime',type: 'date',dateFormat:'Y-m-d H:i:s'},
-					{name: 'updateTime',type: 'date',dateFormat:'Y-m-d H:i:s'}
+				{name: 'comment_id',type: 'int'},
+				{name: 'user_id',type: 'int'},
+				{name: 'username',type: 'string'},
+				{name: 'comment',type: 'string'},
+				{name: 'blog_id',type: 'int'},
+				{name: 'blog_name',type: 'string'}
 			]}
 		),
 		writer: new Ext.data.JsonWriter({
@@ -182,7 +178,7 @@ Bb.Blog.View={
 							{xtype: 'hidden',name : 'user_id',ref:'../user_id'},
 							{
 								 fieldLabel : '用户',xtype: 'combo',name : 'username',ref : '../username',
-								 store:Bb.Blog.Store.userStore,emptyText: '请选择用户',itemSelector: 'div.search-item',
+								 store:Bb.Blog.Store.userStoreForCombo,emptyText: '请选择用户',itemSelector: 'div.search-item',
 								 loadingText: '查询中...',width: 570, pageSize:Bb.Blog.Config.PageSize,
 								 displayField:'username',grid:this,
 								 mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,
@@ -410,21 +406,21 @@ Bb.Blog.View={
 			defaults : {autoScroll : true},
 			listeners:{
 				beforehide:function(){
-				this.editForm.form.getEl().dom.reset();
+					this.editForm.form.getEl().dom.reset();
 				},
-							afterrender:function(){
-								switch (Bb.Blog.Config.OnlineEditor)
-								{
-									case 2:
-										Bb.Blog.View.CommentView.EditWindow.KindEditor_comment = KindEditor.create('textarea[name="comment"]',{width:'98%',minHeith:'350px', filterMode:true});
-										break
-									case 3:
-										pageInit_comment();
-										break
-									default:
-										ckeditor_replace_comment();
-								}
-							}
+				afterrender:function(){
+					switch (Bb.Blog.Config.OnlineEditor)
+					{
+						case 2:
+							Bb.Blog.View.CommentView.EditWindow.KindEditor_comment = KindEditor.create('textarea[name="comment"]',{width:'98%',minHeith:'350px', filterMode:true});
+							break
+						case 3:
+							pageInit_comment();
+							break
+						default:
+							ckeditor_replace_comment();
+					}
+				}
 			},
 			items : [
 				new Ext.form.FormPanel({
@@ -436,83 +432,83 @@ Bb.Blog.View={
 					xtype : 'textfield',anchor:'98%'
 				},
 				items : [
-									{xtype: 'hidden',name : 'comment_id',ref:'../comment_id'},
-									{xtype: 'hidden',name : 'user_id',ref:'../user_id'},
-									{
-										 fieldLabel : '评论者',xtype: 'combo',name : 'username',ref : '../username',
-										 store:Bb.Blog.Store.userStoreForCombo,emptyText: '请选择评论者',itemSelector: 'div.search-item',
-										 loadingText: '查询中...',width: 570, pageSize:Bb.Blog.Config.PageSize,
-										 displayField:'username',grid:this,
-										 mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,
-										 forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,
-										 tpl:new Ext.XTemplate(
-											 '<tpl for="."><div class="search-item">',
-												 '<h3>{username}</h3>',
-											 '</div></tpl>'
-										 ),
-										 listeners:{
-											 'beforequery': function(event){delete event.combo.lastQuery;}
-										 },
-										 onSelect:function(record,index){
-											 if(this.fireEvent('beforeselect', this, record, index) !== false){
-												this.grid.user_id.setValue(record.data.user_id);
-												this.grid.username.setValue(record.data.username);
-												this.collapse();
-											 }
-										 }
-									},
-									{fieldLabel : '评论',name : 'comment',xtype : 'textarea',id:'comment',ref:'comment'},
-									{xtype: 'hidden',name : 'blog_id',ref:'../blog_id'}
+					{xtype: 'hidden',name : 'comment_id',ref:'../comment_id'},
+					{xtype: 'hidden',name : 'user_id',ref:'../user_id'},
+					{
+						 fieldLabel : '评论者',xtype: 'combo',name : 'username',ref : '../username',
+						 store:Bb.Blog.Store.userStoreForCombo,emptyText: '请选择评论者',itemSelector: 'div.search-item',
+						 loadingText: '查询中...',width: 570, pageSize:Bb.Blog.Config.PageSize,
+						 displayField:'username',grid:this,
+						 mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,
+						 forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,
+						 tpl:new Ext.XTemplate(
+							 '<tpl for="."><div class="search-item">',
+								 '<h3>{username}</h3>',
+							 '</div></tpl>'
+						 ),
+						 listeners:{
+							 'beforequery': function(event){delete event.combo.lastQuery;}
+						 },
+						 onSelect:function(record,index){
+							 if(this.fireEvent('beforeselect', this, record, index) !== false){
+								this.grid.user_id.setValue(record.data.user_id);
+								this.grid.username.setValue(record.data.username);
+								this.collapse();
+							 }
+						 }
+					},
+					{fieldLabel : '评论',name : 'comment',xtype : 'textarea',id:'comment',ref:'comment'},
+					{xtype: 'hidden',name : 'blog_id',ref:'../blog_id'}
 				]
 				})
 			],
 			buttons : [{
 				text: "",ref : "../saveBtn",scope:this,
 				handler : function() {
-								switch (Bb.Blog.Config.OnlineEditor)
-								{
-									case 2:
-										if (Bb.Blog.View.CommentView.EditWindow.KindEditor_comment)this.editForm.comment.setValue(Bb.Blog.View.CommentView.EditWindow.KindEditor_comment.html());
-										break
-									case 3:
-										if (xhEditor_comment)this.editForm.comment.setValue(xhEditor_comment.getSource());
-										break
-									default:
-										if (CKEDITOR.instances.comment) this.editForm.comment.setValue(CKEDITOR.instances.comment.getData());
-								}
+					switch (Bb.Blog.Config.OnlineEditor)
+					{
+						case 2:
+							if (Bb.Blog.View.CommentView.EditWindow.KindEditor_comment)this.editForm.comment.setValue(Bb.Blog.View.CommentView.EditWindow.KindEditor_comment.html());
+							break
+						case 3:
+							if (xhEditor_comment)this.editForm.comment.setValue(xhEditor_comment.getSource());
+							break
+						default:
+							if (CKEDITOR.instances.comment) this.editForm.comment.setValue(CKEDITOR.instances.comment.getData());
+					}
 
-				if (!this.editForm.getForm().isValid()) {
-					return;
-				}
-				editWindow=this;
-				if (this.savetype==0){
-					this.editForm.api.submit=ExtServiceComment.save;
-					this.editForm.getForm().submit({
-					success : function(form, action) {
-						Ext.Msg.alert("提示", "保存成功！");
-						Bb.Blog.View.Running.commentGrid.doSelectComment();
-						form.reset();
-						editWindow.hide();
-					},
-					failure : function(form, response) {
-						Ext.Msg.show({title:'提示',width:350,buttons: {yes: '确定'},msg:response.result.msg});
+					if (!this.editForm.getForm().isValid()) {
+						return;
 					}
-					});
-				}else{
-					this.editForm.api.submit=ExtServiceComment.update;
-					this.editForm.getForm().submit({
-					success : function(form, action) {
-						Ext.Msg.show({title:'提示',msg: '修改成功！',buttons: {yes: '确定'},fn: function(){
-						Bb.Blog.View.Running.commentGrid.bottomToolbar.doRefresh();
-						}});
-						form.reset();
-						editWindow.hide();
-					},
-					failure : function(form, response) {
-						Ext.Msg.show({title:'提示',width:350,buttons: {yes: '确定'},msg:response.result.msg});
+					editWindow=this;
+					if (this.savetype==0){
+						this.editForm.api.submit=ExtServiceComment.save;
+						this.editForm.getForm().submit({
+							success : function(form, action) {
+								Ext.Msg.alert("提示", "保存成功！");
+								Bb.Blog.View.Running.commentGrid.doSelectComment();
+								form.reset();
+								editWindow.hide();
+							},
+							failure : function(form, response) {
+								Ext.Msg.show({title:'提示',width:350,buttons: {yes: '确定'},msg:response.result.msg});
+							}
+						});
+					}else{
+						this.editForm.api.submit=ExtServiceComment.update;
+						this.editForm.getForm().submit({
+						success : function(form, action) {
+							Ext.Msg.show({title:'提示',msg: '修改成功！',buttons: {yes: '确定'},fn: function(){
+							Bb.Blog.View.Running.commentGrid.bottomToolbar.doRefresh();
+							}});
+							form.reset();
+							editWindow.hide();
+						},
+						failure : function(form, response) {
+							Ext.Msg.show({title:'提示',width:350,buttons: {yes: '确定'},msg:response.result.msg});
+						}
+						});
 					}
-					});
-				}
 				}
 			}, {
 				text : "取 消",scope:this,
@@ -523,18 +519,17 @@ Bb.Blog.View={
 				text : "重 置",ref:'../resetBtn',scope:this,
 				handler : function() {
 				this.editForm.form.loadRecord(Bb.Blog.View.Running.commentGrid.getSelectionModel().getSelected());
-								switch (Bb.Blog.Config.OnlineEditor)
-								{
-									case 2:
-										if (Bb.Blog.View.CommentView.EditWindow.KindEditor_comment) Bb.Blog.View.CommentView.EditWindow.KindEditor_comment.html(Bb.Blog.View.Running.commentGrid.getSelectionModel().getSelected().data.comment);
-										break
-									case 3:
-										break
-									default:
-										if (CKEDITOR.instances.comment) CKEDITOR.instances.comment.setData(Bb.Blog.View.Running.commentGrid.getSelectionModel().getSelected().data.comment);
-								}
-
+				switch (Bb.Blog.Config.OnlineEditor)
+				{
+					case 2:
+						if (Bb.Blog.View.CommentView.EditWindow.KindEditor_comment) Bb.Blog.View.CommentView.EditWindow.KindEditor_comment.html(Bb.Blog.View.Running.commentGrid.getSelectionModel().getSelected().data.comment);
+						break
+					case 3:
+						break
+					default:
+						if (CKEDITOR.instances.comment) CKEDITOR.instances.comment.setData(Bb.Blog.View.Running.commentGrid.getSelectionModel().getSelected().data.comment);
 				}
+			}
 			}]
 			}, config);
 			Bb.Blog.View.CommentView.EditWindow.superclass.constructor.call(this, config);
@@ -559,10 +554,10 @@ Bb.Blog.View={
 				width:120,sortable : true
 				},
 				columns : [
-								this.sm,
-								{header : '标识',dataIndex : 'comment_id',hidden:true},
-								{header : '评论者',dataIndex : 'username'},
-								{header : '评论',dataIndex : 'comment'}
+					this.sm,
+					{header : '标识',dataIndex : 'comment_id',hidden:true},
+					{header : '评论者',dataIndex : 'username'},
+					{header : '评论',dataIndex : 'comment'}
 				]
 			}),
 			tbar : {
@@ -609,26 +604,26 @@ Bb.Blog.View={
 				{xtype:'numberfield', value:Bb.Blog.Config.PageSize,minValue:1,width:35,style:'text-align:center',allowBlank: false,
 					listeners:
 					{
-					change:function(Field, newValue, oldValue){
-						var num = parseInt(newValue);
-						if (isNaN(num) || !num || num<1)
-						{
-						num = Bb.Blog.Config.PageSize;
-						Field.setValue(num);
+						change:function(Field, newValue, oldValue){
+							var num = parseInt(newValue);
+							if (isNaN(num) || !num || num<1)
+							{
+							num = Bb.Blog.Config.PageSize;
+							Field.setValue(num);
+							}
+							this.ownerCt.pageSize= num;
+							Bb.Blog.Config.PageSize = num;
+							this.ownerCt.ownerCt.doSelectComment();
+						},
+						specialKey :function(field,e){
+							if (e.getKey() == Ext.EventObject.ENTER){
+							var num = parseInt(field.getValue());
+							if (isNaN(num) || !num || num<1)num = Bb.Blog.Config.PageSize;
+							this.ownerCt.pageSize= num;
+							Bb.Blog.Config.PageSize = num;
+							this.ownerCt.ownerCt.doSelectComment();
+							}
 						}
-						this.ownerCt.pageSize= num;
-						Bb.Blog.Config.PageSize = num;
-						this.ownerCt.ownerCt.doSelectComment();
-					},
-					specialKey :function(field,e){
-						if (e.getKey() == Ext.EventObject.ENTER){
-						var num = parseInt(field.getValue());
-						if (isNaN(num) || !num || num<1)num = Bb.Blog.Config.PageSize;
-						this.ownerCt.pageSize= num;
-						Bb.Blog.Config.PageSize = num;
-						this.ownerCt.ownerCt.doSelectComment();
-						}
-					}
 					}
 				},{xtype:'label', text: '个'}
 				]
@@ -647,11 +642,11 @@ Bb.Blog.View={
 		 */
 		sm : new Ext.grid.CheckboxSelectionModel({
 			listeners : {
-			selectionchange:function(sm) {
-				// 判断删除和更新按钮是否可以激活
-				this.grid.btnRemove.setDisabled(sm.getCount() < 1);
-				this.grid.btnUpdate.setDisabled(sm.getCount() != 1);
-			}
+				selectionchange:function(sm) {
+					// 判断删除和更新按钮是否可以激活
+					this.grid.btnRemove.setDisabled(sm.getCount() < 1);
+					this.grid.btnUpdate.setDisabled(sm.getCount() != 1);
+				}
 			}
 		}),
 		/**
@@ -688,11 +683,11 @@ Bb.Blog.View={
 		 */
 		onReverseSelect:function() {
 			for (var i = this.getView().getRows().length - 1; i >= 0; i--) {
-			if (this.sm.isSelected(i)) {
-				this.sm.deselectRow(i);
-			}else {
-				this.sm.selectRow(i, true);
-			}
+				if (this.sm.isSelected(i)) {
+					this.sm.deselectRow(i);
+				}else {
+					this.sm.selectRow(i, true);
+				}
 			}
 		},
 		/**
@@ -700,7 +695,7 @@ Bb.Blog.View={
 		 */
 		addComment : function(){
 			if (Bb.Blog.View.CommentView.edit_window==null){
-			Bb.Blog.View.CommentView.edit_window=new Bb.Blog.View.CommentView.EditWindow();
+				Bb.Blog.View.CommentView.edit_window=new Bb.Blog.View.CommentView.EditWindow();
 			}
 			Bb.Blog.View.CommentView.edit_window.resetBtn.setVisible(false);
 			Bb.Blog.View.CommentView.edit_window.saveBtn.setText('保 存');
@@ -709,16 +704,16 @@ Bb.Blog.View={
 			Bb.Blog.View.CommentView.edit_window.comment_id.setValue("");
 			var company_id = Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.blog_id;
 			Bb.Blog.View.CommentView.edit_window.blog_id.setValue(company_id);
-					switch (Bb.Blog.Config.OnlineEditor)
-					{
-						case 2:
-							if (Bb.Blog.View.CommentView.EditWindow.KindEditor_comment) Bb.Blog.View.CommentView.EditWindow.KindEditor_comment.html("");
-							break
-						case 3:
-							break
-						default:
-							if (CKEDITOR.instances.comment) CKEDITOR.instances.comment.setData("");
-					}
+			switch (Bb.Blog.Config.OnlineEditor)
+			{
+				case 2:
+					if (Bb.Blog.View.CommentView.EditWindow.KindEditor_comment) Bb.Blog.View.CommentView.EditWindow.KindEditor_comment.html("");
+					break
+				case 3:
+					break
+				default:
+					if (CKEDITOR.instances.comment) CKEDITOR.instances.comment.setData("");
+			}
 
 			Bb.Blog.View.CommentView.edit_window.show();
 			Bb.Blog.View.CommentView.edit_window.maximize();
@@ -728,24 +723,24 @@ Bb.Blog.View={
 		 */
 		updateComment : function() {
 			if (Bb.Blog.View.CommentView.edit_window==null){
-			Bb.Blog.View.CommentView.edit_window=new Bb.Blog.View.CommentView.EditWindow();
+				Bb.Blog.View.CommentView.edit_window=new Bb.Blog.View.CommentView.EditWindow();
 			}
 			Bb.Blog.View.CommentView.edit_window.saveBtn.setText('修 改');
 			Bb.Blog.View.CommentView.edit_window.resetBtn.setVisible(true);
 			Bb.Blog.View.CommentView.edit_window.setTitle('修改评论');
 			Bb.Blog.View.CommentView.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
 			Bb.Blog.View.CommentView.edit_window.savetype=1;
-					switch (Bb.Blog.Config.OnlineEditor)
-					{
-						case 2:
-							if (Bb.Blog.View.CommentView.EditWindow.KindEditor_comment) Bb.Blog.View.CommentView.EditWindow.KindEditor_comment.html(this.getSelectionModel().getSelected().data.comment);
-							break
-						case 3:
-							if (xhEditor_comment)xhEditor_comment.setSource(this.getSelectionModel().getSelected().data.comment);
-							break
-						default:
-							if (CKEDITOR.instances.comment) CKEDITOR.instances.comment.setData(this.getSelectionModel().getSelected().data.comment);
-					}
+			switch (Bb.Blog.Config.OnlineEditor)
+			{
+				case 2:
+					if (Bb.Blog.View.CommentView.EditWindow.KindEditor_comment) Bb.Blog.View.CommentView.EditWindow.KindEditor_comment.html(this.getSelectionModel().getSelected().data.comment);
+					break
+				case 3:
+					if (xhEditor_comment)xhEditor_comment.setSource(this.getSelectionModel().getSelected().data.comment);
+					break
+				default:
+					if (CKEDITOR.instances.comment) CKEDITOR.instances.comment.setData(this.getSelectionModel().getSelected().data.comment);
+			}
 
 			Bb.Blog.View.CommentView.edit_window.show();
 			Bb.Blog.View.CommentView.edit_window.maximize();
@@ -801,46 +796,46 @@ Bb.Blog.View={
 					})
 				],
 				buttons : [{
-						text : '上 传',
-						scope:this,
-						handler : function() {
-							uploadWindow           =this;
-							validationExpression   =/([\u4E00-\u9FA5]|\w)+(.xlsx|.XLSX|.xls|.XLS)$/;/**允许中文名*/
-							var isValidExcelFormat = new RegExp(validationExpression);
-							var result             = isValidExcelFormat.test(this.uploadForm.upload_file.getValue());
-							if (!result){
-								Ext.Msg.alert('提示', '请上传Excel文件，后缀名为xls或者xlsx！');
-								return;
-							}
-							if (this.uploadForm.getForm().isValid()) {
-								Ext.Msg.show({
-									title : '请等待',msg : '文件正在上传中，请稍后...',
-									animEl : 'loading',icon : Ext.Msg.WARNING,
-									closable : true,progress : true,progressText : '',width : 300
-								});
-								this.uploadForm.getForm().submit({
-									url : 'index.php?go=admin.upload.uploadBlog',
-									success : function(form, action) {
-										Ext.Msg.alert('成功', '上传成功');
-										uploadWindow.hide();
-										uploadWindow.uploadForm.upload_file.setValue('');
-										Bb.Blog.View.Running.blogGrid.doSelectBlog();
-									},
-									failure : function(form, action) {
-										Ext.Msg.alert('错误', action.result.msg);
-									}
-								});
-							}
+					text : '上 传',
+					scope:this,
+					handler : function() {
+						uploadWindow           =this;
+						validationExpression   =/([\u4E00-\u9FA5]|\w)+(.xlsx|.XLSX|.xls|.XLS)$/;/**允许中文名*/
+						var isValidExcelFormat = new RegExp(validationExpression);
+						var result             = isValidExcelFormat.test(this.uploadForm.upload_file.getValue());
+						if (!result){
+							Ext.Msg.alert('提示', '请上传Excel文件，后缀名为xls或者xlsx！');
+							return;
 						}
-					},{
-						text : '取 消',
-						scope:this,
-						handler : function() {
-							this.uploadForm.upload_file.setValue('');
-							this.hide();
+						if (this.uploadForm.getForm().isValid()) {
+							Ext.Msg.show({
+								title : '请等待',msg : '文件正在上传中，请稍后...',
+								animEl : 'loading',icon : Ext.Msg.WARNING,
+								closable : true,progress : true,progressText : '',width : 300
+							});
+							this.uploadForm.getForm().submit({
+								url : 'index.php?go=admin.upload.uploadBlog',
+								success : function(form, action) {
+									Ext.Msg.alert('成功', '上传成功');
+									uploadWindow.hide();
+									uploadWindow.uploadForm.upload_file.setValue('');
+									Bb.Blog.View.Running.blogGrid.doSelectBlog();
+								},
+								failure : function(form, action) {
+									Ext.Msg.alert('错误', action.result.msg);
+								}
+							});
 						}
-					}]
-				}, config);
+					}
+				},{
+					text : '取 消',
+					scope:this,
+					handler : function() {
+						this.uploadForm.upload_file.setValue('');
+						this.hide();
+					}
+				}
+			]}, config);
 			Bb.Blog.View.UploadWindow.superclass.constructor.call(this, config);
 		}
 	}),
@@ -890,16 +885,16 @@ Bb.Blog.View={
 							},
 							items : [
 								'用户 ','&nbsp;&nbsp;',{ref: '../buser_id',xtype: 'combo',
-									 store:Bb.Blog.Store.userStore,hiddenname : 'user_id',
+									 store:Bb.Blog.Store.userStoreForCombo,hiddenname : 'user_id',
 									 emptyText: '请选择用户',itemSelector: 'div.search-item',
 									 loadingText: '查询中...',width:280,pageSize:Bb.Blog.Config.PageSize,
 									 displayField:'username',valueField:'user_id',
 									 mode: 'remote',editable:true,minChars: 1,autoSelect :true,typeAhead: false,
 									 forceSelection: true,triggerAction: 'all',resizable:true,selectOnFocus:true,
 									 tpl:new Ext.XTemplate(
-												'<tpl for="."><div class="search-item">',
-													'<h3>{username}</h3>',
-												'</div></tpl>'
+										'<tpl for="."><div class="search-item">',
+											'<h3>{username}</h3>',
+										'</div></tpl>'
 									 )
 								},'&nbsp;&nbsp;',
 								'博客标题 ','&nbsp;&nbsp;',{ref: '../bblog_name'},'&nbsp;&nbsp;',
@@ -969,8 +964,9 @@ Bb.Blog.View={
 											{text:'右侧',group:'mlayout',checked:false,iconCls:'view-right',scope:this,handler:function(){this.onUpDown(4)}},
 											{text:'隐藏',group:'mlayout',checked:false,iconCls:'view-hide',scope:this,handler:function(){this.hideBlog();Bb.Blog.Config.View.IsShow=0;}},'-',
 											{text: '固定',ref:'mBind',checked: true,scope:this,checkHandler:function(item, checked){this.onBindGrid(item, checked);Bb.Blog.Cookie.set('View.IsFix',Bb.Blog.Config.View.IsFix);}}
-										]}
-								},'-']}
+									]}
+							},'-']
+						}
 					)]
 				},
 				bbar: new Ext.PagingToolbar({
@@ -981,13 +977,13 @@ Bb.Blog.View={
 					emptyMsg: "无显示数据",
 					listeners:{
 						change:function(thisbar,pagedata){
-						if (Bb.Blog.Viewport){
-							if (Bb.Blog.Config.View.IsShow==1){
-							Bb.Blog.View.IsSelectView=1;
+							if (Bb.Blog.Viewport){
+								if (Bb.Blog.Config.View.IsShow==1){
+								Bb.Blog.View.IsSelectView=1;
+								}
+								this.ownerCt.hideBlog();
+								Bb.Blog.Config.View.IsShow=0;
 							}
-							this.ownerCt.hideBlog();
-							Bb.Blog.Config.View.IsShow=0;
-						}
 						}
 					},
 					items: [
