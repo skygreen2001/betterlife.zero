@@ -88,7 +88,8 @@ class AutoCode extends Object
 			$ignoreTables=array();
 			foreach (self::$tableList as $tablename){
 				$classname=self::getClassname($tablename);
-				if (!contain($tablename,Config_Db::$table_prefix)){
+				$prefix = Config_Db::$table_prefix;
+				if ((!empty($prefix))&&(!contain($tablename,$prefix))){
 					$ignoreTables[]=$tablename;
 					continue;
 				}
@@ -435,7 +436,7 @@ class AutoCode extends Object
 	protected static function isNotColumnKeywork($fieldname)
 	{
 		$fieldname=strtoupper($fieldname);
-		if ($fieldname=="ID"||$fieldname=="COMMITTIME"||$fieldname=="UPDATETIME"){
+		if ($fieldname=="COMMITTIME"||$fieldname=="UPDATETIME"){
 			return false;
 		}else{
 			return true;
