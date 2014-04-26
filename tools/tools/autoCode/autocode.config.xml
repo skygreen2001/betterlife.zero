@@ -21,7 +21,7 @@
 			<condition>username</condition>
 		</conditions>
 		<relationShows>
-			<show local_key="department_id" relation_class="Department">department_name</show>
+			<show local_key="Department_ID" relation_class="Department">department_name</show>
 		</relationShows>
 		<belong_has_one>
 			<relationclass name="Department">department</relationclass>
