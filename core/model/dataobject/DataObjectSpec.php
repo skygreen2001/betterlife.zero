@@ -93,11 +93,11 @@ class EnumColumnNameDefault extends Enum
 	/**
 	 * 数据创建的时间，当没有updateTime时，其亦代表数据最后更新的时间
 	 */
-	const COMMITTIME="commitTime";
+	const COMMITTIME="CommitTime";
 	/**
 	 * 数据最后更新的时间
 	 */
-	const UPDATETIME="updateTime";
+	const UPDATETIME="UpdateTime";
 }
 
 /**

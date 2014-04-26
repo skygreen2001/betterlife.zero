@@ -377,14 +377,14 @@ class AutoCodeDomain extends AutoCode
 
 	/**
 	 * 不符合规范的表定义需要用规格在数据文件里进行说明
-	 * 1.移除默认字段:commitTime,updateTime
+	 * 1.移除默认字段:CommitTime,UpdateTime
 	 * @param array $fieldInfo 表列信息列表
 	 * @param string $tablename 表名称
 	 */
 	private static function domainDataobjectSpec($fieldInfo,$tablename)
 	{
 		$result="";
-		$table_keyfield=array("commitTime","updateTime");
+		$table_keyfield=array("CommitTime","UpdateTime");
 		$removefields=array();
 		foreach ($table_keyfield as $keyfield) {
 			if (!array_key_exists($keyfield,$fieldInfo)){

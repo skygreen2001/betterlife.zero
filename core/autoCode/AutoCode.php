@@ -522,11 +522,19 @@ class AutoCode extends Object
 	 * 根据类名判断是不是多对多关系，存在中间表表名
 	 * @param string $classname 数据对象类名
 	 */
-	protected static function isMany2ManyByClassname($classname)
+	protected static function isMany2ManyByClassname($classname,$comment,$fields)
 	{
 		$tablename=self::getTablename($classname);
-		if (contain($tablename,Config_Db::TABLENAME_RELATION."_")){
-			return true;
+        $comment=self::$tableInfoList[$tablename]["Comment"];
+        $fields=self::$fieldInfos[$tablename];
+		if (strlen($tablename)>=8){
+            if (contain($comment,"关系表")){
+			    $count=0;
+                foreach ($fields as $field_name=>$vlaue) {
+                    if (contain($field_name,"_ID"))$count+=1;
+                }
+                if ($count>=2)return true;
+            }
 		}
 		return false;
 	}
@@ -537,10 +545,11 @@ class AutoCode extends Object
 	 */
 	protected static function isMany2ManyShowHasMany($classname)
 	{
-		if (self::isMany2ManyByClassname($classname))
+        $isMany2ManyByClassname=self::isMany2ManyByClassname($classname);
+		if ($isMany2ManyByClassname)
 		{
 			$fieldInfo=self::$fieldInfos[self::getTablename($classname)];
-			unset($fieldInfo['updateTime'],$fieldInfo['commitTime']);
+			unset($fieldInfo['UpdateTime'],$fieldInfo['CommitTime']);
 			$realId=DataObjectSpec::getRealIDColumnName($classname);
 			unset($fieldInfo[$realId]);
 			if (count($fieldInfo)==2)return false;

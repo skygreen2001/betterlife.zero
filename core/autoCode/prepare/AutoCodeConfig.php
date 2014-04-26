@@ -38,6 +38,7 @@ class AutoCodeConfig extends AutoCode
         self::init();
         foreach (self::$fieldInfos as $tablename=>$fieldInfo){
             $classname=self::getClassname($tablename);
+            if (self::isMany2ManyByClassname($classname))continue;
             $current_class_config=array(
                 '@attributes' => array(
                     "name"=>$classname
@@ -68,10 +69,10 @@ class AutoCodeConfig extends AutoCode
             self::$table_key_map[$classname]=key(self::$config_classes["class"]);
         }
 
-
         $relation_keys=array("has_one","belong_has_one","has_many","many_many","belongs_many_many");
         foreach (self::$fieldInfos as $tablename=>$fieldInfo){
             $classname=self::getClassname($tablename);
+            if (self::isMany2ManyByClassname($classname))continue;
             foreach ($relation_keys as  $relation_key) {
                 self::$config_classes["class"][self::$table_key_map[$classname]][$relation_key]=array(
                 );
@@ -79,6 +80,7 @@ class AutoCodeConfig extends AutoCode
         }
         foreach (self::$fieldInfos as $tablename=>$fieldInfo){
             $classname=self::getClassname($tablename);
+            if (self::isMany2ManyByClassname($classname))continue;
             $current_class_config= self::$config_classes["class"][self::$table_key_map[$classname]];
             foreach ($relation_keys as  $relation_key) {
                 $relation_fives[$relation_key]=$current_class_config[$relation_key];
@@ -129,18 +131,18 @@ class AutoCodeConfig extends AutoCode
             if (!self::isNotColumnKeywork($fieldname))continue;
             if ($fieldname==self::keyIDColumn($classname))continue;
             if (!empty($showfieldname)){
-                if ((!in_array($fieldname,$exists_condition))&&contains($fieldname,array("name","title"))&&($fieldname!=$showfieldname)&&(!contain($fieldname,"_id"))){
+                if ((!in_array($fieldname,$exists_condition))&&contains($fieldname,array("Name","Title"))&&($fieldname!=$showfieldname)&&(!contain($fieldname,"_ID"))){
                     $conditions[]=array("@value"=>$fieldname);
                     $exists_condition[]=$fieldname;
                 }
 
                 if (count($conditions)<self::$count_condition){
-                    if ((!in_array($fieldname,$exists_condition))&&contains($fieldname,array("code","_no","status","type"))&&(!contain($fieldname,"_id"))){
+                    if ((!in_array($fieldname,$exists_condition))&&contains($fieldname,array("Code","_no","Status","Type"))&&(!contain($fieldname,"_ID"))){
                         $conditions[]=array("@value"=>$fieldname);
                         $exists_condition[]=$fieldname;
                     }
-                    if (contain($fieldname,"_id")&&(!contain($fieldname,"parent_id"))){
-                        $relation_classname=str_replace("_id", "", $fieldname);
+                    if (contain($fieldname,"_ID")&&(!contain($fieldname,"Parent_ID"))){
+                        $relation_classname=str_replace("_ID", "", $fieldname);
                         $relation_classname{0}=strtoupper($relation_classname{0});
                         $relation_class=null;
                         if (class_exists($relation_classname)) {
@@ -180,8 +182,8 @@ class AutoCodeConfig extends AutoCode
         {
             if (!self::isNotColumnKeywork($fieldname))continue;
             if ($fieldname==self::keyIDColumn($classname))continue;
-            if (contain($fieldname,"_id")&&(!contain($fieldname,"parent_id"))){
-                $relation_classname=str_replace("_id", "", $fieldname);
+            if (contain($fieldname,"_ID")&&(!contain($fieldname,"parent_ID"))){
+                $relation_classname=str_replace("_ID", "", $fieldname);
                 $relation_classname{0}=strtoupper($relation_classname{0});
                 $relation_class=null;
                 if (class_exists($relation_classname)) {
@@ -215,16 +217,16 @@ class AutoCodeConfig extends AutoCode
             if ($fieldname==self::keyIDColumn($classname))continue;
 
             $realId=DataObjectSpec::getRealIDColumnName($classname);
-            if (contain($fieldname,"_id")&&(!contain($fieldname,"parent_id"))){
-                $relation_classname=str_replace("_id", "", $fieldname);
+            if (contain($fieldname,"_ID")&&(!contain($fieldname,"Parent_ID"))){
+                $relation_classname=str_replace("_ID", "", $fieldname);
                 $relation_classname{0}=strtoupper($relation_classname{0});
                 $relation_class=null;
                 if (class_exists($relation_classname)) {
                     $relation_class=new $relation_classname();
                 }
                 if ($relation_class instanceof DataObject){
-                    //belong_has_one:[当前表有归属表的标识，归属表没有当前表的标识]
-                    if (!array_key_exists($realId, $relation_class))
+                    //belong_has_one:[当前表有归属表的标识，归属表没有当前表的类名+"_ID"]
+                    if (!array_key_exists($classname."_ID", $relation_class))
                     {
                         $instance_name=$relation_classname;
                         $instance_name{0}=strtolower($instance_name);
@@ -289,7 +291,7 @@ class AutoCodeConfig extends AutoCode
                     $class_onetwo=array();
                     foreach (array_keys($fieldInfo_m2m) as $fieldname_m2m)
                     {
-                        $class_onetwo_element=str_replace("_id", "", $fieldname_m2m);
+                        $class_onetwo_element=str_replace("_ID", "", $fieldname_m2m);
                         $class_onetwo[]=$class_onetwo_element;
                     }
 

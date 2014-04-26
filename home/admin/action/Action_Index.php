@@ -31,9 +31,9 @@ class Action_Index extends ActionExt
 			if (empty($admindata)) {
 				$this->view->set("message","用户名或者密码错误");
 			}else {
-				HttpSession::set('admin_id',$admindata->admin_id);
-				HttpSession::set(Gc::$appName_alias.'admin_id',$admindata->admin_id);
-				HttpCookie::sets(array("admin_id"=>$admindata->admin_id,"operator"=>$admindata->username,'roletype'=>$admindata->roletype,'roleid'=>$admindata->roleid));
+				HttpSession::set('admin_id',$admindata->ID);
+				HttpSession::set(Gc::$appName_alias.'admin_id',$admindata->ID);
+				HttpCookie::sets(array("admin_id"=>$admindata->ID,"operator"=>$admindata->Username,'roletype'=>$admindata->Roletype));
 				$this->redirect("index","index");
 			}
 		}

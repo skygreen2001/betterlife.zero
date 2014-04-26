@@ -210,7 +210,7 @@ class Config_Db extends ConfigBB
 	* @var bool
 	* @static
 	*/
-	public static $debug_show_sql=false;
+	public static $debug_show_sql=true;
 	/**
 	 +--------------------------------------------------<br/>
 	 * 目前调试通过  该参数对Config_Db::$engine<br/>
