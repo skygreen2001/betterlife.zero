@@ -238,16 +238,15 @@ class AutoCodeConfig extends AutoCode
                         );
                     }
 
-                    //has_many[当前表没有归属表的标识，归属表有当前表的标识]
-                    //has_one:[当前表没有归属表的标识，归属表有当前表的标识，并且归属表里当前表的标识为Unique]
-                    if (!array_key_exists($realId, $relation_class))
+                    //has_many[归属表没有当前表的标识，当前表有归属表的标识]
+                    //has_one:[归属表没有当前表的标识，当前表有归属表的标识，并且当前表里归属表的标识为Unique]
+                    if (!array_key_exists($classname."_ID", $relation_class))
                     {
                         if (array_key_exists($relation_classname, self::$table_key_map)){
                             $relation_tablename_key=self::$table_key_map[$relation_classname];
                             $instance_name=$classname;
                             $instance_name{0}=strtolower($instance_name)."s";
-                            $fieldInfo_key_isunique=$fieldInfo[$fieldname];
-                            $isunique=$fieldInfo_key_isunique["Key"];
+                            $isunique=Manager_Db::newInstance()->dbinfo()->hasUnique($classname,$fieldname);
                             if ($isunique=="UNI"){
                                 self::$config_classes["class"][$relation_tablename_key]
                                                      ["has_one"]["relationclass"][]=array(

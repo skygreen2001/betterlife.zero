@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50520
 File Encoding         : 65001
 
-Date: 2014-04-26 15:51:33
+Date: 2014-04-26 21:50:42
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -3710,7 +3710,7 @@ CREATE TABLE `Userdetail` (
   `CommitTime` datetime DEFAULT NULL COMMENT '提交时间',
   `UpdateTime` datetime DEFAULT NULL COMMENT '更新时间',
   PRIMARY KEY (`ID`,`User_ID`),
-  KEY `fk_bb_user_userdetail_bb_user_user1` (`User_ID`)
+  UNIQUE KEY `fk_bb_user_userdetail_bb_user_user1` (`User_ID`) USING BTREE
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户详细信息';
 
 -- ----------------------------

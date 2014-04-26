@@ -61,6 +61,12 @@ interface IDbInfo {
      * NOTE: Experimental; introduced for db-abstraction and may changed before 2.4 is released.
      */
     public function hasTable($table);
+    
+    /**
+     * @param string|array  查看Column_name的Unique在表里是否存在                                                        
+     */
+    public function hasUnique($table,$Column_names);
+    
     /**
      * 查看指定的数据库是否存在
      */
