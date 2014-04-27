@@ -116,6 +116,7 @@ Bb.User.Store = {
                 {name: 'ID',type: 'int'},
                 {name: 'Username',type: 'string'},
                 {name: 'Comment',type: 'string'},
+                {name: 'Blog_ID',type: 'int'},
                 {name: 'Blog_Name',type: 'string'}
             ]}
         ),
@@ -688,6 +689,8 @@ Bb.User.View={
 				Bb.User.View.BlogView.edit_window.setTitle('修改博客');
 				Bb.User.View.BlogView.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
 				Bb.User.View.BlogView.edit_window.savetype=1;
+				var user_id = Bb.User.View.Running.userGrid.getSelectionModel().getSelected().data.ID;
+				Bb.User.View.BlogView.edit_window.User_ID.setValue(user_id);
                 switch (Bb.User.Config.OnlineEditor)
                 {
                     case 2:
@@ -1077,6 +1080,8 @@ Bb.User.View={
 				Bb.User.View.CommentView.edit_window.setTitle('修改评论');
 				Bb.User.View.CommentView.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
 				Bb.User.View.CommentView.edit_window.savetype=1;
+				var user_id = Bb.User.View.Running.userGrid.getSelectionModel().getSelected().data.ID;
+				Bb.User.View.CommentView.edit_window.User_ID.setValue(user_id);
                 switch (Bb.User.Config.OnlineEditor)
                 {
                     case 2:
