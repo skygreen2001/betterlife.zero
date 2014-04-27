@@ -320,7 +320,9 @@ class DbInfo_Mysql extends  DbInfo implements IDbInfo
 		}else{
 			 $condition="Column_name='$Column_names'";
 		}
-		return (bool)($this->query("show index from $table where Key_name!='PRIMARY' and ($condition);")->value());
+        $sqlUnique="show index from $table where Key_name!='PRIMARY' and Non_unique=0 and ($condition);";
+        LogMe::log($sqlUnique);
+		return (bool)($this->query($sqlUnique)->value());
 	}
 
 	/**

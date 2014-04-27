@@ -3747,7 +3747,7 @@ CREATE TABLE `bb_user_userdetail` (
   `commitTime` int(11) DEFAULT NULL COMMENT '提交时间',
   `updateTime` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   PRIMARY KEY (`userdetail_id`,`user_id`),
-  KEY `fk_bb_user_userdetail_bb_user_user1` (`user_id`)
+  UNIQUE KEY `fk_userdetail_user_user_id` (`user_id`) USING BTREE
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='用户详细信息';
 
 -- ----------------------------
