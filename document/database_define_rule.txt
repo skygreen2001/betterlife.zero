@@ -45,5 +45,14 @@
         列类型为：text|longtext
         特殊情况：列长度>=500并且名称不能为images|link|ico
 
+*.邮箱列定义规则:
+  列名称含有:email
+  列名称注释含有:邮件,邮箱 并且列名称不含有is【如是否发送邮件列就不是邮箱列】
+
+*.密码列定义规则:
+  表名称含有:member|user|admin 并且列名称含有：password
+
 *.当和其他表是一对一的关系是，需设置外键字段为Unique
 	如用户和用户详情表，则需要在用户详情表里指明外键user_id是Unique。
+
+*.多对多关系表名称中间用"_re_"连接。如：bb_user_re_userrole

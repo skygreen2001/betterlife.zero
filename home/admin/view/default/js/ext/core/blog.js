@@ -702,8 +702,8 @@ Bb.Blog.View={
 			Bb.Blog.View.CommentView.edit_window.setTitle('添加评论');
 			Bb.Blog.View.CommentView.edit_window.savetype=0;
 			Bb.Blog.View.CommentView.edit_window.comment_id.setValue("");
-			var company_id = Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.blog_id;
-			Bb.Blog.View.CommentView.edit_window.blog_id.setValue(company_id);
+			var blog_id = Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.blog_id;
+			Bb.Blog.View.CommentView.edit_window.blog_id.setValue(blog_id);
 			switch (Bb.Blog.Config.OnlineEditor)
 			{
 				case 2:

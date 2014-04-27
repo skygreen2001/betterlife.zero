@@ -217,8 +217,8 @@ EDITWINDOW;
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.setTitle('添加{$table_comment12n}');
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.savetype=0;
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.{$realId_relation}.setValue("");
-				var company_id = $appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.{$realId};
-				$appName_alias.$classname.View.{$current_classname}View.edit_window.{$realId}.setValue(company_id);
+				var {$instancename}_id = $appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.{$realId};
+				$appName_alias.$classname.View.{$current_classname}View.edit_window.{$realId}.setValue({$instancename}_id);
 {$textareaOnlineditor_Add}{$treeLevelVisible_Add}
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.show();
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.maximize();
