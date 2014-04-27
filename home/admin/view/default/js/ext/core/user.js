@@ -116,6 +116,7 @@ Bb.User.Store = {
                 {name: 'comment_id',type: 'int'},
                 {name: 'username',type: 'string'},
                 {name: 'comment',type: 'string'},
+                {name: 'blog_id',type: 'int'}
                 {name: 'blog_name',type: 'string'}
             ]}
         ),
