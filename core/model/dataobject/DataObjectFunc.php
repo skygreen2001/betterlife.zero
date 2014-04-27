@@ -20,7 +20,7 @@ class DataObjectFunc
 	{
 		if (strpos($method,"set")!==false) {
 			$property=substr($method,strlen("set"),strlen($method));
-			$property{0}=strtolower($property{0});
+			//$property{0}=strtolower($property{0});
 			//$property=lcfirst(substr($method,strlen("set"),strlen($method)));
 			$dataobject->{$property}=$arguments[0];
 		}else if (strpos($method,"get")!==false) {

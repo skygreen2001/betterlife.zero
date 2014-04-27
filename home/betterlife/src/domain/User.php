@@ -48,5 +48,27 @@ class User extends DataObject
     public $LoginTimes;
     //</editor-fold>
 
+    /**
+     * 一对一关系
+     */
+    static $has_one=array(
+        "userDetail"=>"Userdetail"
+    );
+
+    /**
+     * 一对多关系
+     */
+    static $has_many=array(
+        "blogs"=>"Blog",
+        "comment"=>"Comment"
+    );
+
+    /**
+     * 多对多关系
+     */
+    static $many_many=array(
+        "roles"=>"Role"
+    );
+
 }
 ?>

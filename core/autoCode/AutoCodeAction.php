@@ -284,7 +284,7 @@ class AutoCodeAction extends AutoCode
 							$relationShow=$relationSpecs[$fieldname];
 							foreach ($relationShow as $key=>$value) {
 								$fieldInfos=self::$fieldInfos[self::getTablename($key)];
-								if (array_key_exists("parent_id",$fieldInfos)){
+								if (array_key_exists("Parent_ID",$fieldInfos)){
 									$result.="         \$this->loadExtComponent(\"ComboBoxTree.js\");\r\n";
 									break 2;
 								}

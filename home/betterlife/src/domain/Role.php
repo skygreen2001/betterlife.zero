@@ -24,5 +24,12 @@ class Role extends DataObject
     public $Role_Name;
     //</editor-fold>
 
+    /**
+     * 从属于多对多关系
+     */
+    static $belongs_many_many=array(
+        "users"=>"User"
+    );
+
 }
 ?>

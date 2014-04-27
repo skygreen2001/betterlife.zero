@@ -522,7 +522,7 @@ class AutoCode extends Object
 	 * 根据类名判断是不是多对多关系，存在中间表表名
 	 * @param string $classname 数据对象类名
 	 */
-	protected static function isMany2ManyByClassname($classname,$comment,$fields)
+	protected static function isMany2ManyByClassname($classname)
 	{
 		$tablename=self::getTablename($classname);
         $comment=self::$tableInfoList[$tablename]["Comment"];

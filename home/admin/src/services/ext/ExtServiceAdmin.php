@@ -102,14 +102,14 @@ class ExtServiceAdmin extends ServiceBasic
 			$data =Admin::queryPage($start,$limit,$condition);
 			if ((!empty($data))&&(count($data)>0))
 			{
-				Admin::propertyShow($data,array('roletype','seescope'));
+				Admin::propertyShow($data,array('Roletype','Seescope'));
 			}
-			foreach ($data as $admin) {
-				if ($admin->department_id){
-					$department_instance=Department::get_by_id($admin->department_id);
-					$admin['department_name']=$department_instance->department_name;
-				}
-			}
+            foreach ($data as $admin) {
+                if ($admin->Department_ID){
+                    $department_instance=Department::get_by_id($admin->Department_ID);
+                    $admin['Department_Name']=$department_instance->Department_Name;
+                }
+            }
 			if ($data==null)$data=array();
 		}else{
 			$data=array();
@@ -163,17 +163,17 @@ class ExtServiceAdmin extends ServiceBasic
 					$data              = UtilExcel::exceltoArray($uploadPath,$arr_import_header);
 					$result=false;
 					foreach ($data as $admin) {
-						if (!is_numeric($admin["department_id"])){
-							$department=Department::get_one("department_name='".$admin["department_id"]."'");
-							if ($department) $admin["department_id"]=$department->department_id;
-						}
+                        if (!is_numeric($admin["Department_ID"])){
+                            $department=Department::get_one("Department_Name='".$admin["Department_ID"]."'");
+                            if ($department) $admin["Department_ID"]=$department->Department_ID;
+                        }
 						$admin=new Admin($admin);
-						if (!EnumRoletype::isEnumValue($admin->roletype)){
-							$admin->roletype=EnumRoletype::roletypeByShow($admin->roletype);
-						}
-						if (!EnumSeescope::isEnumValue($admin->seescope)){
-							$admin->seescope=EnumSeescope::seescopeByShow($admin->seescope);
-						}
+                        if (!EnumRoletype::isEnumValue($admin->Roletype)){
+                            $admin->Roletype=EnumRoletype::RoletypeByShow($admin->Roletype);
+                        }
+                        if (!EnumSeescope::isEnumValue($admin->Seescope)){
+                            $admin->Seescope=EnumSeescope::SeescopeByShow($admin->Seescope);
+                        }
 						$admin_id=$admin->getId();
 						if (!empty($admin_id)){
 							$hadAdmin=Admin::existByID($admin->getId());
@@ -209,22 +209,22 @@ class ExtServiceAdmin extends ServiceBasic
 		$data=Admin::get($filter);
 		if ((!empty($data))&&(count($data)>0))
 		{
-			Admin::propertyShow($data,array('roletype','seescope'));
+            Admin::propertyShow($data,array('Roletype','Seescope'));
 		}
 		$arr_output_header= self::fieldsMean(Admin::tablename());
 		foreach ($data as $admin) {
-			if ($admin->roletypeShow){
-				$admin['roletype']=$admin->roletypeShow;
-			}
-			if ($admin->seescopeShow){
-				$admin['seescope']=$admin->seescopeShow;
-			}
-			if ($admin->department_id){
-				$department_instance=Department::get_by_id($admin->department_id);
-				$admin['department_id']=$department_instance->department_name;
-			}
+            if ($admin->RoletypeShow){
+                $admin['Roletype']=$admin->RoletypeShow;
+            }
+            if ($admin->SeescopeShow){
+                $admin['Seescope']=$admin->SeescopeShow;
+            }
+            if ($admin->Department_ID){
+                $department_instance=Department::get_by_id($admin->Department_ID);
+                $admin['Department_ID']=$department_instance->Department_Name;
+            }
 		}
-		unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
+        unset($arr_output_header['UpdateTime'],$arr_output_header['CommitTime']);
 		$diffpart=date("YmdHis");
 		$outputFileName=Gc::$attachment_path."admin".DIRECTORY_SEPARATOR."export".DIRECTORY_SEPARATOR."admin$diffpart.xls";
 		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false);

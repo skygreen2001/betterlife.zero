@@ -93,6 +93,13 @@ class Userdetail extends DataObject
     public $Birthday;
     //</editor-fold>
 
+    /**
+     * 从属一对一关系
+     */
+    static $belong_has_one=array(
+        "user"=>"User"
+    );
+
     /** 
      * 显示会员性别<br/>
      * 0：女-female<br/>

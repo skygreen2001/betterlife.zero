@@ -36,5 +36,13 @@ class Comment extends DataObject
     public $Blog_ID;
     //</editor-fold>
 
+    /**
+     * 从属一对一关系
+     */
+    static $belong_has_one=array(
+        "user"=>"User",
+        "blog"=>"Blog"
+    );
+
 }
 ?>

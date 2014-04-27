@@ -38,7 +38,7 @@ class AutoCodeConfig extends AutoCode
         self::init();
         foreach (self::$fieldInfos as $tablename=>$fieldInfo){
             $classname=self::getClassname($tablename);
-            if (self::isMany2ManyByClassname($classname))continue;
+            //if (self::isMany2ManyByClassname($classname))continue;
             $current_class_config=array(
                 '@attributes' => array(
                     "name"=>$classname
@@ -72,7 +72,7 @@ class AutoCodeConfig extends AutoCode
         $relation_keys=array("has_one","belong_has_one","has_many","many_many","belongs_many_many");
         foreach (self::$fieldInfos as $tablename=>$fieldInfo){
             $classname=self::getClassname($tablename);
-            if (self::isMany2ManyByClassname($classname))continue;
+            //if (self::isMany2ManyByClassname($classname))continue;
             foreach ($relation_keys as  $relation_key) {
                 self::$config_classes["class"][self::$table_key_map[$classname]][$relation_key]=array(
                 );
@@ -80,7 +80,7 @@ class AutoCodeConfig extends AutoCode
         }
         foreach (self::$fieldInfos as $tablename=>$fieldInfo){
             $classname=self::getClassname($tablename);
-            if (self::isMany2ManyByClassname($classname))continue;
+            //if (self::isMany2ManyByClassname($classname))continue;
             $current_class_config= self::$config_classes["class"][self::$table_key_map[$classname]];
             foreach ($relation_keys as  $relation_key) {
                 $relation_fives[$relation_key]=$current_class_config[$relation_key];
@@ -277,60 +277,59 @@ class AutoCodeConfig extends AutoCode
             }
         }
 
-        if (contain($tablename,Config_Db::TABLENAME_RELATION)){
-            if (self::isMany2ManyByClassname($classname))
-            {
-                $fieldInfo_m2m=self::$fieldInfos[self::getTablename($classname)];
-                unset($fieldInfo_m2m['updateTime'],$fieldInfo_m2m['commitTime']);
-                $realId=DataObjectSpec::getRealIDColumnName($classname);
-                unset($fieldInfo_m2m[$realId]);
-                if (count($fieldInfo_m2m)==2){
-                    //many_many[在关系表中有两个关系主键，并且表名的前半部分是其中一个主键]
-                    //belongs_many_many[在关系表中有两个关系主键，并且表名的后半部分是其中一个主键]
-                    $class_onetwo=array();
-                    foreach (array_keys($fieldInfo_m2m) as $fieldname_m2m)
-                    {
-                        $class_onetwo_element=str_replace("_ID", "", $fieldname_m2m);
-                        $class_onetwo[]=$class_onetwo_element;
-                    }
+        if (self::isMany2ManyByClassname($classname))
+        {
+            $fieldInfo_m2m=self::$fieldInfos[self::getTablename($classname)];
+            unset($fieldInfo_m2m['updateTime'],$fieldInfo_m2m['commitTime']);
+            $realId=DataObjectSpec::getRealIDColumnName($classname);
+            unset($fieldInfo_m2m[$realId]);
+            if (count($fieldInfo_m2m)==2){
+                //many_many[在关系表中有两个关系主键，并且表名的前半部分是其中一个主键]
+                //belongs_many_many[在关系表中有两个关系主键，并且表名的后半部分是其中一个主键]
+                $class_onetwo=array();
+                foreach (array_keys($fieldInfo_m2m) as $fieldname_m2m)
+                {
+                    $class_onetwo_element=str_replace("_ID", "", $fieldname_m2m);
+                    $class_onetwo[]=$class_onetwo_element;
+                }
 
-                    if ($class_onetwo[0].$class_onetwo[1]==strtolower($classname)){
-                        $ownerClassname=$class_onetwo[0];
-                        $belongClassname=$class_onetwo[1];
-                        $ownerInstancename=$class_onetwo[0]."s";
-                        $belongInstancename=$class_onetwo[1]."s";
-                    }else if ($class_onetwo[1].$class_onetwo[0]==strtolower($classname)){
-                        $ownerClassname=$class_onetwo[1];
-                        $belongClassname=$class_onetwo[0];
-                        $ownerInstancename=$class_onetwo[1]."s";
-                        $belongInstancename=$class_onetwo[0]."s";
-                    }
-                    $ownerClassname{0}=strtoupper($ownerClassname{0});
-                    $belongClassname{0}=strtoupper($belongClassname{0});
+                if (strtolower($class_onetwo[0].$class_onetwo[1])==strtolower($classname)){
+                    $ownerClassname=$class_onetwo[0];
+                    $belongClassname=$class_onetwo[1];
+                    $ownerInstancename=$class_onetwo[0]."s";
+                    $belongInstancename=$class_onetwo[1]."s";
+                }else if (strtolower($class_onetwo[1].$class_onetwo[0])==strtolower($classname)){
+                    $ownerClassname=$class_onetwo[1];
+                    $belongClassname=$class_onetwo[0];
+                    $ownerInstancename=$class_onetwo[1]."s";
+                    $belongInstancename=$class_onetwo[0]."s";
+                }
+                $ownerClassname{0}=strtoupper($ownerClassname{0});
+                $belongClassname{0}=strtoupper($belongClassname{0});
 
-                    $relation_tablename_key_m2m=self::$table_key_map[$ownerClassname];
-                    if (self::$config_classes["class"][$relation_tablename_key_m2m]){
-                        self::$config_classes["class"][$relation_tablename_key_m2m]
-                                             ["many_many"]["relationclass"][]=array(
-                            '@attributes' => array(
-                                "name"=>$belongClassname
-                            ),
-                            '@value' => $belongInstancename
-                        );
-                    }
-                    $relation_tablename_key_m2m=self::$table_key_map[$belongClassname];
-                    if (self::$config_classes["class"][$relation_tablename_key_m2m]){
-                        self::$config_classes["class"][$relation_tablename_key_m2m]
-                                             ["belongs_many_many"]["relationclass"][]=array(
-                            '@attributes' => array(
-                                "name"=>$ownerClassname
-                            ),
-                            '@value' => $ownerInstancename
-                        );
-                    }
+                $relation_tablename_key_m2m=self::$table_key_map[$ownerClassname];
+                if (self::$config_classes["class"][$relation_tablename_key_m2m]){
+                    self::$config_classes["class"][$relation_tablename_key_m2m]
+                                         ["many_many"]["relationclass"][]=array(
+                        '@attributes' => array(
+                            "name"=>$belongClassname
+                        ),
+                        '@value' => $belongInstancename
+                    );
+                }
+                $relation_tablename_key_m2m=self::$table_key_map[$belongClassname];
+                if (self::$config_classes["class"][$relation_tablename_key_m2m]){
+                    self::$config_classes["class"][$relation_tablename_key_m2m]
+                                         ["belongs_many_many"]["relationclass"][]=array(
+                        '@attributes' => array(
+                            "name"=>$ownerClassname
+                        ),
+                        '@value' => $ownerInstancename
+                    );
                 }
             }
         }
+    
         return $relation_fives;
     }
 }

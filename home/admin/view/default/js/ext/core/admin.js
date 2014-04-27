@@ -51,23 +51,23 @@ Bb.Admin.Store = {
 	/**
 	 * 系统管理人员
 	 */
-	adminStore:new Ext.data.Store({
+	AdminStore:new Ext.data.Store({
 		reader: new Ext.data.JsonReader({
 			totalProperty: 'totalCount',
 			successProperty: 'success',
 			root: 'data',remoteSort: true,
 			fields : [
-                {name: 'admin_id',type: 'int'},
-                {name: 'department_id',type: 'int'},
-                {name: 'department_name',type: 'string'},
-                {name: 'username',type: 'string'},
-                {name: 'realname',type: 'string'},
-                {name: 'password',type: 'string'},
-                {name: 'roletypeShow',type: 'string'},
-                {name: 'roletype',type: 'string'},
-                {name: 'seescopeShow',type: 'string'},
-                {name: 'seescope',type: 'string'},
-                {name: 'loginTimes',type: 'int'}
+                {name: 'ID',type: 'int'},
+                {name: 'Department_ID',type: 'int'},
+                {name: 'Department_Name',type: 'string'},
+                {name: 'Username',type: 'string'},
+                {name: 'Realname',type: 'string'},
+                {name: 'Password',type: 'string'},
+                {name: 'RoletypeShow',type: 'string'},
+                {name: 'Roletype',type: 'string'},
+                {name: 'SeescopeShow',type: 'string'},
+                {name: 'Seescope',type: 'string'},
+                {name: 'LoginTimes',type: 'int'}
 			]}
 		),
 		writer: new Ext.data.JsonWriter({
@@ -77,7 +77,7 @@ Bb.Admin.Store = {
 			beforeload : function(store, options) {
 				if (Ext.isReady) {
 					if (!options.params.limit)options.params.limit=Bb.Admin.Config.PageSize;
-					Ext.apply(options.params, Bb.Admin.View.Running.adminGrid.filter);//保证分页也将查询条件带上
+					Ext.apply(options.params, Bb.Admin.View.Running.AdminGrid.filter);//保证分页也将查询条件带上
 				}
 			}
 		}
@@ -93,10 +93,10 @@ Bb.Admin.Store = {
             root: 'departments',
             autoLoad: true,
             totalProperty: 'totalCount',
-            idProperty: 'department_id'
+            idProperty: 'Department_ID'
         }, [
-            {name: 'department_id', mapping: 'department_id'},
-            {name: 'department_name', mapping: 'department_name'}
+            {name: 'Department_ID', mapping: 'Department_ID'},
+            {name: 'Department_Name', mapping: 'Department_Name'}
         ])
     })
 };
@@ -137,18 +137,18 @@ Bb.Admin.View={
 							xtype : 'textfield',anchor:'98%'
 						},
 						items : [
-                            {xtype: 'hidden',name : 'admin_id',ref:'../admin_id'},
-                            {xtype: 'hidden',name : 'department_id',ref:'../department_id'},
+                            {xtype: 'hidden',name : 'ID',ref:'../ID'},
+                            {xtype: 'hidden',name : 'Department_ID',ref:'../Department_ID'},
                             {
-                                 fieldLabel : '部门',xtype: 'combo',name : 'department_name',ref : '../department_name',
+                                 fieldLabel : '部门',xtype: 'combo',name : 'Department_Name',ref : '../Department_Name',
                                  store:Bb.Admin.Store.departmentStoreForCombo,emptyText: '请选择部门',itemSelector: 'div.search-item',
                                  loadingText: '查询中...',width: 570, pageSize:Bb.Admin.Config.PageSize,
-                                 displayField:'department_name',grid:this,
+                                 displayField:'Department_Name',grid:this,
                                  mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,
                                  forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,
                                  tpl:new Ext.XTemplate(
                                      '<tpl for="."><div class="search-item">',
-                                         '<h3>{department_name}</h3>',
+                                         '<h3>{Department_Name}</h3>',
                                      '</div></tpl>'
                                  ),
                                  listeners:{
@@ -156,17 +156,17 @@ Bb.Admin.View={
                                  },
                                  onSelect:function(record,index){
                                      if(this.fireEvent('beforeselect', this, record, index) !== false){
-                                        this.grid.department_id.setValue(record.data.department_id);
-                                        this.grid.department_name.setValue(record.data.department_name);
+                                        this.grid.Department_ID.setValue(record.data.Department_ID);
+                                        this.grid.Department_Name.setValue(record.data.Department_Name);
                                         this.collapse();
                                      }
                                  }
                             },
-                            {fieldLabel : '用户名(<font color=red>*</font>)',name : 'username',allowBlank : false},
-                            {fieldLabel : '真实姓名',name : 'realname'},
-                            {fieldLabel : '密码(<font color=red>*</font>)',name : 'password',inputType:'password',ref:'../password'},
-                            {xtype: 'hidden',name : 'password_old',ref:'../password_old'},
-                            {fieldLabel : '扮演角色',hiddenName : 'roletype',xtype:'combo',ref:'../roletype',
+                            {fieldLabel : '用户名',name : 'Username'},
+                            {fieldLabel : '真实姓名',name : 'Realname'},
+                            {fieldLabel : '密码(<font color=red>*</font>)',name : 'Password',inputType:'Password',ref:'../Password'},
+                            {xtype: 'hidden',name : 'Password_old',ref:'../Password_old'},
+                            {fieldLabel : '扮演角色',hiddenName : 'Roletype',xtype:'combo',ref:'../Roletype',
                                 mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,allowBlank : false,
                                 store : new Ext.data.SimpleStore({
                                     fields : ['value', 'text'],
@@ -174,7 +174,7 @@ Bb.Admin.View={
                                 }),emptyText: '请选择扮演角色',
                                 valueField : 'value',displayField : 'text'
                             },
-                            {fieldLabel : '视野',hiddenName : 'seescope',xtype:'combo',ref:'../seescope',
+                            {fieldLabel : '视野',hiddenName : 'Seescope',xtype:'combo',ref:'../Seescope',
                                 mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,allowBlank : false,
                                 store : new Ext.data.SimpleStore({
                                     fields : ['value', 'text'],
@@ -182,7 +182,7 @@ Bb.Admin.View={
                                 }),emptyText: '请选择视野',
                                 valueField : 'value',displayField : 'text'
                             },
-                            {fieldLabel : '登录次数',name : 'loginTimes',xtype : 'numberfield'}
+                            {fieldLabel : '登录次数',name : 'LoginTimes',xtype : 'numberfield'}
 						]
 					})
 				],
@@ -199,7 +199,7 @@ Bb.Admin.View={
 							this.editForm.getForm().submit({
 								success : function(form, action) {
 									Ext.Msg.alert("提示", "保存成功！");
-									Bb.Admin.View.Running.adminGrid.doSelectAdmin();
+									Bb.Admin.View.Running.AdminGrid.doSelectAdmin();
 									form.reset();
 									editWindow.hide();
 								},
@@ -211,9 +211,9 @@ Bb.Admin.View={
 							this.editForm.api.submit=ExtServiceAdmin.update;
 							this.editForm.getForm().submit({
 								success : function(form, action) {
-									Bb.Admin.View.Running.adminGrid.store.reload();
+									Bb.Admin.View.Running.AdminGrid.store.reload();
 									Ext.Msg.show({title:'提示',msg: '修改成功！',buttons: {yes: '确定'},fn: function(){
-										Bb.Admin.View.Running.adminGrid.bottomToolbar.doRefresh();
+										Bb.Admin.View.Running.AdminGrid.bottomToolbar.doRefresh();
 									}});
 									form.reset();
 									editWindow.hide();
@@ -232,7 +232,7 @@ Bb.Admin.View={
 				}, {
 					text : "重 置",ref:'../resetBtn',scope:this,
 					handler : function() {
-						this.editForm.form.loadRecord(Bb.Admin.View.Running.adminGrid.getSelectionModel().getSelected());
+						this.editForm.form.loadRecord(Bb.Admin.View.Running.AdminGrid.getSelectionModel().getSelected());
 
 					}
 				}]
@@ -260,13 +260,13 @@ Bb.Admin.View={
 					listeners:{
 						beforetabchange:function(tabs,newtab,currentTab){
 							if (tabs.tabFix==newtab){
-								if (Bb.Admin.View.Running.adminGrid.getSelectionModel().getSelected()==null){
+								if (Bb.Admin.View.Running.AdminGrid.getSelectionModel().getSelected()==null){
 									Ext.Msg.alert('提示', '请先选择系统管理人员！');
 									return false;
 								}
 								Bb.Admin.Config.View.IsShow=1;
-								Bb.Admin.View.Running.adminGrid.showAdmin();
-								Bb.Admin.View.Running.adminGrid.tvpView.menu.mBind.setChecked(false);
+								Bb.Admin.View.Running.AdminGrid.showAdmin();
+								Bb.Admin.View.Running.AdminGrid.tvpView.menu.mBind.setChecked(false);
 								return false;
 							}
 						}
@@ -299,12 +299,12 @@ Bb.Admin.View={
 					{title: '基本信息',ref:'tabAdminDetail',iconCls:'tabs',
 					 tpl: [
 						 '<table class="viewdoblock">',
-                         '    <tr class="entry"><td class="head">部门</td><td class="content">{department_name}</td></tr>',
-                         '    <tr class="entry"><td class="head">用户名</td><td class="content">{username}</td></tr>',
-                         '    <tr class="entry"><td class="head">真实姓名</td><td class="content">{realname}</td></tr>',
-                         '    <tr class="entry"><td class="head">扮演角色</td><td class="content">{roletypeShow}</td></tr>',
-                         '    <tr class="entry"><td class="head">视野</td><td class="content">{seescopeShow}</td></tr>',
-                         '    <tr class="entry"><td class="head">登录次数</td><td class="content">{loginTimes}</td></tr>',
+                         '    <tr class="entry"><td class="head">部门</td><td class="content">{Department_Name}</td></tr>',
+                         '    <tr class="entry"><td class="head">用户名</td><td class="content">{Username}</td></tr>',
+                         '    <tr class="entry"><td class="head">真实姓名</td><td class="content">{Realname}</td></tr>',
+                         '    <tr class="entry"><td class="head">扮演角色</td><td class="content">{RoletypeShow}</td></tr>',
+                         '    <tr class="entry"><td class="head">视野</td><td class="content">{SeescopeShow}</td></tr>',
+                         '    <tr class="entry"><td class="head">登录次数</td><td class="content">{LoginTimes}</td></tr>',
 						 '</table>'
 					 ]}
 				);
@@ -328,18 +328,18 @@ Bb.Admin.View={
 						minimize:function(w){
 							w.hide();
 							Bb.Admin.Config.View.IsShow=0;
-							Bb.Admin.View.Running.adminGrid.tvpView.menu.mBind.setChecked(true);
+							Bb.Admin.View.Running.AdminGrid.tvpView.menu.mBind.setChecked(true);
 						},
 						hide:function(w){
-							Bb.Admin.View.Running.adminGrid.tvpView.toggle(false);
+							Bb.Admin.View.Running.AdminGrid.tvpView.toggle(false);
 						}
 					},
 					buttons: [{
 						text: '新增系统管理人员',scope:this,
-						handler : function() {this.hide();Bb.Admin.View.Running.adminGrid.addAdmin();}
+						handler : function() {this.hide();Bb.Admin.View.Running.AdminGrid.addAdmin();}
 					},{
 						text: '修改系统管理人员',scope:this,
-						handler : function() {this.hide();Bb.Admin.View.Running.adminGrid.updateAdmin();}
+						handler : function() {this.hide();Bb.Admin.View.Running.AdminGrid.updateAdmin();}
 					}]
 				}, config);
 				Bb.Admin.View.AdminView.Window.superclass.constructor.call(this, config);
@@ -395,7 +395,7 @@ Bb.Admin.View={
 										Ext.Msg.alert('成功', '上传成功');
 										uploadWindow.hide();
 										uploadWindow.uploadForm.upload_file.setValue('');
-										Bb.Admin.View.Running.adminGrid.doSelectAdmin();
+										Bb.Admin.View.Running.AdminGrid.doSelectAdmin();
 									},
 									failure : function(form, response) {
 										Ext.Msg.alert('错误', response.result.data);
@@ -414,8 +414,7 @@ Bb.Admin.View={
 				}, config);
 			Bb.Admin.View.UploadWindow.superclass.constructor.call(this, config);
 		}
-	}),
-
+	}),
 	/**
 	 * 视图：系统管理人员列表
 	 */
@@ -427,7 +426,7 @@ Bb.Admin.View={
 				 */
 				filter:null,
 				region : 'center',
-				store : Bb.Admin.Store.adminStore,
+				store : Bb.Admin.Store.AdminStore,
 				sm : this.sm,
 				frame : true,trackMouseOver : true,enableColumnMove : true,columnLines : true,
 				loadMask : true,stripeRows : true,headerAsText : false,
@@ -440,13 +439,13 @@ Bb.Admin.View={
 					},
 					columns : [
 						this.sm,
-                        {header : '标识',dataIndex : 'admin_id',hidden:true},
-                        {header : '部门',dataIndex : 'department_name'},
-                        {header : '用户名',dataIndex : 'username'},
-                        {header : '真实姓名',dataIndex : 'realname'},
-                        {header : '扮演角色',dataIndex : 'roletypeShow'},
-                        {header : '视野',dataIndex : 'seescopeShow'},
-                        {header : '登录次数',dataIndex : 'loginTimes'}
+                        {header : '标识',dataIndex : 'ID',hidden:true},
+                        {header : '部门',dataIndex : 'Department_Name'},
+                        {header : '用户名',dataIndex : 'Username'},
+                        {header : '真实姓名',dataIndex : 'Realname'},
+                        {header : '扮演角色',dataIndex : 'RoletypeShow'},
+                        {header : '视野',dataIndex : 'SeescopeShow'},
+                        {header : '登录次数',dataIndex : 'LoginTimes'}
 					]
 				}),
 				tbar : {
@@ -466,7 +465,21 @@ Bb.Admin.View={
 								}
 							},
 							items : [
-                                '用户名','&nbsp;&nbsp;',{ref: '../ausername'},'&nbsp;&nbsp;',
+                                '部门','&nbsp;&nbsp;',{ref: '../ADepartment_ID',xtype: 'combo',
+                                     store:Bb.Admin.Store.departmentStoreForCombo,hiddenName : 'Department_ID',
+                                     emptyText: '请选择部门',itemSelector: 'div.search-item',
+                                     loadingText: '查询中...',width:280,pageSize:Bb.Admin.Config.PageSize,
+                                     displayField:'Department_Name',valueField:'Department_ID',
+                                     mode: 'remote',editable:true,minChars: 1,autoSelect :true,typeAhead: false,
+                                     forceSelection: true,triggerAction: 'all',resizable:true,selectOnFocus:true,
+                                     tpl:new Ext.XTemplate(
+                                         '<tpl for="."><div class="search-item">',
+                                         '<h3>{Department_Name}</h3>',
+                                         '</div></tpl>'
+                                     )
+                                },'&nbsp;&nbsp;',
+                                '用户名','&nbsp;&nbsp;',{ref: '../AUsername'},'&nbsp;&nbsp;',
+                                '真实姓名','&nbsp;&nbsp;',{ref: '../ARealname'},'&nbsp;&nbsp;',
 								{
 									xtype : 'button',text : '查询',scope: this,
 									handler : function() {
@@ -476,7 +489,9 @@ Bb.Admin.View={
 								{
 									xtype : 'button',text : '重置',scope: this,
 									handler : function() {
-                                        this.topToolbar.ausername.setValue("");
+                                        this.topToolbar.ADepartment_ID.setValue("");
+                                        this.topToolbar.AUsername.setValue("");
+                                        this.topToolbar.ARealname.setValue("");
 										this.filter={};
 										this.doSelectAdmin();
 									}
@@ -539,7 +554,7 @@ Bb.Admin.View={
 				},
 				bbar: new Ext.PagingToolbar({
 					pageSize: Bb.Admin.Config.PageSize,
-					store: Bb.Admin.Store.adminStore,
+					store: Bb.Admin.Store.AdminStore,
 					scope:this,autoShow:true,displayInfo: true,
 					displayMsg: '当前显示 {0} - {1}条记录/共 {2}条记录。',
 					emptyMsg: "无显示数据",
@@ -681,8 +696,10 @@ Bb.Admin.View={
 		 */
 		doSelectAdmin : function() {
 			if (this.topToolbar){
-                var ausername = this.topToolbar.ausername.getValue();
-                this.filter       ={'username':ausername};
+                var ADepartment_ID = this.topToolbar.ADepartment_ID.getValue();
+                var AUsername = this.topToolbar.AUsername.getValue();
+                var ARealname = this.topToolbar.ARealname.getValue();
+                this.filter       ={'Department_ID':ADepartment_ID,'Username':AUsername,'Realname':ARealname};
 			}
 			var condition = {'start':0,'limit':Bb.Admin.Config.PageSize};
 			Ext.apply(condition,this.filter);
@@ -691,9 +708,9 @@ Bb.Admin.View={
 					var result           = new Array();
 					result['data']       =response.result.data;
 					result['totalCount'] =response.result.totalCount;
-					Bb.Admin.Store.adminStore.loadData(result);
+					Bb.Admin.Store.AdminStore.loadData(result);
 				} else {
-					Bb.Admin.Store.adminStore.removeAll();
+					Bb.Admin.Store.AdminStore.removeAll();
 					Ext.Msg.alert('提示', '无符合条件的系统管理人员！');
 				}
 			});
@@ -725,7 +742,7 @@ Bb.Admin.View={
 					this.showAdmin();
 				}
 				Bb.Admin.Config.View.IsFix=1;
-				Bb.Admin.View.Running.adminGrid.tvpView.menu.mBind.setChecked(true,true);
+				Bb.Admin.View.Running.AdminGrid.tvpView.menu.mBind.setChecked(true,true);
 				Bb.Admin.Config.View.IsShow=0;
 				this.showAdmin();
 			}
@@ -838,10 +855,10 @@ Bb.Admin.View={
 			Bb.Admin.View.Running.edit_window.saveBtn.setText('保 存');
 			Bb.Admin.View.Running.edit_window.setTitle('添加系统管理人员');
 			Bb.Admin.View.Running.edit_window.savetype=0;
-			Bb.Admin.View.Running.edit_window.admin_id.setValue("");
-            var passwordObj=Bb.Admin.View.Running.edit_window.password;
-            passwordObj.allowBlank=false;
-            if (passwordObj.getEl()) passwordObj.getEl().dom.parentNode.previousSibling.innerHTML ="密码(<font color=red>*</font>)";
+			Bb.Admin.View.Running.edit_window.ID.setValue("");
+            var PasswordObj=Bb.Admin.View.Running.edit_window.Password;
+            PasswordObj.allowBlank=false;
+            if (PasswordObj.getEl()) PasswordObj.getEl().dom.parentNode.previousSibling.innerHTML ="密码(<font color=red>*</font>)";
 
 			Bb.Admin.View.Running.edit_window.show();
 			Bb.Admin.View.Running.edit_window.maximize();
@@ -861,11 +878,11 @@ Bb.Admin.View={
 
 			Bb.Admin.View.Running.edit_window.show();
 
-            var passwordObj=Bb.Admin.View.Running.edit_window.password;
-            passwordObj.allowBlank=true;
-            if (passwordObj.getEl())passwordObj.getEl().dom.parentNode.previousSibling.innerHTML ="密码";
-            Bb.Admin.View.Running.edit_window.password_old.setValue(Bb.Admin.View.Running.edit_window.password.getValue());
-            Bb.Admin.View.Running.edit_window.password.setValue("");
+            var PasswordObj=Bb.Admin.View.Running.edit_window.Password;
+            PasswordObj.allowBlank=true;
+            if (PasswordObj.getEl())PasswordObj.getEl().dom.parentNode.previousSibling.innerHTML ="密码";
+            Bb.Admin.View.Running.edit_window.Password_old.setValue(Bb.Admin.View.Running.edit_window.Password.getValue());
+            Bb.Admin.View.Running.edit_window.Password.setValue("");
 
 			Bb.Admin.View.Running.edit_window.maximize();
 		},
@@ -880,12 +897,12 @@ Bb.Admin.View={
 		 */
 		confirmDeleteAdmin : function(btn) {
 			if (btn == 'yes') {
-				var del_admin_ids ="";
+				var del_Admin_ids ="";
 				var selectedRows    = this.getSelectionModel().getSelections();
 				for ( var flag = 0; flag < selectedRows.length; flag++) {
-					del_admin_ids=del_admin_ids+selectedRows[flag].data.admin_id+",";
+					del_Admin_ids=del_Admin_ids+selectedRows[flag].data.ID+",";
 				}
-				ExtServiceAdmin.deleteByIds(del_admin_ids);
+				ExtServiceAdmin.deleteByIds(del_Admin_ids);
 				this.doSelectAdmin();
 				Ext.Msg.alert("提示", "删除成功！");
 			}
@@ -915,16 +932,16 @@ Bb.Admin.View={
 	 */
 	Panel:Ext.extend(Ext.form.FormPanel,{
 		constructor : function(config) {
-			Bb.Admin.View.Running.adminGrid=new Bb.Admin.View.Grid();
+			Bb.Admin.View.Running.AdminGrid=new Bb.Admin.View.Grid();
 			if (Bb.Admin.Config.View.IsFix==0){
-				Bb.Admin.View.Running.adminGrid.tvpView.menu.mBind.setChecked(false,true);
+				Bb.Admin.View.Running.AdminGrid.tvpView.menu.mBind.setChecked(false,true);
 			}
 			config = Ext.apply({
 				region : 'center',layout : 'fit', frame:true,
 				items: {
 					layout:'border',
 					items:[
-						Bb.Admin.View.Running.adminGrid,
+						Bb.Admin.View.Running.AdminGrid,
 						{region:'north',ref:'north',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true},
 						{region:'south',ref:'south',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true,items:[Bb.Admin.View.Running.viewTabs]},
 						{region:'west',ref:'west',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true},
@@ -942,7 +959,7 @@ Bb.Admin.View={
 		/**
 		 * 当前系统管理人员Grid对象
 		 */
-		adminGrid:null,
+		AdminGrid:null,
 
 		/**
 		 * 显示系统管理人员信息及关联信息列表的Tab页
@@ -969,7 +986,7 @@ Ext.onReady(function(){
 	/**
 	 * 系统管理人员数据模型获取数据Direct调用
 	 */
-	Bb.Admin.Store.adminStore.proxy=new Ext.data.DirectProxy({
+	Bb.Admin.Store.AdminStore.proxy=new Ext.data.DirectProxy({
 		api: {read:ExtServiceAdmin.queryPageAdmin}
 	});
 	/**

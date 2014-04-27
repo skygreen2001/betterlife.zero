@@ -2,13 +2,13 @@
 /**
  +---------------------------------<br/>
  * 工具类:自动生成代码-校验器<br/>
- +---------------------------------<br/>  
+ +---------------------------------<br/>
  * @category betterlife
- * @package core.autoCode   
+ * @package core.autoCode
  * @author skygreen skygreen2001@gmail.com
  */
 class AutoCodeValidate extends AutoCode
-{   
+{
 	/**
 	 * 预先校验表定义是否有问题<br/>
 	 * 校验包括以下问题:<br/>
@@ -32,7 +32,7 @@ class AutoCodeValidate extends AutoCode
 		foreach (self::$fieldInfos as $tablename=>$fieldInfo){
 			$tableCommentKey=self::tableCommentKey($tablename);
 			if (empty($tableCommentKey)){
-				$table_error["nocomment"][]=$tablename;    
+				$table_error["nocomment"][]=$tablename;
 			}
 
 			$realId=DataObjectSpec::getRealIDColumnName(self::getClassname($tablename));
@@ -40,25 +40,25 @@ class AutoCodeValidate extends AutoCode
 				$fieldInfo_upperkey=array_change_key_case($fieldInfo,CASE_UPPER);
 				$realId_upper= strtoupper($realId);
 				if (!array_key_exists($realId_upper, $fieldInfo_upperkey)){
-					$table_error["invalid_idname"][$tablename]=$realId; 
+					$table_error["invalid_idname"][$tablename]=$realId;
 				}
 			}else{
-				$table_error["unlocation_domain"][]=$tablename; 
+				$table_error["unlocation_domain"][]=$tablename;
 			}
 			foreach ($fieldInfo as $fieldname=>$field)
 			{
-				$field_comment=$field["Comment"];  
+				$field_comment=$field["Comment"];
 				if (empty($field_comment)){
-					$table_error["column_nocomment"][$tablename][]=$fieldname;    
+					$table_error["column_nocomment"][$tablename][]=$fieldname;
 				}
-				if (array_key_exists($fieldname."_id", $fieldInfo)&&($fieldname."_id"!=$realId)){
-					$table_error["samefieldname_id"][$tablename][]=$fieldname;  
+				if (array_key_exists($fieldname."_ID", $fieldInfo)&&($fieldname."_ID"!=$realId)){
+					$table_error["samefieldname_id"][$tablename][]=$fieldname;
 				}
 				if (in_array($fieldname, $invaid_keywords)){
-					$table_error["invaid_keywords"][$tablename][]=$fieldname; 
+					$table_error["invaid_keywords"][$tablename][]=$fieldname;
 				}
 				if  (contain($fieldname,"＿")){
-					$table_error["specialkey_half"][$tablename][]=$fieldname; 
+					$table_error["specialkey_half"][$tablename][]=$fieldname;
 				}
 			}
 		}
@@ -75,7 +75,7 @@ class AutoCodeValidate extends AutoCode
 		foreach ($print_error_info as $key => $value) {
 			if (count($table_error[$key])>0){
 				$isValid=false;
-				echo "<font color='#00FF00'>&nbsp;&nbsp;/".str_repeat("*",40).$value.str_repeat("*",40)."</font></a><br/>";  
+				echo "<font color='#00FF00'>&nbsp;&nbsp;/".str_repeat("*",40).$value.str_repeat("*",40)."</font></a><br/>";
 				foreach ($table_error[$key] as $first=>$second) {
 					if (is_numeric($first)){
 						echo "&nbsp;&nbsp;&nbsp;&nbsp;".$second."<br/>";
@@ -88,7 +88,7 @@ class AutoCodeValidate extends AutoCode
 							echo "&nbsp;&nbsp;&nbsp;&nbsp;".$first."->".$second."<br/>";
 						}
 					}
-					
+
 				}
 			}
 		}

@@ -296,6 +296,7 @@ class AutoCodeService extends AutoCode
 		$result            ="<?php\r\n";
 		$classname         =self::getClassname($tablename);
 		$instance_name     =self::getInstancename($tablename);
+        $instance_name{0}=strtolower($instance_name{0});
 		$service_classname =self::getServiceClassname($tablename);
 		$object_desc       ="";
 		$object_desc=self::tableCommentKey($tablename);
@@ -520,7 +521,7 @@ class AutoCodeService extends AutoCode
 						 "        if (\$filter)\$filter=\$this->filtertoCondition(\$filter);\r\n".
 						 "        \$data=$classname::get(\$filter);\r\n".
 						 $specialResult.
-						 "        unset(\$arr_output_header['updateTime'],\$arr_output_header['commitTime']);\r\n".
+						 "        unset(\$arr_output_header['UpdateTime'],\$arr_output_header['CommitTime']);\r\n".
 						 "        \$diffpart=date(\"YmdHis\");\r\n".
 						 "        \$outputFileName=Gc::\$attachment_path.\"{$instance_name}\".DIRECTORY_SEPARATOR.\"export\".DIRECTORY_SEPARATOR.\"{$instance_name}\$diffpart.xls\"; \r\n".
 						 "        UtilExcel::arraytoExcel(\$arr_output_header,\$data,\$outputFileName,false); \r\n".
@@ -858,8 +859,8 @@ class AutoCodeService extends AutoCode
 						{
 							if (!self::isNotColumnKeywork($fieldname))continue;
 							if ($fieldname==self::keyIDColumn($key))continue;
-							if (contain($fieldname,"_id")){
-								$to_class=str_replace("_id", "", $fieldname);
+							if (contain($fieldname,"_ID")){
+								$to_class=str_replace("_ID", "", $fieldname);
 								$to_class{0}=strtoupper($to_class{0});
 								if (class_exists($to_class)){
 									if ($to_class!=$classname){
@@ -912,8 +913,8 @@ class AutoCodeService extends AutoCode
 						{
 							if (!self::isNotColumnKeywork($fieldname))continue;
 							if ($fieldname==self::keyIDColumn($key))continue;
-							if (contain($fieldname,"_id")){
-								$to_class=str_replace("_id", "", $fieldname);
+							if (contain($fieldname,"_ID")){
+								$to_class=str_replace("_ID", "", $fieldname);
 								$to_class{0}=strtoupper($to_class{0});
 								if (class_exists($to_class)){
 									if ($to_class!=$classname){
@@ -1024,8 +1025,8 @@ MANY2MANYUPDATE;
 						{
 							if (!self::isNotColumnKeywork($fieldname))continue;
 							if ($fieldname==self::keyIDColumn($key))continue;
-							if (contain($fieldname,"_id")){
-								$to_class=str_replace("_id", "", $fieldname);
+							if (contain($fieldname,"_ID")){
+								$to_class=str_replace("_ID", "", $fieldname);
 								$to_class{0}=strtoupper($to_class{0});
 								if (class_exists($to_class)){
 									if ($to_class!=$classname){
@@ -1083,8 +1084,8 @@ MANY2MANYUPDATE;
 						{
 							if (!self::isNotColumnKeywork($fieldname))continue;
 							if ($fieldname==self::keyIDColumn($key))continue;
-							if (contain($fieldname,"_id")){
-								$to_class=str_replace("_id", "", $fieldname);
+							if (contain($fieldname,"_ID")){
+								$to_class=str_replace("_ID", "", $fieldname);
 								$to_class{0}=strtoupper($to_class{0});
 								if (class_exists($to_class)){
 									if ($to_class!=$classname){
@@ -1309,15 +1310,15 @@ MANY2MANYQUERYPAGE;
 					if (array_key_exists($fieldname,$relationSpecs)){
 						$relationShow=$relationSpecs[$fieldname];
 						foreach ($relationShow as $key=>$value) {
-							$realId=DataObjectSpec::getRealIDColumnName($key);
+							$realId=$key."_ID";
 							$show_fieldname=$value;
 							if ($realId!=$fieldname){
 								$show_fieldname.="_".$fieldname;
-								if (contain($show_fieldname,"_id")){
-									$show_fieldname=str_replace("_id","",$show_fieldname);
+								if (contain($show_fieldname,"_ID")){
+									$show_fieldname=str_replace("_ID","",$show_fieldname);
 								}
 							}
-							if ($show_fieldname=="name")$show_fieldname=strtolower($key)."_".$value;
+							if ($show_fieldname=="Name")$show_fieldname=strtolower($key)."_".$value;
 							$i_name=$key;
 							$i_name{0}=strtolower($i_name{0});
 							if (!array_key_exists("$show_fieldname",$fieldInfo)){
@@ -1328,20 +1329,20 @@ MANY2MANYQUERYPAGE;
 							}
 							$fieldInfo=self::$fieldInfos[self::getTablename($key)];
 							if (!$isTreeLevelHad){
-								if (array_key_exists("parent_id",$fieldInfo)&&array_key_exists("level",$fieldInfo)){
+								if (array_key_exists("Parent_ID",$fieldInfo)&&array_key_exists("level",$fieldInfo)){
 									$classNameField=self::getShowFieldNameByClassname($key);
 									$result.="                if (\${$i_name}_instance){\r\n".
 											 "                    \$level=\${$i_name}_instance->level;\r\n".
 											 "                    \${$i_name}ShowAll=\${$i_name}_instance->$classNameField;\r\n".
 											 "                    switch (\$level) {\r\n".
 											 "                       case 2:\r\n".
-											 "                         \${$i_name}=$key::get_by_id(\${$i_name}_instance->parent_id);\r\n".
+											 "                         \${$i_name}=$key::get_by_id(\${$i_name}_instance->Parent_ID);\r\n".
 											 "                         \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
 											 "                         break;\r\n".
 											 "                       case 3:\r\n".
-											 "                         \${$i_name}=$key::get_by_id(\${$i_name}_instance->parent_id);\r\n".
+											 "                         \${$i_name}=$key::get_by_id(\${$i_name}_instance->Parent_ID);\r\n".
 											 "                         \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
-											 "                         \${$i_name}=$key::get_by_id(\${$i_name}->parent_id);\r\n".
+											 "                         \${$i_name}=$key::get_by_id(\${$i_name}->Parent_ID);\r\n".
 											 "                         \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
 											 "                         break;\r\n".
 											 "                    }\r\n".
@@ -1380,11 +1381,11 @@ MANY2MANYQUERYPAGE;
 							$show_fieldname=$value;
 							if ($realId!=$fieldname){
 								$show_fieldname.="_".$fieldname;
-								if (contain($show_fieldname,"_id")){
-									$show_fieldname=str_replace("_id","",$show_fieldname);
+								if (contain($show_fieldname,"_ID")){
+									$show_fieldname=str_replace("_ID","",$show_fieldname);
 								}
 							}
-							if ($show_fieldname=="name")$show_fieldname=strtolower($key)."_".$value;
+							if ($show_fieldname=="Name")$show_fieldname=strtolower($key)."_".$value;
 							$i_name=$key;
 							$i_name{0}=strtolower($i_name{0});
 							if (!array_key_exists("$show_fieldname",$fieldInfo)){
@@ -1397,7 +1398,7 @@ MANY2MANYQUERYPAGE;
 							}
 							$fieldInfos=self::$fieldInfos[self::getTablename($key)];
 							if (!$isTreeLevelHad){
-								if (array_key_exists("parent_id",$fieldInfos)&&array_key_exists("level",$fieldInfos)){
+								if (array_key_exists("Parent_ID",$fieldInfos)&&array_key_exists("level",$fieldInfos)){
 									$classNameField=self::getShowFieldNameByClassname($key);
 									$field_comment=$field["Comment"];
 									$field_comment=self::columnCommentKey($field_comment,$fieldname);
@@ -1406,13 +1407,13 @@ MANY2MANYQUERYPAGE;
 											 "                \${$i_name}ShowAll=\${$i_name}_instance->$classNameField;\r\n".
 											 "                switch (\$level) {\r\n".
 											 "                   case 2:\r\n".
-											 "                     \${$i_name}=$key::get_by_id(\${$i_name}_instance->parent_id);\r\n".
+											 "                     \${$i_name}=$key::get_by_id(\${$i_name}_instance->Parent_ID);\r\n".
 											 "                     \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
 											 "                     break;\r\n".
 											 "                   case 3:\r\n".
-											 "                     \${$i_name}=$key::get_by_id(\${$i_name}_instance->parent_id);\r\n".
+											 "                     \${$i_name}=$key::get_by_id(\${$i_name}_instance->Parent_ID);\r\n".
 											 "                     \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
-											 "                     \${$i_name}=$key::get_by_id(\${$i_name}->parent_id);\r\n".
+											 "                     \${$i_name}=$key::get_by_id(\${$i_name}->Parent_ID);\r\n".
 											 "                     \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
 											 "                     break;\r\n".
 											 "                }\r\n".
@@ -1453,7 +1454,7 @@ MANY2MANYQUERYPAGE;
 							$show_fieldname=self::getShowFieldNameByClassname($key);
 							$i_name{0}=strtolower($i_name{0});
 							$fieldInfo_relation=self::$fieldInfos[self::getTablename($key)];
-							if (array_key_exists("parent_id",$fieldInfo_relation)&&array_key_exists("level",$fieldInfo_relation)){
+							if (array_key_exists("Parent_ID",$fieldInfo_relation)&&array_key_exists("level",$fieldInfo_relation)){
 								if (!$isTreeLevelHad){
 									$classNameField=self::getShowFieldNameByClassname($key);
 									$field_comment=$field["Comment"];
@@ -1472,16 +1473,16 @@ MANY2MANYQUERYPAGE;
 											 "                                        case 2:\r\n".
 											 "                                            \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[0],\"level\"=>1));\r\n".
 											 "                                            if (\${$i_name}){\r\n".
-											 "                                                \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[1],\"level\"=>2,\"parent_id\"=>\${$i_name}->{$fieldname}));\r\n".
+											 "                                                \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[1],\"level\"=>2,\"Parent_ID\"=>\${$i_name}->{$fieldname}));\r\n".
 											 "                                                if (\${$i_name})\${$instance_name}[\"{$fieldname}\"]=\${$i_name}->{$fieldname};\r\n".
 											 "                                            }\r\n".
 											 "                                            break;\r\n".
 											 "                                        case 3:\r\n".
 											 "                                            \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[0],\"level\"=>1));\r\n".
 											 "                                            if (\${$i_name}){\r\n".
-											 "                                                \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[1],\"level\"=>2,\"parent_id\"=>\${$i_name}->{$fieldname}));\r\n".
+											 "                                                \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[1],\"level\"=>2,\"Parent_ID\"=>\${$i_name}->{$fieldname}));\r\n".
 											 "                                                if (\${$i_name}){\r\n".
-											 "                                                    \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[2],\"level\"=>3,\"parent_id\"=>\${$i_name}->{$fieldname}));\r\n".
+											 "                                                    \${$i_name}={$key}::get_one(array(\"{$show_fieldname}\"=>\${$i_name}_all_arr[2],\"level\"=>3,\"Parent_ID\"=>\${$i_name}->{$fieldname}));\r\n".
 											 "                                                    if (\${$i_name})\${$instance_name}[\"{$fieldname}\"]=\${$i_name}->{$fieldname};\r\n".
 											 "                                                }\r\n".
 											 "                                            }\r\n".

@@ -36,5 +36,19 @@ class Blog extends DataObject
     public $Blog_Content;
     //</editor-fold>
 
+    /**
+     * 从属一对一关系
+     */
+    static $belong_has_one=array(
+        "user"=>"User"
+    );
+
+    /**
+     * 一对多关系
+     */
+    static $has_many=array(
+        "comments"=>"Comment"
+    );
+
 }
 ?>

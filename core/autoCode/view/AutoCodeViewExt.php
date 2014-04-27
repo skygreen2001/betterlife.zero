@@ -150,7 +150,7 @@ class AutoCodeViewExt extends AutoCode
 							$isNeedCreate=true;
 							break 3;
 						}
-						if (array_key_exists("parent_id",$fieldInfo)){
+						if (array_key_exists("Parent_ID",$fieldInfo)){
 							$filename =$key."Tree".Config_F::SUFFIX_FILE_PHP;
 							if (!file_exists(self::$ajax_dir_full.$filename)){
 								$isNeedCreate=true;
@@ -176,7 +176,7 @@ class AutoCodeViewExt extends AutoCode
 						$classname{0}=strtolower($classname{0});
 
 						$fieldInfo=self::$fieldInfos[self::getTablename($key)];
-						if (array_key_exists("parent_id",$fieldInfo)){
+						if (array_key_exists("Parent_ID",$fieldInfo)){
 							$filename =$key_i."Tree".Config_F::SUFFIX_FILE_PHP;
 							if (!file_exists(self::$ajax_dir_full.$filename)){
 								$realId=DataObjectSpec::getRealIDColumnName($classname);
@@ -185,9 +185,9 @@ class AutoCodeViewExt extends AutoCode
 										 "require_once (\"../../../../init.php\");\r\n".
 										 "\$node=intval(\$_REQUEST[\"id\"]);\r\n".
 										 "if (\$node){\r\n".
-										 "    \$condition=array(\"parent_id\"=>\"\$node\");\r\n".
+										 "    \$condition=array(\"Parent_ID\"=>\"\$node\");\r\n".
 										 "}else{\r\n".
-										 "    \$condition=array(\"parent_id\"=>'0');\r\n".
+										 "    \$condition=array(\"Parent_ID\"=>'0');\r\n".
 										 "}\r\n".
 										 "\${$key_i}s={$key}::get(\$condition,\"$realId asc\");\r\n".
 										 "echo \"[\";\r\n".
@@ -382,17 +382,17 @@ class AutoCodeViewExt extends AutoCode
 						{
 							$relationShow=$relationSpecs[$fieldname];
 							foreach ($relationShow as $key=>$value) {
-								$realId=DataObjectSpec::getRealIDColumnName($key);
+								$realId=$key."_ID";
 								if (empty($realId))$realId=$fieldname;
 								if ((!array_key_exists($value,$fieldInfo))||($classname==$key)){
 									$show_fieldname=$value;
 									if ($realId!=$fieldname){
-										if (contain($fieldname,"_id")){
-											$fieldname=str_replace("_id","",$fieldname);
+										if (contain($fieldname,"_ID")){
+											$fieldname=str_replace("_ID","",$fieldname);
 										}
 										$show_fieldname.="_".$fieldname;
 									}
-									if ($show_fieldname=="name"){
+									if ($show_fieldname=="Name"){
 										$show_fieldname= strtolower($key)."_".$value;
 									}
 									if (!array_key_exists("$show_fieldname",$fieldInfo)){
@@ -411,7 +411,7 @@ class AutoCodeViewExt extends AutoCode
 								$fieldInfo_relationshow=self::$fieldInfos[self::getTablename($key)];
 								$key{0}=strtolower($key{0});
 								if (!$isTreelevelStoreHad){
-									if (array_key_exists("parent_id",$fieldInfo_relationshow)){
+									if (array_key_exists("Parent_ID",$fieldInfo_relationshow)){
 										$fields.="                {name: '{$key}ShowAll',type: 'string'},\r\n";
 										$isTreelevelStoreHad=true;
 									}
@@ -468,8 +468,8 @@ class AutoCodeViewExt extends AutoCode
 						{
 							if (!self::isNotColumnKeywork($fieldname))continue;
 							if ($fieldname==self::keyIDColumn($key))continue;
-							if (contain($fieldname,"_id")){
-								$to_class=str_replace("_id", "", $fieldname);
+							if (contain($fieldname,"_ID")){
+								$to_class=str_replace("_ID", "", $fieldname);
 								$to_class{0}=strtoupper($to_class{0});
 								if (class_exists($to_class)){
 									if ($to_class!=$classname){
@@ -588,16 +588,16 @@ class AutoCodeViewExt extends AutoCode
 							}
 							$field_comment=$field["Comment"];
 							$isMoreShowAll=false;
-							if (contain($fieldname,"_id")){
-								$maybe_classname=str_replace("_id","",$fieldname);
+							if (contain($fieldname,"_ID")){
+								$maybe_classname=str_replace("_ID","",$fieldname);
 								$maybe_classname{0}=strtoupper($maybe_classname{0});
 								if (class_exists($maybe_classname))
 								{
 									$fieldname=self::getShowFieldNameByClassname($maybe_classname);
-									if ($fieldname=="name")$fieldname=strtolower($maybe_classname)."_".$fieldname;
+									if ($fieldname=="Name")$fieldname=strtolower($maybe_classname)."_".$fieldname;
 									$datatype="string";
 									$fieldInfo_maybe=self::$fieldInfos[self::getTablename($maybe_classname)];
-									if (array_key_exists("parent_id",$fieldInfo_maybe)&&array_key_exists("level",$fieldInfo_maybe)){
+									if (array_key_exists("Parent_ID",$fieldInfo_maybe)&&array_key_exists("Level",$fieldInfo_maybe)){
 										$isMoreShowAll=true;
 									}
 								}
@@ -688,15 +688,15 @@ class AutoCodeViewExt extends AutoCode
 							$field_comment=self::columnCommentKey($field_comment,$fieldname);
 							$datatype=self::comment_type($field["Type"]);
 							$isMoreShowAll=false;
-							if (contain($fieldname,"_id")){
-								$maybe_classname=str_replace("_id","",$fieldname);
+							if (contain($fieldname,"_ID")){
+								$maybe_classname=str_replace("_ID","",$fieldname);
 								$maybe_classname{0}=strtoupper($maybe_classname{0});
 								if (class_exists($maybe_classname))
 								{
 									$fieldname=self::getShowFieldNameByClassname($maybe_classname);
-									if ($fieldname=="name")$fieldname=strtolower($maybe_classname)."_".$fieldname;
+									if ($fieldname=="Name")$fieldname=strtolower($maybe_classname)."_".$fieldname;
 									$fieldInfo_maybe=self::$fieldInfos[self::getTablename($maybe_classname)];
-									if (array_key_exists("parent_id",$fieldInfo_maybe)&&array_key_exists("level",$fieldInfo_maybe)){
+									if (array_key_exists("Parent_ID",$fieldInfo_maybe)&&array_key_exists("Level",$fieldInfo_maybe)){
 										$isMoreShowAll=true;
 									}
 								}
@@ -815,22 +815,22 @@ class AutoCodeViewExt extends AutoCode
 									}
 									$ignord_field=$value;
 								}
-								$realId=DataObjectSpec::getRealIDColumnName($key);
+								$realId=$key."_ID";
 								if (empty($realId))$realId=$fieldname;
 								//避免name和本表的name冲突可能
-								if ($value=="name") $value=strtolower($key)."_".$value;
+								if ($value=="Name") $value=strtolower($key)."_".$value;
 								$show_name_diff=$value;
 
 								if ($realId!=$fieldname){
-									if (contain($fieldname,"_id")){
-										$fieldname_modify=str_replace("_id","",$fieldname);
+									if (contain($fieldname,"_ID")){
+										$fieldname_modify=str_replace("_ID","",$fieldname);
 									}
 									$show_name_diff.="_".$fieldname_modify;
 								}
 								$fieldInfo_relationshow=self::$fieldInfos[self::getTablename($key)];
 								$current_classname=$key;
 								$key{0}=strtolower($key{0});
-								if (array_key_exists("parent_id",$fieldInfo_relationshow)){
+								if (array_key_exists("Parent_ID",$fieldInfo_relationshow)){
 									$treeLevelVisible_Add="\r\n".
 														  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(false);\r\n".
 														  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(false);\r\n";
@@ -1248,11 +1248,11 @@ class AutoCodeViewExt extends AutoCode
 								$field_comment=$field["Comment"];
 								$field_comment=self::columnCommentKey($field_comment,$fieldname);
 								foreach ($relationShow as $key=>$value) {
-									$realId=DataObjectSpec::getRealIDColumnName($key);
+									$realId=$key."_ID";
 									$show_fieldname=$value;
 									if ($realId!=$fieldname){
-										if (contain($fieldname,"_id")){
-											$fieldname=str_replace("_id","",$fieldname);
+										if (contain($fieldname,"_ID")){
+											$fieldname=str_replace("_ID","",$fieldname);
 										}
 										$show_fieldname.="_".$fieldname;
 									}
@@ -1262,7 +1262,7 @@ class AutoCodeViewExt extends AutoCode
 									$fieldInfo_relationshow=self::$fieldInfos[self::getTablename($key)];
 									$show_TreelevelViewInfo="";
 									if (!$isTreelevelViewInfoHad){
-										if (array_key_exists("parent_id",$fieldInfo_relationshow)){
+										if (array_key_exists("Parent_ID",$fieldInfo_relationshow)){
 											$key{0}=strtolower($key{0});
 											$show_TreelevelViewInfo="<tpl if=\"$show_fieldname\">({{$key}ShowAll})</tpl>";
 											$isTreelevelViewInfoHad=true;
@@ -1340,15 +1340,15 @@ class AutoCodeViewExt extends AutoCode
 								$field_comment=$field["Comment"];
 								$field_comment=self::columnCommentKey($field_comment,$fieldname);
 								foreach ($relationShow as $key=>$value) {
-									$realId=DataObjectSpec::getRealIDColumnName($key);
+									$realId=$key."_ID";
 									$show_fieldname=$value;
 									if ($realId!=$fieldname){
-										if (contain($fieldname,"_id")){
-											$fieldname=str_replace("_id","",$fieldname);
+										if (contain($fieldname,"_ID")){
+											$fieldname=str_replace("_ID","",$fieldname);
 										}
 										$show_fieldname.="_".$fieldname;
 									}
-									if ($show_fieldname=="name"){
+									if ($show_fieldname=="Name"){
 										$show_fieldname=strtolower($key)."_".$show_fieldname;
 									}
 									if (!array_key_exists("$show_fieldname",$fieldInfo)){
@@ -1356,7 +1356,7 @@ class AutoCodeViewExt extends AutoCode
 									}
 								}
 							}else{
-								if ($value=="name"){
+								if ($value=="Name"){
 									$field_comment=$field["Comment"];
 									$field_comment=self::columnCommentKey($field_comment,$fieldname);
 									$show_fieldname= strtolower($key)."_".$value;
@@ -1484,7 +1484,7 @@ class AutoCodeViewExt extends AutoCode
 							$store_con_relation_class[0]=strtolower($store_con_relation_class[0]);
 							$storeName="$appName_alias.$classname.Store.".$store_con_relation_class."StoreForCombo";
 							$fieldInfo_relationshow=self::$fieldInfos[self::getTablename($con_relation_class)];
-							if (array_key_exists("parent_id",$fieldInfo_relationshow)){
+							if (array_key_exists("Parent_ID",$fieldInfo_relationshow)){
 								$fieldname=self::getShowFieldNameByClassname($con_relation_class);
 								$fsname=$instancename_pre.$fieldname;
 								$con_relation_class{0}=strtolower($con_relation_class{0});

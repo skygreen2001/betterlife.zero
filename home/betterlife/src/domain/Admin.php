@@ -67,6 +67,13 @@ class Admin extends DataObject
     public $LoginTimes;
     //</editor-fold>
 
+    /**
+     * 从属一对一关系
+     */
+    static $belong_has_one=array(
+        "department"=>"Department"
+    );
+
     /** 
      * 显示扮演角色<br/>
      * 系统管理员扮演角色。<br/>

@@ -20,8 +20,8 @@ if (self::isMany2ManyByClassname($key_many))
     {
         if (!self::isNotColumnKeywork($fieldname))continue;
         if ($fieldname==self::keyIDColumn($key_many))continue;
-        if (contain($fieldname,"_id")){
-            $to_class=str_replace("_id", "", $fieldname);
+        if (contain($fieldname,"_ID")){
+            $to_class=str_replace("_ID", "", $fieldname);
             $to_class{0}=strtoupper($to_class{0});
             if (class_exists($to_class)){
                 if ($to_class!=$classname){
