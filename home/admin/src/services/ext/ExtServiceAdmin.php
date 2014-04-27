@@ -44,10 +44,12 @@ class ExtServiceAdmin extends ServiceBasic
 			$adminObj=new Admin($admin);
 		}
 		if ($adminObj instanceof Admin){
-			if(empty($adminObj->password))
-			{
-				$adminObj->password= $admin["password_old"];
-			}
+            if(!empty($adminObj->Password))
+            {
+                $adminObj->Password= $adminObj->Password;
+            }else{
+                $adminObj->Password= $admin["Password_old"];
+            }
 			$data=$adminObj->update();
 		}else{
 			$data=false;

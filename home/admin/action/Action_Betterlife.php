@@ -18,7 +18,7 @@ class Action_Betterlife extends ActionExt
 		 $this->init();
 		 $this->ExtDirectMode();
 		 $this->ExtUpload();
-		 $this->loadExtJs('core/admin.js');
+		 $this->loadExtJs('core/Admin.js');
 	 }
 
 	 /**
@@ -29,8 +29,8 @@ class Action_Betterlife extends ActionExt
 		 $this->init();
 		 $this->ExtDirectMode();
 		 $this->ExtUpload();
-		 $this->loadExtJs('core/user.js');
-         $this->load_onlineditor(array('blog_content','comment'));
+		 $this->loadExtJs('core/User.js');
+         $this->load_onlineditor(array('Blog_Content','Comment'));
 	 }
 
 	 /**
@@ -41,8 +41,8 @@ class Action_Betterlife extends ActionExt
 		 $this->init();
 		 $this->ExtDirectMode();
 		 $this->ExtUpload();
-		 $this->loadExtJs('core/blog.js');
-         $this->load_onlineditor(array('comment','blog_content'));
+		 $this->loadExtJs('core/Blog.js');
+         $this->load_onlineditor(array('Comment','Blog_Content'));
 	 }
 }
 ?>

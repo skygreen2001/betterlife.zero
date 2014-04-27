@@ -23,6 +23,7 @@ class ExtServiceBlog extends ServiceBasic
 			$blogObj=new Blog($blog);
 		}
 		if ($blogObj instanceof Blog){
+			$blogObj->setUpdateTime(UtilDateTime::now());
 			$data=$blogObj->save();
 		}else{
 			$data=false;
@@ -93,23 +94,20 @@ class ExtServiceBlog extends ServiceBasic
 		unset($condition['start'],$condition['limit']);
 		$condition=$this->filtertoCondition($condition);
 		$count=Blog::count($condition);
-		if ($count>0){
-			if ($limit>$count)$limit=$count;
-			$data =Blog::queryPage($start,$limit,$condition);
-			foreach ($data as $blog) {
-				if ($blog->user_id){
-					$user_instance=User::get_by_id($blog->user_id);
-					$blog['username']=$user_instance->username;
-				}
-				if ($blog["commitTime"]){
-					UtilDateTime::ChinaTime();
-					$blog["commitTime"]=UtilDateTime::timestampToDateTime($blog["commitTime"]);
-				}
-			}
-			if ($data==null)$data=array();
-		}else{
-			$data=array();
-		}
+        if ($count>0){
+            if ($limit>$count)$limit=$count;
+            $data =Blog::queryPage($start,$limit,$condition);
+            foreach ($data as $blog) {
+                if ($blog->User_ID){
+                    $user_instance=User::get_by_id($blog->User_ID);
+                    $blog['Username']=$user_instance->Username;
+                }
+                $blog->Blog_ContentShow=preg_replace("/<\s*img\s+[^>]*?src\s*=\s*(\'|\")(.*?)\\1[^>]*?\/?\s*>/i","<a href='\${2}' target='_blank'>\${0}</a>",$blog->Blog_Content);
+            }
+            if ($data==null)$data=array();
+        }else{
+            $data=array();
+        }
 		return array(
 			'success' => true,
 			'totalCount'=>$count,

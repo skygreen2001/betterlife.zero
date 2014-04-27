@@ -107,6 +107,7 @@ class AutoCodeViewExt extends AutoCode
 		foreach(self::$tableList as $tablename){
 			$table_comment=self::tableCommentKey($tablename);
 			$instancename=self::getInstancename($tablename);
+            $instancename{0}=strtolower($instancename{0});
 			$section_content.="        <menu name=\"$table_comment\" id=\"$instancename\" address=\"index.php?go=admin.$appName.{$instancename}\" />\r\n";
 		}
 		$filename="menu.config.xml";
@@ -242,6 +243,9 @@ class AutoCodeViewExt extends AutoCode
 									 "}\r\n".
 									 "\$arr['totalCount']= {$key}::count(\$condition);\r\n".
 									 "\$arr['{$key_i}s']    = {$key}::queryPage(\$start,\$limit,\$condition);\r\n".
+									 "foreach (\$arr['{$key_i}s'] as \${$key_i}) {\r\n".
+									 "    \${$key_i}->{$key}_ID=\${$key_i}->ID;\r\n".
+									 "}\r\n".
 									 "echo json_encode(\$arr);\r\n".
 									 "?>\r\n";
 							$key{0}=strtolower($key{0});
@@ -270,6 +274,7 @@ class AutoCodeViewExt extends AutoCode
 		$table_comment=self::tableCommentKey($tablename);
 		$classname=self::getClassname($tablename);
 		$instancename=self::getInstancename($tablename);
+        $instancename{0}=strtolower($instancename{0});
 		$appName=ucfirst($appName);
 		//Ext "store" 中包含的fields
 		$storeInfo=self::model_fields($tablename,$classname,$instancename,$fieldInfo);

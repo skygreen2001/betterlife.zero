@@ -51,7 +51,7 @@ Bb.Admin.Store = {
 	/**
 	 * 系统管理人员
 	 */
-	AdminStore:new Ext.data.Store({
+	adminStore:new Ext.data.Store({
 		reader: new Ext.data.JsonReader({
 			totalProperty: 'totalCount',
 			successProperty: 'success',
@@ -414,7 +414,8 @@ Bb.Admin.View={
 				}, config);
 			Bb.Admin.View.UploadWindow.superclass.constructor.call(this, config);
 		}
-	}),
+	}),
+
 	/**
 	 * 视图：系统管理人员列表
 	 */
@@ -426,7 +427,7 @@ Bb.Admin.View={
 				 */
 				filter:null,
 				region : 'center',
-				store : Bb.Admin.Store.AdminStore,
+				store : Bb.Admin.Store.adminStore,
 				sm : this.sm,
 				frame : true,trackMouseOver : true,enableColumnMove : true,columnLines : true,
 				loadMask : true,stripeRows : true,headerAsText : false,
@@ -554,7 +555,7 @@ Bb.Admin.View={
 				},
 				bbar: new Ext.PagingToolbar({
 					pageSize: Bb.Admin.Config.PageSize,
-					store: Bb.Admin.Store.AdminStore,
+					store: Bb.Admin.Store.adminStore,
 					scope:this,autoShow:true,displayInfo: true,
 					displayMsg: '当前显示 {0} - {1}条记录/共 {2}条记录。',
 					emptyMsg: "无显示数据",
@@ -708,9 +709,9 @@ Bb.Admin.View={
 					var result           = new Array();
 					result['data']       =response.result.data;
 					result['totalCount'] =response.result.totalCount;
-					Bb.Admin.Store.AdminStore.loadData(result);
+					Bb.Admin.Store.adminStore.loadData(result);
 				} else {
-					Bb.Admin.Store.AdminStore.removeAll();
+					Bb.Admin.Store.adminStore.removeAll();
 					Ext.Msg.alert('提示', '无符合条件的系统管理人员！');
 				}
 			});
@@ -986,7 +987,7 @@ Ext.onReady(function(){
 	/**
 	 * 系统管理人员数据模型获取数据Direct调用
 	 */
-	Bb.Admin.Store.AdminStore.proxy=new Ext.data.DirectProxy({
+	Bb.Admin.Store.adminStore.proxy=new Ext.data.DirectProxy({
 		api: {read:ExtServiceAdmin.queryPageAdmin}
 	});
 	/**

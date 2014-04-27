@@ -57,12 +57,12 @@ Bb.User.Store = {
 			successProperty: 'success',
 			root: 'data',remoteSort: true,
 			fields : [
-                {name: 'user_id',type: 'int'},
-                {name: 'username',type: 'string'},
-                {name: 'password',type: 'string'},
-                {name: 'email',type: 'string'},
-                {name: 'cellphone',type: 'string'},
-                {name: 'loginTimes',type: 'int'}
+                {name: 'ID',type: 'int'},
+                {name: 'Username',type: 'string'},
+                {name: 'Password',type: 'string'},
+                {name: 'Email',type: 'string'},
+                {name: 'Cellphone',type: 'string'},
+                {name: 'LoginTimes',type: 'int'}
 			]}
 		),
 		writer: new Ext.data.JsonWriter({
@@ -86,10 +86,10 @@ Bb.User.Store = {
             successProperty: 'success',
             root: 'data',remoteSort: true,
             fields : [
-                {name: 'blog_id',type: 'int'},
-                {name: 'username',type: 'string'},
-                {name: 'blog_name',type: 'string'},
-                {name: 'blog_content',type: 'string'}
+                {name: 'ID',type: 'int'},
+                {name: 'Username',type: 'string'},
+                {name: 'Blog_Name',type: 'string'},
+                {name: 'Blog_Content',type: 'string'}
             ]}
         ),
         writer: new Ext.data.JsonWriter({
@@ -105,6 +105,23 @@ Bb.User.Store = {
         }
     }),
     /**
+     * 用户
+     */
+    userStoreForCombo:new Ext.data.Store({
+        proxy: new Ext.data.HttpProxy({
+            url: 'home/admin/src/httpdata/user.php'
+        }),
+        reader: new Ext.data.JsonReader({
+            root: 'users',
+            autoLoad: true,
+            totalProperty: 'totalCount',
+            idProperty: 'ID'
+        }, [
+            {name: 'ID', mapping: 'ID'},
+            {name: 'Username', mapping: 'Username'}
+        ])
+    }),
+    /**
      * 评论
      */
     commentStore:new Ext.data.Store({
@@ -113,10 +130,10 @@ Bb.User.Store = {
             successProperty: 'success',
             root: 'data',remoteSort: true,
             fields : [
-                {name: 'comment_id',type: 'int'},
-                {name: 'username',type: 'string'},
-                {name: 'comment',type: 'string'},
-                {name: 'blog_name',type: 'string'}
+                {name: 'ID',type: 'int'},
+                {name: 'Username',type: 'string'},
+                {name: 'Comment',type: 'string'},
+                {name: 'Blog_Name',type: 'string'}
             ]}
         ),
         writer: new Ext.data.JsonWriter({
@@ -142,10 +159,10 @@ Bb.User.Store = {
             root: 'blogs',
             autoLoad: true,
             totalProperty: 'totalCount',
-            idProperty: 'blog_id'
+            idProperty: 'ID'
         }, [
-            {name: 'blog_id', mapping: 'blog_id'},
-            {name: 'blog_name', mapping: 'blog_name'}
+            {name: 'ID', mapping: 'ID'},
+            {name: 'Blog_Name', mapping: 'Blog_Name'}
         ])
     })
 };
@@ -186,13 +203,13 @@ Bb.User.View={
 							xtype : 'textfield',anchor:'98%'
 						},
 						items : [
-                            {xtype: 'hidden',name : 'user_id',ref:'../user_id'},
-                            {fieldLabel : '用户名(<font color=red>*</font>)',name : 'username',allowBlank : false},
-                            {fieldLabel : '用户密码(<font color=red>*</font>)',name : 'password',inputType:'password',ref:'../password'},
-                            {xtype: 'hidden',name : 'password_old',ref:'../password_old'},
-                            {fieldLabel : '邮箱地址',name : 'email',vtype:'email'},
-                            {fieldLabel : '手机电话',name : 'cellphone'},
-                            {fieldLabel : '访问次数',name : 'loginTimes',xtype : 'numberfield'}
+                            {xtype: 'hidden',name : 'ID',ref:'../ID'},
+                            {fieldLabel : '用户名',name : 'Username'},
+                            {fieldLabel : '用户密码(<font color=red>*</font>)',name : 'Password',inputType:'Password',ref:'../Password'},
+                            {xtype: 'hidden',name : 'Password_old',ref:'../Password_old'},
+                            {fieldLabel : '邮箱地址',name : 'Email',vtype:'email'},
+                            {fieldLabel : '手机电话',name : 'Cellphone'},
+                            {fieldLabel : '访问次数',name : 'LoginTimes',xtype : 'numberfield'}
 						]
 					})
 				],
@@ -310,10 +327,10 @@ Bb.User.View={
 					{title: '基本信息',ref:'tabUserDetail',iconCls:'tabs',
 					 tpl: [
 						 '<table class="viewdoblock">',
-                         '    <tr class="entry"><td class="head">用户名</td><td class="content">{username}</td></tr>',
-                         '    <tr class="entry"><td class="head">邮箱地址</td><td class="content">{email}</td></tr>',
-                         '    <tr class="entry"><td class="head">手机电话</td><td class="content">{cellphone}</td></tr>',
-                         '    <tr class="entry"><td class="head">访问次数</td><td class="content">{loginTimes}</td></tr>',
+                         '    <tr class="entry"><td class="head">用户名</td><td class="content">{Username}</td></tr>',
+                         '    <tr class="entry"><td class="head">邮箱地址</td><td class="content">{Email}</td></tr>',
+                         '    <tr class="entry"><td class="head">手机电话</td><td class="content">{Cellphone}</td></tr>',
+                         '    <tr class="entry"><td class="head">访问次数</td><td class="content">{LoginTimes}</td></tr>',
 						 '</table>'
 					 ]}
 				);
@@ -390,13 +407,13 @@ Bb.User.View={
                             switch (Bb.User.Config.OnlineEditor)
                             {
                                 case 2:
-                                    Bb.User.View.BlogView.EditWindow.KindEditor_blog_content = KindEditor.create('textarea[name="blog_content"]',{width:'98%',minHeith:'350px', filterMode:true});
+                                    Bb.User.View.BlogView.EditWindow.KindEditor_Blog_Content = KindEditor.create('textarea[name="Blog_Content"]',{width:'98%',minHeith:'350px', filterMode:true});
                                     break
                                 case 3:
-                                    pageInit_blog_content();
+                                    pageInit_Blog_Content();
                                     break
                                 default:
-                                    ckeditor_replace_blog_content();
+                                    ckeditor_replace_Blog_Content();
                             }
                         }
 					},
@@ -410,10 +427,33 @@ Bb.User.View={
 								xtype : 'textfield',anchor:'98%'
 							},
 							items : [
-                                {xtype: 'hidden',name : 'blog_id',ref:'../blog_id'},
-                                {xtype: 'hidden',name : 'user_id',ref:'../user_id'},
-                                {fieldLabel : '博客标题',name : 'blog_name'},
-                                {fieldLabel : '博客内容',name : 'blog_content',xtype : 'textarea',id:'blog_content',ref:'blog_content'}
+                                {xtype: 'hidden',name : 'ID',ref:'../ID'},
+                                {xtype: 'hidden',name : 'User_ID',ref:'../User_ID'},
+                                {
+                                     fieldLabel : '用户',xtype: 'combo',name : 'Username',ref : '../Username',
+                                     store:Bb.User.Store.userStoreForCombo,emptyText: '请选择用户',itemSelector: 'div.search-item',
+                                     loadingText: '查询中...',width: 570, pageSize:Bb.User.Config.PageSize,
+                                     displayField:'Username',grid:this,
+                                     mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,
+                                     forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,
+                                     tpl:new Ext.XTemplate(
+                                         '<tpl for="."><div class="search-item">',
+                                             '<h3>{Username}</h3>',
+                                         '</div></tpl>'
+                                     ),
+                                     listeners:{
+                                         'beforequery': function(event){delete event.combo.lastQuery;}
+                                     },
+                                     onSelect:function(record,index){
+                                         if(this.fireEvent('beforeselect', this, record, index) !== false){
+                                            this.grid.User_ID.setValue(record.data.User_ID);
+                                            this.grid.Username.setValue(record.data.Username);
+                                            this.collapse();
+                                         }
+                                     }
+                                },
+                                {fieldLabel : '博客标题',name : 'Blog_Name'},
+                                {fieldLabel : '博客内容',name : 'Blog_Content',xtype : 'textarea',id:'Blog_Content',ref:'Blog_Content'}
 							]
 						})
 					],
@@ -423,13 +463,13 @@ Bb.User.View={
                             switch (Bb.User.Config.OnlineEditor)
                             {
                                 case 2:
-                                    if (Bb.User.View.BlogView.EditWindow.KindEditor_blog_content)this.editForm.blog_content.setValue(Bb.User.View.BlogView.EditWindow.KindEditor_blog_content.html());
+                                    if (Bb.User.View.BlogView.EditWindow.KindEditor_Blog_Content)this.editForm.Blog_Content.setValue(Bb.User.View.BlogView.EditWindow.KindEditor_Blog_Content.html());
                                     break
                                 case 3:
-                                    if (xhEditor_blog_content)this.editForm.blog_content.setValue(xhEditor_blog_content.getSource());
+                                    if (xhEditor_Blog_Content)this.editForm.Blog_Content.setValue(xhEditor_Blog_Content.getSource());
                                     break
                                 default:
-                                    if (CKEDITOR.instances.blog_content) this.editForm.blog_content.setValue(CKEDITOR.instances.blog_content.getData());
+                                    if (CKEDITOR.instances.Blog_Content) this.editForm.Blog_Content.setValue(CKEDITOR.instances.Blog_Content.getData());
                             }
 
 							if (!this.editForm.getForm().isValid()) {
@@ -477,12 +517,12 @@ Bb.User.View={
                             switch (Bb.User.Config.OnlineEditor)
                             {
                                 case 2:
-                                    if (Bb.User.View.BlogView.EditWindow.KindEditor_blog_content) Bb.User.View.BlogView.EditWindow.KindEditor_blog_content.html(Bb.User.View.Running.blogGrid.getSelectionModel().getSelected().data.blog_content);
+                                    if (Bb.User.View.BlogView.EditWindow.KindEditor_Blog_Content) Bb.User.View.BlogView.EditWindow.KindEditor_Blog_Content.html(Bb.User.View.Running.blogGrid.getSelectionModel().getSelected().data.Blog_Content);
                                     break
                                 case 3:
                                     break
                                 default:
-                                    if (CKEDITOR.instances.blog_content) CKEDITOR.instances.blog_content.setData(Bb.User.View.Running.blogGrid.getSelectionModel().getSelected().data.blog_content);
+                                    if (CKEDITOR.instances.Blog_Content) CKEDITOR.instances.Blog_Content.setData(Bb.User.View.Running.blogGrid.getSelectionModel().getSelected().data.Blog_Content);
                             }
 
 						}
@@ -511,9 +551,10 @@ Bb.User.View={
 						},
 						columns : [
                             this.sm,
-                            {header : '标识',dataIndex : 'blog_id',hidden:true},
-                            {header : '博客标题',dataIndex : 'blog_name'},
-                            {header : '博客内容',dataIndex : 'blog_content'}
+                            {header : '标识',dataIndex : 'ID',hidden:true},
+                            {header : '用户',dataIndex : 'Username'},
+                            {header : '博客标题',dataIndex : 'Blog_Name'},
+                            {header : '博客内容',dataIndex : 'Blog_Content'}
 						]
 					}),
 					tbar : {
@@ -610,9 +651,9 @@ Bb.User.View={
 			 */
 			doSelectBlog : function() {
 				if (Bb.User.View.Running.userGrid&&Bb.User.View.Running.userGrid.getSelectionModel().getSelected()){
-					var user_id = Bb.User.View.Running.userGrid.getSelectionModel().getSelected().data.user_id;
-					var condition = {'user_id':user_id,'start':0,'limit':Bb.User.Config.PageSize};
-					this.filter       ={'user_id':user_id};
+					var User_ID = Bb.User.View.Running.userGrid.getSelectionModel().getSelected().data.ID;
+					var condition = {'User_ID':User_ID,'start':0,'limit':Bb.User.Config.PageSize};
+					this.filter       ={'User_ID':User_ID};
 					ExtServiceBlog.queryPageBlog(condition,function(provider, response) {
 						if (response.result){
 							if (response.result.data) {
@@ -624,6 +665,7 @@ Bb.User.View={
 								Bb.User.Store.blogStore.removeAll();
 								Ext.Msg.alert('提示', '无符合条件的博客！');
 							}
+
 							if (Bb.User.Store.blogStore.getTotalCount()>Bb.User.Config.PageSize){
 								 Bb.User.View.Running.blogGrid.bottomToolbar.show();
 							}else{
@@ -657,18 +699,18 @@ Bb.User.View={
 				Bb.User.View.BlogView.edit_window.saveBtn.setText('保 存');
 				Bb.User.View.BlogView.edit_window.setTitle('添加博客');
 				Bb.User.View.BlogView.edit_window.savetype=0;
-				Bb.User.View.BlogView.edit_window.blog_id.setValue("");
-				var company_id = Bb.User.View.Running.userGrid.getSelectionModel().getSelected().data.user_id;
-				Bb.User.View.BlogView.edit_window.user_id.setValue(company_id);
+				Bb.User.View.BlogView.edit_window.ID.setValue("");
+				var user_id = Bb.User.View.Running.userGrid.getSelectionModel().getSelected().data.ID;
+				Bb.User.View.BlogView.edit_window.User_ID.setValue(user_id);
                 switch (Bb.User.Config.OnlineEditor)
                 {
                     case 2:
-                        if (Bb.User.View.BlogView.EditWindow.KindEditor_blog_content) Bb.User.View.BlogView.EditWindow.KindEditor_blog_content.html("");
+                        if (Bb.User.View.BlogView.EditWindow.KindEditor_Blog_Content) Bb.User.View.BlogView.EditWindow.KindEditor_Blog_Content.html("");
                         break
                     case 3:
                         break
                     default:
-                        if (CKEDITOR.instances.blog_content) CKEDITOR.instances.blog_content.setData("");
+                        if (CKEDITOR.instances.Blog_Content) CKEDITOR.instances.Blog_Content.setData("");
                 }
 
 				Bb.User.View.BlogView.edit_window.show();
@@ -689,13 +731,13 @@ Bb.User.View={
                 switch (Bb.User.Config.OnlineEditor)
                 {
                     case 2:
-                        if (Bb.User.View.BlogView.EditWindow.KindEditor_blog_content) Bb.User.View.BlogView.EditWindow.KindEditor_blog_content.html(this.getSelectionModel().getSelected().data.blog_content);
+                        if (Bb.User.View.BlogView.EditWindow.KindEditor_Blog_Content) Bb.User.View.BlogView.EditWindow.KindEditor_Blog_Content.html(this.getSelectionModel().getSelected().data.Blog_Content);
                         break
                     case 3:
-                        if (xhEditor_blog_content)xhEditor_blog_content.setSource(this.getSelectionModel().getSelected().data.blog_content);
+                        if (xhEditor_Blog_Content)xhEditor_Blog_Content.setSource(this.getSelectionModel().getSelected().data.Blog_Content);
                         break
                     default:
-                        if (CKEDITOR.instances.blog_content) CKEDITOR.instances.blog_content.setData(this.getSelectionModel().getSelected().data.blog_content);
+                        if (CKEDITOR.instances.Blog_Content) CKEDITOR.instances.Blog_Content.setData(this.getSelectionModel().getSelected().data.Blog_Content);
                 }
 
 				Bb.User.View.BlogView.edit_window.show();
@@ -712,12 +754,12 @@ Bb.User.View={
 			 */
 			confirmDeleteBlog : function(btn) {
 				if (btn == 'yes') {
-					var del_blog_ids ="";
+					var del_IDs ="";
 					var selectedRows    = this.getSelectionModel().getSelections();
 					for ( var flag = 0; flag < selectedRows.length; flag++) {
-						del_blog_ids=del_blog_ids+selectedRows[flag].data.blog_id+",";
+						del_IDs=del_IDs+selectedRows[flag].data.ID+",";
 					}
-					ExtServiceBlog.deleteByIds(del_blog_ids);
+					ExtServiceBlog.deleteByIds(del_IDs);
 					this.doSelectBlog();
 					Ext.Msg.alert("提示", "删除成功！");
 				}
@@ -754,13 +796,13 @@ Bb.User.View={
                             switch (Bb.User.Config.OnlineEditor)
                             {
                                 case 2:
-                                    Bb.User.View.CommentView.EditWindow.KindEditor_comment = KindEditor.create('textarea[name="comment"]',{width:'98%',minHeith:'350px', filterMode:true});
+                                    Bb.User.View.CommentView.EditWindow.KindEditor_Comment = KindEditor.create('textarea[name="Comment"]',{width:'98%',minHeith:'350px', filterMode:true});
                                     break
                                 case 3:
-                                    pageInit_comment();
+                                    pageInit_Comment();
                                     break
                                 default:
-                                    ckeditor_replace_comment();
+                                    ckeditor_replace_Comment();
                             }
                         }
 					},
@@ -774,20 +816,18 @@ Bb.User.View={
 								xtype : 'textfield',anchor:'98%'
 							},
 							items : [
-                                {xtype: 'hidden',name : 'comment_id',ref:'../comment_id'},
-                                {xtype: 'hidden',name : 'user_id',ref:'../user_id'},
-                                {fieldLabel : '评论',name : 'comment',xtype : 'textarea',id:'comment',ref:'comment'},
-                                {xtype: 'hidden',name : 'blog_id',ref:'../blog_id'},
+                                {xtype: 'hidden',name : 'ID',ref:'../ID'},
+                                {xtype: 'hidden',name : 'User_ID',ref:'../User_ID'},
                                 {
-                                     fieldLabel : '博客',xtype: 'combo',name : 'blog_name',ref : '../blog_name',
-                                     store:Bb.User.Store.blogStoreForCombo,emptyText: '请选择博客',itemSelector: 'div.search-item',
+                                     fieldLabel : '评论者',xtype: 'combo',name : 'Username',ref : '../Username',
+                                     store:Bb.User.Store.userStoreForCombo,emptyText: '请选择评论者',itemSelector: 'div.search-item',
                                      loadingText: '查询中...',width: 570, pageSize:Bb.User.Config.PageSize,
-                                     displayField:'blog_name',grid:this,
+                                     displayField:'Username',grid:this,
                                      mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,
                                      forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,
                                      tpl:new Ext.XTemplate(
                                          '<tpl for="."><div class="search-item">',
-                                             '<h3>{blog_name}</h3>',
+                                             '<h3>{Username}</h3>',
                                          '</div></tpl>'
                                      ),
                                      listeners:{
@@ -795,8 +835,33 @@ Bb.User.View={
                                      },
                                      onSelect:function(record,index){
                                          if(this.fireEvent('beforeselect', this, record, index) !== false){
-                                            this.grid.blog_id.setValue(record.data.blog_id);
-                                            this.grid.blog_name.setValue(record.data.blog_name);
+                                            this.grid.User_ID.setValue(record.data.User_ID);
+                                            this.grid.Username.setValue(record.data.Username);
+                                            this.collapse();
+                                         }
+                                     }
+                                },
+                                {fieldLabel : '评论',name : 'Comment',xtype : 'textarea',id:'Comment',ref:'Comment'},
+                                {xtype: 'hidden',name : 'Blog_ID',ref:'../Blog_ID'},
+                                {
+                                     fieldLabel : '博客',xtype: 'combo',name : 'Blog_Name',ref : '../Blog_Name',
+                                     store:Bb.User.Store.blogStoreForCombo,emptyText: '请选择博客',itemSelector: 'div.search-item',
+                                     loadingText: '查询中...',width: 570, pageSize:Bb.User.Config.PageSize,
+                                     displayField:'Blog_Name',grid:this,
+                                     mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,
+                                     forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,
+                                     tpl:new Ext.XTemplate(
+                                         '<tpl for="."><div class="search-item">',
+                                             '<h3>{Blog_Name}</h3>',
+                                         '</div></tpl>'
+                                     ),
+                                     listeners:{
+                                         'beforequery': function(event){delete event.combo.lastQuery;}
+                                     },
+                                     onSelect:function(record,index){
+                                         if(this.fireEvent('beforeselect', this, record, index) !== false){
+                                            this.grid.Blog_ID.setValue(record.data.Blog_ID);
+                                            this.grid.Blog_Name.setValue(record.data.Blog_Name);
                                             this.collapse();
                                          }
                                      }
@@ -810,13 +875,13 @@ Bb.User.View={
                             switch (Bb.User.Config.OnlineEditor)
                             {
                                 case 2:
-                                    if (Bb.User.View.CommentView.EditWindow.KindEditor_comment)this.editForm.comment.setValue(Bb.User.View.CommentView.EditWindow.KindEditor_comment.html());
+                                    if (Bb.User.View.CommentView.EditWindow.KindEditor_Comment)this.editForm.Comment.setValue(Bb.User.View.CommentView.EditWindow.KindEditor_Comment.html());
                                     break
                                 case 3:
-                                    if (xhEditor_comment)this.editForm.comment.setValue(xhEditor_comment.getSource());
+                                    if (xhEditor_Comment)this.editForm.Comment.setValue(xhEditor_Comment.getSource());
                                     break
                                 default:
-                                    if (CKEDITOR.instances.comment) this.editForm.comment.setValue(CKEDITOR.instances.comment.getData());
+                                    if (CKEDITOR.instances.Comment) this.editForm.Comment.setValue(CKEDITOR.instances.Comment.getData());
                             }
 
 							if (!this.editForm.getForm().isValid()) {
@@ -864,12 +929,12 @@ Bb.User.View={
                             switch (Bb.User.Config.OnlineEditor)
                             {
                                 case 2:
-                                    if (Bb.User.View.CommentView.EditWindow.KindEditor_comment) Bb.User.View.CommentView.EditWindow.KindEditor_comment.html(Bb.User.View.Running.commentGrid.getSelectionModel().getSelected().data.comment);
+                                    if (Bb.User.View.CommentView.EditWindow.KindEditor_Comment) Bb.User.View.CommentView.EditWindow.KindEditor_Comment.html(Bb.User.View.Running.commentGrid.getSelectionModel().getSelected().data.Comment);
                                     break
                                 case 3:
                                     break
                                 default:
-                                    if (CKEDITOR.instances.comment) CKEDITOR.instances.comment.setData(Bb.User.View.Running.commentGrid.getSelectionModel().getSelected().data.comment);
+                                    if (CKEDITOR.instances.Comment) CKEDITOR.instances.Comment.setData(Bb.User.View.Running.commentGrid.getSelectionModel().getSelected().data.Comment);
                             }
 
 						}
@@ -898,9 +963,10 @@ Bb.User.View={
 						},
 						columns : [
                             this.sm,
-                            {header : '标识',dataIndex : 'comment_id',hidden:true},
-                            {header : '评论',dataIndex : 'comment'},
-                            {header : '博客',dataIndex : 'blog_name'}
+                            {header : '标识',dataIndex : 'ID',hidden:true},
+                            {header : '评论者',dataIndex : 'Username'},
+                            {header : '评论',dataIndex : 'Comment'},
+                            {header : '博客',dataIndex : 'Blog_Name'}
 						]
 					}),
 					tbar : {
@@ -997,9 +1063,9 @@ Bb.User.View={
 			 */
 			doSelectComment : function() {
 				if (Bb.User.View.Running.userGrid&&Bb.User.View.Running.userGrid.getSelectionModel().getSelected()){
-					var user_id = Bb.User.View.Running.userGrid.getSelectionModel().getSelected().data.user_id;
-					var condition = {'user_id':user_id,'start':0,'limit':Bb.User.Config.PageSize};
-					this.filter       ={'user_id':user_id};
+					var User_ID = Bb.User.View.Running.userGrid.getSelectionModel().getSelected().data.ID;
+					var condition = {'User_ID':User_ID,'start':0,'limit':Bb.User.Config.PageSize};
+					this.filter       ={'User_ID':User_ID};
 					ExtServiceComment.queryPageComment(condition,function(provider, response) {
 						if (response.result){
 							if (response.result.data) {
@@ -1011,6 +1077,7 @@ Bb.User.View={
 								Bb.User.Store.commentStore.removeAll();
 								Ext.Msg.alert('提示', '无符合条件的评论！');
 							}
+
 							if (Bb.User.Store.commentStore.getTotalCount()>Bb.User.Config.PageSize){
 								 Bb.User.View.Running.commentGrid.bottomToolbar.show();
 							}else{
@@ -1044,18 +1111,18 @@ Bb.User.View={
 				Bb.User.View.CommentView.edit_window.saveBtn.setText('保 存');
 				Bb.User.View.CommentView.edit_window.setTitle('添加评论');
 				Bb.User.View.CommentView.edit_window.savetype=0;
-				Bb.User.View.CommentView.edit_window.comment_id.setValue("");
-				var company_id = Bb.User.View.Running.userGrid.getSelectionModel().getSelected().data.user_id;
-				Bb.User.View.CommentView.edit_window.user_id.setValue(company_id);
+				Bb.User.View.CommentView.edit_window.ID.setValue("");
+				var user_id = Bb.User.View.Running.userGrid.getSelectionModel().getSelected().data.ID;
+				Bb.User.View.CommentView.edit_window.User_ID.setValue(user_id);
                 switch (Bb.User.Config.OnlineEditor)
                 {
                     case 2:
-                        if (Bb.User.View.CommentView.EditWindow.KindEditor_comment) Bb.User.View.CommentView.EditWindow.KindEditor_comment.html("");
+                        if (Bb.User.View.CommentView.EditWindow.KindEditor_Comment) Bb.User.View.CommentView.EditWindow.KindEditor_Comment.html("");
                         break
                     case 3:
                         break
                     default:
-                        if (CKEDITOR.instances.comment) CKEDITOR.instances.comment.setData("");
+                        if (CKEDITOR.instances.Comment) CKEDITOR.instances.Comment.setData("");
                 }
 
 				Bb.User.View.CommentView.edit_window.show();
@@ -1076,13 +1143,13 @@ Bb.User.View={
                 switch (Bb.User.Config.OnlineEditor)
                 {
                     case 2:
-                        if (Bb.User.View.CommentView.EditWindow.KindEditor_comment) Bb.User.View.CommentView.EditWindow.KindEditor_comment.html(this.getSelectionModel().getSelected().data.comment);
+                        if (Bb.User.View.CommentView.EditWindow.KindEditor_Comment) Bb.User.View.CommentView.EditWindow.KindEditor_Comment.html(this.getSelectionModel().getSelected().data.Comment);
                         break
                     case 3:
-                        if (xhEditor_comment)xhEditor_comment.setSource(this.getSelectionModel().getSelected().data.comment);
+                        if (xhEditor_Comment)xhEditor_Comment.setSource(this.getSelectionModel().getSelected().data.Comment);
                         break
                     default:
-                        if (CKEDITOR.instances.comment) CKEDITOR.instances.comment.setData(this.getSelectionModel().getSelected().data.comment);
+                        if (CKEDITOR.instances.Comment) CKEDITOR.instances.Comment.setData(this.getSelectionModel().getSelected().data.Comment);
                 }
 
 				Bb.User.View.CommentView.edit_window.show();
@@ -1099,12 +1166,12 @@ Bb.User.View={
 			 */
 			confirmDeleteComment : function(btn) {
 				if (btn == 'yes') {
-					var del_comment_ids ="";
+					var del_IDs ="";
 					var selectedRows    = this.getSelectionModel().getSelections();
 					for ( var flag = 0; flag < selectedRows.length; flag++) {
-						del_comment_ids=del_comment_ids+selectedRows[flag].data.comment_id+",";
+						del_IDs=del_IDs+selectedRows[flag].data.ID+",";
 					}
-					ExtServiceComment.deleteByIds(del_comment_ids);
+					ExtServiceComment.deleteByIds(del_IDs);
 					this.doSelectComment();
 					Ext.Msg.alert("提示", "删除成功！");
 				}
@@ -1205,11 +1272,11 @@ Bb.User.View={
 					},
 					columns : [
 						this.sm,
-                        {header : '标识',dataIndex : 'user_id',hidden:true},
-                        {header : '用户名',dataIndex : 'username'},
-                        {header : '邮箱地址',dataIndex : 'email'},
-                        {header : '手机电话',dataIndex : 'cellphone'},
-                        {header : '访问次数',dataIndex : 'loginTimes'}
+                        {header : '标识',dataIndex : 'ID',hidden:true},
+                        {header : '用户名',dataIndex : 'Username'},
+                        {header : '邮箱地址',dataIndex : 'Email'},
+                        {header : '手机电话',dataIndex : 'Cellphone'},
+                        {header : '访问次数',dataIndex : 'LoginTimes'}
 					]
 				}),
 				tbar : {
@@ -1229,7 +1296,7 @@ Bb.User.View={
 								}
 							},
 							items : [
-                                '用户名','&nbsp;&nbsp;',{ref: '../uusername'},'&nbsp;&nbsp;',
+                                '用户名','&nbsp;&nbsp;',{ref: '../uUsername'},'&nbsp;&nbsp;',
 								{
 									xtype : 'button',text : '查询',scope: this,
 									handler : function() {
@@ -1239,7 +1306,7 @@ Bb.User.View={
 								{
 									xtype : 'button',text : '重置',scope: this,
 									handler : function() {
-                                        this.topToolbar.uusername.setValue("");
+                                        this.topToolbar.uUsername.setValue("");
 										this.filter={};
 										this.doSelectUser();
 									}
@@ -1444,8 +1511,8 @@ Bb.User.View={
 		 */
 		doSelectUser : function() {
 			if (this.topToolbar){
-                var uusername = this.topToolbar.uusername.getValue();
-                this.filter       ={'username':uusername};
+                var uUsername = this.topToolbar.uUsername.getValue();
+                this.filter       ={'Username':uUsername};
 			}
 			var condition = {'start':0,'limit':Bb.User.Config.PageSize};
 			Ext.apply(condition,this.filter);
@@ -1602,10 +1669,10 @@ Bb.User.View={
 			Bb.User.View.Running.edit_window.saveBtn.setText('保 存');
 			Bb.User.View.Running.edit_window.setTitle('添加用户');
 			Bb.User.View.Running.edit_window.savetype=0;
-			Bb.User.View.Running.edit_window.user_id.setValue("");
-            var passwordObj=Bb.User.View.Running.edit_window.password;
-            passwordObj.allowBlank=false;
-            if (passwordObj.getEl()) passwordObj.getEl().dom.parentNode.previousSibling.innerHTML ="用户密码(<font color=red>*</font>)";
+			Bb.User.View.Running.edit_window.ID.setValue("");
+            var PasswordObj=Bb.User.View.Running.edit_window.Password;
+            PasswordObj.allowBlank=false;
+            if (PasswordObj.getEl()) PasswordObj.getEl().dom.parentNode.previousSibling.innerHTML ="用户密码(<font color=red>*</font>)";
 
 			Bb.User.View.Running.edit_window.show();
 			Bb.User.View.Running.edit_window.maximize();
@@ -1625,11 +1692,11 @@ Bb.User.View={
 
 			Bb.User.View.Running.edit_window.show();
 
-            var passwordObj=Bb.User.View.Running.edit_window.password;
-            passwordObj.allowBlank=true;
-            if (passwordObj.getEl())passwordObj.getEl().dom.parentNode.previousSibling.innerHTML ="用户密码";
-            Bb.User.View.Running.edit_window.password_old.setValue(Bb.User.View.Running.edit_window.password.getValue());
-            Bb.User.View.Running.edit_window.password.setValue("");
+            var PasswordObj=Bb.User.View.Running.edit_window.Password;
+            PasswordObj.allowBlank=true;
+            if (PasswordObj.getEl())PasswordObj.getEl().dom.parentNode.previousSibling.innerHTML ="用户密码";
+            Bb.User.View.Running.edit_window.Password_old.setValue(Bb.User.View.Running.edit_window.Password.getValue());
+            Bb.User.View.Running.edit_window.Password.setValue("");
 
 			Bb.User.View.Running.edit_window.maximize();
 		},
@@ -1647,7 +1714,7 @@ Bb.User.View={
 				var del_user_ids ="";
 				var selectedRows    = this.getSelectionModel().getSelections();
 				for ( var flag = 0; flag < selectedRows.length; flag++) {
-					del_user_ids=del_user_ids+selectedRows[flag].data.user_id+",";
+					del_user_ids=del_user_ids+selectedRows[flag].data.ID+",";
 				}
 				ExtServiceUser.deleteByIds(del_user_ids);
 				this.doSelectUser();

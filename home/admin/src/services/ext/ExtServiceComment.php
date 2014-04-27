@@ -30,7 +30,7 @@ class ExtServiceComment extends ServiceBasic
 		return array(
 			'success' => true,
 			'data'    => $data
-		); 
+		);
 	}
 
 	/**
@@ -51,7 +51,7 @@ class ExtServiceComment extends ServiceBasic
 		return array(
 			'success' => true,
 			'data'    => $data
-		); 
+		);
 	}
 
 	/**
@@ -59,7 +59,7 @@ class ExtServiceComment extends ServiceBasic
 	 * @param array|string $ids 数据对象编号
 	 * 形式如下:
 	 * 1.array:array(1,2,3,4,5)
-	 * 2.字符串:1,2,3,4 
+	 * 2.字符串:1,2,3,4
 	 * @return boolen 是否删除成功；true为操作正常
 	 */
 	public function deleteByIds($ids)
@@ -68,7 +68,7 @@ class ExtServiceComment extends ServiceBasic
 		return array(
 			'success' => true,
 			'data'    => $data
-		); 
+		);
 	}
 
 	/**
@@ -87,8 +87,8 @@ class ExtServiceComment extends ServiceBasic
 			$start=$condition['start']+1;
 		  }
 		if (isset($condition['limit'])){
-			$limit=$condition['limit']; 
-			$limit=$start+$limit-1; 
+			$limit=$condition['limit'];
+			$limit=$start+$limit-1;
 		}
 		unset($condition['start'],$condition['limit']);
 		$condition=$this->filtertoCondition($condition);
@@ -96,16 +96,17 @@ class ExtServiceComment extends ServiceBasic
 		if ($count>0){
 			if ($limit>$count)$limit=$count;
 			$data =Comment::queryPage($start,$limit,$condition);
-			foreach ($data as $comment) {
-				$user=User::get_by_id($comment->user_id);
-				$comment['username']=$user->username;
-				$blog=Blog::get_by_id($comment->blog_id);
-				$comment['blog_name']=$blog->blog_name;
-				if ($comment["commitTime"]){
-					UtilDateTime::ChinaTime();
-					$comment["commitTime"]=UtilDateTime::timestampToDateTime($comment["commitTime"]);
-				}  
-			}
+            foreach ($data as $comment) {
+                if ($comment->User_ID){
+                    $user_instance=User::get_by_id($comment->User_ID);
+                    $comment['Username']=$user_instance->Username;
+                }
+                if ($comment->Blog_ID){
+                    $blog_instance=Blog::get_by_id($comment->Blog_ID);
+                    $comment['Blog_Name']=$blog_instance->Blog_Name;
+                }
+                $comment->CommentShow=preg_replace("/<\s*img\s+[^>]*?src\s*=\s*(\'|\")(.*?)\\1[^>]*?\/?\s*>/i","<a href='\${2}' target='_blank'>\${0}</a>",$comment->Comment);
+            }
 			if ($data==null)$data=array();
 		}else{
 			$data=array();
@@ -114,7 +115,7 @@ class ExtServiceComment extends ServiceBasic
 			'success' => true,
 			'totalCount'=>$count,
 			'data'    => $data
-		); 
+		);
 	}
 
 	/**
@@ -167,7 +168,7 @@ class ExtServiceComment extends ServiceBasic
 	public function exportComment($filter=null)
 	{
 		if ($filter)$filter=$this->filtertoCondition($filter);
-		$data=Comment::get($filter);              
+		$data=Comment::get($filter);
 		$arr_output_header= self::fieldsMean(Comment::tablename());
         foreach ($data as $comment) {
             if ($comment->user_id){
@@ -182,12 +183,12 @@ class ExtServiceComment extends ServiceBasic
         unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
 		$diffpart=date("YmdHis");
 		$outputFileName=Gc::$attachment_path."comment".DIRECTORY_SEPARATOR."export".DIRECTORY_SEPARATOR."comment$diffpart.xls";
-		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false); 
-		$downloadPath  =Gc::$attachment_url."comment/export/comment$diffpart.xls"; 
+		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false);
+		$downloadPath  =Gc::$attachment_url."comment/export/comment$diffpart.xls";
 		return array(
 			'success' => true,
 			'data'    => $downloadPath
-		); 
+		);
 	}
 }
 ?>

@@ -17,5 +17,8 @@ if (isset($_REQUEST['limit'])){
 }
 $arr['totalCount']= User::count($condition);
 $arr['users']    = User::queryPage($start,$limit,$condition);
+foreach ($arr['users'] as $user) {
+    $user->User_ID=$user->ID;
+}
 echo json_encode($arr);
 ?>

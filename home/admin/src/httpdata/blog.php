@@ -17,5 +17,8 @@ if (isset($_REQUEST['limit'])){
 }
 $arr['totalCount']= Blog::count($condition);
 $arr['blogs']    = Blog::queryPage($start,$limit,$condition);
+foreach ($arr['blogs'] as $blog) {
+    $blog->Blog_ID=$blog->ID;
+}
 echo json_encode($arr);
 ?>

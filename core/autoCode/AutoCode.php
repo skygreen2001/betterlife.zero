@@ -165,6 +165,7 @@ class AutoCode extends Object
 			$classnameSplit=array_reverse($classnameSplit);
 			$classname=$classnameSplit[0];
 		}
+        $classname{0}=strtolower($classname{0});
 		return $classname;
 	}
 

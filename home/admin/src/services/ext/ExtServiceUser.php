@@ -23,7 +23,7 @@ class ExtServiceUser extends ServiceBasic
 			$userObj=new User($user);
 		}
 		if ($userObj instanceof User){
-			$userObj->password=md5($userObj->password);
+			$userObj->Password=md5($userObj->Password);
 			$data=$userObj->save();
 		}else{
 			$data=false;
@@ -47,9 +47,9 @@ class ExtServiceUser extends ServiceBasic
 		if ($userObj instanceof User){
 			if(!empty($userObj->password))
 			{
-				$userObj->password=md5($userObj->password);
+				$userObj->Password=md5($userObj->Password);
 			}else{
-				$userObj->password=$user["password_old"];
+				$userObj->password=$user["Password_old"];
 			}
 			$data=$userObj->update();
 		}else{
@@ -125,8 +125,8 @@ class ExtServiceUser extends ServiceBasic
 			if (!empty($user))
 			{
 				if ($user->department_id){
-					$department_instance=Department::get_by_id($user->department_id);
-					$user['department_name']=$department_instance->department_name;
+					$department_instance=Department::get_by_id($user->Department_ID);
+					$user['Department_Name']=$department_instance->Department_Name;
 				}
 			}
 			return array(
@@ -192,7 +192,7 @@ class ExtServiceUser extends ServiceBasic
 		if ($filter)$filter=$this->filtertoCondition($filter);
 		$data=User::get($filter);
 		$arr_output_header= self::fieldsMean(User::tablename());
-		unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
+		unset($arr_output_header['UpdateTime'],$arr_output_header['CommitTime']);
 		$diffpart=date("YmdHis");
 		$outputFileName=Gc::$attachment_path."user".DIRECTORY_SEPARATOR."export".DIRECTORY_SEPARATOR."user$diffpart.xls";
 		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false);

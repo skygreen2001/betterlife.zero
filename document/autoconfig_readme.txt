@@ -10,15 +10,15 @@
 *.数据对象类配置。
   配置文件的元节点为class，对每一个数据对象进行查询条件、表关系主键显示配置、数据对象之间关系配置
     <classes>
-	<class name="Order">
+		<class name="Blog">
     </classes>
 
     - name :数据对象名称
 
 *.查询条件配置[允许配置关系主键查询]
     <conditions>
-        <condition>name</condition>
-		<condition relation_class="Member" show_name="username">member_id</condition>
+        <condition>Realname</condition>
+		<condition relation_class="Member" show_name="Username">Member_ID</condition>
     </conditions>
 
     - relation_class :关系主键对应的表数据对象
@@ -27,7 +27,7 @@
 
 *.表关系主键显示配置
     <relationShows>
-       <show local_key="product_id" relation_class="Product">name</show>
+       <show local_key="Blog_ID" relation_class="Blog">Blog_Name</show>
     </relationShows>
 
     - relation_class :关系主键对应的表数据对象
