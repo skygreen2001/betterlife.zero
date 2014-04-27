@@ -925,7 +925,8 @@ class AutoCodeViewExt extends AutoCode
 																	"            totalProperty: 'totalCount',\r\n".
 																	"            idProperty: '$realId'\r\n".
 																	"        }, [\r\n".
-																	"            {name: '$realId', mapping: '$realId'},\r\n";
+																	//"            {name: '$realId', mapping: '$realId'},\r\n".
+                                                                    "            {name: '{$current_classname}_{$realId}', mapping: '$realId'},\r\n";
 													if (array_key_exists("level",$fieldInfo_relationshow)){
 														$showLevel=strtolower($key)."_level";
 														$relationStore_combo.="            {name: '$showLevel', mapping: 'level'},\r\n";

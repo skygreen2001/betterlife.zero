@@ -38,13 +38,6 @@
 
 *.UpdateTime默认值是CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 
-*.多对多关系表中定义需遵循规范：
-     表名长度>=8
-     注释中带有:关系表
-     有两列带有_ID 
-     
-*.has_one 需要定义关系主键为unique
-
 *.图片列定义规则：
 	列名称含有：Image|Img|Ico|Logo|Pic|Profile
 
@@ -62,3 +55,8 @@
 
 *.当和其他表是一对一的关系是，需设置外键字段为Unique
 	如用户和用户详情表，则需要在用户详情表里指明外键user_id是Unique。
+  
+*.多对多关系表中定义需遵循规范：
+     表名长度>=8
+     注释中带有:关系表
+     有两列带有_ID

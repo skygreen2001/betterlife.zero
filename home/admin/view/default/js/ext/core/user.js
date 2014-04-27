@@ -105,23 +105,6 @@ Bb.User.Store = {
         }
     }),
     /**
-     * 用户
-     */
-    userStoreForCombo:new Ext.data.Store({
-        proxy: new Ext.data.HttpProxy({
-            url: 'home/admin/src/httpdata/user.php'
-        }),
-        reader: new Ext.data.JsonReader({
-            root: 'users',
-            autoLoad: true,
-            totalProperty: 'totalCount',
-            idProperty: 'ID'
-        }, [
-            {name: 'ID', mapping: 'ID'},
-            {name: 'Username', mapping: 'Username'}
-        ])
-    }),
-    /**
      * 评论
      */
     commentStore:new Ext.data.Store({
@@ -161,7 +144,7 @@ Bb.User.Store = {
             totalProperty: 'totalCount',
             idProperty: 'ID'
         }, [
-            {name: 'ID', mapping: 'ID'},
+            {name: 'Blog_ID', mapping: 'ID'},
             {name: 'Blog_Name', mapping: 'Blog_Name'}
         ])
     })
@@ -429,29 +412,6 @@ Bb.User.View={
 							items : [
                                 {xtype: 'hidden',name : 'ID',ref:'../ID'},
                                 {xtype: 'hidden',name : 'User_ID',ref:'../User_ID'},
-                                {
-                                     fieldLabel : '用户',xtype: 'combo',name : 'Username',ref : '../Username',
-                                     store:Bb.User.Store.userStoreForCombo,emptyText: '请选择用户',itemSelector: 'div.search-item',
-                                     loadingText: '查询中...',width: 570, pageSize:Bb.User.Config.PageSize,
-                                     displayField:'Username',grid:this,
-                                     mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,
-                                     forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,
-                                     tpl:new Ext.XTemplate(
-                                         '<tpl for="."><div class="search-item">',
-                                             '<h3>{Username}</h3>',
-                                         '</div></tpl>'
-                                     ),
-                                     listeners:{
-                                         'beforequery': function(event){delete event.combo.lastQuery;}
-                                     },
-                                     onSelect:function(record,index){
-                                         if(this.fireEvent('beforeselect', this, record, index) !== false){
-                                            this.grid.User_ID.setValue(record.data.User_ID);
-                                            this.grid.Username.setValue(record.data.Username);
-                                            this.collapse();
-                                         }
-                                     }
-                                },
                                 {fieldLabel : '博客标题',name : 'Blog_Name'},
                                 {fieldLabel : '博客内容',name : 'Blog_Content',xtype : 'textarea',id:'Blog_Content',ref:'Blog_Content'}
 							]
@@ -653,7 +613,7 @@ Bb.User.View={
 				if (Bb.User.View.Running.userGrid&&Bb.User.View.Running.userGrid.getSelectionModel().getSelected()){
 					var User_ID = Bb.User.View.Running.userGrid.getSelectionModel().getSelected().data.ID;
 					var condition = {'User_ID':User_ID,'start':0,'limit':Bb.User.Config.PageSize};
-					this.filter       ={'User_ID':User_ID};
+					this.filter   = {'User_ID':User_ID};
 					ExtServiceBlog.queryPageBlog(condition,function(provider, response) {
 						if (response.result){
 							if (response.result.data) {
@@ -818,29 +778,6 @@ Bb.User.View={
 							items : [
                                 {xtype: 'hidden',name : 'ID',ref:'../ID'},
                                 {xtype: 'hidden',name : 'User_ID',ref:'../User_ID'},
-                                {
-                                     fieldLabel : '评论者',xtype: 'combo',name : 'Username',ref : '../Username',
-                                     store:Bb.User.Store.userStoreForCombo,emptyText: '请选择评论者',itemSelector: 'div.search-item',
-                                     loadingText: '查询中...',width: 570, pageSize:Bb.User.Config.PageSize,
-                                     displayField:'Username',grid:this,
-                                     mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,
-                                     forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,
-                                     tpl:new Ext.XTemplate(
-                                         '<tpl for="."><div class="search-item">',
-                                             '<h3>{Username}</h3>',
-                                         '</div></tpl>'
-                                     ),
-                                     listeners:{
-                                         'beforequery': function(event){delete event.combo.lastQuery;}
-                                     },
-                                     onSelect:function(record,index){
-                                         if(this.fireEvent('beforeselect', this, record, index) !== false){
-                                            this.grid.User_ID.setValue(record.data.User_ID);
-                                            this.grid.Username.setValue(record.data.Username);
-                                            this.collapse();
-                                         }
-                                     }
-                                },
                                 {fieldLabel : '评论',name : 'Comment',xtype : 'textarea',id:'Comment',ref:'Comment'},
                                 {xtype: 'hidden',name : 'Blog_ID',ref:'../Blog_ID'},
                                 {
@@ -1065,7 +1002,7 @@ Bb.User.View={
 				if (Bb.User.View.Running.userGrid&&Bb.User.View.Running.userGrid.getSelectionModel().getSelected()){
 					var User_ID = Bb.User.View.Running.userGrid.getSelectionModel().getSelected().data.ID;
 					var condition = {'User_ID':User_ID,'start':0,'limit':Bb.User.Config.PageSize};
-					this.filter       ={'User_ID':User_ID};
+					this.filter   = {'User_ID':User_ID};
 					ExtServiceComment.queryPageComment(condition,function(provider, response) {
 						if (response.result){
 							if (response.result.data) {

@@ -947,8 +947,8 @@ class AutoCodeService extends AutoCode
         \$addcount = 0;//新增计数
         \$delcount = 0;//取消计数
         if(\${$owner_idcolumn}){
-            \$oldRetainArr = array();//保留的已关联货品
-            //处理已关联的货品
+            \$oldRetainArr = array();//保留的已关联{$comment_belong}
+            //处理已关联的{$comment_belong}
             if(\$oldData){
                 foreach(\$oldData as \$okey=>\$ovalue){
                     if(!\$ovalue->active){
@@ -961,12 +961,12 @@ class AutoCodeService extends AutoCode
                 }
             }
             if(\$selData){
-                \$selArr = array();//选择的货品
+                \$selArr = array();//选择的{$comment_belong}
                 //转为goods_id数组
                 foreach(\$selData as \$skey=>\$svalue){
                     \$selArr[] = \$skey;
                 }
-                \$insertArr = array_diff(\$selArr,\$oldRetainArr);//需新插入的货品
+                \$insertArr = array_diff(\$selArr,\$oldRetainArr);//需新插入的{$comment_belong}
                 if(\$insertArr){
                     foreach(\$insertArr as \${$belong_idcolumn}){
                     	\${$middle_instance_name}={$key}::get_one(array("$owner_idcolumn"=>\${$owner_idcolumn},"$belong_idcolumn"=>\${$belong_idcolumn}));
