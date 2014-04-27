@@ -235,6 +235,8 @@ EDITWINDOW;
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.setTitle('修改{$table_comment12n}');
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.savetype=1;
+				var {$instancename}_id = $appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.{$realId};
+				$appName_alias.$classname.View.{$current_classname}View.edit_window.{$realId}.setValue({$instancename}_id);
 {$textareaOnlineditor_Update}{$treeLevelVisible_Update}
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.show();
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.maximize();

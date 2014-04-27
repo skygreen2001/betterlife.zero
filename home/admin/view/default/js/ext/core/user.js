@@ -1045,8 +1045,8 @@ Bb.User.View={
 				Bb.User.View.CommentView.edit_window.setTitle('添加评论');
 				Bb.User.View.CommentView.edit_window.savetype=0;
 				Bb.User.View.CommentView.edit_window.comment_id.setValue("");
-				var company_id = Bb.User.View.Running.userGrid.getSelectionModel().getSelected().data.user_id;
-				Bb.User.View.CommentView.edit_window.user_id.setValue(company_id);
+				var user_id = Bb.User.View.Running.userGrid.getSelectionModel().getSelected().data.user_id;
+				Bb.User.View.CommentView.edit_window.user_id.setValue(user_id);
                 switch (Bb.User.Config.OnlineEditor)
                 {
                     case 2:
@@ -1073,6 +1073,8 @@ Bb.User.View={
 				Bb.User.View.CommentView.edit_window.setTitle('修改评论');
 				Bb.User.View.CommentView.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
 				Bb.User.View.CommentView.edit_window.savetype=1;
+				var user_id = Bb.User.View.Running.userGrid.getSelectionModel().getSelected().data.user_id;
+				Bb.User.View.CommentView.edit_window.user_id.setValue(user_id);
                 switch (Bb.User.Config.OnlineEditor)
                 {
                     case 2:
