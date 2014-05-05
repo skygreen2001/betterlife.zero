@@ -36,8 +36,6 @@
 	1:男-male
 	2:待确认-unknown
 
-*.UpdateTime默认值是CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-
 *.图片列定义规则：
 	列名称含有：Image|Img|Ico|Logo|Pic|Profile
 
