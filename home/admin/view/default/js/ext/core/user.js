@@ -87,6 +87,7 @@ Bb.User.Store = {
             root: 'data',remoteSort: true,
             fields : [
                 {name: 'blog_id',type: 'int'},
+                {name: 'user_id',type: 'int'},
                 {name: 'username',type: 'string'},
                 {name: 'blog_name',type: 'string'},
                 {name: 'blog_content',type: 'string'}
@@ -114,9 +115,10 @@ Bb.User.Store = {
             root: 'data',remoteSort: true,
             fields : [
                 {name: 'comment_id',type: 'int'},
+                {name: 'user_id',type: 'int'},
                 {name: 'username',type: 'string'},
                 {name: 'comment',type: 'string'},
-                {name: 'blog_id',type: 'int'}
+                {name: 'blog_id',type: 'int'},
                 {name: 'blog_name',type: 'string'}
             ]}
         ),

@@ -593,7 +593,7 @@ class AutoCodeViewExt extends AutoCode
 								$maybe_classname{0}=strtoupper($maybe_classname{0});
 								if (class_exists($maybe_classname))
 								{
-                                    $fields_relation.="                {name: '$fieldname',type: '".$datatype."'}\r\n";
+                                    $fields_relation.="                {name: '$fieldname',type: '".$datatype."'},\r\n";
 									$fieldname=self::getShowFieldNameByClassname($maybe_classname);
 									if ($fieldname=="name")$fieldname=strtolower($maybe_classname)."_".$fieldname;
 									$datatype="string";
