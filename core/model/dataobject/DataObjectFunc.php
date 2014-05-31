@@ -375,7 +375,7 @@ class DataObjectFunc
 	}
 
 	/**
-	 * 由标识判断指定ID数据对象是否存在
+	 * 判断符合条件的数据对象是否存在
 	 * @param string $classname 数据对象类名
 	 * @param mixed $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
