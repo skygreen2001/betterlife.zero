@@ -183,6 +183,8 @@ class Initializer
 	{
 		$root_core="core";
 		self::$NAV_CORE_PATH=Gc::$nav_framework_path.$root_core.DIRECTORY_SEPARATOR;
+		//设置时区为中国时区
+		date_default_timezone_set('PRC');
 		//初始化PHP版本校验
 		if(version_compare(phpversion(), 5, '<')) {
 			header("HTTP/1.1 500 Server Error");
