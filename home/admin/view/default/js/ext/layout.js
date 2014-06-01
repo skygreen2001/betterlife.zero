@@ -62,7 +62,12 @@ Bb.Layout = {
                                     }},
                                     {text:'在线编辑器',ref:'onlineditor',menu:{
                                         items: [ {
-                                            text: '默认【ckEditor】',
+                                            text: '默认【UEditor】',
+                                            checked: true,value:"4",
+                                            group: 'onlineditor',
+                                            checkHandler: function(item, checked){Bb.Layout.Function.onOnlineditorCheck(item, checked);}
+                                        },{
+                                            text: 'ckEditor',
                                             checked: true,value:"1",
                                             group: 'onlineditor',
                                             checkHandler: function(item, checked){Bb.Layout.Function.onOnlineditorCheck(item, checked);}

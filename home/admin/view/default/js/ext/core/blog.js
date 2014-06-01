@@ -71,7 +71,9 @@ Bb.Blog.Store = {
 				{name: 'user_id',type: 'int'},
 				{name: 'username',type: 'string'},
 				{name: 'blog_name',type: 'string'},
-				{name: 'blog_content',type: 'string'}
+				{name: 'blog_content',type: 'string'},
+                {name: 'commitTime',type: 'date',dateFormat:'Y-m-d H:i:s'},
+                {name: 'updateTime',type: 'date',dateFormat:'Y-m-d H:i:s'}
 			]}
 		),
 		writer: new Ext.data.JsonWriter({
@@ -153,6 +155,9 @@ Bb.Blog.View={
 					afterrender:function(){
 						switch (Bb.Blog.Config.OnlineEditor)
 						{
+							case 1:
+								ckeditor_replace_blog_content();
+								break
 							case 2:
 								Bb.Blog.View.EditWindow.KindEditor_blog_content = KindEditor.create('textarea[name="blog_content"]',{width:'98%',minHeith:'350px', filterMode:true});
 								break
@@ -160,7 +165,9 @@ Bb.Blog.View={
 								pageInit_blog_content();
 								break
 							default:
-								ckeditor_replace_blog_content();
+								this.editForm.blog_content.setWidth("98%");
+								pageInit_ue_blog_content();
+								
 						}
 					}
 				},
@@ -205,7 +212,9 @@ Bb.Blog.View={
 					text: "",ref : "../saveBtn",scope:this,
 					handler : function() {
 						switch (Bb.Blog.Config.OnlineEditor)
-						{
+						{	case 1:
+								if (CKEDITOR.instances.blog_content)this.editForm.blog_content.setValue(CKEDITOR.instances.blog_content.getData());
+								break
 							case 2:
 								if (Bb.Blog.View.EditWindow.KindEditor_blog_content)this.editForm.blog_content.setValue(Bb.Blog.View.EditWindow.KindEditor_blog_content.html());
 								break
@@ -213,7 +222,8 @@ Bb.Blog.View={
 								if (xhEditor_blog_content)this.editForm.blog_content.setValue(xhEditor_blog_content.getSource());
 								break
 							default:
-								if (CKEDITOR.instances.blog_content)this.editForm.blog_content.setValue(CKEDITOR.instances.blog_content.getData());
+								if (ue_blog_content)this.editForm.blog_content.setValue(ue_blog_content.getContent());
+
 						}
 						if (!this.editForm.getForm().isValid()) {
 							return;
@@ -259,13 +269,17 @@ Bb.Blog.View={
 						this.editForm.form.loadRecord(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected());
 						switch (Bb.Blog.Config.OnlineEditor)
 						{
+							case 1:
+								if (CKEDITOR.instances.blog_content) CKEDITOR.instances.blog_content.setData(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.blog_content);
+								break
 							case 2:
 								if (Bb.Blog.View.EditWindow.KindEditor_blog_content) Bb.Blog.View.EditWindow.KindEditor_blog_content.html(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.blog_content);
 								break
 							case 3:
+								if (xhEditor_blog_content)xhEditor_blog_content.setSource(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.blog_content);
 								break
 							default:
-								if (CKEDITOR.instances.blog_content) CKEDITOR.instances.blog_content.setData(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.blog_content);
+								if (ue_blog_content)ue_blog_content.setContent(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.blog_content);						
 						}
 
 					}
@@ -411,6 +425,9 @@ Bb.Blog.View={
 				afterrender:function(){
 					switch (Bb.Blog.Config.OnlineEditor)
 					{
+						case 1:
+							ckeditor_replace_comment();
+							break
 						case 2:
 							Bb.Blog.View.CommentView.EditWindow.KindEditor_comment = KindEditor.create('textarea[name="comment"]',{width:'98%',minHeith:'350px', filterMode:true});
 							break
@@ -418,7 +435,8 @@ Bb.Blog.View={
 							pageInit_comment();
 							break
 						default:
-							ckeditor_replace_comment();
+                            this.editForm.comment.setWidth("98%");
+                            pageInit_ue_comment();
 					}
 				}
 			},
@@ -467,6 +485,9 @@ Bb.Blog.View={
 				handler : function() {
 					switch (Bb.Blog.Config.OnlineEditor)
 					{
+						case 1:
+							if (CKEDITOR.instances.comment) this.editForm.comment.setValue(CKEDITOR.instances.comment.getData());
+							break
 						case 2:
 							if (Bb.Blog.View.CommentView.EditWindow.KindEditor_comment)this.editForm.comment.setValue(Bb.Blog.View.CommentView.EditWindow.KindEditor_comment.html());
 							break
@@ -474,7 +495,7 @@ Bb.Blog.View={
 							if (xhEditor_comment)this.editForm.comment.setValue(xhEditor_comment.getSource());
 							break
 						default:
-							if (CKEDITOR.instances.comment) this.editForm.comment.setValue(CKEDITOR.instances.comment.getData());
+                            if (ue_comment)this.editForm.comment.setValue(ue_comment.getContent());
 					}
 
 					if (!this.editForm.getForm().isValid()) {
@@ -521,13 +542,17 @@ Bb.Blog.View={
 				this.editForm.form.loadRecord(Bb.Blog.View.Running.commentGrid.getSelectionModel().getSelected());
 				switch (Bb.Blog.Config.OnlineEditor)
 				{
+					case 1:
+						if (CKEDITOR.instances.comment) CKEDITOR.instances.comment.setData(Bb.Blog.View.Running.commentGrid.getSelectionModel().getSelected().data.comment);					
+						break
 					case 2:
 						if (Bb.Blog.View.CommentView.EditWindow.KindEditor_comment) Bb.Blog.View.CommentView.EditWindow.KindEditor_comment.html(Bb.Blog.View.Running.commentGrid.getSelectionModel().getSelected().data.comment);
 						break
 					case 3:
+                    	if (xhEditor_comment) xhEditor_comment.setSource(Bb.Blog.View.Running.commentGrid.getSelectionModel().getSelected().data.comment);
 						break
 					default:
-						if (CKEDITOR.instances.comment) CKEDITOR.instances.comment.setData(Bb.Blog.View.Running.commentGrid.getSelectionModel().getSelected().data.comment);
+                        if (ue_comment) ue_comment.setContent(Bb.Blog.View.Running.commentGrid.getSelectionModel().getSelected().data.comment);
 				}
 			}
 			}]
@@ -706,13 +731,16 @@ Bb.Blog.View={
 			Bb.Blog.View.CommentView.edit_window.blog_id.setValue(blog_id);
 			switch (Bb.Blog.Config.OnlineEditor)
 			{
+				case 1:
+					if (CKEDITOR.instances.comment) CKEDITOR.instances.comment.setData("");
+					break
 				case 2:
 					if (Bb.Blog.View.CommentView.EditWindow.KindEditor_comment) Bb.Blog.View.CommentView.EditWindow.KindEditor_comment.html("");
 					break
 				case 3:
 					break
 				default:
-					if (CKEDITOR.instances.comment) CKEDITOR.instances.comment.setData("");
+                    if (ue_comment)ue_comment.setContent("");
 			}
 
 			Bb.Blog.View.CommentView.edit_window.show();
@@ -732,6 +760,9 @@ Bb.Blog.View={
 			Bb.Blog.View.CommentView.edit_window.savetype=1;
 			switch (Bb.Blog.Config.OnlineEditor)
 			{
+				case 1:
+					if (CKEDITOR.instances.comment) CKEDITOR.instances.comment.setData(this.getSelectionModel().getSelected().data.comment);
+					break
 				case 2:
 					if (Bb.Blog.View.CommentView.EditWindow.KindEditor_comment) Bb.Blog.View.CommentView.EditWindow.KindEditor_comment.html(this.getSelectionModel().getSelected().data.comment);
 					break
@@ -739,7 +770,7 @@ Bb.Blog.View={
 					if (xhEditor_comment)xhEditor_comment.setSource(this.getSelectionModel().getSelected().data.comment);
 					break
 				default:
-					if (CKEDITOR.instances.comment) CKEDITOR.instances.comment.setData(this.getSelectionModel().getSelected().data.comment);
+                    if (ue_comment)ue_comment.setContent(this.getSelectionModel().getSelected().data.comment);		
 			}
 
 			Bb.Blog.View.CommentView.edit_window.show();
@@ -866,7 +897,6 @@ Bb.Blog.View={
 						{header : '标识',dataIndex : 'blog_id',hidden:true},
 						{header : '用户名称',dataIndex : 'username'},
 						{header : '博客标题',dataIndex : 'blog_name'},
-						{header : '博客内容',dataIndex : 'blog_content',width:450},
 						{header : '创建时间',dataIndex : 'commitTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i')},
 						{header : '更新时间',dataIndex : 'updateTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i')}
 					]
@@ -1275,13 +1305,16 @@ Bb.Blog.View={
 			Bb.Blog.View.Running.edit_window.blog_id.setValue("");
 			switch (Bb.Blog.Config.OnlineEditor)
 			{
+				case 1:
+					if (CKEDITOR.instances.blog_content)CKEDITOR.instances.blog_content.setData("");
+					break
 				case 2:
 					if (Bb.Blog.View.EditWindow.KindEditor_blog_content) Bb.Blog.View.EditWindow.KindEditor_blog_content.html("");
 					break
 				case 3:
 					break
 				default:
-					if (CKEDITOR.instances.blog_content)CKEDITOR.instances.blog_content.setData("");
+					if (ue_blog_content)ue_blog_content.setContent("");
 			}
 			Bb.Blog.View.Running.edit_window.show();
 			Bb.Blog.View.Running.edit_window.maximize();
@@ -1300,6 +1333,9 @@ Bb.Blog.View={
 			Bb.Blog.View.Running.edit_window.savetype=1;
 			switch (Bb.Blog.Config.OnlineEditor)
 			{
+				case 1:
+					if (CKEDITOR.instances.blog_content) CKEDITOR.instances.blog_content.setData(this.getSelectionModel().getSelected().data.blog_content);
+					break
 				case 2:
 					if (Bb.Blog.View.EditWindow.KindEditor_blog_content)Bb.Blog.View.EditWindow.KindEditor_blog_content.html(this.getSelectionModel().getSelected().data.blog_content);
 					break
@@ -1307,7 +1343,7 @@ Bb.Blog.View={
 					if (xhEditor_blog_content)xhEditor_blog_content.setSource(this.getSelectionModel().getSelected().data.blog_content);
 					break
 				default:
-					if (CKEDITOR.instances.blog_content) CKEDITOR.instances.blog_content.setData(this.getSelectionModel().getSelected().data.blog_content);
+					if (ue_blog_content)ue_blog_content.setContent(this.getSelectionModel().getSelected().data.blog_content);
 			}
 
 			Bb.Blog.View.Running.edit_window.show();

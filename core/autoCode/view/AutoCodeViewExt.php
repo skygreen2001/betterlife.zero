@@ -1066,11 +1066,11 @@ class AutoCodeViewExt extends AutoCode
 		$textareaOnlineditor_Init="";
 		$textareaOnlineditor_Init_func="";
 
-		$textareaOnlineditor_Replace_array=array("ckEditor"=>'',"kindEditor"=>'',"xhEditor"=>'');
-		$textareaOnlineditor_Add_array=array("ckEditor"=>'',"kindEditor"=>'',"xhEditor"=>'');
-		$textareaOnlineditor_Update_array=array("ckEditor"=>'',"kindEditor"=>'',"xhEditor"=>'');
-		$textareaOnlineditor_Save_array=array("ckEditor"=>'',"kindEditor"=>'',"xhEditor"=>'');
-		$textareaOnlineditor_Reset_array=array("ckEditor"=>'',"kindEditor"=>'',"xhEditor"=>'');
+		$textareaOnlineditor_Replace_array=array("UEditor"=>'',"ckEditor"=>'',"kindEditor"=>'',"xhEditor"=>'');
+		$textareaOnlineditor_Add_array=array("UEditor"=>'',"ckEditor"=>'',"kindEditor"=>'',"xhEditor"=>'');
+		$textareaOnlineditor_Update_array=array("UEditor"=>'',"ckEditor"=>'',"kindEditor"=>'',"xhEditor"=>'');
+		$textareaOnlineditor_Save_array=array("UEditor"=>'',"ckEditor"=>'',"kindEditor"=>'',"xhEditor"=>'');
+		$textareaOnlineditor_Reset_array=array("UEditor"=>'',"ckEditor"=>'',"kindEditor"=>'',"xhEditor"=>'');
 		$reset_img="";
 		$add_img="";
 		$update_img="";
@@ -1119,23 +1119,30 @@ class AutoCodeViewExt extends AutoCode
 							if (array_key_exists($fieldname, $redundancy_fields))continue;
 						}
 						$has_textarea=true;
+						$textareaOnlineditor_Replace_array["UEditor"].="                                this.editForm.$fieldname.setWidth(\"98%\");\r\n";
+						$textareaOnlineditor_Replace_array["UEditor"].=$blank_pre."                                pageInit_ue_$fieldname();\r\n";
 						$textareaOnlineditor_Replace_array["ckEditor"].="                                ckeditor_replace_$fieldname();\r\n";
 						$textareaOnlineditor_Replace_array["kindEditor"].="                                $appName_alias.$classname.View.EditWindow.KindEditor_$fieldname = KindEditor.create('textarea[name=\"$fieldname\"]',{width:'98%',minHeith:'350px', filterMode:true});\r\n";
 						$textareaOnlineditor_Replace_array["xhEditor"].="                                pageInit_$fieldname();\r\n";
-
+						
+						$textareaOnlineditor_Add_array["UEditor"].="                    if (ue_$fieldname)ue_$fieldname.setContent(\"\");\r\n";
 						$textareaOnlineditor_Add_array["ckEditor"].="                    if (CKEDITOR.instances.$fieldname) CKEDITOR.instances.$fieldname.setData(\"\");\r\n";
 						$textareaOnlineditor_Add_array["kindEditor"].="                    if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname) $appName_alias.$classname.View.EditWindow.KindEditor_{$fieldname}.html(\"\");\r\n";
 
+						$textareaOnlineditor_Update_array["UEditor"].="                    if (ue_$fieldname)ue_$fieldname.setContent(this.getSelectionModel().getSelected().data.$fieldname);\r\n";
 						$textareaOnlineditor_Update_array["ckEditor"].="                    if (CKEDITOR.instances.$fieldname) CKEDITOR.instances.$fieldname.setData(this.getSelectionModel().getSelected().data.$fieldname);\r\n";
 						$textareaOnlineditor_Update_array["kindEditor"].="                    if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname) $appName_alias.$classname.View.EditWindow.KindEditor_$fieldname.html(this.getSelectionModel().getSelected().data.$fieldname);\r\n";
 						$textareaOnlineditor_Update_array["xhEditor"].="                    if (xhEditor_$fieldname)xhEditor_$fieldname.setSource(this.getSelectionModel().getSelected().data.$fieldname);\r\n";
 
+						$textareaOnlineditor_Save_array["UEditor"].="                                if (ue_$fieldname)this.editForm.$fieldname.setValue(ue_$fieldname.getContent());\r\n";
 						$textareaOnlineditor_Save_array["ckEditor"].="                                if (CKEDITOR.instances.$fieldname) this.editForm.$fieldname.setValue(CKEDITOR.instances.$fieldname.getData());\r\n";
 						$textareaOnlineditor_Save_array["kindEditor"].="                                if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname)this.editForm.$fieldname.setValue($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname.html());\r\n";
 						$textareaOnlineditor_Save_array["xhEditor"].="                                if (xhEditor_$fieldname)this.editForm.$fieldname.setValue(xhEditor_$fieldname.getSource());\r\n";
 
+						$textareaOnlineditor_Reset_array["UEditor"].="                                if (ue_$fieldname) ue_$fieldname.setContent($appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n";
 						$textareaOnlineditor_Reset_array["ckEditor"].="                                if (CKEDITOR.instances.$fieldname) CKEDITOR.instances.$fieldname.setData($appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n";
 						$textareaOnlineditor_Reset_array["kindEditor"].="                                if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname) $appName_alias.$classname.View.EditWindow.KindEditor_$fieldname.html($appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n";
+						$textareaOnlineditor_Reset_array["xhEditor"].="                                if (xhEditor_$fieldname) xhEditor_$fieldname.setSource($appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n";
 					}
 				}
 			}
@@ -1144,10 +1151,10 @@ class AutoCodeViewExt extends AutoCode
 			$textareaOnlineditor_Init=",\r\n".
 									  "        /**\r\n".
 									  "         * 在线编辑器类型。\r\n".
-									  "         * 1:CkEditor,2:KindEditor,3:xhEditor\r\n".
+									  "         * 1:CkEditor,2:KindEditor,3:xhEditor,4:UEditor\r\n".
 									  "         * 配合Action的变量配置\$online_editor\r\n".
 									  "         */\r\n".
-									  "        OnlineEditor:1";
+									  "        OnlineEditor:4";
 			$textareaOnlineditor_Init_func="\r\n".
 									  "        if (Ext.util.Cookies.get('OnlineEditor')!=null){\r\n".
 									  "            $appName_alias.$classname.Config.OnlineEditor=parseInt(Ext.util.Cookies.get('OnlineEditor'));\r\n".
@@ -1156,6 +1163,9 @@ class AutoCodeViewExt extends AutoCode
 									  $blank_pre."                    afterrender:function(){\r\n".
 									  $blank_pre."                        switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
 									  $blank_pre."                        {\r\n".
+									  $blank_pre."                            case 1:\r\n".	
+									  $blank_pre.$textareaOnlineditor_Replace_array["ckEditor"].
+									  $blank_pre."                                break\r\n".
 									  $blank_pre."                            case 2:\r\n".
 									  $blank_pre.$textareaOnlineditor_Replace_array["kindEditor"].
 									  $blank_pre."                                break\r\n".
@@ -1163,23 +1173,29 @@ class AutoCodeViewExt extends AutoCode
 									  $blank_pre.$textareaOnlineditor_Replace_array["xhEditor"].
 									  $blank_pre."                                break\r\n".
 									  $blank_pre."                            default:\r\n".
-									  $blank_pre.$textareaOnlineditor_Replace_array["ckEditor"].
+									  $blank_pre.$textareaOnlineditor_Replace_array["UEditor"].
 									  $blank_pre."                        }\r\n".
 									  $blank_pre."                    }";
 			$textareaOnlineditor_Add=$add_img.
 									  $blank_pre."            switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
 									  $blank_pre."            {\r\n".
+									  $blank_pre."                case 1:\r\n".	
+									  $blank_pre.$textareaOnlineditor_Add_array["ckEditor"].
+									  $blank_pre."                    break\r\n".
 									  $blank_pre."                case 2:\r\n".
 									  $blank_pre.$textareaOnlineditor_Add_array["kindEditor"].
 									  $blank_pre."                    break\r\n".
 									  $blank_pre."                case 3:\r\n".
 									  $blank_pre."                    break\r\n".
 									  $blank_pre."                default:\r\n".
-									  $blank_pre.$textareaOnlineditor_Add_array["ckEditor"].
+									  $blank_pre.$textareaOnlineditor_Add_array["UEditor"].
 									  $blank_pre."            }\r\n";
 			$textareaOnlineditor_Update=$update_img.
 									  $blank_pre."            switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
 									  $blank_pre."            {\r\n".
+									  $blank_pre."                case 1:\r\n".	
+									  $blank_pre.$textareaOnlineditor_Update_array["ckEditor"].
+									  $blank_pre."                    break\r\n".
 									  $blank_pre."                case 2:\r\n".
 									  $blank_pre.$textareaOnlineditor_Update_array["kindEditor"].
 									  $blank_pre."                    break\r\n".
@@ -1187,10 +1203,13 @@ class AutoCodeViewExt extends AutoCode
 									  $blank_pre.$textareaOnlineditor_Update_array["xhEditor"].
 									  $blank_pre."                    break\r\n".
 									  $blank_pre."                default:\r\n".
-									  $blank_pre.$textareaOnlineditor_Update_array["ckEditor"].
+									  $blank_pre.$textareaOnlineditor_Update_array["UEditor"].
 									  $blank_pre."            }\r\n";
 			$textareaOnlineditor_Save=$blank_pre."                        switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
 									  $blank_pre."                        {\r\n".
+									  $blank_pre."                            case 1:\r\n".	
+									  $blank_pre.$textareaOnlineditor_Save_array["ckEditor"].
+									  $blank_pre."                                break\r\n".
 									  $blank_pre."                            case 2:\r\n".
 									  $blank_pre.$textareaOnlineditor_Save_array["kindEditor"].
 									  $blank_pre."                                break\r\n".
@@ -1198,18 +1217,22 @@ class AutoCodeViewExt extends AutoCode
 									  $blank_pre.$textareaOnlineditor_Save_array["xhEditor"].
 									  $blank_pre."                                break\r\n".
 									  $blank_pre."                            default:\r\n".
-									  $blank_pre.$textareaOnlineditor_Save_array["ckEditor"].
+									  $blank_pre.$textareaOnlineditor_Save_array["UEditor"].
 									  $blank_pre."                        }\r\n";
 			$textareaOnlineditor_Reset=$reset_img.
 									  $blank_pre."                        switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
 									  $blank_pre."                        {\r\n".
+									  $blank_pre."                            case 1:\r\n".	
+									  $blank_pre.$textareaOnlineditor_Reset_array["ckEditor"].
+									  $blank_pre."                                break\r\n".
 									  $blank_pre."                            case 2:\r\n".
 									  $blank_pre.$textareaOnlineditor_Reset_array["kindEditor"].
 									  $blank_pre."                                break\r\n".
 									  $blank_pre."                            case 3:\r\n".
+									  $blank_pre.$textareaOnlineditor_Reset_array["xhEditor"].
 									  $blank_pre."                                break\r\n".
 									  $blank_pre."                            default:\r\n".
-									  $blank_pre.$textareaOnlineditor_Reset_array["ckEditor"].
+									  $blank_pre.$textareaOnlineditor_Reset_array["UEditor"].
 									  $blank_pre."                        }\r\n";
 		}else{
 			$textareaOnlineditor_Add=$add_img;
