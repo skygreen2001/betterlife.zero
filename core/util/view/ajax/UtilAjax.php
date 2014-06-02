@@ -181,7 +181,7 @@ class UtilAjax extends Util
 		$result="";
 		if (isset($jsFile)){
 			$url_base=UtilNet::urlbase();
-			if ($isGzip&&Gc::$isGzip){
+			if ($isGzip){
 				if (isset($jsFlag)){
 					$jsFile.="&".self::$JS_FLAG_GROUP."=".$jsFlag;
 				}

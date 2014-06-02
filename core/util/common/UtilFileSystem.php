@@ -163,6 +163,7 @@ class UtilFileSystem extends Util
 
 	/**
 	 * 服务器上传文件
+	 * 需要调整php.ini的配置项:post_max_size|upload_max_filesize
 	 * @param mixed $files 上传的文件对象
 	 * @param string $uploadPath 文件路径或者文件名
 	 * @param sting $uploadFieldName 上传文件的input组件的名称

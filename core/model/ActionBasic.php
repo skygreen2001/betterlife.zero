@@ -316,23 +316,21 @@ class ActionBasic extends Object
 				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.config.js");
 				if (UtilAjax::$IsDebug){
 					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.all.js");
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.parse.js");
 				}else{
-					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.all.min.js");
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.all.min.js");				
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.parse.min.js");
 				}
 				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/lang/zh-cn/zh-cn.js");
-				
 
 				if (is_array($textarea_ids)&&(count($textarea_ids)>0)){
 					$this->view->editorHtml="<script type=\"text/javascript\">";
 					for($i=0;$i<count($textarea_ids);$i++){
-						//$this->view->editorHtml.="var ue = UE.getEditor('".$textarea_ids[$i]."');";
 						UtilUeditor::loadJsFunction($textarea_ids[$i],$this->view->viewObject,null);
 					}
 				}else{
-					//$this->view->editorHtml="<script type=\"text/javascript\">var ue = UE.getEditor('".$textarea_ids."');";
 					UtilUeditor::loadJsFunction($textarea_ids[$i],$this->view->viewObject,null);
 				}
-				//$this->view->editorHtml.="</script>";
 				$this->view->online_editor="UEditor";
 				break;
 			case EnumOnlineEditorType::CKEDITOR:
