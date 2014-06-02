@@ -16,10 +16,10 @@ class EnumOnlineEditorType extends Enum
 	 * @link http://xheditor.com/
 	 */
 	const XHEDITOR=3;
-    /**
-     * @link http://ueditor.baidu.com/
-     */
-    const UEDITOR=4;
+	/**
+	 * @link http://ueditor.baidu.com/
+	 */
+	const UEDITOR=4;
 }
 
 /**
@@ -309,6 +309,7 @@ class ActionBasic extends Object
 	{
 		switch ($this->online_editor) {
 			case EnumOnlineEditorType::UEDITOR:
+				$viewObject=$this->view->viewObject;
 				if(empty($viewObject))
 				{
 					$this->view->viewObject=new ViewObject();
@@ -324,12 +325,11 @@ class ActionBasic extends Object
 				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/lang/zh-cn/zh-cn.js");
 
 				if (is_array($textarea_ids)&&(count($textarea_ids)>0)){
-					$this->view->editorHtml="<script type=\"text/javascript\">";
 					for($i=0;$i<count($textarea_ids);$i++){
 						UtilUeditor::loadJsFunction($textarea_ids[$i],$this->view->viewObject,null);
 					}
 				}else{
-					UtilUeditor::loadJsFunction($textarea_ids[$i],$this->view->viewObject,null);
+					UtilUeditor::loadJsFunction($textarea_ids,$this->view->viewObject,null);
 				}
 				$this->view->online_editor="UEditor";
 				break;
