@@ -16,6 +16,10 @@ class EnumOnlineEditorType extends Enum
 	 * @link http://xheditor.com/
 	 */
 	const XHEDITOR=3;
+	/**
+	 * @link http://ueditor.baidu.com/
+	 */
+	const UEDITOR=4;
 }
 
 /**
@@ -48,7 +52,7 @@ class ActionBasic extends Object
 	 * 3.xhEditor
 	 * @var mixed
 	 */
-	public $online_editor=EnumOnlineEditorType::CKEDITOR;
+	public $online_editor=EnumOnlineEditorType::UEDITOR;
 	/**
 	 * 访问应用名
 	 * @var string
@@ -304,6 +308,31 @@ class ActionBasic extends Object
 	public function load_onlineditor($textarea_ids="content")
 	{
 		switch ($this->online_editor) {
+			case EnumOnlineEditorType::UEDITOR:
+				$viewObject=$this->view->viewObject;
+				if(empty($viewObject))
+				{
+					$this->view->viewObject=new ViewObject();
+				}
+				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.config.js");
+				if (UtilAjax::$IsDebug){
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.all.js");
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.parse.js");
+				}else{
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.all.min.js");				
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.parse.min.js");
+				}
+				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/lang/zh-cn/zh-cn.js");
+
+				if (is_array($textarea_ids)&&(count($textarea_ids)>0)){
+					for($i=0;$i<count($textarea_ids);$i++){
+						UtilUeditor::loadJsFunction($textarea_ids[$i],$this->view->viewObject,null);
+					}
+				}else{
+					UtilUeditor::loadJsFunction($textarea_ids,$this->view->viewObject,null);
+				}
+				$this->view->online_editor="UEditor";
+				break;
 		   case EnumOnlineEditorType::CKEDITOR:
 				if (is_array($textarea_ids)&&(count($textarea_ids)>0)){
 					$this->view->editorHtml=UtilCKEeditor::loadReplace($textarea_ids[0]);
