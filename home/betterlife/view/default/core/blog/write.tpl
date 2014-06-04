@@ -17,10 +17,13 @@
 		<br/><font color="{$color}">{$message|nl2br|default:''}</font><br/>
 		<form name="postForm" method="POST">
 			博文名:<br/>
-			<input type="text" class="inputNormal" style="width: 620px; margin-left: 0px;text-align: left;" name="blog_name" value="{$blog.blog_name}"/><br/>
+			<input type="text" class="inputNormal" style="width: 710px; margin-left: 0px;text-align: left;" name="blog_name" value="{$blog.blog_name}"/><br/>
 			内容: <br/>  
-			<textarea id="blog_content" name="blog_content" style="width:600px;height:300px;visibility:hidden;">{$blog.blog_content}</textarea><br/> 
+			<textarea id="blog_content" name="blog_content" style="width:710px;height:300px;">{$blog.blog_content}</textarea><br/> 
 			<input type="submit" value="提交" class="btnSubmit" />
 		</form>
 	</div>
+	{if ($online_editor=='UEditor')}
+	<script>pageInit_ue_blog_content();</script>
+	{/if}
 {/block}

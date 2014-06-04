@@ -39,10 +39,13 @@
 			{if !isset($smarty.get.comment_id)}<h2>提交新评论</h2> {else}<h2>修改评论</h2>{/if}
 			<form name="commentForm" method="post">
 				我要发言: <br/><input type="hidden" name="blog_id" value="{$blog.blog_id}"/>
-				<textarea name="comment" id="comment" style="width:700px;height:300px;visibility:hidden;">{if isset($comment_content)}{$comment_content}{/if}</textarea><br/>
+				<textarea name="comment" id="comment" style="width:710px;height:300px;">{if isset($comment_content)}{$comment_content}{/if}</textarea><br/>
 				<input type="submit" value="提交" class="btnSubmit" /> | <input class="btnSubmit" onclick="location.href='{$url_base}index.php?go=betterlife.comment.comment&blog_id={$smarty.get.blog_id}&pageNo={$smarty.get.pageNo|default:"1"}'" type="button" value="返回" />
 			</form>
 		</div>
+		{if ($online_editor=='UEditor')}
+		<script>pageInit_ue_comment();</script>
+		{/if}
 		{/if}
 	</div>
 {/block}
