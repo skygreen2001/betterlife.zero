@@ -64,10 +64,10 @@ $appName_alias.Config={
     Operator:'',
     /**
      * 在线编辑器类型。
-     * 1:CkEditor,2:KindEditor,3:xhEditor
+     * 1:CkEditor,2:KindEditor,3:xhEditor,4:UEditor
      * 配合Action的变量配置\$online_editor
      */
-    OnlineEditor:1,
+    OnlineEditor:4,
     /**
      * 提供第三方公用使用的窗口，一个应用只有一个这样的窗口
      */
@@ -186,8 +186,13 @@ $appName_alias.Layout = {
                                         }
                                     }},
                                     {text:'在线编辑器',ref:'onlineditor',menu:{
-                                        items: [ {
-                                            text: '默认【ckEditor】',
+                                        items: [{
+                                            text: '默认【UEditor】',
+                                            checked: true,value:"4",
+                                            group: 'onlineditor',
+                                            checkHandler: function(item, checked){{$appName_alias}.Layout.Function.onOnlineditorCheck(item, checked);}
+                                        },{
+                                            text: 'ckEditor',
                                             checked: true,value:"1",
                                             group: 'onlineditor',
                                             checkHandler: function(item, checked){{$appName_alias}.Layout.Function.onOnlineditorCheck(item, checked);}
