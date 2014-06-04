@@ -23,11 +23,11 @@ $save_url = $php_url;
 $ext_arr = array(
 	'image' => array('gif', 'jpg', 'jpeg', 'png', 'bmp'),
 	'flash' => array('swf', 'flv'),
-	'media' => array('swf', 'flv', 'mp3', 'wav', 'wma', 'wmv', 'mid', 'avi', 'mpg', 'asf', 'rm', 'rmvb'),
+	'media' => array('swf', 'flv', 'mp3', 'mp4', 'wav', 'wma', 'wmv', 'mid', 'avi', 'mpg', 'asf', 'rm', 'rmvb'),
 	'file' => array('doc', 'docx', 'xls', 'xlsx', 'ppt', 'htm', 'html', 'txt', 'zip', 'rar', 'gz', 'bz2'),
 );
 //最大文件大小
-$max_size = 1000000;
+$max_size = 100000000;
 
 $save_path = realpath($save_path) . '/';
 

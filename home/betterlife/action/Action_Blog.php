@@ -40,8 +40,8 @@ class Action_Blog extends Action
 		$blog_content="";
 		if (!empty($_POST)) {
 			$blog = $this->model->Blog;
-			$blog->user_id=HttpSession::get('user_id');
-			$blog_id= $blog->getId();
+			$blog->User_ID=HttpSession::get('user_id');
+			$blog_id= $blog->getID();
 			if (!empty($blog_id)){
 			  $blog->update();
 			  $view=new View_Blog($this);
@@ -109,7 +109,7 @@ class View_Blog extends ViewObject
 	public $blogs;
 	public $countBlogs;
 	public function count_comments($blog_id){
-		return Comment::count("blog_id=".$blog_id);
+		return Comment::count("Blog_ID=".$blog_id);
 	}
 }
 ?>

@@ -5,8 +5,8 @@
 		<h1>请登录</h1>
 		<font color="red">{$message}</font>
 		<div>           
-		   <label>用户名</label><br/><input class="inputNormal" type="text" name="username" style="width:260px;" /><br/>
-		   <label>密码</label><br/><input class="inputNormal" type="password" name="password" /><br/>
+		   <label>用户名</label><br/><input class="inputNormal" type="text" name="Username" style="width:260px;" /><br/>
+		   <label>密码</label><br/><input class="inputNormal" type="password" name="Password" /><br/>
 		</div>
 		<input type="submit" name="Submit" value="登录" class="btnSubmit" />
 		</form>

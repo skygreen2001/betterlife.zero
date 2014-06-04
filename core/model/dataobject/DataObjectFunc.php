@@ -62,7 +62,8 @@ class DataObjectFunc
 			if ($relationData) {
 				return $relationData;
 			}else {
-				if (!property_exists($dataobject,$property)) {
+                $property=ucfirst($property);
+				if (property_exists($dataobject,$property)) {
 					if (method_exists($dataobject,$property)){
 						return  $dataobject->$property();
 					}else{

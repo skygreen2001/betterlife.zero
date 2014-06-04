@@ -30,13 +30,13 @@ class Action_Auth extends Action
 			$this->redirect("blog","display");
 		}else if (!empty($_POST)) {
 			$user = $this->model->User;
-			$userdata = User::get_one(array("username"=>$user->username,
-					"password"=>md5($user->getPassword())));
+			$userdata = User::get_one(array("Username"=>$user->username,
+					"Password"=>md5($user->getPassword())));
 			if (empty($userdata)) {
 				$this->view->set("message","用户名或者密码错误");
 			}else {
 				$this->uc_login($user);
-				HttpSession::set('user_id',$userdata->user_id);
+				HttpSession::set('user_id',$userdata->ID);
 				$this->redirect("blog","display");
 			}
 		}

@@ -53,15 +53,15 @@ abstract class DataObject extends Object implements ArrayAccess
 	/**
 	 * @var mixed 数据对象的唯一标识
 	 */
-	protected $id;
+	protected $ID;
 	/**
 	 * @var int 记录创建的时间timestamp
 	 */
-	public $commitTime;
+	public $CommitTime;
 	/**
 	 * @var int 记录最后更新的时间，当表中无该字段时，一般用commitTime记录最后更新的时间。
 	 */
-	public $updateTime;
+	public $UpdateTime;
 	/**
 	 * @var IDao 当前使用的数据库调用对象
 	 */

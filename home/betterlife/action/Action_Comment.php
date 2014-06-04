@@ -18,9 +18,9 @@ class Action_Comment extends Action
 		}
 		if (count($_POST)>0) {
 			$comment = $this->model->Comment;
-			$comment->blog_id = $blog_id;
-			$comment->user_id=HttpSession::get('user_id');
-			if (!empty($comment->comment_id)){
+			$comment->Blog_ID = $blog_id;
+			$comment->User_ID=HttpSession::get('user_id');
+			if (!empty($comment->ID)){
 			  $comment->update();
 			  $this->view->message="评论修改成功";
 			}else{
@@ -33,6 +33,7 @@ class Action_Comment extends Action
 		if ($comment_id){
 			$comment=Comment::get_by_id($comment_id);
 			$this->view->comment_content=$comment->comment;
+            $this->view-> comment_id=$comment_id;
 		}
 		$canEdit=$this->view->blog->canEdit();
         if (!$canEdit){
@@ -46,7 +47,7 @@ class Action_Comment extends Action
 	{
 	  $comment_id= $this->data["comment_id"];
 	  $comment=new Comment();
-	  $comment->setId($comment_id);
+	  $comment->setID($comment_id);
 	  $comment->delete();
 	  unset($this->data["comment_id"]);
 	  $this->redirect("comment","comment",$this->data);

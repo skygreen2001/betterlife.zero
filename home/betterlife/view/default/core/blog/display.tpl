@@ -5,14 +5,14 @@
 		<b>共计{$countBlogs} 篇博客</b>
 		{if $blogs}
 		{foreach item=blog from=$blogs}
-		<div id='blog{$blog.blog_id}' class="block">
-			<b><my:a href='{$url_base}index.php?go=betterlife.comment.comment&blog_id={$blog.blog_id}&pageNo={$smarty.get.pageNo|default:"1"}'>{$blog.blog_name}</my:a>
-			{if $blog.canEdit}[<my:a href="{$url_base}index.php?go=betterlife.blog.write&blog_id={$blog.blog_id}&pageNo={$smarty.get.pageNo|default:"1"}">改</my:a>]{/if}
-			{if $blog.canDelete}[<my:a href="{$url_base}index.php?go=betterlife.blog.delete&blog_id={$blog.blog_id}&pageNo={$smarty.get.pageNo|default:"1"}">删</my:a>]{/if}
+		<div id='blog{$blog.ID}' class="block">
+			<b><my:a href='{$url_base}index.php?go=betterlife.comment.comment&blog_id={$blog.ID}&pageNo={$smarty.get.pageNo|default:"1"}'>{$blog.Blog_Name}</my:a>
+			{if $blog.canEdit}[<my:a href="{$url_base}index.php?go=betterlife.blog.write&blog_id={$blog.ID}&pageNo={$smarty.get.pageNo|default:"1"}">改</my:a>]{/if}
+			{if $blog.canDelete}[<my:a href="{$url_base}index.php?go=betterlife.blog.delete&blog_id={$blog.ID}&pageNo={$smarty.get.pageNo|default:"1"}">删</my:a>]{/if}
 			</b><br/>
-			{$blog.blog_content|nl2br}<br/><br/>
-			由 {$blog.user.username} 在 {$blog.commitTime|date_format:'%Y-%m-%d %H:%M'} 发表<br/>
-			评论数:{$viewObject->count_comments($blog.blog_id)}<br/>
+			{$blog.Blog_Content|nl2br}<br/><br/>
+			由 {$blog.user.Username} 在 {$blog.CommitTime|date_format:'%Y-%m-%d %H:%M'} 发表<br/>
+			评论数:{$viewObject->count_comments($blog.ID)}<br/>
 		</div>
 		{/foreach}<br/>
 		<my:page src='{$url_base}index.php?go=betterlife.blog.display' /><br/>
