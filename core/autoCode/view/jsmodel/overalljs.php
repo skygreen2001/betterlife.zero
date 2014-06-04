@@ -67,7 +67,7 @@ $appName_alias.Config={
      * 1:CkEditor,2:KindEditor,3:xhEditor,4:UEditor
      * 配合Action的变量配置\$online_editor
      */
-    OnlineEditor:4, 
+    OnlineEditor:4,
     /**
      * 提供第三方公用使用的窗口，一个应用只有一个这样的窗口
      */
