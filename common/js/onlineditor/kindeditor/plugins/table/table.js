@@ -67,7 +67,7 @@ KindEditor.plugin('table', function(K) {
 		//insert or modify table
 		prop : function(isInsert) {
 			var html = [
-				'<div style="padding:10px 20px;">',
+				'<div style="padding:20px;">',
 				//rows, cols
 				'<div class="ke-dialog-row">',
 				'<label for="keRows" style="width:90px;">' + lang.cells + '</label>',
@@ -117,10 +117,10 @@ KindEditor.plugin('table', function(K) {
 				'</div>',
 				'</div>'
 			].join('');
+			var bookmark = self.cmd.range.createBookmark();
 			var dialog = self.createDialog({
 				name : name,
 				width : 500,
-				height : 300,
 				title : self.lang(name),
 				body : html,
 				beforeRemove : function() {
@@ -229,6 +229,9 @@ KindEditor.plugin('table', function(K) {
 								table.removeAttr('borderColor');
 							}
 							self.hideDialog().focus();
+							self.cmd.range.moveToBookmark(bookmark);
+							self.cmd.select();
+							self.addBookmark();
 							return;
 						}
 						//insert new table
@@ -338,7 +341,7 @@ KindEditor.plugin('table', function(K) {
 		//modify cell
 		cellprop : function() {
 			var html = [
-				'<div style="padding:10px 20px;">',
+				'<div style="padding:20px;">',
 				//width, height
 				'<div class="ke-dialog-row">',
 				'<label for="keWidth" style="width:90px;">' + lang.size + '</label>',
@@ -383,10 +386,10 @@ KindEditor.plugin('table', function(K) {
 				'</div>',
 				'</div>'
 			].join('');
+			var bookmark = self.cmd.range.createBookmark();
 			var dialog = self.createDialog({
 				name : name,
 				width : 500,
-				height : 220,
 				title : self.lang('tablecell'),
 				body : html,
 				beforeRemove : function() {
@@ -432,6 +435,8 @@ KindEditor.plugin('table', function(K) {
 							'border-color' : borderColor
 						});
 						self.hideDialog().focus();
+						self.cmd.range.moveToBookmark(bookmark);
+						self.cmd.select();
 						self.addBookmark();
 					}
 				}
@@ -496,6 +501,9 @@ KindEditor.plugin('table', function(K) {
 				row = self.plugin.getSelectedRow()[0],
 				cell = self.plugin.getSelectedCell()[0],
 				index = cell.cellIndex + offset;
+			// 取得第一行的index
+			index += table.rows[0].cells.length - row.cells.length;
+
 			for (var i = 0, len = table.rows.length; i < len; i++) {
 				var newRow = table.rows[i],
 					newCell = newRow.insertCell(index);
@@ -516,20 +524,36 @@ KindEditor.plugin('table', function(K) {
 		rowinsert : function(offset) {
 			var table = self.plugin.getSelectedTable()[0],
 				row = self.plugin.getSelectedRow()[0],
-				cell = self.plugin.getSelectedCell()[0],
-				newRow;
+				cell = self.plugin.getSelectedCell()[0];
+			var rowIndex = row.rowIndex;
 			if (offset === 1) {
-				newRow = table.insertRow(row.rowIndex + (cell.rowSpan - 1) + offset);
-			} else {
-				newRow = table.insertRow(row.rowIndex);
+				rowIndex = row.rowIndex + (cell.rowSpan - 1) + offset;
 			}
+			var newRow = table.insertRow(rowIndex);
+
 			for (var i = 0, len = row.cells.length; i < len; i++) {
+				// 调整cell个数
+				if (row.cells[i].rowSpan > 1) {
+					len -= row.cells[i].rowSpan - 1;
+				}
 				var newCell = newRow.insertCell(i);
 				// copy colspan
 				if (offset === 1 && row.cells[i].colSpan > 1) {
 					newCell.colSpan = row.cells[i].colSpan;
 				}
 				newCell.innerHTML = K.IE ? '' : '<br />';
+			}
+			// 调整rowspan
+			for (var j = rowIndex; j >= 0; j--) {
+				var cells = table.rows[j].cells;
+				if (cells.length > i) {
+					for (var k = cell.cellIndex; k >= 0; k--) {
+						if (cells[k].rowSpan > 1) {
+							cells[k].rowSpan += 1;
+						}
+					}
+					break;
+				}
 			}
 			self.cmd.range.selectNodeContents(cell).collapse(true);
 			self.cmd.select();
@@ -552,7 +576,7 @@ KindEditor.plugin('table', function(K) {
 			if (table.rows.length <= nextRowIndex) {
 				return;
 			}
-			var cellIndex = _getCellIndex(table, row, cell); // 下一行单元格的index
+			var cellIndex = cell.cellIndex; // 下一行单元格的index
 			if (nextRow.cells.length <= cellIndex) {
 				return;
 			}

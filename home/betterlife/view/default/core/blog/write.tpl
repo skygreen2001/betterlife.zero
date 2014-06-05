@@ -1,6 +1,11 @@
 {extends file="$templateDir/layout/normal/layout.tpl"}
 {block name=body}
-	{if ($online_editor=='KindEditor')}<script>showHtmlEditor("Blog_Content");//KindEditor 加载语句</script>{/if}
+	{if ($online_editor=='KindEditor')}
+	<script>
+	KindEditor.ready(function(KE) {
+		KE.create('textarea[name="Blog_Content"]',{$keConfig});
+	});</script>
+	{/if}
 	{if ($online_editor=='CKEditor')}
 	{$editorHtml}
 	<script>$(function(){   
@@ -16,9 +21,9 @@
 		<br/><font color="{$color}">{$message|nl2br|default:''}</font><br/>
 		<form name="postForm" method="POST">
 			博文名:<br/>
-			<input type="text" name="Blog_Name" class="inputNormal" style="width: 650px; margin-left: 0px;text-align: left;" value="{$blog.Blog_Name}"/><br/>
+			<input type="text" name="Blog_Name" class="inputNormal" style="width: 720px; margin-left: 0px;text-align: left;" value="{$blog.Blog_Name}"/><br/>
 			内容: <br/>  
-			<textarea id="blog_content" name="Blog_Content" style="width:650px;height:300px;">{$blog.Blog_Content}</textarea><br/> 
+			<textarea id="blog_content" name="Blog_Content" style="width:720px;height:300px;">{$blog.Blog_Content}</textarea><br/> 
 			<input type="submit" value="提交" class="btnSubmit" />
 		</form>
 	</div>

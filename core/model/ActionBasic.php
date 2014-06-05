@@ -350,14 +350,9 @@ class ActionBasic extends Object
 				{
 					$this->view->viewObject=new ViewObject();
 				}
-				if (UtilAjax::$IsDebug){
-					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/kindeditor.js");
-				}else{
-					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/kindeditor-min.js");
-				}
-				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/lang/zh_CN.js");
+				$this->view->keConfig=UtilKindEditor::loadJsFunction($textarea_ids,$this->view->viewObject);
 				$this->view->online_editor="KindEditor";
-			 break;
+				break;
 		   case EnumOnlineEditorType::XHEDITOR:
 				$viewObject=$this->view->viewObject;
 				if(empty($viewObject))

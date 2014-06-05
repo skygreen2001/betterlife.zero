@@ -1,7 +1,12 @@
 {extends file="$templateDir/layout/normal/layout.tpl"}
 {block name=body}
 	{if isset($online_editor)}
-		{if ($online_editor=='KindEditor')}<script>showHtmlEditor("Comment");</script>{/if}
+		{if ($online_editor=='KindEditor')}
+		<script>
+		KindEditor.ready(function(KE) {
+			KE.create('textarea[name="Comment"]',{$keConfig});
+		});</script>
+		{/if}
 		{if ($online_editor=='CKEditor')}
 		{$editorHtml}
 		<script>$(function(){
