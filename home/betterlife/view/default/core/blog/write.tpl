@@ -1,6 +1,11 @@
 {extends file="$templateDir/layout/normal/layout.tpl"}
 {block name=body}
-	{if ($online_editor=='KindEditor')}<script>showHtmlEditor("blog_content");//KindEditor 加载语句</script>{/if}
+	{if ($online_editor=='KindEditor')}
+	<script>
+	KindEditor.ready(function(KE) {
+		KE.create('textarea[name="blog_content"]',{$keConfig});
+	});</script>
+	{/if}
 	{if ($online_editor=='CKEditor')}
 	{$editorHtml}
 	<script>$(function(){

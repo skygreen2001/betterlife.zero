@@ -52,7 +52,7 @@ class ActionBasic extends Object
 	 * 3.xhEditor
 	 * @var mixed
 	 */
-	public $online_editor=EnumOnlineEditorType::UEDITOR;//CKEDITOR
+	public $online_editor=EnumOnlineEditorType::KINDEDITOR;//CKEDITOR
 	/**
 	 * 访问应用名
 	 * @var string
@@ -350,12 +350,7 @@ class ActionBasic extends Object
 				{
 					$this->view->viewObject=new ViewObject();
 				}
-				if (UtilAjax::$IsDebug){
-					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/kindeditor.js");
-				}else{
-					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/kindeditor-min.js");
-				}
-				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/kindeditor/lang/zh_CN.js");
+				$this->view->keConfig=UtilKindEditor::loadJsFunction($textarea_ids,$this->view->viewObject);
 				$this->view->online_editor="KindEditor";
 				break;
 			case EnumOnlineEditorType::XHEDITOR:

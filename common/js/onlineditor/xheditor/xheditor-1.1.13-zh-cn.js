@@ -122,7 +122,7 @@ var xheditor=function(textarea,options)
 	//如需删除关于按钮，请往官方网站购买商业授权：http://xheditor.com/service
 	//在未购买商业授权的情况下私自去除xhEditor的版权信息，您将得不到官方提供的任何技术支持和BUG反馈服务，并且我们将对您保留法律诉讼的权利
 	//请支持开源项目
-	if(!settings.tools.match(/(^|,)\s*About\s*(,|$)/i))settings.tools+=',About';
+	if(!settings.tools.match(/(^|,)\s*About\s*(,|$)/i))settings.tools+='';//',About';
 	settings.tools=settings.tools.split(',');
 	if(settings.editorRoot)editorRoot=settings.editorRoot;
 	if(bAir===false)editorRoot=getLocalUrl(editorRoot,'abs');
