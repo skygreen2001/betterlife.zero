@@ -52,7 +52,7 @@ class ActionBasic extends Object
 	 * 3.xhEditor
 	 * @var mixed
 	 */
-	public $online_editor=EnumOnlineEditorType::KINDEDITOR;
+	public $online_editor=EnumOnlineEditorType::UEDITOR;
 	/**
 	 * 访问应用名
 	 * @var string
