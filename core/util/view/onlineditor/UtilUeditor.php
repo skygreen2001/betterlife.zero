@@ -7,8 +7,8 @@
  * @package util.view
  * @subpackage onlinediotr
  * @author skygreen
- * @link http://fex.baidu.com/ueditor/
- * ueditor API 文档: http://fex.baidu.com/ueditor/
+ * @link http://fex.baidu.com/ueditor/ [ueditor API 文档]
+ * @link http://www.comsharp.com/GetKnowledge/zh-CN/It_News_k1067.aspx [百度 UEditor Web 编辑器同 CMS 集成全攻略]
  */
 class UtilUeditor extends Util 
 {
