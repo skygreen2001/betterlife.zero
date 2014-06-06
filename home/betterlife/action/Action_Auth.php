@@ -55,6 +55,7 @@ class Action_Auth extends Action
 				$pass=$user->getPassword();
 				$this->uc_register($user);
 				$user->setPassword(md5($user->getPassword()));
+                $user->LoginTimes=0;
 				$user->save();
 				HttpSession::set('user_id',$user->id);
 				$this->redirect("blog","display");

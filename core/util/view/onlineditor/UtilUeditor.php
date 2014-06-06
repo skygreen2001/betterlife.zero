@@ -13,6 +13,9 @@
 class UtilUeditor extends Util 
 {
 
+	/**
+	 * 设置标准toolbar
+	 */
 	public static function toolbar_normal()
 	{
 		return "[

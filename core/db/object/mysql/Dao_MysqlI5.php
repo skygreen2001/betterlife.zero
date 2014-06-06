@@ -484,6 +484,8 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 			$_SQL=new Crud_Sql_Insert();
 			$_SQL->isPreparedStatement=true;
 			$object->setCommitTime(UtilDateTime::now());
+            
+            $object->setUpdateTime(UtilDateTime::now());
 			$this->saParams=UtilObject::object_to_array($object);
 			//$this->saParams=$this->filterViewProperties($this->saParams);
 			$this->sQuery=$_SQL->insert($this->classname)->values($this->saParams)->result();
