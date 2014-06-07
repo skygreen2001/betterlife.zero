@@ -1009,7 +1009,7 @@ class AutoCodeViewExt extends AutoCode
 								  $blank_pre."                                 lazyRender : true,editable: false,allowBlank : false,valueNotFoundText:'否',\r\n".
 								  $blank_pre."                                 store : new Ext.data.SimpleStore({\r\n".
 								  $blank_pre."                                     fields : ['value', 'text'],\r\n".
-								  $blank_pre."                                     data : [['0', '否'], ['1', '是']]\r\n".
+								  $blank_pre."                                     data : [['false', '否'], ['true', '是']]\r\n".
 								  $blank_pre."                                 }),emptyText: '请选择$field_comment',\r\n".
 								  $blank_pre."                                 valueField : 'value',displayField : 'text'\r\n".
 								  $blank_pre."                            ";
@@ -1481,7 +1481,7 @@ class AutoCodeViewExt extends AutoCode
 								$blank_pre."                                    triggerAction : 'all',lazyRender : true,editable: false,\r\n".
 								$blank_pre."                                    store : new Ext.data.SimpleStore({\r\n".
 								$blank_pre."                                        fields : ['value', 'text'],\r\n".
-								$blank_pre."                                        data : [['0', '否'], ['1', '是']]\r\n".
+								$blank_pre."                                        data : [['false', '否'], ['true', '是']]\r\n".
 								$blank_pre."                                    }),\r\n".
 								$blank_pre."                                    valueField : 'value',displayField : 'text'\r\n".
 								$blank_pre."                                ";
