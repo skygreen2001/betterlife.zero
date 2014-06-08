@@ -15,6 +15,22 @@ class Action_Upload extends ActionExt
 	{
 		return self::ExtResponse(Manager_ExtService::blogService()->import($_FILES)); 
 	}                
+
+    /**
+     * 上传数据对象:系统管理人员数据文件
+     */
+    public function uploadAdmin()
+    {
+        return self::ExtResponse(Manager_ExtService::adminService()->import($_FILES)); 
+    }
 	
+    /**
+     * 上传数据对象:用户数据文件
+     */
+    public function uploadUser()
+    {
+        return self::ExtResponse(Manager_ExtService::userService()->import($_FILES)); 
+    }
+
 }
 ?>
