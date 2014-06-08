@@ -15,8 +15,8 @@ BbView.User.View={
 				defaults : {autoScroll : true},
 				tpl: [
 					  '<table class="viewdoblock">',
-						 '<tr class="entry"><td class="head">部门</td><td class="content">{department_name}</td></tr>',
 						 '<tr class="entry"><td class="head">用户名</td><td class="content">{username}</td></tr>',
+						 '<tr class="entry"><td class="head">手机电话</td><td class="content">{cellphone}</td></tr>',
 						 '<tr class="entry"><td class="head">邮箱地址</td><td class="content">{email}</td></tr>',
 					  '</table>'
 				]

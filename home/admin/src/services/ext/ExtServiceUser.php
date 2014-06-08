@@ -122,13 +122,6 @@ class ExtServiceUser extends ServiceBasic
 	{
 		if (!empty($viewId)){
 			$user=User::get_by_id($viewId);
-			if (!empty($user))
-			{
-				if ($user->department_id){
-					$department_instance=Department::get_by_id($user->department_id);
-					$user['department_name']=$department_instance->department_name;
-				}
-			}
 			return array(
 				'success' => true,
 				'data'    => $user
