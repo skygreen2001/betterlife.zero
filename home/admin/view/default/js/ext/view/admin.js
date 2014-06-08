@@ -1,10 +1,10 @@
-Ext.namespace("Betterlife.Admin.View.Admin");
-BbView = Betterlife.Admin.View;
-BbView.Admin={};
+Ext.namespace("BetterlifeNet.Admin.View.Admin");
+BnView = BetterlifeNet.Admin.View;
+BnView.Admin={};
 /**
  * View:系统管理人员显示组件
  */
-BbView.Admin.View={
+BnView.Admin.View={
 	/**
 	 * 视图：产品图片视图
 	 */
@@ -22,7 +22,7 @@ BbView.Admin.View={
 					 '</table>'
 				]
 			}, config);
-			BbView.Admin.View.AdminView.superclass.constructor.call(this, config);
+			BnView.Admin.View.AdminView.superclass.constructor.call(this, config);
 		}
 	}),
 	/**
@@ -34,26 +34,26 @@ BbView.Admin.View={
 				title:"查看管理员信息",constrainHeader:true,maximizable: true,
 				width : 605,height:350,minWidth:450,minHeight:300,
 				layout : 'fit',resizable:true,plain : true,bodyStyle : 'padding:5px;',collapsible: true,//closeAction : "hide",modal:true,
-				items:[new BbView.Admin.View.AdminView()],
+				items:[new BnView.Admin.View.AdminView()],
 				listeners: {
-					hide:function(w){if (parent.Bb&&parent.Bb.Config){parent.Bb.Config.ViewOnlyWindow=null;}/**parent.Ext.getBody().unmask();*/}
+					hide:function(w){if (parent.Bn&&parent.Bn.Config){parent.Bn.Config.ViewOnlyWindow=null;}/**parent.Ext.getBody().unmask();*/}
 				},
 				buttons: [{
-					text: '更多',scope:this,handler:function() {BbView.Admin.Function.openLinkListAdmins();}
+					text: '更多',scope:this,handler:function() {BnView.Admin.Function.openLinkListAdmins();}
 				},{
 					text: '关闭',scope:this,handler:function() {this.hide();}
 				}]
 			}, config);
-			BbView.Admin.View.Window.superclass.constructor.call(this, config);
+			BnView.Admin.View.Window.superclass.constructor.call(this, config);
 		}
 	})
 };
 
-BbView.Admin.Function={
+BnView.Admin.Function={
 	openLinkListAdmins:function(){
 		var targeturl="index.php?go=admin.betterlife.admin";
-		if (parent.Bb){
-			parent.Bb.Navigation.AddTabbyUrl(parent.Bb.Viewport.center,'系统管理人员',targeturl,"admin");
+		if (parent.Bn){
+			parent.Bn.Navigation.AddTabbyUrl(parent.Bn.Viewport.center,'系统管理人员',targeturl,"admin");
 		}else{
 			window.open(targeturl);
 		}
@@ -72,23 +72,23 @@ Ext.onReady(function(){
 	if (admin_param&&admin_param.ow) ow=admin_param.ow.length==4?true:false;
 	if(typeof(admin_id)=="undefined"){Ext.Msg.alert('提示', '无符合查询条件的系统管理人员！');return;}
 
-	if ((ow==false)||(parent.Bb.Config==null)||(parent.Bb.Config.ViewOnlyWindow==null)){
-		BbView.Admin.ViewAdminWindow = new BbView.Admin.View.Window();
-		if ((ow==true)&&parent.Bb.Config)parent.Bb.Config.ViewOnlyWindow=BbView.Admin.ViewAdminWindow;
+	if ((ow==false)||(parent.Bn.Config==null)||(parent.Bn.Config.ViewOnlyWindow==null)){
+		BnView.Admin.ViewAdminWindow = new BnView.Admin.View.Window();
+		if ((ow==true)&&parent.Bn.Config)parent.Bn.Config.ViewOnlyWindow=BnView.Admin.ViewAdminWindow;
 	} else{
-		if (parent.Bb.Config.ViewOnlyWindow.title=="查看管理员信息"){
-			BbView.Admin.ViewAdminWindow=parent.Bb.Config.ViewOnlyWindow;
+		if (parent.Bn.Config.ViewOnlyWindow.title=="查看管理员信息"){
+			BnView.Admin.ViewAdminWindow=parent.Bn.Config.ViewOnlyWindow;
 		}else{
-			BbView.Admin.ViewAdminWindow = new BbView.Admin.View.Window();
-			if ((ow==true)&&parent.Bb.Config)parent.Bb.Config.ViewOnlyWindow=BbView.Admin.ViewAdminWindow;
+			BnView.Admin.ViewAdminWindow = new BnView.Admin.View.Window();
+			if ((ow==true)&&parent.Bn.Config)parent.Bn.Config.ViewOnlyWindow=BnView.Admin.ViewAdminWindow;
 		}
 	}
-	if (BbView.Admin.ViewAdminWindow){
-		BbView.Admin.ViewAdminWindow.show();
+	if (BnView.Admin.ViewAdminWindow){
+		BnView.Admin.ViewAdminWindow.show();
 		ExtServiceAdmin.viewAdmin(admin_id,function(provider, response) {
-			if (response.result.data) BbView.Admin.ViewAdminWindow.dataview.update(response.result.data);
+			if (response.result.data) BnView.Admin.ViewAdminWindow.dataview.update(response.result.data);
 			else {
-				BbView.Admin.ViewAdminWindow.dataview.update("");
+				BnView.Admin.ViewAdminWindow.dataview.update("");
 				Ext.Msg.alert('提示', '无符合查询条件的系统管理人员！');
 			}
 		});

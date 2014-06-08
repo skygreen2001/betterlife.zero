@@ -1,10 +1,10 @@
-Ext.namespace("Betterlife.Admin.View.User");
-BbView = Betterlife.Admin.View;
-BbView.User={};
+Ext.namespace("BetterlifeNet.Admin.View.User");
+BnView = BetterlifeNet.Admin.View;
+BnView.User={};
 /**
  * View:系统管理人员显示组件
  */
-BbView.User.View={
+BnView.User.View={
 	/**
 	 * 视图：产品图片视图
 	 */
@@ -21,7 +21,7 @@ BbView.User.View={
 					  '</table>'
 				]
 			}, config);
-			BbView.User.View.UserView.superclass.constructor.call(this, config);
+			BnView.User.View.UserView.superclass.constructor.call(this, config);
 		}
 	}),
 	/**
@@ -33,26 +33,26 @@ BbView.User.View={
 				title:"查看用户信息",constrainHeader:true,maximizable: true,collapsible: true,
 				width : 605,height:350,minWidth:450,minHeight:300,
 				layout : 'fit',resizable:true,plain : true,bodyStBbe : 'padding:5px;',
-				items:[new BbView.User.View.UserView()],
+				items:[new BnView.User.View.UserView()],
 				listeners: {
-					hide:function(w){if (parent.Bb&&parent.Bb.Config){parent.Bb.Config.ViewOnlyWindow=null;}}
+					hide:function(w){if (parent.Bn&&parent.Bn.Config){parent.Bn.Config.ViewOnlyWindow=null;}}
 				},
 				buttons: [{
-					text: '更多',scope:this,handler:function() {BbView.User.Function.openLinkListUsers();}
+					text: '更多',scope:this,handler:function() {BnView.User.Function.openLinkListUsers();}
 				},{
 					text: '关闭',scope:this,handler:function() {this.hide();}
 				}]
 			}, config);
-			BbView.User.View.Window.superclass.constructor.call(this, config);
+			BnView.User.View.Window.superclass.constructor.call(this, config);
 		}
 	})
 };
 
-BbView.User.Function={
+BnView.User.Function={
 	openLinkListUsers:function(){
-		var targeturl="index.php?go=admin.betterlife.user&user_id="+BbView.User.user_id;
-		if (parent.Bb){
-			parent.Bb.Navigation.AddTabbyUrl(parent.Bb.Viewport.center,'用户',targeturl,"user");
+		var targeturl="index.php?go=admin.betterlife.user&user_id="+BnView.User.user_id;
+		if (parent.Bn){
+			parent.Bn.Navigation.AddTabbyUrl(parent.Bn.Viewport.center,'用户',targeturl,"user");
 		}else{
 			window.open(targeturl);
 		}
@@ -70,24 +70,24 @@ Ext.onReady(function(){
 	if (user_param&&user_param.user_id) user_id=user_param.user_id;
 	if (user_param&&user_param.ow) ow=user_param.ow.length==4?true:false;
 	if(typeof(user_id)=="undefined"){Ext.Msg.alert('提示', '无符合查询条件的用户！');return;}
-	if ((ow==false)||(parent.Bb.Config==null)||(parent.Bb.Config.ViewOnlyWindow==null)){
-		BbView.User.ViewUserWindow = new BbView.User.View.Window();
-		if ((ow==true)&&parent.Bb.Config)parent.Bb.Config.ViewOnlyWindow=BbView.User.ViewUserWindow;
+	if ((ow==false)||(parent.Bn.Config==null)||(parent.Bn.Config.ViewOnlyWindow==null)){
+		BnView.User.ViewUserWindow = new BnView.User.View.Window();
+		if ((ow==true)&&parent.Bn.Config)parent.Bn.Config.ViewOnlyWindow=BnView.User.ViewUserWindow;
 	} else {
-		if (parent.Bb.Config.ViewOnlyWindow.title=="查看用户信息"){
-			BbView.User.ViewUserWindow=parent.Bb.Config.ViewOnlyWindow;
+		if (parent.Bn.Config.ViewOnlyWindow.title=="查看用户信息"){
+			BnView.User.ViewUserWindow=parent.Bn.Config.ViewOnlyWindow;
 		}else{
-			BbView.User.ViewUserWindow = new BbView.User.View.Window();
-			if ((ow==true)&&parent.Bb.Config)parent.Bb.Config.ViewOnlyWindow=BbView.User.ViewUserWindow;
+			BnView.User.ViewUserWindow = new BnView.User.View.Window();
+			if ((ow==true)&&parent.Bn.Config)parent.Bn.Config.ViewOnlyWindow=BnView.User.ViewUserWindow;
 		}
 	}
-	if (BbView.User.ViewUserWindow){
-		BbView.User.ViewUserWindow.show();
-		BbView.User.user_id=user_id;
+	if (BnView.User.ViewUserWindow){
+		BnView.User.ViewUserWindow.show();
+		BnView.User.user_id=user_id;
 		ExtServiceUser.viewUser(user_id,function(provider, response) {
-			if (response.result.data) BbView.User.ViewUserWindow.dataview.update(response.result.data);
+			if (response.result.data) BnView.User.ViewUserWindow.dataview.update(response.result.data);
 			else {
-				BbView.User.ViewUserWindow.dataview.update("");
+				BnView.User.ViewUserWindow.dataview.update("");
 				Ext.Msg.alert('提示', '无符合查询条件的用户！');
 			}
 		});

@@ -1,10 +1,10 @@
-Ext.namespace("Betterlife.Admin");
-Bb = Betterlife.Admin;
+Ext.namespace("BetterlifeNet.Admin");
+Bn = BetterlifeNet.Admin;
 
 /**
  * 导航功能
  */
-Bb.Navigation = {
+Bn.Navigation = {
 	/**
 	 * 在指定的TabPanel组件上添加Tab 【如果已经添加了则激活该Tab】
 	 * 
@@ -57,7 +57,7 @@ Bb.Navigation = {
 		if (url){
 			if(url.indexOf("go=")>0)url=url+"&".concat(Math.random());
 		}
-		if (!Bb.Config.IsTabHeaderShow) {
+		if (!Bn.Config.IsTabHeaderShow) {
 			var centerArea = Ext.get("centerArea");
 			centerArea.setHeight(contentPanel.getHeight());
 			centerArea.setWidth(contentPanel.getWidth());
@@ -82,7 +82,7 @@ Bb.Navigation = {
 					tabTip:title,
 					border : false,
 					// add iframe as the child component
-					items : [new Bb.Navigation.IFrameComponent({id: "frm"+id,url : url})]
+					items : [new Bn.Navigation.IFrameComponent({id: "frm"+id,url : url})]
 				});
 				contentPanel.add(tab).show();
 			} else {
@@ -114,7 +114,7 @@ Bb.Navigation = {
 		if (linkTarget.id=="logout"){
 			window.location.href="index.php?go=admin.index.logout";
 		}else{
-			Bb.Navigation.AddTabbyUrl(Bb.Viewport.center, title, linkTarget.href,linkTarget.id);
+			Bn.Navigation.AddTabbyUrl(Bn.Viewport.center, title, linkTarget.href,linkTarget.id);
 		}
 	},
 	OnContextMenu:function(e, item){

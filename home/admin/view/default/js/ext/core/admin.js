@@ -1,6 +1,6 @@
-Ext.namespace("Betterlife.Admin.Admin");
-Bb = Betterlife.Admin;
-Bb.Admin={
+Ext.namespace("BetterlifeNet.Admin.Admin");
+Bn = BetterlifeNet.Admin;
+Bn.Admin={
 	/**
 	 * 全局配置
 	 */
@@ -36,18 +36,18 @@ Bb.Admin={
 	 * 初始化
 	 */
 	Init:function(){
-		if (Bb.Admin.Cookie.get('View.Direction')){
-			Bb.Admin.Config.View.Direction=Bb.Admin.Cookie.get('View.Direction');
+		if (Bn.Admin.Cookie.get('View.Direction')){
+			Bn.Admin.Config.View.Direction=Bn.Admin.Cookie.get('View.Direction');
 		}
-		if (Bb.Admin.Cookie.get('View.IsFix')!=null){
-			Bb.Admin.Config.View.IsFix=Bb.Admin.Cookie.get('View.IsFix');
+		if (Bn.Admin.Cookie.get('View.IsFix')!=null){
+			Bn.Admin.Config.View.IsFix=Bn.Admin.Cookie.get('View.IsFix');
 		}
 	}
 };
 /**
  * Model:数据模型
  */
-Bb.Admin.Store = {
+Bn.Admin.Store = {
 	/**
 	 * 系统管理人员
 	 */
@@ -76,8 +76,8 @@ Bb.Admin.Store = {
 		listeners : {
 			beforeload : function(store, options) {
 				if (Ext.isReady) {
-					if (!options.params.limit)options.params.limit=Bb.Admin.Config.PageSize;
-					Ext.apply(options.params, Bb.Admin.View.Running.AdminGrid.filter);//保证分页也将查询条件带上
+					if (!options.params.limit)options.params.limit=Bn.Admin.Config.PageSize;
+					Ext.apply(options.params, Bn.Admin.View.Running.AdminGrid.filter);//保证分页也将查询条件带上
 				}
 			}
 		}
@@ -103,7 +103,7 @@ Bb.Admin.Store = {
 /**
  * View:系统管理人员显示组件
  */
-Bb.Admin.View={
+Bn.Admin.View={
 	/**
 	 * 编辑窗口：新建或者修改系统管理人员
 	 */
@@ -141,8 +141,8 @@ Bb.Admin.View={
                             {xtype: 'hidden',name : 'Department_ID',ref:'../Department_ID'},
                             {
                                  fieldLabel : '部门',xtype: 'combo',name : 'Department_Name',ref : '../Department_Name',
-                                 store:Bb.Admin.Store.departmentStoreForCombo,emptyText: '请选择部门',itemSelector: 'div.search-item',
-                                 loadingText: '查询中...',width: 570, pageSize:Bb.Admin.Config.PageSize,
+                                 store:Bn.Admin.Store.departmentStoreForCombo,emptyText: '请选择部门',itemSelector: 'div.search-item',
+                                 loadingText: '查询中...',width: 570, pageSize:Bn.Admin.Config.PageSize,
                                  displayField:'Department_Name',grid:this,
                                  mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,
                                  forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,
@@ -199,7 +199,7 @@ Bb.Admin.View={
 							this.editForm.getForm().submit({
 								success : function(form, action) {
 									Ext.Msg.alert("提示", "保存成功！");
-									Bb.Admin.View.Running.AdminGrid.doSelectAdmin();
+									Bn.Admin.View.Running.AdminGrid.doSelectAdmin();
 									form.reset();
 									editWindow.hide();
 								},
@@ -211,9 +211,9 @@ Bb.Admin.View={
 							this.editForm.api.submit=ExtServiceAdmin.update;
 							this.editForm.getForm().submit({
 								success : function(form, action) {
-									Bb.Admin.View.Running.AdminGrid.store.reload();
+									Bn.Admin.View.Running.AdminGrid.store.reload();
 									Ext.Msg.show({title:'提示',msg: '修改成功！',buttons: {yes: '确定'},fn: function(){
-										Bb.Admin.View.Running.AdminGrid.bottomToolbar.doRefresh();
+										Bn.Admin.View.Running.AdminGrid.bottomToolbar.doRefresh();
 									}});
 									form.reset();
 									editWindow.hide();
@@ -232,12 +232,12 @@ Bb.Admin.View={
 				}, {
 					text : "重 置",ref:'../resetBtn',scope:this,
 					handler : function() {
-						this.editForm.form.loadRecord(Bb.Admin.View.Running.AdminGrid.getSelectionModel().getSelected());
+						this.editForm.form.loadRecord(Bn.Admin.View.Running.AdminGrid.getSelectionModel().getSelected());
 
 					}
 				}]
 			}, config);
-			Bb.Admin.View.EditWindow.superclass.constructor.call(this, config);
+			Bn.Admin.View.EditWindow.superclass.constructor.call(this, config);
 		}
 	}),
 	/**
@@ -260,13 +260,13 @@ Bb.Admin.View={
 					listeners:{
 						beforetabchange:function(tabs,newtab,currentTab){
 							if (tabs.tabFix==newtab){
-								if (Bb.Admin.View.Running.AdminGrid.getSelectionModel().getSelected()==null){
+								if (Bn.Admin.View.Running.AdminGrid.getSelectionModel().getSelected()==null){
 									Ext.Msg.alert('提示', '请先选择系统管理人员！');
 									return false;
 								}
-								Bb.Admin.Config.View.IsShow=1;
-								Bb.Admin.View.Running.AdminGrid.showAdmin();
-								Bb.Admin.View.Running.AdminGrid.tvpView.menu.mBind.setChecked(false);
+								Bn.Admin.Config.View.IsShow=1;
+								Bn.Admin.View.Running.AdminGrid.showAdmin();
+								Bn.Admin.View.Running.AdminGrid.tvpView.menu.mBind.setChecked(false);
 								return false;
 							}
 						}
@@ -275,7 +275,7 @@ Bb.Admin.View={
 						{title:'+',tabTip:'取消固定',ref:'tabFix',iconCls:'icon-fix'}
 					]
 				}, config);
-				Bb.Admin.View.AdminView.Tabs.superclass.constructor.call(this, config);
+				Bn.Admin.View.AdminView.Tabs.superclass.constructor.call(this, config);
 
 				this.onAddItems();
 			},
@@ -283,7 +283,7 @@ Bb.Admin.View={
 			 * 根据布局调整Tabs的宽度或者高度以及折叠
 			 */
 			enableCollapse:function(){
-				if ((Bb.Admin.Config.View.Direction==1)||(Bb.Admin.Config.View.Direction==2)){
+				if ((Bn.Admin.Config.View.Direction==1)||(Bn.Admin.Config.View.Direction==2)){
 					this.width =Ext.getBody().getViewSize().width;
 					this.height=Ext.getBody().getViewSize().height/2;
 				}else{
@@ -323,26 +323,26 @@ Bb.Admin.View={
 					width : 705,height : 500,minWidth : 450,minHeight : 400,
 					layout : 'fit',resizable:true,plain : true,bodyStyle : 'padding:5px;',
 					closeAction : "hide",
-					items:[new Bb.Admin.View.AdminView.Tabs({ref:'winTabs',tabPosition:'top'})],
+					items:[new Bn.Admin.View.AdminView.Tabs({ref:'winTabs',tabPosition:'top'})],
 					listeners: {
 						minimize:function(w){
 							w.hide();
-							Bb.Admin.Config.View.IsShow=0;
-							Bb.Admin.View.Running.AdminGrid.tvpView.menu.mBind.setChecked(true);
+							Bn.Admin.Config.View.IsShow=0;
+							Bn.Admin.View.Running.AdminGrid.tvpView.menu.mBind.setChecked(true);
 						},
 						hide:function(w){
-							Bb.Admin.View.Running.AdminGrid.tvpView.toggle(false);
+							Bn.Admin.View.Running.AdminGrid.tvpView.toggle(false);
 						}
 					},
 					buttons: [{
 						text: '新增系统管理人员',scope:this,
-						handler : function() {this.hide();Bb.Admin.View.Running.AdminGrid.addAdmin();}
+						handler : function() {this.hide();Bn.Admin.View.Running.AdminGrid.addAdmin();}
 					},{
 						text: '修改系统管理人员',scope:this,
-						handler : function() {this.hide();Bb.Admin.View.Running.AdminGrid.updateAdmin();}
+						handler : function() {this.hide();Bn.Admin.View.Running.AdminGrid.updateAdmin();}
 					}]
 				}, config);
-				Bb.Admin.View.AdminView.Window.superclass.constructor.call(this, config);
+				Bn.Admin.View.AdminView.Window.superclass.constructor.call(this, config);
 			}
 		})
 	},
@@ -395,7 +395,7 @@ Bb.Admin.View={
 										Ext.Msg.alert('成功', '上传成功');
 										uploadWindow.hide();
 										uploadWindow.uploadForm.upload_file.setValue('');
-										Bb.Admin.View.Running.AdminGrid.doSelectAdmin();
+										Bn.Admin.View.Running.adminGrid.doSelectAdmin();
 									},
 									failure : function(form, response) {
 										Ext.Msg.alert('错误', response.result.data);
@@ -412,7 +412,7 @@ Bb.Admin.View={
 						}
 					}]
 				}, config);
-			Bb.Admin.View.UploadWindow.superclass.constructor.call(this, config);
+			Bn.Admin.View.UploadWindow.superclass.constructor.call(this, config);
 		}
 	}),
 
@@ -427,7 +427,7 @@ Bb.Admin.View={
 				 */
 				filter:null,
 				region : 'center',
-				store : Bb.Admin.Store.adminStore,
+				store : Bn.Admin.Store.adminStore,
 				sm : this.sm,
 				frame : true,trackMouseOver : true,enableColumnMove : true,columnLines : true,
 				loadMask : true,stripeRows : true,headerAsText : false,
@@ -467,9 +467,9 @@ Bb.Admin.View={
 							},
 							items : [
                                 '部门','&nbsp;&nbsp;',{ref: '../ADepartment_ID',xtype: 'combo',
-                                     store:Bb.Admin.Store.departmentStoreForCombo,hiddenName : 'Department_ID',
+                                     store:Bn.Admin.Store.departmentStoreForCombo,hiddenName : 'Department_ID',
                                      emptyText: '请选择部门',itemSelector: 'div.search-item',
-                                     loadingText: '查询中...',width:280,pageSize:Bb.Admin.Config.PageSize,
+                                     loadingText: '查询中...',width:280,pageSize:Bn.Admin.Config.PageSize,
                                      displayField:'Department_Name',valueField:'Department_ID',
                                      mode: 'remote',editable:true,minChars: 1,autoSelect :true,typeAhead: false,
                                      forceSelection: true,triggerAction: 'all',resizable:true,selectOnFocus:true,
@@ -547,32 +547,32 @@ Bb.Admin.View={
 											{text:'下方',group:'mlayout',checked:true ,iconCls:'view-bottom',scope:this,handler:function(){this.onUpDown(2)}},
 											{text:'左侧',group:'mlayout',checked:false,iconCls:'view-left',scope:this,handler:function(){this.onUpDown(3)}},
 											{text:'右侧',group:'mlayout',checked:false,iconCls:'view-right',scope:this,handler:function(){this.onUpDown(4)}},
-											{text:'隐藏',group:'mlayout',checked:false,iconCls:'view-hide',scope:this,handler:function(){this.hideAdmin();Bb.Admin.Config.View.IsShow=0;}},'-',
-											{text: '固定',ref:'mBind',checked: true,scope:this,checkHandler:function(item, checked){this.onBindGrid(item, checked);Bb.Admin.Cookie.set('View.IsFix',Bb.Admin.Config.View.IsFix);}}
+											{text:'隐藏',group:'mlayout',checked:false,iconCls:'view-hide',scope:this,handler:function(){this.hideAdmin();Bn.Admin.Config.View.IsShow=0;}},'-',
+											{text: '固定',ref:'mBind',checked: true,scope:this,checkHandler:function(item, checked){this.onBindGrid(item, checked);Bn.Admin.Cookie.set('View.IsFix',Bn.Admin.Config.View.IsFix);}}
 										]}
 								},'-']}
 					)]
 				},
 				bbar: new Ext.PagingToolbar({
-					pageSize: Bb.Admin.Config.PageSize,
-					store: Bb.Admin.Store.adminStore,
+					pageSize: Bn.Admin.Config.PageSize,
+					store: Bn.Admin.Store.adminStore,
 					scope:this,autoShow:true,displayInfo: true,
 					displayMsg: '当前显示 {0} - {1}条记录/共 {2}条记录。',
 					emptyMsg: "无显示数据",
 					listeners:{
 						change:function(thisbar,pagedata){
-							if (Bb.Admin.Viewport){
-								if (Bb.Admin.Config.View.IsShow==1){
-									Bb.Admin.View.IsSelectView=1;
+							if (Bn.Admin.Viewport){
+								if (Bn.Admin.Config.View.IsShow==1){
+									Bn.Admin.View.IsSelectView=1;
 								}
 								this.ownerCt.hideAdmin();
-								Bb.Admin.Config.View.IsShow=0;
+								Bn.Admin.Config.View.IsShow=0;
 							}
 						}
 					},
 					items: [
 						{xtype:'label', text: '每页显示'},
-						{xtype:'numberfield', value:Bb.Admin.Config.PageSize,minValue:1,width:35,
+						{xtype:'numberfield', value:Bn.Admin.Config.PageSize,minValue:1,width:35,
 							style:'text-align:center',allowBlank: false,
 							listeners:
 							{
@@ -580,11 +580,11 @@ Bb.Admin.View={
 									var num = parseInt(newValue);
 									if (isNaN(num) || !num || num<1)
 									{
-										num = Bb.Admin.Config.PageSize;
+										num = Bn.Admin.Config.PageSize;
 										Field.setValue(num);
 									}
 									this.ownerCt.pageSize= num;
-									Bb.Admin.Config.PageSize = num;
+									Bn.Admin.Config.PageSize = num;
 									this.ownerCt.ownerCt.doSelectAdmin();
 								},
 								specialKey :function(field,e){
@@ -592,10 +592,10 @@ Bb.Admin.View={
 										var num = parseInt(field.getValue());
 										if (isNaN(num) || !num || num<1)
 										{
-											num = Bb.Admin.Config.PageSize;
+											num = Bn.Admin.Config.PageSize;
 										}
 										this.ownerCt.pageSize= num;
-										Bb.Admin.Config.PageSize = num;
+										Bn.Admin.Config.PageSize = num;
 										this.ownerCt.ownerCt.doSelectAdmin();
 									}
 								}
@@ -607,9 +607,9 @@ Bb.Admin.View={
 			}, config);
 			//初始化显示系统管理人员列表
 			this.doSelectAdmin();
-			Bb.Admin.View.Grid.superclass.constructor.call(this, config);
+			Bn.Admin.View.Grid.superclass.constructor.call(this, config);
 			//创建在Grid里显示的系统管理人员信息Tab页
-			Bb.Admin.View.Running.viewTabs=new Bb.Admin.View.AdminView.Tabs();
+			Bn.Admin.View.Running.viewTabs=new Bn.Admin.View.AdminView.Tabs();
 			this.addListener('rowdblclick', this.onRowDoubleClick);
 		},
 		/**
@@ -627,21 +627,21 @@ Bb.Admin.View={
 				rowselect: function(sm, rowIndex, record) {
 					if (sm.getCount() != 1){
 						this.grid.hideAdmin();
-						Bb.Admin.Config.View.IsShow=0;
+						Bn.Admin.Config.View.IsShow=0;
 					}else{
-						if (Bb.Admin.View.IsSelectView==1){
-							Bb.Admin.View.IsSelectView=0;
+						if (Bn.Admin.View.IsSelectView==1){
+							Bn.Admin.View.IsSelectView=0;
 							this.grid.showAdmin();
 						}
 					}
 				},
 				rowdeselect: function(sm, rowIndex, record) {
 					if (sm.getCount() != 1){
-						if (Bb.Admin.Config.View.IsShow==1){
-							Bb.Admin.View.IsSelectView=1;
+						if (Bn.Admin.Config.View.IsShow==1){
+							Bn.Admin.View.IsSelectView=1;
 						}
 						this.grid.hideAdmin();
-						Bb.Admin.Config.View.IsShow=0;
+						Bn.Admin.Config.View.IsShow=0;
 					}
 				}
 			}
@@ -650,13 +650,13 @@ Bb.Admin.View={
 		 * 双击选行
 		 */
 		onRowDoubleClick:function(grid, rowIndex, e){
-			if (!Bb.Admin.Config.View.IsShow){
+			if (!Bn.Admin.Config.View.IsShow){
 				this.sm.selectRow(rowIndex);
 				this.showAdmin();
 				this.tvpView.toggle(true);
 			}else{
 				this.hideAdmin();
-				Bb.Admin.Config.View.IsShow=0;
+				Bn.Admin.Config.View.IsShow=0;
 				this.sm.deselectRow(rowIndex);
 				this.tvpView.toggle(false);
 			}
@@ -666,17 +666,17 @@ Bb.Admin.View={
 		 */
 		onBindGrid:function(item, checked){
 			if (checked){
-			   Bb.Admin.Config.View.IsFix=1;
+			   Bn.Admin.Config.View.IsFix=1;
 			}else{
-			   Bb.Admin.Config.View.IsFix=0;
+			   Bn.Admin.Config.View.IsFix=0;
 			}
 			if (this.getSelectionModel().getSelected()==null){
-				Bb.Admin.Config.View.IsShow=0;
+				Bn.Admin.Config.View.IsShow=0;
 				return ;
 			}
-			if (Bb.Admin.Config.View.IsShow==1){
+			if (Bn.Admin.Config.View.IsShow==1){
 			   this.hideAdmin();
-			   Bb.Admin.Config.View.IsShow=0;
+			   Bn.Admin.Config.View.IsShow=0;
 			}
 			this.showAdmin();
 		},
@@ -702,16 +702,16 @@ Bb.Admin.View={
                 var ARealname = this.topToolbar.ARealname.getValue();
                 this.filter       ={'Department_ID':ADepartment_ID,'Username':AUsername,'Realname':ARealname};
 			}
-			var condition = {'start':0,'limit':Bb.Admin.Config.PageSize};
+			var condition = {'start':0,'limit':Bn.Admin.Config.PageSize};
 			Ext.apply(condition,this.filter);
 			ExtServiceAdmin.queryPageAdmin(condition,function(provider, response) {
 				if (response.result&&response.result.data) {
 					var result           = new Array();
 					result['data']       =response.result.data;
 					result['totalCount'] =response.result.totalCount;
-					Bb.Admin.Store.adminStore.loadData(result);
+					Bn.Admin.Store.adminStore.loadData(result);
 				} else {
-					Bb.Admin.Store.adminStore.removeAll();
+					Bn.Admin.Store.adminStore.removeAll();
 					Ext.Msg.alert('提示', '无符合条件的系统管理人员！');
 				}
 			});
@@ -722,29 +722,29 @@ Bb.Admin.View={
 		 * 1:上方,2:下方,0:隐藏。
 		 */
 		onUpDown:function(viewDirection){
-			Bb.Admin.Config.View.Direction=viewDirection;
+			Bn.Admin.Config.View.Direction=viewDirection;
 			switch(viewDirection){
 				case 1:
-					this.ownerCt.north.add(Bb.Admin.View.Running.viewTabs);
+					this.ownerCt.north.add(Bn.Admin.View.Running.viewTabs);
 					break;
 				case 2:
-					this.ownerCt.south.add(Bb.Admin.View.Running.viewTabs);
+					this.ownerCt.south.add(Bn.Admin.View.Running.viewTabs);
 					break;
 				case 3:
-					this.ownerCt.west.add(Bb.Admin.View.Running.viewTabs);
+					this.ownerCt.west.add(Bn.Admin.View.Running.viewTabs);
 					break;
 				case 4:
-					this.ownerCt.east.add(Bb.Admin.View.Running.viewTabs);
+					this.ownerCt.east.add(Bn.Admin.View.Running.viewTabs);
 					break;
 			}
-			Bb.Admin.Cookie.set('View.Direction',Bb.Admin.Config.View.Direction);
+			Bn.Admin.Cookie.set('View.Direction',Bn.Admin.Config.View.Direction);
 			if (this.getSelectionModel().getSelected()!=null){
-				if ((Bb.Admin.Config.View.IsFix==0)&&(Bb.Admin.Config.View.IsShow==1)){
+				if ((Bn.Admin.Config.View.IsFix==0)&&(Bn.Admin.Config.View.IsShow==1)){
 					this.showAdmin();
 				}
-				Bb.Admin.Config.View.IsFix=1;
-				Bb.Admin.View.Running.AdminGrid.tvpView.menu.mBind.setChecked(true,true);
-				Bb.Admin.Config.View.IsShow=0;
+				Bn.Admin.Config.View.IsFix=1;
+				Bn.Admin.View.Running.AdminGrid.tvpView.menu.mBind.setChecked(true,true);
+				Bn.Admin.Config.View.IsShow=0;
 				this.showAdmin();
 			}
 		},
@@ -754,52 +754,52 @@ Bb.Admin.View={
 		showAdmin : function(){
 			if (this.getSelectionModel().getSelected()==null){
 				Ext.Msg.alert('提示', '请先选择系统管理人员！');
-				Bb.Admin.Config.View.IsShow=0;
+				Bn.Admin.Config.View.IsShow=0;
 				this.tvpView.toggle(false);
 				return ;
 			}
-			if (Bb.Admin.Config.View.IsFix==0){
-				if (Bb.Admin.View.Running.view_window==null){
-					Bb.Admin.View.Running.view_window=new Bb.Admin.View.AdminView.Window();
+			if (Bn.Admin.Config.View.IsFix==0){
+				if (Bn.Admin.View.Running.view_window==null){
+					Bn.Admin.View.Running.view_window=new Bn.Admin.View.AdminView.Window();
 				}
-				if (Bb.Admin.View.Running.view_window.hidden){
-					Bb.Admin.View.Running.view_window.show();
-					Bb.Admin.View.Running.view_window.winTabs.hideTabStripItem(Bb.Admin.View.Running.view_window.winTabs.tabFix);
+				if (Bn.Admin.View.Running.view_window.hidden){
+					Bn.Admin.View.Running.view_window.show();
+					Bn.Admin.View.Running.view_window.winTabs.hideTabStripItem(Bn.Admin.View.Running.view_window.winTabs.tabFix);
 					this.updateViewAdmin();
 					this.tvpView.toggle(true);
-					Bb.Admin.Config.View.IsShow=1;
+					Bn.Admin.Config.View.IsShow=1;
 				}else{
 					this.hideAdmin();
-					Bb.Admin.Config.View.IsShow=0;
+					Bn.Admin.Config.View.IsShow=0;
 				}
 				return;
 			}
-			switch(Bb.Admin.Config.View.Direction){
+			switch(Bn.Admin.Config.View.Direction){
 				case 1:
-					if (!this.ownerCt.north.items.contains(Bb.Admin.View.Running.viewTabs)){
-						this.ownerCt.north.add(Bb.Admin.View.Running.viewTabs);
+					if (!this.ownerCt.north.items.contains(Bn.Admin.View.Running.viewTabs)){
+						this.ownerCt.north.add(Bn.Admin.View.Running.viewTabs);
 					}
 					break;
 				case 2:
-					if (!this.ownerCt.south.items.contains(Bb.Admin.View.Running.viewTabs)){
-						this.ownerCt.south.add(Bb.Admin.View.Running.viewTabs);
+					if (!this.ownerCt.south.items.contains(Bn.Admin.View.Running.viewTabs)){
+						this.ownerCt.south.add(Bn.Admin.View.Running.viewTabs);
 					}
 					break;
 				case 3:
-					if (!this.ownerCt.west.items.contains(Bb.Admin.View.Running.viewTabs)){
-						this.ownerCt.west.add(Bb.Admin.View.Running.viewTabs);
+					if (!this.ownerCt.west.items.contains(Bn.Admin.View.Running.viewTabs)){
+						this.ownerCt.west.add(Bn.Admin.View.Running.viewTabs);
 					}
 					break;
 				case 4:
-					if (!this.ownerCt.east.items.contains(Bb.Admin.View.Running.viewTabs)){
-						this.ownerCt.east.add(Bb.Admin.View.Running.viewTabs);
+					if (!this.ownerCt.east.items.contains(Bn.Admin.View.Running.viewTabs)){
+						this.ownerCt.east.add(Bn.Admin.View.Running.viewTabs);
 					}
 					break;
 			}
 			this.hideAdmin();
-			if (Bb.Admin.Config.View.IsShow==0){
-				Bb.Admin.View.Running.viewTabs.enableCollapse();
-				switch(Bb.Admin.Config.View.Direction){
+			if (Bn.Admin.Config.View.IsShow==0){
+				Bn.Admin.View.Running.viewTabs.enableCollapse();
+				switch(Bn.Admin.Config.View.Direction){
 					case 1:
 						this.ownerCt.north.show();
 						break;
@@ -815,9 +815,9 @@ Bb.Admin.View={
 				}
 				this.updateViewAdmin();
 				this.tvpView.toggle(true);
-				Bb.Admin.Config.View.IsShow=1;
+				Bn.Admin.Config.View.IsShow=1;
 			}else{
-				Bb.Admin.Config.View.IsShow=0;
+				Bn.Admin.Config.View.IsShow=0;
 			}
 			this.ownerCt.doLayout();
 		},
@@ -829,8 +829,8 @@ Bb.Admin.View={
 			this.ownerCt.south.hide();
 			this.ownerCt.west.hide();
 			this.ownerCt.east.hide();
-			if (Bb.Admin.View.Running.view_window!=null){
-				Bb.Admin.View.Running.view_window.hide();
+			if (Bn.Admin.View.Running.view_window!=null){
+				Bn.Admin.View.Running.view_window.hide();
 			}
 			this.tvpView.toggle(false);
 			this.ownerCt.doLayout();
@@ -840,52 +840,52 @@ Bb.Admin.View={
 		 */
 		updateViewAdmin : function() {
 
-			if (Bb.Admin.View.Running.view_window!=null){
-				Bb.Admin.View.Running.view_window.winTabs.tabAdminDetail.update(this.getSelectionModel().getSelected().data);
+			if (Bn.Admin.View.Running.view_window!=null){
+				Bn.Admin.View.Running.view_window.winTabs.tabAdminDetail.update(this.getSelectionModel().getSelected().data);
 			}
-			Bb.Admin.View.Running.viewTabs.tabAdminDetail.update(this.getSelectionModel().getSelected().data);
+			Bn.Admin.View.Running.viewTabs.tabAdminDetail.update(this.getSelectionModel().getSelected().data);
 		},
 		/**
 		 * 新建系统管理人员
 		 */
 		addAdmin : function() {
-			if (Bb.Admin.View.Running.edit_window==null){
-				Bb.Admin.View.Running.edit_window=new Bb.Admin.View.EditWindow();
+			if (Bn.Admin.View.Running.edit_window==null){
+				Bn.Admin.View.Running.edit_window=new Bn.Admin.View.EditWindow();
 			}
-			Bb.Admin.View.Running.edit_window.resetBtn.setVisible(false);
-			Bb.Admin.View.Running.edit_window.saveBtn.setText('保 存');
-			Bb.Admin.View.Running.edit_window.setTitle('添加系统管理人员');
-			Bb.Admin.View.Running.edit_window.savetype=0;
-			Bb.Admin.View.Running.edit_window.ID.setValue("");
-            var PasswordObj=Bb.Admin.View.Running.edit_window.Password;
+			Bn.Admin.View.Running.edit_window.resetBtn.setVisible(false);
+			Bn.Admin.View.Running.edit_window.saveBtn.setText('保 存');
+			Bn.Admin.View.Running.edit_window.setTitle('添加系统管理人员');
+			Bn.Admin.View.Running.edit_window.savetype=0;
+			Bn.Admin.View.Running.edit_window.ID.setValue("");
+            var PasswordObj=Bn.Admin.View.Running.edit_window.Password;
             PasswordObj.allowBlank=false;
             if (PasswordObj.getEl()) PasswordObj.getEl().dom.parentNode.previousSibling.innerHTML ="密码(<font color=red>*</font>)";
 
-			Bb.Admin.View.Running.edit_window.show();
-			Bb.Admin.View.Running.edit_window.maximize();
+			Bn.Admin.View.Running.edit_window.show();
+			Bn.Admin.View.Running.edit_window.maximize();
 		},
 		/**
 		 * 编辑系统管理人员时先获得选中的系统管理人员信息
 		 */
 		updateAdmin : function() {
-			if (Bb.Admin.View.Running.edit_window==null){
-				Bb.Admin.View.Running.edit_window=new Bb.Admin.View.EditWindow();
+			if (Bn.Admin.View.Running.edit_window==null){
+				Bn.Admin.View.Running.edit_window=new Bn.Admin.View.EditWindow();
 			}
-			Bb.Admin.View.Running.edit_window.saveBtn.setText('修 改');
-			Bb.Admin.View.Running.edit_window.resetBtn.setVisible(true);
-			Bb.Admin.View.Running.edit_window.setTitle('修改系统管理人员');
-			Bb.Admin.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
-			Bb.Admin.View.Running.edit_window.savetype=1;
+			Bn.Admin.View.Running.edit_window.saveBtn.setText('修 改');
+			Bn.Admin.View.Running.edit_window.resetBtn.setVisible(true);
+			Bn.Admin.View.Running.edit_window.setTitle('修改系统管理人员');
+			Bn.Admin.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
+			Bn.Admin.View.Running.edit_window.savetype=1;
 
-			Bb.Admin.View.Running.edit_window.show();
+			Bn.Admin.View.Running.edit_window.show();
 
-            var PasswordObj=Bb.Admin.View.Running.edit_window.Password;
+            var PasswordObj=Bn.Admin.View.Running.edit_window.Password;
             PasswordObj.allowBlank=true;
             if (PasswordObj.getEl())PasswordObj.getEl().dom.parentNode.previousSibling.innerHTML ="密码";
-            Bb.Admin.View.Running.edit_window.Password_old.setValue(Bb.Admin.View.Running.edit_window.Password.getValue());
-            Bb.Admin.View.Running.edit_window.Password.setValue("");
+            Bn.Admin.View.Running.edit_window.Password_old.setValue(Bn.Admin.View.Running.edit_window.Password.getValue());
+            Bn.Admin.View.Running.edit_window.Password.setValue("");
 
-			Bb.Admin.View.Running.edit_window.maximize();
+			Bn.Admin.View.Running.edit_window.maximize();
 		},
 		/**
 		 * 删除系统管理人员
@@ -922,10 +922,10 @@ Bb.Admin.View={
 		 * 导入系统管理人员
 		 */
 		importAdmin : function() {
-			if (Bb.Admin.View.current_uploadWindow==null){
-				Bb.Admin.View.current_uploadWindow=new Bb.Admin.View.UploadWindow();
+			if (Bn.Admin.View.current_uploadWindow==null){
+				Bn.Admin.View.current_uploadWindow=new Bn.Admin.View.UploadWindow();
 			}
-			Bb.Admin.View.current_uploadWindow.show();
+			Bn.Admin.View.current_uploadWindow.show();
 		}
 	}),
 	/**
@@ -933,24 +933,24 @@ Bb.Admin.View={
 	 */
 	Panel:Ext.extend(Ext.form.FormPanel,{
 		constructor : function(config) {
-			Bb.Admin.View.Running.AdminGrid=new Bb.Admin.View.Grid();
-			if (Bb.Admin.Config.View.IsFix==0){
-				Bb.Admin.View.Running.AdminGrid.tvpView.menu.mBind.setChecked(false,true);
+			Bn.Admin.View.Running.AdminGrid=new Bn.Admin.View.Grid();
+			if (Bn.Admin.Config.View.IsFix==0){
+				Bn.Admin.View.Running.AdminGrid.tvpView.menu.mBind.setChecked(false,true);
 			}
 			config = Ext.apply({
 				region : 'center',layout : 'fit', frame:true,
 				items: {
 					layout:'border',
 					items:[
-						Bb.Admin.View.Running.AdminGrid,
+						Bn.Admin.View.Running.AdminGrid,
 						{region:'north',ref:'north',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true},
-						{region:'south',ref:'south',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true,items:[Bb.Admin.View.Running.viewTabs]},
+						{region:'south',ref:'south',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true,items:[Bn.Admin.View.Running.viewTabs]},
 						{region:'west',ref:'west',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true},
 						{region:'east',ref:'east',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true}
 					]
 				}
 			}, config);
-			Bb.Admin.View.Panel.superclass.constructor.call(this, config);
+			Bn.Admin.View.Panel.superclass.constructor.call(this, config);
 		}
 	}),
 	/**
@@ -981,23 +981,23 @@ Bb.Admin.View={
  */
 Ext.onReady(function(){
 	Ext.QuickTips.init();
-	Ext.state.Manager.setProvider(Bb.Admin.Cookie);
+	Ext.state.Manager.setProvider(Bn.Admin.Cookie);
 	Ext.Direct.addProvider(Ext.app.REMOTING_API);
-	Bb.Admin.Init();
+	Bn.Admin.Init();
 	/**
 	 * 系统管理人员数据模型获取数据Direct调用
 	 */
-	Bb.Admin.Store.adminStore.proxy=new Ext.data.DirectProxy({
+	Bn.Admin.Store.adminStore.proxy=new Ext.data.DirectProxy({
 		api: {read:ExtServiceAdmin.queryPageAdmin}
 	});
 	/**
 	 * 系统管理人员页面布局
 	 */
-	Bb.Admin.Viewport = new Ext.Viewport({
+	Bn.Admin.Viewport = new Ext.Viewport({
 		layout : 'border',
-		items : [new Bb.Admin.View.Panel()]
+		items : [new Bn.Admin.View.Panel()]
 	});
-	Bb.Admin.Viewport.doLayout();
+	Bn.Admin.Viewport.doLayout();
 	setTimeout(function(){
 		Ext.get('loading').remove();
 		Ext.get('loading-mask').fadeOut({

@@ -1,9 +1,9 @@
-Ext.namespace("Betterlife.Admin");
-Bb = Betterlife.Admin;         
+Ext.namespace("BetterlifeNet.Admin");
+Bn = BetterlifeNet.Admin;         
 /**
  * 全局配置
  */  
-Bb.Config={
+Bn.Config={
     /**
      *是否显示Tab头
      */        
@@ -32,13 +32,13 @@ Bb.Config={
      */
     Init:function(){
         if (Ext.util.Cookies.get('OnlineEditor')!=null){
-            Bb.Config.OnlineEditor=Ext.util.Cookies.get('OnlineEditor');
+            Bn.Config.OnlineEditor=Ext.util.Cookies.get('OnlineEditor');
         }
         if (Ext.util.Cookies.get('operator')!=null){
-            Bb.Config.Operator=Ext.util.Cookies.get('operator');
+            Bn.Config.Operator=Ext.util.Cookies.get('operator');
         }
         if (Ext.util.Cookies.get('admin_id')!=null){
-            Bb.Config.Admin_id=Ext.util.Cookies.get('admin_id');
+            Bn.Config.Admin_id=Ext.util.Cookies.get('admin_id');
         }
     }
 };
@@ -46,22 +46,22 @@ Bb.Config={
 Ext.onReady(function(){
     Ext.QuickTips.init();   
     Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
-    var centerPanel=Bb.Layout.CenterPanel; 
-    if (!Bb.Config.IsTabHeaderShow){
-        centerPanel=Bb.Layout.CenterPanel_NoTabs;
+    var centerPanel=Bn.Layout.CenterPanel; 
+    if (!Bn.Config.IsTabHeaderShow){
+        centerPanel=Bn.Layout.CenterPanel_NoTabs;
     } 
-    Bb.Viewport = new Ext.Viewport({
+    Bn.Viewport = new Ext.Viewport({
         layout: 'border',
         items: [      
-          Bb.Layout.HeaderPanel,
-          Bb.Layout.LeftPanel,centerPanel//,
-          //Bb.Layout.FooterPanel,              
-          //Bb.Layout.RightPanel           
+          Bn.Layout.HeaderPanel,
+          Bn.Layout.LeftPanel,centerPanel//,
+          //Bn.Layout.FooterPanel,              
+          //Bn.Layout.RightPanel           
         ]
     });
-    Bb.Config.Init();
-    Bb.Layout.Init();  
-    Bb.Viewport.doLayout(); 
+    Bn.Config.Init();
+    Bn.Layout.Init();  
+    Bn.Viewport.doLayout(); 
     setTimeout(function(){
         Ext.get('loading').remove();
         Ext.get('loading-mask').fadeOut({remove:true});
@@ -73,7 +73,7 @@ Ext.onReady(function(){
     // Handle this change event in order to restore the UI to the appropriate history state
     Ext.History.on('change', function(token){
         if(token){
-            var parts = token.split(Bb.Config.TokenDelimiter);
+            var parts = token.split(Bn.Config.TokenDelimiter);
             var tabPanel = Ext.getCmp(parts[0]);
             var tabId = parts[1];
             tabPanel.show();

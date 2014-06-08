@@ -1,6 +1,6 @@
-Ext.namespace("Betterlife.Admin.Blog");
-Bb = Betterlife.Admin;
-Bb.Blog={
+Ext.namespace("BetterlifeNet.Admin.Blog");
+Bn = BetterlifeNet.Admin;
+Bn.Blog={
 	/**
 	 * 全局配置
 	 */
@@ -42,14 +42,14 @@ Bb.Blog={
 	 * 初始化
 	 */
 	Init:function(){
-		if (Bb.Blog.Cookie.get('View.Direction')){
-			Bb.Blog.Config.View.Direction=Bb.Blog.Cookie.get('View.Direction');
+		if (Bn.Blog.Cookie.get('View.Direction')){
+			Bn.Blog.Config.View.Direction=Bn.Blog.Cookie.get('View.Direction');
 		}
-		if (Bb.Blog.Cookie.get('View.IsFix')!=null){
-			Bb.Blog.Config.View.IsFix=Bb.Blog.Cookie.get('View.IsFix');
+		if (Bn.Blog.Cookie.get('View.IsFix')!=null){
+			Bn.Blog.Config.View.IsFix=Bn.Blog.Cookie.get('View.IsFix');
 		}
         if (Ext.util.Cookies.get('OnlineEditor')!=null){
-            Bb.Blog.Config.OnlineEditor=parseInt(Ext.util.Cookies.get('OnlineEditor'));
+            Bn.Blog.Config.OnlineEditor=parseInt(Ext.util.Cookies.get('OnlineEditor'));
         }
 
 	}
@@ -57,7 +57,7 @@ Bb.Blog={
 /**
  * Model:数据模型
  */
-Bb.Blog.Store = {
+Bn.Blog.Store = {
 	/**
 	 * 博客
 	 */
@@ -83,8 +83,8 @@ Bb.Blog.Store = {
 		listeners : {
 			beforeload : function(store, options) {
 				if (Ext.isReady) {
-					if (!options.params.limit)options.params.limit=Bb.Blog.Config.PageSize;
-					Ext.apply(options.params, Bb.Blog.View.Running.blogGrid.filter);//保证分页也将查询条件带上
+					if (!options.params.limit)options.params.limit=Bn.Blog.Config.PageSize;
+					Ext.apply(options.params, Bn.Blog.View.Running.blogGrid.filter);//保证分页也将查询条件带上
 				}
 			}
 		}
@@ -128,8 +128,8 @@ Bb.Blog.Store = {
         listeners : {
             beforeload : function(store, options) {
                 if (Ext.isReady) {
-                    if (!options.params.limit)options.params.limit=Bb.Blog.Config.PageSize;
-                    Ext.apply(options.params, Bb.Blog.View.Running.commentGrid.filter);//保证分页也将查询条件带上
+                    if (!options.params.limit)options.params.limit=Bn.Blog.Config.PageSize;
+                    Ext.apply(options.params, Bn.Blog.View.Running.commentGrid.filter);//保证分页也将查询条件带上
                 }
             }
         }
@@ -155,7 +155,7 @@ Bb.Blog.Store = {
 /**
  * View:博客显示组件
  */
-Bb.Blog.View={
+Bn.Blog.View={
 	/**
 	 * 编辑窗口：新建或者修改博客
 	 */
@@ -179,13 +179,13 @@ Bb.Blog.View={
 						this.editForm.form.getEl().dom.reset();
 					},
                     afterrender:function(){
-                        switch (Bb.Blog.Config.OnlineEditor)
+                        switch (Bn.Blog.Config.OnlineEditor)
                         {
                             case 1:
                                 ckeditor_replace_Blog_Content();
                                 break
                             case 2:
-                                Bb.Blog.View.EditWindow.KindEditor_Blog_Content = KindEditor.create('textarea[name="Blog_Content"]',{width:'98%',minHeith:'350px', filterMode:true});
+                                Bn.Blog.View.EditWindow.KindEditor_Blog_Content = KindEditor.create('textarea[name="Blog_Content"]',{width:'98%',minHeith:'350px', filterMode:true});
                                 break
                             case 3:
                                 pageInit_Blog_Content();
@@ -210,8 +210,8 @@ Bb.Blog.View={
                             {xtype: 'hidden',name : 'User_ID',ref:'../User_ID'},
                             {
                                  fieldLabel : '用户',xtype: 'combo',name : 'Username',ref : '../Username',
-                                 store:Bb.Blog.Store.userStoreForCombo,emptyText: '请选择用户',itemSelector: 'div.search-item',
-                                 loadingText: '查询中...',width: 570, pageSize:Bb.Blog.Config.PageSize,
+                                 store:Bn.Blog.Store.userStoreForCombo,emptyText: '请选择用户',itemSelector: 'div.search-item',
+                                 loadingText: '查询中...',width: 570, pageSize:Bn.Blog.Config.PageSize,
                                  displayField:'Username',grid:this,
                                  mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,
                                  forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,
@@ -239,13 +239,13 @@ Bb.Blog.View={
 				buttons : [{
 					text: "",ref : "../saveBtn",scope:this,
 					handler : function() {
-                        switch (Bb.Blog.Config.OnlineEditor)
+                        switch (Bn.Blog.Config.OnlineEditor)
                         {
                             case 1:
                                 if (CKEDITOR.instances.Blog_Content) this.editForm.Blog_Content.setValue(CKEDITOR.instances.Blog_Content.getData());
                                 break
                             case 2:
-                                if (Bb.Blog.View.EditWindow.KindEditor_Blog_Content)this.editForm.Blog_Content.setValue(Bb.Blog.View.EditWindow.KindEditor_Blog_Content.html());
+                                if (Bn.Blog.View.EditWindow.KindEditor_Blog_Content)this.editForm.Blog_Content.setValue(Bn.Blog.View.EditWindow.KindEditor_Blog_Content.html());
                                 break
                             case 3:
                                 if (xhEditor_Blog_Content)this.editForm.Blog_Content.setValue(xhEditor_Blog_Content.getSource());
@@ -263,7 +263,7 @@ Bb.Blog.View={
 							this.editForm.getForm().submit({
 								success : function(form, action) {
 									Ext.Msg.alert("提示", "保存成功！");
-									Bb.Blog.View.Running.blogGrid.doSelectBlog();
+									Bn.Blog.View.Running.blogGrid.doSelectBlog();
 									form.reset();
 									editWindow.hide();
 								},
@@ -275,9 +275,9 @@ Bb.Blog.View={
 							this.editForm.api.submit=ExtServiceBlog.update;
 							this.editForm.getForm().submit({
 								success : function(form, action) {
-									Bb.Blog.View.Running.blogGrid.store.reload();
+									Bn.Blog.View.Running.blogGrid.store.reload();
 									Ext.Msg.show({title:'提示',msg: '修改成功！',buttons: {yes: '确定'},fn: function(){
-										Bb.Blog.View.Running.blogGrid.bottomToolbar.doRefresh();
+										Bn.Blog.View.Running.blogGrid.bottomToolbar.doRefresh();
 									}});
 									form.reset();
 									editWindow.hide();
@@ -296,25 +296,25 @@ Bb.Blog.View={
 				}, {
 					text : "重 置",ref:'../resetBtn',scope:this,
 					handler : function() {
-						this.editForm.form.loadRecord(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected());
-                        switch (Bb.Blog.Config.OnlineEditor)
+						this.editForm.form.loadRecord(Bn.Blog.View.Running.blogGrid.getSelectionModel().getSelected());
+                        switch (Bn.Blog.Config.OnlineEditor)
                         {
                             case 1:
-                                if (CKEDITOR.instances.Blog_Content) CKEDITOR.instances.Blog_Content.setData(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.Blog_Content);
+                                if (CKEDITOR.instances.Blog_Content) CKEDITOR.instances.Blog_Content.setData(Bn.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.Blog_Content);
                                 break
                             case 2:
-                                if (Bb.Blog.View.EditWindow.KindEditor_Blog_Content) Bb.Blog.View.EditWindow.KindEditor_Blog_Content.html(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.Blog_Content);
+                                if (Bn.Blog.View.EditWindow.KindEditor_Blog_Content) Bn.Blog.View.EditWindow.KindEditor_Blog_Content.html(Bn.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.Blog_Content);
                                 break
                             case 3:
-                                if (xhEditor_Blog_Content) xhEditor_Blog_Content.setSource(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.Blog_Content);
+                                if (xhEditor_Blog_Content) xhEditor_Blog_Content.setSource(Bn.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.Blog_Content);
                                 break
                             default:
-                                if (ue_Blog_Content) ue_Blog_Content.setContent(Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.Blog_Content);
+                                if (ue_Blog_Content) ue_Blog_Content.setContent(Bn.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.Blog_Content);
                         }
 					}
 				}]
 			}, config);
-			Bb.Blog.View.EditWindow.superclass.constructor.call(this, config);
+			Bn.Blog.View.EditWindow.superclass.constructor.call(this, config);
 		}
 	}),
 	/**
@@ -337,13 +337,13 @@ Bb.Blog.View={
 					listeners:{
 						beforetabchange:function(tabs,newtab,currentTab){
 							if (tabs.tabFix==newtab){
-								if (Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected()==null){
+								if (Bn.Blog.View.Running.blogGrid.getSelectionModel().getSelected()==null){
 									Ext.Msg.alert('提示', '请先选择博客！');
 									return false;
 								}
-								Bb.Blog.Config.View.IsShow=1;
-								Bb.Blog.View.Running.blogGrid.showBlog();
-								Bb.Blog.View.Running.blogGrid.tvpView.menu.mBind.setChecked(false);
+								Bn.Blog.Config.View.IsShow=1;
+								Bn.Blog.View.Running.blogGrid.showBlog();
+								Bn.Blog.View.Running.blogGrid.tvpView.menu.mBind.setChecked(false);
 								return false;
 							}
 						}
@@ -352,15 +352,15 @@ Bb.Blog.View={
 						{title:'+',tabTip:'取消固定',ref:'tabFix',iconCls:'icon-fix'}
 					]
 				}, config);
-				Bb.Blog.View.BlogView.Tabs.superclass.constructor.call(this, config);
-                Bb.Blog.View.Running.commentGrid=new Bb.Blog.View.CommentView.Grid();
+				Bn.Blog.View.BlogView.Tabs.superclass.constructor.call(this, config);
+                Bn.Blog.View.Running.commentGrid=new Bn.Blog.View.CommentView.Grid();
 				this.onAddItems();
 			},
 			/**
 			 * 根据布局调整Tabs的宽度或者高度以及折叠
 			 */
 			enableCollapse:function(){
-				if ((Bb.Blog.Config.View.Direction==1)||(Bb.Blog.Config.View.Direction==2)){
+				if ((Bn.Blog.Config.View.Direction==1)||(Bn.Blog.Config.View.Direction==2)){
 					this.width =Ext.getBody().getViewSize().width;
 					this.height=Ext.getBody().getViewSize().height/2;
 				}else{
@@ -386,7 +386,7 @@ Bb.Blog.View={
 				);
                 this.add(
                     {title: '评论',iconCls:'tabs',tabWidth:150,
-                     items:[Bb.Blog.View.Running.commentGrid]
+                     items:[Bn.Blog.View.Running.commentGrid]
                     }
                 );
 			}
@@ -401,26 +401,26 @@ Bb.Blog.View={
 					width : 705,height : 500,minWidth : 450,minHeight : 400,
 					layout : 'fit',resizable:true,plain : true,bodyStyle : 'padding:5px;',
 					closeAction : "hide",
-					items:[new Bb.Blog.View.BlogView.Tabs({ref:'winTabs',tabPosition:'top'})],
+					items:[new Bn.Blog.View.BlogView.Tabs({ref:'winTabs',tabPosition:'top'})],
 					listeners: {
 						minimize:function(w){
 							w.hide();
-							Bb.Blog.Config.View.IsShow=0;
-							Bb.Blog.View.Running.blogGrid.tvpView.menu.mBind.setChecked(true);
+							Bn.Blog.Config.View.IsShow=0;
+							Bn.Blog.View.Running.blogGrid.tvpView.menu.mBind.setChecked(true);
 						},
 						hide:function(w){
-							Bb.Blog.View.Running.blogGrid.tvpView.toggle(false);
+							Bn.Blog.View.Running.blogGrid.tvpView.toggle(false);
 						}
 					},
 					buttons: [{
 						text: '新增博客',scope:this,
-						handler : function() {this.hide();Bb.Blog.View.Running.blogGrid.addBlog();}
+						handler : function() {this.hide();Bn.Blog.View.Running.blogGrid.addBlog();}
 					},{
 						text: '修改博客',scope:this,
-						handler : function() {this.hide();Bb.Blog.View.Running.blogGrid.updateBlog();}
+						handler : function() {this.hide();Bn.Blog.View.Running.blogGrid.updateBlog();}
 					}]
 				}, config);
-				Bb.Blog.View.BlogView.Window.superclass.constructor.call(this, config);
+				Bn.Blog.View.BlogView.Window.superclass.constructor.call(this, config);
 			}
 		})
 	},
@@ -451,13 +451,13 @@ Bb.Blog.View={
 							this.editForm.form.getEl().dom.reset();
 						},
                         afterrender:function(){
-                            switch (Bb.Blog.Config.OnlineEditor)
+                            switch (Bn.Blog.Config.OnlineEditor)
                             {
                                 case 1:
                                     ckeditor_replace_Comment();
                                     break
                                 case 2:
-                                    Bb.Blog.View.CommentView.EditWindow.KindEditor_Comment = KindEditor.create('textarea[name="Comment"]',{width:'98%',minHeith:'350px', filterMode:true});
+                                    Bn.Blog.View.CommentView.EditWindow.KindEditor_Comment = KindEditor.create('textarea[name="Comment"]',{width:'98%',minHeith:'350px', filterMode:true});
                                     break
                                 case 3:
                                     pageInit_Comment();
@@ -482,8 +482,8 @@ Bb.Blog.View={
                                 {xtype: 'hidden',name : 'User_ID',ref:'../User_ID'},
                                 {
                                      fieldLabel : '评论者',xtype: 'combo',name : 'Username',ref : '../Username',
-                                     store:Bb.Blog.Store.userStoreForCombo,emptyText: '请选择评论者',itemSelector: 'div.search-item',
-                                     loadingText: '查询中...',width: 570, pageSize:Bb.Blog.Config.PageSize,
+                                     store:Bn.Blog.Store.userStoreForCombo,emptyText: '请选择评论者',itemSelector: 'div.search-item',
+                                     loadingText: '查询中...',width: 570, pageSize:Bn.Blog.Config.PageSize,
                                      displayField:'Username',grid:this,
                                      mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,
                                      forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,
@@ -507,8 +507,8 @@ Bb.Blog.View={
                                 {xtype: 'hidden',name : 'Blog_ID',ref:'../Blog_ID'},
                                 {
                                      fieldLabel : '博客',xtype: 'combo',name : 'Blog_Name',ref : '../Blog_Name',
-                                     store:Bb.Blog.Store.blogStoreForCombo,emptyText: '请选择博客',itemSelector: 'div.search-item',
-                                     loadingText: '查询中...',width: 570, pageSize:Bb.Blog.Config.PageSize,
+                                     store:Bn.Blog.Store.blogStoreForCombo,emptyText: '请选择博客',itemSelector: 'div.search-item',
+                                     loadingText: '查询中...',width: 570, pageSize:Bn.Blog.Config.PageSize,
                                      displayField:'Blog_Name',grid:this,
                                      mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,
                                      forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,
@@ -534,13 +534,13 @@ Bb.Blog.View={
 					buttons : [{
 						text: "",ref : "../saveBtn",scope:this,
 						handler : function() {
-                            switch (Bb.Blog.Config.OnlineEditor)
+                            switch (Bn.Blog.Config.OnlineEditor)
                             {
                                 case 1:
                                     if (CKEDITOR.instances.Comment) this.editForm.Comment.setValue(CKEDITOR.instances.Comment.getData());
                                     break
                                 case 2:
-                                    if (Bb.Blog.View.CommentView.EditWindow.KindEditor_Comment)this.editForm.Comment.setValue(Bb.Blog.View.CommentView.EditWindow.KindEditor_Comment.html());
+                                    if (Bn.Blog.View.CommentView.EditWindow.KindEditor_Comment)this.editForm.Comment.setValue(Bn.Blog.View.CommentView.EditWindow.KindEditor_Comment.html());
                                     break
                                 case 3:
                                     if (xhEditor_Comment)this.editForm.Comment.setValue(xhEditor_Comment.getSource());
@@ -558,7 +558,7 @@ Bb.Blog.View={
 								this.editForm.getForm().submit({
 									success : function(form, action) {
 										Ext.Msg.alert("提示", "保存成功！");
-										Bb.Blog.View.Running.commentGrid.doSelectComment();
+										Bn.Blog.View.Running.commentGrid.doSelectComment();
 										form.reset();
 										editWindow.hide();
 									},
@@ -571,7 +571,7 @@ Bb.Blog.View={
 								this.editForm.getForm().submit({
 									success : function(form, action) {
 										Ext.Msg.show({title:'提示',msg: '修改成功！',buttons: {yes: '确定'},fn: function(){
-											Bb.Blog.View.Running.commentGrid.bottomToolbar.doRefresh();
+											Bn.Blog.View.Running.commentGrid.bottomToolbar.doRefresh();
 										}});
 										form.reset();
 										editWindow.hide();
@@ -590,26 +590,26 @@ Bb.Blog.View={
 					}, {
 						text : "重 置",ref:'../resetBtn',scope:this,
 						handler : function() {
-							this.editForm.form.loadRecord(Bb.Blog.View.Running.commentGrid.getSelectionModel().getSelected());
-                            switch (Bb.Blog.Config.OnlineEditor)
+							this.editForm.form.loadRecord(Bn.Blog.View.Running.commentGrid.getSelectionModel().getSelected());
+                            switch (Bn.Blog.Config.OnlineEditor)
                             {
                                 case 1:
-                                    if (CKEDITOR.instances.Comment) CKEDITOR.instances.Comment.setData(Bb.Blog.View.Running.commentGrid.getSelectionModel().getSelected().data.Comment);
+                                    if (CKEDITOR.instances.Comment) CKEDITOR.instances.Comment.setData(Bn.Blog.View.Running.commentGrid.getSelectionModel().getSelected().data.Comment);
                                     break
                                 case 2:
-                                    if (Bb.Blog.View.CommentView.EditWindow.KindEditor_Comment) Bb.Blog.View.CommentView.EditWindow.KindEditor_Comment.html(Bb.Blog.View.Running.commentGrid.getSelectionModel().getSelected().data.Comment);
+                                    if (Bn.Blog.View.CommentView.EditWindow.KindEditor_Comment) Bn.Blog.View.CommentView.EditWindow.KindEditor_Comment.html(Bn.Blog.View.Running.commentGrid.getSelectionModel().getSelected().data.Comment);
                                     break
                                 case 3:
-                                    if (xhEditor_Comment) xhEditor_Comment.setSource(Bb.Blog.View.Running.commentGrid.getSelectionModel().getSelected().data.Comment);
+                                    if (xhEditor_Comment) xhEditor_Comment.setSource(Bn.Blog.View.Running.commentGrid.getSelectionModel().getSelected().data.Comment);
                                     break
                                 default:
-                                    if (ue_Comment) ue_Comment.setContent(Bb.Blog.View.Running.commentGrid.getSelectionModel().getSelected().data.Comment);
+                                    if (ue_Comment) ue_Comment.setContent(Bn.Blog.View.Running.commentGrid.getSelectionModel().getSelected().data.Comment);
                             }
 
 						}
 					}]
 				}, config);
-				Bb.Blog.View.CommentView.EditWindow.superclass.constructor.call(this, config);
+				Bn.Blog.View.CommentView.EditWindow.superclass.constructor.call(this, config);
 			}
 		}),
 		/**
@@ -622,7 +622,7 @@ Bb.Blog.View={
 		Grid:Ext.extend(Ext.grid.GridPanel, {
 			constructor : function(config) {
 				config = Ext.apply({
-					store : Bb.Blog.Store.commentStore,sm : this.sm,
+					store : Bn.Blog.Store.commentStore,sm : this.sm,
 					frame : true,trackMouseOver : true,enableColumnMove : true,columnLines : true,
 					loadMask : true,stripeRows : true,headerAsText : false,
 					defaults : {autoScroll : true},
@@ -674,31 +674,31 @@ Bb.Blog.View={
 						)]
 					},
 					bbar: new Ext.PagingToolbar({
-						pageSize: Bb.Blog.Config.PageSize,
-						store: Bb.Blog.Store.commentStore,scope:this,autoShow:true,displayInfo: true,
+						pageSize: Bn.Blog.Config.PageSize,
+						store: Bn.Blog.Store.commentStore,scope:this,autoShow:true,displayInfo: true,
 						displayMsg: '当前显示 {0} - {1}条记录/共 {2}条记录。',emptyMsg: "无显示数据",
 						items: [
 							{xtype:'label', text: '每页显示'},
-							{xtype:'numberfield', value:Bb.Blog.Config.PageSize,minValue:1,width:35,style:'text-align:center',allowBlank: false,
+							{xtype:'numberfield', value:Bn.Blog.Config.PageSize,minValue:1,width:35,style:'text-align:center',allowBlank: false,
 								listeners:
 								{
 									change:function(Field, newValue, oldValue){
 										var num = parseInt(newValue);
 										if (isNaN(num) || !num || num<1)
 										{
-											num = Bb.Blog.Config.PageSize;
+											num = Bn.Blog.Config.PageSize;
 											Field.setValue(num);
 										}
 										this.ownerCt.pageSize= num;
-										Bb.Blog.Config.PageSize = num;
+										Bn.Blog.Config.PageSize = num;
 										this.ownerCt.ownerCt.doSelectComment();
 									},
 									specialKey :function(field,e){
 										if (e.getKey() == Ext.EventObject.ENTER){
 											var num = parseInt(field.getValue());
-											if (isNaN(num) || !num || num<1)num = Bb.Blog.Config.PageSize;
+											if (isNaN(num) || !num || num<1)num = Bn.Blog.Config.PageSize;
 											this.ownerCt.pageSize= num;
-											Bb.Blog.Config.PageSize = num;
+											Bn.Blog.Config.PageSize = num;
 											this.ownerCt.ownerCt.doSelectComment();
 										}
 									}
@@ -710,10 +710,10 @@ Bb.Blog.View={
 				/**
 				 * 评论数据模型获取数据Direct调用
 				 */
-				Bb.Blog.Store.commentStore.proxy=new Ext.data.DirectProxy({
+				Bn.Blog.Store.commentStore.proxy=new Ext.data.DirectProxy({
 					api: {read:ExtServiceComment.queryPageComment}
 				});
-				Bb.Blog.View.CommentView.Grid.superclass.constructor.call(this, config);
+				Bn.Blog.View.CommentView.Grid.superclass.constructor.call(this, config);
 			},
 			/**
 			 * 行选择器
@@ -731,9 +731,9 @@ Bb.Blog.View={
 			 * 查询符合条件的评论
 			 */
 			doSelectComment : function() {
-				if (Bb.Blog.View.Running.blogGrid&&Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected()){
-					var Blog_ID = Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.ID;
-					var condition = {'Blog_ID':Blog_ID,'start':0,'limit':Bb.Blog.Config.PageSize};
+				if (Bn.Blog.View.Running.blogGrid&&Bn.Blog.View.Running.blogGrid.getSelectionModel().getSelected()){
+					var Blog_ID = Bn.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.ID;
+					var condition = {'Blog_ID':Blog_ID,'start':0,'limit':Bn.Blog.Config.PageSize};
 					this.filter   = {'Blog_ID':Blog_ID};
 					ExtServiceComment.queryPageComment(condition,function(provider, response) {
 						if (response.result){
@@ -741,18 +741,18 @@ Bb.Blog.View={
 								var result           = new Array();
 								result['data']       =response.result.data;
 								result['totalCount'] =response.result.totalCount;
-								Bb.Blog.Store.commentStore.loadData(result);
+								Bn.Blog.Store.commentStore.loadData(result);
 							} else {
-								Bb.Blog.Store.commentStore.removeAll();
+								Bn.Blog.Store.commentStore.removeAll();
 								Ext.Msg.alert('提示', '无符合条件的评论！');
 							}
 
-							if (Bb.Blog.Store.commentStore.getTotalCount()>Bb.Blog.Config.PageSize){
-								 Bb.Blog.View.Running.commentGrid.bottomToolbar.show();
+							if (Bn.Blog.Store.commentStore.getTotalCount()>Bn.Blog.Config.PageSize){
+								 Bn.Blog.View.Running.commentGrid.bottomToolbar.show();
 							}else{
-								 Bb.Blog.View.Running.commentGrid.bottomToolbar.hide();
+								 Bn.Blog.View.Running.commentGrid.bottomToolbar.hide();
 							}
-							Bb.Blog.View.Running.blogGrid.ownerCt.doLayout();
+							Bn.Blog.View.Running.blogGrid.ownerCt.doLayout();
 						}
 					});
 				}
@@ -773,23 +773,23 @@ Bb.Blog.View={
 			 * 新建评论
 			 */
 			addComment : function(){
-				if (Bb.Blog.View.CommentView.edit_window==null){
-					Bb.Blog.View.CommentView.edit_window=new Bb.Blog.View.CommentView.EditWindow();
+				if (Bn.Blog.View.CommentView.edit_window==null){
+					Bn.Blog.View.CommentView.edit_window=new Bn.Blog.View.CommentView.EditWindow();
 				}
-				Bb.Blog.View.CommentView.edit_window.resetBtn.setVisible(false);
-				Bb.Blog.View.CommentView.edit_window.saveBtn.setText('保 存');
-				Bb.Blog.View.CommentView.edit_window.setTitle('添加评论');
-				Bb.Blog.View.CommentView.edit_window.savetype=0;
-				Bb.Blog.View.CommentView.edit_window.ID.setValue("");
-				var blog_id = Bb.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.ID;
-				Bb.Blog.View.CommentView.edit_window.Blog_ID.setValue(blog_id);
-                switch (Bb.Blog.Config.OnlineEditor)
+				Bn.Blog.View.CommentView.edit_window.resetBtn.setVisible(false);
+				Bn.Blog.View.CommentView.edit_window.saveBtn.setText('保 存');
+				Bn.Blog.View.CommentView.edit_window.setTitle('添加评论');
+				Bn.Blog.View.CommentView.edit_window.savetype=0;
+				Bn.Blog.View.CommentView.edit_window.ID.setValue("");
+				var blog_id = Bn.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.ID;
+				Bn.Blog.View.CommentView.edit_window.Blog_ID.setValue(blog_id);
+                switch (Bn.Blog.Config.OnlineEditor)
                 {
                     case 1:
                         if (CKEDITOR.instances.Comment) CKEDITOR.instances.Comment.setData("");
                         break
                     case 2:
-                        if (Bb.Blog.View.CommentView.EditWindow.KindEditor_Comment) Bb.Blog.View.CommentView.EditWindow.KindEditor_Comment.html("");
+                        if (Bn.Blog.View.CommentView.EditWindow.KindEditor_Comment) Bn.Blog.View.CommentView.EditWindow.KindEditor_Comment.html("");
                         break
                     case 3:
                         break
@@ -797,28 +797,28 @@ Bb.Blog.View={
                         if (ue_Comment)ue_Comment.setContent("");
                 }
 
-				Bb.Blog.View.CommentView.edit_window.show();
-				Bb.Blog.View.CommentView.edit_window.maximize();
+				Bn.Blog.View.CommentView.edit_window.show();
+				Bn.Blog.View.CommentView.edit_window.maximize();
 			},
 			/**
 			 * 编辑评论时先获得选中的评论信息
 			 */
 			updateComment : function() {
-				if (Bb.Blog.View.CommentView.edit_window==null){
-					Bb.Blog.View.CommentView.edit_window=new Bb.Blog.View.CommentView.EditWindow();
+				if (Bn.Blog.View.CommentView.edit_window==null){
+					Bn.Blog.View.CommentView.edit_window=new Bn.Blog.View.CommentView.EditWindow();
 				}
-				Bb.Blog.View.CommentView.edit_window.saveBtn.setText('修 改');
-				Bb.Blog.View.CommentView.edit_window.resetBtn.setVisible(true);
-				Bb.Blog.View.CommentView.edit_window.setTitle('修改评论');
-				Bb.Blog.View.CommentView.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
-				Bb.Blog.View.CommentView.edit_window.savetype=1;
-                switch (Bb.Blog.Config.OnlineEditor)
+				Bn.Blog.View.CommentView.edit_window.saveBtn.setText('修 改');
+				Bn.Blog.View.CommentView.edit_window.resetBtn.setVisible(true);
+				Bn.Blog.View.CommentView.edit_window.setTitle('修改评论');
+				Bn.Blog.View.CommentView.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
+				Bn.Blog.View.CommentView.edit_window.savetype=1;
+                switch (Bn.Blog.Config.OnlineEditor)
                 {
                     case 1:
                         if (CKEDITOR.instances.Comment) CKEDITOR.instances.Comment.setData(this.getSelectionModel().getSelected().data.Comment);
                         break
                     case 2:
-                        if (Bb.Blog.View.CommentView.EditWindow.KindEditor_Comment) Bb.Blog.View.CommentView.EditWindow.KindEditor_Comment.html(this.getSelectionModel().getSelected().data.Comment);
+                        if (Bn.Blog.View.CommentView.EditWindow.KindEditor_Comment) Bn.Blog.View.CommentView.EditWindow.KindEditor_Comment.html(this.getSelectionModel().getSelected().data.Comment);
                         break
                     case 3:
                         if (xhEditor_Comment)xhEditor_Comment.setSource(this.getSelectionModel().getSelected().data.Comment);
@@ -827,8 +827,8 @@ Bb.Blog.View={
                         if (ue_Comment)ue_Comment.setContent(this.getSelectionModel().getSelected().data.Comment);
                 }
 
-				Bb.Blog.View.CommentView.edit_window.show();
-				Bb.Blog.View.CommentView.edit_window.maximize();
+				Bn.Blog.View.CommentView.edit_window.show();
+				Bn.Blog.View.CommentView.edit_window.maximize();
 			},
 			/**
 			 * 删除评论
@@ -902,7 +902,7 @@ Bb.Blog.View={
 										Ext.Msg.alert('成功', '上传成功');
 										uploadWindow.hide();
 										uploadWindow.uploadForm.upload_file.setValue('');
-										Bb.Blog.View.Running.blogGrid.doSelectBlog();
+										Bn.Blog.View.Running.blogGrid.doSelectBlog();
 									},
 									failure : function(form, response) {
 										Ext.Msg.alert('错误', response.result.data);
@@ -919,7 +919,7 @@ Bb.Blog.View={
 						}
 					}]
 				}, config);
-			Bb.Blog.View.UploadWindow.superclass.constructor.call(this, config);
+			Bn.Blog.View.UploadWindow.superclass.constructor.call(this, config);
 		}
 	}),
 
@@ -934,7 +934,7 @@ Bb.Blog.View={
 				 */
 				filter:null,
 				region : 'center',
-				store : Bb.Blog.Store.blogStore,
+				store : Bn.Blog.Store.blogStore,
 				sm : this.sm,
 				frame : true,trackMouseOver : true,enableColumnMove : true,columnLines : true,
 				loadMask : true,stripeRows : true,headerAsText : false,
@@ -972,9 +972,9 @@ Bb.Blog.View={
 							},
 							items : [
                                 '用户','&nbsp;&nbsp;',{ref: '../bUser_ID',xtype: 'combo',
-                                     store:Bb.Blog.Store.userStoreForCombo,hiddenName : 'User_ID',
+                                     store:Bn.Blog.Store.userStoreForCombo,hiddenName : 'User_ID',
                                      emptyText: '请选择用户',itemSelector: 'div.search-item',
-                                     loadingText: '查询中...',width:280,pageSize:Bb.Blog.Config.PageSize,
+                                     loadingText: '查询中...',width:280,pageSize:Bn.Blog.Config.PageSize,
                                      displayField:'Username',valueField:'User_ID',
                                      mode: 'remote',editable:true,minChars: 1,autoSelect :true,typeAhead: false,
                                      forceSelection: true,triggerAction: 'all',resizable:true,selectOnFocus:true,
@@ -1050,32 +1050,32 @@ Bb.Blog.View={
 											{text:'下方',group:'mlayout',checked:true ,iconCls:'view-bottom',scope:this,handler:function(){this.onUpDown(2)}},
 											{text:'左侧',group:'mlayout',checked:false,iconCls:'view-left',scope:this,handler:function(){this.onUpDown(3)}},
 											{text:'右侧',group:'mlayout',checked:false,iconCls:'view-right',scope:this,handler:function(){this.onUpDown(4)}},
-											{text:'隐藏',group:'mlayout',checked:false,iconCls:'view-hide',scope:this,handler:function(){this.hideBlog();Bb.Blog.Config.View.IsShow=0;}},'-',
-											{text: '固定',ref:'mBind',checked: true,scope:this,checkHandler:function(item, checked){this.onBindGrid(item, checked);Bb.Blog.Cookie.set('View.IsFix',Bb.Blog.Config.View.IsFix);}}
+											{text:'隐藏',group:'mlayout',checked:false,iconCls:'view-hide',scope:this,handler:function(){this.hideBlog();Bn.Blog.Config.View.IsShow=0;}},'-',
+											{text: '固定',ref:'mBind',checked: true,scope:this,checkHandler:function(item, checked){this.onBindGrid(item, checked);Bn.Blog.Cookie.set('View.IsFix',Bn.Blog.Config.View.IsFix);}}
 										]}
 								},'-']}
 					)]
 				},
 				bbar: new Ext.PagingToolbar({
-					pageSize: Bb.Blog.Config.PageSize,
-					store: Bb.Blog.Store.blogStore,
+					pageSize: Bn.Blog.Config.PageSize,
+					store: Bn.Blog.Store.blogStore,
 					scope:this,autoShow:true,displayInfo: true,
 					displayMsg: '当前显示 {0} - {1}条记录/共 {2}条记录。',
 					emptyMsg: "无显示数据",
 					listeners:{
 						change:function(thisbar,pagedata){
-							if (Bb.Blog.Viewport){
-								if (Bb.Blog.Config.View.IsShow==1){
-									Bb.Blog.View.IsSelectView=1;
+							if (Bn.Blog.Viewport){
+								if (Bn.Blog.Config.View.IsShow==1){
+									Bn.Blog.View.IsSelectView=1;
 								}
 								this.ownerCt.hideBlog();
-								Bb.Blog.Config.View.IsShow=0;
+								Bn.Blog.Config.View.IsShow=0;
 							}
 						}
 					},
 					items: [
 						{xtype:'label', text: '每页显示'},
-						{xtype:'numberfield', value:Bb.Blog.Config.PageSize,minValue:1,width:35,
+						{xtype:'numberfield', value:Bn.Blog.Config.PageSize,minValue:1,width:35,
 							style:'text-align:center',allowBlank: false,
 							listeners:
 							{
@@ -1083,11 +1083,11 @@ Bb.Blog.View={
 									var num = parseInt(newValue);
 									if (isNaN(num) || !num || num<1)
 									{
-										num = Bb.Blog.Config.PageSize;
+										num = Bn.Blog.Config.PageSize;
 										Field.setValue(num);
 									}
 									this.ownerCt.pageSize= num;
-									Bb.Blog.Config.PageSize = num;
+									Bn.Blog.Config.PageSize = num;
 									this.ownerCt.ownerCt.doSelectBlog();
 								},
 								specialKey :function(field,e){
@@ -1095,10 +1095,10 @@ Bb.Blog.View={
 										var num = parseInt(field.getValue());
 										if (isNaN(num) || !num || num<1)
 										{
-											num = Bb.Blog.Config.PageSize;
+											num = Bn.Blog.Config.PageSize;
 										}
 										this.ownerCt.pageSize= num;
-										Bb.Blog.Config.PageSize = num;
+										Bn.Blog.Config.PageSize = num;
 										this.ownerCt.ownerCt.doSelectBlog();
 									}
 								}
@@ -1110,9 +1110,9 @@ Bb.Blog.View={
 			}, config);
 			//初始化显示博客列表
 			this.doSelectBlog();
-			Bb.Blog.View.Grid.superclass.constructor.call(this, config);
+			Bn.Blog.View.Grid.superclass.constructor.call(this, config);
 			//创建在Grid里显示的博客信息Tab页
-			Bb.Blog.View.Running.viewTabs=new Bb.Blog.View.BlogView.Tabs();
+			Bn.Blog.View.Running.viewTabs=new Bn.Blog.View.BlogView.Tabs();
 			this.addListener('rowdblclick', this.onRowDoubleClick);
 		},
 		/**
@@ -1130,21 +1130,21 @@ Bb.Blog.View={
 				rowselect: function(sm, rowIndex, record) {
 					if (sm.getCount() != 1){
 						this.grid.hideBlog();
-						Bb.Blog.Config.View.IsShow=0;
+						Bn.Blog.Config.View.IsShow=0;
 					}else{
-						if (Bb.Blog.View.IsSelectView==1){
-							Bb.Blog.View.IsSelectView=0;
+						if (Bn.Blog.View.IsSelectView==1){
+							Bn.Blog.View.IsSelectView=0;
 							this.grid.showBlog();
 						}
 					}
 				},
 				rowdeselect: function(sm, rowIndex, record) {
 					if (sm.getCount() != 1){
-						if (Bb.Blog.Config.View.IsShow==1){
-							Bb.Blog.View.IsSelectView=1;
+						if (Bn.Blog.Config.View.IsShow==1){
+							Bn.Blog.View.IsSelectView=1;
 						}
 						this.grid.hideBlog();
-						Bb.Blog.Config.View.IsShow=0;
+						Bn.Blog.Config.View.IsShow=0;
 					}
 				}
 			}
@@ -1153,13 +1153,13 @@ Bb.Blog.View={
 		 * 双击选行
 		 */
 		onRowDoubleClick:function(grid, rowIndex, e){
-			if (!Bb.Blog.Config.View.IsShow){
+			if (!Bn.Blog.Config.View.IsShow){
 				this.sm.selectRow(rowIndex);
 				this.showBlog();
 				this.tvpView.toggle(true);
 			}else{
 				this.hideBlog();
-				Bb.Blog.Config.View.IsShow=0;
+				Bn.Blog.Config.View.IsShow=0;
 				this.sm.deselectRow(rowIndex);
 				this.tvpView.toggle(false);
 			}
@@ -1169,17 +1169,17 @@ Bb.Blog.View={
 		 */
 		onBindGrid:function(item, checked){
 			if (checked){
-			   Bb.Blog.Config.View.IsFix=1;
+			   Bn.Blog.Config.View.IsFix=1;
 			}else{
-			   Bb.Blog.Config.View.IsFix=0;
+			   Bn.Blog.Config.View.IsFix=0;
 			}
 			if (this.getSelectionModel().getSelected()==null){
-				Bb.Blog.Config.View.IsShow=0;
+				Bn.Blog.Config.View.IsShow=0;
 				return ;
 			}
-			if (Bb.Blog.Config.View.IsShow==1){
+			if (Bn.Blog.Config.View.IsShow==1){
 			   this.hideBlog();
-			   Bb.Blog.Config.View.IsShow=0;
+			   Bn.Blog.Config.View.IsShow=0;
 			}
 			this.showBlog();
 		},
@@ -1204,16 +1204,16 @@ Bb.Blog.View={
                 var bBlog_Name = this.topToolbar.bBlog_Name.getValue();
                 this.filter       ={'User_ID':bUser_ID,'Blog_Name':bBlog_Name};
 			}
-			var condition = {'start':0,'limit':Bb.Blog.Config.PageSize};
+			var condition = {'start':0,'limit':Bn.Blog.Config.PageSize};
 			Ext.apply(condition,this.filter);
 			ExtServiceBlog.queryPageBlog(condition,function(provider, response) {
 				if (response.result&&response.result.data) {
 					var result           = new Array();
 					result['data']       =response.result.data;
 					result['totalCount'] =response.result.totalCount;
-					Bb.Blog.Store.blogStore.loadData(result);
+					Bn.Blog.Store.blogStore.loadData(result);
 				} else {
-					Bb.Blog.Store.blogStore.removeAll();
+					Bn.Blog.Store.blogStore.removeAll();
 					Ext.Msg.alert('提示', '无符合条件的博客！');
 				}
 			});
@@ -1224,29 +1224,29 @@ Bb.Blog.View={
 		 * 1:上方,2:下方,0:隐藏。
 		 */
 		onUpDown:function(viewDirection){
-			Bb.Blog.Config.View.Direction=viewDirection;
+			Bn.Blog.Config.View.Direction=viewDirection;
 			switch(viewDirection){
 				case 1:
-					this.ownerCt.north.add(Bb.Blog.View.Running.viewTabs);
+					this.ownerCt.north.add(Bn.Blog.View.Running.viewTabs);
 					break;
 				case 2:
-					this.ownerCt.south.add(Bb.Blog.View.Running.viewTabs);
+					this.ownerCt.south.add(Bn.Blog.View.Running.viewTabs);
 					break;
 				case 3:
-					this.ownerCt.west.add(Bb.Blog.View.Running.viewTabs);
+					this.ownerCt.west.add(Bn.Blog.View.Running.viewTabs);
 					break;
 				case 4:
-					this.ownerCt.east.add(Bb.Blog.View.Running.viewTabs);
+					this.ownerCt.east.add(Bn.Blog.View.Running.viewTabs);
 					break;
 			}
-			Bb.Blog.Cookie.set('View.Direction',Bb.Blog.Config.View.Direction);
+			Bn.Blog.Cookie.set('View.Direction',Bn.Blog.Config.View.Direction);
 			if (this.getSelectionModel().getSelected()!=null){
-				if ((Bb.Blog.Config.View.IsFix==0)&&(Bb.Blog.Config.View.IsShow==1)){
+				if ((Bn.Blog.Config.View.IsFix==0)&&(Bn.Blog.Config.View.IsShow==1)){
 					this.showBlog();
 				}
-				Bb.Blog.Config.View.IsFix=1;
-				Bb.Blog.View.Running.blogGrid.tvpView.menu.mBind.setChecked(true,true);
-				Bb.Blog.Config.View.IsShow=0;
+				Bn.Blog.Config.View.IsFix=1;
+				Bn.Blog.View.Running.blogGrid.tvpView.menu.mBind.setChecked(true,true);
+				Bn.Blog.Config.View.IsShow=0;
 				this.showBlog();
 			}
 		},
@@ -1256,52 +1256,52 @@ Bb.Blog.View={
 		showBlog : function(){
 			if (this.getSelectionModel().getSelected()==null){
 				Ext.Msg.alert('提示', '请先选择博客！');
-				Bb.Blog.Config.View.IsShow=0;
+				Bn.Blog.Config.View.IsShow=0;
 				this.tvpView.toggle(false);
 				return ;
 			}
-			if (Bb.Blog.Config.View.IsFix==0){
-				if (Bb.Blog.View.Running.view_window==null){
-					Bb.Blog.View.Running.view_window=new Bb.Blog.View.BlogView.Window();
+			if (Bn.Blog.Config.View.IsFix==0){
+				if (Bn.Blog.View.Running.view_window==null){
+					Bn.Blog.View.Running.view_window=new Bn.Blog.View.BlogView.Window();
 				}
-				if (Bb.Blog.View.Running.view_window.hidden){
-					Bb.Blog.View.Running.view_window.show();
-					Bb.Blog.View.Running.view_window.winTabs.hideTabStripItem(Bb.Blog.View.Running.view_window.winTabs.tabFix);
+				if (Bn.Blog.View.Running.view_window.hidden){
+					Bn.Blog.View.Running.view_window.show();
+					Bn.Blog.View.Running.view_window.winTabs.hideTabStripItem(Bn.Blog.View.Running.view_window.winTabs.tabFix);
 					this.updateViewBlog();
 					this.tvpView.toggle(true);
-					Bb.Blog.Config.View.IsShow=1;
+					Bn.Blog.Config.View.IsShow=1;
 				}else{
 					this.hideBlog();
-					Bb.Blog.Config.View.IsShow=0;
+					Bn.Blog.Config.View.IsShow=0;
 				}
 				return;
 			}
-			switch(Bb.Blog.Config.View.Direction){
+			switch(Bn.Blog.Config.View.Direction){
 				case 1:
-					if (!this.ownerCt.north.items.contains(Bb.Blog.View.Running.viewTabs)){
-						this.ownerCt.north.add(Bb.Blog.View.Running.viewTabs);
+					if (!this.ownerCt.north.items.contains(Bn.Blog.View.Running.viewTabs)){
+						this.ownerCt.north.add(Bn.Blog.View.Running.viewTabs);
 					}
 					break;
 				case 2:
-					if (!this.ownerCt.south.items.contains(Bb.Blog.View.Running.viewTabs)){
-						this.ownerCt.south.add(Bb.Blog.View.Running.viewTabs);
+					if (!this.ownerCt.south.items.contains(Bn.Blog.View.Running.viewTabs)){
+						this.ownerCt.south.add(Bn.Blog.View.Running.viewTabs);
 					}
 					break;
 				case 3:
-					if (!this.ownerCt.west.items.contains(Bb.Blog.View.Running.viewTabs)){
-						this.ownerCt.west.add(Bb.Blog.View.Running.viewTabs);
+					if (!this.ownerCt.west.items.contains(Bn.Blog.View.Running.viewTabs)){
+						this.ownerCt.west.add(Bn.Blog.View.Running.viewTabs);
 					}
 					break;
 				case 4:
-					if (!this.ownerCt.east.items.contains(Bb.Blog.View.Running.viewTabs)){
-						this.ownerCt.east.add(Bb.Blog.View.Running.viewTabs);
+					if (!this.ownerCt.east.items.contains(Bn.Blog.View.Running.viewTabs)){
+						this.ownerCt.east.add(Bn.Blog.View.Running.viewTabs);
 					}
 					break;
 			}
 			this.hideBlog();
-			if (Bb.Blog.Config.View.IsShow==0){
-				Bb.Blog.View.Running.viewTabs.enableCollapse();
-				switch(Bb.Blog.Config.View.Direction){
+			if (Bn.Blog.Config.View.IsShow==0){
+				Bn.Blog.View.Running.viewTabs.enableCollapse();
+				switch(Bn.Blog.Config.View.Direction){
 					case 1:
 						this.ownerCt.north.show();
 						break;
@@ -1317,9 +1317,9 @@ Bb.Blog.View={
 				}
 				this.updateViewBlog();
 				this.tvpView.toggle(true);
-				Bb.Blog.Config.View.IsShow=1;
+				Bn.Blog.Config.View.IsShow=1;
 			}else{
-				Bb.Blog.Config.View.IsShow=0;
+				Bn.Blog.Config.View.IsShow=0;
 			}
 			this.ownerCt.doLayout();
 		},
@@ -1331,8 +1331,8 @@ Bb.Blog.View={
 			this.ownerCt.south.hide();
 			this.ownerCt.west.hide();
 			this.ownerCt.east.hide();
-			if (Bb.Blog.View.Running.view_window!=null){
-				Bb.Blog.View.Running.view_window.hide();
+			if (Bn.Blog.View.Running.view_window!=null){
+				Bn.Blog.View.Running.view_window.hide();
 			}
 			this.tvpView.toggle(false);
 			this.ownerCt.doLayout();
@@ -1341,31 +1341,31 @@ Bb.Blog.View={
 		 * 更新当前博客显示信息
 		 */
 		updateViewBlog : function() {
-            Bb.Blog.View.Running.commentGrid.doSelectComment();
-			if (Bb.Blog.View.Running.view_window!=null){
-				Bb.Blog.View.Running.view_window.winTabs.tabBlogDetail.update(this.getSelectionModel().getSelected().data);
+            Bn.Blog.View.Running.commentGrid.doSelectComment();
+			if (Bn.Blog.View.Running.view_window!=null){
+				Bn.Blog.View.Running.view_window.winTabs.tabBlogDetail.update(this.getSelectionModel().getSelected().data);
 			}
-			Bb.Blog.View.Running.viewTabs.tabBlogDetail.update(this.getSelectionModel().getSelected().data);
+			Bn.Blog.View.Running.viewTabs.tabBlogDetail.update(this.getSelectionModel().getSelected().data);
 		},
 		/**
 		 * 新建博客
 		 */
 		addBlog : function() {
-			if (Bb.Blog.View.Running.edit_window==null){
-				Bb.Blog.View.Running.edit_window=new Bb.Blog.View.EditWindow();
+			if (Bn.Blog.View.Running.edit_window==null){
+				Bn.Blog.View.Running.edit_window=new Bn.Blog.View.EditWindow();
 			}
-			Bb.Blog.View.Running.edit_window.resetBtn.setVisible(false);
-			Bb.Blog.View.Running.edit_window.saveBtn.setText('保 存');
-			Bb.Blog.View.Running.edit_window.setTitle('添加博客');
-			Bb.Blog.View.Running.edit_window.savetype=0;
-			Bb.Blog.View.Running.edit_window.ID.setValue("");
-            switch (Bb.Blog.Config.OnlineEditor)
+			Bn.Blog.View.Running.edit_window.resetBtn.setVisible(false);
+			Bn.Blog.View.Running.edit_window.saveBtn.setText('保 存');
+			Bn.Blog.View.Running.edit_window.setTitle('添加博客');
+			Bn.Blog.View.Running.edit_window.savetype=0;
+			Bn.Blog.View.Running.edit_window.ID.setValue("");
+            switch (Bn.Blog.Config.OnlineEditor)
             {
                 case 1:
                     if (CKEDITOR.instances.Blog_Content) CKEDITOR.instances.Blog_Content.setData("");
                     break
                 case 2:
-                    if (Bb.Blog.View.EditWindow.KindEditor_Blog_Content) Bb.Blog.View.EditWindow.KindEditor_Blog_Content.html("");
+                    if (Bn.Blog.View.EditWindow.KindEditor_Blog_Content) Bn.Blog.View.EditWindow.KindEditor_Blog_Content.html("");
                     break
                 case 3:
                     break
@@ -1373,28 +1373,28 @@ Bb.Blog.View={
                     if (ue_Blog_Content)ue_Blog_Content.setContent("");
             }
 
-			Bb.Blog.View.Running.edit_window.show();
-			Bb.Blog.View.Running.edit_window.maximize();
+			Bn.Blog.View.Running.edit_window.show();
+			Bn.Blog.View.Running.edit_window.maximize();
 		},
 		/**
 		 * 编辑博客时先获得选中的博客信息
 		 */
 		updateBlog : function() {
-			if (Bb.Blog.View.Running.edit_window==null){
-				Bb.Blog.View.Running.edit_window=new Bb.Blog.View.EditWindow();
+			if (Bn.Blog.View.Running.edit_window==null){
+				Bn.Blog.View.Running.edit_window=new Bn.Blog.View.EditWindow();
 			}
-			Bb.Blog.View.Running.edit_window.saveBtn.setText('修 改');
-			Bb.Blog.View.Running.edit_window.resetBtn.setVisible(true);
-			Bb.Blog.View.Running.edit_window.setTitle('修改博客');
-			Bb.Blog.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
-			Bb.Blog.View.Running.edit_window.savetype=1;
-            switch (Bb.Blog.Config.OnlineEditor)
+			Bn.Blog.View.Running.edit_window.saveBtn.setText('修 改');
+			Bn.Blog.View.Running.edit_window.resetBtn.setVisible(true);
+			Bn.Blog.View.Running.edit_window.setTitle('修改博客');
+			Bn.Blog.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
+			Bn.Blog.View.Running.edit_window.savetype=1;
+            switch (Bn.Blog.Config.OnlineEditor)
             {
                 case 1:
                     if (CKEDITOR.instances.Blog_Content) CKEDITOR.instances.Blog_Content.setData(this.getSelectionModel().getSelected().data.Blog_Content);
                     break
                 case 2:
-                    if (Bb.Blog.View.EditWindow.KindEditor_Blog_Content) Bb.Blog.View.EditWindow.KindEditor_Blog_Content.html(this.getSelectionModel().getSelected().data.Blog_Content);
+                    if (Bn.Blog.View.EditWindow.KindEditor_Blog_Content) Bn.Blog.View.EditWindow.KindEditor_Blog_Content.html(this.getSelectionModel().getSelected().data.Blog_Content);
                     break
                 case 3:
                     if (xhEditor_Blog_Content)xhEditor_Blog_Content.setSource(this.getSelectionModel().getSelected().data.Blog_Content);
@@ -1403,8 +1403,8 @@ Bb.Blog.View={
                     if (ue_Blog_Content)ue_Blog_Content.setContent(this.getSelectionModel().getSelected().data.Blog_Content);
             }
 
-			Bb.Blog.View.Running.edit_window.show();
-			Bb.Blog.View.Running.edit_window.maximize();
+			Bn.Blog.View.Running.edit_window.show();
+			Bn.Blog.View.Running.edit_window.maximize();
 		},
 		/**
 		 * 删除博客
@@ -1441,10 +1441,10 @@ Bb.Blog.View={
 		 * 导入博客
 		 */
 		importBlog : function() {
-			if (Bb.Blog.View.current_uploadWindow==null){
-				Bb.Blog.View.current_uploadWindow=new Bb.Blog.View.UploadWindow();
+			if (Bn.Blog.View.current_uploadWindow==null){
+				Bn.Blog.View.current_uploadWindow=new Bn.Blog.View.UploadWindow();
 			}
-			Bb.Blog.View.current_uploadWindow.show();
+			Bn.Blog.View.current_uploadWindow.show();
 		}
 	}),
 	/**
@@ -1452,24 +1452,24 @@ Bb.Blog.View={
 	 */
 	Panel:Ext.extend(Ext.form.FormPanel,{
 		constructor : function(config) {
-			Bb.Blog.View.Running.blogGrid=new Bb.Blog.View.Grid();
-			if (Bb.Blog.Config.View.IsFix==0){
-				Bb.Blog.View.Running.blogGrid.tvpView.menu.mBind.setChecked(false,true);
+			Bn.Blog.View.Running.blogGrid=new Bn.Blog.View.Grid();
+			if (Bn.Blog.Config.View.IsFix==0){
+				Bn.Blog.View.Running.blogGrid.tvpView.menu.mBind.setChecked(false,true);
 			}
 			config = Ext.apply({
 				region : 'center',layout : 'fit', frame:true,
 				items: {
 					layout:'border',
 					items:[
-						Bb.Blog.View.Running.blogGrid,
+						Bn.Blog.View.Running.blogGrid,
 						{region:'north',ref:'north',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true},
-						{region:'south',ref:'south',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true,items:[Bb.Blog.View.Running.viewTabs]},
+						{region:'south',ref:'south',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true,items:[Bn.Blog.View.Running.viewTabs]},
 						{region:'west',ref:'west',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true},
 						{region:'east',ref:'east',layout:'fit',collapseMode : 'mini',border:false,split: true,hidden:true}
 					]
 				}
 			}, config);
-			Bb.Blog.View.Panel.superclass.constructor.call(this, config);
+			Bn.Blog.View.Panel.superclass.constructor.call(this, config);
 		}
 	}),
 	/**
@@ -1503,23 +1503,23 @@ Bb.Blog.View={
  */
 Ext.onReady(function(){
 	Ext.QuickTips.init();
-	Ext.state.Manager.setProvider(Bb.Blog.Cookie);
+	Ext.state.Manager.setProvider(Bn.Blog.Cookie);
 	Ext.Direct.addProvider(Ext.app.REMOTING_API);
-	Bb.Blog.Init();
+	Bn.Blog.Init();
 	/**
 	 * 博客数据模型获取数据Direct调用
 	 */
-	Bb.Blog.Store.blogStore.proxy=new Ext.data.DirectProxy({
+	Bn.Blog.Store.blogStore.proxy=new Ext.data.DirectProxy({
 		api: {read:ExtServiceBlog.queryPageBlog}
 	});
 	/**
 	 * 博客页面布局
 	 */
-	Bb.Blog.Viewport = new Ext.Viewport({
+	Bn.Blog.Viewport = new Ext.Viewport({
 		layout : 'border',
-		items : [new Bb.Blog.View.Panel()]
+		items : [new Bn.Blog.View.Panel()]
 	});
-	Bb.Blog.Viewport.doLayout();
+	Bn.Blog.Viewport.doLayout();
 	setTimeout(function(){
 		Ext.get('loading').remove();
 		Ext.get('loading-mask').fadeOut({

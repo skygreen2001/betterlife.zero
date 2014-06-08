@@ -1,11 +1,11 @@
-Ext.namespace("Betterlife.Admin.Menu");
+Ext.namespace("BetterlifeNet.Admin.Menu");
 
-Bb = Betterlife.Admin;
+Bn = BetterlifeNet.Admin;
 
 /**
  * 菜单
  */
-Bb.Menu={
+Bn.Menu={
 	/**
 	 * 全局配置
 	 */
@@ -20,7 +20,7 @@ Bb.Menu={
 /**
 * Model:菜单数据模型   
 */
-Bb.Menu.Store = {
+Bn.Menu.Store = {
     /**
     * 菜单分组数据模型
     */
@@ -70,7 +70,7 @@ Bb.Menu.Store = {
 		     */			
 		    'beforeload' : function(store, options) {
 			    if (Ext.isReady) {  
-				    Ext.apply(options.params, Bb.Menu.View.GetForm.getForm().getValues());
+				    Ext.apply(options.params, Bn.Menu.View.GetForm.getForm().getValues());
 			    }
 		    }
 	    }    
@@ -80,7 +80,7 @@ Bb.Menu.Store = {
 /**
 * View:菜单显示组件   
 */
-Bb.Menu.View={ 
+Bn.Menu.View={ 
     /**
     * 当前选择的菜单分组编号
     */
@@ -95,7 +95,7 @@ Bb.Menu.View={
     GroupGrid:Ext.extend(Ext.grid.EditorGridPanel, {   
 	    constructor : function(config) {
 	        config = Ext.apply({	
-	            store: Bb.Menu.Store.groupStore,      
+	            store: Bn.Menu.Store.groupStore,      
 	            height:180,                 
 	            layout: 'fit',
 	            autoScroll:true,  
@@ -131,13 +131,13 @@ Bb.Menu.View={
                         Ext.Msg.confirm('信息','确定要删除？',function(btn) {
                             if(btn == 'yes') {     
                                 var cell = this.getSelectionModel().getSelectedCell();   
-                                var record = Bb.Menu.Store.groupStore.getAt(cell[0]);
-                                Bb.Menu.Store.groupStore.remove(record);
+                                var record = Bn.Menu.Store.groupStore.getAt(cell[0]);
+                                Bn.Menu.Store.groupStore.remove(record);
                             }
                         },this);
                     }
                   }, '-'])}, config);
-	        Bb.Menu.View.GroupGrid.superclass.constructor.call(this, config);   
+	        Bn.Menu.View.GroupGrid.superclass.constructor.call(this, config);   
 	    },	
 	    /**
 	     * 编辑器
@@ -175,10 +175,10 @@ Bb.Menu.View={
           scope:this,
           listeners: {
               rowselect: function(sm, row, rec) {    
-                  //Bb.Menu.Store.load();      
+                  //Bn.Menu.Store.load();      
                   if (rec.data.id){    
-                      Bb.Menu.View.current_menuGroup_id=rec.data.id;
-                      Bb.Menu.View.SaveForm.cmenuGroup_id.setValue(rec.data.id);
+                      Bn.Menu.View.current_menuGroup_id=rec.data.id;
+                      Bn.Menu.View.SaveForm.cmenuGroup_id.setValue(rec.data.id);
                       this.grid.getMenusByGroupId(rec.data.id);
                   }                      
               },
@@ -195,7 +195,7 @@ Bb.Menu.View={
           ServiceMenu.getMenusByGroupId($menugroup_id,function(provider, response){    
               var result= new Array();
               result['data']=response.result.data;                                       
-              Bb.Menu.Store.menuStore.loadData(result);          
+              Bn.Menu.Store.menuStore.loadData(result);          
           });   
         }                         
     }),  
@@ -223,10 +223,10 @@ Bb.Menu.View={
                     type:'fit'
                 },
                 items:[
-                    new Bb.Menu.View.GroupGrid({id:'groupGrid'})
+                    new Bn.Menu.View.GroupGrid({id:'groupGrid'})
                 ]
             });
-            Bb.Menu.View.GroupPanel.superclass.constructor.call(this, config);    
+            Bn.Menu.View.GroupPanel.superclass.constructor.call(this, config);    
         } 
     }),       
             
@@ -277,7 +277,7 @@ Bb.Menu.View={
                     xtype: 'hidden',
                     id: 'limit',
                     name: 'limit',
-                    value: Bb.Menu.Config.PageSize
+                    value: Bn.Menu.Config.PageSize
                 },{                    
                     layout:'form',
                     anchor:"80%",
@@ -292,15 +292,15 @@ Bb.Menu.View={
                         listeners:{
                             render:function(){
                                 Ext.fly(this.el).on('click',function(){
-                                    //Bb.Menu.Store.load({
+                                    //Bn.Menu.Store.load({
                                     //  params:params   
                                     //});                    
-                                    Bb.Menu.View.GetForm.getForm().submit({
+                                    Bn.Menu.View.GetForm.getForm().submit({
                                         success:function(form, action) {//表单提交成功后,调用的函数.参数分为两个,一个是提交的表单对象,另一个是JSP返回的参数值对象
                                             var result= new Array();
                                             result['data']=action.result.data;
                                             result['totalCount']=action.result.totalCount;   
-                                            Bb.Menu.Store.menuStore.loadData(result);
+                                            Bn.Menu.Store.menuStore.loadData(result);
                                         },
                                         failure: function(form, action) {
                                             Ext.Msg.alert('提示', '查询失败！');
@@ -320,7 +320,7 @@ Bb.Menu.View={
                             text : '重置',
                             width : 80,
                             handler : function() {
-                                Bb.Menu.View.GetForm.getForm().reset();
+                                Bn.Menu.View.GetForm.getForm().reset();
                             }     
                     }]
                 }         
@@ -336,7 +336,7 @@ Bb.Menu.View={
             config = Ext.apply({
                 region: 'center',// a center region is ALWAYS required for border layout    
                 contentEl: 'center',    
-                store: Bb.Menu.Store.menuStore,      
+                store: Bn.Menu.Store.menuStore,      
                 height:460,                 
                 layout: 'fit',  
                 autoScroll:true,
@@ -381,7 +381,7 @@ Bb.Menu.View={
                         anchor : '100%'
                     },        
                     items : [
-                        Bb.Menu.View.GetForm,
+                        Bn.Menu.View.GetForm,
                         new Ext.Toolbar({  
                             height : 27,    
                             items : [{
@@ -436,8 +436,8 @@ Bb.Menu.View={
                                 }*/]
                 })]},
                 bbar: new Ext.PagingToolbar({
-                    pageSize: Bb.Menu.Config.PageSize,
-                    store: Bb.Menu.Store.menuStore,
+                    pageSize: Bn.Menu.Config.PageSize,
+                    store: Bn.Menu.Store.menuStore,
                     autoShow:true,
                     displayInfo: true,
                     displayMsg: '当前显示 {0} - {1}条记录/共 {2}条记录。',
@@ -447,9 +447,9 @@ Bb.Menu.View={
         
             //菜单分组初始化
             ServiceMenuGroup.allMenuGroup(function(provider, response){           
-                Bb.Menu.Store.groupStore.loadData(response.result.data);                                   
+                Bn.Menu.Store.groupStore.loadData(response.result.data);                                   
             });             
-            Bb.Menu.View.Grid.superclass.constructor.call(this, config);   
+            Bn.Menu.View.Grid.superclass.constructor.call(this, config);   
         },  
         /**
          * 行选择器
@@ -486,10 +486,10 @@ Bb.Menu.View={
          * 新增
          */
         onAdd : function(btn, ev) {  
-           if (!Bb.Menu.View.current_savewindow){ 
-               Bb.Menu.View.current_savewindow=new Bb.Menu.View.SaveWindow();
+           if (!Bn.Menu.View.current_savewindow){ 
+               Bn.Menu.View.current_savewindow=new Bn.Menu.View.SaveWindow();
            }              
-           Bb.Menu.View.current_savewindow.show();   
+           Bn.Menu.View.current_savewindow.show();   
         }
     }),
     
@@ -522,7 +522,7 @@ Bb.Menu.View={
             hideTrigger : false,
             mode : 'local',
             typeAhead : true,
-            store : Bb.Menu.Store.groupStore, 
+            store : Bn.Menu.Store.groupStore, 
             emptyText : '请选择菜单分组', 
             valueField : 'id',// 值
             displayField : 'name',// 显示文本
@@ -536,7 +536,7 @@ Bb.Menu.View={
                     this.collapse();
                     this.fireEvent('select', this, record, index);
                 }  
-                Bb.Menu.View.current_menuGroup_id=record.data.id;                                                   
+                Bn.Menu.View.current_menuGroup_id=record.data.id;                                                   
             },
         },{
             fieldLabel : '网址(<font color=red>*</font>)',
@@ -582,18 +582,18 @@ Bb.Menu.View={
                 layout : 'fit',
                 plain : true,
                 buttonAlign : 'center',            
-                items : [Bb.Menu.View.SaveForm],
+                items : [Bn.Menu.View.SaveForm],
                 buttons : [{
                     text : "保 存",
                     scope:this,
                     handler : function() {
                         saveWindow=this;
-                        Bb.Menu.View.SaveForm.getForm().submit({                             
+                        Bn.Menu.View.SaveForm.getForm().submit({                             
                             success : function(form, action) {// 表单提交成功后,调用的函数.参数分为两个,一个是提交的表单对象,另一个是PHP返回的参数值对象
                                 Ext.MessageBox.alert("提示","保存成功！");
-                                Ext.getCmp('groupGrid').getMenusByGroupId(Bb.Menu.View.current_menuGroup_id);  
+                                Ext.getCmp('groupGrid').getMenusByGroupId(Bn.Menu.View.current_menuGroup_id);  
                                 saveWindow.hide();
-                                Bb.Menu.View.SaveForm.getForm().reset();  
+                                Bn.Menu.View.SaveForm.getForm().reset();  
                             },
                             failure : function(form, action) {
                                 Ext.Msg.alert('提示', '失败');
@@ -608,7 +608,7 @@ Bb.Menu.View={
                     }
                 }]                     
             }, config);  
-            Bb.Menu.View.SaveWindow.superclass.constructor.call(this, config);     
+            Bn.Menu.View.SaveWindow.superclass.constructor.call(this, config);     
         }
     })
 }      
@@ -620,25 +620,25 @@ Ext.onReady(function(){
     Ext.QuickTips.init();
     Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
     Ext.Direct.addProvider(Ext.app.REMOTING_API); 
-    Bb.Menu.Store.menuStore.proxy=new Ext.data.DirectProxy({ 
+    Bn.Menu.Store.menuStore.proxy=new Ext.data.DirectProxy({ 
         api: {
            read:ServiceMenu.queryPageMenu
         }
     });   
-    Bb.Menu.View.SaveForm.api.submit=ServiceMenu.save;   
-    Bb.Menu.View.GetForm.api.submit=ServiceMenu.queryPageMenuForm;  
+    Bn.Menu.View.SaveForm.api.submit=ServiceMenu.save;   
+    Bn.Menu.View.GetForm.api.submit=ServiceMenu.queryPageMenuForm;  
     
   
     
-    Bb.Menu.Viewport = new Ext.Viewport({
+    Bn.Menu.Viewport = new Ext.Viewport({
         layout: 'border',   
         items: [
-          new Bb.Menu.View.GroupPanel(),   
-          new Bb.Menu.View.Grid()
+          new Bn.Menu.View.GroupPanel(),   
+          new Bn.Menu.View.Grid()
         ]
     });    
     
-    Bb.Menu.Viewport.doLayout(); 
+    Bn.Menu.Viewport.doLayout(); 
     
     setTimeout(function(){
         Ext.get('loading').remove();

@@ -1,10 +1,10 @@
 Ext.ns("Betterlife.Admin.Library");
 
-Bb = Betterlife.Admin;
+Bn = BetterlifeNet.Admin;
 /**
  * 资源库
  */
-Bb.Library = {
+Bn.Library = {
 	/**
 	 * 全局配置
 	 */
@@ -23,7 +23,7 @@ Bb.Library = {
 /**
  * Model:资源库数据模型 
  */
-Bb.Library.Store = {
+Bn.Library.Store = {
 	// Typical Store collecting the Proxy, Reader and Writer together.
 	libraryStore : new Ext.data.Store({
 		id : 'resourceLibrary',
@@ -35,24 +35,24 @@ Bb.Library.Store = {
 			listeners : {
 				// /Listen to all DataProxy beforewrite events
 				'beforewrite' : function(proxy, action) {
-					// Bb.Library.App.setAlert(Bb.Library.App.STATUS_NOTICE, "在
+					// Bn.Library.App.setAlert(Bn.Library.App.STATUS_NOTICE, "在
 					// " + action + "之前");
 				},
 				// / all write events
 				'write' : function(proxy, action, result, res, rs) {
-					Bb.Library.App.setAlert(true, action + ':' + res.message);
+					Bn.Library.App.setAlert(true, action + ':' + res.message);
 				},
 				// / all exception events
 				"exception" : function(proxy, type, action, options, res) {
 					// this.rejectChanges();
-					Bb.Library.App.setAlert(false, "发生异常，执行： " + action);
+					Bn.Library.App.setAlert(false, "发生异常，执行： " + action);
 				}
 			}
 		}),
 		autoLoad : {
 			params : {
 				start : 0,
-				limit : Bb.Library.Config.PageSize
+				limit : Bn.Library.Config.PageSize
 			}
 		},
 		autoSave : false,
@@ -98,7 +98,7 @@ Bb.Library.Store = {
 			 */			
 			'beforeload' : function(store, options) {
 				if (Ext.isReady) {
-					Ext.apply(options.params, Bb.Library.View.Form.getForm().getValues());
+					Ext.apply(options.params, Bn.Library.View.Form.getForm().getValues());
 				}
 			}
 		}
@@ -108,13 +108,13 @@ Bb.Library.Store = {
 /**
 * View:资源库显示组件   
 */
-Bb.Library.View={  
+Bn.Library.View={  
 	/**
 	 * 创建一个典型的具备RowEditor Plugin的 GridPanel 类
 	 */
 	Grid:Ext.extend(Ext.grid.GridPanel, {
 		constructor : function(config) {
-			Bb.Library.Store.libraryStore.setDefaultSort('id', 'desc');
+			Bn.Library.Store.libraryStore.setDefaultSort('id', 'desc');
 			/**
 			 * 解决了CheckboxSelectionModel和RowEditor的冲突问题
 			 * 
@@ -133,7 +133,7 @@ Bb.Library.View={
 				title : '资源库管理',
 				width : 800,
 				height : 400,
-				store : Bb.Library.Store.libraryStore,
+				store : Bn.Library.Store.libraryStore,
 				plugins : [this.editor],
 				defaults : {
 					autoScroll : true
@@ -239,8 +239,8 @@ Bb.Library.View={
 						xtype : 'tbseparator'
 					}*/],
 				bbar : new Ext.PagingToolbar({
-					pageSize : Bb.Library.Config.PageSize,
-					store : Bb.Library.Store.libraryStore,
+					pageSize : Bn.Library.Config.PageSize,
+					store : Bn.Library.Store.libraryStore,
 					autoShow : true,
 					prependButtons : true,
 					displayInfo : true,
@@ -251,7 +251,7 @@ Bb.Library.View={
 					forceFit : true
 				}
 			}, config);
-			Bb.Library.View.Grid.superclass.constructor.call(this, config);
+			Bn.Library.View.Grid.superclass.constructor.call(this, config);
 		},
 		/**
 		 * 自动行号
@@ -434,7 +434,7 @@ Bb.Library.View={
 					text : '查询',
 					width : 80,
 					handler : function() {
-						Bb.Library.View.Form.onSubmitQuery();
+						Bn.Library.View.Form.onSubmitQuery();
 					}
 				}]
 			}, {
@@ -446,7 +446,7 @@ Bb.Library.View={
 					text : '重置',
 					width : 80,
 					handler : function() {
-						Bb.Library.View.Form.getForm().reset();
+						Bn.Library.View.Form.getForm().reset();
 					}
 				}]
 			}, {
@@ -459,7 +459,7 @@ Bb.Library.View={
 		keys : [{
 			key : Ext.EventObject.ENTER,
 			fn : function() {
-				Bb.Library.View.Form.onSubmitQuery();
+				Bn.Library.View.Form.onSubmitQuery();
 			},
 			scope : this
 		}],
@@ -467,11 +467,11 @@ Bb.Library.View={
 		 * 根据条件查询资料库
 		 */
 		onSubmitQuery : function() {
-			Bb.Library.Config.params = Bb.Library.View.Form.getForm().getValues();
-			Bb.Library.Config.params.start = 0;
-			Bb.Library.Config.params.limit = Bb.Library.Config.PageSize;
-			Bb.Library.Store.libraryStore.load({
-				params : Bb.Library.Config.params
+			Bn.Library.Config.params = Bn.Library.View.Form.getForm().getValues();
+			Bn.Library.Config.params.start = 0;
+			Bn.Library.Config.params.limit = Bn.Library.Config.PageSize;
+			Bn.Library.Store.libraryStore.load({
+				params : Bn.Library.Config.params
 			})
 		}
 	})
@@ -484,14 +484,14 @@ Ext.onReady(function() {
 	Ext.QuickTips.init();
 	Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
 
-	Bb.Library.Viewport = new Ext.Viewport({
+	Bn.Library.Viewport = new Ext.Viewport({
 		layout : 'border',
-		items : [Bb.Library.View.Form,
-			new Bb.Library.View.Grid()
+		items : [Bn.Library.View.Form,
+			new Bn.Library.View.Grid()
 		]
 	});
 
-	Bb.Library.Viewport.doLayout();
+	Bn.Library.Viewport.doLayout();
 
 	setTimeout(function() {
 		Ext.get('loading').remove();

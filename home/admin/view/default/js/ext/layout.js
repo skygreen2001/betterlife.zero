@@ -1,9 +1,9 @@
-Ext.namespace("Betterlife.Admin");
-Bb = Betterlife.Admin;
+Ext.namespace("BetterlifeNet.Admin");
+Bn = BetterlifeNet.Admin;
 /**
  * 页面布局格局
  */
-Bb.Layout = {
+Bn.Layout = {
     /**
      * 布局：页面头部
      */
@@ -23,7 +23,7 @@ Bb.Layout = {
                                     {text:'导入',handler:function(){}},
                                     {text:'导出',handler:function(){}},*/
                                     {text:'关闭所有',handler:function(){
-                                        Bb.Viewport.center.tabCloseMenu.onCloseAll();
+                                        Bn.Viewport.center.tabCloseMenu.onCloseAll();
                                     }}, '-',
                                     {text: '退出',iconCls : 'icon-quit',ref:'exit',handler:function(){
                                         window.location.href="index.php?go=admin.index.logout";
@@ -41,23 +41,23 @@ Bb.Layout = {
                                 xtype:'menu',items: [
                                     '-',
                                     {text:'工具栏',checked:true,ref:'toolbar',checkHandler:function(){
-                                        if (Bb.Viewport.head.view.menu.toolbar.checked){
-                                            Bb.Viewport.head.topToolbar.toolbar.show();
-                                            Bb.Viewport.head.topToolbar.setHeight(27*3);
-                                            Bb.Viewport.head.setHeight(27*3);
+                                        if (Bn.Viewport.head.view.menu.toolbar.checked){
+                                            Bn.Viewport.head.topToolbar.toolbar.show();
+                                            Bn.Viewport.head.topToolbar.setHeight(27*3);
+                                            Bn.Viewport.head.setHeight(27*3);
                                         }else{
-                                            Bb.Viewport.head.topToolbar.toolbar.hide();
-                                            Bb.Viewport.head.topToolbar.setHeight(27);
-                                            Bb.Viewport.head.setHeight(27);
+                                            Bn.Viewport.head.topToolbar.toolbar.hide();
+                                            Bn.Viewport.head.topToolbar.setHeight(27);
+                                            Bn.Viewport.head.setHeight(27);
                                         }
-                                        Bb.Viewport.head.syncHeight();
-                                        Bb.Viewport.doLayout();
+                                        Bn.Viewport.head.syncHeight();
+                                        Bn.Viewport.doLayout();
                                     }},
                                     {text:'导航栏',checked:true,ref:'nav',checkHandler:function(){
-                                        if (Bb.Viewport.head.view.menu.nav.checked){
-                                            Bb.Viewport.west.expand();
+                                        if (Bn.Viewport.head.view.menu.nav.checked){
+                                            Bn.Viewport.west.expand();
                                         }else{
-                                            Bb.Viewport.west.collapse();
+                                            Bn.Viewport.west.collapse();
                                         }
                                     }},
                                     {text:'在线编辑器',ref:'onlineditor',menu:{
@@ -65,27 +65,27 @@ Bb.Layout = {
                                             text: '默认【UEditor】',
                                             checked: true,value:"4",
                                             group: 'onlineditor',
-                                            checkHandler: function(item, checked){Bb.Layout.Function.onOnlineditorCheck(item, checked);}
+                                            checkHandler: function(item, checked){Bn.Layout.Function.onOnlineditorCheck(item, checked);}
                                         },{
                                             text: 'ckEditor',
                                             checked: true,value:"1",
                                             group: 'onlineditor',
-                                            checkHandler: function(item, checked){Bb.Layout.Function.onOnlineditorCheck(item, checked);}
+                                            checkHandler: function(item, checked){Bn.Layout.Function.onOnlineditorCheck(item, checked);}
                                         },{
                                             text: 'KindEditor',
                                             checked: false,value:"2",
                                             group: 'onlineditor',
-                                            checkHandler: function(item, checked){Bb.Layout.Function.onOnlineditorCheck(item, checked);}
+                                            checkHandler: function(item, checked){Bn.Layout.Function.onOnlineditorCheck(item, checked);}
                                         }, {
                                             text: 'xHeditor',
                                             checked: false,value:"3",
                                             group: 'onlineditor',
-                                            checkHandler: function(item, checked){Bb.Layout.Function.onOnlineditorCheck(item, checked);}
+                                            checkHandler: function(item, checked){Bn.Layout.Function.onOnlineditorCheck(item, checked);}
                                         }]
                                     }},
                                     '-',
                                     {text: '全屏  [F11]',checked:false,ref:'full',checkHandler:function(){
-                                        Bb.Layout.Function.FullScreen();
+                                        Bn.Layout.Function.FullScreen();
                                     }}
                                 ]
                             }
@@ -93,10 +93,10 @@ Bb.Layout = {
                             menu: {
                                 xtype:'menu',items: [
                                     {text:'添加',ref:'addBlog',handler:function(){
-                                        Bb.Navigation.AddTabbyUrl(Bb.Layout.CenterPanel,"博客","index.php?go=admin.betterlife.blog","blog");
+                                        Bn.Navigation.AddTabbyUrl(Bn.Layout.CenterPanel,"博客","index.php?go=admin.betterlife.blog","blog");
                                     }},
                                     {text:'管理',ref:'blogs',handler:function(){
-                                        Bb.Navigation.AddTabbyUrl(Bb.Layout.CenterPanel,"博客","index.php?go=admin.betterlife.blog","blog");
+                                        Bn.Navigation.AddTabbyUrl(Bn.Layout.CenterPanel,"博客","index.php?go=admin.betterlife.blog","blog");
                                     }}
                                 ]
                             }
@@ -112,7 +112,7 @@ Bb.Layout = {
                         },'-',{text: '退出', iconCls : 'icon-quit',ref:'../../exit',handler:function(){
                             window.location.href="index.php?go=admin.index.logout";
                         }},new Ext.Toolbar.Fill(),'-',{text: "",ref:'../../operator',handler:function(){
-                            Bb.Layout.Function.OpenWindow("index.php?go=admin.view.admin&admin_id="+Bb.Config.Admin_id);
+                            Bn.Layout.Function.OpenWindow("index.php?go=admin.view.admin&admin_id="+Bn.Config.Admin_id);
                         }}]
                 }),
                 new Ext.Toolbar({
@@ -120,10 +120,10 @@ Bb.Layout = {
                     items : [
                         {xtype: 'buttongroup',title: '博客管理',columns: 2,defaults: {scale: 'small'},
                          items: [{text: '添加',iconCls: 'page',ref:"../addBlog",handler:function(){
-                                Bb.Navigation.AddTabbyUrl(Bb.Layout.CenterPanel,"博客","index.php?go=admin.betterlife.blog","blog");
+                                Bn.Navigation.AddTabbyUrl(Bn.Layout.CenterPanel,"博客","index.php?go=admin.betterlife.blog","blog");
                             }},
                             {text: '管理',iconCls: 'page',ref:"../blogs",handler:function(){
-                                Bb.Navigation.AddTabbyUrl(Bb.Layout.CenterPanel,"博客","index.php?go=admin.betterlife.blog","blog");
+                                Bn.Navigation.AddTabbyUrl(Bn.Layout.CenterPanel,"博客","index.php?go=admin.betterlife.blog","blog");
                             }}
                          ]}]
                 })
@@ -200,7 +200,7 @@ Bb.Layout = {
             tabchange: function(tabPanel, tab){
                 if (tab){
                     //tabs切换时修改浏览器hash
-                    Ext.History.add(tabPanel.id + Bb.Config.TokenDelimiter + tab.id);
+                    Ext.History.add(tabPanel.id + Bn.Config.TokenDelimiter + tab.id);
                 }
             }
         },
@@ -241,42 +241,42 @@ Bb.Layout = {
      * Layout初始化
      */
     Init : function() {
-        Bb.Viewport.west.add(Bb.Layout.LeftMenuGroups);
-        Bb.Viewport.west.doLayout();
-        if (Bb.Viewport.layout.north){
+        Bn.Viewport.west.add(Bn.Layout.LeftMenuGroups);
+        Bn.Viewport.west.doLayout();
+        if (Bn.Viewport.layout.north){
             //顶部导航区不可拖动，否则顶部下方会有空白
-            Bb.Viewport.layout.north.split.el.dom.style.cursor="inherit";
-            Bb.Viewport.layout.north.split.dd.lock();
+            Bn.Viewport.layout.north.split.el.dom.style.cursor="inherit";
+            Bn.Viewport.layout.north.split.dd.lock();
         }
         if (Ext.get('hideit')) {
             Ext.get('hideit').on('click', function() {
-                if (Bb.Viewport.west.collapsed) {
+                if (Bn.Viewport.west.collapsed) {
                     Ext.get('hideit').update('隐藏左侧');
-                    Bb.Viewport.west.expand();
+                    Bn.Viewport.west.expand();
                 } else {
                     Ext.get('hideit').update('显示左侧');
-                    Bb.Viewport.west.collapse();
+                    Bn.Viewport.west.collapse();
                 }
             });
         }
-        var navEs = Bb.Viewport.west.el.select('a');
-        navEs.on('click', Bb.Navigation.HyperlinkClicked);
-        navEs.on('contextmenu',Bb.Navigation.OnContextMenu);
-        if (Bb.Viewport.head){
-            if (Bb.Viewport.head.operator)Bb.Viewport.head.operator.setText(Bb.Config.Operator);
+        var navEs = Bn.Viewport.west.el.select('a');
+        navEs.on('click', Bn.Navigation.HyperlinkClicked);
+        navEs.on('contextmenu',Bn.Navigation.OnContextMenu);
+        if (Bn.Viewport.head){
+            if (Bn.Viewport.head.operator)Bn.Viewport.head.operator.setText(Bn.Config.Operator);
             //设置当前在线编辑器的菜单选项
-            if (Bb.Viewport.head.view){
-                var onlineditorItems=Bb.Viewport.head.view.menu.onlineditor.menu.items.items;
+            if (Bn.Viewport.head.view){
+                var onlineditorItems=Bn.Viewport.head.view.menu.onlineditor.menu.items.items;
                 Ext.each(onlineditorItems, function(item) {
                   //console.log(item.value);
-                  if (item.value==Bb.Config.OnlineEditor){
+                  if (item.value==Bn.Config.OnlineEditor){
                       item.checked=true;
                   }else{
                       item.checked=false;
                   }
                 });
             }
-            Bb.Viewport.head.view.menu.toolbar.setChecked(false);
+            Bn.Viewport.head.view.menu.toolbar.setChecked(false);
         }
     },
     Function:{
@@ -304,7 +304,7 @@ Bb.Layout = {
         FullScreen:function(){
             var isIEPrompt=true;
             if (arguments[0]==false)isIEPrompt=false;
-            if (Bb.Viewport.head.view.menu.full.checked){
+            if (Bn.Viewport.head.view.menu.full.checked){
                 var docElm = document.documentElement;
                 if (docElm.requestFullscreen) {
                    docElm.requestFullscreen();
@@ -329,7 +329,7 @@ Bb.Layout = {
                            if (isIEPrompt){
                                 Ext.Msg.alert('提示', 'IE浏览器请使用快捷键:F11');
                            }
-                           Bb.Viewport.head.view.menu.full.setChecked(false);
+                           Bn.Viewport.head.view.menu.full.setChecked(false);
                            return;
                        }
                     }
