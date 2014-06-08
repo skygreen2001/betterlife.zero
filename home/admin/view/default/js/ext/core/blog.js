@@ -27,12 +27,12 @@ Bb.Blog={
 			 */
 			IsFix:0
 		},
-		/**
-		 * 在线编辑器类型。
-		 * 1:CkEditor,2:KindEditor,3:xhEditor
-		 * 配合Action的变量配置$online_editor
-		 */
-		OnlineEditor:1
+        /**
+         * 在线编辑器类型。
+         * 1:CkEditor,2:KindEditor,3:xhEditor,4:UEditor
+         * 配合Action的变量配置$online_editor
+         */
+        OnlineEditor:4
 	},
 	/**
 	 * Cookie设置
