@@ -311,7 +311,7 @@ $viewdoblock
 									closable : true,progress : true,progressText : '',width : 300
 								});
 								this.uploadForm.getForm().submit({
-									url : 'index.php?go=admin.upload.upload$classname',
+									url : '$uploadwindow_url',
 									success : function(form, response) {
 										Ext.Msg.alert('成功', '上传成功');
 										uploadWindow.hide();

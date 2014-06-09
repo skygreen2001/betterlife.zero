@@ -334,6 +334,11 @@ class AutoCodeViewExt extends AutoCode
 		$batchUploadImagesWinow        =$upload_mixed["batchUploadImagesWinow"];
 		$result="";
 		$realId=DataObjectSpec::getRealIDColumnName($classname);
+		if (Config_AutoCode::IS_CSHARP_NET_SERVER){
+			$uploadwindow_url="/Upload/Upload$classname";
+		}else{
+			$uploadwindow_url="index.php?go=admin.upload.upload$classname";
+		}
 		require("jsmodel".DIRECTORY_SEPARATOR."includemodeljs.php");
 		$result.=$jsContent;
 		return $result;
@@ -424,13 +429,21 @@ class AutoCodeViewExt extends AutoCode
 								if ((!$isTreelevelStoreHad)&&(!contain(self::$relationStore,"{$key}StoreForCombo"))){
 									$showValue=$value;
 									if ($value=="name") $showValue=strtolower($key)."_".$value;
+									if (Config_AutoCode::IS_CSHARP_NET_SERVER)
+									{
+										$key_u=$key;
+										$key_u{0}=strtoupper($key_u{0});
+										$url_storeForCombo="../HttpData/Core/{$key_u}.ashx";
+									}else{
+										$url_storeForCombo="home/admin/src/httpdata/{$key}.php";
+									}
 									$relationStore_combo=",\r\n".
 													"    /**\r\n".
 													"     * {$relation_classcomment}\r\n".
 													"     */\r\n".
 													"    {$key}StoreForCombo:new Ext.data.Store({\r\n".
 													"        proxy: new Ext.data.HttpProxy({\r\n".
-													"            url: 'home/admin/src/httpdata/{$key}.php'\r\n".
+													"            url: '{$url_storeForCombo}'\r\n".
 													"        }),\r\n".
 													"        reader: new Ext.data.JsonReader({\r\n".
 													"            root: '{$key}s',\r\n".
@@ -1130,7 +1143,7 @@ class AutoCodeViewExt extends AutoCode
 						$textareaOnlineditor_Replace_array["ckEditor"].="                                ckeditor_replace_$fieldname();\r\n";
 						$textareaOnlineditor_Replace_array["kindEditor"].="                                $appName_alias.$classname.View.EditWindow.KindEditor_$fieldname = KindEditor.create('textarea[name=\"$fieldname\"]',{width:'98%',minHeith:'350px', filterMode:true});\r\n";
 						$textareaOnlineditor_Replace_array["xhEditor"].="                                pageInit_$fieldname();\r\n";
-						
+
 						$textareaOnlineditor_Add_array["UEditor"].="                    if (ue_$fieldname)ue_$fieldname.setContent(\"\");\r\n";
 						$textareaOnlineditor_Add_array["ckEditor"].="                    if (CKEDITOR.instances.$fieldname) CKEDITOR.instances.$fieldname.setData(\"\");\r\n";
 						$textareaOnlineditor_Add_array["kindEditor"].="                    if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname) $appName_alias.$classname.View.EditWindow.KindEditor_{$fieldname}.html(\"\");\r\n";
@@ -1169,7 +1182,7 @@ class AutoCodeViewExt extends AutoCode
 									  $blank_pre."                    afterrender:function(){\r\n".
 									  $blank_pre."                        switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
 									  $blank_pre."                        {\r\n".
-									  $blank_pre."                            case 1:\r\n".	
+									  $blank_pre."                            case 1:\r\n".
 									  $blank_pre.$textareaOnlineditor_Replace_array["ckEditor"].
 									  $blank_pre."                                break\r\n".
 									  $blank_pre."                            case 2:\r\n".
@@ -1185,7 +1198,7 @@ class AutoCodeViewExt extends AutoCode
 			$textareaOnlineditor_Add=$add_img.
 									  $blank_pre."            switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
 									  $blank_pre."            {\r\n".
-									  $blank_pre."                case 1:\r\n".	
+									  $blank_pre."                case 1:\r\n".
 									  $blank_pre.$textareaOnlineditor_Add_array["ckEditor"].
 									  $blank_pre."                    break\r\n".
 									  $blank_pre."                case 2:\r\n".
@@ -1199,7 +1212,7 @@ class AutoCodeViewExt extends AutoCode
 			$textareaOnlineditor_Update=$update_img.
 									  $blank_pre."            switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
 									  $blank_pre."            {\r\n".
-									  $blank_pre."                case 1:\r\n".	
+									  $blank_pre."                case 1:\r\n".
 									  $blank_pre.$textareaOnlineditor_Update_array["ckEditor"].
 									  $blank_pre."                    break\r\n".
 									  $blank_pre."                case 2:\r\n".
@@ -1213,7 +1226,7 @@ class AutoCodeViewExt extends AutoCode
 									  $blank_pre."            }\r\n";
 			$textareaOnlineditor_Save=$blank_pre."                        switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
 									  $blank_pre."                        {\r\n".
-									  $blank_pre."                            case 1:\r\n".	
+									  $blank_pre."                            case 1:\r\n".
 									  $blank_pre.$textareaOnlineditor_Save_array["ckEditor"].
 									  $blank_pre."                                break\r\n".
 									  $blank_pre."                            case 2:\r\n".
@@ -1228,7 +1241,7 @@ class AutoCodeViewExt extends AutoCode
 			$textareaOnlineditor_Reset=$reset_img.
 									  $blank_pre."                        switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
 									  $blank_pre."                        {\r\n".
-									  $blank_pre."                            case 1:\r\n".	
+									  $blank_pre."                            case 1:\r\n".
 									  $blank_pre.$textareaOnlineditor_Reset_array["ckEditor"].
 									  $blank_pre."                                break\r\n".
 									  $blank_pre."                            case 2:\r\n".
@@ -1616,16 +1629,26 @@ class AutoCodeViewExt extends AutoCode
 				$fieldname_funcname=$fieldname;
 				$fieldname_funcname{0}=strtoupper($fieldname_funcname);
 				if ($isImage_once){
-					$uploadServiceUrl.="                            if (this.uploadForm.upload_file.name==\"upload_{$fieldname}_files\"){\r\n".
-									   "                                uploadImageUrl='index.php?go=admin.upload.upload{$classname}{$fieldname_funcname}s';\r\n".
-									   "                            }\r\n";
+					if (Config_AutoCode::IS_CSHARP_NET_SERVER){
+						$uploadServiceUrl.="                            if (this.uploadForm.upload_file.name==\"upload_{$fieldname}_files\"){\r\n".
+										   "                                uploadImageUrl='/Upload/Upload{$classname}{$fieldname_funcname}s';\r\n".
+										   "                            }\r\n";
+					}else{
+						$uploadServiceUrl.="                            if (this.uploadForm.upload_file.name==\"upload_{$fieldname}_files\"){\r\n".
+										   "                                uploadImageUrl='index.php?go=admin.upload.upload{$classname}{$fieldname_funcname}s';\r\n".
+										   "                            }\r\n";
+					}
 					$moreImageUploads="if ($appName_alias.$classname.View.Running.batchUploadImagesWindow!=null){\r\n".
 									  "                $appName_alias.$classname.View.Running.batchUploadImagesWindow.destroy();\r\n".
 									  "                $appName_alias.$classname.View.Running.batchUploadImagesWindow=null;\r\n".
 									  "            }\r\n".
 									  "            $appName_alias.$classname.View.Running.batchUploadImagesWindow=new $appName_alias.$classname.View.BatchUploadImagesWindow();\r\n";
 				}else{
-					$uploadServiceUrl="var uploadImageUrl='index.php?go=admin.upload.upload{$classname}{$fieldname_funcname}s';\r\n";
+					if (Config_AutoCode::IS_CSHARP_NET_SERVER){
+						$uploadServiceUrl="var uploadImageUrl='/Upload/Upload{$classname}{$fieldname_funcname}s';\r\n";
+					}else{
+						$uploadServiceUrl="var uploadImageUrl='index.php?go=admin.upload.upload{$classname}{$fieldname_funcname}s';\r\n";
+					}
 				}
 				$isImage_once=true;
 			}
