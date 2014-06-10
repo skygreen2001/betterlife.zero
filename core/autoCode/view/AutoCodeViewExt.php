@@ -1169,9 +1169,13 @@ class AutoCodeViewExt extends AutoCode
 		if ($has_textarea){
 			$textareaOnlineditor_Init=",\r\n".
 									  "        /**\r\n".
-									  "         * 在线编辑器类型。\r\n".
-									  "         * 1:CkEditor,2:KindEditor,3:xhEditor,4:UEditor\r\n".
-									  "         * 配合Action的变量配置\$online_editor\r\n".
+									  "         * 在线编辑器类型。\r\n";
+			if (Config_AutoCode::IS_CSHARP_NET_SERVER){
+				$textareaOnlineditor_Init.="         * 1:CkEditor,4:UEditor[默认]\r\n";
+			}else{
+				$textareaOnlineditor_Init.="         * 1:CkEditor,2:KindEditor,3:xhEditor,4:UEditor\r\n";
+			}
+			$textareaOnlineditor_Init.="         * 配合Action的变量配置\$online_editor\r\n".
 									  "         */\r\n".
 									  "        OnlineEditor:4";
 			$textareaOnlineditor_Init_func="\r\n".
@@ -1184,13 +1188,17 @@ class AutoCodeViewExt extends AutoCode
 									  $blank_pre."                        {\r\n".
 									  $blank_pre."                            case 1:\r\n".
 									  $blank_pre.$textareaOnlineditor_Replace_array["ckEditor"].
-									  $blank_pre."                                break\r\n".
-									  $blank_pre."                            case 2:\r\n".
-									  $blank_pre.$textareaOnlineditor_Replace_array["kindEditor"].
-									  $blank_pre."                                break\r\n".
-									  $blank_pre."                            case 3:\r\n".
-									  $blank_pre.$textareaOnlineditor_Replace_array["xhEditor"].
-									  $blank_pre."                                break\r\n".
+									  $blank_pre."                                break\r\n";
+									  if (!Config_AutoCode::IS_CSHARP_NET_SERVER){
+			$textareaOnlineditor_Replace.=
+										  $blank_pre."                            case 2:\r\n".
+										  $blank_pre.$textareaOnlineditor_Replace_array["kindEditor"].
+										  $blank_pre."                                break\r\n".
+										  $blank_pre."                            case 3:\r\n".
+										  $blank_pre.$textareaOnlineditor_Replace_array["xhEditor"].
+										  $blank_pre."                                break\r\n";
+									  }
+			$textareaOnlineditor_Replace.=
 									  $blank_pre."                            default:\r\n".
 									  $blank_pre.$textareaOnlineditor_Replace_array["UEditor"].
 									  $blank_pre."                        }\r\n".
@@ -1200,12 +1208,16 @@ class AutoCodeViewExt extends AutoCode
 									  $blank_pre."            {\r\n".
 									  $blank_pre."                case 1:\r\n".
 									  $blank_pre.$textareaOnlineditor_Add_array["ckEditor"].
-									  $blank_pre."                    break\r\n".
-									  $blank_pre."                case 2:\r\n".
-									  $blank_pre.$textareaOnlineditor_Add_array["kindEditor"].
-									  $blank_pre."                    break\r\n".
-									  $blank_pre."                case 3:\r\n".
-									  $blank_pre."                    break\r\n".
+									  $blank_pre."                    break\r\n";
+									  if (!Config_AutoCode::IS_CSHARP_NET_SERVER){
+			$textareaOnlineditor_Add.=
+										  $blank_pre."                case 2:\r\n".
+										  $blank_pre.$textareaOnlineditor_Add_array["kindEditor"].
+										  $blank_pre."                    break\r\n".
+										  $blank_pre."                case 3:\r\n".
+										  $blank_pre."                    break\r\n";
+									  }
+			$textareaOnlineditor_Add.=
 									  $blank_pre."                default:\r\n".
 									  $blank_pre.$textareaOnlineditor_Add_array["UEditor"].
 									  $blank_pre."            }\r\n";
@@ -1214,13 +1226,17 @@ class AutoCodeViewExt extends AutoCode
 									  $blank_pre."            {\r\n".
 									  $blank_pre."                case 1:\r\n".
 									  $blank_pre.$textareaOnlineditor_Update_array["ckEditor"].
-									  $blank_pre."                    break\r\n".
-									  $blank_pre."                case 2:\r\n".
-									  $blank_pre.$textareaOnlineditor_Update_array["kindEditor"].
-									  $blank_pre."                    break\r\n".
-									  $blank_pre."                case 3:\r\n".
-									  $blank_pre.$textareaOnlineditor_Update_array["xhEditor"].
-									  $blank_pre."                    break\r\n".
+									  $blank_pre."                    break\r\n";
+									  if (!Config_AutoCode::IS_CSHARP_NET_SERVER){
+			$textareaOnlineditor_Update.=
+										  $blank_pre."                case 2:\r\n".
+										  $blank_pre.$textareaOnlineditor_Update_array["kindEditor"].
+										  $blank_pre."                    break\r\n".
+										  $blank_pre."                case 3:\r\n".
+										  $blank_pre.$textareaOnlineditor_Update_array["xhEditor"].
+										  $blank_pre."                    break\r\n";
+									  }
+			$textareaOnlineditor_Update.=
 									  $blank_pre."                default:\r\n".
 									  $blank_pre.$textareaOnlineditor_Update_array["UEditor"].
 									  $blank_pre."            }\r\n";
@@ -1228,13 +1244,17 @@ class AutoCodeViewExt extends AutoCode
 									  $blank_pre."                        {\r\n".
 									  $blank_pre."                            case 1:\r\n".
 									  $blank_pre.$textareaOnlineditor_Save_array["ckEditor"].
-									  $blank_pre."                                break\r\n".
-									  $blank_pre."                            case 2:\r\n".
-									  $blank_pre.$textareaOnlineditor_Save_array["kindEditor"].
-									  $blank_pre."                                break\r\n".
-									  $blank_pre."                            case 3:\r\n".
-									  $blank_pre.$textareaOnlineditor_Save_array["xhEditor"].
-									  $blank_pre."                                break\r\n".
+									  $blank_pre."                                break\r\n";
+									  if (!Config_AutoCode::IS_CSHARP_NET_SERVER){
+			$textareaOnlineditor_Save.=
+										  $blank_pre."                            case 2:\r\n".
+										  $blank_pre.$textareaOnlineditor_Save_array["kindEditor"].
+										  $blank_pre."                                break\r\n".
+										  $blank_pre."                            case 3:\r\n".
+										  $blank_pre.$textareaOnlineditor_Save_array["xhEditor"].
+										  $blank_pre."                                break\r\n";
+									  }
+			$textareaOnlineditor_Save.=
 									  $blank_pre."                            default:\r\n".
 									  $blank_pre.$textareaOnlineditor_Save_array["UEditor"].
 									  $blank_pre."                        }\r\n";
@@ -1243,13 +1263,17 @@ class AutoCodeViewExt extends AutoCode
 									  $blank_pre."                        {\r\n".
 									  $blank_pre."                            case 1:\r\n".
 									  $blank_pre.$textareaOnlineditor_Reset_array["ckEditor"].
-									  $blank_pre."                                break\r\n".
-									  $blank_pre."                            case 2:\r\n".
-									  $blank_pre.$textareaOnlineditor_Reset_array["kindEditor"].
-									  $blank_pre."                                break\r\n".
-									  $blank_pre."                            case 3:\r\n".
-									  $blank_pre.$textareaOnlineditor_Reset_array["xhEditor"].
-									  $blank_pre."                                break\r\n".
+									  $blank_pre."                                break\r\n";
+									  if (!Config_AutoCode::IS_CSHARP_NET_SERVER){
+			$textareaOnlineditor_Reset.=
+										  $blank_pre."                            case 2:\r\n".
+										  $blank_pre.$textareaOnlineditor_Reset_array["kindEditor"].
+										  $blank_pre."                                break\r\n".
+										  $blank_pre."                            case 3:\r\n".
+										  $blank_pre.$textareaOnlineditor_Reset_array["xhEditor"].
+										  $blank_pre."                                break\r\n";
+									  }
+			$textareaOnlineditor_Reset.=
 									  $blank_pre."                            default:\r\n".
 									  $blank_pre.$textareaOnlineditor_Reset_array["UEditor"].
 									  $blank_pre."                        }\r\n";
