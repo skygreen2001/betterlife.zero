@@ -118,7 +118,7 @@ SM;
 					defaults : {autoScroll : true},
 					listeners:{
 						beforehide:function(){
-							this.editForm.form.getEl().dom.reset();
+							this.editForm.getForm().reset();
 						}{$textareaOnlineditor_Replace}
 					},
 					items : [
@@ -233,13 +233,14 @@ EDITWINDOW;
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.saveBtn.setText('修 改');
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.resetBtn.setVisible(true);
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.setTitle('修改{$table_comment12n}');
-				$appName_alias.$classname.View.{$current_classname}View.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.savetype=1;
+				$appName_alias.$classname.View.{$current_classname}View.edit_window.show();
+				$appName_alias.$classname.View.{$current_classname}View.edit_window.maximize();
+
+				$appName_alias.$classname.View.{$current_classname}View.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
 				var {$instancename}_id = $appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.{$realId};
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.{$classname}_{$realId}.setValue({$instancename}_id);
 {$textareaOnlineditor_Update}{$treeLevelVisible_Update}
-				$appName_alias.$classname.View.{$current_classname}View.edit_window.show();
-				$appName_alias.$classname.View.{$current_classname}View.edit_window.maximize();
 			},
 			/**
 			 * 删除{$table_comment12n}

@@ -29,6 +29,6 @@ class Config_AutoCode extends ConfigBB
     /**
      * 是否服务端使用C# ASP.Net MVC 3
      */
-    const IS_CSHARP_NET_SERVER=true;
+    const IS_CSHARP_NET_SERVER=false;
 }
 ?>

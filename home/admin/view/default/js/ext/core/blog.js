@@ -176,7 +176,7 @@ Bn.Blog.View={
 				},
 				listeners:{
 					beforehide:function(){
-						this.editForm.form.getEl().dom.reset();
+						this.editForm.getForm().reset();
 					},
                     afterrender:function(){
                         switch (Bn.Blog.Config.OnlineEditor)
@@ -448,7 +448,7 @@ Bn.Blog.View={
 					defaults : {autoScroll : true},
 					listeners:{
 						beforehide:function(){
-							this.editForm.form.getEl().dom.reset();
+							this.editForm.getForm().reset();
 						},
                         afterrender:function(){
                             switch (Bn.Blog.Config.OnlineEditor)
@@ -810,25 +810,29 @@ Bn.Blog.View={
 				Bn.Blog.View.CommentView.edit_window.saveBtn.setText('修 改');
 				Bn.Blog.View.CommentView.edit_window.resetBtn.setVisible(true);
 				Bn.Blog.View.CommentView.edit_window.setTitle('修改评论');
-				Bn.Blog.View.CommentView.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
 				Bn.Blog.View.CommentView.edit_window.savetype=1;
-                switch (Bn.Blog.Config.OnlineEditor)
-                {
-                    case 1:
-                        if (CKEDITOR.instances.Comment) CKEDITOR.instances.Comment.setData(this.getSelectionModel().getSelected().data.Comment);
-                        break
-                    case 2:
-                        if (Bn.Blog.View.CommentView.EditWindow.KindEditor_Comment) Bn.Blog.View.CommentView.EditWindow.KindEditor_Comment.html(this.getSelectionModel().getSelected().data.Comment);
-                        break
-                    case 3:
-                        if (xhEditor_Comment)xhEditor_Comment.setSource(this.getSelectionModel().getSelected().data.Comment);
-                        break
-                    default:
-                        if (ue_Comment)ue_Comment.setContent(this.getSelectionModel().getSelected().data.Comment);
-                }
 
 				Bn.Blog.View.CommentView.edit_window.show();
 				Bn.Blog.View.CommentView.edit_window.maximize();
+
+				Bn.Blog.View.CommentView.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
+				var blog_id = Bn.Blog.View.Running.blogGrid.getSelectionModel().getSelected().data.ID;
+				Bn.Blog.View.CommentView.edit_window.Blog_ID.setValue(blog_id);
+				var data = this.getSelectionModel().getSelected().data;
+                switch (Bn.Blog.Config.OnlineEditor)
+                {
+                    case 1:
+                        if (CKEDITOR.instances.Comment) CKEDITOR.instances.Comment.setData(data.Comment);
+                        break
+                    case 2:
+                        if (Bn.Blog.View.CommentView.EditWindow.KindEditor_Comment) Bn.Blog.View.CommentView.EditWindow.KindEditor_Comment.html(data.Comment);
+                        break
+                    case 3:
+                        if (xhEditor_Comment)xhEditor_Comment.setSource(data.Comment);
+                        break
+                    default:
+                        ue_Comment.ready(function(){ue_Comment.setContent(data.Comment);});
+                }
 			},
 			/**
 			 * 删除评论
@@ -1386,25 +1390,28 @@ Bn.Blog.View={
 			Bn.Blog.View.Running.edit_window.saveBtn.setText('修 改');
 			Bn.Blog.View.Running.edit_window.resetBtn.setVisible(true);
 			Bn.Blog.View.Running.edit_window.setTitle('修改博客');
-			Bn.Blog.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
 			Bn.Blog.View.Running.edit_window.savetype=1;
-            switch (Bn.Blog.Config.OnlineEditor)
-            {
-                case 1:
-                    if (CKEDITOR.instances.Blog_Content) CKEDITOR.instances.Blog_Content.setData(this.getSelectionModel().getSelected().data.Blog_Content);
-                    break
-                case 2:
-                    if (Bn.Blog.View.EditWindow.KindEditor_Blog_Content) Bn.Blog.View.EditWindow.KindEditor_Blog_Content.html(this.getSelectionModel().getSelected().data.Blog_Content);
-                    break
-                case 3:
-                    if (xhEditor_Blog_Content)xhEditor_Blog_Content.setSource(this.getSelectionModel().getSelected().data.Blog_Content);
-                    break
-                default:
-                    if (ue_Blog_Content)ue_Blog_Content.setContent(this.getSelectionModel().getSelected().data.Blog_Content);
-            }
 
 			Bn.Blog.View.Running.edit_window.show();
 			Bn.Blog.View.Running.edit_window.maximize();
+
+			Bn.Blog.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
+			var data = this.getSelectionModel().getSelected().data;
+            switch (Bn.Blog.Config.OnlineEditor)
+            {
+                case 1:
+                    if (CKEDITOR.instances.Blog_Content) CKEDITOR.instances.Blog_Content.setData(data.Blog_Content);
+                    break
+                case 2:
+                    if (Bn.Blog.View.EditWindow.KindEditor_Blog_Content) Bn.Blog.View.EditWindow.KindEditor_Blog_Content.html(data.Blog_Content);
+                    break
+                case 3:
+                    if (xhEditor_Blog_Content)xhEditor_Blog_Content.setSource(data.Blog_Content);
+                    break
+                default:
+                    ue_Blog_Content.ready(function(){ue_Blog_Content.setContent(data.Blog_Content);});
+            }
+
 		},
 		/**
 		 * 删除博客
