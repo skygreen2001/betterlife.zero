@@ -987,7 +987,7 @@ class AutoCodeViewExt extends AutoCode
 									  $blank_pre."            var {$fieldname}Obj=$appName_alias.$classname.View.Running.edit_window.{$fieldname};\r\n".
 									  $blank_pre."            {$fieldname}Obj.allowBlank=true;\r\n".
 									  $blank_pre."            if ({$fieldname}Obj.getEl()){$fieldname}Obj.getEl().dom.parentNode.previousSibling.innerHTML =\"{$field_comment}\";\r\n".
-									  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$fieldname}_old.setValue($appName_alias.$classname.View.Running.edit_window.{$fieldname}.getValue());\r\n".
+									  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$fieldname}_old.setValue(this.getSelectionModel().getSelected().data.{$fieldname}.getValue());\r\n".
 									  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$fieldname}.setValue(\"\");\r\n";
 				}else{
 					$datatype=self::comment_type($field["Type"]);

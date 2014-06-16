@@ -766,12 +766,12 @@ $filterdoSelect
 			$appName_alias.$classname.View.Running.edit_window.resetBtn.setVisible(true);
 			$appName_alias.$classname.View.Running.edit_window.setTitle('修改{$table_comment}');
 			$appName_alias.$classname.View.Running.edit_window.savetype=1;
-
+{$treeLevelVisible_Update}{$password_update}
 			$appName_alias.$classname.View.Running.edit_window.show();
 			$appName_alias.$classname.View.Running.edit_window.maximize();
 
 			$appName_alias.$classname.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
-{$textareaOnlineditor_Update}{$treeLevelVisible_Update}{$password_update}
+{$textareaOnlineditor_Update}
 		},
 		/**
 		 * 删除{$table_comment}

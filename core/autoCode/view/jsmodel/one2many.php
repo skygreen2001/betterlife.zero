@@ -236,11 +236,11 @@ EDITWINDOW;
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.savetype=1;
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.show();
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.maximize();
-
+{$treeLevelVisible_Update}
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
 				var {$instancename}_id = $appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.{$realId};
 				$appName_alias.$classname.View.{$current_classname}View.edit_window.{$classname}_{$realId}.setValue({$instancename}_id);
-{$textareaOnlineditor_Update}{$treeLevelVisible_Update}
+{$textareaOnlineditor_Update}
 			},
 			/**
 			 * 删除{$table_comment12n}
