@@ -99,7 +99,7 @@ $appName_alias.$classname.View={
 				},
 				listeners:{
 					beforehide:function(){
-						this.editForm.form.getEl().dom.reset();
+						this.editForm.getForm().reset();
 					}{$textareaOnlineditor_Replace}
 				},
 				items : [
@@ -765,11 +765,13 @@ $filterdoSelect
 			$appName_alias.$classname.View.Running.edit_window.saveBtn.setText('修 改');
 			$appName_alias.$classname.View.Running.edit_window.resetBtn.setVisible(true);
 			$appName_alias.$classname.View.Running.edit_window.setTitle('修改{$table_comment}');
-			$appName_alias.$classname.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
 			$appName_alias.$classname.View.Running.edit_window.savetype=1;
-{$textareaOnlineditor_Update}{$treeLevelVisible_Update}
-			$appName_alias.$classname.View.Running.edit_window.show();{$password_update}
+{$treeLevelVisible_Update}
+			$appName_alias.$classname.View.Running.edit_window.show();
 			$appName_alias.$classname.View.Running.edit_window.maximize();
+
+			$appName_alias.$classname.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
+{$textareaOnlineditor_Update}{$password_update}
 		},
 		/**
 		 * 删除{$table_comment}

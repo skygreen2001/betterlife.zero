@@ -124,7 +124,7 @@ Bb.Admin.View={
 				},
 				listeners:{
 					beforehide:function(){
-						this.editForm.form.getEl().dom.reset();
+						this.editForm.getForm().reset();
 					}
 				},
 				items : [
@@ -856,18 +856,18 @@ Bb.Admin.View={
 			Bb.Admin.View.Running.edit_window.saveBtn.setText('修 改');
 			Bb.Admin.View.Running.edit_window.resetBtn.setVisible(true);
 			Bb.Admin.View.Running.edit_window.setTitle('修改系统管理人员');
-			Bb.Admin.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
 			Bb.Admin.View.Running.edit_window.savetype=1;
 
 			Bb.Admin.View.Running.edit_window.show();
+			Bb.Admin.View.Running.edit_window.maximize();
 
+			Bb.Admin.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
             var passwordObj=Bb.Admin.View.Running.edit_window.password;
             passwordObj.allowBlank=true;
             if (passwordObj.getEl())passwordObj.getEl().dom.parentNode.previousSibling.innerHTML ="密码";
             Bb.Admin.View.Running.edit_window.password_old.setValue(Bb.Admin.View.Running.edit_window.password.getValue());
             Bb.Admin.View.Running.edit_window.password.setValue("");
 
-			Bb.Admin.View.Running.edit_window.maximize();
 		},
 		/**
 		 * 删除系统管理人员
