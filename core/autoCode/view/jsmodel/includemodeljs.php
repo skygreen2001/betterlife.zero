@@ -60,8 +60,8 @@ $appName_alias.$classname.Store = {
 			root: 'data',remoteSort: true,
 			fields : [
 $fields
-			]}
-		),
+			]
+		}),
 		writer: new Ext.data.JsonWriter({
 			encode: false
 		}),
