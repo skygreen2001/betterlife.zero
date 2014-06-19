@@ -876,16 +876,16 @@ Bn.Admin.View={
 			Bn.Admin.View.Running.edit_window.setTitle('修改系统管理人员');
 			Bn.Admin.View.Running.edit_window.savetype=1;
 
+			Bn.Admin.View.Running.edit_window.show();
+			Bn.Admin.View.Running.edit_window.maximize();
+
+			Bn.Admin.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
             var PasswordObj=Bn.Admin.View.Running.edit_window.Password;
             PasswordObj.allowBlank=true;
             if (PasswordObj.getEl())PasswordObj.getEl().dom.parentNode.previousSibling.innerHTML ="密码";
             Bn.Admin.View.Running.edit_window.Password_old.setValue(this.getSelectionModel().getSelected().data.Password.getValue());
             Bn.Admin.View.Running.edit_window.Password.setValue("");
 
-			Bn.Admin.View.Running.edit_window.show();
-			Bn.Admin.View.Running.edit_window.maximize();
-
-			Bn.Admin.View.Running.edit_window.editForm.form.loadRecord(this.getSelectionModel().getSelected());
 		},
 		/**
 		 * 删除系统管理人员
