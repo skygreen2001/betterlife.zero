@@ -372,7 +372,7 @@ class AutoCode extends Object
 		if (contain($column_name,"ID")){
 			return false;
 		}
-		if (((self::column_length($column_type)>=500)&&(!contains($column_name,array("PROFILE","IMAGES","LINK","ICO","PASSWORD","EMAIL","PHONE","ADDRESS"))))
+		if (((self::column_length($column_type)>=500)&&(!contains($column_name,array("URL","PROFILE","IMAGES","LINK","ICO","PASSWORD","EMAIL","PHONE","ADDRESS"))))
 			 ||(contains($column_name,array("INTRO","MEMO","CONTENT")))||(self::column_type($column_type)=='text')||(self::column_type($column_type)=='longtext')){
 			return true;
 		}else{
