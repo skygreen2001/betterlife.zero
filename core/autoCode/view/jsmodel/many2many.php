@@ -269,21 +269,21 @@ $m2m_columns
                                                     }
                                                 },
                                                 {text: '未选择',checked: false,group: 'isSelect',ref:'../../unselect',
-                                                      checkHandler: function(item, checked){
-                                                          if (checked){
-                                                              $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.isSelect.setText(item.text);
-                                                              $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.filter.selectType=2;
-                                                              $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.doSelect{$belong_class}();
-                                                          }
-                                                      }
+                                                    checkHandler: function(item, checked){
+                                                        if (checked){
+                                                            $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.isSelect.setText(item.text);
+                                                            $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.filter.selectType=2;
+                                                            $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.doSelect{$belong_class}();
+                                                        }
+                                                    }
                                                 },
                                                 {text: '已选择',checked: false,group: 'isSelect',ref:'../../select',
-                                                      checkHandler: function(item, checked){
-                                                          if (checked){
-                                                              $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.isSelect.setText(item.text);
-                                                              $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.filter.selectType=1;
-                                                              $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.doSelect{$belong_class}();
-                                                          }
+                                                    checkHandler: function(item, checked){
+                                                        if (checked){
+                                                            $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.isSelect.setText(item.text);
+                                                            $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.filter.selectType=1;
+                                                            $appName_alias.$classname.View.Running.select{$belong_class}Window.{$belong_instance_name}Grid.doSelect{$belong_class}();
+                                                        }
                                                     }
                                                 }
                                              ]
