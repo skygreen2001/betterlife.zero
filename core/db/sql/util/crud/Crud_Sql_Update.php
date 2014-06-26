@@ -89,6 +89,7 @@ class Crud_Sql_Update extends Crud_SQL {
 						$valueA=explode("=", $value);
 						if (empty($valueA[1])) {
 							$value=$valueA[0]."='".$valueA[1]."'";
+							if ($valueA[1]==0)$value=$valueA[0]."=".$valueA[1];
 						}else if (strlen(trim($valueA[1]))==0) {
 							$value=$valueA[0]."='".$valueA[1]."'";
 						}
