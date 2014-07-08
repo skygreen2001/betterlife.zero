@@ -454,7 +454,7 @@ class AutoCodeService extends AutoCode
 				//queryPage多对多
 				$result.=self::many2manyQueryPage($classname,$instance_name,$fieldInfo);
 
-				//如果是目录树【parent_id】,需要附加一个递归函数显示父目录[全]
+				//如果是目录树【Parent_ID】,需要附加一个递归函数显示父目录[全]
 				$result.=self::relationFieldTreeRecursive($instance_name,$classname,$fieldInfo);
 
 				//import
@@ -1298,7 +1298,7 @@ MANY2MANYQUERYPAGE;
 
 	/**
 	 * 目录树递归函数:显示父目录[全]
-	 * 如果是目录树【parent_id】,需要附加一个递归函数显示父目录[全]
+	 * 如果是目录树【Parent_ID】,需要附加一个递归函数显示父目录[全]
 	 * @param mixed $instance_name 实体变量
 	 * @param mixed $classname 数据对象列名
 	 * @param mixed $fieldInfo 表列信息列表
@@ -1319,24 +1319,24 @@ MANY2MANYQUERYPAGE;
 							$i_name{0}=strtolower($i_name{0});
 							$fieldInfo=self::$fieldInfos[self::getTablename($key)];
 							if (!$isTreeLevelHad){
-								if (array_key_exists("parent_id",$fieldInfo)&&array_key_exists("level",$fieldInfo)){
+								if (array_key_exists("Parent_ID",$fieldInfo)&&array_key_exists("Level",$fieldInfo)){
 									$classNameField=self::getShowFieldNameByClassname($key);									$classNameField=self::getShowFieldNameByClassname($key);
 									$field_comment=$field["Comment"];
 									$field_comment=self::columnCommentKey($field_comment,$fieldname);
 									$result.="    /**\r\n".
 											 "     * 显示{$field_comment}[全]\r\n".
 											 "     * 注:采用了递归写法\r\n".
-											 "     * @param 对象 \$parent_id 父地区标识\r\n".
-											 "     * @param mixed \$level 目录层级\r\n".
+											 "     * @param 对象 \$Parent_ID 父地区标识\r\n".
+											 "     * @param mixed \$Level 目录层级\r\n".
 											 "     */\r\n".
-											 "    private function {$i_name}ShowAll(\$parent_id,\$level)\r\n".
+											 "    private function {$i_name}ShowAll(\$Parent_ID,\$level)\r\n".
 											 "    {\r\n".
-											 "        \${$i_name}_p=$key::get_by_id(\$parent_id);\r\n".
+											 "        \${$i_name}_p=$key::get_by_id(\$Parent_ID);\r\n".
 											 "        if (\$level==1){\r\n".
 											 "            \${$i_name}ShowAll=\${$i_name}_p->$classNameField;\r\n".
 											 "        }else{\r\n".
-											 "            \$parent_id=\${$i_name}_p->parent_id;\r\n".
-											 "            \${$i_name}ShowAll=\$this->{$i_name}ShowAll(\$parent_id,\$level-1).\"->\".\${$i_name}_p->$classNameField;\r\n".
+											 "            \$Parent_ID=\${$i_name}_p->Parent_ID;\r\n".
+											 "            \${$i_name}ShowAll=\$this->{$i_name}ShowAll(\$Parent_ID,\$level-1).\"->\".\${$i_name}_p->$classNameField;\r\n".
 											 "        }\r\n".
 											 "        return \${$i_name}ShowAll;\r\n".
 											 "    }\r\n".
@@ -1390,11 +1390,11 @@ MANY2MANYQUERYPAGE;
 							}
 							$fieldInfo=self::$fieldInfos[self::getTablename($key)];
 							if (!$isTreeLevelHad){
-								if (array_key_exists("Parent_ID",$fieldInfo)&&array_key_exists("level",$fieldInfo)){
+								if (array_key_exists("Parent_ID",$fieldInfo)&&array_key_exists("Level",$fieldInfo)){
 									$classNameField=self::getShowFieldNameByClassname($key);
 									$result.="                if (\${$i_name}_instance){\r\n".
 											 "                    \$level=\${$i_name}_instance->level;\r\n".
-											 "                    \${$instance_name}[\"{$i_name}ShowAll\"]=\$this->{$i_name}ShowAll(\${$instance_name}->parent_id,\$level);\r\n".
+											 "                    \${$instance_name}[\"{$i_name}ShowAll\"]=\$this->{$i_name}ShowAll(\${$instance_name}->Parent_ID,\$level);\r\n".
 											 "                }\r\n";
 									$isTreeLevelHad=true;
 								}
@@ -1446,13 +1446,13 @@ MANY2MANYQUERYPAGE;
 							}
 							$fieldInfos=self::$fieldInfos[self::getTablename($key)];
 							if (!$isTreeLevelHad){
-								if (array_key_exists("Parent_ID",$fieldInfos)&&array_key_exists("level",$fieldInfos)){
+								if (array_key_exists("Parent_ID",$fieldInfos)&&array_key_exists("Level",$fieldInfos)){
 									$classNameField=self::getShowFieldNameByClassname($key);
 									$field_comment=$field["Comment"];
 									$field_comment=self::columnCommentKey($field_comment,$fieldname);
 									$result.="            if (\${$i_name}_instance){\r\n".
 											 "                \$level=\${$i_name}_instance->level;\r\n".
-											 "                \${$instance_name}[\"{$i_name}ShowAll\"]=\$this->{$i_name}ShowAll(\${$instance_name}->parent_id,\$level);\r\n".
+											 "                \${$instance_name}[\"{$i_name}ShowAll\"]=\$this->{$i_name}ShowAll(\${$instance_name}->Parent_ID,\$level);\r\n".
 											 "                \$".$instance_name."['$fieldname']=\${$i_name}_instance->$value;\r\n".
 											 "                \$pos=UtilArray::keyPosition(\$arr_output_header,\"$fieldname\");\r\n".
 											 "                UtilArray::insert(\$arr_output_header,\$pos+1,array('{$i_name}ShowAll'=>\"{$field_comment}[全]\"));\r\n".
@@ -1490,7 +1490,7 @@ MANY2MANYQUERYPAGE;
 							$show_fieldname=self::getShowFieldNameByClassname($key);
 							$i_name{0}=strtolower($i_name{0});
 							$fieldInfo_relation=self::$fieldInfos[self::getTablename($key)];
-							if (array_key_exists("Parent_ID",$fieldInfo_relation)&&array_key_exists("level",$fieldInfo_relation)){
+							if (array_key_exists("Parent_ID",$fieldInfo_relation)&&array_key_exists("Level",$fieldInfo_relation)){
 								if (!$isTreeLevelHad){
 									$classNameField=self::getShowFieldNameByClassname($key);
 									$field_comment=$field["Comment"];
