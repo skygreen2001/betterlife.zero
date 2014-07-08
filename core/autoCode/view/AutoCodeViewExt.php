@@ -851,13 +851,19 @@ class AutoCodeViewExt extends AutoCode
 								$key{0}=strtolower($key{0});
 								if (array_key_exists("Parent_ID",$fieldInfo_relationshow)){
 									$treeLevelVisible_Add="\r\n".
+														  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$key}comp.btnModify.setVisible(false);\r\n".
+														  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}_name.setVisible(true);\r\n".
 														  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(false);\r\n".
 														  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(false);\r\n";
 									$treeLevelVisible_Update="\r\n".
 															 $blank_pre."            if (this.getSelectionModel().getSelected().data.{$key}ShowAll){\r\n".
+															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.btnModify.setVisible(true);\r\n".
+															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}_name.setVisible(false);\r\n".
 															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(true);\r\n".
 															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(true);\r\n".
 															 $blank_pre."            }else{\r\n".
+															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.btnModify.setVisible(false);\r\n".
+															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}_name.setVisible(true);\r\n".
 															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(false);\r\n".
 															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(false);\r\n".
 															 $blank_pre."            }\r\n";
@@ -880,6 +886,14 @@ class AutoCodeViewExt extends AutoCode
 												  $blank_pre."                                              this.setValue(node.attributes.text);\r\n".
 												  $blank_pre."                                          }\r\n".
 												  $blank_pre."                                      },\r\n".
+												  $blank_pre."                                      {xtype:'button',text : '修改{$field_comment}',ref: 'btnModify',iconCls : 'icon-edit',\r\n".
+												  $blank_pre."                                       handler:function(){\r\n".
+												  $blank_pre."                                           this.setVisible(false);\r\n".
+												  $blank_pre."                                           this.ownerCt.ownerCt.{$key}_name.setVisible(true);\r\n".
+												  $blank_pre."                                           this.ownerCt.ownerCt.{$key}ShowLabel.setVisible(true);\r\n".
+												  $blank_pre."                                           this.ownerCt.ownerCt.{$key}ShowValue.setVisible(true);\r\n".
+												  $blank_pre."                                           this.ownerCt.ownerCt.doLayout();\r\n".
+												  $blank_pre."                                      }},\r\n".
 												  $blank_pre."                                      {xtype:'displayfield',value:'所选{$field_comment}:',ref: '{$key}ShowLabel'},{xtype:'displayfield',name:'{$key}ShowAll',flex:1,ref: '{$key}ShowValue'}]\r\n".
 												  $blank_pre."                            },\r\n";
 								}else{

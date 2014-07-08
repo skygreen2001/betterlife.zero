@@ -453,6 +453,10 @@ class AutoCodeService extends AutoCode
 						 "    }\r\n\r\n";
 				//queryPage多对多
 				$result.=self::many2manyQueryPage($classname,$instance_name,$fieldInfo);
+
+				//如果是目录树【parent_id】,需要附加一个递归函数显示父目录[全]
+				$result.=self::relationFieldTreeRecursive($instance_name,$classname,$fieldInfo);
+
 				//import
 				$result.="    /**\r\n".
 						 "     * 批量上传{$object_desc}\r\n".
@@ -1293,6 +1297,62 @@ MANY2MANYQUERYPAGE;
 	}
 
 	/**
+	 * 目录树递归函数:显示父目录[全]
+	 * 如果是目录树【parent_id】,需要附加一个递归函数显示父目录[全]
+	 * @param mixed $instance_name 实体变量
+	 * @param mixed $classname 数据对象列名
+	 * @param mixed $fieldInfo 表列信息列表
+	 */
+	private static function relationFieldTreeRecursive($instance_name,$classname,$fieldInfo)
+	{
+		$result="";
+		if (is_array(self::$relation_viewfield)&&(count(self::$relation_viewfield)>0))
+		{
+			if (array_key_exists($classname,self::$relation_viewfield)){
+				$relationSpecs=self::$relation_viewfield[$classname];
+				$isTreeLevelHad=false;
+				foreach ($fieldInfo as $fieldname=>$field){
+					if (array_key_exists($fieldname,$relationSpecs)){
+						$relationShow=$relationSpecs[$fieldname];
+						foreach ($relationShow as $key=>$value) {
+							$i_name=$key;
+							$i_name{0}=strtolower($i_name{0});
+							$fieldInfo=self::$fieldInfos[self::getTablename($key)];
+							if (!$isTreeLevelHad){
+								if (array_key_exists("parent_id",$fieldInfo)&&array_key_exists("level",$fieldInfo)){
+									$classNameField=self::getShowFieldNameByClassname($key);									$classNameField=self::getShowFieldNameByClassname($key);
+									$field_comment=$field["Comment"];
+									$field_comment=self::columnCommentKey($field_comment,$fieldname);
+									$result.="    /**\r\n".
+											 "     * 显示{$field_comment}[全]\r\n".
+											 "     * 注:采用了递归写法\r\n".
+											 "     * @param 对象 \$parent_id 父地区标识\r\n".
+											 "     * @param mixed \$level 目录层级\r\n".
+											 "     */\r\n".
+											 "    private function {$i_name}ShowAll(\$parent_id,\$level)\r\n".
+											 "    {\r\n".
+											 "        \${$i_name}_p=$key::get_by_id(\$parent_id);\r\n".
+											 "        if (\$level==1){\r\n".
+											 "            \${$i_name}ShowAll=\${$i_name}_p->$classNameField;\r\n".
+											 "        }else{\r\n".
+											 "            \$parent_id=\${$i_name}_p->parent_id;\r\n".
+											 "            \${$i_name}ShowAll=\$this->{$i_name}ShowAll(\$parent_id,\$level-1).\"->\".\${$i_name}_p->$classNameField;\r\n".
+											 "        }\r\n".
+											 "        return \${$i_name}ShowAll;\r\n".
+											 "    }\r\n".
+											 "\r\n";
+									$isTreeLevelHad=true;
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return $result;
+	}
+
+	/**
 	 * 显示关系列
 	 * @param mixed $instance_name 实体变量
 	 * @param mixed $classname 数据对象列名
@@ -1322,6 +1382,7 @@ MANY2MANYQUERYPAGE;
 							$i_name=$key;
 							$i_name{0}=strtolower($i_name{0});
 							if (!array_key_exists("$show_fieldname",$fieldInfo)){
+								$result.="                \${$i_name}_instance=null;\r\n";
 								$result.="                if (\${$instance_name}->$fieldname){\r\n";
 								$result.="                    \${$i_name}_instance=$key::get_by_id(\${$instance_name}->$fieldname);\r\n";
 								$result.="                    \$".$instance_name."['$show_fieldname']=\${$i_name}_instance->$value;\r\n";
@@ -1333,20 +1394,7 @@ MANY2MANYQUERYPAGE;
 									$classNameField=self::getShowFieldNameByClassname($key);
 									$result.="                if (\${$i_name}_instance){\r\n".
 											 "                    \$level=\${$i_name}_instance->level;\r\n".
-											 "                    \${$i_name}ShowAll=\${$i_name}_instance->$classNameField;\r\n".
-											 "                    switch (\$level) {\r\n".
-											 "                       case 2:\r\n".
-											 "                         \${$i_name}=$key::get_by_id(\${$i_name}_instance->Parent_ID);\r\n".
-											 "                         \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
-											 "                         break;\r\n".
-											 "                       case 3:\r\n".
-											 "                         \${$i_name}=$key::get_by_id(\${$i_name}_instance->Parent_ID);\r\n".
-											 "                         \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
-											 "                         \${$i_name}=$key::get_by_id(\${$i_name}->Parent_ID);\r\n".
-											 "                         \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
-											 "                         break;\r\n".
-											 "                    }\r\n".
-											 "                    \${$instance_name}[\"{$i_name}ShowAll\"]=\${$i_name}ShowAll;\r\n".
+											 "                    \${$instance_name}[\"{$i_name}ShowAll\"]=\$this->{$i_name}ShowAll(\${$instance_name}->parent_id,\$level);\r\n".
 											 "                }\r\n";
 									$isTreeLevelHad=true;
 								}
@@ -1389,9 +1437,9 @@ MANY2MANYQUERYPAGE;
 							$i_name=$key;
 							$i_name{0}=strtolower($i_name{0});
 							if (!array_key_exists("$show_fieldname",$fieldInfo)){
+								$result.="            \${$i_name}_instance=null;\r\n";
 								$result.="            if (\${$instance_name}->$fieldname){\r\n";
 								$result.="                \${$i_name}_instance=$key::get_by_id(\${$instance_name}->$fieldname);\r\n";
-								$result.="                \$".$instance_name."['$fieldname']=\${$i_name}_instance->$value;\r\n";
 								$result.="            }\r\n";
 							}else{
 								$result.="            unset(\$arr_output_header[\"$fieldname\"]);\r\n";
@@ -1404,20 +1452,8 @@ MANY2MANYQUERYPAGE;
 									$field_comment=self::columnCommentKey($field_comment,$fieldname);
 									$result.="            if (\${$i_name}_instance){\r\n".
 											 "                \$level=\${$i_name}_instance->level;\r\n".
-											 "                \${$i_name}ShowAll=\${$i_name}_instance->$classNameField;\r\n".
-											 "                switch (\$level) {\r\n".
-											 "                   case 2:\r\n".
-											 "                     \${$i_name}=$key::get_by_id(\${$i_name}_instance->Parent_ID);\r\n".
-											 "                     \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
-											 "                     break;\r\n".
-											 "                   case 3:\r\n".
-											 "                     \${$i_name}=$key::get_by_id(\${$i_name}_instance->Parent_ID);\r\n".
-											 "                     \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
-											 "                     \${$i_name}=$key::get_by_id(\${$i_name}->Parent_ID);\r\n".
-											 "                     \${$i_name}ShowAll=\${$i_name}->$classNameField.\"->\".\${$i_name}ShowAll;\r\n".
-											 "                     break;\r\n".
-											 "                }\r\n".
-											 "                \${$instance_name}[\"{$i_name}ShowAll\"]=\${$i_name}ShowAll;\r\n".
+											 "                \${$instance_name}[\"{$i_name}ShowAll\"]=\$this->{$i_name}ShowAll(\${$instance_name}->parent_id,\$level);\r\n".
+											 "                \$".$instance_name."['$fieldname']=\${$i_name}_instance->$value;\r\n".
 											 "                \$pos=UtilArray::keyPosition(\$arr_output_header,\"$fieldname\");\r\n".
 											 "                UtilArray::insert(\$arr_output_header,\$pos+1,array('{$i_name}ShowAll'=>\"{$field_comment}[全]\"));\r\n".
 											 "            }\r\n";
