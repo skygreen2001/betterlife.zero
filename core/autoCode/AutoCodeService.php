@@ -1296,7 +1296,8 @@ MANY2MANYQUERYPAGE;
 	}
 
 	/**
-	 * 显示关系列
+	 * 目录树递归函数:显示父目录[全]
+	 * 如果是目录树【parent_id】,需要附加一个递归函数显示父目录[全]
 	 * @param mixed $instance_name 实体变量
 	 * @param mixed $classname 数据对象列名
 	 * @param mixed $fieldInfo 表列信息列表
