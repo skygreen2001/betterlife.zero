@@ -44,5 +44,18 @@ class Action_Betterlife extends ActionExt
 		 $this->loadExtJs('core/blog.js');
          $this->load_onlineditor(array('comment','blog_content'));
 	 }
+
+     /**
+      * 控制器:地区
+      */
+     public function region()
+     {
+         $this->init();
+         $this->ExtDirectMode();
+         $this->ExtUpload();
+         $this->loadExtComponent("ComboBoxTree.js");
+         $this->loadExtJs('dic/region.js');
+     }
+
 }
 ?>

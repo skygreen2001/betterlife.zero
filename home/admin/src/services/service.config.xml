@@ -1,49 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <services>
-	<service name="ServiceMenuGroup">  
-		<methods>        
+	<service name="ServiceMenuGroup">
+		<methods>
 			<method name="save">
 				<param name="len">1</param>
-				<param name="formHandler">true</param>           
-			</method>    
+				<param name="formHandler">true</param>
+			</method>
 			<method name="update">
 				<param name="len">1</param>
-				<param name="formHandler">true</param>           
-			</method>    
+				<param name="formHandler">true</param>
+			</method>
 			<method name="delete">
-				<param name="len">1</param>    
-			</method>   
+				<param name="len">1</param>
+			</method>
 			<method name="allMenuGroup">
-				<param name="len">0</param>              
-			</method>   
-		</methods>  
-	</service> 
-	
-	<service name="ServiceMenu">
-		<methods>     
-			<method name="save">
-				<param name="len">1</param>
-				<param name="formHandler">true</param>           
-			</method>    
-			<method name="update">
-				<param name="len">1</param>
-				<param name="formHandler">true</param>           
-			</method>    
-			<method name="delete">
-				<param name="len">1</param>    
-			</method>   
-			<method name="getMenusByGroupId">
-				<param name="len">1</param>    
-			</method>  
-			<method name="queryPageMenu">
-				<param name="len">1</param>             
-			</method>   
-			<method name="queryPageMenuForm">
-				<param name="len">1</param>
-				<param name="formHandler">true</param>           
+				<param name="len">0</param>
 			</method>
 		</methods>
-	</service>   
+	</service>
+
+	<service name="ServiceMenu">
+		<methods>
+			<method name="save">
+				<param name="len">1</param>
+				<param name="formHandler">true</param>
+			</method>
+			<method name="update">
+				<param name="len">1</param>
+				<param name="formHandler">true</param>
+			</method>
+			<method name="delete">
+				<param name="len">1</param>
+			</method>
+			<method name="getMenusByGroupId">
+				<param name="len">1</param>
+			</method>
+			<method name="queryPageMenu">
+				<param name="len">1</param>
+			</method>
+			<method name="queryPageMenuForm">
+				<param name="len">1</param>
+				<param name="formHandler">true</param>
+			</method>
+		</methods>
+	</service>
 
 	<service name="ExtServiceBlog">
 		<methods>
@@ -64,8 +64,8 @@
 			<method name="exportBlog">
 				<param name="len">1</param>
 			</method>
-		</methods> 
-	</service>   
+		</methods>
+	</service>
 	<service name="ExtServiceComment">
 		<methods>
 			<method name="save">
@@ -85,7 +85,7 @@
 			<method name="exportComment">
 				<param name="len">1</param>
 			</method>
-		</methods> 
+		</methods>
 	</service>
 	<service name="ExtServiceAdmin">
 		<methods>
@@ -109,9 +109,9 @@
 			<method name="viewAdmin">
 				<param name="len">1</param>
 			</method>
-		</methods> 
+		</methods>
 	</service>
- 
+
 	<service name="ExtServiceUser">
 		<methods>
 			<method name="save">
@@ -134,6 +134,27 @@
 			<method name="viewUser">
 				<param name="len">1</param>
 			</method>
-		</methods> 
+		</methods>
 	</service>
+    <service name="ExtServiceRegion">
+        <methods>
+            <method name="save">
+                <param name="len">1</param>
+                <param name="formHandler">true</param>
+            </method>
+            <method name="update">
+                <param name="len">1</param>
+                <param name="formHandler">true</param>
+            </method>
+            <method name="deleteByIds">
+                <param name="len">1</param>
+            </method>
+            <method name="queryPageRegion">
+                <param name="len">1</param>
+            </method>
+            <method name="exportRegion">
+                <param name="len">1</param>
+            </method>
+        </methods>
+    </service>
 </services>

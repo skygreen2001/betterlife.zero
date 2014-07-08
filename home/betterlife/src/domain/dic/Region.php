@@ -39,7 +39,20 @@ class Region extends DataObject
      * @access public
      */
     public $region_type;
+    /**
+     * 目录层级
+     * @var string
+     * @access public
+     */
+    public $level;
     //</editor-fold>
+
+    /**
+     * 从属一对一关系
+     */
+    static $belong_has_one=array(
+        "region"=>"Region"
+    );
 
     /** 
      * 显示地区类型<br/>
@@ -66,5 +79,14 @@ class Region extends DataObject
     {
         return EnumRegionType::region_typeShow($region_type);
     }
+
+    /**
+     * 最高的层次，默认为3 
+     */
+    public static function maxlevel()
+    {
+        return Region::select("max(level)");//return 3;
+    }
+
 }
 ?>

@@ -18,8 +18,8 @@ Ext.form.ComboBoxTree = Ext.extend(Ext.form.ComboBox, {
 	selectedClass: '',
 	onSelect: null,
 	canCollapse: true,
-	triggerAction: 'all',  
-	forceSelection: true, 
+	triggerAction: 'all',
+	forceSelection: true,
 	constructor: function(_cfg) {
 		if (_cfg == null) {
 			_cfg = {};
@@ -34,7 +34,13 @@ Ext.form.ComboBoxTree = Ext.extend(Ext.form.ComboBox, {
 				cmb.canCollapse = false;
 				if (cmb.canFolderSelect){
 						cmb.canCollapse = true;
-						cmb.setValue(node.text);
+						//modify by skygreen
+						//原为:cmb.setValue(node.text);
+						if (Ext.isFunction(cmb.onSelect)) {
+							cmb.onSelect(cmb, node);
+						} else {
+							cmb.setValue(node.text);
+						}
 						cmb.collapse();
 				}else{
 					if (node.isLeaf()) {
@@ -43,7 +49,7 @@ Ext.form.ComboBoxTree = Ext.extend(Ext.form.ComboBox, {
 							cmb.onSelect(cmb, node);
 						} else {
 							cmb.setValue(node.text);
-						} 
+						}
 						cmb.collapse();
 					}
 				}
@@ -61,9 +67,9 @@ Ext.form.ComboBoxTree = Ext.extend(Ext.form.ComboBox, {
 		this.canCollapse = true;
 		if (this.tree) {
 			this.tree.render('ext-combobox-tree' + this.treerenderid);
-			this.canCollapse = true;          
+			this.canCollapse = true;
 			this.tree.getRootNode().expand();
-			
+
 		}
 	},
 	collapseHandler: function collapse() {
