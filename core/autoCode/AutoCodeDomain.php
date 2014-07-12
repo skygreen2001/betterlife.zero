@@ -484,7 +484,7 @@ class AutoCodeDomain extends AutoCode
 	private static function domainTreeLevelDefine($fieldInfo,$classname)
 	{
 		$result="\r\n";
-		if (array_key_exists("countChild",$fieldInfo)){
+		if (array_key_exists("countChild",$fieldInfo)||array_key_exists("childCount",$fieldInfo)){
 			$realId=DataObjectSpec::getRealIDColumnName($classname);
 			$result.="    /**\r\n".
 					 "     * 计算所有的子元素数量并存储\r\n".
