@@ -484,7 +484,7 @@ class AutoCodeDomain extends AutoCode
 	private static function domainTreeLevelDefine($fieldInfo,$classname)
 	{
 		$result="\r\n";
-		if (array_key_exists("countChild",$fieldInfo)){
+		if (array_key_exists("CountChild",$fieldInfo)||array_key_exists("ChildCount",$fieldInfo)){
 			$realId=DataObjectSpec::getRealIDColumnName($classname);
 			$result.="    /**\r\n".
 					 "     * 计算所有的子元素数量并存储\r\n".
@@ -498,7 +498,7 @@ class AutoCodeDomain extends AutoCode
 					 "        }\r\n".
 					 "    }\r\n\r\n";
 		}
-		if (array_key_exists("level",$fieldInfo)){
+		if (array_key_exists("Level",$fieldInfo)){
 			$result.="    /**\r\n".
 					 "     * 最高的层次，默认为3 \r\n".
 					 "     */\r\n".
@@ -506,7 +506,7 @@ class AutoCodeDomain extends AutoCode
 					 "    {\r\n".
 					 "        return $classname::select(\"max(level)\");//return 3;\r\n".
 					 "    }\r\n\r\n";
-		}else if (array_key_exists("region_type",$fieldInfo)){
+		}else if (array_key_exists("Region_Type",$fieldInfo)){
 			$result.="    /**\r\n".
 					 "     * 最高的层次，默认为3 \r\n".
 					 "     */\r\n".

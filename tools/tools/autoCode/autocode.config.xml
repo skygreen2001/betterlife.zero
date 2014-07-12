@@ -86,4 +86,16 @@
 			<relationclass name="User">users</relationclass>
 		</belongs_many_many>
 	</class>
+    <class name="Region">
+        <conditions>
+            <condition>Region_Name</condition>
+            <condition>Region_Type</condition>
+        </conditions>
+        <relationShows>
+            <show local_key="Parent_ID" relation_class="Region">Region_Name</show>
+        </relationShows>
+        <belong_has_one>
+            <relationclass name="Region">region_p</relationclass>
+        </belong_has_one>
+    </class>
 </classes>
