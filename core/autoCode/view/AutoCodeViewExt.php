@@ -865,15 +865,21 @@ class AutoCodeViewExt extends AutoCode
 															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(false);\r\n".
 															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(false);\r\n".
 															 $blank_pre."            }\r\n";
+									if (Config_AutoCode::IS_CSHARP_NET_SERVER)
+									{
+										$url_httpdatatree="../HttpData/Core/Tree/{$key}Tree.ashx";
+									}else{
+										$url_httpdatatree="home/admin/src/httpdata/{$key}Tree.php";
+									}
 									$fieldLabels.=$blank_pre."                            {xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'},\r\n".
 												  $blank_pre."                            {\r\n".
 												  $blank_pre."                                  xtype: 'compositefield',ref: '../{$key}comp',\r\n".
 												  $blank_pre."                                  items: [\r\n".
 												  $blank_pre."                                      {\r\n".
 												  $blank_pre."                                          xtype:'combotree', fieldLabel:'{$field_comment}',ref:'{$key}_name',name: '{$key}_name',grid:this,\r\n".
-												  $blank_pre."                                          emptyText: '请选择{$field_comment}',canFolderSelect:false,flex:1,editable:false,\r\n".
+												  $blank_pre."                                          emptyText: '请选择{$field_comment}',canFolderSelect:true,flex:1,editable:false,\r\n".
 												  $blank_pre."                                          tree: new Ext.tree.TreePanel({\r\n".
-												  $blank_pre."                                              dataUrl: 'home/admin/src/httpdata/{$key}Tree.php',\r\n".
+												  $blank_pre."                                              dataUrl: '{$url_httpdatatree}',\r\n".
 												  $blank_pre."                                              root: {nodeType: 'async'},border: false,rootVisible: false,\r\n".
 												  $blank_pre."                                              listeners: {\r\n".
 												  $blank_pre."                                                  beforeload: function(n) {if (n) {this.getLoader().baseParams.id = n.attributes.id;}}\r\n".
@@ -937,13 +943,19 @@ class AutoCodeViewExt extends AutoCode
 													$showValue=$value;
 													if ($value=="name") $showValue=strtolower($key_relation)."_".$value_relation;
 													$relation_classcomment=self::relation_classcomment(self::$class_comments[$current_classname]);
+													if (Config_AutoCode::IS_CSHARP_NET_SERVER)
+													{
+														$url_httpdata="../HttpData/Core/{$key_relation}.ashx";
+													}else{
+														$url_httpdata="home/admin/src/httpdata/{$key_relation}.php";
+													}
 													$relationStore_combo=",\r\n".
 																	"    /**\r\n".
 																	"     * {$relation_classcomment}\r\n".
 																	"     */\r\n".
 																	"    {$key}StoreForCombo:new Ext.data.Store({\r\n".
 																	"        proxy: new Ext.data.HttpProxy({\r\n".
-																	"            url: 'home/admin/src/httpdata/{$key_relation}.php'\r\n".
+																	"            url: '{$url_httpdata}'\r\n".
 																	"        }),\r\n".
 																	"        reader: new Ext.data.JsonReader({\r\n".
 																	"            root: '{$key}s',\r\n".
@@ -1567,11 +1579,17 @@ class AutoCodeViewExt extends AutoCode
 								$fieldname=self::getShowFieldNameByClassname($con_relation_class);
 								$fsname=$instancename_pre.$fieldname;
 								$con_relation_class{0}=strtolower($con_relation_class{0});
+								if (Config_AutoCode::IS_CSHARP_NET_SERVER)
+								{
+									$url_httpdatatree="../HttpData/Core/Tree/{$con_relation_class}Tree.ashx";
+								}else{
+									$url_httpdatatree="home/admin/src/httpdata/{$con_relation_class}Tree.php";
+								}
 								$filterFields.=", xtype:'hidden'},{\r\n".
 											   $blank_pre."                                      xtype:'combotree',ref:'../{$fsname}',grid:this,\r\n".
-											   $blank_pre."                                      emptyText: '请选择{$field_comment}',canFolderSelect:false,flex:1,editable:false,\r\n".
+											   $blank_pre."                                      emptyText: '请选择{$field_comment}',canFolderSelect:true,flex:1,editable:false,\r\n".
 											   $blank_pre."                                      tree: new Ext.tree.TreePanel({\r\n".
-											   $blank_pre."                                          dataUrl: 'home/admin/src/httpdata/{$con_relation_class}Tree.php',\r\n".
+											   $blank_pre."                                          dataUrl: '{$url_httpdatatree}',\r\n".
 											   $blank_pre."                                          root: {nodeType: 'async'},border: false,rootVisible: false,\r\n".
 											   $blank_pre."                                          listeners: {\r\n".
 											   $blank_pre."                                              beforeload: function(n) {if (n) {this.getLoader().baseParams.id = n.attributes.id;}}\r\n".
