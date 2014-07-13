@@ -856,7 +856,7 @@ class AutoCodeViewExt extends AutoCode
 												  $blank_pre."                                  items: [\r\n".
 												  $blank_pre."                                      {\r\n".
 												  $blank_pre."                                          xtype:'combotree', fieldLabel:'{$field_comment}',ref:'{$key}_name',name: '{$key}_name',grid:this,\r\n".
-												  $blank_pre."                                          emptyText: '请选择{$field_comment}',canFolderSelect:false,flex:1,editable:false,\r\n".
+												  $blank_pre."                                          emptyText: '请选择{$field_comment}',canFolderSelect:true,flex:1,editable:false,\r\n".
 												  $blank_pre."                                          tree: new Ext.tree.TreePanel({\r\n".
 												  $blank_pre."                                              dataUrl: 'home/admin/src/httpdata/{$key}Tree.php',\r\n".
 												  $blank_pre."                                              root: {nodeType: 'async'},border: false,rootVisible: false,\r\n".
@@ -1530,7 +1530,7 @@ class AutoCodeViewExt extends AutoCode
 								$con_relation_class{0}=strtolower($con_relation_class{0});
 								$filterFields.=", xtype:'hidden'},{\r\n".
 											   $blank_pre."                                      xtype:'combotree',ref:'../{$fsname}',grid:this,\r\n".
-											   $blank_pre."                                      emptyText: '请选择{$field_comment}',canFolderSelect:false,flex:1,editable:false,\r\n".
+											   $blank_pre."                                      emptyText: '请选择{$field_comment}',canFolderSelect:true,flex:1,editable:false,\r\n".
 											   $blank_pre."                                      tree: new Ext.tree.TreePanel({\r\n".
 											   $blank_pre."                                          dataUrl: 'home/admin/src/httpdata/{$con_relation_class}Tree.php',\r\n".
 											   $blank_pre."                                          root: {nodeType: 'async'},border: false,rootVisible: false,\r\n".
