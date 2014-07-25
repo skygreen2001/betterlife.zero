@@ -7,14 +7,14 @@
  * @package util.common
  * @author skygreen
  */
-class UtilString extends Util 
+class UtilString extends Util
 {
 	/**
 	 * 查看字符串里是否包含指定字符串
 	 * @param mixed $subject
 	 * @param mixed $needle
 	 */
-	public static function contain($subject,$needle) 
+	public static function contain($subject,$needle)
 	{
 		if (strpos($subject,$needle)!== false) {
 			return true;
@@ -22,11 +22,11 @@ class UtilString extends Util
 			return false;
 		}
 	}
-	
+
 	/**
-	 * 检查是否有影响系统稳定，数据完全的字符。 
+	 * 检查是否有影响系统稳定，数据完全的字符。
 	 * @param type $str 字符串
-	 * @return bool 是否有影响系统稳定，数据完全的字符。 
+	 * @return bool 是否有影响系统稳定，数据完全的字符。
 	 */
 	public static function has_unsafeword($str)
 	{
@@ -34,15 +34,15 @@ class UtilString extends Util
 	}
 
 	/**
-	 * 查看字符串是否包含中文 
-	 * @param string $string 查看的字符串 
+	 * 查看字符串是否包含中文
+	 * @param string $string 查看的字符串
 	 * @return bool 是否包含中文
 	 */
 	public static function is_chinese($string)
 	{
 		return preg_match("/[\x80-\xff]./", $string);
 	}
-	
+
 	/**
 	 * 返回中文文字内容的长度。
 	 * @param string $title 中文文字内容
@@ -124,7 +124,7 @@ class UtilString extends Util
 		}
 		return $realnum;
 	}
-	
+
 	/**
 	 +----------------------------------------------------------<br/>
 	 * 检查字符串是否是UTF8编码<br/>
@@ -134,14 +134,14 @@ class UtilString extends Util
 	 * @return Boolean
 	 +----------------------------------------------------------
 	 */
-	public static function is_utf8($str) 
+	public static function is_utf8($str)
 	{
 		if (function_exists('mb_check_encoding')){
-			if (mb_check_encoding($str,'UTF-8')){  
-				return true;    
+			if (mb_check_encoding($str,'UTF-8')){
+				return true;
 			}else{
 				return false;
-			}        
+			}
 		}else{
 			$c=0;
 			$b=0;
@@ -173,7 +173,7 @@ class UtilString extends Util
 	/**
 	 * 定义字符转换函数，解决mssql中文乱码问题
 	 */
-	public static function gbk2utf8($string) 
+	public static function gbk2utf8($string)
 	{
 		return iconv("gbk","utf-8",$string);
 	}
@@ -183,55 +183,76 @@ class UtilString extends Util
 	 * @param string $string 原字符串
 	 * @return string 转换后的字符串
 	 */
-	public static function utf82gbk($string) 
+	public static function utf82gbk($string)
 	{
 		return iconv("utf-8","gbk",$string);
-	}  
-	 
+	}
+
+    /**
+     * 在windows下获取中文文件名
+     * php的一些小函数，尤其是文件系统的小函数，总是有一些不能正常处理中文的情况发生，
+     * 在使用的时候要注意了，要么尽量避免使用中文文件名，要么自己写一些放心的小函数替代他们。
+     * 如pathinfo在处理带有英文连字符“-”的中文文件名时，得到的结果是错误的
+     * @see php的pathinfo()函数处理中文问题解决办法:http://www.92csz.com/48/1198.html
+     * @param mixed $filepath 文件全名称
+     */
+    public static function chinese_filename($filepath)
+    {
+          $basename = ltrim(substr($filepath, strrpos($filepath, '/')),"/");
+          $filename = ltrim(substr($basename, 0, strrpos($basename, '.')),"/");
+          return $filename;
+//        $path_parts = array();
+//        $path_parts ['dirname'] = rtrim(substr($filepath, 0, strrpos($filepath, '/')),"/")."/";
+//        $path_parts ['basename'] = ltrim(substr($filepath, strrpos($filepath, '/')),"/");
+//        $path_parts ['extension'] = substr(strrchr($filepath, '.'), 1);
+//        $path_parts ['filename'] = ltrim(substr($path_parts ['basename'], 0, strrpos($path_parts ['basename'], '.')),"/");
+//        return $path_parts;
+    }
+
 	/**
 	 * 在线模式:移除js,css里所有的换行，注释和冗余的空格
 	 */
 	public static function online_optimize($result)
-	{                             
-		$result=preg_replace("/(\/\/[\s\S]*?([\r]|[\n]))/", "",$result); //去掉js行注释如://   
-		$result=preg_replace("/(\/\*[\s\S]*?\*\/|[\r]|[\n]|[\r\n])/", "",$result);//去掉css注释如:/*   */        
-		$result=str_replace(array("\r\n","	","    ","\r", "\n", "\t"),"",$result);                      
-		/** 移除无需的空格 */        
+	{
+		$result=preg_replace("/(\/\/[\s\S]*?([\r]|[\n]))/", "",$result); //去掉js行注释如://
+		$result=preg_replace("/(\/\*[\s\S]*?\*\/|[\r]|[\n]|[\r\n])/", "",$result);//去掉css注释如:/*   */
+		$result=str_replace(array("\r\n","	","    ","\r", "\n", "\t"),"",$result);
+		/** 移除无需的空格 */
 		$result = str_replace('{ ', '{', $result);
 		$result = str_replace(' }', '}', $result);
 		$result = str_replace('; ', ';', $result);
 		$result = str_replace(', ', ',', $result);
 		$result = str_replace(' {', '{', $result);
 		$result = str_replace('} ', '}', $result);
-		$result = str_replace(': ', ':', $result);    
+		$result = str_replace(': ', ':', $result);
 		$result = str_replace(' :', ':', $result);
 		$result = str_replace(' ,', ',', $result);
 		$result = str_replace(' ;', ';', $result);
 		return $result;
 	}
-				
+
 	/**
 	 * 截取指定的字符串到指定长度。
 	 * 1.英文按单词截取指定长度数的单词。
-	 * 2.中文按单字截取指定长度数的字。 
+	 * 2.中文按单字截取指定长度数的字。
 	 * @param $string the original string
 	 * @param $count  the word count
-	 * @param $ellipsis  TRUE to add "..." or use a string to define other character   
-	 * @param $count  the word count        
+	 * @param $ellipsis  TRUE to add "..." or use a string to define other character
+	 * @param $count  the word count
 	 * @return
 	 * trimmed string with ellipsis added if it was truncated
 	 */
 	public static function word_trim($string,$count,$ellipsis = true,$isChinese=true)
-	{    
+	{
 		if ($isChinese){
-			$string = UtilString::msubstr($string,0,$count);  
+			$string = UtilString::msubstr($string,0,$count);
 			if (is_string($ellipsis)){
 				$string.=$ellipsis;
 			}
 			elseif ($ellipsis){
 				$string .= '&hellip;' ;
-			}                        
-			return $string;  
+			}
+			return $string;
 		}else{
 			$words = preg_split("/[\s]+/",$string);
 			if (count($words)>$count){
@@ -244,7 +265,7 @@ class UtilString extends Util
 					$string .= '&hellip;' ;
 				}
 			}
-			return $string ;    
+			return $string ;
 		}
 	}
 
@@ -264,7 +285,7 @@ class UtilString extends Util
 	 * @return string
 	 +----------------------------------------------------------
 	 */
-	public static function msubstr($str, $start=0, $length=0, $charset="utf-8", $suffix=true) 
+	public static function msubstr($str, $start=0, $length=0, $charset="utf-8", $suffix=true)
 	{
 		if(function_exists("mb_substr"))
 			return mb_substr($str, $start, $length, $charset);
@@ -288,13 +309,13 @@ class UtilString extends Util
 	 +----------------------------------------------------------
 	 * @param string $len 长度
 	 * @param string $type 字串类型
-	 * 0 字母 1 数字 2 大写字母 3 小写字母 4 中文 5 百家姓 其它 混合 
+	 * 0 字母 1 数字 2 大写字母 3 小写字母 4 中文 5 百家姓 其它 混合
 	 * @param string $addChars 额外字符
 	 +----------------------------------------------------------
 	 * @return string
 	 +----------------------------------------------------------
 	 */
-	public static function rand_string($len=6,$type='',$addChars='') 
+	public static function rand_string($len=6,$type='',$addChars='')
 	{
 		$str ='';
 		switch($type) {
@@ -334,7 +355,7 @@ class UtilString extends Util
 			$str     =   substr($chars,0,$len);
 		}
 		return $str;
-	} 
+	}
 
 	/**
 	 +----------------------------------------------------------<br/>
@@ -348,7 +369,7 @@ class UtilString extends Util
 	 * @return array
 	 +----------------------------------------------------------
 	 */
-	public static function build_count_rand ($number,$length=4,$mode=1) 
+	public static function build_count_rand ($number,$length=4,$mode=1)
 	{
 		if($mode==1 && $length<strlen($number) ) {
 			//不足以生成一定数量的不重复数字
@@ -382,7 +403,7 @@ class UtilString extends Util
 	 * @return string | array
 	 +----------------------------------------------------------
 	 */
-	public static function build_format_rand($format,$number=1) 
+	public static function build_format_rand($format,$number=1)
 	{
 		$str  =  array();
 		$length =  strlen($format);
@@ -412,9 +433,9 @@ class UtilString extends Util
 		}
 		return $number==1? $strtemp : $str ;
 	}
-	
+
 	/**
-	* 去除Html标签   
+	* 去除Html标签
 	* str 需要截去的对象
 	*/
 	public static function delhtml($str){   //清除HTML标签
