@@ -33,7 +33,7 @@ class UtilEmailer
 	 * @param string $subject 邮件标题
 	 * @param string $content 邮件内容
 	 */
-	public static function sendEmail($fromaddress,$fromname,$toaddress,$toname,$subject,$content) 
+	public static function sendEmail($fromaddress,$fromname,$toaddress,$toname,$subject,$content)
 	{
 		$mail = new PHPMailer(); //建立邮件发送类
 		$mail->Host = self::$host; //您的企业邮局域名
@@ -43,7 +43,7 @@ class UtilEmailer
 		$mail->From = $fromaddress; //邮件发送者email地址
 		$mail->FromName = $fromname;
 		$mail->AddAddress($toaddress, $toname); //接收邮件的email信箱("收件人email地址","收件人姓名")
-		$mail->Subject = "=?utf-8?B?" . base64_encode($subject) . "?="; //邮件标题
+		$mail->Subject = $subject;//"=?utf-8?B?" . base64_encode($subject) . "?="; //邮件标题
 		$mail->Body = $content; //邮件内容
 		$mail->IsHTML(true); //是否使用HTML格式
 		$mail->CharSet = "UTF-8"; //编码格式
