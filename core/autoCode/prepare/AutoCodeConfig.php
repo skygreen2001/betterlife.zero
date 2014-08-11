@@ -216,10 +216,11 @@ class AutoCodeConfig extends AutoCode
 	}
 
 	/**
-	 * 表关系主键显示配置
+	 * 表五种关系映射配置
 	 * @param array $classname 数据对象类名
+	 * @param string $tablename 表名称
 	 * @param array $fieldInfo 表列信息列表
-	 * @param array $relation_fives 表关系主键显示
+	 * @param array $relation_fives 表五种关系映射配置
 	 */
 	private static function relationFives($classname,$tablename,$fieldInfo,$relation_fives)
 	{
