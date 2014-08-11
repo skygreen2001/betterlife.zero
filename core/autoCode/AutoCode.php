@@ -515,7 +515,7 @@ class AutoCode extends Object
 		if ($isReturnNull){
 			return "";
 		}else{
-			return "name";
+			return "Name";
 		}
 	}
 
