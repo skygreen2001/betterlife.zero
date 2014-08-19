@@ -49,7 +49,9 @@ class UtilUeditor extends Util
 				var ue_{$textarea_id};
 				function pageInit_ue_{$textarea_id}()
 				{
-					ue_{$textarea_id}=UE.getEditor('{$textarea_id}');
+					ue_{$textarea_id}=UE.getEditor('{$textarea_id}',{
+						allowDivTransToP: false
+					});
 				}
 				"
 			);
@@ -62,7 +64,8 @@ class UtilUeditor extends Util
 				function pageInit_ue_{$textarea_id}()
 				{
 					ue_{$textarea_id}=UE.getEditor('{$textarea_id}',{
-						toolbars:$configString
+						toolbars:$configString,
+						allowDivTransToP: false
 					});
 				}
 				"
