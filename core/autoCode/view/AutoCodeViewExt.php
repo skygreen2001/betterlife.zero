@@ -1144,7 +1144,7 @@ class AutoCodeViewExt extends AutoCode
 						$textareaOnlineditor_Add_array["ckEditor"].="                    if (CKEDITOR.instances.$fieldname) CKEDITOR.instances.$fieldname.setData(\"\");\r\n";
 						$textareaOnlineditor_Add_array["kindEditor"].="                    if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname) $appName_alias.$classname.View.EditWindow.KindEditor_{$fieldname}.html(\"\");\r\n";
 
-						$textareaOnlineditor_Update_array["UEditor"].="                    ue_$fieldname.ready(function(){ue_$fieldname.setContent(data.$fieldname);});\r\n";
+						$textareaOnlineditor_Update_array["UEditor"].="                    if (ue_$fieldname)ue_$fieldname.ready(function(){ue_$fieldname.setContent(data.$fieldname);});\r\n";
 						$textareaOnlineditor_Update_array["ckEditor"].="                    if (CKEDITOR.instances.$fieldname) CKEDITOR.instances.$fieldname.setData(data.$fieldname);\r\n";
 						$textareaOnlineditor_Update_array["kindEditor"].="                    if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname) $appName_alias.$classname.View.EditWindow.KindEditor_$fieldname.html(data.$fieldname);\r\n";
 						$textareaOnlineditor_Update_array["xhEditor"].="                    if (xhEditor_$fieldname)xhEditor_$fieldname.setSource(data.$fieldname);\r\n";
