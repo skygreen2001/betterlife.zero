@@ -397,7 +397,7 @@ class Gc
 					}else{
 						$parse_url=parse_url(Gc::$upload_url);
 						Gc::$upload_url=$parse_url["scheme"]."://".$parse_url["host"];
-						if (!empty($parse_url["port"]))  Gc::$attachment_url.=":".$parse_url["port"];
+						if (!empty($parse_url["port"]))  Gc::$upload_url.=":".$parse_url["port"];
 						Gc::$upload_url.="/upload/";
 					}
 				}
