@@ -139,10 +139,10 @@ class Gc
 	 * @static
 	 */
 	public static $module_names=array(
-			"admin",
-			"betterlife",
-			"model",
-			"business",
+			"Admin",
+			"BetterlifeNet",
+			"Model",
+			"Business",
 	);
 	/**
 	 * 所有无需预加载的 业务应用所在的根目录路径下的子目录<br/>

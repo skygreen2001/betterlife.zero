@@ -10,7 +10,7 @@
 		</div>
 		<input type="submit" name="Submit" value="登录" class="btnSubmit" />
 		</form>
-		<my:a href="{$url_base}index.php?go=betterlife.auth.register">注册</my:a>
+		<my:a href="{$url_base}index.php?go=BetterlifeNet.auth.register">注册</my:a>
 	</div>
 	<div align="center">[测试帐户]用户名:admin,密码:admin<br/>[测试帐户]用户名:china,密码:iloveu</center>
 {/block}

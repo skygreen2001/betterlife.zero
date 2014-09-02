@@ -11,6 +11,6 @@
 		</div>
 		<input type="submit" name="Submit" value="注册" class="btnSubmit"/>
 		</form>
-		<my:a href="{$url_base}index.php?go=betterlife.auth.login">登录</my:a> 
+		<my:a href="{$url_base}index.php?go=BetterlifeNet.auth.login">登录</my:a> 
 	</div>
 {/block}

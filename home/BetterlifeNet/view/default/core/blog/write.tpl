@@ -16,8 +16,8 @@
 		pageInit_blog_content();});</script>
 	{/if}   
 	<div class="contentBox">
-		<b><my:a href="{$url_base}index.php?go=betterlife.auth.logout">退出</my:a></b><br/>
-		<my:a href="{$url_base}index.php?go=betterlife.blog.display&pageNo={$smarty.get.pageNo|default:"1"}">博客列表</my:a>
+		<b><my:a href="{$url_base}index.php?go=BetterlifeNet.auth.logout">退出</my:a></b><br/>
+		<my:a href="{$url_base}index.php?go=BetterlifeNet.blog.display&pageNo={$smarty.get.pageNo|default:"1"}">博客列表</my:a>
 		<br/><font color="{$color}">{$message|nl2br|default:''}</font><br/>
 		<form name="postForm" method="POST">
 			博文名:<br/>

@@ -18,8 +18,8 @@
 		{/if}
 	{/if}
 	<div id="content" class="contentBox">
-		<my:a href='{$url_base}?go=betterlife.auth.logout'><b>退出</b></my:a><br/>
-		<my:a href='{$url_base}?go=betterlife.blog.display&pageNo={$smarty.get.pageNo|default:"1"}'><b>博客列表</b></my:a>
+		<my:a href='{$url_base}?go=BetterlifeNet.auth.logout'><b>退出</b></my:a><br/>
+		<my:a href='{$url_base}?go=BetterlifeNet.blog.display&pageNo={$smarty.get.pageNo|default:"1"}'><b>博客列表</b></my:a>
 		<div id='blog{$blog.blog_id}' >
 			<h1>{$blog.Blog_Name}</h1>
 			<p>{$blog.Blog_Content|nl2br}</p>
@@ -32,8 +32,8 @@
 				由 {$comment.user.Username} 在 {$comment.CommitTime|date_format:'%Y-%m-%d %H:%M'} 提交<br/><span></span>
 				</blockquote>
 				<b>
-				{if $comment.canEdit}[<my:a href="{$url_base}index.php?go=betterlife.comment.comment&comment_id={$comment.ID}&blog_id={$comment.Blog_ID}&pageNo={$smarty.get.pageNo|default:"1"}">改</my:a>]{/if}
-				{if $comment.canDelete}[<my:a href="{$url_base}index.php?go=betterlife.comment.delete&comment_id={$comment.ID}&blog_id={$comment.Blog_ID}&pageNo={$smarty.get.pageNo|default:"1"}">删</my:a>]{/if}
+				{if $comment.canEdit}[<my:a href="{$url_base}index.php?go=BetterlifeNet.comment.comment&comment_id={$comment.ID}&blog_id={$comment.Blog_ID}&pageNo={$smarty.get.pageNo|default:"1"}">改</my:a>]{/if}
+				{if $comment.canDelete}[<my:a href="{$url_base}index.php?go=BetterlifeNet.comment.delete&comment_id={$comment.ID}&blog_id={$comment.Blog_ID}&pageNo={$smarty.get.pageNo|default:"1"}">删</my:a>]{/if}
 				</b>
 			</div>
 			{/foreach}

@@ -6,7 +6,7 @@
  * @var string|array $excludes 排除在外要加载的子文件夹[只有一个文件夹就是字符串，超过一个就是数组]
  */
 function load_module($moduleName,$module_dir,$excludes=null)
-{
+{              
 	$require_dirs=UtilFileSystem::getSubDirsInDirectory($module_dir);
 	///需要包含本目录下的文件。
 

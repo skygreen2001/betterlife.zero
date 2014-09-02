@@ -350,12 +350,14 @@ class Router
 		if(!empty($route[$var])){
 			$group=$route[$var]; 
 			unset($route[$var]);
-			$this->module=strtolower($group); 
+			//$this->module=strtolower($group);
+            $this->module=$group; 
 		}else{
 		  if (count(Gc::$module_names)>=3){
 			$group= Gc::$module_names[2];  
 		  }  
-		  $this->module=strtolower($group); 
+		  //$this->module=strtolower($group); 
+          $this->module=$group; 
 		}  
 		/**
 		 * 设置控制器
