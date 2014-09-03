@@ -12,7 +12,7 @@ class AutoCodeDomainJava extends AutoCode
 	/**
 	 * Java 实体类所在的Package名称
 	 */
-	public static $package_name="com.kstm.pcard.domain";
+	public static $package_name="com.bb.domain";
 	/**
 	 * 实体数据对象类完整的保存路径
 	 */
