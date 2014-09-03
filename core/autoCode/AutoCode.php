@@ -489,7 +489,7 @@ class AutoCode extends Object
 			$field_comment=preg_split("/[\s,]+/", $field_comment);
 			$field_comment=$field_comment[0];
 		}
-		if ($field_comment)$field_comment=str_replace(array('标识','编号','主键'),"",$field_comment);
+		//if ($field_comment)$field_comment=str_replace(array('标识','编号','主键'),"",$field_comment);
 		return $field_comment;
 	}
 
