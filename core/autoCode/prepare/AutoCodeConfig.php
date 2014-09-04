@@ -130,42 +130,39 @@ class AutoCodeConfig extends AutoCode
 		{
 			if (!self::isNotColumnKeywork($fieldname))continue;
 			if ($fieldname==self::keyIDColumn($classname))continue;
-			if (!empty($showfieldname)){
-				if ((!in_array($fieldname,$exists_condition))&&contains($fieldname,array("Name","Title"))&&($fieldname!=$showfieldname)&&(!contain($fieldname,"_ID"))){
+			if ((!in_array($fieldname,$exists_condition))&&contains($fieldname,array("Name","Title"))&&($fieldname!=$showfieldname)&&(!contain($fieldname,"_ID"))){
+				$conditions[]=array("@value"=>$fieldname);
+				$exists_condition[]=$fieldname;
+			}
+
+			if (count($conditions)<self::$count_condition){
+				if ((!in_array($fieldname,$exists_condition))&&contains($fieldname,array("Code","_no","Status","Type"))&&(!contain($fieldname,"_ID"))){
 					$conditions[]=array("@value"=>$fieldname);
 					$exists_condition[]=$fieldname;
 				}
-
-				if (count($conditions)<self::$count_condition){
-					if ((!in_array($fieldname,$exists_condition))&&contains($fieldname,array("Code","_no","Status","Type"))&&(!contain($fieldname,"_ID"))){
-						$conditions[]=array("@value"=>$fieldname);
-						$exists_condition[]=$fieldname;
+				if (contain($fieldname,"_ID")&&(!contain($fieldname,"Parent_ID"))){
+					$relation_classname=str_replace("_ID", "", $fieldname);
+					$relation_classname{0}=strtoupper($relation_classname{0});
+					$relation_class=null;
+					if (class_exists($relation_classname)) {
+						$relation_class=new $relation_classname();
 					}
-					if (contain($fieldname,"_ID")&&(!contain($fieldname,"Parent_ID"))){
-						$relation_classname=str_replace("_ID", "", $fieldname);
-						$relation_classname{0}=strtoupper($relation_classname{0});
-						$relation_class=null;
-						if (class_exists($relation_classname)) {
-							$relation_class=new $relation_classname();
-						}
-						if ((!in_array($fieldname,$exists_condition))&&($relation_class instanceof DataObject)){
-							$showfieldname_relation=self::getShowFieldNameByClassname($relation_classname);
-							if (!in_array($showfieldname_relation,$exists_condition)){
-								$conditions[]=array(
-									'@attributes' => array(
-										"relation_class"=>$relation_classname,
-										"show_name"=>$showfieldname_relation
-									),
-									"@value"=>$fieldname);
-								$exists_condition[]=$fieldname;
-							}
+					if ((!in_array($fieldname,$exists_condition))&&($relation_class instanceof DataObject)){
+						$showfieldname_relation=self::getShowFieldNameByClassname($relation_classname);
+						if (!in_array($showfieldname_relation,$exists_condition)){
+							$conditions[]=array(
+								'@attributes' => array(
+									"relation_class"=>$relation_classname,
+									"show_name"=>$showfieldname_relation
+								),
+								"@value"=>$fieldname);
+							$exists_condition[]=$fieldname;
 						}
 					}
-				}else{
-					break;
 				}
+			}else{
+				break;
 			}
-
 		}
 		return $conditions;
 	}
