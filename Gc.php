@@ -139,7 +139,7 @@ class Gc
 	 * @static
 	 */
 	public static $module_names=array(
-			"Admin",
+			"admin",
 			"BetterlifeNet",
 			"Model",
 			"Business",
