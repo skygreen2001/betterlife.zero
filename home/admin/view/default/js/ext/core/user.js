@@ -348,6 +348,7 @@ Bb.User.View={
 							Bb.User.View.Running.userGrid.tvpView.menu.mBind.setChecked(true);
 						},
 						hide:function(w){
+							Bb.User.Config.View.IsShow=0;
 							Bb.User.View.Running.userGrid.tvpView.toggle(false);
 						}
 					},

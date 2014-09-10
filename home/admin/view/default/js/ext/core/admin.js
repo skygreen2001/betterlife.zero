@@ -331,6 +331,7 @@ Bb.Admin.View={
 							Bb.Admin.View.Running.adminGrid.tvpView.menu.mBind.setChecked(true);
 						},
 						hide:function(w){
+							Bb.Admin.Config.View.IsShow=0;
 							Bb.Admin.View.Running.adminGrid.tvpView.toggle(false);
 						}
 					},

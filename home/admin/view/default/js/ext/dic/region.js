@@ -303,6 +303,7 @@ Bb.Region.View={
 							Bb.Region.View.Running.regionGrid.tvpView.menu.mBind.setChecked(true);
 						},
 						hide:function(w){
+							Bb.Region.Config.View.IsShow=0;
 							Bb.Region.View.Running.regionGrid.tvpView.toggle(false);
 						}
 					},

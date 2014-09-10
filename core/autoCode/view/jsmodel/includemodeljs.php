@@ -252,6 +252,7 @@ $viewdoblock
 							$appName_alias.$classname.View.Running.{$instancename}Grid.tvpView.menu.mBind.setChecked(true);
 						},
 						hide:function(w){
+							$appName_alias.$classname.Config.View.IsShow=0;
 							$appName_alias.$classname.View.Running.{$instancename}Grid.tvpView.toggle(false);
 						}
 					},
