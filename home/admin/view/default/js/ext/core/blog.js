@@ -409,6 +409,7 @@ Bn.Blog.View={
 							Bn.Blog.View.Running.blogGrid.tvpView.menu.mBind.setChecked(true);
 						},
 						hide:function(w){
+							Bn.Blog.Config.View.IsShow=0;
 							Bn.Blog.View.Running.blogGrid.tvpView.toggle(false);
 						}
 					},
