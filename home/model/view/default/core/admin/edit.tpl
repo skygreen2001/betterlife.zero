@@ -2,15 +2,15 @@
 {block name=body}
  <div class="block">
 	<div><h1>编辑系统管理人员</h1><p><font color="red">{$message|default:''}</font></p></div>
-	<form name="adminForm" method="post"><input type="hidden" name="admin_id" value="{$admin.admin_id}"/>
+	<form name="adminForm" method="post"><input type="hidden" name="ID" value="{$admin.ID}"/>
 	<table class="viewdoblock">
-        <tr class="entry"><th class="head">部门标识</th><td class="content"><input type="text" class="edit" name="department_id" value="{$admin.department_id}"/></td></tr>
-        <tr class="entry"><th class="head">用户名</th><td class="content"><input type="text" class="edit" name="username" value="{$admin.username}"/></td></tr>
-        <tr class="entry"><th class="head">真实姓名</th><td class="content"><input type="text" class="edit" name="realname" value="{$admin.realname}"/></td></tr>
-        <tr class="entry"><th class="head">密码</th><td class="content"><input type="text" class="edit" name="password" value="{$admin.password}"/></td></tr>
-        <tr class="entry"><th class="head">扮演角色</th><td class="content"><input type="text" class="edit" name="roletype" value="{$admin.roletype}"/></td></tr>
-        <tr class="entry"><th class="head">视野</th><td class="content"><input type="text" class="edit" name="seescope" value="{$admin.seescope}"/></td></tr>
-        <tr class="entry"><th class="head">登录次数</th><td class="content"><input type="text" class="edit" name="loginTimes" value="{$admin.loginTimes}"/></td></tr>
+        <tr class="entry"><th class="head">部门标识</th><td class="content"><input type="text" class="edit" name="Department_ID" value="{$admin.Department_ID}"/></td></tr>
+        <tr class="entry"><th class="head">用户名</th><td class="content"><input type="text" class="edit" name="Username" value="{$admin.Username}"/></td></tr>
+        <tr class="entry"><th class="head">真实姓名</th><td class="content"><input type="text" class="edit" name="Realname" value="{$admin.Realname}"/></td></tr>
+        <tr class="entry"><th class="head">密码</th><td class="content"><input type="text" class="edit" name="Password" value="{$admin.Password}"/></td></tr>
+        <tr class="entry"><th class="head">扮演角色</th><td class="content"><input type="text" class="edit" name="Roletype" value="{$admin.Roletype}"/></td></tr>
+        <tr class="entry"><th class="head">视野</th><td class="content"><input type="text" class="edit" name="Seescope" value="{$admin.Seescope}"/></td></tr>
+        <tr class="entry"><th class="head">登录次数</th><td class="content"><input type="text" class="edit" name="LoginTimes" value="{$admin.LoginTimes}"/></td></tr>
 		<tr class="entry"><td class="content" colspan="2" align="center"><input type="submit" value="提交" class="btnSubmit" /></td></tr>
 	</table>
 	</form>

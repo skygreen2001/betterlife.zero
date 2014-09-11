@@ -3,7 +3,7 @@
  +---------------------------------------<br/>
  * 控制器:首页导航<br/>
  +---------------------------------------
- * @category betterlife
+ * @category BetterlifeNet
  * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */

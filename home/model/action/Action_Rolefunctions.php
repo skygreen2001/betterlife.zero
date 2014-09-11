@@ -3,7 +3,7 @@
  +---------------------------------------<br/>
  * 控制器:角色拥有功能<br/>
  +---------------------------------------
- * @category betterlife
+ * @category BetterlifeNet
  * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
@@ -20,9 +20,9 @@ class Action_Rolefunctions extends ActionModel
             $nowpage=1; 
         }
         $count=Rolefunctions::count();
-        $bb_page=UtilPage::init($nowpage,$count);
+        $bn_page=UtilPage::init($nowpage,$count);
         $this->view->countRolefunctionss=$count;
-        $rolefunctionss = Rolefunctions::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+        $rolefunctionss = Rolefunctions::queryPage($bn_page->getStartPoint(),$bn_page->getEndPoint());
         $this->view->set("rolefunctionss",$rolefunctionss);
     }
     /**

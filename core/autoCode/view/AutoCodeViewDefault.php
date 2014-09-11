@@ -208,13 +208,15 @@ LISTS;
 			$kindEditor_prepare="    ";
 			$ckeditor_prepare="    ";
 			$xhEditor_prepare="    ";
+			$ueEditor_prepare="";
 			foreach ($text_area_fieldname as $key=>$value) {
 				$headerscontents.="        <tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\">\r\n".
-								  "        <textarea id=\"$key\" name=\"$key\" style=\"width:93%;height:300px;visibility:hidden;\">{\${$instancename}.$key}</textarea>\r\n".
+								  "        <textarea id=\"$key\" name=\"$key\" style=\"width:720px;height:300px;\">{\${$instancename}.$key}</textarea>\r\n".
 								  "        </td></tr>\r\n";
 				$kindEditor_prepare.="showHtmlEditor(\"$key\");";
 				$ckeditor_prepare.="ckeditor_replace_$key();";
 				$xhEditor_prepare.="pageInit_$key();";
+				$ueEditor_prepare.="pageInit_ue_$key();";
 			}
 
 			$textareapreparesentence = <<<EDIT
@@ -229,6 +231,11 @@ $ckeditor_prepare});</script>
 $xhEditor_prepare});</script>
  {/if}
 EDIT;
+			$ueTextareacontents=<<<UETC
+    {if (\$online_editor=='UEditor')}
+    <script>$ueEditor_prepare</script>
+    {/if}
+UETC;
 		}
 		if (!empty($headerscontents)&&(strlen($headerscontents)>2)){
 			$headerscontents=substr($headerscontents,0,strlen($headerscontents)-2);
@@ -243,7 +250,7 @@ $headerscontents
 	</table>
 	</form>
 	<div align="center"><my:a href='{\$url_base}index.php?go=$appname.{$instancename}.lists&pageNo={\$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{\$url_base}index.php?go=$appname.{$instancename}.view&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}'>查看{$table_comment}</my:a></div>
-</div>
+</div>$ueTextareacontents
 EDIT;
 		if (count($text_area_fieldname)>=1){
 			$result=$textareapreparesentence."\r\n".$result;

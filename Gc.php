@@ -141,7 +141,7 @@ class Gc
 	public static $module_names=array(
 			"admin",
 			"BetterlifeNet",
-			"Model",
+			"model",
 			"Business",
 	);
 	/**

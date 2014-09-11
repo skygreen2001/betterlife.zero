@@ -3,7 +3,7 @@
  +---------------------------------------<br/>
  * 控制器:用户收到通知<br/>
  +---------------------------------------
- * @category betterlife
+ * @category BetterlifeNet
  * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
@@ -20,9 +20,9 @@ class Action_Usernotice extends ActionModel
             $nowpage=1; 
         }
         $count=Usernotice::count();
-        $bb_page=UtilPage::init($nowpage,$count);
+        $bn_page=UtilPage::init($nowpage,$count);
         $this->view->countUsernotices=$count;
-        $usernotices = Usernotice::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+        $usernotices = Usernotice::queryPage($bn_page->getStartPoint(),$bn_page->getEndPoint());
         $this->view->set("usernotices",$usernotices);
     }
     /**

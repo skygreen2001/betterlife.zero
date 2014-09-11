@@ -15,13 +15,13 @@
 		</tr>
 		{foreach item=department from=$departments}
 		<tr class="entry">
-            <td class="content">{$department.department_id}</td>
-            <td class="content">{$department.department_name}</td>
-            <td class="content">{$department.manager}</td>
-            <td class="content">{$department.budget}</td>
-            <td class="content">{$department.actualexpenses}</td>
-            <td class="content">{$department.estsalary}</td>
-            <td class="content">{$department.actualsalary}</td>
+            <td class="content">{$department.ID}</td>
+            <td class="content">{$department.Department_Name}</td>
+            <td class="content">{$department.Manager}</td>
+            <td class="content">{$department.Budget}</td>
+            <td class="content">{$department.Actualexpenses}</td>
+            <td class="content">{$department.Estsalary}</td>
+            <td class="content">{$department.Actualsalary}</td>
 			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.department.view&id={$department.id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.department.edit&id={$department.id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.department.delete&id={$department.id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
 		</tr>
 		{/foreach}

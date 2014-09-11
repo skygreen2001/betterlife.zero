@@ -16,14 +16,14 @@
 		</tr>
 		{foreach item=admin from=$admins}
 		<tr class="entry">
-            <td class="content">{$admin.admin_id}</td>
-            <td class="content">{$admin.department_id}</td>
-            <td class="content">{$admin.username}</td>
-            <td class="content">{$admin.realname}</td>
-            <td class="content">{$admin.password}</td>
-            <td class="content">{$admin.roletype}</td>
-            <td class="content">{$admin.seescope}</td>
-            <td class="content">{$admin.loginTimes}</td>
+            <td class="content">{$admin.ID}</td>
+            <td class="content">{$admin.Department_ID}</td>
+            <td class="content">{$admin.Username}</td>
+            <td class="content">{$admin.Realname}</td>
+            <td class="content">{$admin.Password}</td>
+            <td class="content">{$admin.Roletype}</td>
+            <td class="content">{$admin.Seescope}</td>
+            <td class="content">{$admin.LoginTimes}</td>
 			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.admin.view&id={$admin.id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.admin.edit&id={$admin.id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.admin.delete&id={$admin.id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
 		</tr>
 		{/foreach}

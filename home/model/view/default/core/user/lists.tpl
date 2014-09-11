@@ -14,12 +14,12 @@
 		</tr>
 		{foreach item=user from=$users}
 		<tr class="entry">
-            <td class="content">{$user.user_id}</td>
-            <td class="content">{$user.username}</td>
-            <td class="content">{$user.password}</td>
-            <td class="content">{$user.email}</td>
-            <td class="content">{$user.cellphone}</td>
-            <td class="content">{$user.loginTimes}</td>
+            <td class="content">{$user.ID}</td>
+            <td class="content">{$user.Username}</td>
+            <td class="content">{$user.Password}</td>
+            <td class="content">{$user.Email}</td>
+            <td class="content">{$user.Cellphone}</td>
+            <td class="content">{$user.LoginTimes}</td>
 			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.user.view&id={$user.id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.user.edit&id={$user.id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.user.delete&id={$user.id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
 		</tr>
 		{/foreach}

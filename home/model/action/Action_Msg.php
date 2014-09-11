@@ -3,7 +3,7 @@
  +---------------------------------------<br/>
  * 控制器:消息<br/>
  +---------------------------------------
- * @category betterlife
+ * @category BetterlifeNet
  * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
@@ -20,9 +20,9 @@ class Action_Msg extends ActionModel
             $nowpage=1; 
         }
         $count=Msg::count();
-        $bb_page=UtilPage::init($nowpage,$count);
+        $bn_page=UtilPage::init($nowpage,$count);
         $this->view->countMsgs=$count;
-        $msgs = Msg::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+        $msgs = Msg::queryPage($bn_page->getStartPoint(),$bn_page->getEndPoint());
         $this->view->set("msgs",$msgs);
     }
     /**
@@ -57,7 +57,7 @@ class Action_Msg extends ActionModel
         $msg = Msg::get_by_id($msgId);
         $this->view->set("msg",$msg); 
         //加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。
-        $this->load_onlineditor('content');
+        $this->load_onlineditor('Content');
     }
     /**
      * 删除消息

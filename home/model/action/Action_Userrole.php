@@ -3,7 +3,7 @@
  +---------------------------------------<br/>
  * 控制器:用户角色<br/>
  +---------------------------------------
- * @category betterlife
+ * @category BetterlifeNet
  * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
@@ -20,9 +20,9 @@ class Action_Userrole extends ActionModel
             $nowpage=1; 
         }
         $count=Userrole::count();
-        $bb_page=UtilPage::init($nowpage,$count);
+        $bn_page=UtilPage::init($nowpage,$count);
         $this->view->countUserroles=$count;
-        $userroles = Userrole::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+        $userroles = Userrole::queryPage($bn_page->getStartPoint(),$bn_page->getEndPoint());
         $this->view->set("userroles",$userroles);
     }
     /**

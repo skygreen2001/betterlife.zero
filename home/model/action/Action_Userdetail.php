@@ -3,7 +3,7 @@
  +---------------------------------------<br/>
  * 控制器:用户详细信息<br/>
  +---------------------------------------
- * @category betterlife
+ * @category BetterlifeNet
  * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
@@ -20,9 +20,9 @@ class Action_Userdetail extends ActionModel
             $nowpage=1; 
         }
         $count=Userdetail::count();
-        $bb_page=UtilPage::init($nowpage,$count);
+        $bn_page=UtilPage::init($nowpage,$count);
         $this->view->countUserdetails=$count;
-        $userdetails = Userdetail::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+        $userdetails = Userdetail::queryPage($bn_page->getStartPoint(),$bn_page->getEndPoint());
         $this->view->set("userdetails",$userdetails);
     }
     /**
@@ -43,10 +43,10 @@ class Action_Userdetail extends ActionModel
             $userdetail = $this->model->Userdetail;
             $id= $userdetail->getId(); 
             $isRedirect=true;
-            if (!empty($_FILES)&&!empty($_FILES["profileUpload"]["name"])){
-                $result=$this->uploadImg($_FILES,"profileUpload","profile","userdetail");
+            if (!empty($_FILES)&&!empty($_FILES["ProfileUpload"]["name"])){
+                $result=$this->uploadImg($_FILES,"ProfileUpload","Profile","userdetail");
                 if ($result&&($result['success']==true)){
-                    if (array_key_exists('file_name',$result))$userdetail->profile = $result['file_name'];
+                    if (array_key_exists('file_name',$result))$userdetail->Profile = $result['file_name'];
                 }else{
                     $isRedirect=false;
                     $this->view->set("message",$result["msg"]);

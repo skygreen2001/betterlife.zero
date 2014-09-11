@@ -15,13 +15,13 @@
 		</tr>
 		{foreach item=msg from=$msgs}
 		<tr class="entry">
-            <td class="content">{$msg.msg_id}</td>
-            <td class="content">{$msg.senderId}</td>
-            <td class="content">{$msg.receiverId}</td>
-            <td class="content">{$msg.senderName}</td>
-            <td class="content">{$msg.receiverName}</td>
-            <td class="content">{$msg.content}</td>
-            <td class="content">{$msg.status}</td>
+            <td class="content">{$msg.ID}</td>
+            <td class="content">{$msg.SenderId}</td>
+            <td class="content">{$msg.ReceiverId}</td>
+            <td class="content">{$msg.SenderName}</td>
+            <td class="content">{$msg.ReceiverName}</td>
+            <td class="content">{$msg.Content}</td>
+            <td class="content">{$msg.Status}</td>
 			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.msg.view&id={$msg.id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.msg.edit&id={$msg.id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.msg.delete&id={$msg.id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
 		</tr>
 		{/foreach}

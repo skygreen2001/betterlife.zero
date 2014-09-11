@@ -13,11 +13,11 @@
 		</tr>
 		{foreach item=logsystem from=$logsystems}
 		<tr class="entry">
-            <td class="content">{$logsystem.logsystem_id}</td>
-            <td class="content">{$logsystem.logtime}</td>
-            <td class="content">{$logsystem.ident}</td>
-            <td class="content">{$logsystem.priority}</td>
-            <td class="content">{$logsystem.message}</td>
+            <td class="content">{$logsystem.ID}</td>
+            <td class="content">{$logsystem.Logtime}</td>
+            <td class="content">{$logsystem.Ident}</td>
+            <td class="content">{$logsystem.Priority}</td>
+            <td class="content">{$logsystem.Message}</td>
 			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.logsystem.view&id={$logsystem.id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.logsystem.edit&id={$logsystem.id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.logsystem.delete&id={$logsystem.id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
 		</tr>
 		{/foreach}

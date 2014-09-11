@@ -3,7 +3,7 @@
  +---------------------------------------<br/>
  * 控制器:评论<br/>
  +---------------------------------------
- * @category betterlife
+ * @category BetterlifeNet
  * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
@@ -20,9 +20,9 @@ class Action_Comment extends ActionModel
             $nowpage=1; 
         }
         $count=Comment::count();
-        $bb_page=UtilPage::init($nowpage,$count);
+        $bn_page=UtilPage::init($nowpage,$count);
         $this->view->countComments=$count;
-        $comments = Comment::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+        $comments = Comment::queryPage($bn_page->getStartPoint(),$bn_page->getEndPoint());
         $this->view->set("comments",$comments);
     }
     /**
@@ -57,7 +57,7 @@ class Action_Comment extends ActionModel
         $comment = Comment::get_by_id($commentId);
         $this->view->set("comment",$comment); 
         //加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。
-        $this->load_onlineditor('comment');
+        $this->load_onlineditor('Comment');
     }
     /**
      * 删除评论

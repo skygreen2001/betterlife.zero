@@ -3,7 +3,7 @@
  +---------------------------------------<br/>
  * 控制器:地区<br/>
  +---------------------------------------
- * @category betterlife
+ * @category BetterlifeNet
  * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
@@ -20,9 +20,9 @@ class Action_Region extends ActionModel
             $nowpage=1; 
         }
         $count=Region::count();
-        $bb_page=UtilPage::init($nowpage,$count);
+        $bn_page=UtilPage::init($nowpage,$count);
         $this->view->countRegions=$count;
-        $regions = Region::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+        $regions = Region::queryPage($bn_page->getStartPoint(),$bn_page->getEndPoint());
         $this->view->set("regions",$regions);
     }
     /**

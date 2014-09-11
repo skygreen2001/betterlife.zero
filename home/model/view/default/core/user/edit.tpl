@@ -2,13 +2,13 @@
 {block name=body}
  <div class="block">
 	<div><h1>编辑用户</h1><p><font color="red">{$message|default:''}</font></p></div>
-	<form name="userForm" method="post"><input type="hidden" name="user_id" value="{$user.user_id}"/>
+	<form name="userForm" method="post"><input type="hidden" name="ID" value="{$user.ID}"/>
 	<table class="viewdoblock">
-        <tr class="entry"><th class="head">用户名</th><td class="content"><input type="text" class="edit" name="username" value="{$user.username}"/></td></tr>
-        <tr class="entry"><th class="head">用户密码</th><td class="content"><input type="text" class="edit" name="password" value="{$user.password}"/></td></tr>
-        <tr class="entry"><th class="head">邮箱地址</th><td class="content"><input type="text" class="edit" name="email" value="{$user.email}"/></td></tr>
-        <tr class="entry"><th class="head">手机电话</th><td class="content"><input type="text" class="edit" name="cellphone" value="{$user.cellphone}"/></td></tr>
-        <tr class="entry"><th class="head">访问次数</th><td class="content"><input type="text" class="edit" name="loginTimes" value="{$user.loginTimes}"/></td></tr>
+        <tr class="entry"><th class="head">用户名</th><td class="content"><input type="text" class="edit" name="Username" value="{$user.Username}"/></td></tr>
+        <tr class="entry"><th class="head">用户密码</th><td class="content"><input type="text" class="edit" name="Password" value="{$user.Password}"/></td></tr>
+        <tr class="entry"><th class="head">邮箱地址</th><td class="content"><input type="text" class="edit" name="Email" value="{$user.Email}"/></td></tr>
+        <tr class="entry"><th class="head">手机电话</th><td class="content"><input type="text" class="edit" name="Cellphone" value="{$user.Cellphone}"/></td></tr>
+        <tr class="entry"><th class="head">访问次数</th><td class="content"><input type="text" class="edit" name="LoginTimes" value="{$user.LoginTimes}"/></td></tr>
 		<tr class="entry"><td class="content" colspan="2" align="center"><input type="submit" value="提交" class="btnSubmit" /></td></tr>
 	</table>
 	</form>

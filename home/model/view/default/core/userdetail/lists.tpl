@@ -19,17 +19,17 @@
 		</tr>
 		{foreach item=userdetail from=$userdetails}
 		<tr class="entry">
-            <td class="content">{$userdetail.userdetail_id}</td>
-            <td class="content">{$userdetail.user_id}</td>
-            <td class="content">{$userdetail.realname}</td>
-            <td class="content">{$userdetail.country}</td>
-            <td class="content">{$userdetail.province}</td>
-            <td class="content">{$userdetail.city}</td>
-            <td class="content">{$userdetail.district}</td>
-            <td class="content">{$userdetail.address}</td>
-            <td class="content">{$userdetail.qq}</td>
-            <td class="content">{$userdetail.sex}</td>
-            <td class="content">{$userdetail.birthday}</td>
+            <td class="content">{$userdetail.ID}</td>
+            <td class="content">{$userdetail.User_ID}</td>
+            <td class="content">{$userdetail.Realname}</td>
+            <td class="content">{$userdetail.Country}</td>
+            <td class="content">{$userdetail.Province}</td>
+            <td class="content">{$userdetail.City}</td>
+            <td class="content">{$userdetail.District}</td>
+            <td class="content">{$userdetail.Address}</td>
+            <td class="content">{$userdetail.Qq}</td>
+            <td class="content">{$userdetail.Sex}</td>
+            <td class="content">{$userdetail.Birthday}</td>
 			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.userdetail.view&id={$userdetail.id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.userdetail.edit&id={$userdetail.id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.userdetail.delete&id={$userdetail.id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
 		</tr>
 		{/foreach}

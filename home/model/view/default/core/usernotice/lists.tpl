@@ -11,9 +11,9 @@
 		</tr>
 		{foreach item=usernotice from=$usernotices}
 		<tr class="entry">
-            <td class="content">{$usernotice.usernotice_id}</td>
-            <td class="content">{$usernotice.user_id}</td>
-            <td class="content">{$usernotice.notice_id}</td>
+            <td class="content">{$usernotice.ID}</td>
+            <td class="content">{$usernotice.User_ID}</td>
+            <td class="content">{$usernotice.Notice_ID}</td>
 			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.usernotice.view&id={$usernotice.id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.usernotice.edit&id={$usernotice.id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.usernotice.delete&id={$usernotice.id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
 		</tr>
 		{/foreach}

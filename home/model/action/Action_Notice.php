@@ -3,7 +3,7 @@
  +---------------------------------------<br/>
  * 控制器:通知<br/>
  +---------------------------------------
- * @category betterlife
+ * @category BetterlifeNet
  * @package web.model.action
  * @author skygreen skygreen2001@gmail.com
  */
@@ -20,9 +20,9 @@ class Action_Notice extends ActionModel
             $nowpage=1; 
         }
         $count=Notice::count();
-        $bb_page=UtilPage::init($nowpage,$count);
+        $bn_page=UtilPage::init($nowpage,$count);
         $this->view->countNotices=$count;
-        $notices = Notice::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+        $notices = Notice::queryPage($bn_page->getStartPoint(),$bn_page->getEndPoint());
         $this->view->set("notices",$notices);
     }
     /**
@@ -57,7 +57,7 @@ class Action_Notice extends ActionModel
         $notice = Notice::get_by_id($noticeId);
         $this->view->set("notice",$notice); 
         //加载在线编辑器的语句要放在:$this->view->viewObject[如果有这一句]之后。
-        $this->load_onlineditor('notice_content');
+        $this->load_onlineditor('Notice_Content');
     }
     /**
      * 删除通知
