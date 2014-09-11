@@ -26,15 +26,12 @@ p {
 	margin:5px;
 }
 
-div{
-	margin:8px;
-}
-
 div .block {
 	margin-top:10px;
 	border:1px solid #cfcfcf;
 	width:600px;
 	padding:10px;
+	margin:8px;
 }
 
 a {
