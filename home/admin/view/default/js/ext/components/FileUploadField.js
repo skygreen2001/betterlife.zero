@@ -90,7 +90,6 @@ Ext.ux.form.FileUploadField = Ext.extend(Ext.form.TextField,  {
             fileUploadComp.fileInput.dom.click();
         });
 
-
         this.bindListeners();
         this.resizeEl = this.positionEl = this.wrap;
     },
