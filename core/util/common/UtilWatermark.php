@@ -405,7 +405,11 @@ class UtilWatermark
 		$imageCreateFunction = $imageCreateFunctionArr[$mime];
 		$source_gd_image = $imageCreateFunction($source_file_path);
 
-		$overlay_gd_image = imagecreatefrompng(self::$watermark_overlay_image);
+		$imgsize_overlay=getimagesize(self::$watermark_overlay_image);
+		$mime_overlay=$imgsize_overlay["mime"];
+		$imageCreate_overlayFunction = $imageCreateFunctionArr[$mime_overlay];
+
+		$overlay_gd_image = $imageCreate_overlayFunction(self::$watermark_overlay_image);
 		$overlay_width = imagesx($overlay_gd_image);
 		$overlay_height = imagesy($overlay_gd_image);
 
