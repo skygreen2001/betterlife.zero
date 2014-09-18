@@ -65,7 +65,12 @@ h1{
     width: 360px;
     margin: -330px -180px;
 }
-
+#footnav {
+	position: absolute;
+	top: -50%;
+	width: 300px;
+	margin: 150px 0px 0px -100px;
+}
 div#content{
 	border-style:outset;
 	border-color: black;
@@ -90,6 +95,9 @@ div#content{
 					<p><a target="_blank" href="<?php echo Gc::$url_base?>index.php?go=model.index.index">通用模板</a></p>
 				</div>
 			</div>
+		</div>
+		<div id="footnav">
+			<a href="<?php echo Gc::$url_base?>tools/tools/db/manual/db_normal.php" target="_blank">数据库说明书</a>|<a href="<?php echo Gc::$url_base?>tools/tools/autoCode/db_onekey.php" target="_blank">一键生成</a>|<a href="<?php echo Gc::$url_base?>install/" target="_blank">线上部署</a>|<a href="https://github.com/skygreen2001/betterlife" target="_blank">帮助</a>
 		</div>
 	</div>
 </body>
