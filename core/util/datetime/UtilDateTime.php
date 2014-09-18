@@ -85,7 +85,7 @@ class UtilDateTime extends Util
 	 */
 	public static function now($type=EnumDateTimeFormat::DATE,$timeformat=EnumDateTimeShow::DATETIME)
 	{
-		date_default_timezone_set('Asia/Shanghai');
+		self::ChinaTime();
 		switch ($timeformat) {
 			case EnumDateTimeShow::DATE:
 				$now= date(self::TIMEFORMAT_YMD);
@@ -116,6 +116,7 @@ class UtilDateTime extends Util
 	 */
 	public static function timestampToDateTime($timestamp,$format=self::TIMEFORMAT_YMDHIS)
 	{
+		self::ChinaTime();
 		return date($format, $timestamp);
 	}
 
