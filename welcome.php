@@ -93,7 +93,7 @@ div#content{
 			</div>
 		</div>
 		<div id="footnav">
-			<a href="<?php echo Gc::$url_base?>tools/tools/db/manual/db_normal.php" target="_blank">数据库说明书</a>|<a href="<?php echo Gc::$url_base?>tools/tools/autoCode/db_onekey.php" target="_blank">一键生成</a>|<a style="cursor:hand;" onclick="if (confirm('确认需要一键部署，该操作不可还原！')==true){window.location.href='<?php echo Gc::$url_base?>tools/tools/web/deploy.php}'}" target="_blank">线上部署</a>|<a href="https://github.com/skygreen2001/betterlife" target="_blank">帮助</a>
+			<a href="<?php echo Gc::$url_base?>tools/tools/db/manual/db_normal.php" target="_blank">数据库说明书</a>|<a href="<?php echo Gc::$url_base?>tools/tools/autoCode/db_onekey.php" target="_blank">一键生成</a>|<a style="cursor:hand;" onclick="if (confirm('确认需要一键部署，该操作不可还原！')==true){window.location.href='<?php echo Gc::$url_base?>tools/tools/web/deploy.php'}" target="_blank">线上部署</a>|<a href="https://github.com/skygreen2001/betterlife" target="_blank">帮助</a>
 		</div>
 	</div>
 </body>

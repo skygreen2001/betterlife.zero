@@ -13,7 +13,7 @@ if(startWith($contents,"<?php")){
     }else{  
         echo "<a href=\"".Gc::$url_base."tools/tools/web/deploy.php?recover=yes\">还原</a>【至开发导航首页】<br>";
     }
-    echo "<a href=\"".Gc::$url_base."\">返回首页</a><br/>";
+    echo "<a href=\"".Gc::$url_base."\" target='_blank'>返回首页</a><br/>";
 }else{
     $redirect_head=<<<REDIRECT_HEAD
 <?php
@@ -28,7 +28,7 @@ REDIRECT_HEAD;
     //echo $contents;
     echo "部署成功，不再显示welcome页面，直接跳转到".Gc::$site_name."首页<br/>";
     echo "<a href=\"".Gc::$url_base."tools/tools/web/deploy.php?recover=yes\">还原</a>【至开发导航首页】<br>";
-    echo "<a href=\"".Gc::$url_base."\">返回首页</a><br/>";
+    echo "<a href=\"".Gc::$url_base."\" target='_blank'>返回首页</a><br/>";
 }
 
 ?>
