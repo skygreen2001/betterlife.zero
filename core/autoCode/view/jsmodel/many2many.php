@@ -232,10 +232,10 @@ $m2m_columns
                         ]
                     }),
                     tbar : {
-                        xtype : 'container',layout : 'anchor',
+                        xtype : 'container',layout : 'anchor',autoScroll : true,
                         height : 27,style:'font-size:14px',
                         defaults : {
-                            height : 27,anchor : '100%'
+                            height : 27,anchor : '100%',autoScroll : true,autoHeight : true
                         },
                         items : [
                             new Ext.Toolbar({

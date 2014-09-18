@@ -10,7 +10,7 @@ Bb.Layout = {
     HeaderPanel : [{
         region:'north',ref:'head',header:false,collapsible:true,collapseMode : 'mini',split : true,height:27*3,//contentEl:'header',
         tbar:{
-            xtype : 'container',layout : 'anchor',
+            xtype : 'container',layout : 'anchor',autoScroll : true,
             height : 27*3,style:'font-size:14px',
             items : [
                 new Ext.Toolbar({

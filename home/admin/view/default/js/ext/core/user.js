@@ -521,10 +521,10 @@ Bb.User.View={
 						]
 					}),
 					tbar : {
-						xtype : 'container',layout : 'anchor',
+						xtype : 'container',layout : 'anchor',autoScroll : true,
 						height : 27,style:'font-size:14px',
 						defaults : {
-							height : 27,anchor : '100%'
+							height : 27,anchor : '100%',autoScroll : true,autoHeight : true
 						},
 						items : [
 							new Ext.Toolbar({
@@ -908,10 +908,10 @@ Bb.User.View={
 						]
 					}),
 					tbar : {
-						xtype : 'container',layout : 'anchor',
+						xtype : 'container',layout : 'anchor',autoScroll : true,
 						height : 27,style:'font-size:14px',
 						defaults : {
-							height : 27,anchor : '100%'
+							height : 27,anchor : '100%',autoScroll : true,autoHeight : true
 						},
 						items : [
 							new Ext.Toolbar({
@@ -1219,9 +1219,9 @@ Bb.User.View={
 					]
 				}),
 				tbar : {
-					xtype : 'container',layout : 'anchor',height : 27 * 2,style:'font-size:14px',
+					xtype : 'container',layout : 'anchor',autoScroll : true,height : 27 * 2,style:'font-size:14px',
 					defaults : {
-						height : 27,anchor : '100%'
+						height : 27,anchor : '100%',autoScroll : true,autoHeight : true
 					},
 					items : [
 						new Ext.Toolbar({
