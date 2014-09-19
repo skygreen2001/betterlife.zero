@@ -13,6 +13,7 @@ class Initializer
 	public static $IS_WIN=true;
 	public static $IS_CLI=false;
 	public static $NAV_CORE_PATH;
+	public static $NAV_CONFIG_PATH;
 	/**
 	 * PHP文件名后缀
 	 */
@@ -181,12 +182,12 @@ class Initializer
 	 */
 	private static function init()
 	{
+		$root_config="config";
 		$root_core="core";
+		self::$NAV_CONFIG_PATH=Gc::$nav_framework_path.$root_config.DIRECTORY_SEPARATOR;
 		self::$NAV_CORE_PATH=Gc::$nav_framework_path.$root_core.DIRECTORY_SEPARATOR;
-		
 		//设置时区为中国时区
 		date_default_timezone_set('PRC');
-
 		//初始化PHP版本校验
 		if(version_compare(phpversion(), 5, '<')) {
 			header("HTTP/1.1 500 Server Error");
@@ -301,14 +302,16 @@ class Initializer
 	{
 		$core_util="util";
 		$include_paths=array(
+				self::$NAV_CONFIG_PATH,
 				self::$NAV_CORE_PATH,
 				self::$NAV_CORE_PATH.$core_util,
 				self::$NAV_CORE_PATH."log",
 				self::$NAV_CORE_PATH.$core_util.DIRECTORY_SEPARATOR."common",
 		);
 		set_include_path(get_include_path().PATH_SEPARATOR.join(PATH_SEPARATOR, $include_paths));
+		$dirs_config=UtilFileSystem::getAllDirsInDriectory(self::$NAV_CONFIG_PATH);
 		$dirs_root=UtilFileSystem::getAllDirsInDriectory(self::$NAV_CORE_PATH);
-		$include_paths=$dirs_root;
+		$include_paths=array_merge($dirs_root,$dirs_config);
 		$module_Dir=Gc::$nav_root_path;
 		if (strlen(Gc::$module_root)>0) {
 			$module_Dir.=Gc::$module_root.DIRECTORY_SEPARATOR;
@@ -345,6 +348,7 @@ class Initializer
 	private static function recordCoreClasses()
 	{
 		$dirs_root=array(
+				self::$NAV_CONFIG_PATH,
 				self::$NAV_CORE_PATH
 		);
 
