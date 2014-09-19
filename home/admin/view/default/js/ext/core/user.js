@@ -517,7 +517,7 @@ Bb.User.View={
                             this.sm,
                             {header : '标识',dataIndex : 'blog_id',hidden:true},
                             {header : '博客标题',dataIndex : 'blog_name'},
-                            {header : '博客内容',dataIndex : 'blog_content'}
+                            {header : '博客内容',dataIndex : 'blog_content',width:600}
 						]
 					}),
 					tbar : {
@@ -903,8 +903,8 @@ Bb.User.View={
 						columns : [
                             this.sm,
                             {header : '标识',dataIndex : 'comment_id',hidden:true},
-                            {header : '评论',dataIndex : 'comment'},
-                            {header : '博客',dataIndex : 'blog_name'}
+                            {header : '博客',dataIndex : 'blog_name'},
+                            {header : '评论',dataIndex : 'comment',width:600}
 						]
 					}),
 					tbar : {

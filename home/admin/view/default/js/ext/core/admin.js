@@ -308,9 +308,6 @@ Bb.Admin.View={
 						 '</table>'
 					 ]}
 				);
-                this.add(
-                    {title: '其他',iconCls:'tabs'}
-                );
 			}
 		}),
 		/**

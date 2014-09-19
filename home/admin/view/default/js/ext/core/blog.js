@@ -583,7 +583,7 @@ Bb.Blog.View={
 							this.sm,
 							{header : '标识',dataIndex : 'comment_id',hidden:true},
 							{header : '评论者',dataIndex : 'username'},
-							{header : '评论',dataIndex : 'comment'}
+							{header : '评论',dataIndex : 'comment',width:600}
 						]
 					}),
 					tbar : {
