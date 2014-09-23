@@ -152,6 +152,75 @@ class AutoCode extends Object
 	}
 
 	/**
+	 * 获取指定的表的列信息
+	 * @param array|string $table_names 表列表
+	 * 示例如下：
+	 *  1.array:array('bb_user_admin','bb_core_blog')
+	 *  2.字符串:'bb_user_admin,bb_core_blog'
+	 */
+	protected static function fieldInfosByTable_names($table_names)
+	{
+		$fieldInfos=self::$fieldInfos;
+		if(!empty($table_names)){
+			$fieldInfos=array();
+
+			if (is_string($table_names))$table_names=explode(",",$table_names);
+			if ($table_names&&(count($table_names)>0)){
+				for($i=0;$i<count($table_names);$i++){
+					if (!empty($table_names[$i])){
+						$tablename=$table_names[$i];
+						$fieldInfos[$tablename]=self::$fieldInfos[$tablename];
+					}
+				}
+			}
+		}
+		return $fieldInfos;
+	}
+
+	/**
+	 * 获取指定的表的表信息
+	 * @param array|string $table_names 表列表
+	 * 示例如下：
+	 *  1.array:array('bb_user_admin','bb_core_blog')
+	 *  2.字符串:'bb_user_admin,bb_core_blog'
+	 */
+	protected static function tableInfosByTable_names($table_names)
+	{
+		$tableInfos=self::$tableInfoList;
+		if(!empty($table_names)){
+			$tableInfos=array();
+
+			if (is_string($table_names))$table_names=explode(",",$table_names);
+			if ($table_names&&(count($table_names)>0)){
+				for($i=0;$i<count($table_names);$i++){
+					if (!empty($table_names[$i])){
+						$tablename=$table_names[$i];
+						$tableInfos[$tablename]=self::$tableInfoList[$tablename];
+					}
+				}
+			}
+		}
+		return $tableInfos;
+	}
+
+	/**
+	 * 获取指定的表的表名
+	 * @param array|string $table_names 表列表
+	 * 示例如下：
+	 *  1.array:array('bb_user_admin','bb_core_blog')
+	 *  2.字符串:'bb_user_admin,bb_core_blog'
+	 */
+	protected static function tableListByTable_names($table_names)
+	{
+		$tableList=self::$tableList;
+		if(!empty($table_names)){
+			if (is_string($table_names))$table_names=explode(",",$table_names);
+			if ($table_names&&(count($table_names)>0))$tableList=$table_names;
+		}
+		return $tableList;
+	}
+
+	/**
 	 * 从表名称获取对象的类名实例化名【头字母小写】。
 	 * @param string $tablename 表名称
 	 * @return string 返回对象的类名
@@ -489,7 +558,11 @@ class AutoCode extends Object
 			$field_comment=preg_split("/[\s,]+/", $field_comment);
 			$field_comment=$field_comment[0];
 		}
-		//if ($field_comment)$field_comment=str_replace(array('标识','编号','主键'),"",$field_comment);
+		if ($field_comment){
+			if(($field_comment!="标识")&&($field_comment!="编号")&&($field_comment!="主键")){
+				$field_comment=str_replace(array('标识','编号','主键'),"",$field_comment);
+			}
+		}
 		return $field_comment;
 	}
 

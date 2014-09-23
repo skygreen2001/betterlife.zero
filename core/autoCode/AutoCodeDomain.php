@@ -29,8 +29,12 @@ class AutoCodeDomain extends AutoCode
 	public static $type;
 	/**
 	 * 自动生成代码-实体类
+     * @param array|string $table_names
+     * 示例如下：
+     *  1.array:array('bb_user_admin','bb_core_blog')
+     *  2.字符串:'bb_user_admin,bb_core_blog'
 	 */
-	public static function AutoCode()
+	public static function AutoCode($table_names="")
 	{
 		self::$app_dir=Gc::$appName;
 		self::$domain_dir_full=self::$save_dir.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR.self::$domain_dir.DIRECTORY_SEPARATOR;
@@ -38,7 +42,9 @@ class AutoCodeDomain extends AutoCode
 		if (self::$isNoOutputCss)echo UtilCss::form_css()."\r\n";
 		self::$enumClass="";
 		echo '<div id="Content_11" style="display:none;">';
-		foreach (self::$fieldInfos as $tablename=>$fieldInfo){
+
+		$fieldInfos=self::fieldInfosByTable_names($table_names);
+		foreach ($fieldInfos as $tablename=>$fieldInfo){
 		   //print_r($fieldInfo);
 		   //echo("<br/>");
 		   $definePhpFileContent=self::tableToDataObjectDefine($tablename,$fieldInfo);

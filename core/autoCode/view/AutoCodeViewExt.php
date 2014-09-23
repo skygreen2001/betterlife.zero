@@ -52,8 +52,12 @@ class AutoCodeViewExt extends AutoCode
 
 	/**
 	 * 自动生成代码-使用ExtJs生成的表示层
+     * @param array|string $table_names
+     * 示例如下：
+     *  1.array:array('bb_user_admin','bb_core_blog')
+     *  2.字符串:'bb_user_admin,bb_core_blog'
 	 */
-	public static function AutoCode()
+	public static function AutoCode($table_names="")
 	{
 		self::pathset();
 		//加载生成实体数据对象的目录路径，以便生成代码中数据对象的ID名称
@@ -73,7 +77,9 @@ class AutoCodeViewExt extends AutoCode
 		AutoCodeFoldHelper::foldEffectCommon("Content_51");
 		echo "<font color='#FF0000'>采用ExtJs框架生成后端Js文件导出:</font></a>";
 		echo '<div id="Content_51" style="display:none;">';
-		foreach (self::$fieldInfos as $tablename=>$fieldInfo){
+
+		$fieldInfos=self::fieldInfosByTable_names($table_names);
+		foreach ($fieldInfos as $tablename=>$fieldInfo){
 			$defineJsFileContent=self::tableToViewJsDefine($tablename,$fieldInfo);
 			if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($defineJsFileContent)){
 				$jsName=self::saveJsDefineToDir($tablename,$defineJsFileContent);
@@ -86,7 +92,9 @@ class AutoCodeViewExt extends AutoCode
 		AutoCodeFoldHelper::foldEffectCommon("Content_52");
 		echo "<font color='#FF0000'>生成后端tpl模板显示文件导出:</font></a>";
 		echo '<div id="Content_52" style="display:none;">';
-		foreach (self::$fieldInfos as $tablename=>$fieldInfo){
+
+		$fieldInfos=self::fieldInfosByTable_names($table_names);
+		foreach ($fieldInfos as $tablename=>$fieldInfo){
 			$defineTplFileContent=self::tableToViewTplDefine($tablename,$fieldInfo);
 			if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($defineTplFileContent)){
 				$tplName=self::saveTplDefineToDir($tablename,$defineTplFileContent);
@@ -104,7 +112,9 @@ class AutoCodeViewExt extends AutoCode
 		echo "<br/><font color='#FF0000'>[需要在后端admin/src/view/menu目录下菜单配置文件:menu.config.xml里添加没有的代码]</font><br/>";
 		$section_content="";
 		$appName=Gc::$appName;
-		foreach(self::$tableList as $tablename){
+
+		$tableList=self::tableListByTable_names($table_names);
+		foreach($tableList as $tablename){
 			$table_comment=self::tableCommentKey($tablename);
 			$instancename=self::getInstancename($tablename);
 			$section_content.="        <menu name=\"$table_comment\" id=\"$instancename\" address=\"index.php?go=admin.$appName.{$instancename}\" />\r\n";

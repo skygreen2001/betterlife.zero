@@ -50,8 +50,12 @@ class AutoCodeViewDefault extends AutoCode
 
 	/**
 	 * 自动生成代码-前端默认的表示层
+     * @param array|string $table_names
+     * 示例如下：
+     *  1.array:array('bb_user_admin','bb_core_blog')
+     *  2.字符串:'bb_user_admin,bb_core_blog'
 	 */
-	public static function AutoCode()
+	public static function AutoCode($table_names="")
 	{
 		self::pathset();
 		self::init();
@@ -61,16 +65,18 @@ class AutoCodeViewDefault extends AutoCode
 				AutoCodeFoldHelper::foldEffectCommon("Content_41");
 				echo "<font color='#FF0000'>生成前台所需的表示层页面:</font></a>";
 				echo '<div id="Content_41" style="display:none;">';
-				self::createModelIndexFile();
-				self::createFrontModelPages();
+				self::createModelIndexFile($table_names);
+				self::createFrontModelPages($table_names);
 				echo "</div><br>";
 			 break;
 		   case 1:
 				AutoCodeFoldHelper::foldEffectCommon("Content_42");
 				echo "<font color='#FF0000'>生成标准的增删改查模板表示层页面:</font></a>";
 				echo '<div id="Content_42" style="display:none;">';
-				self::createModelIndexFile();
-				foreach (self::$fieldInfos as $tablename=>$fieldInfo){
+				self::createModelIndexFile($table_names);
+
+				$fieldInfos=self::fieldInfosByTable_names($table_names);
+				foreach ($fieldInfos as $tablename=>$fieldInfo){
 					$tpl_listsContent=self::tpl_lists($tablename,$fieldInfo);
 					$filename="lists".Config_F::SUFFIX_FILE_TPL;
 					$tplName=self::saveTplDefineToDir($tablename,$tpl_listsContent,$filename);
@@ -325,15 +331,20 @@ VIEW;
 
 	/**
 	 * 生成标准的增删改查模板Action文件需生成首页访问所有生成的链接
+     * @param array|string $table_names
+     * 示例如下：
+     *  1.array:array('bb_user_admin','bb_core_blog')
+     *  2.字符串:'bb_user_admin,bb_core_blog'
 	 */
-	private static function createModelIndexFile()
+	private static function createModelIndexFile($table_names="")
 	{
-		$tpl_content="    <div><h1>这是首页列表(共计数据对象".count(self::$tableInfoList)."个)</h1></div>\r\n";
+		$tableInfos=self::tableInfosByTable_names($table_names);
+		$tpl_content="    <div><h1>这是首页列表(共计数据对象".count($tableInfos)."个)</h1></div>\r\n";
 		$result="";
 		$appname=self::$appName;
-		if (self::$tableInfoList!=null&&count(self::$tableInfoList)>0){
-			foreach (self::$tableInfoList as $tablename=>$tableInfo){
-				$table_comment=self::$tableInfoList[$tablename]["Comment"];
+		if ($tableInfos!=null&&count($tableInfos)>0){
+			foreach ($tableInfos as $tablename=>$tableInfo){
+				$table_comment=$tableInfos[$tablename]["Comment"];
 				if (contain($table_comment,"\r")||contain($table_comment,"\n")){
 					$table_comment=preg_split("/[\s,]+/", $table_comment);
 					$table_comment=$table_comment[0];
@@ -354,10 +365,16 @@ VIEW;
 
 	/**
 	 * 生成前台所需的表示层页面
+     * @param array|string $table_names
+     * 示例如下：
+     *  1.array:array('bb_user_admin','bb_core_blog')
+     *  2.字符串:'bb_user_admin,bb_core_blog'
 	 */
-	private static function createFrontModelPages()
+	private static function createFrontModelPages($table_names="")
 	{
-		foreach (self::$fieldInfos as $tablename=>$fieldInfo){
+
+		$fieldInfos=self::fieldInfosByTable_names($table_names);
+		foreach ($fieldInfos as $tablename=>$fieldInfo){
 			if(self::$type==0) {
 				$classname=self::getClassname($tablename);
 				if ($classname=="Admin")continue;

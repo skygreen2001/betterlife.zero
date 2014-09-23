@@ -108,6 +108,7 @@ class ActionExt extends ActionBasic
 		} else {
 			echo json_encode($response);
 		}
+		die();
 	}
 
 	/**

@@ -73,7 +73,7 @@ class AutoCodeOneKey extends AutoCode
      */
     public static function UserInput($title=null,$inputArr=null)
     {
-        parent::UserInput("一键生成前后台所有模板文件的输出文件路径参数");
+        parent::UserInput("一键生成前后台所有模板文件");
     }
 
 }

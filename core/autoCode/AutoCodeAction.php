@@ -53,8 +53,12 @@ class AutoCodeAction extends AutoCode
 
 	/**
 	 * 自动生成代码-控制器
+     * @param array|string $table_names
+     * 示例如下：
+     *  1.array:array('bb_user_admin','bb_core_blog')
+     *  2.字符串:'bb_user_admin,bb_core_blog'
 	 */
-	public static function AutoCode()
+	public static function AutoCode($table_names="")
 	{
 		switch (self::$type) {
 		   case 0:
@@ -84,7 +88,9 @@ class AutoCodeAction extends AutoCode
 		}else if(self::$type==1) {
 			AutoCodeFoldHelper::foldbeforeaction1();
 		}
-		foreach (self::$fieldInfos as $tablename=>$fieldInfo){
+
+		$fieldInfos=self::fieldInfosByTable_names($table_names);
+		foreach ($fieldInfos as $tablename=>$fieldInfo){
 			if(self::$type==0) {
 				$classname=self::getClassname($tablename);
 				if ($classname=="Admin")continue;

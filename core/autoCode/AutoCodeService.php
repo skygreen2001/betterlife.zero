@@ -35,8 +35,12 @@ class AutoCodeService extends AutoCode
 
 	/**
 	 * 自动生成代码-服务类
+     * @param array|string $table_names
+     * 示例如下：
+     *  1.array:array('bb_user_admin','bb_core_blog')
+     *  2.字符串:'bb_user_admin,bb_core_blog'
 	 */
-	public static function AutoCode()
+	public static function AutoCode($table_names="")
 	{
 		if (self::$type==3){
 			self::$app_dir="admin";
@@ -68,7 +72,8 @@ class AutoCodeService extends AutoCode
 			 echo '<div id="Content_22" style="display:none;">';
 			 break;
 		}
-		foreach(self::$tableList as $tablename){
+		$tableList=self::tableListByTable_names($table_names);
+		foreach($tableList as $tablename){
 			$definePhpFileContent=self::tableToServiceDefine($tablename);
 			if (isset($definePhpFileContent)&&(!empty($definePhpFileContent))){
 			   $classname=self::saveServiceDefineToDir($tablename,$definePhpFileContent);
@@ -89,7 +94,9 @@ class AutoCodeService extends AutoCode
 			echo "<font color='#FF0000'>[需要在管理类Manager_Service里添加没有的代码]</font><br />";
 			$section_define="";
 			$section_content="";
-			foreach(self::$tableList as $tablename){
+
+			$tableList=self::tableListByTable_names($table_names);
+			foreach($tableList as $tablename){
 				$table_comment=self::tableCommentKey($tablename);
 				$classname=self::getClassname($tablename);
 				$classname{0} = strtolower($classname{0});
@@ -136,7 +143,8 @@ class AutoCodeService extends AutoCode
 			echo "<br/><font color='#FF0000'>[需要在管理类Manager_ExtService里添加没有的代码]</font><br/>";
 			$section_define="";
 			$section_content="";
-			foreach(self::$tableList as $tablename){
+			$tableList=self::tableListByTable_names($table_names);
+			foreach($tableList as $tablename){
 				$table_comment=self::tableCommentKey($tablename);
 				$classname=self::getClassname($tablename);
 				$classname{0} = strtolower($classname{0});
@@ -181,7 +189,8 @@ class AutoCodeService extends AutoCode
 			 */
 			echo "<font color='#FF0000'>[需要在Ext Direct 服务配置文件:service.config.xml里添加没有的代码]</font><br/>";
 			$section_content="";
-			foreach(self::$tableList as $tablename){
+			$tableList=self::tableListByTable_names($table_names);
+			foreach($tableList as $tablename){
 				$classname=self::getClassname($tablename);
 				$many2manyUpdateXml="";
 				$many2manyQueryPageXml="";

@@ -2,13 +2,13 @@
 /**
  +---------------------------------<br/>
  * 工具类:自动生成代码-校验器<br/>
- +---------------------------------<br/>  
+ +---------------------------------<br/>
  * @category betterlife
- * @package core.autoCode   
+ * @package core.autoCode
  * @author skygreen skygreen2001@gmail.com
  */
 class AutoCodeValidate extends AutoCode
-{   
+{
 	/**
 	 * 预先校验表定义是否有问题<br/>
 	 * 校验包括以下问题:<br/>
@@ -17,10 +17,15 @@ class AutoCodeValidate extends AutoCode
 	 * 2.column_nocomment-列名无注释说明<br/>
 	 * 3.samefieldname_id-同张表列名不能包含:同名、同名_id<br/>
 	 * 4.invaid_keywords-列名不能为Mysql特殊关键字如:desc,from,<br/>
-	 * 5.表中列定义中的"_"是半角，不是全角。
-	 * 6.确认以下表的实体类放置在规范的domain目录下
+	 * 5.表中列定义中的"_"是半角，不是全角。<br/>
+	 * 6.确认以下表的实体类放置在规范的domain目录下<br/>
+	 *
+	 * @param array|string $table_names
+	 * 示例如下：
+	 *  1.array:array('bb_user_admin','bb_core_blog')
+	 *  2.字符串:'bb_user_admin,bb_core_blog'
 	 */
-	public static function run()
+	public static function run($table_names="")
 	{
 		self::init();
 		$table_error=array("invalid_idname"=>array(),"unlocation_domain"=>array(),
@@ -29,10 +34,11 @@ class AutoCodeValidate extends AutoCode
 						   "specialkey_half"=>array());
 		$isValid=true;
 		$invaid_keywords=array("desc","from","describe","case");
-		foreach (self::$fieldInfos as $tablename=>$fieldInfo){
+		$fieldInfos=self::fieldInfosByTable_names($table_names);
+		foreach ($fieldInfos as $tablename=>$fieldInfo){
 			$tableCommentKey=self::tableCommentKey($tablename);
 			if (empty($tableCommentKey)){
-				$table_error["nocomment"][]=$tablename;    
+				$table_error["nocomment"][]=$tablename;
 			}
 
 			$realId=DataObjectSpec::getRealIDColumnName(self::getClassname($tablename));
@@ -40,25 +46,25 @@ class AutoCodeValidate extends AutoCode
 				$fieldInfo_upperkey=array_change_key_case($fieldInfo,CASE_UPPER);
 				$realId_upper= strtoupper($realId);
 				if (!array_key_exists($realId_upper, $fieldInfo_upperkey)){
-					$table_error["invalid_idname"][$tablename]=$realId; 
+					$table_error["invalid_idname"][$tablename]=$realId;
 				}
 			}else{
-				$table_error["unlocation_domain"][]=$tablename; 
+				$table_error["unlocation_domain"][]=$tablename;
 			}
 			foreach ($fieldInfo as $fieldname=>$field)
 			{
-				$field_comment=$field["Comment"];  
+				$field_comment=$field["Comment"];
 				if (empty($field_comment)){
-					$table_error["column_nocomment"][$tablename][]=$fieldname;    
+					$table_error["column_nocomment"][$tablename][]=$fieldname;
 				}
 				if (array_key_exists($fieldname."_id", $fieldInfo)&&($fieldname."_id"!=$realId)){
-					$table_error["samefieldname_id"][$tablename][]=$fieldname;  
+					$table_error["samefieldname_id"][$tablename][]=$fieldname;
 				}
 				if (in_array($fieldname, $invaid_keywords)){
-					$table_error["invaid_keywords"][$tablename][]=$fieldname; 
+					$table_error["invaid_keywords"][$tablename][]=$fieldname;
 				}
 				if  (contain($fieldname,"＿")){
-					$table_error["specialkey_half"][$tablename][]=$fieldname; 
+					$table_error["specialkey_half"][$tablename][]=$fieldname;
 				}
 			}
 		}
@@ -75,7 +81,7 @@ class AutoCodeValidate extends AutoCode
 		foreach ($print_error_info as $key => $value) {
 			if (count($table_error[$key])>0){
 				$isValid=false;
-				echo "<font color='#00FF00'>&nbsp;&nbsp;/".str_repeat("*",40).$value.str_repeat("*",40)."</font></a><br/>";  
+				echo "<font color='#00FF00'>&nbsp;&nbsp;/".str_repeat("*",40).$value.str_repeat("*",40)."</font></a><br/>";
 				foreach ($table_error[$key] as $first=>$second) {
 					if (is_numeric($first)){
 						echo "&nbsp;&nbsp;&nbsp;&nbsp;".$second."<br/>";
@@ -88,7 +94,7 @@ class AutoCodeValidate extends AutoCode
 							echo "&nbsp;&nbsp;&nbsp;&nbsp;".$first."->".$second."<br/>";
 						}
 					}
-					
+
 				}
 			}
 		}
