@@ -235,6 +235,24 @@ class UtilCss extends Util
 					padding-left:30px;
 					text-align:left;
 				}
+
+				a {
+					color: #1E4176;
+				}
+				a:link {
+					color: #1E4176;
+					text-decoration: none;
+				}
+
+				a:visited {
+					color: #555;
+					text-decoration: none;
+				}
+
+				a:hover {
+					text-decoration: underline;
+					color: #15428b;
+				}
 				label {
 					vertical-align:middle;
 					width:150px;
