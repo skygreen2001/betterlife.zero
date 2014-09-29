@@ -79,14 +79,18 @@ class AutoCodeAction extends AutoCode
 			self::$action_dir_full=UtilString::gbk2utf8(self::$action_dir_full);
 		}
 		self::init();
-		if (self::$isNoOutputCss) echo UtilCss::form_css()."\r\n";
+		if (self::$isOutputCss) self::$showReport.= UtilCss::form_css()."\r\n";
 		self::$echo_result="";
 		self::$echo_upload="";
 
 		if(self::$type==0) {
-			AutoCodeFoldHelper::foldbeforeaction0();
+			self::$showReport.=AutoCodeFoldHelper::foldbeforeaction0();
+			$link_action_dir_href="file:///".str_replace("\\", "/", self::$action_dir_full);
+			self::$showReport.= "<font color='#AAA'>存储路径:<a target='_blank' href='".$link_action_dir_href."'>".self::$action_dir_full."</a></font><br/><br/>";
 		}else if(self::$type==1) {
-			AutoCodeFoldHelper::foldbeforeaction1();
+			self::$showReport.=AutoCodeFoldHelper::foldbeforeaction1();
+			$link_action_dir_href="file:///".str_replace("\\", "/", self::$action_dir_full);
+			self::$showReport.= "<font color='#AAA'>存储路径:<a target='_blank' href='".$link_action_dir_href."'>".self::$action_dir_full."</a></font><br/><br/>";
 		}
 
 		$fieldInfos=self::fieldInfosByTable_names($table_names);
@@ -99,22 +103,22 @@ class AutoCodeAction extends AutoCode
 			if (!empty($definePhpFileContent)){
 				if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($definePhpFileContent)){
 					$classname=self::saveActionDefineToDir($tablename,$definePhpFileContent);
-					echo "生成导出完成:$tablename=>$classname!<br/>";
+					self::$showReport.= "生成导出完成:$tablename=>$classname!<br/>";
 				}else{
-					echo $definePhpFileContent."<br/>";
+					self::$showReport.= $definePhpFileContent."<br/>";
 				}
 			}
 		}
 
 		if(self::$type==0) {
-			 echo '</div><br/>';
+			 self::$showReport.= '</div><br/>';
 		}else if(self::$type==1) {
-			 echo '</div>';
+			 self::$showReport.= '</div>';
 		}
 		$category_cap=Gc::$appName;
 		$category_cap{0}=ucfirst($category_cap{0});
 		if (self::$type==2){
-			echo "<br/><font color='#FF0000'>[需要在【后台】Action_".$category_cap."里添加没有的代码]</font><br />";
+			self::$showReport.= "<br/><font color='#FF0000'>[需要在【后台】Action_".$category_cap."里添加没有的代码]</font><br />";
 			$category  = Gc::$appName;
 			$package   = self::$package_back;
 			$author    = self::$author;
@@ -174,13 +178,14 @@ class AutoCodeAction extends AutoCode
 					self::saveDefineToDir(self::$action_dir_full,$key.".php",$e_result);
 				}
 			}
-            echo  "新生成的Action_{$category_cap}文件路径:<font color='#0000FF'>".self::$action_dir_full.$key.".php</font><br />";
+			$link_action_dir_href="file:///".str_replace("\\", "/", self::$action_dir_full).$key.".php";
+            self::$showReport.=  "新生成的Action_{$category_cap}文件路径:<font color='#0000FF'><a target='_blank' href='".$link_action_dir_href."'>".self::$action_dir_full.$key.".php</a></font><br />";
 
 			/*self::$echo_result=str_replace(" ","&nbsp;",self::$echo_result);
 			self::$echo_result=str_replace("\r\n","<br />",self::$echo_result);
 			echo self::$echo_result;     */
 
-			echo "<br/><font color='#FF0000'>[需要在【后台】Action_Upload里添加没有的代码]</font><br/>";
+			self::$showReport.= "<br/><font color='#FF0000'>[需要在【后台】Action_Upload里添加没有的代码]</font><br/>";
 			$e_result="<?php\r\n".
 					 "/**\r\n".
 					 " +---------------------------------------<br/>\r\n".
@@ -195,7 +200,9 @@ class AutoCodeAction extends AutoCode
 					 "{\r\n".self::$echo_upload."}\r\n".
 					 "?>";
 			self::saveDefineToDir(self::$action_dir_full,"Action_Upload.php",$e_result);
-			echo  "新生成的Action_Upload文件路径:<font color='#0000FF'>".self::$action_dir_full."Action_Upload.php</font><br />";
+
+			$link_action_dir_href="file:///".str_replace("\\", "/", self::$action_dir_full);
+			self::$showReport.=  "新生成的Action_Upload文件路径:<font color='#0000FF'><a target='_blank' href='".$link_action_dir_href."Action_Upload.php'>".self::$action_dir_full."Action_Upload.php</a></font><br />";
 			/*self::$echo_upload=str_replace(" ","&nbsp;",self::$echo_upload);
 			self::$echo_upload=str_replace("\r\n","<br />",self::$echo_upload);
 			echo self::$echo_upload;  */

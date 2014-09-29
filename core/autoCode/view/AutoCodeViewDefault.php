@@ -59,20 +59,28 @@ class AutoCodeViewDefault extends AutoCode
 	{
 		self::pathset();
 		self::init();
-		if (self::$isNoOutputCss) echo UtilCss::form_css()."\r\n";
+		if (self::$isOutputCss)self::$showReport.= UtilCss::form_css()."\r\n";
 		switch (self::$type) {
 		   case 0:
-				AutoCodeFoldHelper::foldEffectCommon("Content_41");
-				echo "<font color='#FF0000'>生成前台所需的表示层页面:</font></a>";
-				echo '<div id="Content_41" style="display:none;">';
+				self::$showReport.=AutoCodeFoldHelper::foldEffectCommon("Content_41");
+				self::$showReport.= "<font color='#FF0000'>生成前台所需的表示层页面:</font></a>";
+				self::$showReport.= '<div id="Content_41" style="display:none;">';
+
+				$link_view_default_dir_href="file:///".str_replace("\\", "/", self::$view_dir_full);
+				self::$showReport.= "<font color='#AAA'>存储路径:<a target='_blank' href='".$link_view_default_dir_href."'>".self::$view_dir_full."</a></font><br/><br/>";
+
 				self::createModelIndexFile($table_names);
 				self::createFrontModelPages($table_names);
-				echo "</div><br>";
+				self::$showReport.= "</div><br>";
 			 break;
 		   case 1:
-				AutoCodeFoldHelper::foldEffectCommon("Content_42");
-				echo "<font color='#FF0000'>生成标准的增删改查模板表示层页面:</font></a>";
-				echo '<div id="Content_42" style="display:none;">';
+				self::$showReport.=AutoCodeFoldHelper::foldEffectCommon("Content_42");
+				self::$showReport.= "<font color='#FF0000'>生成标准的增删改查模板表示层页面:</font></a>";
+				self::$showReport.= '<div id="Content_42" style="display:none;">';
+
+				$link_view_default_dir_href="file:///".str_replace("\\", "/", self::$view_dir_full);
+				self::$showReport.= "<font color='#AAA'>存储路径:<a target='_blank' href='".$link_view_default_dir_href."'>".self::$view_dir_full."</a></font><br/><br/>";
+
 				self::createModelIndexFile($table_names);
 
 				$fieldInfos=self::fieldInfosByTable_names($table_names);
@@ -80,17 +88,17 @@ class AutoCodeViewDefault extends AutoCode
 					$tpl_listsContent=self::tpl_lists($tablename,$fieldInfo);
 					$filename="lists".Config_F::SUFFIX_FILE_TPL;
 					$tplName=self::saveTplDefineToDir($tablename,$tpl_listsContent,$filename);
-					echo "生成导出完成:$tablename=>$tplName!<br/>";
+					self::$showReport.= "生成导出完成:$tablename=>$tplName!<br/>";
 					$tpl_viewContent=self::tpl_view($tablename,$fieldInfo);
 					$filename="view".Config_F::SUFFIX_FILE_TPL;
 					$tplName=self::saveTplDefineToDir($tablename,$tpl_viewContent,$filename);
-					echo "生成导出完成:$tablename=>$tplName!<br/>";
+					self::$showReport.= "生成导出完成:$tablename=>$tplName!<br/>";
 					$tpl_editContent=self::tpl_edit($tablename,$fieldInfo);
 					$filename="edit".Config_F::SUFFIX_FILE_TPL;
 					$tplName=self::saveTplDefineToDir($tablename,$tpl_editContent,$filename);
-					echo "生成导出完成:$tablename=>$tplName!<br/>";
+					self::$showReport.= "生成导出完成:$tablename=>$tplName!<br/>";
 				}
-				echo "</div><br>";
+				self::$showReport.= "</div><br>";
 			 break;
 		}
 	}
@@ -387,16 +395,16 @@ VIEW;
 			$tpl_content=self::tableToViewTplDefine("    <div><h1>".$table_comment."列表</h1></div><br/>\r\n{$link}<br/>\r\n{$back_index}");
 			$filename="lists".Config_F::SUFFIX_FILE_TPL;
 			$tplName=self::saveTplDefineToDir($tablename,$tpl_content,$filename);
-			echo "生成导出完成:$tablename=>$tplName!<br/>";
+			self::$showReport.= "生成导出完成:$tablename=>$tplName!<br/>";
 			$link="     <div align=\"center\"><my:a href=\"{\$url_base}index.php?go={$appname}.{$instancename}.lists\">返回列表</my:a>";
 			$tpl_content=self::tableToViewTplDefine("    <div><h1>查看".$table_comment."</h1></div><br/>\r\n{$link}<br/>\r\n{$back_index}");
 			$filename="view".Config_F::SUFFIX_FILE_TPL;
 			$tplName=self::saveTplDefineToDir($tablename,$tpl_content,$filename);
-			echo "生成导出完成:$tablename=>$tplName!<br/>";
+			self::$showReport.= "生成导出完成:$tablename=>$tplName!<br/>";
 			$tpl_content=self::tableToViewTplDefine("    <div><h1>编辑".$table_comment."</h1></div><br/>\r\n{$link}<br/>\r\n{$back_index}");
 			$filename="edit".Config_F::SUFFIX_FILE_TPL;
 			$tplName=self::saveTplDefineToDir($tablename,$tpl_content,$filename);
-			echo "生成导出完成:$tablename=>$tplName!<br/>";
+			self::$showReport.= "生成导出完成:$tablename=>$tplName!<br/>";
 		}
 	}
 

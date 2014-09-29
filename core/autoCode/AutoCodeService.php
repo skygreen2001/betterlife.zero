@@ -53,36 +53,39 @@ class AutoCodeService extends AutoCode
 		self::$service_dir_full=self::$save_dir.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR.self::$service_dir.DIRECTORY_SEPARATOR;
 		self::init();
 
-		if (self::$isNoOutputCss) echo UtilCss::form_css()."\r\n";
+		if (self::$isOutputCss) self::$showReport.= UtilCss::form_css()."\r\n";
 
 		switch (self::$type) {
 		   case 1:
-			 AutoCodeFoldHelper::foldEffectCommon("Content_23");
-			 echo "<font color='#FF0000'>生成继承具有标准方法的Service文件导出:</font></a>";
-			 echo '<div id="Content_23" style="display:none;">';
+			 self::$showReport.=AutoCodeFoldHelper::foldEffectCommon("Content_23");
+			 self::$showReport.= "<font color='#FF0000'>生成继承具有标准方法的Service文件导出:</font></a>";
+			 self::$showReport.= '<div id="Content_23" style="display:none;">';
 			 break;
 		   case 2:
-			 AutoCodeFoldHelper::foldEffectCommon("Content_21");
-			 echo "<font color='#FF0000'>标准方法的Service文件导出:</font></a>";
-			 echo '<div id="Content_21" style="display:none;">';
+			 self::$showReport.=AutoCodeFoldHelper::foldEffectCommon("Content_21");
+			 self::$showReport.= "<font color='#FF0000'>标准方法的Service文件导出:</font></a><br/>";
+			 self::$showReport.= '<div id="Content_21" style="display:none;">';
 			 break;
 		   case 3:
-			 AutoCodeFoldHelper::foldEffectCommon("Content_22");
-			 echo "<font color='#FF0000'>生成ExtJs框架使用的Service【后台】文件导出:</font></a>";
-			 echo '<div id="Content_22" style="display:none;">';
+			 self::$showReport.=AutoCodeFoldHelper::foldEffectCommon("Content_22");
+			 self::$showReport.= "<font color='#FF0000'>生成ExtJs框架使用的Service【后台】文件导出:</font></a>";
+			 self::$showReport.= '<div id="Content_22" style="display:none;">';
 			 break;
 		}
+		$link_service_dir_href="file:///".str_replace("\\", "/", self::$service_dir_full);
+		self::$showReport.= "<font color='#AAA'>存储路径:<a target='_blank' href='".$link_service_dir_href."'>".self::$service_dir_full."</a></font><br/><br/>";
+
 		$tableList=self::tableListByTable_names($table_names);
 		foreach($tableList as $tablename){
 			$definePhpFileContent=self::tableToServiceDefine($tablename);
 			if (isset($definePhpFileContent)&&(!empty($definePhpFileContent))){
 			   $classname=self::saveServiceDefineToDir($tablename,$definePhpFileContent);
-			   echo "生成导出完成:$tablename=>$classname!<br/>";
+			   self::$showReport.= "生成导出完成:$tablename=>$classname!<br/>";
 			}else{
-			   echo $definePhpFileContent."<br/>";
+			   self::$showReport.= $definePhpFileContent."<br/>";
 			}
 		}
-		echo '</div><br>';
+		self::$showReport.= '</div><br>';
 		$category  = Gc::$appName;
 		$author    = self::$author;
 		$package   = self::$package;
@@ -91,7 +94,7 @@ class AutoCodeService extends AutoCode
 			/**
 			 * 需要在管理类Manager_Service.php里添加的代码
 			 */
-			echo "<font color='#FF0000'>[需要在管理类Manager_Service里添加没有的代码]</font><br />";
+			self::$showReport.= "<font color='#FF0000'>[需要在管理类Manager_Service里添加没有的代码]</font><br />";
 			$section_define="";
 			$section_content="";
 
@@ -126,21 +129,21 @@ class AutoCodeService extends AutoCode
 					 "{\r\n".$section_define."\r\n".$section_content."}\r\n";
 			$e_result.="?>";
 			self::saveDefineToDir(self::$service_dir_full,"Manager_Service.php",$e_result);
-
-			echo  "新生成的Manager_Service文件路径:<font color='#0000FF'>".self::$service_dir_full."Manager_Service.php</font><br />";
+			$link_service_manage_dir_href="file:///".str_replace("\\", "/", self::$service_dir_full)."Manager_Service.php";
+			self::$showReport.=  "新生成的Manager_Service文件路径:<font color='#0000FF'><a target='_blank' href='$link_service_manage_dir_href'>".self::$service_dir_full."Manager_Service.php</a></font><br />";
 			/*            $section_define=str_replace(" ","&nbsp;",$section_define);
 			$section_define=str_replace("\r\n","<br />",$section_define);
-			echo  $section_define.'<br/>';
+			self::$showReport.=  $section_define.'<br/>';
 			$section_content=str_replace(" ","&nbsp;",$section_content);
 			$section_content=str_replace("\r\n","<br />",$section_content);
-			echo  $section_content;*/
+			self::$showReport.=  $section_content;*/
 		}
 		else if (self::$type==3)
 		{
 			/**
 			 * 需要在管理类Manager_ExtService.php里添加的代码
 			 */
-			echo "<br/><font color='#FF0000'>[需要在管理类Manager_ExtService里添加没有的代码]</font><br/>";
+			self::$showReport.= "<br/><font color='#FF0000'>[需要在管理类Manager_ExtService里添加没有的代码]</font><br/>";
 			$section_define="";
 			$section_content="";
 			$tableList=self::tableListByTable_names($table_names);
@@ -177,17 +180,18 @@ class AutoCodeService extends AutoCode
 			$e_result.="?>";
 
 			self::saveDefineToDir(self::$service_dir_full.self::$ext_dir.DIRECTORY_SEPARATOR,"Manager_ExtService.php",$e_result);
-			echo  "新生成的Manager_ExtService文件路径:<font color='#0000FF'>".self::$service_dir_full.self::$ext_dir.DIRECTORY_SEPARATOR,"Manager_ExtService.php</font><br />";
+			$link_service_manage_ext_dir_href="file:///".str_replace("\\", "/", self::$service_dir_full).self::$ext_dir."/Manager_ExtService.php";
+			self::$showReport.=  "新生成的Manager_ExtService文件路径:<font color='#0000FF'><a target='_blank' href='$link_service_manage_ext_dir_href'>".self::$service_dir_full.self::$ext_dir.DIRECTORY_SEPARATOR."Manager_ExtService.php</a></font><br />";
 			/*            $section_define=str_replace(" ","&nbsp;",$section_define);
 			$section_define=str_replace("\r\n","<br />",$section_define);
-			echo  $section_define.'<br/>';
+			self::$showReport.=  $section_define.'<br/>';
 			$section_content=str_replace(" ","&nbsp;",$section_content);
 			$section_content=str_replace("\r\n","<br />",$section_content);
-			echo  $section_content; */
+			self::$showReport.=  $section_content; */
 			/**
 			 * 需要在Ext Direct 服务配置文件:service.config.xml里添加的代码
 			 */
-			echo "<font color='#FF0000'>[需要在Ext Direct 服务配置文件:service.config.xml里添加没有的代码]</font><br/>";
+			self::$showReport.= "<font color='#FF0000'>[需要在Ext Direct 服务配置文件:service.config.xml里添加没有的代码]</font><br/>";
 			$section_content="";
 			$tableList=self::tableListByTable_names($table_names);
 			foreach($tableList as $tablename){
@@ -268,12 +272,13 @@ class AutoCodeService extends AutoCode
 					 $section_content.
 					 "</services>\r\n";
 			self::saveDefineToDir(self::$service_dir_full,"service.config.xml",$e_result);
-			echo  "新生成的service.config.xml文件路径:<font color='#0000FF'>".self::$service_dir_full,"service.config.xml</font><br />";
+			$link_service_config_xml_dir_href="file:///".str_replace("\\", "/", self::$service_dir_full)."service.config.xml";
+			self::$showReport.=  "新生成的service.config.xml文件路径:<font color='#0000FF'><a target='_blank' href='$link_service_config_xml_dir_href'>".self::$service_dir_full."service.config.xml</a></font><br />";
 			/*            $section_content=str_replace(" ","&nbsp;",$section_content);
 			$section_content=str_replace("<","&lt;",$section_content);
 			$section_content=str_replace(">","&gt;",$section_content);
 			$section_content=str_replace("\r\n","<br />",$section_content);
-			echo  $section_content;     */
+			self::$showReport.=  $section_content;     */
 		}
 	}
 

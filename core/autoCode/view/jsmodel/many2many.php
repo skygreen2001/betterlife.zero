@@ -118,7 +118,7 @@ MANY2MANYSTORE;
                     oldData:null,//已关联的{$comment_belong}
                     title:"选择{$comment_belong}",updateData:null,closeAction:"hide",constrainHeader:true,maximizable:true,collapsible:true,
                     width:720,minWidth:720,height:560,minHeight:450,layout:'fit',plain : true,buttonAlign : 'center',
-                    defaults : {autoScroll : true,},
+                    defaults : {autoScroll : true},
                     listeners:{
                         beforehide:this.doHide
                     },
@@ -422,7 +422,7 @@ $m2m_filterReset
                 }
                 this.filter.sel{$belong_class} = selArr.join(",");
             }
-        }),
+        })
     },
 MANY2MANY;
 

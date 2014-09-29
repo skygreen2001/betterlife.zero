@@ -214,7 +214,7 @@ class UtilCss extends Util
 	 */
 	public static function form_css()
 	{
-		echo '<style type="text/css">
+		$showResult = '<style type="text/css">
 				html,body {
 					font:normal 15px SimSun,sans-serif;
 					border:0 none;
@@ -291,6 +291,7 @@ class UtilCss extends Util
 					background-color:#FFF;
 				}
 			</style>';
+		return $showResult;
 	}
 
 }

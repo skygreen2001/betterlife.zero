@@ -73,43 +73,48 @@ class AutoCodeViewExt extends AutoCode
 			Initializer::$coreFiles[Config_F::ROOT_CORE][basename($file,Initializer::SUFFIX_FILE_PHP)]=$file;
 		}
 		self::init();
-		if (self::$isNoOutputCss) echo UtilCss::form_css()."\r\n";
-		AutoCodeFoldHelper::foldEffectCommon("Content_51");
-		echo "<font color='#FF0000'>采用ExtJs框架生成后端Js文件导出:</font></a>";
-		echo '<div id="Content_51" style="display:none;">';
+		if (self::$isOutputCss) self::$showReport.= UtilCss::form_css()."\r\n";
+		self::$showReport.=AutoCodeFoldHelper::foldEffectCommon("Content_51");
+		self::$showReport.= "<font color='#FF0000'>采用ExtJs框架生成后端Js文件导出:</font></a>";
+		self::$showReport.= '<div id="Content_51" style="display:none;">';
+		$link_view_ext_dir_href="file:///".str_replace("\\", "/", self::$view_js_package);
+		self::$showReport.= "<font color='#AAA'>存储路径:<a target='_blank' href='".$link_view_ext_dir_href."'>".self::$view_js_package."</a></font><br/><br/>";
 
 		$fieldInfos=self::fieldInfosByTable_names($table_names);
 		foreach ($fieldInfos as $tablename=>$fieldInfo){
 			$defineJsFileContent=self::tableToViewJsDefine($tablename,$fieldInfo);
 			if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($defineJsFileContent)){
 				$jsName=self::saveJsDefineToDir($tablename,$defineJsFileContent);
-				echo "生成导出完成:$tablename=>$jsName!<br/>";
+				self::$showReport.= "生成导出完成:$tablename=>$jsName!<br/>";
 			}else{
-				echo $defineJsFileContent."<br/>";
+				self::$showReport.= $defineJsFileContent."<br/>";
 			}
 		}
-		echo "</div><br>";
-		AutoCodeFoldHelper::foldEffectCommon("Content_52");
-		echo "<font color='#FF0000'>生成后端tpl模板显示文件导出:</font></a>";
-		echo '<div id="Content_52" style="display:none;">';
+		self::$showReport.= "</div><br>";
+		self::$showReport.=AutoCodeFoldHelper::foldEffectCommon("Content_52");
+		self::$showReport.= "<font color='#FF0000'>生成后端tpl模板显示文件导出:</font></a>";
+		self::$showReport.= '<div id="Content_52" style="display:none;">';
+
+		$link_view_ext_dir_href="file:///".str_replace("\\", "/", self::$view_core);
+		self::$showReport.= "<font color='#AAA'>存储路径:<a target='_blank' href='".$link_view_ext_dir_href."'>".self::$view_core."</a></font><br/><br/>";
 
 		$fieldInfos=self::fieldInfosByTable_names($table_names);
 		foreach ($fieldInfos as $tablename=>$fieldInfo){
 			$defineTplFileContent=self::tableToViewTplDefine($tablename,$fieldInfo);
 			if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($defineTplFileContent)){
 				$tplName=self::saveTplDefineToDir($tablename,$defineTplFileContent);
-				echo "生成导出完成:$tablename=>$tplName!<br/>";
+				self::$showReport.= "生成导出完成:$tablename=>$tplName!<br/>";
 			}else{
-				echo $defineTplFileContent."<br/>";
+				self::$showReport.= $defineTplFileContent."<br/>";
 			}
 		}
-		echo '</div>';
+		self::$showReport.= '</div>';
 		self::tableToAjaxPhpDefine();
 
 		/**
 		 * 需要在后端admin/src/view/menu目录下 菜单配置文件:menu.config.xml里添加的代码
 		 */
-		echo "<br/><font color='#FF0000'>[需要在后端admin/src/view/menu目录下菜单配置文件:menu.config.xml里添加没有的代码]</font><br/>";
+		self::$showReport.= "<br/><font color='#FF0000'>[需要在后端admin/src/view/menu目录下菜单配置文件:menu.config.xml里添加没有的代码]</font><br/>";
 		$section_content="";
 		$appName=Gc::$appName;
 
@@ -127,12 +132,13 @@ class AutoCodeViewExt extends AutoCode
 						 "    </menuGroup> \r\n".
 						 "</menuGroups>\r\n";
 		self::saveDefineToDir(self::$menuconfig_dir_full,$filename,$output_section_content);
-		echo  "新生成的menu.config.xml文件路径:<font color='#0000FF'>".self::$menuconfig_dir_full.$filename."</font><br/>";
+		$link_view_ext_dir_href="file:///".str_replace("\\", "/", self::$menuconfig_dir_full).$filename;
+		self::$showReport.=  "新生成的menu.config.xml文件路径:<font color='#0000FF'>存储路径:<a target='_blank' href='".$link_view_ext_dir_href."'>".self::$menuconfig_dir_full.$filename."</a></font><br/>";
 		/*    $section_content=str_replace(" ","&nbsp;",$section_content);
 			$section_content=str_replace("<","&lt;",$section_content);
 			$section_content=str_replace(">","&gt;",$section_content);
 			$section_content=str_replace("\r\n","<br />",$section_content);
-			echo  $section_content;*/
+			self::$showReport.=  $section_content;*/
 	}
 
 	/**
@@ -173,10 +179,13 @@ class AutoCodeViewExt extends AutoCode
 		}
 
 		if ($isNeedCreate){
-			echo "<br />";
-			AutoCodeFoldHelper::foldEffectCommon("Content_53");
-			echo "<font color='#FF0000'>生成关系列Ajax请求php文件:</font></a>";
-			echo '<div id="Content_53" style="display:none;">';
+			self::$showReport.= "<br />";
+			self::$showReport.=AutoCodeFoldHelper::foldEffectCommon("Content_53");
+			self::$showReport.= "<font color='#FF0000'>生成关系列Ajax请求php文件:</font></a>";
+			self::$showReport.= '<div id="Content_53" style="display:none;">';
+			$link_view_ext_dir_href="file:///".str_replace("\\", "/", self::$ajax_dir_full);
+			self::$showReport.= "<font color='#AAA'>存储路径:<a target='_blank' href='".$link_view_ext_dir_href."'>".self::$ajax_dir_full."</a></font><br/><br/>";
+
 			foreach (self::$relation_viewfield as $relation_viewfield) {
 				foreach ($relation_viewfield as $key=>$showClasses) {
 					foreach ($showClasses as $key=>$value) {
@@ -227,7 +236,7 @@ class AutoCodeViewExt extends AutoCode
 										 "echo \"]\";\r\n".
 										 "?>\r\n";
 								$ajaxName=self::saveoAjaxPhpDefineToDir($filename,$result);
-								echo "生成导出Ajax目录树服务类PHP文件完成:$tablename=>$ajaxName".Config_F::SUFFIX_FILE_PHP."!<br/>";
+								self::$showReport.= "生成导出Ajax目录树服务类PHP文件完成:$tablename=>$ajaxName".Config_F::SUFFIX_FILE_PHP."!<br/>";
 							}
 						}
 
@@ -257,12 +266,12 @@ class AutoCodeViewExt extends AutoCode
 							$key{0}=strtolower($key{0});
 							$filename =$key.Config_F::SUFFIX_FILE_PHP;
 							$ajaxName=self::saveoAjaxPhpDefineToDir($filename,$result);
-							echo "生成导出Ajax服务类PHP文件完成:$tablename=>$ajaxName".Config_F::SUFFIX_FILE_PHP."!<br/>";
+							self::$showReport.= "生成导出Ajax服务类PHP文件完成:$tablename=>$ajaxName".Config_F::SUFFIX_FILE_PHP."!<br/>";
 						}
 					}
 				}
 			}
-			echo '</div>';
+			self::$showReport.= '</div>';
 		}
 	}
 

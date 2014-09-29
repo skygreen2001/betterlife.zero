@@ -6,8 +6,7 @@ if (isset($_REQUEST["save_dir"])&&!empty($_REQUEST["save_dir"]))
 	AutoCodeOneKey::$save_dir =$save_dir;
 	AutoCodeConfig::Decode();
 	AutoCodeOneKey::AutoCode();
-}  else {
+}else{
 	AutoCodeOneKey::UserInput();
 }
-
 ?>

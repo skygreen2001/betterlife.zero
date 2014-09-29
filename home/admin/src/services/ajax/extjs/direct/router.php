@@ -94,6 +94,7 @@ class RemoteServiceCall
 			}
 			echo json_encode($response);
 		}
+		die();
 	}
 
 	/**

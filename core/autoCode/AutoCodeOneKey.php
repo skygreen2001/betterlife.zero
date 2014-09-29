@@ -14,7 +14,6 @@ class AutoCodeOneKey extends AutoCode
      */
     public static function AutoCode()
     {
-
         $dest_directory=Gc::$nav_root_path."tools".DIRECTORY_SEPARATOR."tools".DIRECTORY_SEPARATOR."autoCode".DIRECTORY_SEPARATOR;
         $filename=$dest_directory."autocode.config.xml";
         AutoCodeValidate::run();
@@ -22,50 +21,51 @@ class AutoCodeOneKey extends AutoCode
             AutoCodeConfig::run();
             die("&nbsp;&nbsp;自动生成代码的配置文件已生成，请再次运行以生成所有web应用代码！");
         }
-        AutoCodeFoldHelper::foldEffectReady();
+        self::$showReport.=AutoCodeFoldHelper::foldEffectReady();
         //生成实体数据对象类
         AutoCodeDomain::$save_dir =self::$save_dir;
         AutoCodeDomain::$type     =2;
-        AutoCodeFoldHelper::foldbeforedomain();
+        self::$showReport.=AutoCodeFoldHelper::foldbeforedomain();
         AutoCodeDomain::AutoCode();
-        AutoCodeFoldHelper::foldafterdomain();
-        AutoCode::$isNoOutputCss=false;
+        self::$showReport.=AutoCodeFoldHelper::foldafterdomain();
+        AutoCode::$isOutputCss=false;
 
         //生成提供服务类[前端和后端基于Ext的Service类]
         AutoCodeService::$save_dir =self::$save_dir;
-        AutoCodeFoldHelper::foldbeforeservice();
+        self::$showReport.=AutoCodeFoldHelper::foldbeforeservice();
         AutoCodeService::$type     =2;
         AutoCodeService::AutoCode();
         AutoCodeService::$type     =3;
         AutoCodeService::AutoCode();
-        AutoCodeFoldHelper::foldafterservice();
+        self::$showReport.=AutoCodeFoldHelper::foldafterservice();
 
         //生成Action类[前端和后端]
         AutoCodeAction::$save_dir =self::$save_dir;
-        AutoCodeFoldHelper::foldbeforeaction();
+        self::$showReport.=AutoCodeFoldHelper::foldbeforeaction();
         AutoCodeAction::$type     =0;
         AutoCodeAction::AutoCode();
         AutoCodeAction::$type     =1;
         AutoCodeAction::AutoCode();
         AutoCodeAction::$type     =2;
         AutoCodeAction::AutoCode();
-        AutoCodeFoldHelper::foldafteraction();
+        self::$showReport.=AutoCodeFoldHelper::foldafteraction();
 
         //生成前端表示层
-        AutoCodeFoldHelper::foldbeforeviewdefault();
+        self::$showReport.=AutoCodeFoldHelper::foldbeforeviewdefault();
         AutoCodeViewDefault::$save_dir =self::$save_dir;
         AutoCodeViewDefault::$type     =0;
         AutoCodeViewDefault::AutoCode();
         AutoCodeViewDefault::$type     =1;
         AutoCodeViewDefault::AutoCode();
-        AutoCodeFoldHelper::foldafterviewdefault();
+        self::$showReport.=AutoCodeFoldHelper::foldafterviewdefault();
 
         //生成后端表示层
         AutoCodeViewExt::$save_dir =self::$save_dir;
-        AutoCodeFoldHelper::foldbeforeviewext();
+        self::$showReport.=AutoCodeFoldHelper::foldbeforeviewext();
         AutoCodeViewExt::AutoCode();
-        AutoCodeFoldHelper::foldafterviewext();
-        echo "</div>";
+        self::$showReport.=AutoCodeFoldHelper::foldafterviewext();
+        self::$showReport.="</div>";
+        echo self::$showReport;
     }
 
     /**
@@ -73,8 +73,8 @@ class AutoCodeOneKey extends AutoCode
      */
     public static function UserInput($title=null,$inputArr=null)
     {
-        parent::UserInput("一键生成前后台所有模板文件");
+        $more_content='';
+        parent::UserInput("一键生成前后台所有模板文件", null ,$more_content);
     }
-
 }
 ?>

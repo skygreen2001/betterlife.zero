@@ -83,7 +83,7 @@ if(isset($_REQUEST["type"])){
 		</div>
 	</body>
 FORMCONTENT;
-	UtilCss::form_css();
+	echo UtilCss::form_css();
 	echo $html;
 }
 

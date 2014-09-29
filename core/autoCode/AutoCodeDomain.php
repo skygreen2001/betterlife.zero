@@ -39,30 +39,33 @@ class AutoCodeDomain extends AutoCode
 		self::$app_dir=Gc::$appName;
 		self::$domain_dir_full=self::$save_dir.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR.self::$domain_dir.DIRECTORY_SEPARATOR;
 		self::init();
-		if (self::$isNoOutputCss)echo UtilCss::form_css()."\r\n";
+		if (self::$isOutputCss)self::$showReport.= UtilCss::form_css()."\r\n";
 		self::$enumClass="";
-		echo '<div id="Content_11" style="display:none;">';
+		self::$showReport.= '<div id="Content_11" style="display:none;">';
+		$link_domain_dir_href="file:///".str_replace("\\", "/", self::$domain_dir_full);
+		self::$showReport.= "<font color='#AAA'>存储路径:<a target='_blank' href='".$link_domain_dir_href."'>".self::$domain_dir_full."</a></font><br/><br/>";
 
 		$fieldInfos=self::fieldInfosByTable_names($table_names);
 		foreach ($fieldInfos as $tablename=>$fieldInfo){
 		   //print_r($fieldInfo);
-		   //echo("<br/>");
+		   //self::$showReport.="<br/>";
 		   $definePhpFileContent=self::tableToDataObjectDefine($tablename,$fieldInfo);
 		   if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($definePhpFileContent)){
 			   $classname=self::saveDataObjectDefineToDir($tablename,$definePhpFileContent);
-			   echo "生成导出完成:$tablename=>$classname!<br/>";
+			   self::$showReport.= "生成导出完成:$tablename=>$classname!<br/>";
 		   }else{
-			   echo $definePhpFileContent."<br/>";
+			   self::$showReport.= $definePhpFileContent."<br/>";
 		   }
 		   self::tableToEnumClass($tablename,$fieldInfo);
 		}
-		echo "</div><br/>";
-		AutoCodeFoldHelper::foldEffectCommon("Content_12");
-		echo "<font color='#FF0000'>生成枚举类型:</font><br/>";
-		echo '</a>';
-		echo '<div id="Content_12" style="display:none;">';
-		echo self::$enumClass;
-		echo "</div>";
+		self::$showReport.= "</div><br/>";
+		self::$showReport.=AutoCodeFoldHelper::foldEffectCommon("Content_12");
+		self::$showReport.= "<font color='#FF0000'>生成枚举类型:</font><br/>";
+		self::$showReport.= '</a>';
+		self::$showReport.= '<div id="Content_12" style="display:none;">';
+		self::$showReport.= "<font color='#AAA'>存储路径:<a target='_blank' href='".$link_domain_dir_href.self::$enum_dir."'>".self::$domain_dir_full.self::$enum_dir."</a></font><br/><br/>";
+		self::$showReport.= self::$enumClass;
+		self::$showReport.= "</div>";
 	}
 
 	/**
