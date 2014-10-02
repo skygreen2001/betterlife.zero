@@ -294,46 +294,46 @@ $viewdoblock
 					})
 				],
 				buttons : [{
-						text : '上 传',
-						scope:this,
-						handler : function() {
-							uploadWindow           =this;
-							validationExpression   =/([\u4E00-\u9FA5]|\w)+(.xlsx|.XLSX|.xls|.XLS)$/;/**允许中文名*/
-							var isValidExcelFormat = new RegExp(validationExpression);
-							var result             = isValidExcelFormat.test(this.uploadForm.upload_file.getValue());
-							if (!result){
-								Ext.Msg.alert('提示', '请上传Excel文件，后缀名为xls或者xlsx！');
-								return;
-							}
-							if (this.uploadForm.getForm().isValid()) {
-								Ext.Msg.show({
-									title : '请等待',msg : '文件正在上传中，请稍后...',
-									animEl : 'loading',icon : Ext.Msg.WARNING,
-									closable : true,progress : true,progressText : '',width : 300
-								});
-								this.uploadForm.getForm().submit({
-									url : 'index.php?go=admin.upload.upload$classname',
-									success : function(form, response) {
-										Ext.Msg.alert('成功', '上传成功');
-										uploadWindow.hide();
-										uploadWindow.uploadForm.upload_file.setValue('');
-										$appName_alias.$classname.View.Running.{$instancename}Grid.doSelect$classname();
-									},
-									failure : function(form, response) {
-										Ext.Msg.alert('错误', response.result.data);
-									}
-								});
-							}
+					text : '上 传',
+					scope:this,
+					handler : function() {
+						uploadWindow			=this;
+						validationExpression	=/([\u4E00-\u9FA5]|\w)+(.xlsx|.XLSX|.xls|.XLS)$/;/**允许中文名*/
+						var isValidExcelFormat = new RegExp(validationExpression);
+						var result			 = isValidExcelFormat.test(this.uploadForm.upload_file.getValue());
+						if (!result){
+							Ext.Msg.alert('提示', '请上传Excel文件，后缀名为xls或者xlsx！');
+							return;
 						}
-					},{
-						text : '取 消',
-						scope:this,
-						handler : function() {
-							this.uploadForm.upload_file.setValue('');
-							this.hide();
+						if (this.uploadForm.getForm().isValid()) {
+							Ext.Msg.show({
+								title : '请等待',msg : '文件正在上传中，请稍后...',
+								animEl : 'loading',icon : Ext.Msg.WARNING,
+								closable : true,progress : true,progressText : '',width : 300
+							});
+							this.uploadForm.getForm().submit({
+								url : 'index.php?go=admin.upload.upload$classname',
+								success : function(form, response) {
+									Ext.Msg.alert('成功', '上传成功');
+									uploadWindow.hide();
+									uploadWindow.uploadForm.upload_file.setValue('');
+									$appName_alias.$classname.View.Running.{$instancename}Grid.doSelect$classname();
+								},
+								failure : function(form, response) {
+									Ext.Msg.alert('错误', response.result.data);
+								}
+							});
 						}
-					}]
-				}, config);
+					}
+				},{
+					text : '取 消',
+					scope:this,
+					handler : function() {
+						this.uploadForm.upload_file.setValue('');
+						this.hide();
+					}
+				}]
+			}, config);
 			$appName_alias.$classname.View.UploadWindow.superclass.constructor.call(this, config);
 		}
 	})$batchUploadImagesWinow
@@ -375,7 +375,7 @@ $columns
 							defaults : {
 								xtype : 'textfield',
 								listeners : {
-								   specialkey : function(field, e) {
+									specialkey : function(field, e) {
 										if (e.getKey() == Ext.EventObject.ENTER)this.ownerCt.ownerCt.ownerCt.doSelect{$classname}();
 									}
 								}
@@ -395,7 +395,8 @@ $filterReset
 										this.filter={};
 										this.doSelect$classname();
 									}
-								}]
+								}
+							]
 						}),
 						new Ext.Toolbar({
 							defaults:{scope: this},
@@ -448,8 +449,11 @@ $filterReset
 											{text:'右侧',group:'mlayout',checked:false,iconCls:'view-right',scope:this,handler:function(){this.onUpDown(4)}},
 											{text:'隐藏',group:'mlayout',checked:false,iconCls:'view-hide',scope:this,handler:function(){this.hide$classname();$appName_alias.$classname.Config.View.IsShow=0;}},'-',
 											{text: '固定',ref:'mBind',checked: true,scope:this,checkHandler:function(item, checked){this.onBindGrid(item, checked);$appName_alias.$classname.Cookie.set('View.IsFix',$appName_alias.$classname.Config.View.IsFix);}}
-										]}
-								}{$relationM2mMenu},'-']}
+										]
+									}
+								}{$relationM2mMenu},'-'
+							]
+						}
 					)]
 				},
 				bbar: new Ext.PagingToolbar({
@@ -565,17 +569,17 @@ $filterReset
 		 */
 		onBindGrid:function(item, checked){
 			if (checked){
-			   $appName_alias.$classname.Config.View.IsFix=1;
+				$appName_alias.$classname.Config.View.IsFix=1;
 			}else{
-			   $appName_alias.$classname.Config.View.IsFix=0;
+				$appName_alias.$classname.Config.View.IsFix=0;
 			}
 			if (this.getSelectionModel().getSelected()==null){
 				$appName_alias.$classname.Config.View.IsShow=0;
 				return ;
 			}
 			if ($appName_alias.$classname.Config.View.IsShow==1){
-			   this.hide$classname();
-			   $appName_alias.$classname.Config.View.IsShow=0;
+				this.hide$classname();
+				$appName_alias.$classname.Config.View.IsShow=0;
 			}
 			this.show$classname();
 		},
@@ -602,9 +606,9 @@ $filterdoSelect
 			Ext.apply(condition,this.filter);
 			ExtService$classname.queryPage$classname(condition,function(provider, response) {
 				if (response.result&&response.result.data) {
-					var result           = new Array();
-					result['data']       =response.result.data;
-					result['totalCount'] =response.result.totalCount;
+					var result			 = new Array();
+					result['data']		 = response.result.data;
+					result['totalCount'] = response.result.totalCount;
 					$appName_alias.$classname.Store.{$instancename}Store.loadData(result);
 				} else {
 					$appName_alias.$classname.Store.{$instancename}Store.removeAll();
@@ -786,7 +790,7 @@ $filterdoSelect
 		confirmDelete$classname : function(btn) {
 			if (btn == 'yes') {
 				var del_{$instancename}_ids ="";
-				var selectedRows    = this.getSelectionModel().getSelections();
+				var selectedRows	= this.getSelectionModel().getSelections();
 				for ( var flag = 0; flag < selectedRows.length; flag++) {
 					del_{$instancename}_ids=del_{$instancename}_ids+selectedRows[flag].data.{$realId}+",";
 				}

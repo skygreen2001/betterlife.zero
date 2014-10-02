@@ -95,7 +95,7 @@ class AutoCodeModel extends AutoCode
         echo "<body>";
         echo "<br/><br/><br/><h1 align='center'>$title</h1>";
         echo "<div align='center' height='450'>";
-        echo "<form target='_blank'>";
+        echo "<form>";
         echo "  <div style='line-height:1.5em;'>";
         echo "      <label>输出文件路径:</label><input style=\"width:400px;text-align:left;padding-left:10px;\" type=\"text\" name=\"save_dir\" value=\"$default_dir\" id=\"save_dir\" />";
         if (!empty($inputArr)){

@@ -14,11 +14,13 @@ class ViewFiles {
 /******************************显示本工程文件列表清单********************************************************/
 
 $files=UtilFileSystem::getAllFilesInDirectory(Initializer::$NAV_CORE_PATH);
+$files_config=UtilFileSystem::getAllFilesInDirectory(Initializer::$NAV_CONFIG_PATH);
+$files=array_merge($files_config,$files);
 foreach (Initializer::$moduleFiles as $moduleFile) {
 	$files=array_merge($files, $moduleFile);
 }
-
-
+$files_tools=UtilFileSystem::getAllFilesInDirectory(Gc::$nav_root_path."tools");
+$files=array_merge($files,$files_tools);
 UtilCss::report_info();
 
 /**
@@ -26,7 +28,7 @@ UtilCss::report_info();
  * 1：路径
  * 2：文件名称【查看】
  * 3：文件信息【查看】
- */
+ */              
 echo '<pre>';
 echo '<table class='.UtilCss::CSS_REPORT_TABLE.'>';
 echo '<tr><td colspan="5" align="center"><h1>所有源码清单</h1></td></tr>';
@@ -40,7 +42,7 @@ echo '</tr>';
 foreach ($files as $file) {
 	echo '<tr>';
 	echo '<td>'.dirname($file).'</td>';
-	echo '<td>'.basename($file).'&nbsp;</td>';
+	echo '<td>'.basename($file).' </td>';
 	echo '<td>'.count(file($file)).'</td>';
 	echo '<td>'.filesize($file).'</td>';
 	echo '<td>[<a href="viewfilebyline.php?f='.$file.'">查看</a>]';
@@ -48,6 +50,5 @@ foreach ($files as $file) {
 	echo '</tr>';
 }
 echo '</table>';
-echo "<br/><br/><br/><br/><br/><br/><br/>"
-
+echo "<br/><br/><br/><br/><br/><br/><br/>";
 ?>

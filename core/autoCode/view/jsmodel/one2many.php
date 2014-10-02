@@ -9,36 +9,36 @@ if (Config_AutoCode::RELATION_VIEW_FULL)
 	}
 	$realId_relation=DataObjectSpec::getRealIDColumnName($key);
 	self::$relationStore=$relationStore;
-	$editWindow_relationVars = self::model_fieldLables($tablename,$appName_alias,$current_classname,$fieldInfo,$realId,"    ");
+	$editWindow_relationVars = self::model_fieldLables($tablename,$appName_alias,$current_classname,$fieldInfo,$realId,"	");
 	$relationStore=self::$relationStore;
-	$fieldLabels_relation    = $editWindow_relationVars["fieldLabels"];
-	$treeLevelVisible_Add    = $editWindow_relationVars["treeLevelVisible_Add"];
-	$treeLevelVisible_Add   =str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $treeLevelVisible_Add);
+	$fieldLabels_relation = $editWindow_relationVars["fieldLabels"];
+	$treeLevelVisible_Add = $editWindow_relationVars["treeLevelVisible_Add"];
+	$treeLevelVisible_Add = str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $treeLevelVisible_Add);
 
 	$treeLevelVisible_Update = $editWindow_relationVars["treeLevelVisible_Update"];
-	$treeLevelVisible_Update   =str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $treeLevelVisible_Update);
+	$treeLevelVisible_Update =str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $treeLevelVisible_Update);
 
-	$textarea_Vars=self::model_textareaOnlineEditor($appName_alias,$current_classname,$current_instancename,$fieldInfo,"    ");
-	$textareaOnlineditor_Add   =$textarea_Vars["textareaOnlineditor_Add"];
-	$textareaOnlineditor_Add   =str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $textareaOnlineditor_Add);
-	$textareaOnlineditor_Add   =str_replace("View.EditWindow.", "View.{$current_classname}View.EditWindow.",$textareaOnlineditor_Add);
+	$textarea_Vars=self::model_textareaOnlineEditor($appName_alias,$current_classname,$current_instancename,$fieldInfo,"	");
+	$textareaOnlineditor_Add = $textarea_Vars["textareaOnlineditor_Add"];
+	$textareaOnlineditor_Add = str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $textareaOnlineditor_Add);
+	$textareaOnlineditor_Add = str_replace("View.EditWindow.", "View.{$current_classname}View.EditWindow.",$textareaOnlineditor_Add);
 
 
 	$textareaOnlineditor_Update=$textarea_Vars["textareaOnlineditor_Update"];
-	$textareaOnlineditor_Update   =str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $textareaOnlineditor_Update);
-	$textareaOnlineditor_Update   =str_replace("View.EditWindow.", "View.{$current_classname}View.EditWindow.", $textareaOnlineditor_Update);
+	$textareaOnlineditor_Update	= str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $textareaOnlineditor_Update);
+	$textareaOnlineditor_Update	= str_replace("View.EditWindow.", "View.{$current_classname}View.EditWindow.", $textareaOnlineditor_Update);
 
-	$textareaOnlineditor_Replace=$textarea_Vars["textareaOnlineditor_Replace"];
-	$textareaOnlineditor_Replace   =str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $textareaOnlineditor_Replace);
-	$textareaOnlineditor_Replace   =str_replace("View.EditWindow.", "View.{$current_classname}View.EditWindow.", $textareaOnlineditor_Replace);
+	$textareaOnlineditor_Replace = $textarea_Vars["textareaOnlineditor_Replace"];
+	$textareaOnlineditor_Replace = str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $textareaOnlineditor_Replace);
+	$textareaOnlineditor_Replace = str_replace("View.EditWindow.", "View.{$current_classname}View.EditWindow.", $textareaOnlineditor_Replace);
 
-	$textareaOnlineditor_Save=$textarea_Vars["textareaOnlineditor_Save"];
-	$textareaOnlineditor_Save   =str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $textareaOnlineditor_Save);
-	$textareaOnlineditor_Save   =str_replace("View.EditWindow.", "View.{$current_classname}View.EditWindow.", $textareaOnlineditor_Save);
+	$textareaOnlineditor_Save = $textarea_Vars["textareaOnlineditor_Save"];
+	$textareaOnlineditor_Save = str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $textareaOnlineditor_Save);
+	$textareaOnlineditor_Save = str_replace("View.EditWindow.", "View.{$current_classname}View.EditWindow.", $textareaOnlineditor_Save);
 
-	$textareaOnlineditor_Reset=$textarea_Vars["textareaOnlineditor_Reset"];
-	$textareaOnlineditor_Reset   =str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $textareaOnlineditor_Reset);
-	$textareaOnlineditor_Reset   =str_replace("View.EditWindow.", "View.{$current_classname}View.EditWindow.", $textareaOnlineditor_Reset);
+	$textareaOnlineditor_Reset = $textarea_Vars["textareaOnlineditor_Reset"];
+	$textareaOnlineditor_Reset = str_replace("{$appName_alias}.$current_classname.", "{$appName_alias}.$classname.", $textareaOnlineditor_Reset);
+	$textareaOnlineditor_Reset = str_replace("View.EditWindow.", "View.{$current_classname}View.EditWindow.", $textareaOnlineditor_Reset);
 
 	$tbar=<<<TBAR
 
@@ -51,7 +51,7 @@ if (Config_AutoCode::RELATION_VIEW_FULL)
 						items : [
 							new Ext.Toolbar({
 								defaults:{
-								  scope: this
+									scope: this
 								},
 								items : [
 									{
@@ -74,12 +74,14 @@ if (Config_AutoCode::RELATION_VIEW_FULL)
 										handler : function() {
 											this.delete{$current_classname}();
 										}
-									},'-']}
-						)]
+									},'-'
+								]}
+							)
+						]
 					},
 TBAR;
 	$sm="sm : this.sm,";
-	$sm_incm="\r\n                            this.sm,";
+	$sm_incm="\r\n							this.sm,";
 	$sm_impl=<<<SM
 
 			/**
@@ -99,7 +101,7 @@ SM;
 	$relation_editwindow=<<<EDITWINDOW
 
 		/**
-		 *  当前创建的{$table_comment12n}编辑窗口
+		 *	当前创建的{$table_comment12n}编辑窗口
 		 */
 		edit_window:null,
 		/**
@@ -255,7 +257,7 @@ EDITWINDOW;
 			confirmDelete{$current_classname} : function(btn) {
 				if (btn == 'yes') {
 					var del_{$realId_relation}s ="";
-					var selectedRows    = this.getSelectionModel().getSelections();
+					var selectedRows	= this.getSelectionModel().getSelections();
 					for ( var flag = 0; flag < selectedRows.length; flag++) {
 						del_{$realId_relation}s=del_{$realId_relation}s+selectedRows[flag].data.{$realId_relation}+",";
 					}
@@ -267,8 +269,8 @@ EDITWINDOW;
 ADDUPADTEDITWINDOW;
 
 }else{
-	$tbar   ="";
-	$sm     ="";
+	$tbar	 ="";
+	$sm	 ="";
 	$sm_impl="";
 	$addupdateDeleteEditWindow="";
 }
@@ -350,12 +352,12 @@ $columns_relation
 				if ($appName_alias.$classname.View.Running.{$instancename}Grid&&$appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected()){
 					var $realId = $appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.{$realId};
 					var condition = {'$realId':$realId,'start':0,'limit':$appName_alias.$classname.Config.PageSize};
-					this.filter       ={'{$realId}':{$realId}};
+					this.filter	  = {'{$realId}':{$realId}};
 					ExtService{$current_classname}.queryPage{$current_classname}(condition,function(provider, response) {
 						if (response.result){
 							if (response.result.data) {
-								var result           = new Array();
-								result['data']       =response.result.data;
+								var result			 = new Array();
+								result['data']		 =response.result.data;
 								result['totalCount'] =response.result.totalCount;
 								$appName_alias.$classname.Store.{$current_instancename}Store.loadData(result);
 							} else {

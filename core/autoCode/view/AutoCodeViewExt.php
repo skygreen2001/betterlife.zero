@@ -52,10 +52,10 @@ class AutoCodeViewExt extends AutoCode
 
 	/**
 	 * 自动生成代码-使用ExtJs生成的表示层
-     * @param array|string $table_names
-     * 示例如下：
-     *  1.array:array('bb_user_admin','bb_core_blog')
-     *  2.字符串:'bb_user_admin,bb_core_blog'
+	 * @param array|string $table_names
+	 * 示例如下：
+	 *1.array:array('bb_user_admin','bb_core_blog')
+	 *2.字符串:'bb_user_admin,bb_core_blog'
 	 */
 	public static function AutoCode($table_names="")
 	{
@@ -122,23 +122,23 @@ class AutoCodeViewExt extends AutoCode
 		foreach($tableList as $tablename){
 			$table_comment=self::tableCommentKey($tablename);
 			$instancename=self::getInstancename($tablename);
-			$section_content.="        <menu name=\"$table_comment\" id=\"$instancename\" address=\"index.php?go=admin.$appName.{$instancename}\" />\r\n";
+			$section_content.="		<menu name=\"$table_comment\" id=\"$instancename\" address=\"index.php?go=admin.$appName.{$instancename}\" />\r\n";
 		}
 		$filename="menu.config.xml";
 		$output_section_content="<?xml version=\"1.0\" encoding=\"UTF-8\"?> \r\n".
 						 "<menuGroups>\r\n".
-						 "    <menuGroup id=\"navWebDev\" name=\"功能区\" iconCls=\"navdesign\" show=\"true\">\r\n".
+						 "	<menuGroup id=\"navWebDev\" name=\"功能区\" iconCls=\"navdesign\" show=\"true\">\r\n".
 						 $section_content.
-						 "    </menuGroup> \r\n".
+						 "	</menuGroup> \r\n".
 						 "</menuGroups>\r\n";
 		self::saveDefineToDir(self::$menuconfig_dir_full,$filename,$output_section_content);
 		$link_view_ext_dir_href="file:///".str_replace("\\", "/", self::$menuconfig_dir_full).$filename;
-		self::$showReport.=  "新生成的menu.config.xml文件路径:<font color='#0000FF'>存储路径:<a target='_blank' href='".$link_view_ext_dir_href."'>".self::$menuconfig_dir_full.$filename."</a></font><br/>";
-		/*    $section_content=str_replace(" ","&nbsp;",$section_content);
+		self::$showReport.="新生成的menu.config.xml文件路径:<font color='#0000FF'>存储路径:<a target='_blank' href='".$link_view_ext_dir_href."'>".self::$menuconfig_dir_full.$filename."</a></font><br/>";
+		/*	$section_content=str_replace(" ","&nbsp;",$section_content);
 			$section_content=str_replace("<","&lt;",$section_content);
 			$section_content=str_replace(">","&gt;",$section_content);
 			$section_content=str_replace("\r\n","<br />",$section_content);
-			self::$showReport.=  $section_content;*/
+			self::$showReport.=$section_content;*/
 	}
 
 	/**
@@ -204,34 +204,34 @@ class AutoCodeViewExt extends AutoCode
 										 "require_once (\"../../../../init.php\");\r\n".
 										 "\$node=intval(\$_REQUEST[\"id\"]);\r\n".
 										 "if (\$node){\r\n".
-										 "    \$condition=array(\"parent_id\"=>\"\$node\");\r\n".
+										 "	\$condition=array(\"parent_id\"=>\"\$node\");\r\n".
 										 "}else{\r\n".
-										 "    \$condition=array(\"parent_id\"=>'0');\r\n".
+										 "	\$condition=array(\"parent_id\"=>'0');\r\n".
 										 "}\r\n".
 										 "\${$key_i}s={$key}::get(\$condition,\"$realId asc\");\r\n".
 										 "echo \"[\";\r\n".
 										 "if (!empty(\${$key_i}s)){\r\n".
-										 "    \$trees=\"\";\r\n".
-										 "    \$maxLevel={$key}::maxlevel();\r\n".
-										 "    foreach (\${$key_i}s as \${$key_i}){\r\n".
-										 "        \$trees.=\"{\r\n".
-										 "            'text': '\${$key_i}->{$showname}',\r\n".
-										 "            'id': '\${$key_i}->$realId',\r\n".
-										 "            'level':'\${$key_i}->level',\";\r\n".
-										 "        if (\${$key_i}->level==\$maxLevel){\r\n".
-										 "            \$trees.=\"'leaf':true,'cls': 'file'\";\r\n".
-										 "        }else{\r\n".
-										 "            \$trees.=\"'cls': 'folder'\";\r\n".
-										 "        }\r\n".
-										 "        if (isset(\${$key_i}->countChild)){\r\n".
-										 "            if (\${$key_i}->countChild==0){\r\n".
-										 "                \$trees.=\",'leaf':true\";\r\n".
-										 "            }\r\n".
-										 "        }\r\n".
-										 "        \$trees.=\"},\";\r\n".
-										 "    }\r\n".
-										 "    \$trees=substr(\$trees, 0, strlen(\$trees)-1);\r\n".
-										 "    echo \$trees;\r\n".
+										 "	\$trees=\"\";\r\n".
+										 "	\$maxLevel={$key}::maxlevel();\r\n".
+										 "	foreach (\${$key_i}s as \${$key_i}){\r\n".
+										 "		\$trees.=\"{\r\n".
+										 "			'text': '\${$key_i}->{$showname}',\r\n".
+										 "			'id': '\${$key_i}->$realId',\r\n".
+										 "			'level':'\${$key_i}->level',\";\r\n".
+										 "		if (\${$key_i}->level==\$maxLevel){\r\n".
+										 "			\$trees.=\"'leaf':true,'cls': 'file'\";\r\n".
+										 "		}else{\r\n".
+										 "			\$trees.=\"'cls': 'folder'\";\r\n".
+										 "		}\r\n".
+										 "		if (isset(\${$key_i}->countChild)){\r\n".
+										 "			if (\${$key_i}->countChild==0){\r\n".
+										 "				\$trees.=\",'leaf':true\";\r\n".
+										 "			}\r\n".
+										 "		}\r\n".
+										 "		\$trees.=\"},\";\r\n".
+										 "	}\r\n".
+										 "	\$trees=substr(\$trees, 0, strlen(\$trees)-1);\r\n".
+										 "	echo \$trees;\r\n".
 										 "}\r\n".
 										 "echo \"]\";\r\n".
 										 "?>\r\n";
@@ -245,22 +245,22 @@ class AutoCodeViewExt extends AutoCode
 							$result="<?php \r\n".
 									 "require_once (\"../../../../init.php\");\r\n".
 									 "\$pageSize=15;\r\n".
-									 "\${$value}   = !empty(\$_REQUEST['query'])&&(\$_REQUEST['query']!=\"?\")&&(\$_REQUEST['query']!=\"？\") ? trim(\$_REQUEST['query']) : \"\";\r\n".
+									 "\${$value} = !empty(\$_REQUEST['query'])&&(\$_REQUEST['query']!=\"?\")&&(\$_REQUEST['query']!=\"？\") ? trim(\$_REQUEST['query']) : \"\";\r\n".
 									 "\$condition=array();\r\n".
 									 "if (!empty(\${$value})){\r\n".
-									 "    \$condition[\"{$value}\"]=\" like '%\${$value}%'\";\r\n".
+									 "	\$condition[\"{$value}\"]=\" like '%\${$value}%'\";\r\n".
 									 "}\r\n".
 									 "\$start=0;\r\n".
 									 "if (isset(\$_REQUEST['start'])){\r\n".
-									 "    \$start=\$_REQUEST['start']+1;\r\n".
+									 "	\$start=\$_REQUEST['start']+1;\r\n".
 									 "}\r\n".
 									 "\$limit=\$pageSize;\r\n".
 									 "if (isset(\$_REQUEST['limit'])){\r\n".
-									 "    \$limit=\$_REQUEST['limit'];\r\n".
-									 "    \$limit= \$start+\$limit-1;\r\n".
+									 "	\$limit=\$_REQUEST['limit'];\r\n".
+									 "	\$limit= \$start+\$limit-1;\r\n".
 									 "}\r\n".
 									 "\$arr['totalCount']= {$key}::count(\$condition);\r\n".
-									 "\$arr['{$key_i}s']    = {$key}::queryPage(\$start,\$limit,\$condition);\r\n".
+									 "\$arr['{$key_i}s']	= {$key}::queryPage(\$start,\$limit,\$condition);\r\n".
 									 "echo json_encode(\$arr);\r\n".
 									 "?>\r\n";
 							$key{0}=strtolower($key{0});
@@ -314,7 +314,7 @@ class AutoCodeViewExt extends AutoCode
 		$password_update=$editWindowVars["password_update"];
 		$isFileUpload=array_key_exists("isFileUpload", $editWindowVars) ? $editWindowVars["isFileUpload"]:"";
 
-		$treeLevelVisible_Add   =$editWindowVars["treeLevelVisible_Add"];
+		$treeLevelVisible_Add =$editWindowVars["treeLevelVisible_Add"];
 		$treeLevelVisible_Update=$editWindowVars["treeLevelVisible_Update"];
 
 		$textarea_Vars=self::model_textareaOnlineEditor($appName_alias,$classname,$instancename,$fieldInfo);
@@ -334,18 +334,18 @@ class AutoCodeViewExt extends AutoCode
 
 		$filters=self::model_filters($appName_alias,$classname,$instancename,$fieldInfo);
 		//Ext "Grid" 中"tbar"包含的items中的items
-		$filterFields   =$filters["filterFields"];
+		$filterFields =$filters["filterFields"];
 		//重置语句
-		$filterReset    =$filters["filterReset"];
+		$filterReset	=$filters["filterReset"];
 		//查询中的语句
 		$filterdoSelect =$filters["filterdoSelect"];
 
-		$upload_mixed   =self::model_upload($appName_alias,$classname,$instancename,$fieldInfo);
+		$upload_mixed =self::model_upload($appName_alias,$classname,$instancename,$fieldInfo);
 		//批量上传图片文件菜单
 		$menu_uploadImg =$upload_mixed["menu_uploadImg"];
 		//打开批量上传图片窗口
-		$openBatchUploadImagesWindow   =$upload_mixed["openBatchUploadImagesWindow"];
-		$batchUploadImagesWinow        =$upload_mixed["batchUploadImagesWinow"];
+		$openBatchUploadImagesWindow =$upload_mixed["openBatchUploadImagesWindow"];
+		$batchUploadImagesWinow		=$upload_mixed["batchUploadImagesWinow"];
 		$result="";
 		$realId=DataObjectSpec::getRealIDColumnName($classname);
 		require("jsmodel".DIRECTORY_SEPARATOR."includemodeljs.php");
@@ -380,16 +380,16 @@ class AutoCodeViewExt extends AutoCode
 				}
 				if ($datatype=='enum'){
 					$datatype='string';
-					$fields.="                {name: '{$fieldname}Show',type: '".$datatype."'},\r\n";
+					$fields.="				{name: '{$fieldname}Show',type: '".$datatype."'},\r\n";
 				}
-				$fields.="                {name: '$fieldname',type: '".$datatype."'";
+				$fields.="				{name: '$fieldname',type: '".$datatype."'";
 				if ($datatype=='date')
 				{
 					$fields.=",dateFormat:'Y-m-d H:i:s'";
 				}
 				$fields.="},\r\n";
 				if (self::columnIsTextArea($fieldname,$field["Type"])){
-					$fields.="                {name: '{$fieldname}Show',type:'string'},\r\n";
+					$fields.="				{name: '{$fieldname}Show',type:'string'},\r\n";
 				}
 
 				if (is_array(self::$relation_viewfield)&&(count(self::$relation_viewfield)>0))
@@ -415,13 +415,13 @@ class AutoCodeViewExt extends AutoCode
 										$show_fieldname= strtolower($key)."_".$value;
 									}
 									if (!array_key_exists("$show_fieldname",$fieldInfo)){
-										$fields.="                {name: '$show_fieldname',type: 'string'},\r\n";
+										$fields.="				{name: '$show_fieldname',type: 'string'},\r\n";
 									}
 								}else{
 									if ($value=="name"){
 										$show_fieldname= strtolower($key)."_".$value;
 										if (!array_key_exists("$show_fieldname",$fieldInfo)){
-											$fields.="                {name: '$show_fieldname',type: 'string'},\r\n";
+											$fields.="				{name: '$show_fieldname',type: 'string'},\r\n";
 										}
 									}
 								}
@@ -431,7 +431,7 @@ class AutoCodeViewExt extends AutoCode
 								$key{0}=strtolower($key{0});
 								if (!$isTreelevelStoreHad){
 									if (array_key_exists("parent_id",$fieldInfo_relationshow)){
-										$fields.="                {name: '{$key}ShowAll',type: 'string'},\r\n";
+										$fields.="				{name: '{$key}ShowAll',type: 'string'},\r\n";
 										$isTreelevelStoreHad=true;
 									}
 								}
@@ -439,27 +439,27 @@ class AutoCodeViewExt extends AutoCode
 									$showValue=$value;
 									if ($value=="name") $showValue=strtolower($key)."_".$value;
 									$relationStore_combo=",\r\n".
-													"    /**\r\n".
-													"     * {$relation_classcomment}\r\n".
-													"     */\r\n".
-													"    {$key}StoreForCombo:new Ext.data.Store({\r\n".
-													"        proxy: new Ext.data.HttpProxy({\r\n".
-													"            url: 'home/admin/src/httpdata/{$key}.php'\r\n".
-													"        }),\r\n".
-													"        reader: new Ext.data.JsonReader({\r\n".
-													"            root: '{$key}s',\r\n".
-													"            autoLoad: true,\r\n".
-													"            totalProperty: 'totalCount',\r\n".
-													"            idProperty: '$realId'\r\n".
-													"        }, [\r\n".
-													"            {name: '$realId', mapping: '$realId'},\r\n";
+													"	/**\r\n".
+													"	 * {$relation_classcomment}\r\n".
+													"	 */\r\n".
+													"	{$key}StoreForCombo:new Ext.data.Store({\r\n".
+													"		proxy: new Ext.data.HttpProxy({\r\n".
+													"			url: 'home/admin/src/httpdata/{$key}.php'\r\n".
+													"		}),\r\n".
+													"		reader: new Ext.data.JsonReader({\r\n".
+													"			root: '{$key}s',\r\n".
+													"			autoLoad: true,\r\n".
+													"			totalProperty: 'totalCount',\r\n".
+													"			idProperty: '$realId'\r\n".
+													"		}, [\r\n".
+													"			{name: '$realId', mapping: '$realId'},\r\n";
 									if (array_key_exists("level",$fieldInfo_relationshow)){
 										$showLevel=strtolower($key)."_level";
-										$relationStore_combo.="            {name: '$showLevel', mapping: 'level'},\r\n";
+										$relationStore_combo.="			{name: '$showLevel', mapping: 'level'},\r\n";
 									}
-									$relationStore_combo.="            {name: '$showValue', mapping: '$value'}\r\n".
-													"        ])\r\n".
-													"    })";
+									$relationStore_combo.="			{name: '$showValue', mapping: '$value'}\r\n".
+													"		])\r\n".
+													"	})";
 									$relationStore.=$relationStore_combo;
 									self::$relationStore.=$relationStore_combo;
 								}
@@ -500,7 +500,7 @@ class AutoCodeViewExt extends AutoCode
 
 						$tablename_belong=self::getTablename($belong_class);
 						$belong_instance_name=self::getInstancename($tablename_belong);
-						$fields.="                {name: '{$belong_instance_name}Str',type: 'string'},\r\n";
+						$fields.="				{name: '{$belong_instance_name}Str',type: 'string'},\r\n";
 					}
 				}
 			}
@@ -582,15 +582,15 @@ class AutoCodeViewExt extends AutoCode
 					$relation_classcomment=self::relation_classcomment(self::$class_comments[$current_classname]);
 					if (self::isMany2ManyShowHasMany($current_classname))
 					{
-						$relationViewAdds.="                    {title: '$relation_classcomment',iconCls:'tabs',tabWidth:150,\r\n".
-										   "                     items:[$appName_alias.$classname.View.Running.{$current_instancename}Grid]\r\n".
-										   "                    },\r\n";
-						$relationViewGrids.="        /**\r\n".
-											"         * 当前{$relation_classcomment}Grid对象\r\n".
-											"         */\r\n".
-											"        {$current_instancename}Grid:null,\r\n";
-						$viewRelationDoSelect.="            $appName_alias.$classname.View.Running.{$current_instancename}Grid.doSelect{$current_classname}();\r\n";
-						$relationViewGridInit.="                $appName_alias.$classname.View.Running.{$current_instancename}Grid=new $appName_alias.$classname.View.{$current_classname}View.Grid();\r\n";
+						$relationViewAdds.="					{title: '$relation_classcomment',iconCls:'tabs',tabWidth:150,\r\n".
+										 "					 items:[$appName_alias.$classname.View.Running.{$current_instancename}Grid]\r\n".
+										 "					},\r\n";
+						$relationViewGrids.="		/**\r\n".
+											"		 * 当前{$relation_classcomment}Grid对象\r\n".
+											"		 */\r\n".
+											"		{$current_instancename}Grid:null,\r\n";
+						$viewRelationDoSelect.="			$appName_alias.$classname.View.Running.{$current_instancename}Grid.doSelect{$current_classname}();\r\n";
+						$relationViewGridInit.="				$appName_alias.$classname.View.Running.{$current_instancename}Grid=new $appName_alias.$classname.View.{$current_classname}View.Grid();\r\n";
 					}
 					if (!contain($relationStore,"{$key}Store:"))
 					{
@@ -602,7 +602,7 @@ class AutoCodeViewExt extends AutoCode
 							$datatype=self::comment_type($field["Type"]);
 							if ($fieldname==self::keyIDColumn($current_classname))
 							{
-								$fields_relation.="                {name: '$fieldname',type: '$datatype'},\r\n";
+								$fields_relation.="				{name: '$fieldname',type: '$datatype'},\r\n";
 								continue;
 							}
 							$field_comment=$field["Comment"];
@@ -612,7 +612,7 @@ class AutoCodeViewExt extends AutoCode
 								$maybe_classname{0}=strtoupper($maybe_classname{0});
 								if (class_exists($maybe_classname))
 								{
-                                    $fields_relation.="                {name: '$fieldname',type: '".$datatype."'},\r\n";
+									$fields_relation.="				{name: '$fieldname',type: '".$datatype."'},\r\n";
 									$fieldname=self::getShowFieldNameByClassname($maybe_classname);
 									if ($fieldname=="name")$fieldname=strtolower($maybe_classname)."_".$fieldname;
 									$datatype="string";
@@ -630,7 +630,7 @@ class AutoCodeViewExt extends AutoCode
 							if ($datatype=='enum'){
 								$datatype='string';
 							}
-							$fields_relation.="                {name: '$fieldname',type: '".$datatype."'";
+							$fields_relation.="				{name: '$fieldname',type: '".$datatype."'";
 							if ($datatype=='date')
 							{
 								$fields_relation.=",dateFormat:'Y-m-d H:i:s'";
@@ -638,12 +638,12 @@ class AutoCodeViewExt extends AutoCode
 							$fields_relation.="},\r\n";
 							if ($datatype_origin=='enum'){
 								$fieldname=$fieldname."Show";
-								$fields_relation.="                {name: '$fieldname',type: '".$datatype."'},\r\n";
+								$fields_relation.="				{name: '$fieldname',type: '".$datatype."'},\r\n";
 							}
 							if ($isMoreShowAll){
 								$i_name=$maybe_classname;
 								$i_name{0}=strtolower($i_name{0});
-								$fields_relation.="                {name: '{$i_name}ShowAll',type: '".$datatype."'},\r\n";
+								$fields_relation.="				{name: '{$i_name}ShowAll',type: '".$datatype."'},\r\n";
 							}
 						}
 						$fields_relation=substr($fields_relation,0,strlen($fields_relation)-3);
@@ -651,30 +651,30 @@ class AutoCodeViewExt extends AutoCode
 						{
 							$relation_classcomment=self::relation_classcomment(self::$class_comments[$current_classname]);
 							$relationStore.=",\r\n".
-											"    /**\r\n".
-											"     * {$relation_classcomment}\r\n".
-											"     */\r\n".
-											"    {$key}Store:new Ext.data.Store({\r\n".
-											"        reader: new Ext.data.JsonReader({\r\n".
-											"            totalProperty: 'totalCount',\r\n".
-											"            successProperty: 'success',\r\n".
-											"            root: 'data',remoteSort: true,\r\n".
-											"            fields : [\r\n".
+											"	/**\r\n".
+											"	 * {$relation_classcomment}\r\n".
+											"	 */\r\n".
+											"	{$key}Store:new Ext.data.Store({\r\n".
+											"		reader: new Ext.data.JsonReader({\r\n".
+											"			totalProperty: 'totalCount',\r\n".
+											"			successProperty: 'success',\r\n".
+											"			root: 'data',remoteSort: true,\r\n".
+											"			fields : [\r\n".
 											"$fields_relation\r\n".
-											"            ]}\r\n".
-											"        ),\r\n".
-											"        writer: new Ext.data.JsonWriter({\r\n".
-											"            encode: false \r\n".
-											"        }),\r\n".
-											"        listeners : {\r\n".
-											"            beforeload : function(store, options) {\r\n".
-											"                if (Ext.isReady) {\r\n".
-											"                    if (!options.params.limit)options.params.limit=$appName_alias.$classname.Config.PageSize;\r\n".
-											"                    Ext.apply(options.params, $appName_alias.$classname.View.Running.{$current_instancename}Grid.filter);//保证分页也将查询条件带上\r\n".
-											"                }\r\n".
-											"            }\r\n".
-											"        }\r\n".
-											"    })";
+											"			]}\r\n".
+											"		),\r\n".
+											"		writer: new Ext.data.JsonWriter({\r\n".
+											"			encode: false\r\n".
+											"		}),\r\n".
+											"		listeners : {\r\n".
+											"			beforeload : function(store, options) {\r\n".
+											"				if (Ext.isReady) {\r\n".
+											"					if (!options.params.limit)options.params.limit=$appName_alias.$classname.Config.PageSize;\r\n".
+											"					Ext.apply(options.params, $appName_alias.$classname.View.Running.{$current_instancename}Grid.filter);//保证分页也将查询条件带上\r\n".
+											"				}\r\n".
+											"			}\r\n".
+											"		}\r\n".
+											"	})";
 						}
 					}
 					if (!contain($relationClassesView,"{$current_classname}View"))
@@ -695,11 +695,11 @@ class AutoCodeViewExt extends AutoCode
 						{
 							if (!self::isNotColumnKeywork($fieldname))
 							{
-							   continue;
+							 continue;
 							}
 							if ($fieldname==self::keyIDColumn($current_classname))
 							{
-								$columns_relation.="                            {header : '标识',dataIndex : '{$fieldname}',hidden:true},\r\n";
+								$columns_relation.="							{header : '标识',dataIndex : '{$fieldname}',hidden:true},\r\n";
 								continue;
 							}
 							if ($realId==$fieldname) continue;
@@ -724,7 +724,7 @@ class AutoCodeViewExt extends AutoCode
 							if ($datatype=='enum'){
 								$fieldname=$fieldname."Show";
 							}
-							$columns_relation.="                            {header : '$field_comment',dataIndex : '{$fieldname}'";
+							$columns_relation.="							{header : '$field_comment',dataIndex : '{$fieldname}'";
 							if (($datatype=='date')||contains($field_comment,array("日期","时间")))
 							{
 								$columns_relation.=",renderer:Ext.util.Format.dateRenderer('Y-m-d')";
@@ -738,7 +738,7 @@ class AutoCodeViewExt extends AutoCode
 							if ($isMoreShowAll){
 								$i_name=$maybe_classname;
 								$i_name{0}=strtolower($i_name{0});
-								$columns_relation.="                            {header : '{$field_comment}[全]',dataIndex :'{$i_name}ShowAll'},\r\n";
+								$columns_relation.="							{header : '{$field_comment}[全]',dataIndex :'{$i_name}ShowAll'},\r\n";
 							}
 						}
 						$columns_relation=substr($columns_relation,0,strlen($columns_relation)-3);
@@ -751,13 +751,13 @@ class AutoCodeViewExt extends AutoCode
 
 		$result['relationStore']=$relationStore;
 		if (empty($relationViewAdds)){
-			$relationViewAdds.="                    {title: '其他',iconCls:'tabs'}";
+			$relationViewAdds.="					{title: '其他',iconCls:'tabs'}";
 		}else{
 			$relationViewAdds=substr($relationViewAdds,0,strlen($relationViewAdds)-3);
 		}
-		$relationViewAdds="                this.add(\r\n".
-						  $relationViewAdds."\r\n".
-						  "                );";
+		$relationViewAdds="				this.add(\r\n".
+						$relationViewAdds."\r\n".
+						"				);";
 		$result['one2many']=$relationClassesView;
 		$result['relationViewAdds']="\r\n".$relationViewAdds;
 		$relationViewGrids=substr($relationViewGrids,0,strlen($relationViewGrids)-2);
@@ -782,7 +782,7 @@ class AutoCodeViewExt extends AutoCode
 	{
 		$result=array();
 		$fieldLabels="";//Ext "EditWindow"里items的fieldLabels
-		$treeLevelVisible_Add   ="";
+		$treeLevelVisible_Add ="";
 		$treeLevelVisible_Update="";
 		$isRedundancyCurrentHad=false;
 		$redundancy_table_fields=self::$redundancy_table_fields[$classname];
@@ -809,7 +809,7 @@ class AutoCodeViewExt extends AutoCode
 			}
 
 			if (!empty($relationIgnoreID)&&($fieldname==$relationIgnoreID)){
-				$fieldLabels.=$blank_pre."                            {xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'},\r\n";
+				$fieldLabels.=$blank_pre."							{xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'},\r\n";
 				continue;
 			}
 
@@ -852,82 +852,82 @@ class AutoCodeViewExt extends AutoCode
 								$key{0}=strtolower($key{0});
 								if (array_key_exists("parent_id",$fieldInfo_relationshow)){
 									$treeLevelVisible_Add="\r\n".
-														  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$key}comp.btnModify.setVisible(false);\r\n".
-														  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}_name.setVisible(true);\r\n".
-														  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(false);\r\n".
-														  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(false);\r\n";
+														$blank_pre."			$appName_alias.$classname.View.Running.edit_window.{$key}comp.btnModify.setVisible(false);\r\n".
+														$blank_pre."			$appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}_name.setVisible(true);\r\n".
+														$blank_pre."			$appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(false);\r\n".
+														$blank_pre."			$appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(false);\r\n";
 									$treeLevelVisible_Update="\r\n".
-															 $blank_pre."            if (this.getSelectionModel().getSelected().data.{$key}ShowAll){\r\n".
-															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.btnModify.setVisible(true);\r\n".
-															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}_name.setVisible(false);\r\n".
+															 $blank_pre."			if (this.getSelectionModel().getSelected().data.{$key}ShowAll){\r\n".
+															 $blank_pre."				$appName_alias.$classname.View.Running.edit_window.{$key}comp.btnModify.setVisible(true);\r\n".
+															 $blank_pre."				$appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}_name.setVisible(false);\r\n".
 
-															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(true);\r\n".
-															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(true);\r\n".
-															 $blank_pre."            }else{\r\n".
-															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.btnModify.setVisible(false);\r\n".
-															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}_name.setVisible(true);\r\n".
-															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(false);\r\n".
-															 $blank_pre."                $appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(false);\r\n".
-															 $blank_pre."            }\r\n";
-									$fieldLabels.=$blank_pre."                            {xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'},\r\n".
-												  $blank_pre."                            {\r\n".
-												  $blank_pre."                                  xtype: 'compositefield',ref: '../{$key}comp',\r\n".
-												  $blank_pre."                                  items: [\r\n".
-												  $blank_pre."                                      {\r\n".
-												  $blank_pre."                                          xtype:'combotree', fieldLabel:'{$field_comment}',ref:'{$key}_name',name: '{$key}_name',grid:this,\r\n".
-												  $blank_pre."                                          emptyText: '请选择{$field_comment}',canFolderSelect:true,flex:1,editable:false,\r\n".
-												  $blank_pre."                                          tree: new Ext.tree.TreePanel({\r\n".
-												  $blank_pre."                                              dataUrl: 'home/admin/src/httpdata/{$key}Tree.php',\r\n".
-												  $blank_pre."                                              root: {nodeType: 'async'},border: false,rootVisible: false,\r\n".
-												  $blank_pre."                                              listeners: {\r\n".
-												  $blank_pre."                                                  beforeload: function(n) {if (n) {this.getLoader().baseParams.id = n.attributes.id;}}\r\n".
-												  $blank_pre."                                              }\r\n".
-												  $blank_pre."                                          }),\r\n".
-												  $blank_pre."                                          onSelect: function(cmb, node) {\r\n".
-												  $blank_pre."                                              this.grid.{$fieldname}.setValue(node.attributes.id);\r\n".
-												  $blank_pre."                                              this.setValue(node.attributes.text);\r\n".
-												  $blank_pre."                                          }\r\n".
-												  $blank_pre."                                      },\r\n".
-												  $blank_pre."                                      {xtype:'button',text : '修改{$field_comment}',ref: 'btnModify',iconCls : 'icon-edit',\r\n".
-												  $blank_pre."                                       handler:function(){\r\n".
-												  $blank_pre."                                           this.setVisible(false);\r\n".
-												  $blank_pre."                                           this.ownerCt.ownerCt.{$key}_name.setVisible(true);\r\n".
-												  $blank_pre."                                           this.ownerCt.ownerCt.{$key}ShowLabel.setVisible(true);\r\n".
-												  $blank_pre."                                           this.ownerCt.ownerCt.{$key}ShowValue.setVisible(true);\r\n".
-												  $blank_pre."                                           this.ownerCt.ownerCt.doLayout();\r\n".
-												  $blank_pre."                                      }},\r\n".
-												  $blank_pre."                                      {xtype:'displayfield',value:'所选{$field_comment}:',ref: '{$key}ShowLabel'},{xtype:'displayfield',name:'{$key}ShowAll',flex:1,ref: '{$key}ShowValue'}]\r\n".
-												  $blank_pre."                            },\r\n";
+															 $blank_pre."				$appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(true);\r\n".
+															 $blank_pre."				$appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(true);\r\n".
+															 $blank_pre."			}else{\r\n".
+															 $blank_pre."				$appName_alias.$classname.View.Running.edit_window.{$key}comp.btnModify.setVisible(false);\r\n".
+															 $blank_pre."				$appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}_name.setVisible(true);\r\n".
+															 $blank_pre."				$appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowLabel.setVisible(false);\r\n".
+															 $blank_pre."				$appName_alias.$classname.View.Running.edit_window.{$key}comp.{$key}ShowValue.setVisible(false);\r\n".
+															 $blank_pre."			}\r\n";
+									$fieldLabels.=$blank_pre."							{xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'},\r\n".
+												$blank_pre."							{\r\n".
+												$blank_pre."								xtype: 'compositefield',ref: '../{$key}comp',\r\n".
+												$blank_pre."								items: [\r\n".
+												$blank_pre."									{\r\n".
+												$blank_pre."										xtype:'combotree', fieldLabel:'{$field_comment}',ref:'{$key}_name',name: '{$key}_name',grid:this,\r\n".
+												$blank_pre."										emptyText: '请选择{$field_comment}',canFolderSelect:true,flex:1,editable:false,\r\n".
+												$blank_pre."										tree: new Ext.tree.TreePanel({\r\n".
+												$blank_pre."											dataUrl: 'home/admin/src/httpdata/{$key}Tree.php',\r\n".
+												$blank_pre."											root: {nodeType: 'async'},border: false,rootVisible: false,\r\n".
+												$blank_pre."											listeners: {\r\n".
+												$blank_pre."												beforeload: function(n) {if (n) {this.getLoader().baseParams.id = n.attributes.id;}}\r\n".
+												$blank_pre."											}\r\n".
+												$blank_pre."										}),\r\n".
+												$blank_pre."										onSelect: function(cmb, node) {\r\n".
+												$blank_pre."											this.grid.{$fieldname}.setValue(node.attributes.id);\r\n".
+												$blank_pre."											this.setValue(node.attributes.text);\r\n".
+												$blank_pre."										}\r\n".
+												$blank_pre."									},\r\n".
+												$blank_pre."									{xtype:'button',text : '修改{$field_comment}',ref: 'btnModify',iconCls : 'icon-edit',\r\n".
+												$blank_pre."									 handler:function(){\r\n".
+												$blank_pre."										 this.setVisible(false);\r\n".
+												$blank_pre."										 this.ownerCt.ownerCt.{$key}_name.setVisible(true);\r\n".
+												$blank_pre."										 this.ownerCt.ownerCt.{$key}ShowLabel.setVisible(true);\r\n".
+												$blank_pre."										 this.ownerCt.ownerCt.{$key}ShowValue.setVisible(true);\r\n".
+												$blank_pre."										 this.ownerCt.ownerCt.doLayout();\r\n".
+												$blank_pre."									}},\r\n".
+												$blank_pre."									{xtype:'displayfield',value:'所选{$field_comment}:',ref: '{$key}ShowLabel'},{xtype:'displayfield',name:'{$key}ShowAll',flex:1,ref: '{$key}ShowValue'}]\r\n".
+												$blank_pre."							},\r\n";
 								}else{
 									$show_name_diff_name= $show_name_diff;
 									if ($show_name_diff=="title")$show_name_diff=$key."_".$show_name_diff;
 									$dorefresh="";
 									if (Config_AutoCode::COMBO_REFRESH){
-										$dorefresh=$blank_pre."                                 listeners:{\r\n".
-												   $blank_pre."                                     'beforequery': function(event){delete event.combo.lastQuery;}\r\n".
-												   $blank_pre."                                 },\r\n";
+										$dorefresh=$blank_pre."								 listeners:{\r\n".
+												 $blank_pre."									 'beforequery': function(event){delete event.combo.lastQuery;}\r\n".
+												 $blank_pre."								 },\r\n";
 									}
-									$fieldLabels.=$blank_pre."                            {xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'},\r\n".
-												  $blank_pre."                            {\r\n".
-												  $blank_pre."                                 fieldLabel : '{$field_comment}',xtype: 'combo',name : '$show_name_diff_name',ref : '../$show_name_diff',\r\n".
-												  $blank_pre."                                 store:$appName_alias.$classname.Store.{$key}StoreForCombo,emptyText: '请选择{$field_comment}',itemSelector: 'div.search-item',\r\n".
-												  $blank_pre."                                 loadingText: '查询中...',width: 570, pageSize:$appName_alias.$classname.Config.PageSize,\r\n".
-												  $blank_pre."                                 displayField:'$value',grid:this,\r\n".
-												  $blank_pre."                                 mode: 'remote',  editable:true,minChars: 1,autoSelect :true,typeAhead: false,\r\n".
-												  $blank_pre."                                 forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,\r\n".
-												  $blank_pre."                                 tpl:new Ext.XTemplate(\r\n".
-												  $blank_pre."                                     '<tpl for=\".\"><div class=\"search-item\">',\r\n".
-												  $blank_pre."                                         '<h3>{{$value}}</h3>',\r\n".
-												  $blank_pre."                                     '</div></tpl>'\r\n".
-												  $blank_pre."                                 ),\r\n".$dorefresh.
-												  $blank_pre."                                 onSelect:function(record,index){\r\n".
-												  $blank_pre."                                     if(this.fireEvent('beforeselect', this, record, index) !== false){\r\n".
-												  $blank_pre."                                        this.grid.$fieldname.setValue(record.data.$realId);\r\n".
-												  $blank_pre."                                        this.grid.$show_name_diff.setValue(record.data.$value);\r\n".
-												  $blank_pre."                                        this.collapse();\r\n".
-												  $blank_pre."                                     }\r\n".
-												  $blank_pre."                                 }\r\n".
-												  $blank_pre."                            },\r\n";
+									$fieldLabels.=$blank_pre."							{xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'},\r\n".
+												$blank_pre."							{\r\n".
+												$blank_pre."								 fieldLabel : '{$field_comment}',xtype: 'combo',name : '$show_name_diff_name',ref : '../$show_name_diff',\r\n".
+												$blank_pre."								 store:$appName_alias.$classname.Store.{$key}StoreForCombo,emptyText: '请选择{$field_comment}',itemSelector: 'div.search-item',\r\n".
+												$blank_pre."								 loadingText: '查询中...',width: 570, pageSize:$appName_alias.$classname.Config.PageSize,\r\n".
+												$blank_pre."								 displayField:'$value',grid:this,\r\n".
+												$blank_pre."								 mode: 'remote',editable:true,minChars: 1,autoSelect :true,typeAhead: false,\r\n".
+												$blank_pre."								 forceSelection: true,triggerAction: 'all',resizable:false,selectOnFocus:true,\r\n".
+												$blank_pre."								 tpl:new Ext.XTemplate(\r\n".
+												$blank_pre."									 '<tpl for=\".\"><div class=\"search-item\">',\r\n".
+												$blank_pre."										 '<h3>{{$value}}</h3>',\r\n".
+												$blank_pre."									 '</div></tpl>'\r\n".
+												$blank_pre."								 ),\r\n".$dorefresh.
+												$blank_pre."								 onSelect:function(record,index){\r\n".
+												$blank_pre."									 if(this.fireEvent('beforeselect', this, record, index) !== false){\r\n".
+												$blank_pre."										this.grid.$fieldname.setValue(record.data.$realId);\r\n".
+												$blank_pre."										this.grid.$show_name_diff.setValue(record.data.$value);\r\n".
+												$blank_pre."										this.collapse();\r\n".
+												$blank_pre."									 }\r\n".
+												$blank_pre."								 }\r\n".
+												$blank_pre."							},\r\n";
 
 									if (Config_AutoCode::RELATION_VIEW_FULL){
 										if (array_key_exists($fieldname,$relationSpecs))
@@ -942,27 +942,27 @@ class AutoCodeViewExt extends AutoCode
 													if ($value=="name") $showValue=strtolower($key_relation)."_".$value_relation;
 													$relation_classcomment=self::relation_classcomment(self::$class_comments[$current_classname]);
 													$relationStore_combo=",\r\n".
-																	"    /**\r\n".
-																	"     * {$relation_classcomment}\r\n".
-																	"     */\r\n".
-																	"    {$key}StoreForCombo:new Ext.data.Store({\r\n".
-																	"        proxy: new Ext.data.HttpProxy({\r\n".
-																	"            url: 'home/admin/src/httpdata/{$key_relation}.php'\r\n".
-																	"        }),\r\n".
-																	"        reader: new Ext.data.JsonReader({\r\n".
-																	"            root: '{$key}s',\r\n".
-																	"            autoLoad: true,\r\n".
-																	"            totalProperty: 'totalCount',\r\n".
-																	"            idProperty: '$realId'\r\n".
-																	"        }, [\r\n".
-																	"            {name: '$realId', mapping: '$realId'},\r\n";
+																	"	/**\r\n".
+																	"	 * {$relation_classcomment}\r\n".
+																	"	 */\r\n".
+																	"	{$key}StoreForCombo:new Ext.data.Store({\r\n".
+																	"		proxy: new Ext.data.HttpProxy({\r\n".
+																	"			url: 'home/admin/src/httpdata/{$key_relation}.php'\r\n".
+																	"		}),\r\n".
+																	"		reader: new Ext.data.JsonReader({\r\n".
+																	"			root: '{$key}s',\r\n".
+																	"			autoLoad: true,\r\n".
+																	"			totalProperty: 'totalCount',\r\n".
+																	"			idProperty: '$realId'\r\n".
+																	"		}, [\r\n".
+																	"			{name: '$realId', mapping: '$realId'},\r\n";
 													if (array_key_exists("level",$fieldInfo_relationshow)){
 														$showLevel=strtolower($key)."_level";
-														$relationStore_combo.="            {name: '$showLevel', mapping: 'level'},\r\n";
+														$relationStore_combo.="			{name: '$showLevel', mapping: 'level'},\r\n";
 													}
-													$relationStore_combo.="            {name: '$showValue', mapping: '$value'}\r\n".
-																	"        ])\r\n".
-																	"    })";
+													$relationStore_combo.="			{name: '$showValue', mapping: '$value'}\r\n".
+																	"		])\r\n".
+																	"	})";
 													$relationStore.=$relationStore_combo;
 													self::$relationStore.=$relationStore_combo;
 												}
@@ -981,29 +981,29 @@ class AutoCodeViewExt extends AutoCode
 				$isPassword=self::columnIsPassword($tablename,$fieldname);
 				if ($fieldname==self::keyIDColumn($classname))
 				{
-					$fieldLabels.=$blank_pre."                            {xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'";
+					$fieldLabels.=$blank_pre."							{xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'";
 				}else if ($isImage){
 					$field_comment=$field["Comment"];
 					$field_comment=self::columnCommentKey($field_comment,$fieldname);
 					$result["isFileUpload"]="fileUpload: true,";
-					$fieldLabels.=$blank_pre."                            {xtype: 'hidden',  name : '$fieldname',ref:'../$fieldname'},\r\n";
-					$fieldLabels.=$blank_pre."                            {fieldLabel : '{$field_comment}',name : '{$fieldname}Upload',ref:'../{$fieldname}Upload',xtype:'fileuploadfield',\r\n".
-								  $blank_pre."                              emptyText: '请上传{$field_comment}文件',buttonText: '',accept:'image/*',buttonCfg: {iconCls: 'upload-icon'}";
+					$fieldLabels.=$blank_pre."							{xtype: 'hidden',name : '$fieldname',ref:'../$fieldname'},\r\n";
+					$fieldLabels.=$blank_pre."							{fieldLabel : '{$field_comment}',name : '{$fieldname}Upload',ref:'../{$fieldname}Upload',xtype:'fileuploadfield',\r\n".
+								$blank_pre."							emptyText: '请上传{$field_comment}文件',buttonText: '',accept:'image/*',buttonCfg: {iconCls: 'upload-icon'}";
 				}else if($isPassword){
 					$field_comment=$field["Comment"];
 					$field_comment=self::columnCommentKey($field_comment,$fieldname);
-					$fieldLabels.=$blank_pre."                            {fieldLabel : '{$field_comment}(<font color=red>*</font>)',name : '{$fieldname}',inputType:'{$fieldname}',ref:'../{$fieldname}'},\r\n";
-					$fieldLabels.=$blank_pre."                            {xtype: 'hidden',name : '{$fieldname}_old',ref:'../{$fieldname}_old'";
+					$fieldLabels.=$blank_pre."							{fieldLabel : '{$field_comment}(<font color=red>*</font>)',name : '{$fieldname}',inputType:'{$fieldname}',ref:'../{$fieldname}'},\r\n";
+					$fieldLabels.=$blank_pre."							{xtype: 'hidden',name : '{$fieldname}_old',ref:'../{$fieldname}_old'";
 
-					$password_Add.=$blank_pre."            var {$fieldname}Obj=$appName_alias.$classname.View.Running.edit_window.{$fieldname};\r\n".
-								   $blank_pre."            {$fieldname}Obj.allowBlank=false;\r\n".
-								   $blank_pre."            if ({$fieldname}Obj.getEl()) {$fieldname}Obj.getEl().dom.parentNode.previousSibling.innerHTML =\"{$field_comment}(<font color=red>*</font>)\";\r\n";
+					$password_Add.=$blank_pre."			var {$fieldname}Obj=$appName_alias.$classname.View.Running.edit_window.{$fieldname};\r\n".
+								 $blank_pre."			{$fieldname}Obj.allowBlank=false;\r\n".
+								 $blank_pre."			if ({$fieldname}Obj.getEl()) {$fieldname}Obj.getEl().dom.parentNode.previousSibling.innerHTML =\"{$field_comment}(<font color=red>*</font>)\";\r\n";
 					$password_update.="\r\n".
-									  $blank_pre."            var {$fieldname}Obj=$appName_alias.$classname.View.Running.edit_window.{$fieldname};\r\n".
-									  $blank_pre."            {$fieldname}Obj.allowBlank=true;\r\n".
-									  $blank_pre."            if ({$fieldname}Obj.getEl()){$fieldname}Obj.getEl().dom.parentNode.previousSibling.innerHTML =\"{$field_comment}\";\r\n".
-									  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$fieldname}_old.setValue(this.getSelectionModel().getSelected().data.{$fieldname}.getValue());\r\n".
-									  $blank_pre."            $appName_alias.$classname.View.Running.edit_window.{$fieldname}.setValue(\"\");\r\n";
+									$blank_pre."			var {$fieldname}Obj=$appName_alias.$classname.View.Running.edit_window.{$fieldname};\r\n".
+									$blank_pre."			{$fieldname}Obj.allowBlank=true;\r\n".
+									$blank_pre."			if ({$fieldname}Obj.getEl()){$fieldname}Obj.getEl().dom.parentNode.previousSibling.innerHTML =\"{$field_comment}\";\r\n".
+									$blank_pre."			$appName_alias.$classname.View.Running.edit_window.{$fieldname}_old.setValue(this.getSelectionModel().getSelected().data.{$fieldname}.getValue());\r\n".
+									$blank_pre."			$appName_alias.$classname.View.Running.edit_window.{$fieldname}.setValue(\"\");\r\n";
 				}else{
 					$datatype=self::comment_type($field["Type"]);
 					$field_comment=$field["Comment"];
@@ -1023,7 +1023,7 @@ class AutoCodeViewExt extends AutoCode
 					}else{
 						$flName="name";
 					}
-					$fieldLabels.=$blank_pre."                            {fieldLabel : '$field_comment$fr1',$flName : '$fieldname'$fr2";
+					$fieldLabels.=$blank_pre."							{fieldLabel : '$field_comment$fr1',$flName : '$fieldname'$fr2";
 					if (($datatype=='date')||contains($field_comment,array("日期","时间")))
 					{
 						$fieldLabels.=",xtype : 'datefield',format : \"Y-m-d\"";
@@ -1033,23 +1033,23 @@ class AutoCodeViewExt extends AutoCode
 					if ($column_type=='bit')
 					{
 						$fieldLabels.="\r\n".
-								  $blank_pre."                                 ,xtype:'combo',ref:'../$fieldname',mode : 'local',triggerAction : 'all',\r\n".
-								  $blank_pre."                                 lazyRender : true,editable: false,allowBlank : false,valueNotFoundText:'否',\r\n".
-								  $blank_pre."                                 store : new Ext.data.SimpleStore({\r\n".
-								  $blank_pre."                                     fields : ['value', 'text'],\r\n".
-								  $blank_pre."                                     data : [['0', '否'], ['1', '是']]\r\n".
-								  $blank_pre."                                 }),emptyText: '请选择$field_comment',\r\n".
-								  $blank_pre."                                 valueField : 'value',displayField : 'text'\r\n".
-								  $blank_pre."                            ";
+								$blank_pre."								 ,xtype:'combo',ref:'../$fieldname',mode : 'local',triggerAction : 'all',\r\n".
+								$blank_pre."								 lazyRender : true,editable: false,allowBlank : false,valueNotFoundText:'否',\r\n".
+								$blank_pre."								 store : new Ext.data.SimpleStore({\r\n".
+								$blank_pre."									 fields : ['value', 'text'],\r\n".
+								$blank_pre."									 data : [['0', '否'], ['1', '是']]\r\n".
+								$blank_pre."								 }),emptyText: '请选择$field_comment',\r\n".
+								$blank_pre."								 valueField : 'value',displayField : 'text'\r\n".
+								$blank_pre."							";
 					}
 					if ($column_type=='enum')
 					{
 						$enum_columnDefine=self::enumDefines($field["Comment"]);
 						$fieldLabels.=$blank_pre.",xtype:'combo',ref:'../$fieldname',\r\n".
-									  $blank_pre."                                mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,allowBlank : false,\r\n".
-									  $blank_pre."                                store : new Ext.data.SimpleStore({\r\n".
-									  $blank_pre."                                    fields : ['value', 'text'],\r\n".
-									  $blank_pre."                                    data : [";
+									$blank_pre."								mode : 'local',triggerAction : 'all',lazyRender : true,editable: false,allowBlank : false,\r\n".
+									$blank_pre."								store : new Ext.data.SimpleStore({\r\n".
+									$blank_pre."									fields : ['value', 'text'],\r\n".
+									$blank_pre."									data : [";
 						$enumArr=array();
 						foreach ($enum_columnDefine as $enum_column)
 						{
@@ -1057,9 +1057,9 @@ class AutoCodeViewExt extends AutoCode
 						}
 						$fieldLabels.=implode(",",$enumArr);
 						$fieldLabels.="]\r\n".
-									  $blank_pre."                                }),emptyText: '请选择$field_comment',\r\n".
-									  $blank_pre."                                valueField : 'value',displayField : 'text'\r\n".
-									  $blank_pre."                            ";
+									$blank_pre."								}),emptyText: '请选择$field_comment',\r\n".
+									$blank_pre."								valueField : 'value',displayField : 'text'\r\n".
+									$blank_pre."							";
 					}
 					if (self::columnIsEmail($fieldname,$field_comment)){
 						$fieldLabels.=",vtype:'email'";
@@ -1075,7 +1075,7 @@ class AutoCodeViewExt extends AutoCode
 		$fieldLabels=substr($fieldLabels,0,strlen($fieldLabels)-3);
 		$result["fieldLabels"]=$fieldLabels;
 
-		$result["password_Add"]   =$password_Add;
+		$result["password_Add"] =$password_Add;
 		$result["password_update"]=$password_update;
 		$result["treeLevelVisible_Add"]=$treeLevelVisible_Add;
 		$result["treeLevelVisible_Update"]=$treeLevelVisible_Update;
@@ -1131,9 +1131,9 @@ class AutoCodeViewExt extends AutoCode
 						}
 						if (array_key_exists($fieldname, $redundancy_fields))continue;
 					}
-					$reset_img.="                        this.{$fieldname}Upload.setValue(this.{$fieldname}.getValue());\r\n";
-					$add_img.="            $appName_alias.$classname.View.Running.edit_window.{$fieldname}Upload.setValue(\"\");\r\n";
-					$update_img.="            $appName_alias.$classname.View.Running.edit_window.{$fieldname}Upload.setValue($appName_alias.$classname.View.Running.edit_window.{$fieldname}.getValue());\r\n";
+					$reset_img.="						this.{$fieldname}Upload.setValue(this.{$fieldname}.getValue());\r\n";
+					$add_img.="			$appName_alias.$classname.View.Running.edit_window.{$fieldname}Upload.setValue(\"\");\r\n";
+					$update_img.="			$appName_alias.$classname.View.Running.edit_window.{$fieldname}Upload.setValue($appName_alias.$classname.View.Running.edit_window.{$fieldname}.getValue());\r\n";
 
 				}else{
 					$datatype=self::comment_type($field["Type"]);
@@ -1153,122 +1153,122 @@ class AutoCodeViewExt extends AutoCode
 							if (array_key_exists($fieldname, $redundancy_fields))continue;
 						}
 						$has_textarea=true;
-						$textareaOnlineditor_Replace_array["UEditor"].="                                this.editForm.$fieldname.setWidth(\"98%\");\r\n";
-						$textareaOnlineditor_Replace_array["UEditor"].=$blank_pre."                                pageInit_ue_$fieldname();\r\n";
-						$textareaOnlineditor_Replace_array["ckEditor"].="                                ckeditor_replace_$fieldname();\r\n";
-						$textareaOnlineditor_Replace_array["kindEditor"].="                                $appName_alias.$classname.View.EditWindow.KindEditor_$fieldname = KindEditor.create('textarea[name=\"$fieldname\"]',{width:'98%',minHeith:'350px', filterMode:true});\r\n";
-						$textareaOnlineditor_Replace_array["xhEditor"].="                                pageInit_$fieldname();\r\n";
+						$textareaOnlineditor_Replace_array["UEditor"].="								this.editForm.$fieldname.setWidth(\"98%\");\r\n";
+						$textareaOnlineditor_Replace_array["UEditor"].=$blank_pre."								pageInit_ue_$fieldname();\r\n";
+						$textareaOnlineditor_Replace_array["ckEditor"].="								ckeditor_replace_$fieldname();\r\n";
+						$textareaOnlineditor_Replace_array["kindEditor"].="								$appName_alias.$classname.View.EditWindow.KindEditor_$fieldname = KindEditor.create('textarea[name=\"$fieldname\"]',{width:'98%',minHeith:'350px', filterMode:true});\r\n";
+						$textareaOnlineditor_Replace_array["xhEditor"].="								pageInit_$fieldname();\r\n";
 
-						$textareaOnlineditor_Add_array["UEditor"].="                    if (ue_$fieldname)ue_$fieldname.setContent(\"\");\r\n";
-						$textareaOnlineditor_Add_array["ckEditor"].="                    if (CKEDITOR.instances.$fieldname) CKEDITOR.instances.$fieldname.setData(\"\");\r\n";
-						$textareaOnlineditor_Add_array["kindEditor"].="                    if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname) $appName_alias.$classname.View.EditWindow.KindEditor_{$fieldname}.html(\"\");\r\n";
+						$textareaOnlineditor_Add_array["UEditor"].="					if (ue_$fieldname)ue_$fieldname.setContent(\"\");\r\n";
+						$textareaOnlineditor_Add_array["ckEditor"].="					if (CKEDITOR.instances.$fieldname)CKEDITOR.instances.$fieldname.setData(\"\");\r\n";
+						$textareaOnlineditor_Add_array["kindEditor"].="					if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname)$appName_alias.$classname.View.EditWindow.KindEditor_{$fieldname}.html(\"\");\r\n";
 
-						$textareaOnlineditor_Update_array["UEditor"].="                    if (ue_$fieldname)ue_$fieldname.ready(function(){ue_$fieldname.setContent(data.$fieldname);});\r\n";
-						$textareaOnlineditor_Update_array["ckEditor"].="                    if (CKEDITOR.instances.$fieldname) CKEDITOR.instances.$fieldname.setData(data.$fieldname);\r\n";
-						$textareaOnlineditor_Update_array["kindEditor"].="                    if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname) $appName_alias.$classname.View.EditWindow.KindEditor_$fieldname.html(data.$fieldname);\r\n";
-						$textareaOnlineditor_Update_array["xhEditor"].="                    if (xhEditor_$fieldname)xhEditor_$fieldname.setSource(data.$fieldname);\r\n";
+						$textareaOnlineditor_Update_array["UEditor"].="					if (ue_$fieldname)ue_$fieldname.ready(function(){ue_$fieldname.setContent(data.$fieldname);});\r\n";
+						$textareaOnlineditor_Update_array["ckEditor"].="					if (CKEDITOR.instances.$fieldname)CKEDITOR.instances.$fieldname.setData(data.$fieldname);\r\n";
+						$textareaOnlineditor_Update_array["kindEditor"].="					if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname)$appName_alias.$classname.View.EditWindow.KindEditor_$fieldname.html(data.$fieldname);\r\n";
+						$textareaOnlineditor_Update_array["xhEditor"].="					if (xhEditor_$fieldname)xhEditor_$fieldname.setSource(data.$fieldname);\r\n";
 
-						$textareaOnlineditor_Save_array["UEditor"].="                                if (ue_$fieldname)this.editForm.$fieldname.setValue(ue_$fieldname.getContent());\r\n";
-						$textareaOnlineditor_Save_array["ckEditor"].="                                if (CKEDITOR.instances.$fieldname) this.editForm.$fieldname.setValue(CKEDITOR.instances.$fieldname.getData());\r\n";
-						$textareaOnlineditor_Save_array["kindEditor"].="                                if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname)this.editForm.$fieldname.setValue($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname.html());\r\n";
-						$textareaOnlineditor_Save_array["xhEditor"].="                                if (xhEditor_$fieldname)this.editForm.$fieldname.setValue(xhEditor_$fieldname.getSource());\r\n";
+						$textareaOnlineditor_Save_array["UEditor"].="								if (ue_$fieldname)this.editForm.$fieldname.setValue(ue_$fieldname.getContent());\r\n";
+						$textareaOnlineditor_Save_array["ckEditor"].="								if (CKEDITOR.instances.$fieldname)this.editForm.$fieldname.setValue(CKEDITOR.instances.$fieldname.getData());\r\n";
+						$textareaOnlineditor_Save_array["kindEditor"].="								if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname)this.editForm.$fieldname.setValue($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname.html());\r\n";
+						$textareaOnlineditor_Save_array["xhEditor"].="								if (xhEditor_$fieldname)this.editForm.$fieldname.setValue(xhEditor_$fieldname.getSource());\r\n";
 
-						$textareaOnlineditor_Reset_array["UEditor"].="                                if (ue_$fieldname) ue_$fieldname.setContent($appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n";
-						$textareaOnlineditor_Reset_array["ckEditor"].="                                if (CKEDITOR.instances.$fieldname) CKEDITOR.instances.$fieldname.setData($appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n";
-						$textareaOnlineditor_Reset_array["kindEditor"].="                                if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname) $appName_alias.$classname.View.EditWindow.KindEditor_$fieldname.html($appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n";
-						$textareaOnlineditor_Reset_array["xhEditor"].="                                if (xhEditor_$fieldname) xhEditor_$fieldname.setSource($appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n";
+						$textareaOnlineditor_Reset_array["UEditor"].="								if (ue_$fieldname)ue_$fieldname.setContent($appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n";
+						$textareaOnlineditor_Reset_array["ckEditor"].="								if (CKEDITOR.instances.$fieldname)CKEDITOR.instances.$fieldname.setData($appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n";
+						$textareaOnlineditor_Reset_array["kindEditor"].="								if ($appName_alias.$classname.View.EditWindow.KindEditor_$fieldname)$appName_alias.$classname.View.EditWindow.KindEditor_$fieldname.html($appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n";
+						$textareaOnlineditor_Reset_array["xhEditor"].="								if (xhEditor_$fieldname)xhEditor_$fieldname.setSource($appName_alias.$classname.View.Running.{$instancename}Grid.getSelectionModel().getSelected().data.$fieldname);\r\n";
 					}
 				}
 			}
 		}
 		if ($has_textarea){
 			$textareaOnlineditor_Init=",\r\n".
-									  "        /**\r\n".
-									  "         * 在线编辑器类型。\r\n".
-									  "         * 1:CkEditor,2:KindEditor,3:xhEditor,4:UEditor\r\n".
-									  "         * 配合Action的变量配置\$online_editor\r\n".
-									  "         */\r\n".
-									  "        OnlineEditor:4";
+								 "		/**\r\n".
+								 "		 * 在线编辑器类型。\r\n".
+								 "		 * 1:CkEditor,2:KindEditor,3:xhEditor,4:UEditor\r\n".
+								 "		 * 配合Action的变量配置\$online_editor\r\n".
+								 "		 */\r\n".
+								 "		OnlineEditor:4";
 			$textareaOnlineditor_Init_func="\r\n".
-									  "        if (Ext.util.Cookies.get('OnlineEditor')!=null){\r\n".
-									  "            $appName_alias.$classname.Config.OnlineEditor=parseInt(Ext.util.Cookies.get('OnlineEditor'));\r\n".
-									  "        }\r\n";
+								 "		if (Ext.util.Cookies.get('OnlineEditor')!=null){\r\n".
+								 "			$appName_alias.$classname.Config.OnlineEditor=parseInt(Ext.util.Cookies.get('OnlineEditor'));\r\n".
+								 "		}\r\n";
 			$textareaOnlineditor_Replace=",\r\n".
-									  $blank_pre."                    afterrender:function(){\r\n".
-									  $blank_pre."                        switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
-									  $blank_pre."                        {\r\n".
-									  $blank_pre."                            case 1:\r\n".
-									  $blank_pre.$textareaOnlineditor_Replace_array["ckEditor"].
-									  $blank_pre."                                break\r\n".
-									  $blank_pre."                            case 2:\r\n".
-									  $blank_pre.$textareaOnlineditor_Replace_array["kindEditor"].
-									  $blank_pre."                                break\r\n".
-									  $blank_pre."                            case 3:\r\n".
-									  $blank_pre.$textareaOnlineditor_Replace_array["xhEditor"].
-									  $blank_pre."                                break\r\n".
-									  $blank_pre."                            default:\r\n".
-									  $blank_pre.$textareaOnlineditor_Replace_array["UEditor"].
-									  $blank_pre."                        }\r\n".
-									  $blank_pre."                    }";
+									$blank_pre."					afterrender:function(){\r\n".
+									$blank_pre."						switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
+									$blank_pre."						{\r\n".
+									$blank_pre."							case 1:\r\n".
+									$blank_pre.$textareaOnlineditor_Replace_array["ckEditor"].
+									$blank_pre."								break\r\n".
+									$blank_pre."							case 2:\r\n".
+									$blank_pre.$textareaOnlineditor_Replace_array["kindEditor"].
+									$blank_pre."								break\r\n".
+									$blank_pre."							case 3:\r\n".
+									$blank_pre.$textareaOnlineditor_Replace_array["xhEditor"].
+									$blank_pre."								break\r\n".
+									$blank_pre."							default:\r\n".
+									$blank_pre.$textareaOnlineditor_Replace_array["UEditor"].
+									$blank_pre."						}\r\n".
+									$blank_pre."					}";
 			$textareaOnlineditor_Add=$add_img.
-									  $blank_pre."            switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
-									  $blank_pre."            {\r\n".
-									  $blank_pre."                case 1:\r\n".
-									  $blank_pre.$textareaOnlineditor_Add_array["ckEditor"].
-									  $blank_pre."                    break\r\n".
-									  $blank_pre."                case 2:\r\n".
-									  $blank_pre.$textareaOnlineditor_Add_array["kindEditor"].
-									  $blank_pre."                    break\r\n".
-									  $blank_pre."                case 3:\r\n".
-									  $blank_pre."                    break\r\n".
-									  $blank_pre."                default:\r\n".
-									  $blank_pre.$textareaOnlineditor_Add_array["UEditor"].
-									  $blank_pre."            }\r\n";
+									$blank_pre."			switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
+									$blank_pre."			{\r\n".
+									$blank_pre."				case 1:\r\n".
+									$blank_pre.$textareaOnlineditor_Add_array["ckEditor"].
+									$blank_pre."					break\r\n".
+									$blank_pre."				case 2:\r\n".
+									$blank_pre.$textareaOnlineditor_Add_array["kindEditor"].
+									$blank_pre."					break\r\n".
+									$blank_pre."				case 3:\r\n".
+									$blank_pre."					break\r\n".
+									$blank_pre."				default:\r\n".
+									$blank_pre.$textareaOnlineditor_Add_array["UEditor"].
+									$blank_pre."			}\r\n";
 			$textareaOnlineditor_Update=$update_img.
-									  $blank_pre."            var data = this.getSelectionModel().getSelected().data;\r\n".
-									  $blank_pre."            switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
-									  $blank_pre."            {\r\n".
-									  $blank_pre."                case 1:\r\n".
-									  $blank_pre.$textareaOnlineditor_Update_array["ckEditor"].
-									  $blank_pre."                    break\r\n".
-									  $blank_pre."                case 2:\r\n".
-									  $blank_pre.$textareaOnlineditor_Update_array["kindEditor"].
-									  $blank_pre."                    break\r\n".
-									  $blank_pre."                case 3:\r\n".
-									  $blank_pre.$textareaOnlineditor_Update_array["xhEditor"].
-									  $blank_pre."                    break\r\n".
-									  $blank_pre."                default:\r\n".
-									  $blank_pre.$textareaOnlineditor_Update_array["UEditor"].
-									  $blank_pre."            }\r\n";
-			$textareaOnlineditor_Save=$blank_pre."                        switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
-									  $blank_pre."                        {\r\n".
-									  $blank_pre."                            case 1:\r\n".
-									  $blank_pre.$textareaOnlineditor_Save_array["ckEditor"].
-									  $blank_pre."                                break\r\n".
-									  $blank_pre."                            case 2:\r\n".
-									  $blank_pre.$textareaOnlineditor_Save_array["kindEditor"].
-									  $blank_pre."                                break\r\n".
-									  $blank_pre."                            case 3:\r\n".
-									  $blank_pre.$textareaOnlineditor_Save_array["xhEditor"].
-									  $blank_pre."                                break\r\n".
-									  $blank_pre."                            default:\r\n".
-									  $blank_pre.$textareaOnlineditor_Save_array["UEditor"].
-									  $blank_pre."                        }\r\n";
+									$blank_pre."			var data = this.getSelectionModel().getSelected().data;\r\n".
+									$blank_pre."			switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
+									$blank_pre."			{\r\n".
+									$blank_pre."				case 1:\r\n".
+									$blank_pre.$textareaOnlineditor_Update_array["ckEditor"].
+									$blank_pre."					break\r\n".
+									$blank_pre."				case 2:\r\n".
+									$blank_pre.$textareaOnlineditor_Update_array["kindEditor"].
+									$blank_pre."					break\r\n".
+									$blank_pre."				case 3:\r\n".
+									$blank_pre.$textareaOnlineditor_Update_array["xhEditor"].
+									$blank_pre."					break\r\n".
+									$blank_pre."				default:\r\n".
+									$blank_pre.$textareaOnlineditor_Update_array["UEditor"].
+									$blank_pre."			}\r\n";
+			$textareaOnlineditor_Save=$blank_pre."						switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
+									$blank_pre."						{\r\n".
+									$blank_pre."							case 1:\r\n".
+									$blank_pre.$textareaOnlineditor_Save_array["ckEditor"].
+									$blank_pre."								break\r\n".
+									$blank_pre."							case 2:\r\n".
+									$blank_pre.$textareaOnlineditor_Save_array["kindEditor"].
+									$blank_pre."								break\r\n".
+									$blank_pre."							case 3:\r\n".
+									$blank_pre.$textareaOnlineditor_Save_array["xhEditor"].
+									$blank_pre."								break\r\n".
+									$blank_pre."							default:\r\n".
+									$blank_pre.$textareaOnlineditor_Save_array["UEditor"].
+									$blank_pre."						}\r\n";
 			$textareaOnlineditor_Reset=$reset_img.
-									  $blank_pre."                        switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
-									  $blank_pre."                        {\r\n".
-									  $blank_pre."                            case 1:\r\n".
-									  $blank_pre.$textareaOnlineditor_Reset_array["ckEditor"].
-									  $blank_pre."                                break\r\n".
-									  $blank_pre."                            case 2:\r\n".
-									  $blank_pre.$textareaOnlineditor_Reset_array["kindEditor"].
-									  $blank_pre."                                break\r\n".
-									  $blank_pre."                            case 3:\r\n".
-									  $blank_pre.$textareaOnlineditor_Reset_array["xhEditor"].
-									  $blank_pre."                                break\r\n".
-									  $blank_pre."                            default:\r\n".
-									  $blank_pre.$textareaOnlineditor_Reset_array["UEditor"].
-									  $blank_pre."                        }\r\n";
+									$blank_pre."						switch ($appName_alias.$classname.Config.OnlineEditor)\r\n".
+									$blank_pre."						{\r\n".
+									$blank_pre."							case 1:\r\n".
+									$blank_pre.$textareaOnlineditor_Reset_array["ckEditor"].
+									$blank_pre."								break\r\n".
+									$blank_pre."							case 2:\r\n".
+									$blank_pre.$textareaOnlineditor_Reset_array["kindEditor"].
+									$blank_pre."								break\r\n".
+									$blank_pre."							case 3:\r\n".
+									$blank_pre.$textareaOnlineditor_Reset_array["xhEditor"].
+									$blank_pre."								break\r\n".
+									$blank_pre."							default:\r\n".
+									$blank_pre.$textareaOnlineditor_Reset_array["UEditor"].
+									$blank_pre."						}\r\n";
 		}else{
 			$textareaOnlineditor_Add=$add_img;
 			$textareaOnlineditor_Update=$update_img;
@@ -1328,7 +1328,7 @@ class AutoCodeViewExt extends AutoCode
 										}
 									}
 									if (!array_key_exists("$show_fieldname",$fieldInfo)){
-										$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$show_fieldname}}$show_TreelevelViewInfo</td></tr>',\r\n";
+										$viewdoblock.="						 '	<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$show_fieldname}}$show_TreelevelViewInfo</td></tr>',\r\n";
 									}
 								}
 							}
@@ -1357,18 +1357,18 @@ class AutoCodeViewExt extends AutoCode
 				$isTextarea=self::columnIsTextArea($fieldname,$field["Type"]);
 				if ($isImage){
 					if (contain($field_comment,"路径"))$field_comment=str_replace("路径", "", $field_comment);
-					$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">{$field_comment}路径</td><td class=\"content\">{{$fieldname}}</td></tr>',\r\n";
-					$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\"><tpl if=\"{$fieldname}\"><a href=\"upload/images/{{$fieldname}}\" target=\"_blank\"><img src=\"upload/images/{{$fieldname}}\" /></a></tpl></td></tr>',\r\n";
+					$viewdoblock.="						 '	<tr class=\"entry\"><td class=\"head\">{$field_comment}路径</td><td class=\"content\">{{$fieldname}}</td></tr>',\r\n";
+					$viewdoblock.="						 '	<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\"><tpl if=\"{$fieldname}\"><a href=\"upload/images/{{$fieldname}}\" target=\"_blank\"><img src=\"upload/images/{{$fieldname}}\" /></a></tpl></td></tr>',\r\n";
 				}else if ($column_type=='bit'){
-					$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\"><tpl if=\"{$fieldname} == true\">是</tpl><tpl if=\"{$fieldname} == false\">否</tpl></td></tr>',\r\n";
+					$viewdoblock.="						 '	<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\"><tpl if=\"{$fieldname} == true\">是</tpl><tpl if=\"{$fieldname} == false\">否</tpl></td></tr>',\r\n";
 				}else if ($datatype=='enum'){
-					$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$fieldname}Show}</td></tr>',\r\n";
+					$viewdoblock.="						 '	<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$fieldname}Show}</td></tr>',\r\n";
 				}else if ($isPassword){
 					$viewdoblock.="";
 				}else if ($isTextarea){
-					$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$fieldname}Show}</td></tr>',\r\n";
+					$viewdoblock.="						 '	<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$fieldname}Show}</td></tr>',\r\n";
 				}else{
-					$viewdoblock.="                         '    <tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$fieldname}{$dateformat}}</td></tr>',\r\n";
+					$viewdoblock.="						 '	<tr class=\"entry\"><td class=\"head\">$field_comment</td><td class=\"content\">{{$fieldname}{$dateformat}}</td></tr>',\r\n";
 				}
 			}
 		}
@@ -1411,7 +1411,7 @@ class AutoCodeViewExt extends AutoCode
 										$show_fieldname=strtolower($key)."_".$show_fieldname;
 									}
 									if (!array_key_exists("$show_fieldname",$fieldInfo)){
-										$columns.=$blank_pre."                        {header : '$field_comment',dataIndex : '{$show_fieldname}'},\r\n";
+										$columns.=$blank_pre."						{header : '$field_comment',dataIndex : '{$show_fieldname}'},\r\n";
 									}
 								}
 							}else{
@@ -1420,7 +1420,7 @@ class AutoCodeViewExt extends AutoCode
 									$field_comment=self::columnCommentKey($field_comment,$fieldname);
 									$show_fieldname= strtolower($key)."_".$value;
 									if (!array_key_exists("$show_fieldname",$fieldInfo)){
-										$columns.=$blank_pre."                        {header : '$field_comment',dataIndex : '{$show_fieldname}'},\r\n";
+										$columns.=$blank_pre."						{header : '$field_comment',dataIndex : '{$show_fieldname}'},\r\n";
 									}
 								}
 							}
@@ -1433,7 +1433,7 @@ class AutoCodeViewExt extends AutoCode
 			{
 				if ($fieldname==self::keyIDColumn($classname))
 				{
-					$columns.=$blank_pre."                        {header : '标识',dataIndex : '{$fieldname}',hidden:true},\r\n";
+					$columns.=$blank_pre."						{header : '标识',dataIndex : '{$fieldname}',hidden:true},\r\n";
 					continue;
 				}
 				if (self::columnIsImage($fieldname,$field["Comment"]))continue;
@@ -1445,9 +1445,9 @@ class AutoCodeViewExt extends AutoCode
 				$field_comment=self::columnCommentKey($field_comment,$fieldname);
 				$datatype=self::comment_type($field["Type"]);
 				if ($datatype=='enum'){
-					$columns.=$blank_pre."                        {header : '{$field_comment}',dataIndex : '{$fieldname}Show'";
+					$columns.=$blank_pre."						{header : '{$field_comment}',dataIndex : '{$fieldname}Show'";
 				}else{
-					$columns.=$blank_pre."                        {header : '$field_comment',dataIndex : '{$fieldname}'";
+					$columns.=$blank_pre."						{header : '$field_comment',dataIndex : '{$fieldname}'";
 				}
 				if (($datatype=='date')||contains($field_comment,array("日期","时间")))
 				{
@@ -1477,16 +1477,16 @@ class AutoCodeViewExt extends AutoCode
 	 */
 	private static function model_filters($appName_alias,$classname,$instancename,$fieldInfo,$blank_pre="")
 	{
-		$filterFields             ="";//Ext "Grid" 中"tbar"包含的items中的items
-		$filterReset              ="";//重置语句
-		$filterdoSelect           ="";//查询中的语句
-		$filterwordNames          =array();
-		$filterfilter			  ="";
+		$filterFields			 ="";//Ext "Grid" 中"tbar"包含的items中的items
+		$filterReset			="";//重置语句
+		$filterdoSelect		 ="";//查询中的语句
+		$filterwordNames		=array();
+		$filterfilter			="";
 		if (array_key_exists($classname, self::$filter_fieldnames))
 		{
 			$filterwords=self::$filter_fieldnames[$classname];
 			$instancename_pre=$instancename{0};
-			$filterfilter=$blank_pre."                this.filter       ={";
+			$filterfilter=$blank_pre."				this.filter	= {";
 			foreach ($fieldInfo as $fieldname=>$field)
 			{
 				$field_comment=$field["Comment"];
@@ -1495,7 +1495,7 @@ class AutoCodeViewExt extends AutoCode
 				{
 					$fname=$instancename_pre.$fieldname;
 					$datatype=self::comment_type($field["Type"]);
-					$filterFields.=$blank_pre."                                '{$field_comment}','&nbsp;&nbsp;',";
+					$filterFields.=$blank_pre."								'{$field_comment}','&nbsp;&nbsp;',";
 					if (($datatype=='date')||contains($field_comment,array("日期","时间")))
 					{
 						$filterFields.=$blank_pre."{xtype : 'datefield',ref: '../$fname',format : \"Y-m-d\"";
@@ -1507,22 +1507,22 @@ class AutoCodeViewExt extends AutoCode
 					if ($column_type=='bit')
 					{
 						$filterFields.=",xtype:'combo',mode : 'local',\r\n".
-								$blank_pre."                                    triggerAction : 'all',lazyRender : true,editable: false,\r\n".
-								$blank_pre."                                    store : new Ext.data.SimpleStore({\r\n".
-								$blank_pre."                                        fields : ['value', 'text'],\r\n".
-								$blank_pre."                                        data : [['0', '否'], ['1', '是']]\r\n".
-								$blank_pre."                                    }),\r\n".
-								$blank_pre."                                    valueField : 'value',displayField : 'text'\r\n".
-								$blank_pre."                                ";
+								$blank_pre."									triggerAction : 'all',lazyRender : true,editable: false,\r\n".
+								$blank_pre."									store : new Ext.data.SimpleStore({\r\n".
+								$blank_pre."										fields : ['value', 'text'],\r\n".
+								$blank_pre."										data : [['0', '否'], ['1', '是']]\r\n".
+								$blank_pre."									}),\r\n".
+								$blank_pre."									valueField : 'value',displayField : 'text'\r\n".
+								$blank_pre."								";
 					}
 					if ($column_type=='enum')
 					{
 						$enum_columnDefine=self::enumDefines($field["Comment"]);
 						$filterFields.=",xtype:'combo',mode : 'local',\r\n".
-								$blank_pre."                                    triggerAction : 'all',lazyRender : true,editable: false,\r\n".
-								$blank_pre."                                    store : new Ext.data.SimpleStore({\r\n".
-								$blank_pre."                                        fields : ['value', 'text'],\r\n".
-								$blank_pre."                                        data : [";
+								$blank_pre."									triggerAction : 'all',lazyRender : true,editable: false,\r\n".
+								$blank_pre."									store : new Ext.data.SimpleStore({\r\n".
+								$blank_pre."										fields : ['value', 'text'],\r\n".
+								$blank_pre."										data : [";
 						$enumArr=array();
 						foreach ($enum_columnDefine as $enum_column)
 						{
@@ -1530,15 +1530,15 @@ class AutoCodeViewExt extends AutoCode
 						}
 						$filterFields.=implode(",",$enumArr);
 						$filterFields.="]\r\n".
-								$blank_pre."                                    }),\r\n".
-								$blank_pre."                                    valueField : 'value',displayField : 'text'\r\n".
-								$blank_pre."                                ";
+								$blank_pre."									}),\r\n".
+								$blank_pre."									valueField : 'value',displayField : 'text'\r\n".
+								$blank_pre."								";
 					}
 
 					if ($filterwords["relation_show"]){
 						if (array_key_exists($fieldname, $filterwords["relation_show"])){
 							$con_relation_class=$filterwords["relation_show"][$fieldname]["relation_class"];
-							$show_name         =$filterwords["relation_show"][$fieldname]["show_name"];
+							$show_name		 =$filterwords["relation_show"][$fieldname]["show_name"];
 							$store_con_relation_class=$con_relation_class;
 							$store_con_relation_class[0]=strtolower($store_con_relation_class[0]);
 							$storeName="$appName_alias.$classname.Store.".$store_con_relation_class."StoreForCombo";
@@ -1548,42 +1548,42 @@ class AutoCodeViewExt extends AutoCode
 								$fsname=$instancename_pre.$fieldname;
 								$con_relation_class{0}=strtolower($con_relation_class{0});
 								$filterFields.=", xtype:'hidden'},{\r\n".
-											   $blank_pre."                                      xtype:'combotree',ref:'../{$fsname}',grid:this,\r\n".
-											   $blank_pre."                                      emptyText: '请选择{$field_comment}',canFolderSelect:true,flex:1,editable:false,\r\n".
-											   $blank_pre."                                      tree: new Ext.tree.TreePanel({\r\n".
-											   $blank_pre."                                          dataUrl: 'home/admin/src/httpdata/{$con_relation_class}Tree.php',\r\n".
-											   $blank_pre."                                          root: {nodeType: 'async'},border: false,rootVisible: false,\r\n".
-											   $blank_pre."                                          listeners: {\r\n".
-											   $blank_pre."                                              beforeload: function(n) {if (n) {this.getLoader().baseParams.id = n.attributes.id;}}\r\n".
-											   $blank_pre."                                          }\r\n".
-											   $blank_pre."                                      }),\r\n".
-											   $blank_pre."                                      onSelect: function(cmb, node) {\r\n".
-											   $blank_pre."                                          this.grid.topToolbar.{$fname}.setValue(node.attributes.id);\r\n".
-											   $blank_pre."                                          this.setValue(node.attributes.text);\r\n".
-											   $blank_pre."                                      }\r\n".
-											   $blank_pre."                                ";
+											 $blank_pre."									xtype:'combotree',ref:'../{$fsname}',grid:this,\r\n".
+											 $blank_pre."									emptyText: '请选择{$field_comment}',canFolderSelect:true,flex:1,editable:false,\r\n".
+											 $blank_pre."									tree: new Ext.tree.TreePanel({\r\n".
+											 $blank_pre."										dataUrl: 'home/admin/src/httpdata/{$con_relation_class}Tree.php',\r\n".
+											 $blank_pre."										root: {nodeType: 'async'},border: false,rootVisible: false,\r\n".
+											 $blank_pre."										listeners: {\r\n".
+											 $blank_pre."											beforeload: function(n) {if (n) {this.getLoader().baseParams.id = n.attributes.id;}}\r\n".
+											 $blank_pre."										}\r\n".
+											 $blank_pre."									}),\r\n".
+											 $blank_pre."									onSelect: function(cmb, node) {\r\n".
+											 $blank_pre."										this.grid.topToolbar.{$fname}.setValue(node.attributes.id);\r\n".
+											 $blank_pre."										this.setValue(node.attributes.text);\r\n".
+											 $blank_pre."									}\r\n".
+											 $blank_pre."								";
 							}else{
 								$filterFields.=",xtype: 'combo',\r\n".
-											  $blank_pre."                                     store:{$storeName},hiddenName : '{$fieldname}',\r\n".
-											  $blank_pre."                                     emptyText: '请选择{$field_comment}',itemSelector: 'div.search-item',\r\n".
-											  $blank_pre."                                     loadingText: '查询中...',width:280,pageSize:$appName_alias.$classname.Config.PageSize,\r\n".
-											  $blank_pre."                                     displayField:'{$show_name}',valueField:'{$fieldname}',\r\n".
-											  $blank_pre."                                     mode: 'remote',editable:true,minChars: 1,autoSelect :true,typeAhead: false,\r\n".
-											  $blank_pre."                                     forceSelection: true,triggerAction: 'all',resizable:true,selectOnFocus:true,\r\n".
-											  $blank_pre."                                     tpl:new Ext.XTemplate(\r\n".
-											  $blank_pre."                                         '<tpl for=\".\"><div class=\"search-item\">',\r\n".
-											  $blank_pre."                                         '<h3>{{$show_name}}</h3>',\r\n".
-											  $blank_pre."                                         '</div></tpl>'\r\n".
-											  $blank_pre."                                     )\r\n".
-											  $blank_pre."                                ";
+											$blank_pre."									 store:{$storeName},hiddenName : '{$fieldname}',\r\n".
+											$blank_pre."									 emptyText: '请选择{$field_comment}',itemSelector: 'div.search-item',\r\n".
+											$blank_pre."									 loadingText: '查询中...',width:280,pageSize:$appName_alias.$classname.Config.PageSize,\r\n".
+											$blank_pre."									 displayField:'{$show_name}',valueField:'{$fieldname}',\r\n".
+											$blank_pre."									 mode: 'remote',editable:true,minChars: 1,autoSelect :true,typeAhead: false,\r\n".
+											$blank_pre."									 forceSelection: true,triggerAction: 'all',resizable:true,selectOnFocus:true,\r\n".
+											$blank_pre."									 tpl:new Ext.XTemplate(\r\n".
+											$blank_pre."										 '<tpl for=\".\"><div class=\"search-item\">',\r\n".
+											$blank_pre."											 '<h3>{{$show_name}}</h3>',\r\n".
+											$blank_pre."										 '</div></tpl>'\r\n".
+											$blank_pre."									 )\r\n".
+											$blank_pre."								";
 
 							}
 						}
 					}
 
 					$filterFields.="},'&nbsp;&nbsp;',\r\n";
-					$filterReset.=$blank_pre."                                        this.topToolbar.$fname.setValue(\"\");\r\n";
-					$filterdoSelect.=$blank_pre."                var $fname = this.topToolbar.$fname.getValue();\r\n";
+					$filterReset.=$blank_pre."										this.topToolbar.$fname.setValue(\"\");\r\n";
+					$filterdoSelect.=$blank_pre."				var $fname = this.topToolbar.$fname.getValue();\r\n";
 					$filterfilter.="'$fieldname':$fname,";
 				}
 			}
@@ -1597,8 +1597,8 @@ class AutoCodeViewExt extends AutoCode
 			}
 		}
 		$result["filterwordNames"]=$filterwordNames;
-		$result["filterFields"]   =$filterFields;
-		$result["filterReset"]    =$filterReset;
+		$result["filterFields"] =$filterFields;
+		$result["filterReset"]	=$filterReset;
 		if (endWith($filterfilter,"{"))$filterfilter="";
 		$result["filterdoSelect"] =$filterdoSelect."\r\n".$filterfilter;
 		return $result;
@@ -1619,8 +1619,8 @@ class AutoCodeViewExt extends AutoCode
 		$uploadServiceUrl=",\r\n";
 
 		$moreImageUploads="if ($appName_alias.$classname.View.Running.batchUploadImagesWindow==null){\r\n".
-						  "                $appName_alias.$classname.View.Running.batchUploadImagesWindow=new $appName_alias.$classname.View.BatchUploadImagesWindow();\r\n".
-						  "            }\r\n";
+						"				$appName_alias.$classname.View.Running.batchUploadImagesWindow=new $appName_alias.$classname.View.BatchUploadImagesWindow();\r\n".
+						"			}\r\n";
 		$isRedundancyCurrentHad=false;
 		$redundancy_table_fields=self::$redundancy_table_fields[$classname];
 		foreach ($fieldInfo as $fieldname=>$field)
@@ -1641,18 +1641,18 @@ class AutoCodeViewExt extends AutoCode
 			$field_comment=self::columnCommentKey($field_comment,$fieldname);
 			$field_comment=str_replace('路径',"",$field_comment);
 			if ($isImage){
-				$menu_uploadImg.="                                            {text:'批量导入{$field_comment}',iconCls : 'icon-import',scope:this,handler:function(){this.batchUploadImages(\"upload_{$fieldname}_files\",\"$field_comment\")}},\r\n";
+				$menu_uploadImg.="											{text:'批量导入{$field_comment}',iconCls : 'icon-import',scope:this,handler:function(){this.batchUploadImages(\"upload_{$fieldname}_files\",\"$field_comment\")}},\r\n";
 				$fieldname_funcname=$fieldname;
 				$fieldname_funcname{0}=strtoupper($fieldname_funcname);
 				if ($isImage_once){
-					$uploadServiceUrl.="                            if (this.uploadForm.upload_file.name==\"upload_{$fieldname}_files\"){\r\n".
-									   "                                uploadImageUrl='index.php?go=admin.upload.upload{$classname}{$fieldname_funcname}s';\r\n".
-									   "                            }\r\n";
+					$uploadServiceUrl.="							if (this.uploadForm.upload_file.name==\"upload_{$fieldname}_files\"){\r\n".
+									 "								uploadImageUrl='index.php?go=admin.upload.upload{$classname}{$fieldname_funcname}s';\r\n".
+									 "							}\r\n";
 					$moreImageUploads="if ($appName_alias.$classname.View.Running.batchUploadImagesWindow!=null){\r\n".
-									  "                $appName_alias.$classname.View.Running.batchUploadImagesWindow.destroy();\r\n".
-									  "                $appName_alias.$classname.View.Running.batchUploadImagesWindow=null;\r\n".
-									  "            }\r\n".
-									  "            $appName_alias.$classname.View.Running.batchUploadImagesWindow=new $appName_alias.$classname.View.BatchUploadImagesWindow();\r\n";
+									"				$appName_alias.$classname.View.Running.batchUploadImagesWindow.destroy();\r\n".
+									"				$appName_alias.$classname.View.Running.batchUploadImagesWindow=null;\r\n".
+									"			}\r\n".
+									"			$appName_alias.$classname.View.Running.batchUploadImagesWindow=new $appName_alias.$classname.View.BatchUploadImagesWindow();\r\n";
 				}else{
 					$uploadServiceUrl="var uploadImageUrl='index.php?go=admin.upload.upload{$classname}{$fieldname_funcname}s';\r\n";
 				}
@@ -1690,10 +1690,10 @@ class AutoCodeViewExt extends AutoCode
 						text : '上 传',
 						scope:this,
 						handler : function() {
-							uploadImagesWindow     =this;
-							validationExpression   =/([\u4E00-\u9FA5]|\w)+(.zip|.ZIP)$/;
+							uploadImagesWindow	 =this;
+							validationExpression =/([\u4E00-\u9FA5]|\w)+(.zip|.ZIP)$/;
 							var isValidExcelFormat = new RegExp(validationExpression);
-							var result             = isValidExcelFormat.test(this.uploadForm.upload_file.getValue());
+							var result			 = isValidExcelFormat.test(this.uploadForm.upload_file.getValue());
 							if (!result){
 								Ext.Msg.alert('提示', '请上传ZIP文件，后缀名为zip！');
 								return;
@@ -1753,9 +1753,9 @@ BATCHUPLOADIMAGES;
 		$menu_uploadImg=substr($menu_uploadImg,0,strlen($menu_uploadImg)-3);
 		$openBatchUploadImagesWindow=isset($openBatchUploadImagesWindow) ? $openBatchUploadImagesWindow=substr($openBatchUploadImagesWindow,0,strlen($openBatchUploadImagesWindow)-1) : "";
 		$batchUploadImagesWinow=substr($batchUploadImagesWinow,0,strlen($batchUploadImagesWinow)-1);
-		$result["menu_uploadImg"]   =$menu_uploadImg;
-		$result["openBatchUploadImagesWindow"]   =$openBatchUploadImagesWindow;
-		$result["batchUploadImagesWinow"]   =$batchUploadImagesWinow;
+		$result["menu_uploadImg"] =$menu_uploadImg;
+		$result["openBatchUploadImagesWindow"] =$openBatchUploadImagesWindow;
+		$result["batchUploadImagesWinow"] =$batchUploadImagesWinow;
 		return $result;
 	}
 
@@ -1782,15 +1782,15 @@ BATCHUPLOADIMAGES;
 	{
 		$result ="{extends file=\"\$templateDir/layout/normal/layout.tpl\"}\r\n".
 				 "{block name=body}\r\n".
-				 "    <div id=\"loading-mask\"></div>\r\n".
-				 "    <div id=\"loading\">\r\n".
-				 "        <div class=\"loading-indicator\"><img src=\"{\$url_base}common/js/ajax/ext/resources/images/extanim32.gif\" width=\"32\" height=\"32\" style=\"margin-right:8px;\" align=\"absmiddle\"/>正在加载中...</div>\r\n".
-				 "    </div>\r\n";
+				 "	<div id=\"loading-mask\"></div>\r\n".
+				 "	<div id=\"loading\">\r\n".
+				 "		<div class=\"loading-indicator\"><img src=\"{\$url_base}common/js/ajax/ext/resources/images/extanim32.gif\" width=\"32\" height=\"32\" style=\"margin-right:8px;\" align=\"absmiddle\"/>正在加载中...</div>\r\n".
+				 "	</div>\r\n";
 		foreach ($fieldInfo as $fieldname=>$field)
 		{
 			if (self::columnIsTextArea($fieldname,$field["Type"]))
 			{
-				$result.="    {\$editorHtml}\r\n";
+				$result.="	{\$editorHtml}\r\n";
 				break;
 			}
 
@@ -1813,7 +1813,7 @@ BATCHUPLOADIMAGES;
 								foreach ($fieldInfos_relation as $fieldname_relation=>$fields_relation) {
 									if (self::columnIsTextArea($fieldname_relation,$fields_relation["Type"]))
 									{
-										$result.="    {\$editorHtml}\r\n";
+										$result.="	{\$editorHtml}\r\n";
 										break 3;
 									}
 								}
@@ -1836,9 +1836,9 @@ BATCHUPLOADIMAGES;
 	{
 		$filename =self::getInstancename($tablename).Config_F::SUFFIX_FILE_JS;
 		if (Config_AutoCode::JSFILE_DIRECT_CORE){
-			$dir      =self::$view_js_package.Config_F::VIEW_CORE.DIRECTORY_SEPARATOR;
+			$dir=self::$view_js_package.Config_F::VIEW_CORE.DIRECTORY_SEPARATOR;
 		}else{
-			$dir      =self::$view_js_package.self::getInstancename($tablename).DIRECTORY_SEPARATOR;
+			$dir=self::$view_js_package.self::getInstancename($tablename).DIRECTORY_SEPARATOR;
 		}
 		return self::saveDefineToDir($dir,$filename,$defineJsFileContent);
 	}
@@ -1850,7 +1850,7 @@ BATCHUPLOADIMAGES;
 	 */
 	private static function saveoAjaxPhpDefineToDir($filename,$defineAjaxPhpFileContent)
 	{
-		$dir      =self::$ajax_dir_full;
+		$dir=self::$ajax_dir_full;
 		return self::saveDefineToDir($dir,$filename,$defineAjaxPhpFileContent);
 	}
 
@@ -1862,7 +1862,7 @@ BATCHUPLOADIMAGES;
 	private static function saveTplDefineToDir($tablename,$defineTplFileContent)
 	{
 		$filename =self::getInstancename($tablename).Config_F::SUFFIX_FILE_TPL;
-		$dir      =self::$view_core.Gc::$appName.DIRECTORY_SEPARATOR;
+		$dir	  =self::$view_core.Gc::$appName.DIRECTORY_SEPARATOR;
 		return self::saveDefineToDir($dir,$filename,$defineTplFileContent);
 	}
 }
