@@ -36,12 +36,14 @@ class Comment extends DataObject
 	public $blog_id;
 	//</editor-fold>
 
+	/**
+	 * 从属一对一关系
+	 */
 	static $belong_has_one=array(
-	  "user"=>"User",
-	  "blog"=>"Blog"    
-	);   
+		"user"=>"User",
+		"blog"=>"Blog"
+	);
 
-					 
 	/**
 	* 当前登录用户是否可编辑该评论
 	* @return bool true 可以
@@ -49,10 +51,10 @@ class Comment extends DataObject
 	public function canEdit(){
 		if (HttpSession::get("user_id")==$this->user_id) {
 			return true;
-		}       
+		}
 		return false;
 	}
-	
+
 	/**
 	* 当前登录用户是否可删除该评论
 	* @return bool true 可以
@@ -60,10 +62,10 @@ class Comment extends DataObject
 	public function canDelete(){
 		if (HttpSession::get("user_id")==$this->user_id) {
 			return true;
-		}       
+		}
 		return false;
-	}   
-	
-	
+	}
+
+
 }
 ?>

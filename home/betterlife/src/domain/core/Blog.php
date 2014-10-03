@@ -34,31 +34,38 @@ class Blog extends DataObject
 	 * @access public
 	 */
 	public $blog_content;
-	//</editor-fold>       
-	static $has_many=array(
-	  "comments"=>"Comment"
+	//</editor-fold>
+
+	/**
+	 * 从属一对一关系
+	 */
+	static $belong_has_one=array(
+		"user"=>"User"
 	);
 
-	static $belong_has_one=array(
-	  "user"=>"User"
+	/**
+	 * 一对多关系
+	 */
+	static $has_many=array(
+		"comments"=>"Comment"
 	);
-	
+
 	/**
 	 * 数据库使用SqlServer，需使用字符转换:GBK->UTF8
 	 */
 	public function getBlog_nameShow() {
-		$name=UtilString::gbk2utf8($this->name);         
-		return $name;   
+		$name=UtilString::gbk2utf8($this->name);
+		return $name;
 	}
-	
+
 	/**
 	 * 数据库使用SqlServer，需使用字符转换:GBK->UTF8
 	 */
 	public function getContentShow() {
-		$content=UtilString::gbk2utf8($this->content);         
+		$content=UtilString::gbk2utf8($this->content);
 		return $content;
-	}    
-					 
+	}
+
 	/**
 	* 当前登录用户是否可编辑该博客
 	* @return bool true 可以
@@ -66,10 +73,10 @@ class Blog extends DataObject
 	public function canEdit(){
 		if (HttpSession::get("user_id")==$this->user_id) {
 			return true;
-		}       
+		}
 		return false;
 	}
-	
+
 	/**
 	* 当前登录用户是否可删除该博客
 	* @return bool true 可以
@@ -77,16 +84,16 @@ class Blog extends DataObject
 	public function canDelete(){
 		if (HttpSession::get("user_id")==$this->user_id) {
 			return true;
-		}       
+		}
 		return false;
-	}     
-	
+	}
+
 	/**
 	 * 返回计算当前博客的评论数
-	 * @param mixed $blog_id    
+	 * @param mixed $blog_id
 	 */
 	public function count_comments(){
-		return Comment::count("blog_id=".$this->blog_id);     
-	}    
+		return Comment::count("blog_id=".$this->blog_id);
+	}
 }
 ?>

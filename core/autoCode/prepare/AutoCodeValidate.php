@@ -28,6 +28,7 @@ class AutoCodeValidate extends AutoCode
 	public static function run($table_names="")
 	{
 		self::init();
+		$showValidInfo = "";
 		$table_error=array("invalid_idname"=>array(),"unlocation_domain"=>array(),
 						   "nocomment"=>array(),"column_nocomment"=>array(),
 						   "samefieldname_id"=>array(),"invaid_keywords"=>array(),
@@ -81,24 +82,27 @@ class AutoCodeValidate extends AutoCode
 		foreach ($print_error_info as $key => $value) {
 			if (count($table_error[$key])>0){
 				$isValid=false;
-				echo "<font color='#00FF00'>&nbsp;&nbsp;/".str_repeat("*",40).$value.str_repeat("*",40)."</font></a><br/>";
+				$showValidInfo .= "<font color='#00FF00'>&nbsp;&nbsp;/".str_repeat("*",40).$value.str_repeat("*",40)."</font></a><br/>\r\n";
 				foreach ($table_error[$key] as $first=>$second) {
 					if (is_numeric($first)){
-						echo "&nbsp;&nbsp;&nbsp;&nbsp;".$second."<br/>";
+						$showValidInfo .= "&nbsp;&nbsp;&nbsp;&nbsp;".$second."<br/>\r\n";
 					}else{
 						if (is_array($second)){
 							foreach ($second as $field_name) {
-								echo "&nbsp;&nbsp;&nbsp;&nbsp;".$first."->".$field_name."<br/>";
+								$showValidInfo .= "&nbsp;&nbsp;&nbsp;&nbsp;".$first."->".$field_name."<br/>\r\n";
 							}
 						}else{
-							echo "&nbsp;&nbsp;&nbsp;&nbsp;".$first."->".$second."<br/>";
+							$showValidInfo .= "&nbsp;&nbsp;&nbsp;&nbsp;".$first."->".$second."<br/>\r\n";
 						}
 					}
 
 				}
 			}
 		}
-		echo "<br/>";
+		if(!empty($showValidInfo)){
+			$showValidInfo .= "<br/>\r\n";
+			echo $showValidInfo;
+		}
 		return $isValid;
 	}
 }

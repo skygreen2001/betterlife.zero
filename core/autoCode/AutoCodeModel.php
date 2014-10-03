@@ -69,7 +69,7 @@ class AutoCodeModel extends AutoCode
         AutoCodeViewExt::AutoCode($table_names);
         self::$showReport.=AutoCodeFoldHelper::foldafterviewext();
         self::$showReport.= "</div>";
-        echo self::$showReport;
+        //echo self::$showReport;
     }
 
     /**
@@ -86,31 +86,31 @@ class AutoCodeModel extends AutoCode
         foreach (self::$tableList as $tablename) {
             $inputArr[$tablename]=$tablename;
         }
-        echo  '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-                <html lang="zh-CN" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">';
+        echo  "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\r\n
+                <html lang=\"zh-CN\" xml:lang=\"zh-CN\" xmlns=\"http://www.w3.org/1999/xhtml\">\r\n";
         echo "<head>\r\n";
         echo UtilCss::form_css()."\r\n";
         $url_base=UtilNet::urlbase();
         echo "</head>";
         echo "<body>";
-        echo "<br/><br/><br/><h1 align='center'>$title</h1>";
-        echo "<div align='center' height='450'>";
-        echo "<form>";
-        echo "  <div style='line-height:1.5em;'>";
-        echo "      <label>输出文件路径:</label><input style=\"width:400px;text-align:left;padding-left:10px;\" type=\"text\" name=\"save_dir\" value=\"$default_dir\" id=\"save_dir\" />";
+        echo "<br/><br/><br/><h1 align='center'>$title</h1>\r\n";
+        echo "<div align='center' height='450'>\r\n";
+        echo "<form>\r\n";
+        echo "  <div style='line-height:1.5em;'>\r\n";
+        echo "      <label>输出文件路径:</label><input style=\"width:400px;text-align:left;padding-left:10px;\" type=\"text\" name=\"save_dir\" value=\"$default_dir\" id=\"save_dir\" />\r\n";
         if (!empty($inputArr)){
-            echo "<br/><br/>
-                    <label>&nbsp;&nbsp;&nbsp;选择需要生成的表:</label><select multiple='multiple' size='8' style='height:320px;' name=\"table_names[]\">";
+            echo "<br/><br/>\r\n
+                    <label>&nbsp;&nbsp;&nbsp;选择需要生成的表:</label><select multiple='multiple' size='8' style='height:320px;' name=\"table_names[]\">\r\n";
             foreach ($inputArr as $key=>$value) {
-                echo "        <option value='$key'>$value</option>";
+                echo "        <option value='$key'>$value</option>\r\n";
             }
-            echo "      </select>";
+            echo "      </select>\r\n";
         }
-        echo "  </div>";
-        echo "  <input type=\"submit\" value='生成' /><br/>";
-        echo "</form>";
-        echo "</div>";
-        echo "</body>";
+        echo "  </div>\r\n";
+        echo "  <input type=\"submit\" value='生成' /><br/>\r\n";
+        echo "</form>\r\n";
+        echo "</div>\r\n";
+        echo "</body>\r\n";
         echo "</html>";
     }
 

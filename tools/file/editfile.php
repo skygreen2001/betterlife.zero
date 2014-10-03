@@ -33,7 +33,7 @@
 <?php  
   $edit_filename=$_GET["f"];
   $content=file_get_contents($edit_filename);
-  echo '<a href="viewfiles.php">返回</a><br/>'; 
+  echo '<a style="cursor:pointer;" onclick="window.history.back();">返回</a><br/>'; 
 ?>            
         <form method="post">                               
             <textarea id="code" style="height: 350px; width: 100%;" name="code"><?php echo $content; ?></textarea>  

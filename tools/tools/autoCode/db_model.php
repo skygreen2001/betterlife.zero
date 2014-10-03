@@ -6,9 +6,21 @@ if (isset($_REQUEST["save_dir"])&&!empty($_REQUEST["save_dir"]))
 	AutoCodeModel::$save_dir =$save_dir;
 
 	$table_names=$_GET["table_names"];
-	AutoCodeConfig::Decode($table_names);
-	AutoCodeModel::AutoCode($table_names);
-}  else {
-	AutoCodeModel::UserInput();
+	if(!empty($table_names)){
+		AutoCodeConfig::Decode();//$table_names
+		AutoCodeModel::AutoCode($table_names);
+	}
+}
+AutoCodeModel::UserInput();
+if (isset($_REQUEST["save_dir"])&&!empty($_REQUEST["save_dir"]))
+{
+	echo "<div style='width: 1000px; margin-left: 110px;'>";
+	echo "<span>&nbsp;&nbsp;</span><a style='margin-left:15px;' href='javascript:' style='cursor:pointer;' onclick=\"(document.getElementById('showReport').style.display=(document.getElementById('showReport').style.display=='none')?'':'none')\">显示报告</a>";
+	echo "<div id='showReport' style='display: none;'>";
+	echo AutoCodeModel::$showReport;
+	echo "</div>";
+	echo "</div>";
+	$showReport=AutoCodePreviewReport::showReport();
+	echo $showReport;
 }
 ?>

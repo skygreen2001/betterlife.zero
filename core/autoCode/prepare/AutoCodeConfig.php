@@ -27,9 +27,9 @@ class AutoCodeConfig extends AutoCode
 	private static $filename_config_xml;
 
 //<editor-fold defaultstate="collapsed" desc="数据结构转换成配置xml文件">
-    /**
-     * 初始化
-     */
+	/**
+	 * 初始化
+	 */
 	public static function init()
 	{
 		self::$filename_config_xml=Gc::$nav_root_path."tools".DIRECTORY_SEPARATOR."tools".DIRECTORY_SEPARATOR."autoCode".DIRECTORY_SEPARATOR."autocode.config.xml";
@@ -38,10 +38,10 @@ class AutoCodeConfig extends AutoCode
 
 	/**
 	 * 自动生成配置
-     * @param array|string $table_names
-     * 示例如下：
-     *  1.array:array('bb_user_admin','bb_core_blog')
-     *  2.字符串:'bb_user_admin,bb_core_blog'
+	 * @param array|string $table_names
+	 * 示例如下：
+	 *  1.array:array('bb_user_admin','bb_core_blog')
+	 *  2.字符串:'bb_user_admin,bb_core_blog'
 	 */
 	public static function run($table_names="")
 	{
@@ -205,20 +205,20 @@ class AutoCodeConfig extends AutoCode
 						),
 						"@value"=>$showfieldname);
 				}else{
-    				$relation_class=null;
-    				if (class_exists($relation_classname)) {
-    					$relation_class=new $relation_classname();
-    				}
-    				if ($relation_class instanceof DataObject){
-    					$showfieldname=self::getShowFieldNameByClassname($relation_classname);
-    					$relationShows[]=array(
-    						'@attributes' => array(
-    							"local_key"=>$fieldname,
-    							"relation_class"=>$relation_classname
-    						),
-    						"@value"=>$showfieldname);
-    				}
-                }
+					$relation_class=null;
+					if (class_exists($relation_classname)) {
+						$relation_class=new $relation_classname();
+					}
+					if ($relation_class instanceof DataObject){
+						$showfieldname=self::getShowFieldNameByClassname($relation_classname);
+						$relationShows[]=array(
+							'@attributes' => array(
+								"local_key"=>$fieldname,
+								"relation_class"=>$relation_classname
+							),
+							"@value"=>$showfieldname);
+					}
+				}
 			}
 		}
 		return $relationShows;
@@ -242,71 +242,72 @@ class AutoCodeConfig extends AutoCode
 			if (contain($fieldname,"_id")||(contain($fieldname,"parent_id"))){
 				$relation_classname=str_replace("_id", "", $fieldname);
 				$relation_classname{0}=strtoupper($relation_classname{0});
-                if (strtoupper($relation_classname)=="PARENT"){
-                    $instance_name=$classname;
-                    $instance_name{0}=strtolower($instance_name);
-                    $relation_fives["belong_has_one"]["relationclass"][]=array(
-                        '@attributes' => array(
-                            "name"=>$classname
-                        ),
-                        '@value' => $instance_name."_p"
-                    );
-                }else{
-    				$relation_class=null;
-    				if (class_exists($relation_classname)) {
-    					$relation_class=new $relation_classname();
-    				}
-    				if ($relation_class instanceof DataObject){
-    					//belong_has_one:[当前表有归属表的标识，归属表没有当前表的标识]
-    					if (!array_key_exists($realId, $relation_class))
-    					{
-    						$instance_name=$relation_classname;
-    						$instance_name{0}=strtolower($instance_name);
-    						$relation_fives["belong_has_one"]["relationclass"][]=array(
-    							'@attributes' => array(
-    								"name"=>$relation_classname
-    							),
-    							'@value' => $instance_name
-    						);
-    					}
+				if (strtoupper($relation_classname)=="PARENT"){
+					$instance_name=$classname;
+					$instance_name{0}=strtolower($instance_name);
+					$relation_fives["belong_has_one"]["relationclass"][]=array(
+						'@attributes' => array(
+							"name"=>$classname
+						),
+						'@value' => $instance_name."_p"
+					);
+				}else{
+					$relation_class=null;
+					if (class_exists($relation_classname)) {
+						$relation_class=new $relation_classname();
+					}
+					if ($relation_class instanceof DataObject){
+						//belong_has_one:[当前表有归属表的标识，归属表没有当前表的标识]
+						if (!array_key_exists($realId, $relation_class))
+						{
+							$instance_name=$relation_classname;
+							$instance_name{0}=strtolower($instance_name);
+							$relation_fives["belong_has_one"]["relationclass"][]=array(
+								'@attributes' => array(
+									"name"=>$relation_classname
+								),
+								'@value' => $instance_name
+							);
+						}
 
-    					//has_many[归属表没有当前表的标识，当前表有归属表的标识]
-    					//has_one:[归属表没有当前表的标识，当前表有归属表的标识，并且当前表里归属表的标识为Unique]
-    					if (!array_key_exists($realId, $relation_class))
-    					{
-    						if (array_key_exists($relation_classname, self::$table_key_map)){
-    							$relation_tablename_key=self::$table_key_map[$relation_classname];
-    							$instance_name=$classname;
-    							$instance_name{0}=strtolower($instance_name)."s";
-    							$isunique=Manager_Db::newInstance()->dbinfo()->hasUnique($tablename,$fieldname);
-    							if ($isunique){
-    								self::$config_classes["class"][$relation_tablename_key]
-    													 ["has_one"]["relationclass"][]=array(
-    									'@attributes' => array(
-    										"name"=>$classname
-    									),
-    									'@value' => $instance_name
-    								);
+						//has_many[归属表没有当前表的标识，当前表有归属表的标识]
+						//has_one:[归属表没有当前表的标识，当前表有归属表的标识，并且当前表里归属表的标识为Unique]
+						if (!array_key_exists($realId, $relation_class))
+						{
+							if (array_key_exists($relation_classname, self::$table_key_map)){
+								$relation_tablename_key=self::$table_key_map[$relation_classname];
+								$instance_name=$classname;
+								$instance_name{0}=strtolower($instance_name);
+								$isunique=Manager_Db::newInstance()->dbinfo()->hasUnique($tablename,$fieldname);
+								if ($isunique){
+									self::$config_classes["class"][$relation_tablename_key]
+														 ["has_one"]["relationclass"][]=array(
+										'@attributes' => array(
+											"name"=>$classname
+										),
+										'@value' => $instance_name
+									);
 
-    							}else{
-    								$is_create_hasmany=true;
-    								if ((!Config_AutoCode::AUTOCONFIG_CREATE_FULL)&&(self::isMany2ManyByClassname($classname))){
-    									$is_create_hasmany=false;
-    								}
-    								if ($is_create_hasmany){
-    									self::$config_classes["class"][$relation_tablename_key]
-    														 ["has_many"]["relationclass"][]=array(
-    										'@attributes' => array(
-    											"name"=>$classname
-    										),
-    										'@value' => $instance_name
-    									);
-    								}
-    							}
-    						}
-    					}
-    				}
-                }
+								}else{
+									$instance_name.="s";
+									$is_create_hasmany=true;
+									if ((!Config_AutoCode::AUTOCONFIG_CREATE_FULL)&&(self::isMany2ManyByClassname($classname))){
+										$is_create_hasmany=false;
+									}
+									if ($is_create_hasmany){
+										self::$config_classes["class"][$relation_tablename_key]
+															 ["has_many"]["relationclass"][]=array(
+											'@attributes' => array(
+												"name"=>$classname
+											),
+											'@value' => $instance_name
+										);
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		}
 
@@ -372,10 +373,10 @@ class AutoCodeConfig extends AutoCode
 //<editor-fold defaultstate="collapsed" desc="配置xml文件转换成数据结构">
 	/**
 	 * 代码生成配置xml文件转换成数据结构
-     * @param array|string $table_names
-     * 示例如下：
-     *  1.array:array('bb_user_admin','bb_core_blog')
-     *  2.字符串:'bb_user_admin,bb_core_blog'
+	 * @param array|string $table_names
+	 * 示例如下：
+	 *  1.array:array('bb_user_admin','bb_core_blog')
+	 *  2.字符串:'bb_user_admin,bb_core_blog'
 	 */
 	public static function Decode($table_names="")
 	{

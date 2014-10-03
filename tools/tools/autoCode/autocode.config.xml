@@ -27,17 +27,17 @@
 			<relationclass name="Department">department</relationclass>
 		</belong_has_one>
 	</class>
-    <class name="Region">
-        <conditions>
-            <condition>region_type</condition>
-        </conditions>
-        <relationShows>
-            <show local_key="parent_id" relation_class="Region">region_name</show>   
-        </relationShows>
-        <belong_has_one>
-            <relationclass name="Region">region</relationclass>
-        </belong_has_one>
-    </class>
+	<class name="Region">
+		<conditions>
+			<condition>region_type</condition>
+		</conditions>
+		<relationShows>
+			<show local_key="parent_id" relation_class="Region">region_name</show>
+		</relationShows>
+		<belong_has_one>
+			<relationclass name="Region">region</relationclass>
+		</belong_has_one>
+	</class>
 	<class name="Comment">
 		<conditions>
 			<condition>comment</condition>
@@ -63,7 +63,7 @@
 		</many_many>
 		<has_many>
 			<relationclass name="Blog">blogs</relationclass>
-			<relationclass name="Comment">comment</relationclass>
+			<relationclass name="Comment">comments</relationclass>
 		</has_many>
 	</class>
 	<class name="Department">
