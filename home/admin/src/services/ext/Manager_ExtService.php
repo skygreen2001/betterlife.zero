@@ -13,7 +13,8 @@ class Manager_ExtService extends Manager
 	private static $blogService;
 	private static $commentService;
 	private static $adminService;
-    private static $regionService;
+	private static $regionService;
+
 	/**
 	 * 提供服务:博客
 	 */
@@ -47,15 +48,15 @@ class Manager_ExtService extends Manager
 		return self::$adminService;
 	}
 
-    /**
-     * 提供服务:地区
-     */
-    public static function regionService()
-    {
-        if (self::$regionService==null) {
-            self::$regionService=new ExtServiceRegion();
-        }
-        return self::$regionService;
-    }
+	/**
+	 * 提供服务:地区
+	 */
+	public static function regionService()
+	{
+		if (self::$regionService==null) {
+			self::$regionService=new ExtServiceRegion();
+		}
+		return self::$regionService;
+	}
 }
 ?>

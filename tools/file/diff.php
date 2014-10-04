@@ -8,7 +8,7 @@ $old_file=$_GET["old_file"];
 if(file_exists($old_file)){
     $old_content=file_get_contents($old_file);
 }else{
-    die("原文件不存在！");
+    //die("原文件不存在！");
 }
 $new_file=$_GET["new_file"];
 if(file_exists($new_file)){
@@ -22,6 +22,7 @@ if(is_string($new_content))$new_content=explode("\n",$new_content);
 $diff = new Text_Diff('auto', array($old_content,$new_content));
 $renderer = new Text_Diff_Renderer_inline();
 $contents=$renderer->render($diff);
+if(empty($contents))$contents= htmlspecialchars(file_get_contents($new_file));
 $show=<<<COF
     <style type="text/css">
         del {

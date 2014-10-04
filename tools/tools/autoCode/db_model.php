@@ -11,6 +11,14 @@ if (isset($_REQUEST["save_dir"])&&!empty($_REQUEST["save_dir"]))
 		AutoCodeModel::AutoCode($table_names);
 	}
 }
+
+if(isset($_REQUEST["overwrite"])&&!empty($_REQUEST["overwrite"])){
+	if($_REQUEST["overwrite"][0]=="on")unset($_REQUEST["overwrite"][0]);
+	if(isset($_REQUEST["model_save_dir"])&&!empty($_REQUEST["model_save_dir"]))
+		$model_save_dir=$_REQUEST["model_save_dir"];
+	AutoCodeModel::overwrite($_REQUEST["overwrite"],$model_save_dir);
+}
+
 AutoCodeModel::UserInput();
 if (isset($_REQUEST["save_dir"])&&!empty($_REQUEST["save_dir"]))
 {
@@ -20,6 +28,7 @@ if (isset($_REQUEST["save_dir"])&&!empty($_REQUEST["save_dir"]))
 	echo AutoCodeModel::$showReport;
 	echo "</div>";
 	echo "</div>";
+	AutoCodePreviewReport::init();
 	$showReport=AutoCodePreviewReport::showReport();
 	echo $showReport;
 }
