@@ -50,10 +50,10 @@ class AutoCodeViewDefault extends AutoCode
 
 	/**
 	 * 自动生成代码-前端默认的表示层
-     * @param array|string $table_names
-     * 示例如下：
-     *  1.array:array('bb_user_admin','bb_core_blog')
-     *  2.字符串:'bb_user_admin,bb_core_blog'
+	 * @param array|string $table_names
+	 * 示例如下：
+	 *  1.array:array('bb_user_admin','bb_core_blog')
+	 *  2.字符串:'bb_user_admin,bb_core_blog'
 	 */
 	public static function AutoCode($table_names="")
 	{
@@ -143,8 +143,8 @@ class AutoCodeViewDefault extends AutoCode
 			if (self::isNotColumnKeywork($key)){
 				$isImage =self::columnIsImage($key,$value);
 				if ($isImage)continue;
-				$headers.="            <th class=\"header\">$value</th>\r\n";
-				$contents.="            <td class=\"content\">{\${$instancename}.$key}</td>\r\n";
+				$headers.="			<th class=\"header\">$value</th>\r\n";
+				$contents.="			<td class=\"content\">{\${$instancename}.$key}</td>\r\n";
 			}
 		}
 		if (!empty($headers)&&(strlen($headers)>2)){
@@ -211,22 +211,22 @@ LISTS;
 				$isImage =self::columnIsImage($key,$value);
 				if ($isImage){
 					$hasImgFormFlag=" enctype=\"multipart/form-data\"";
-					$headerscontents.="        <tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\"><input type=\"file\" class=\"edit\" name=\"{$key}Upload\" accept=\"image/png,image/gif,image/jpg,image/jpeg\" value=\"{\${$instancename}.$key}\"/></td></tr>\r\n";
+					$headerscontents.="		<tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\"><input type=\"file\" class=\"edit\" name=\"{$key}Upload\" accept=\"image/png,image/gif,image/jpg,image/jpeg\" value=\"{\${$instancename}.$key}\"/></td></tr>\r\n";
 				}else{
-					$headerscontents.="        <tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\"><input type=\"text\" class=\"edit\" name=\"$key\" value=\"{\${$instancename}.$key}\"/></td></tr>\r\n";
+					$headerscontents.="		<tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\"><input type=\"text\" class=\"edit\" name=\"$key\" value=\"{\${$instancename}.$key}\"/></td></tr>\r\n";
 				}
 			}
 		}
 
 		if (count($text_area_fieldname)>=1){
-			$kindEditor_prepare="    ";
-			$ckeditor_prepare="    ";
-			$xhEditor_prepare="    ";
+			$kindEditor_prepare="	";
+			$ckeditor_prepare="	";
+			$xhEditor_prepare="	";
 			$ueEditor_prepare="";
 			foreach ($text_area_fieldname as $key=>$value) {
-				$headerscontents.="        <tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\">\r\n".
-								  "        <textarea id=\"$key\" name=\"$key\" style=\"width:720px;height:300px;\">{\${$instancename}.$key}</textarea>\r\n".
-								  "        </td></tr>\r\n";
+				$headerscontents.="		<tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\">\r\n".
+								  "		<textarea id=\"$key\" name=\"$key\" style=\"width:720px;height:300px;\">{\${$instancename}.$key}</textarea>\r\n".
+								  "		</td></tr>\r\n";
 				$kindEditor_prepare.="showHtmlEditor(\"$key\");";
 				$ckeditor_prepare.="ckeditor_replace_$key();";
 				$xhEditor_prepare.="pageInit_$key();";
@@ -246,9 +246,9 @@ $xhEditor_prepare});</script>
  {/if}
 EDIT;
 			$ueTextareacontents=<<<UETC
-    {if (\$online_editor=='UEditor')}
-    <script>$ueEditor_prepare</script>
-    {/if}
+	{if (\$online_editor=='UEditor')}
+	<script>$ueEditor_prepare</script>
+	{/if}
 UETC;
 		}
 		if (!empty($headerscontents)&&(strlen($headerscontents)>2)){
@@ -300,11 +300,11 @@ EDIT;
 			if (self::isNotColumnKeywork($key)){
 				$isImage =self::columnIsImage($key,$value);
 				if ($isImage){
-					$headerscontents.="        <tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\">\r\n".
-					"            <div class=\"wrap_2_inner\"><img src=\"{\$uploadImg_url|cat:\$$instancename.$key}\" alt=\"$value\"></div>\r\n".
-            		"            <br/>存储相对路径:{\$$instancename.$key}</td></tr>\r\n";
+					$headerscontents.="		<tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\">\r\n".
+					"			<div class=\"wrap_2_inner\"><img src=\"{\$uploadImg_url|cat:\$$instancename.$key}\" alt=\"$value\"></div>\r\n".
+					"			<br/>存储相对路径:{\$$instancename.$key}</td></tr>\r\n";
 				}else{
-					$headerscontents.="        <tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\">{\$$instancename.$key}</td></tr> \r\n";
+					$headerscontents.="		<tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\">{\$$instancename.$key}</td></tr> \r\n";
 				}
 			}
 		}
@@ -339,15 +339,15 @@ VIEW;
 
 	/**
 	 * 生成标准的增删改查模板Action文件需生成首页访问所有生成的链接
-     * @param array|string $table_names
-     * 示例如下：
-     *  1.array:array('bb_user_admin','bb_core_blog')
-     *  2.字符串:'bb_user_admin,bb_core_blog'
+	 * @param array|string $table_names
+	 * 示例如下：
+	 *  1.array:array('bb_user_admin','bb_core_blog')
+	 *  2.字符串:'bb_user_admin,bb_core_blog'
 	 */
 	private static function createModelIndexFile($table_names="")
 	{
 		$tableInfos=self::tableInfosByTable_names($table_names);
-		$tpl_content="    <div><h1>这是首页列表(共计数据对象".count($tableInfos)."个)</h1></div>\r\n";
+		$tpl_content="	<div><h1>这是首页列表(共计数据对象".count($tableInfos)."个)</h1></div>\r\n";
 		$result="";
 		$appname=self::$appName;
 		if ($tableInfos!=null&&count($tableInfos)>0){
@@ -358,13 +358,13 @@ VIEW;
 					$table_comment=$table_comment[0];
 				}
 				$instancename=self::getInstancename($tablename);
-				$result.="        <tr class=\"entry\"><td class=\"content\"><a href=\"{\$url_base}index.php?go={$appname}.{$instancename}.lists\">{$table_comment}</a></td></tr>\r\n";
+				$result.="		<tr class=\"entry\"><td class=\"content\"><a href=\"{\$url_base}index.php?go={$appname}.{$instancename}.lists\">{$table_comment}</a></td></tr>\r\n";
 			}
 		}
-		$tpl_content.="    <table class=\"viewdoblock\" style=\"width: 500px;\">\r\n".
+		$tpl_content.="	<table class=\"viewdoblock\" style=\"width: 500px;\">\r\n".
 					 $result.
-					 "    </table>\r\n".
-					 "        \r\n";
+					 "	</table>\r\n".
+					 "		\r\n";
 		$tpl_content=self::tableToViewTplDefine($tpl_content);
 		$filename="index".Config_F::SUFFIX_FILE_TPL;
 		$dir=self::$view_dir_full."index".DIRECTORY_SEPARATOR;
@@ -373,10 +373,10 @@ VIEW;
 
 	/**
 	 * 生成前台所需的表示层页面
-     * @param array|string $table_names
-     * 示例如下：
-     *  1.array:array('bb_user_admin','bb_core_blog')
-     *  2.字符串:'bb_user_admin,bb_core_blog'
+	 * @param array|string $table_names
+	 * 示例如下：
+	 *  1.array:array('bb_user_admin','bb_core_blog')
+	 *  2.字符串:'bb_user_admin,bb_core_blog'
 	 */
 	private static function createFrontModelPages($table_names="")
 	{
@@ -390,18 +390,18 @@ VIEW;
 			$table_comment=self::tableCommentKey($tablename);
 			$appname=self::$appName;
 			$instancename=self::getInstancename($tablename);
-			$link="    <div align=\"center\"><my:a href=\"{\$url_base}index.php?go={$appname}.{$instancename}.view\">查看</my:a>|<my:a href=\"{\$url_base}index.php?go={$appname}.{$instancename}.edit\">修改</my:a>";
-			$back_index="    <my:a href='{\$url_base}index.php?go={$appname}.index.index'>返回首页</my:a></div>";
-			$tpl_content=self::tableToViewTplDefine("    <div><h1>".$table_comment."列表</h1></div><br/>\r\n{$link}<br/>\r\n{$back_index}");
+			$link="	<div align=\"center\"><my:a href=\"{\$url_base}index.php?go={$appname}.{$instancename}.view\">查看</my:a>|<my:a href=\"{\$url_base}index.php?go={$appname}.{$instancename}.edit\">修改</my:a>";
+			$back_index="	<my:a href='{\$url_base}index.php?go={$appname}.index.index'>返回首页</my:a></div>";
+			$tpl_content=self::tableToViewTplDefine("	<div><h1>".$table_comment."列表</h1></div><br/>\r\n{$link}<br/>\r\n{$back_index}");
 			$filename="lists".Config_F::SUFFIX_FILE_TPL;
 			$tplName=self::saveTplDefineToDir($tablename,$tpl_content,$filename);
 			self::$showReport.= "生成导出完成:$tablename=>$tplName!<br/>";
-			$link="     <div align=\"center\"><my:a href=\"{\$url_base}index.php?go={$appname}.{$instancename}.lists\">返回列表</my:a>";
-			$tpl_content=self::tableToViewTplDefine("    <div><h1>查看".$table_comment."</h1></div><br/>\r\n{$link}<br/>\r\n{$back_index}");
+			$link="	 <div align=\"center\"><my:a href=\"{\$url_base}index.php?go={$appname}.{$instancename}.lists\">返回列表</my:a>";
+			$tpl_content=self::tableToViewTplDefine("	<div><h1>查看".$table_comment."</h1></div><br/>\r\n{$link}<br/>\r\n{$back_index}");
 			$filename="view".Config_F::SUFFIX_FILE_TPL;
 			$tplName=self::saveTplDefineToDir($tablename,$tpl_content,$filename);
 			self::$showReport.= "生成导出完成:$tablename=>$tplName!<br/>";
-			$tpl_content=self::tableToViewTplDefine("    <div><h1>编辑".$table_comment."</h1></div><br/>\r\n{$link}<br/>\r\n{$back_index}");
+			$tpl_content=self::tableToViewTplDefine("	<div><h1>编辑".$table_comment."</h1></div><br/>\r\n{$link}<br/>\r\n{$back_index}");
 			$filename="edit".Config_F::SUFFIX_FILE_TPL;
 			$tplName=self::saveTplDefineToDir($tablename,$tpl_content,$filename);
 			self::$showReport.= "生成导出完成:$tablename=>$tplName!<br/>";
@@ -418,6 +418,17 @@ VIEW;
 	{
 		$package =self::getInstancename($tablename);
 		$dir=self::$view_dir_full.$package.DIRECTORY_SEPARATOR;
+
+		$classname=self::getClassname($tablename);
+		$relative_path=str_replace(self::$save_dir, "", $dir.$filename);
+		switch (self::$type) {
+			case 0:
+				AutoCodePreviewReport::$view_front_files[$classname.$filename]=$relative_path;
+				break;
+			case 1:
+				AutoCodePreviewReport::$view_model_files[$classname.$filename]=$relative_path;
+				break;
+		}
 		return self::saveDefineToDir($dir,$filename,$defineTplFileContent);
 	}
 }

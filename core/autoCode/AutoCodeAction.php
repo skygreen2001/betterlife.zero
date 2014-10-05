@@ -53,10 +53,10 @@ class AutoCodeAction extends AutoCode
 
 	/**
 	 * 自动生成代码-控制器
-     * @param array|string $table_names
-     * 示例如下：
-     *  1.array:array('bb_user_admin','bb_core_blog')
-     *  2.字符串:'bb_user_admin,bb_core_blog'
+	 * @param array|string $table_names
+	 * 示例如下：
+	 *  1.array:array('bb_user_admin','bb_core_blog')
+	 *  2.字符串:'bb_user_admin,bb_core_blog'
 	 */
 	public static function AutoCode($table_names="")
 	{
@@ -119,9 +119,9 @@ class AutoCodeAction extends AutoCode
 		$category_cap{0}=ucfirst($category_cap{0});
 		if (self::$type==2){
 			self::$showReport.= "<br/><font color='#FF0000'>[需要在【后台】Action_".$category_cap."里添加没有的代码]</font><br />";
-			$category  = Gc::$appName;
-			$package   = self::$package_back;
-			$author    = self::$author;
+			$category = Gc::$appName;
+			$package  = self::$package_back;
+			$author   = self::$author;
 			include_once("jsmodel".DIRECTORY_SEPARATOR."overalljs.php");
 			$overalljs_files=array("index.js"=>$jsIndexContent,"layout.js"=>$jsLayoutContent,"navigation.js"=>$jsNavigationContent);
 			foreach ($overalljs_files as $filename=>$content) {
@@ -130,33 +130,33 @@ class AutoCodeAction extends AutoCode
 				}
 			}
 			$e_index=$loginout."\r\n".
-					 "     /**\r\n".
-					 "      * 控制器:首页\r\n".
-					 "      */\r\n".
-					 "     public function index()\r\n".
-					 "     {\r\n".
-					 "         \$this->init();\r\n".
-					 "         \$this->loadIndexJs();\r\n".
-					 "         //加载菜单 \r\n".
-					 "         \$this->view->menuGroups=MenuGroup::all(); \r\n".
-					 "     }\r\n\r\n".
-					 "     /**\r\n".
-					 "      * 预加载首页JS定义库。\r\n".
-					 "      * @param ViewObject \$viewobject 表示层显示对象 \r\n".
-					 "      * @param string \$templateurl\r\n".
-					 "      */\r\n".
-					 "     private function loadIndexJs()\r\n".
-					 "     {\r\n".
-					 "        \$viewobject=\$this->view->viewObject;\r\n".
-					 "        \$this->loadExtCss(\"index.css\",true);\r\n".
-					 "        \$this->loadExtJs(\"index.js\",true); \r\n".
-					 "        //核心功能:外观展示\r\n".
-					 "        \$this->loadExtJs(\"layout.js\",true);\r\n".
-					 "        //左侧菜单组生成显示\r\n".
-					 "        UtilJavascript::loadJsContentReady(\$viewobject,MenuGroup::viewForExtJs()); \r\n".
-					 "        //核心功能:导航[Tab新建窗口]  \r\n".
-					 "        \$this->loadExtJs(\"navigation.js\",true); \r\n".
-					 "     }\r\n\r\n";
+					 "	 /**\r\n".
+					 "	  * 控制器:首页\r\n".
+					 "	  */\r\n".
+					 "	 public function index()\r\n".
+					 "	 {\r\n".
+					 "		 \$this->init();\r\n".
+					 "		 \$this->loadIndexJs();\r\n".
+					 "		 //加载菜单\r\n".
+					 "		 \$this->view->menuGroups=MenuGroup::all();\r\n".
+					 "	 }\r\n\r\n".
+					 "	 /**\r\n".
+					 "	  * 预加载首页JS定义库。\r\n".
+					 "	  * @param ViewObject \$viewobject 表示层显示对象\r\n".
+					 "	  * @param string \$templateurl\r\n".
+					 "	  */\r\n".
+					 "	 private function loadIndexJs()\r\n".
+					 "	 {\r\n".
+					 "		\$viewobject=\$this->view->viewObject;\r\n".
+					 "		\$this->loadExtCss(\"index.css\",true);\r\n".
+					 "		\$this->loadExtJs(\"index.js\",true);\r\n".
+					 "		//核心功能:外观展示\r\n".
+					 "		\$this->loadExtJs(\"layout.js\",true);\r\n".
+					 "		//左侧菜单组生成显示\r\n".
+					 "		UtilJavascript::loadJsContentReady(\$viewobject,MenuGroup::viewForExtJs());\r\n".
+					 "		//核心功能:导航[Tab新建窗口]\r\n".
+					 "		\$this->loadExtJs(\"navigation.js\",true);\r\n".
+					 "	 }\r\n\r\n";
 			$action_names=array("Action_Index"=>$e_index,"Action_".$category_cap=>self::$echo_result);
 			foreach ($action_names as $key => $value) {
 				$isCreate=true;
@@ -179,11 +179,7 @@ class AutoCodeAction extends AutoCode
 				}
 			}
 			$link_action_dir_href="file:///".str_replace("\\", "/", self::$action_dir_full).$key.".php";
-            self::$showReport.=  "新生成的Action_{$category_cap}文件路径:<font color='#0000FF'><a target='_blank' href='".$link_action_dir_href."'>".self::$action_dir_full.$key.".php</a></font><br />";
-
-			/*self::$echo_result=str_replace(" ","&nbsp;",self::$echo_result);
-			self::$echo_result=str_replace("\r\n","<br />",self::$echo_result);
-			echo self::$echo_result;     */
+			self::$showReport.=  "新生成的Action_{$category_cap}文件路径:<font color='#0000FF'><a target='_blank' href='".$link_action_dir_href."'>".self::$action_dir_full.$key.".php</a></font><br />";
 
 			self::$showReport.= "<br/><font color='#FF0000'>[需要在【后台】Action_Upload里添加没有的代码]</font><br/>";
 			$e_result="<?php\r\n".
@@ -203,9 +199,6 @@ class AutoCodeAction extends AutoCode
 
 			$link_action_dir_href="file:///".str_replace("\\", "/", self::$action_dir_full);
 			self::$showReport.=  "新生成的Action_Upload文件路径:<font color='#0000FF'><a target='_blank' href='".$link_action_dir_href."Action_Upload.php'>".self::$action_dir_full."Action_Upload.php</a></font><br />";
-			/*self::$echo_upload=str_replace(" ","&nbsp;",self::$echo_upload);
-			self::$echo_upload=str_replace("\r\n","<br />",self::$echo_upload);
-			echo self::$echo_upload;  */
 		}
 		/**
 		 * 生成标准的增删改查模板Action文件需生成首页访问所有生成的链接
@@ -266,17 +259,17 @@ class AutoCodeAction extends AutoCode
 		$classname = self::getClassname($tablename);
 		$instancename=self::getInstancename($tablename);
 		$appname_alias=strtolower(Gc::$appName_alias);
-		$author    = self::$author;
+		$author	= self::$author;
 		switch (self::$type) {
 			case 2:
-				$result ="     /**\r\n";
-				$result.="      * 控制器:$table_comment\r\n";
-				$result.="      */\r\n";
-				$result.="     public function $instancename()\r\n";
-				$result.="     {\r\n";
-				$result.="         \$this->init();\r\n";
-				$result.="         \$this->ExtDirectMode();\r\n";
-				$result.="         \$this->ExtUpload();\r\n";
+				$result ="	 /**\r\n";
+				$result.="	  * 控制器:$table_comment\r\n";
+				$result.="	  */\r\n";
+				$result.="	 public function $instancename()\r\n";
+				$result.="	 {\r\n";
+				$result.="		 \$this->init();\r\n";
+				$result.="		 \$this->ExtDirectMode();\r\n";
+				$result.="		 \$this->ExtUpload();\r\n";
 
 				if ((is_array(self::$relation_viewfield))&&(array_key_exists($classname, self::$relation_viewfield)))
 				{
@@ -298,7 +291,7 @@ class AutoCodeAction extends AutoCode
 							foreach ($relationShow as $key=>$value) {
 								$fieldInfos=self::$fieldInfos[self::getTablename($key)];
 								if (array_key_exists("parent_id",$fieldInfos)){
-									$result.="         \$this->loadExtComponent(\"ComboBoxTree.js\");\r\n";
+									$result.="		 \$this->loadExtComponent(\"ComboBoxTree.js\");\r\n";
 									break 2;
 								}
 							}
@@ -309,9 +302,9 @@ class AutoCodeAction extends AutoCode
 					}
 				}
 				if (Config_AutoCode::JSFILE_DIRECT_CORE){
-					$result.="         \$this->loadExtJs('".Config_F::VIEW_CORE."/$instancename.js');\r\n";
+					$result.="		 \$this->loadExtJs('".Config_F::VIEW_CORE."/$instancename.js');\r\n";
 				}else{
-					$result.="         \$this->loadExtJs('$instancename/$instancename.js');\r\n";
+					$result.="		 \$this->loadExtJs('$instancename/$instancename.js');\r\n";
 				}
 
 				if ($isNeedTextarea){
@@ -352,21 +345,21 @@ class AutoCodeAction extends AutoCode
 					}
 
 					if (count($text_area_fieldname)==1){
-						$result.="         \$this->load_onlineditor({$text_area_fieldname[0]});\r\n";
+						$result.="		 \$this->load_onlineditor({$text_area_fieldname[0]});\r\n";
 					}else if (count($text_area_fieldname)>1){
 						$fieldnames=implode(",", $text_area_fieldname);
-						$result.="         \$this->load_onlineditor(array({$fieldnames}));\r\n";
+						$result.="		 \$this->load_onlineditor(array({$fieldnames}));\r\n";
 					}
 				}
-				$result.="     }\r\n\r\n";
+				$result.="	 }\r\n\r\n";
 				self::$echo_result.=$result;
-				$result_upload = "    /**\r\n".
-								 "     * 上传数据对象:{$table_comment}数据文件\r\n".
-								 "     */\r\n".
-								 "    public function upload{$classname}()\r\n".
-								 "    {\r\n".
-								 "        return self::ExtResponse(Manager_ExtService::{$instancename}Service()->import(\$_FILES)); \r\n".
-								 "    }\r\n\r\n";
+				$result_upload = "	/**\r\n".
+								 "	 * 上传数据对象:{$table_comment}数据文件\r\n".
+								 "	 */\r\n".
+								 "	public function upload{$classname}()\r\n".
+								 "	{\r\n".
+								 "		return self::ExtResponse(Manager_ExtService::{$instancename}Service()->import(\$_FILES));\r\n".
+								 "	}\r\n\r\n";
 				//批量上传图片
 				foreach ($fieldInfo as $fieldname=>$field)
 				{
@@ -374,13 +367,13 @@ class AutoCodeAction extends AutoCode
 					{
 						$fieldname_funcname=$fieldname;
 						$fieldname_funcname{0}=strtoupper($fieldname_funcname);
-						$imgs_upload= "    /**\r\n".
-									  "     * 批量上传{$table_comment}图片:$fieldname\r\n".
-									  "     */\r\n".
-									  "    public function upload{$classname}{$fieldname_funcname}s()\r\n".
-									  "    {\r\n".
-									  "        return self::ExtResponse(Manager_ExtService::{$instancename}Service()->batchUploadImages(\$_FILES,\"upload_{$fieldname}_files\",\"{$classname}\",\"{$table_comment}\",\"$fieldname\")); \r\n".
-									  "    }\r\n\r\n";
+						$imgs_upload= "	/**\r\n".
+									  "	 * 批量上传{$table_comment}图片:$fieldname\r\n".
+									  "	 */\r\n".
+									  "	public function upload{$classname}{$fieldname_funcname}s()\r\n".
+									  "	{\r\n".
+									  "		return self::ExtResponse(Manager_ExtService::{$instancename}Service()->batchUploadImages(\$_FILES,\"upload_{$fieldname}_files\",\"{$classname}\",\"{$table_comment}\",\"$fieldname\"));\r\n".
+									  "	}\r\n\r\n";
 						$result_upload .= $imgs_upload;
 					}
 				}
@@ -398,54 +391,54 @@ class AutoCodeAction extends AutoCode
 						 " */\r\n".
 						 "class Action_$classname extends ActionModel\r\n".
 						 "{\r\n".
-						 "    /**\r\n".
-						 "     * {$table_comment}列表\r\n".
-						 "     */\r\n".
-						 "    public function lists()\r\n".
-						 "    {\r\n".
-						 "        if (\$this->isDataHave(UtilPage::\$linkUrl_pageFlag)){\r\n".
-						 "            \$nowpage=\$this->data[UtilPage::\$linkUrl_pageFlag];  \r\n".
-						 "        }else{   \r\n".
-						 "            \$nowpage=1; \r\n".
-						 "        }\r\n".
-						 "        \$count={$classname}::count();\r\n".
-						 "        \${$appname_alias}_page=UtilPage::init(\$nowpage,\$count);\r\n".
-						 "        \$this->view->count{$classname}s=\$count;\r\n".
-						 "        \${$instancename}s = {$classname}::queryPage(\${$appname_alias}_page->getStartPoint(),\${$appname_alias}_page->getEndPoint());\r\n".
-						 "        \$this->view->set(\"{$instancename}s\",\${$instancename}s);\r\n".
-						 "    }\r\n".
-						 "    /**\r\n".
-						 "     * 查看{$table_comment}\r\n".
-						 "     */\r\n".
-						 "    public function view()\r\n".
-						 "    {\r\n".
-						 "        \${$instancename}Id=\$this->data[\"id\"]; \r\n".
-						 "        \${$instancename} = {$classname}::get_by_id(\${$instancename}Id); \r\n".
-						 "        \$this->view->set(\"{$instancename}\",\${$instancename});\r\n".
-						 "    }\r\n".
-						 "    /**\r\n".
-						 "     * 编辑{$table_comment}\r\n".
-						 "     */\r\n".
-						 "    public function edit()\r\n".
-						 "    {\r\n".
-						 "        if (!empty(\$_POST)) {\r\n".
-						 "            \${$instancename} = \$this->model->{$classname};\r\n".
-						 "            \$id= \${$instancename}->getId(); \r\n".
-						 "            \$isRedirect=true;\r\n".
+						 "	/**\r\n".
+						 "	 * {$table_comment}列表\r\n".
+						 "	 */\r\n".
+						 "	public function lists()\r\n".
+						 "	{\r\n".
+						 "		if (\$this->isDataHave(UtilPage::\$linkUrl_pageFlag)){\r\n".
+						 "			\$nowpage=\$this->data[UtilPage::\$linkUrl_pageFlag];\r\n".
+						 "		}else{\r\n".
+						 "			\$nowpage=1;\r\n".
+						 "		}\r\n".
+						 "		\$count={$classname}::count();\r\n".
+						 "		\${$appname_alias}_page=UtilPage::init(\$nowpage,\$count);\r\n".
+						 "		\$this->view->count{$classname}s=\$count;\r\n".
+						 "		\${$instancename}s = {$classname}::queryPage(\${$appname_alias}_page->getStartPoint(),\${$appname_alias}_page->getEndPoint());\r\n".
+						 "		\$this->view->set(\"{$instancename}s\",\${$instancename}s);\r\n".
+						 "	}\r\n".
+						 "	/**\r\n".
+						 "	 * 查看{$table_comment}\r\n".
+						 "	 */\r\n".
+						 "	public function view()\r\n".
+						 "	{\r\n".
+						 "		\${$instancename}Id=\$this->data[\"id\"];\r\n".
+						 "		\${$instancename} = {$classname}::get_by_id(\${$instancename}Id);\r\n".
+						 "		\$this->view->set(\"{$instancename}\",\${$instancename});\r\n".
+						 "	}\r\n".
+						 "	/**\r\n".
+						 "	 * 编辑{$table_comment}\r\n".
+						 "	 */\r\n".
+						 "	public function edit()\r\n".
+						 "	{\r\n".
+						 "		if (!empty(\$_POST)) {\r\n".
+						 "			\${$instancename} = \$this->model->{$classname};\r\n".
+						 "			\$id= \${$instancename}->getId();\r\n".
+						 "			\$isRedirect=true;\r\n".
 						 self::uploadImgInEdit($instancename,$fieldInfo).
-						 "            if (!empty(\$id)){\r\n".
-						 "                \${$instancename}->update(); \r\n".
-						 "            }else{\r\n".
-						 "                \$id=\${$instancename}->save();  \r\n".
-						 "            }\r\n".
-						 "            if (\$isRedirect){\r\n".
-						 "                \$this->redirect(\"{$instancename}\",\"view\",\"id=\$id\");\r\n".
-						 "                exit;\r\n".
-						 "            }\r\n".
-						 "        }\r\n".
-						 "        \${$instancename}Id=\$this->data[\"id\"];\r\n".
-						 "        \${$instancename} = {$classname}::get_by_id(\${$instancename}Id);\r\n".
-						 "        \$this->view->set(\"{$instancename}\",\${$instancename}); \r\n";
+						 "			if (!empty(\$id)){\r\n".
+						 "				\${$instancename}->update();\r\n".
+						 "			}else{\r\n".
+						 "				\$id=\${$instancename}->save();\r\n".
+						 "			}\r\n".
+						 "			if (\$isRedirect){\r\n".
+						 "				\$this->redirect(\"{$instancename}\",\"view\",\"id=\$id\");\r\n".
+						 "				exit;\r\n".
+						 "			}\r\n".
+						 "		}\r\n".
+						 "		\${$instancename}Id=\$this->data[\"id\"];\r\n".
+						 "		\${$instancename} = {$classname}::get_by_id(\${$instancename}Id);\r\n".
+						 "		\$this->view->set(\"{$instancename}\",\${$instancename});\r\n";
 				$text_area_fieldname=array();
 				foreach ($fieldInfo as $fieldname=>$field)
 				{
@@ -455,23 +448,23 @@ class AutoCodeAction extends AutoCode
 					}
 				}
 				if (count($text_area_fieldname)==1){
-					$result.="        //加载在线编辑器的语句要放在:\$this->view->viewObject[如果有这一句]之后。\r\n".
-							 "        \$this->load_onlineditor({$text_area_fieldname[0]});\r\n";
+					$result.="		//加载在线编辑器的语句要放在:\$this->view->viewObject[如果有这一句]之后。\r\n".
+							 "		\$this->load_onlineditor({$text_area_fieldname[0]});\r\n";
 				}else if (count($text_area_fieldname)>1){
 					$fieldnames=implode(",", $text_area_fieldname);
-					$result.="        //加载在线编辑器的语句要放在:\$this->view->viewObject[如果有这一句]之后。\r\n".
-							 "        \$this->load_onlineditor(array({$fieldnames}));\r\n";
+					$result.="		//加载在线编辑器的语句要放在:\$this->view->viewObject[如果有这一句]之后。\r\n".
+							 "		\$this->load_onlineditor(array({$fieldnames}));\r\n";
 				}
-				$result.="    }\r\n".
-						 "    /**\r\n".
-						 "     * 删除{$table_comment}\r\n".
-						 "     */\r\n".
-						 "    public function delete()\r\n".
-						 "    {\r\n".
-						 "        \${$instancename}Id=\$this->data[\"id\"]; \r\n".
-						 "        \$isDelete = {$classname}::deleteByID(\${$instancename}Id); \r\n".
-						 "        \$this->redirect(\"{$instancename}\",\"lists\",\$this->data);\r\n".
-						 "    }\r\n".
+				$result.="	}\r\n".
+						 "	/**\r\n".
+						 "	 * 删除{$table_comment}\r\n".
+						 "	 */\r\n".
+						 "	public function delete()\r\n".
+						 "	{\r\n".
+						 "		\${$instancename}Id=\$this->data[\"id\"];\r\n".
+						 "		\$isDelete = {$classname}::deleteByID(\${$instancename}Id);\r\n".
+						 "		\$this->redirect(\"{$instancename}\",\"lists\",\$this->data);\r\n".
+						 "	}\r\n".
 						 "}\r\n\r\n";
 				$result.="?>";
 				break;
@@ -486,34 +479,34 @@ class AutoCodeAction extends AutoCode
 						 " */\r\n".
 						 "class Action_$classname extends Action\r\n".
 						 "{\r\n".
-						 "    /**\r\n".
-						 "     * {$table_comment}列表\r\n".
-						 "     */\r\n".
-						 "    public function lists()\r\n".
-						 "    {\r\n".
-						 "        \r\n".
-						 "    }\r\n".
-						 "    /**\r\n".
-						 "     * 查看{$table_comment}\r\n".
-						 "     */\r\n".
-						 "    public function view()\r\n".
-						 "    {\r\n".
-						 "        \r\n".
-						 "    }\r\n".
-						 "    /**\r\n".
-						 "     * 编辑{$table_comment}\r\n".
-						 "     */\r\n".
-						 "    public function edit()\r\n".
-						 "    {\r\n".
-						 "        \r\n".
-						 "    }\r\n".
-						 "    /**\r\n".
-						 "     * 删除{$table_comment}\r\n".
-						 "     */\r\n".
-						 "    public function delete()\r\n".
-						 "    {\r\n".
-						 "        \r\n".
-						 "    }\r\n".
+						 "	/**\r\n".
+						 "	 * {$table_comment}列表\r\n".
+						 "	 */\r\n".
+						 "	public function lists()\r\n".
+						 "	{\r\n".
+						 "		\r\n".
+						 "	}\r\n".
+						 "	/**\r\n".
+						 "	 * 查看{$table_comment}\r\n".
+						 "	 */\r\n".
+						 "	public function view()\r\n".
+						 "	{\r\n".
+						 "		\r\n".
+						 "	}\r\n".
+						 "	/**\r\n".
+						 "	 * 编辑{$table_comment}\r\n".
+						 "	 */\r\n".
+						 "	public function edit()\r\n".
+						 "	{\r\n".
+						 "		\r\n".
+						 "	}\r\n".
+						 "	/**\r\n".
+						 "	 * 删除{$table_comment}\r\n".
+						 "	 */\r\n".
+						 "	public function delete()\r\n".
+						 "	{\r\n".
+						 "		\r\n".
+						 "	}\r\n".
 						 "}\r\n\r\n";
 				$result.="?>";
 				break;
@@ -551,15 +544,15 @@ class AutoCodeAction extends AutoCode
 
 		if (count($img_fieldname>0)){
 			foreach ($img_fieldname as $fieldname) {
-				$result.="            if (!empty(\$_FILES)&&!empty(\$_FILES[\"{$fieldname}Upload\"][\"name\"])){\r\n".
-						 "                \$result=\$this->uploadImg(\$_FILES,\"{$fieldname}Upload\",\"{$fieldname}\",\"$instancename\");\r\n".
-						 "                if (\$result&&(\$result['success']==true)){\r\n".
-						 "                    if (array_key_exists('file_name',\$result))\${$instancename}->$fieldname = \$result['file_name'];\r\n".
-						 "                }else{\r\n".
-						 "                    \$isRedirect=false;\r\n".
-						 "                    \$this->view->set(\"message\",\$result[\"msg\"]);\r\n".
-						 "                }\r\n".
-						 "            }\r\n";
+				$result.="			if (!empty(\$_FILES)&&!empty(\$_FILES[\"{$fieldname}Upload\"][\"name\"])){\r\n".
+						 "				\$result=\$this->uploadImg(\$_FILES,\"{$fieldname}Upload\",\"{$fieldname}\",\"$instancename\");\r\n".
+						 "				if (\$result&&(\$result['success']==true)){\r\n".
+						 "					if (array_key_exists('file_name',\$result))\${$instancename}->$fieldname = \$result['file_name'];\r\n".
+						 "				}else{\r\n".
+						 "					\$isRedirect=false;\r\n".
+						 "					\$this->view->set(\"message\",\$result[\"msg\"]);\r\n".
+						 "				}\r\n".
+						 "			}\r\n";
 			}
 		}
 		return $result;
@@ -573,7 +566,7 @@ class AutoCodeAction extends AutoCode
 		$category  = Gc::$appName;
 		$package   = self::$package_front;
 		if (self::$type==1)$package=self::$package_model;
-		$author    = self::$author;
+		$author	= self::$author;
 		$action_parent="Action";
 		if (self::$type==1)$action_parent="ActionModel";
 		$result="<?php\r\n".
@@ -587,13 +580,13 @@ class AutoCodeAction extends AutoCode
 				 " */\r\n".
 				 "class Action_Index extends $action_parent\r\n".
 				 "{\r\n".
-				 "    /**\r\n".
-				 "     * 首页:网站所有页面列表\r\n".
-				 "     */\r\n".
-				 "    public function index()\r\n".
-				 "    {\r\n".
-				 "        \r\n".
-				 "    }\r\n".
+				 "	/**\r\n".
+				 "	 * 首页:网站所有页面列表\r\n".
+				 "	 */\r\n".
+				 "	public function index()\r\n".
+				 "	{\r\n".
+				 "		\r\n".
+				 "	}\r\n".
 				 "}\r\n\r\n".
 				 "?>";
 		self::saveDefineToDir(self::$action_dir_full,"Action_Index.php",$result);
@@ -606,7 +599,19 @@ class AutoCodeAction extends AutoCode
 	 */
 	private static function saveActionDefineToDir($tablename,$definePhpFileContent)
 	{
-		$filename="Action_".self::getClassname($tablename).".php";
+		$classname=self::getClassname($tablename);
+		$filename="Action_".$classname.".php";
+
+		$relative_path=str_replace(self::$save_dir, "",self::$action_dir_full.$filename);
+
+		switch (self::$type) {
+			case 0:
+				AutoCodePreviewReport::$action_front_files[$classname]=$relative_path;
+				break;
+			case 1:
+				AutoCodePreviewReport::$action_model_files[$classname]=$relative_path;
+				break;
+		}
 		return self::saveDefineToDir(self::$action_dir_full,$filename,$definePhpFileContent);
 	}
 }

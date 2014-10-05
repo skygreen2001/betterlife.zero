@@ -75,6 +75,10 @@ class AutoCodeModel extends AutoCode
 		self::createManageExtService($table_names);
 		self::createServiceXml($table_names);
 
+		//TODO
+		self::createManageService($table_names);
+
+
 		//echo self::$showReport;
 	}
 
@@ -118,6 +122,17 @@ class AutoCodeModel extends AutoCode
 		echo "</div>\r\n";
 		echo "</body>\r\n";
 		echo "</html>";
+	}
+
+	/**
+	 * 创建服务管理类
+	 * @param array|string $table_names
+	 * 示例如下：
+	 *  1.array:array('bb_user_admin','bb_core_blog')
+	 *  2.字符串:'bb_user_admin,bb_core_blog'
+	 */
+	public static function createManageService($table_names="")
+	{
 	}
 
 	/**
@@ -198,7 +213,7 @@ class AutoCodeModel extends AutoCode
 		{
 			$file_overwrite=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
 			$content=file_get_contents($model_save_dir.$file);
-			file_put_contents($file_overwrite, $content);
+			//file_put_contents($file_overwrite, $content);
 		}
 
 	}

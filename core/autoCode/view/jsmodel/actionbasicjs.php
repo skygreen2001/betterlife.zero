@@ -57,14 +57,14 @@ class ActionExt extends ActionBasic
 		if (\$this->view->viewObject)
 		{
 			if (\$isGzip&&startWith(\$viewCss,'shared')){
-                UtilAjax::init();
+				UtilAjax::init();
 				UtilCss::loadCssReady(\$this->view->viewObject,\$viewCss,\$isGzip,EnumJsFramework::JS_FW_EXTJS,UtilAjaxExtjs::\$ext_version);
 			}else{
-                if(startWith(\$viewCss,'shared')){
-				    UtilCss::loadCssReady(\$this->view->viewObject,\$viewCss,\$isGzip);
-                }else{
-                    UtilCss::loadCssReady(\$this->view->viewObject,\$templateurl."resources/css/".\$viewCss,\$isGzip);
-                }
+				if(startWith(\$viewCss,'shared')){
+					UtilCss::loadCssReady(\$this->view->viewObject,\$viewCss,\$isGzip);
+				}else{
+					UtilCss::loadCssReady(\$this->view->viewObject,\$templateurl."resources/css/".\$viewCss,\$isGzip);
+				}
 			}
 		}else{
 			UtilCss::loadCss(\$templateurl."resources/css/".\$viewCss,true);
@@ -123,10 +123,10 @@ class ActionExt extends ActionBasic
 		if (contain(\$this->data["go"],"admin")){
 			if((\$this->data["go"]!="admin.index.login")&&!HttpSession::isHave(Gc::\$appName_alias.'admin_id')) {
 				if (\$this->data["go"]=="admin.index.index"){
-                    \$this->redirect("index","login");
-                }else{
-                    UtilJavascript::loadJsContent("window.parent.location='".Gc::\$url_base."index.php?go=admin.index.login");
-                }
+					\$this->redirect("index","login");
+				}else{
+					UtilJavascript::loadJsContent("window.parent.location='".Gc::\$url_base."index.php?go=admin.index.login");
+				}
 			}
 			if (HttpCookie::get("OnlineEditor")){
 				\$this->online_editor=HttpCookie::get("OnlineEditor");
@@ -244,22 +244,22 @@ class ActionModel extends ActionBasic
 	 * @param array \$categoryId 上传文件所在的目录标识，一般为类实例名称
 	 * @return array 是否创建成功。
 	 */
-    public function uploadImg(\$files,\$uploadFlag,\$upload_dir,\$categoryId="default")
-    {
-        \$diffpart=date("YmdHis");
-        \$result="";
-        if (!empty(\$files[\$uploadFlag])&&!empty(\$files[\$uploadFlag]["name"])){
-            \$tmptail = end(explode('.', \$files[\$uploadFlag]["name"]));
-            \$uploadPath =GC::\$upload_path."images".DIRECTORY_SEPARATOR.\$categoryId.DIRECTORY_SEPARATOR.\$upload_dir.DIRECTORY_SEPARATOR.\$diffpart.".".\$tmptail;
-            \$result     =UtilFileSystem::uploadFile(\$files,\$uploadPath,\$uploadFlag);
-            if (\$result&&(\$result['success']==true)){
-                \$result['file_name']="\$categoryId/\$upload_dir/\$diffpart.\$tmptail";
-            }else{
-                return \$result;
-            }
-        }
-        return \$result;
-    }
+	public function uploadImg(\$files,\$uploadFlag,\$upload_dir,\$categoryId="default")
+	{
+		\$diffpart=date("YmdHis");
+		\$result="";
+		if (!empty(\$files[\$uploadFlag])&&!empty(\$files[\$uploadFlag]["name"])){
+			\$tmptail = end(explode('.', \$files[\$uploadFlag]["name"]));
+			\$uploadPath =GC::\$upload_path."images".DIRECTORY_SEPARATOR.\$categoryId.DIRECTORY_SEPARATOR.\$upload_dir.DIRECTORY_SEPARATOR.\$diffpart.".".\$tmptail;
+			\$result	 =UtilFileSystem::uploadFile(\$files,\$uploadPath,\$uploadFlag);
+			if (\$result&&(\$result['success']==true)){
+				\$result['file_name']="\$categoryId/\$upload_dir/\$diffpart.\$tmptail";
+			}else{
+				return \$result;
+			}
+		}
+		return \$result;
+	}
 }
 
 ?>

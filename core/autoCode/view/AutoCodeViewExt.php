@@ -235,7 +235,7 @@ class AutoCodeViewExt extends AutoCode
 										 "}\r\n".
 										 "echo \"]\";\r\n".
 										 "?>\r\n";
-								$ajaxName=self::saveoAjaxPhpDefineToDir($filename,$result);
+								$ajaxName=self::saveoAjaxPhpDefineToDir($tablename,$filename,$result);
 								self::$showReport.= "生成导出Ajax目录树服务类PHP文件完成:$tablename=>$ajaxName".Config_F::SUFFIX_FILE_PHP."!<br/>";
 							}
 						}
@@ -265,7 +265,7 @@ class AutoCodeViewExt extends AutoCode
 									 "?>\r\n";
 							$key{0}=strtolower($key{0});
 							$filename =$key.Config_F::SUFFIX_FILE_PHP;
-							$ajaxName=self::saveoAjaxPhpDefineToDir($filename,$result);
+							$ajaxName=self::saveoAjaxPhpDefineToDir($tablename,$filename,$result);
 							self::$showReport.= "生成导出Ajax服务类PHP文件完成:$tablename=>$ajaxName".Config_F::SUFFIX_FILE_PHP."!<br/>";
 						}
 					}
@@ -1840,17 +1840,27 @@ BATCHUPLOADIMAGES;
 		}else{
 			$dir=self::$view_js_package.self::getInstancename($tablename).DIRECTORY_SEPARATOR;
 		}
+
+		$classname=self::getClassname($tablename);
+		$relative_path=str_replace(self::$save_dir, "", $dir.$filename);
+		AutoCodePreviewReport::$bg_ext_js_files[$classname]=$relative_path;
+
 		return self::saveDefineToDir($dir,$filename,$defineJsFileContent);
 	}
 
 	/**
 	 * 保存生成的Ajax服务代码到指定命名规范的文件中
-	 * @param string $classname 类名称
+	 * @param string $tablename 表名称
 	 * @param string $defineAjaxPhpFileContent 生成的代码
 	 */
-	private static function saveoAjaxPhpDefineToDir($filename,$defineAjaxPhpFileContent)
+	private static function saveoAjaxPhpDefineToDir($tablename,$filename,$defineAjaxPhpFileContent)
 	{
 		$dir=self::$ajax_dir_full;
+
+		$classname=self::getClassname($tablename);
+		$relative_path=str_replace(self::$save_dir, "", $dir.$filename);
+		AutoCodePreviewReport::$bg_ajax_php_files[$classname]=$relative_path;
+
 		return self::saveDefineToDir($dir,$filename,$defineAjaxPhpFileContent);
 	}
 
@@ -1863,6 +1873,11 @@ BATCHUPLOADIMAGES;
 	{
 		$filename =self::getInstancename($tablename).Config_F::SUFFIX_FILE_TPL;
 		$dir	  =self::$view_core.Gc::$appName.DIRECTORY_SEPARATOR;
+
+		$classname=self::getClassname($tablename);
+		$relative_path=str_replace(self::$save_dir, "", $dir.$filename);
+		AutoCodePreviewReport::$view_bg_files[$classname]=$relative_path;
+
 		return self::saveDefineToDir($dir,$filename,$defineTplFileContent);
 	}
 }
