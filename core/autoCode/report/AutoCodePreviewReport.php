@@ -86,7 +86,7 @@ MODEL;
 MODEL;
 		$status=array("<font color='red'>[会覆盖]</font>","<font color='green'>[新生成]</font>","[未修改]");
 
-		$title="数据模型[Domain|Model]";
+		$title="数据模型<Domain|Model>";
 		$moreContent=str_replace("[title]",$title,$module_model);
 		$moreContent=str_replace("[checked]","checked", $moreContent);
 		$moreContent=str_replace("[module_name]","domain",$moreContent);
@@ -393,7 +393,7 @@ MODEL;
 		}
 
 		$model_module=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.self::$m_model.DIRECTORY_SEPARATOR;
-		if(!is_dir($model_module)){
+		if(is_dir($model_module)){
 			$title="[通用模板]";
 			$moreContent.=str_replace("[title]",$title,$module_model);
 			$moreContent=str_replace("[module_name]","model",$moreContent);

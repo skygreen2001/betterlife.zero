@@ -111,9 +111,9 @@ class AutoCodeAction extends AutoCode
 		}
 
 		if(self::$type==0) {
-			 self::$showReport.= '</div><br/>';
+			self::$showReport.= '</div><br/>';
 		}else if(self::$type==1) {
-			 self::$showReport.= '</div>';
+			self::$showReport.= '</div>';
 		}
 		$category_cap=Gc::$appName;
 		$category_cap{0}=ucfirst($category_cap{0});
@@ -130,33 +130,33 @@ class AutoCodeAction extends AutoCode
 				}
 			}
 			$e_index=$loginout."\r\n".
-					 "	 /**\r\n".
-					 "	  * 控制器:首页\r\n".
-					 "	  */\r\n".
-					 "	 public function index()\r\n".
-					 "	 {\r\n".
-					 "		 \$this->init();\r\n".
-					 "		 \$this->loadIndexJs();\r\n".
-					 "		 //加载菜单\r\n".
-					 "		 \$this->view->menuGroups=MenuGroup::all();\r\n".
-					 "	 }\r\n\r\n".
-					 "	 /**\r\n".
-					 "	  * 预加载首页JS定义库。\r\n".
-					 "	  * @param ViewObject \$viewobject 表示层显示对象\r\n".
-					 "	  * @param string \$templateurl\r\n".
-					 "	  */\r\n".
-					 "	 private function loadIndexJs()\r\n".
-					 "	 {\r\n".
-					 "		\$viewobject=\$this->view->viewObject;\r\n".
-					 "		\$this->loadExtCss(\"index.css\",true);\r\n".
-					 "		\$this->loadExtJs(\"index.js\",true);\r\n".
-					 "		//核心功能:外观展示\r\n".
-					 "		\$this->loadExtJs(\"layout.js\",true);\r\n".
-					 "		//左侧菜单组生成显示\r\n".
-					 "		UtilJavascript::loadJsContentReady(\$viewobject,MenuGroup::viewForExtJs());\r\n".
-					 "		//核心功能:导航[Tab新建窗口]\r\n".
-					 "		\$this->loadExtJs(\"navigation.js\",true);\r\n".
-					 "	 }\r\n\r\n";
+					"	/**\r\n".
+					"	 * 控制器:首页\r\n".
+					"	 */\r\n".
+					"	public function index()\r\n".
+					"	{\r\n".
+					"		\$this->init();\r\n".
+					"		\$this->loadIndexJs();\r\n".
+					"		//加载菜单\r\n".
+					"		\$this->view->menuGroups=MenuGroup::all();\r\n".
+					"	}\r\n\r\n".
+					"	/**\r\n".
+					"	 * 预加载首页JS定义库。\r\n".
+					"	 * @param ViewObject \$viewobject 表示层显示对象\r\n".
+					"	 * @param string \$templateurl\r\n".
+					"	 */\r\n".
+					"	private function loadIndexJs()\r\n".
+					"	{\r\n".
+					"		\$viewobject=\$this->view->viewObject;\r\n".
+					"		\$this->loadExtCss(\"index.css\",true);\r\n".
+					"		\$this->loadExtJs(\"index.js\",true);\r\n".
+					"		//核心功能:外观展示\r\n".
+					"		\$this->loadExtJs(\"layout.js\",true);\r\n".
+					"		//左侧菜单组生成显示\r\n".
+					"		UtilJavascript::loadJsContentReady(\$viewobject,MenuGroup::viewForExtJs());\r\n".
+					"		//核心功能:导航[Tab新建窗口]\r\n".
+					"		\$this->loadExtJs(\"navigation.js\",true);\r\n".
+					"	}\r\n\r\n";
 			$action_names=array("Action_Index"=>$e_index,"Action_".$category_cap=>self::$echo_result);
 			foreach ($action_names as $key => $value) {
 				$isCreate=true;
@@ -246,7 +246,7 @@ class AutoCodeAction extends AutoCode
 	}
 
 	/**
-	 * 将表列定义转换成数据对象Php文件定义的内容
+	 * 将表列定义转换成控制器Php文件定义的内容
 	 * @param string $tablename 表名
 	 * @param array $fieldInfo 表列信息列表
 	 */
@@ -262,122 +262,8 @@ class AutoCodeAction extends AutoCode
 		$author	= self::$author;
 		switch (self::$type) {
 			case 2:
-				$result ="	 /**\r\n";
-				$result.="	  * 控制器:$table_comment\r\n";
-				$result.="	  */\r\n";
-				$result.="	 public function $instancename()\r\n";
-				$result.="	 {\r\n";
-				$result.="		 \$this->init();\r\n";
-				$result.="		 \$this->ExtDirectMode();\r\n";
-				$result.="		 \$this->ExtUpload();\r\n";
-
-				if ((is_array(self::$relation_viewfield))&&(array_key_exists($classname, self::$relation_viewfield)))
-				{
-					$relationSpecs=self::$relation_viewfield[$classname];
-				}
-				$redundancy_table_fields=self::$redundancy_table_fields[$classname];
-				$redundancy_fields=array();
-				$isNeedTextarea=true;
-				if ($redundancy_table_fields){
-					foreach ($redundancy_table_fields as $redundancy_table_field) {
-						$redundancy_fields=array_merge($redundancy_fields,$redundancy_table_field);
-					}
-				}
-				foreach ($fieldInfo as $fieldname=>$field)
-				{
-					if (isset($relationSpecs)){
-						if (array_key_exists($fieldname,$relationSpecs)){
-							$relationShow=$relationSpecs[$fieldname];
-							foreach ($relationShow as $key=>$value) {
-								$fieldInfos=self::$fieldInfos[self::getTablename($key)];
-								if (array_key_exists("parent_id",$fieldInfos)){
-									$result.="		 \$this->loadExtComponent(\"ComboBoxTree.js\");\r\n";
-									break 2;
-								}
-							}
-						}
-					}
-					if (!empty($redundancy_fields)){
-						if (array_key_exists($fieldname, $redundancy_fields))$isNeedTextarea=false;
-					}
-				}
-				if (Config_AutoCode::JSFILE_DIRECT_CORE){
-					$result.="		 \$this->loadExtJs('".Config_F::VIEW_CORE."/$instancename.js');\r\n";
-				}else{
-					$result.="		 \$this->loadExtJs('$instancename/$instancename.js');\r\n";
-				}
-
-				if ($isNeedTextarea){
-					$text_area_fieldname=array();
-					foreach ($fieldInfo as $fieldname=>$field)
-					{
-						if (self::columnIsTextArea($fieldname,$field["Type"]))
-						{
-							if (!in_array("'".$fieldname."'", $text_area_fieldname)){
-								$text_area_fieldname[]="'".$fieldname."'";
-							}
-						}
-
-						if (Config_AutoCode::RELATION_VIEW_FULL)
-						{
-							if ((is_array(self::$relation_all))&&(array_key_exists($classname,self::$relation_all)))
-							{
-								$relationSpec=self::$relation_all[$classname];
-								if (array_key_exists("has_many",$relationSpec))
-								{
-									$has_many=$relationSpec["has_many"];
-									foreach ($has_many as $current_classname=>$value)
-									{
-										$tablename_relation=self::getTablename($current_classname);
-										$fieldInfos_relation=self::$fieldInfos[$tablename_relation];
-										foreach ($fieldInfos_relation as $fieldname_relation=>$fields_relation) {
-											if (self::columnIsTextArea($fieldname_relation,$fields_relation["Type"]))
-											{
-												if (!in_array("'".$fieldname_relation."'", $text_area_fieldname)){
-													$text_area_fieldname[].="'".$fieldname_relation."'";
-												}
-											}
-										}
-									}
-								}
-							}
-						}
-					}
-
-					if (count($text_area_fieldname)==1){
-						$result.="		 \$this->load_onlineditor({$text_area_fieldname[0]});\r\n";
-					}else if (count($text_area_fieldname)>1){
-						$fieldnames=implode(",", $text_area_fieldname);
-						$result.="		 \$this->load_onlineditor(array({$fieldnames}));\r\n";
-					}
-				}
-				$result.="	 }\r\n\r\n";
-				self::$echo_result.=$result;
-				$result_upload = "	/**\r\n".
-								 "	 * 上传数据对象:{$table_comment}数据文件\r\n".
-								 "	 */\r\n".
-								 "	public function upload{$classname}()\r\n".
-								 "	{\r\n".
-								 "		return self::ExtResponse(Manager_ExtService::{$instancename}Service()->import(\$_FILES));\r\n".
-								 "	}\r\n\r\n";
-				//批量上传图片
-				foreach ($fieldInfo as $fieldname=>$field)
-				{
-					if (self::columnIsImage($fieldname,$field["Comment"]))
-					{
-						$fieldname_funcname=$fieldname;
-						$fieldname_funcname{0}=strtoupper($fieldname_funcname);
-						$imgs_upload= "	/**\r\n".
-									  "	 * 批量上传{$table_comment}图片:$fieldname\r\n".
-									  "	 */\r\n".
-									  "	public function upload{$classname}{$fieldname_funcname}s()\r\n".
-									  "	{\r\n".
-									  "		return self::ExtResponse(Manager_ExtService::{$instancename}Service()->batchUploadImages(\$_FILES,\"upload_{$fieldname}_files\",\"{$classname}\",\"{$table_comment}\",\"$fieldname\"));\r\n".
-									  "	}\r\n\r\n";
-						$result_upload .= $imgs_upload;
-					}
-				}
-				self::$echo_upload.=$result_upload;
+				self::$echo_result.=self::createBgActionIndex($tablename,$fieldInfo);
+				self::$echo_upload.=self::createBgActionUpload($tablename,$fieldInfo);
 				return "";
 			case 1:
 				$package=self::$package_model;
@@ -511,6 +397,146 @@ class AutoCodeAction extends AutoCode
 				$result.="?>";
 				break;
 		}
+		return $result;
+	}
+
+	/**
+	 * 将表列定义转换成上传文件控制器Php文件定义的内容
+	 * @param string $tablename 表名
+	 * @param array $fieldInfo 表列信息列表
+	 */
+	public static function createBgActionUpload($tablename,$fieldInfo)
+	{
+		$table_comment=self::tableCommentKey($tablename);
+		$classname = self::getClassname($tablename);
+		$instancename=self::getInstancename($tablename);
+		$result_upload = "	/**\r\n".
+								 "	 * 上传数据对象:{$table_comment}数据文件\r\n".
+								 "	 */\r\n".
+								 "	public function upload{$classname}()\r\n".
+								 "	{\r\n".
+								 "		return self::ExtResponse(Manager_ExtService::{$instancename}Service()->import(\$_FILES));\r\n".
+								 "	}\r\n\r\n";
+		//批量上传图片
+		foreach ($fieldInfo as $fieldname=>$field)
+		{
+			if (self::columnIsImage($fieldname,$field["Comment"]))
+			{
+				$fieldname_funcname=$fieldname;
+				$fieldname_funcname{0}=strtoupper($fieldname_funcname);
+				$imgs_upload= "	/**\r\n".
+							  "	 * 批量上传{$table_comment}图片:$fieldname\r\n".
+							  "	 */\r\n".
+							  "	public function upload{$classname}{$fieldname_funcname}s()\r\n".
+							  "	{\r\n".
+							  "		return self::ExtResponse(Manager_ExtService::{$instancename}Service()->batchUploadImages(\$_FILES,\"upload_{$fieldname}_files\",\"{$classname}\",\"{$table_comment}\",\"$fieldname\"));\r\n".
+							  "	}\r\n\r\n";
+				$result_upload .= $imgs_upload;
+			}
+		}
+		return $result_upload;
+	}
+
+	/**
+	 * 将表列定义转换成核心控制器Php文件定义的内容
+	 * @param string $tablename 表名
+	 * @param array $fieldInfo 表列信息列表
+	 */
+	public static function createBgActionIndex($tablename,$fieldInfo)
+	{
+		$table_comment=self::tableCommentKey($tablename);
+		$classname = self::getClassname($tablename);
+		$instancename=self::getInstancename($tablename);
+		$result ="	/**\r\n";
+		$result.="	 * 控制器:$table_comment\r\n";
+		$result.="	 */\r\n";
+		$result.="	public function $instancename()\r\n";
+		$result.="	{\r\n";
+		$result.="		\$this->init();\r\n";
+		$result.="		\$this->ExtDirectMode();\r\n";
+		$result.="		\$this->ExtUpload();\r\n";
+
+		if ((is_array(self::$relation_viewfield))&&(array_key_exists($classname, self::$relation_viewfield)))
+		{
+			$relationSpecs=self::$relation_viewfield[$classname];
+		}
+		$redundancy_table_fields=self::$redundancy_table_fields[$classname];
+		$redundancy_fields=array();
+		$isNeedTextarea=true;
+		if ($redundancy_table_fields){
+			foreach ($redundancy_table_fields as $redundancy_table_field) {
+				$redundancy_fields=array_merge($redundancy_fields,$redundancy_table_field);
+			}
+		}
+		foreach ($fieldInfo as $fieldname=>$field)
+		{
+			if (isset($relationSpecs)){
+				if (array_key_exists($fieldname,$relationSpecs)){
+					$relationShow=$relationSpecs[$fieldname];
+					foreach ($relationShow as $key=>$value) {
+						$fieldInfos=self::$fieldInfos[self::getTablename($key)];
+						if (array_key_exists("parent_id",$fieldInfos)){
+							$result.="		\$this->loadExtComponent(\"ComboBoxTree.js\");\r\n";
+							break 2;
+						}
+					}
+				}
+			}
+			if (!empty($redundancy_fields)){
+				if (array_key_exists($fieldname, $redundancy_fields))$isNeedTextarea=false;
+			}
+		}
+		if (Config_AutoCode::JSFILE_DIRECT_CORE){
+			$result.="		\$this->loadExtJs('".Config_F::VIEW_CORE."/$instancename.js');\r\n";
+		}else{
+			$result.="		\$this->loadExtJs('$instancename/$instancename.js');\r\n";
+		}
+
+		if ($isNeedTextarea){
+			$text_area_fieldname=array();
+			foreach ($fieldInfo as $fieldname=>$field)
+			{
+				if (self::columnIsTextArea($fieldname,$field["Type"]))
+				{
+					if (!in_array("'".$fieldname."'", $text_area_fieldname)){
+						$text_area_fieldname[]="'".$fieldname."'";
+					}
+				}
+
+				if (Config_AutoCode::RELATION_VIEW_FULL)
+				{
+					if ((is_array(self::$relation_all))&&(array_key_exists($classname,self::$relation_all)))
+					{
+						$relationSpec=self::$relation_all[$classname];
+						if (array_key_exists("has_many",$relationSpec))
+						{
+							$has_many=$relationSpec["has_many"];
+							foreach ($has_many as $current_classname=>$value)
+							{
+								$tablename_relation=self::getTablename($current_classname);
+								$fieldInfos_relation=self::$fieldInfos[$tablename_relation];
+								foreach ($fieldInfos_relation as $fieldname_relation=>$fields_relation) {
+									if (self::columnIsTextArea($fieldname_relation,$fields_relation["Type"]))
+									{
+										if (!in_array("'".$fieldname_relation."'", $text_area_fieldname)){
+											$text_area_fieldname[].="'".$fieldname_relation."'";
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+
+			if (count($text_area_fieldname)==1){
+				$result.="		\$this->load_onlineditor({$text_area_fieldname[0]});\r\n";
+			}else if (count($text_area_fieldname)>1){
+				$fieldnames=implode(",", $text_area_fieldname);
+				$result.="		\$this->load_onlineditor(array({$fieldnames}));\r\n";
+			}
+		}
+		$result.="	}\r\n\r\n";
 		return $result;
 	}
 

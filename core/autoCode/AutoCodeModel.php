@@ -72,14 +72,17 @@ class AutoCodeModel extends AutoCode
 
 		//将新添加的内容放置在文件最后作为可覆盖的内容
 		AutoCodePreviewReport::init();
+		//后台
 		self::createManageExtService($table_names);
 		self::createServiceXml($table_names);
+		self::createBgAction($table_names);
+		self::createMenuConfigXml($table_names);
 
-		//TODO
+		//前台
 		self::createManageService($table_names);
 
-
-		//echo self::$showReport;
+		//模板
+		self::createModelIndex($table_names);
 	}
 
 	/**
@@ -125,6 +128,55 @@ class AutoCodeModel extends AutoCode
 	}
 
 	/**
+	 * 创建后台控制器类
+	 * 包括【Action_Upload和Action_Gc::$appName】
+	 * @param array|string $table_names
+	 * 示例如下：
+	 *  1.array:array('bb_user_admin','bb_core_blog')
+	 *  2.字符串:'bb_user_admin,bb_core_blog'
+	 */
+	public static function createBgAction($table_names="")
+	{
+		$fieldInfos=self::fieldInfosByTable_names($table_names);
+		$file_bg_action_appname=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.AutoCodePreviewReport::$bg_action_index_file;
+		if(file_exists($file_bg_action_appname))
+		{
+			$content=file_get_contents($file_bg_action_appname);
+			foreach ($fieldInfos as $tablename=>$fieldInfo)
+			{
+				$instancename=self::getInstancename($tablename);
+				if(!contain($content,"public function $instancename()")){
+					$section_content=AutoCodeAction::createBgActionIndex($tablename,$fieldInfo);
+					$ctrl=substr($content,0,strrpos($content,"}"));
+					$ctrr=substr($content,strrpos($content,"}"));
+					$content=trim($ctrl)."\r\n\r\n".rtrim($section_content)."\r\n".$ctrr;
+				}
+			}
+			$file_bg_action_appname_model=self::$save_dir.AutoCodePreviewReport::$bg_action_index_file;
+			file_put_contents($file_bg_action_appname_model, $content);
+		}
+
+		$file_bg_action_upload=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.AutoCodePreviewReport::$bg_action_upload_file;
+		if(file_exists($file_bg_action_upload))
+		{
+			$content=file_get_contents($file_bg_action_upload);
+			foreach ($fieldInfos as $tablename=>$fieldInfo)
+			{
+				$classname = self::getClassname($tablename);
+				if(!contain($content,"public function upload$classname()"))
+				{
+					$section_content=AutoCodeAction::createBgActionUpload($tablename,$fieldInfo);
+					$ctrl=substr($content,0,strrpos($content,"}"));
+					$ctrr=substr($content,strrpos($content,"}"));
+					$content=trim($ctrl)."\r\n\r\n".rtrim($section_content)."\r\n".$ctrr;
+				}
+			}
+			$file_bg_action_upload_model=self::$save_dir.AutoCodePreviewReport::$bg_action_upload_file;
+			file_put_contents($file_bg_action_upload_model, $content);
+		}
+	}
+
+	/**
 	 * 创建服务管理类
 	 * @param array|string $table_names
 	 * 示例如下：
@@ -133,6 +185,29 @@ class AutoCodeModel extends AutoCode
 	 */
 	public static function createManageService($table_names="")
 	{
+		$file_manage_service_file=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.AutoCodePreviewReport::$manage_service_file;
+		if(file_exists($file_manage_service_file))
+		{
+			$tableList=self::tableListByTable_names($table_names);
+			$content=file_get_contents($file_manage_service_file);
+			foreach($tableList as $tablename){
+				$result=AutoCodeService::createManageService($tablename);
+				$section_define  = $result["section_define"];
+				$section_content = $result["section_content"];
+
+				if(!contain($content,$section_define)){
+					$ctrl=substr($content,0,strpos($content, "	 * 提供服务:")-8);
+					$ctrr=substr($content, strpos($content, "	 * 提供服务:")-8);
+					$content=$ctrl.$section_define.$ctrr;
+					$content=trim($content);
+					$ctrl=substr($content,0,strrpos($content,"}"));
+					$ctrr=substr($content,strrpos($content,"}"));
+					$content=trim($ctrl)."\r\n\r\n".rtrim($section_content)."\r\n".$ctrr;
+				}
+			}
+			$ffile_manage_service_file_model=self::$save_dir.AutoCodePreviewReport::$manage_service_file;
+			file_put_contents($ffile_manage_service_file_model, $content);
+		}
 	}
 
 	/**
@@ -184,9 +259,9 @@ class AutoCodeModel extends AutoCode
 			$tableList=self::tableListByTable_names($table_names);
 			$content=file_get_contents($file_bg_service_xml_file);
 			foreach($tableList as $tablename){
-				$section_content=AutoCodeService::createServiceXml($tablename);
 				$classname=self::getClassname($tablename);
 				if(!contain($content,"<service name=\"ExtService{$classname}\">")){
+					$section_content=AutoCodeService::createServiceXml($tablename);
 					$ctrl=substr($content,0,strrpos($content, "</service>")+12);
 					$ctrr=substr($content, strrpos($content,"</service>")+12);
 					$content=$ctrl."\r\n".$section_content.ltrim($ctrr);
@@ -200,7 +275,65 @@ class AutoCodeModel extends AutoCode
 		}
 	}
 
+	/**
+	 * 生成后台服务配置文件:service.config.xml
+	 * @param array|string $table_names
+	 * 示例如下：
+	 *  1.array:array('bb_user_admin','bb_core_blog')
+	 *  2.字符串:'bb_user_admin,bb_core_blog'
+	 */
+	public static function createMenuConfigXml($table_names="")
+	{
+		$file_bg_menu_xml_file=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.AutoCodePreviewReport::$bg_menu_xml_file;
+		if(file_exists($file_bg_menu_xml_file))
+		{
+			$tableList=self::tableListByTable_names($table_names);
+			$content=file_get_contents($file_bg_menu_xml_file);
+			$appName=Gc::$appName;
+			foreach($tableList as $tablename){
+				$instancename=self::getInstancename($tablename);
+				if(!contain($content,"id=\"$instancename\"")){
+					$table_comment=self::tableCommentKey($tablename);
+					$section_content="		<menu name=\"$table_comment\" id=\"$instancename\" address=\"index.php?go=admin.$appName.{$instancename}\" />";
+					$ctrl=substr($content,0,strrpos($content, "/>")+2);
+					$ctrr=substr($content, strrpos($content,"/>")+2);
+					$content=$ctrl."\r\n".$section_content.$ctrr;
+				}
+			}
+			$file_bg_menu_xml_file_model=self::$save_dir.AutoCodePreviewReport::$bg_menu_xml_file;
+			file_put_contents($file_bg_menu_xml_file_model, $content);
+		}
+	}
 
+	/**
+	 * 生成后台服务配置文件:service.config.xml
+	 * @param array|string $table_names
+	 * 示例如下：
+	 *  1.array:array('bb_user_admin','bb_core_blog')
+	 *  2.字符串:'bb_user_admin,bb_core_blog'
+	 */
+	public static function createModelIndex($table_names="")
+	{
+		$file_model_index_file=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.AutoCodePreviewReport::$model_index_file;
+		if(file_exists($file_model_index_file))
+		{
+			$tableList=self::tableListByTable_names($table_names);
+			$content=file_get_contents($file_model_index_file);
+			$appname=AutoCodePreviewReport::$m_model;
+			foreach($tableList as $tablename){
+				$instancename=self::getInstancename($tablename);
+				if(!contain($content,"go=model.$instancename.lists")){
+					$table_comment=self::tableCommentKey($tablename);
+					$section_content="		<tr class=\"entry\"><td class=\"content\"><a href=\"{\$url_base}index.php?go={$appname}.{$instancename}.lists\">{$table_comment}</a></td></tr>\r\n";
+					$ctrl=substr($content,0,strrpos($content, "</tr>")+5);
+					$ctrr=substr($content, strrpos($content,"</tr>")+5);
+					$content=$ctrl."\r\n".$section_content.$ctrr;
+				}
+			}
+			$file_model_index_file_model=self::$save_dir.AutoCodePreviewReport::$model_index_file;
+			file_put_contents($file_model_index_file_model, $content);
+		}
+	}
 
 	/**
 	 * 覆盖原文件内容

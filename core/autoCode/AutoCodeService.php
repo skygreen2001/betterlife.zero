@@ -95,27 +95,12 @@ class AutoCodeService extends AutoCode
 			 * 需要在管理类Manager_Service.php里添加的代码
 			 */
 			self::$showReport.= "<font color='#FF0000'>[需要在管理类Manager_Service里添加没有的代码]</font><br />";
-			$section_define="";
-			$section_content="";
 
-			$tableList=self::tableListByTable_names($table_names);
-			foreach($tableList as $tablename){
-				$table_comment=self::tableCommentKey($tablename);
-				$classname=self::getClassname($tablename);
-				$classname{0} = strtolower($classname{0});
-				$service_classname=self::getServiceClassname($tablename);
-				$section_define .="	private static \$".$classname."Service;\r\n";
-				$section_content.="	/**\r\n".
-								  "	 * 提供服务:".$table_comment."\r\n".
-								  "	 */\r\n";
-				$section_content.="	public static function ".$classname."Service()\r\n".
-								  "	{\r\n".
-								  "		if (self::\$".$classname."Service==null) {\r\n".
-								  "			self::\$".$classname."Service=new $service_classname();\r\n".
-								  "		}\r\n".
-								  "		return self::\$".$classname."Service;\r\n".
-								  "	}\r\n\r\n";
-			}
+			// 创建前台管理服务类
+			$result = self::createManageService($table_names);
+
+			$section_define  = $result["section_define"];
+			$section_content = $result["section_content"];
 			$e_result="<?php\r\n".
 					 "/**\r\n".
 					 " +---------------------------------------<br/>\r\n".
@@ -219,6 +204,42 @@ class AutoCodeService extends AutoCode
 			$link_service_config_xml_dir_href="file:///".str_replace("\\", "/", self::$service_dir_full)."service.config.xml";
 			self::$showReport.=  "新生成的service.config.xml文件路径:<font color='#0000FF'><a target='_blank' href='$link_service_config_xml_dir_href'>".self::$service_dir_full."service.config.xml</a></font><br />";
 		}
+	}
+
+	/**
+	 * 创建前台管理服务类
+	 * @param array|string $table_names
+	 * 示例如下：
+	 *  1.array:array('bb_user_admin','bb_core_blog')
+	 *  2.字符串:'bb_user_admin,bb_core_blog'
+	 */
+	public static function createManageService($table_names="")
+	{
+		$section_define="";
+		$section_content="";
+		$result=array();
+
+		$tableList=self::tableListByTable_names($table_names);
+		foreach($tableList as $tablename){
+			$table_comment=self::tableCommentKey($tablename);
+			$classname=self::getClassname($tablename);
+			$classname{0} = strtolower($classname{0});
+			$service_classname=self::getServiceClassname($tablename);
+			$section_define .="	private static \$".$classname."Service;\r\n";
+			$section_content.="	/**\r\n".
+							  "	 * 提供服务:".$table_comment."\r\n".
+							  "	 */\r\n";
+			$section_content.="	public static function ".$classname."Service()\r\n".
+							  "	{\r\n".
+							  "		if (self::\$".$classname."Service==null) {\r\n".
+							  "			self::\$".$classname."Service=new $service_classname();\r\n".
+							  "		}\r\n".
+							  "		return self::\$".$classname."Service;\r\n".
+							  "	}\r\n\r\n";
+		}
+		$result["section_define"]  = $section_define;
+		$result["section_content"] = $section_content;
+		return $result;
 	}
 
 	/**

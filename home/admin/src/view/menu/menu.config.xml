@@ -51,10 +51,8 @@
 		<menu name="Browsershots" title="浏览器兼容性测试，跨平台浏览器测试 - Browsershots" address="http://browsershots.org" />
 		<menu name="HtmlTidy" title="Html Tidy online" address="http://infohound.net/tidy/" />
 		<menu name="cssdrive" title="CSS Drive- Categorized CSS gallery and examples" address="http://www.cssdrive.com/" />
-		<menu name="CSSTidy" title="a free, online application that will fix errors and optimize your CSS code." address="http://csstidy.sourceforge.net/example.php" />
 		<menu name="Icon Finder" address="http://www.iconfinder.com/" />
 		<menu name="Convert Icon" address="http://www.converticon.com/" />
-		<menu name="Background Patterns" address="http://www.bgpatterns.com/" />
 		<menu name="Javascript Performance" title="Javascript Performance Testing" address="http://dromaeo.com/" />
 		<menu name="Test Everything" address="http://tester.jonasjohn.de/" />
 	</menuGroup>
