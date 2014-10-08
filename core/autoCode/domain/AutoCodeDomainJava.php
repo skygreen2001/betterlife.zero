@@ -387,7 +387,7 @@ class AutoCodeDomainJava extends AutoCode
 				$has_many=$relationSpec["has_many"];
 				$has_many_effect="";
 				foreach ($has_many as $key=>$value) {
-				    $has_many_effect.="    public List<$key> $value"."s;\r\n";
+				    $has_many_effect.="    public List<$key> $value".";\r\n";
 					self::relation_class_package($key);
 				}
 				$result.="\r\n".
@@ -402,7 +402,7 @@ class AutoCodeDomainJava extends AutoCode
 				$many_many=$relationSpec["many_many"];
 				$many_many_effect="";
 				foreach ($many_many as $key=>$value) {
-				    $many_many_effect.="    public List<$key> $value"."s;\r\n";
+				    $many_many_effect.="    public List<$key> $value".";\r\n";
 					self::relation_class_package($key);
 				}
 				$result.="\r\n".
@@ -417,7 +417,7 @@ class AutoCodeDomainJava extends AutoCode
 				$belongs_many_many=$relationSpec["belongs_many_many"];
 				$belongs_many_many_effect="";
 				foreach ($belongs_many_many as $key=>$value) {
-				    $belongs_many_many_effect.="    public List<$key> $value"."s;\r\n";
+				    $belongs_many_many_effect.="    public List<$key> $value".";\r\n";
 					self::relation_class_package($key);
 				}
 				$result.="\r\n".

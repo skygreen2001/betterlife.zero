@@ -37,6 +37,6 @@ class Config_AutoCode extends ConfigBB
     /**
      * 显示前台生成报告
      */
-    const SHOW_REPORT_FRONT=false;
+    const SHOW_REPORT_FRONT=true;
 }
 ?>
