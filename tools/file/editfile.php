@@ -36,7 +36,7 @@
   echo '<a style="cursor:pointer;" onclick="window.history.back();">返回</a><br/>'; 
 ?>            
         <form method="post">                               
-            <textarea id="code" style="height: 350px; width: 100%;" name="code"><?php echo $content; ?></textarea>  
+            <textarea id="code" style="height: 510px; width: 100%;" name="code"><?php echo $content; ?></textarea>  
             <input type="hidden" name="f" value="<?php echo $edit_filename ?>" />
             <input type="submit" align="middle" value="确定" /> 
         </form>
