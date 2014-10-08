@@ -350,6 +350,7 @@ class AutoCodeModel extends AutoCode
 		{
 			$file_overwrite=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
 			$content=file_get_contents($model_save_dir.$file);
+			UtilFileSystem::createDir(dirname($file_overwrite));
 			file_put_contents($file_overwrite, $content);
 		}
 

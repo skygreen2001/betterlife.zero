@@ -12,6 +12,7 @@ if(isset($_REQUEST["model_save_dir"])&&!empty($_REQUEST["model_save_dir"])){
 
 	if(count($overwrite)>0)AutoCodeModel::overwrite($overwrite,$model_save_dir);
 	$_REQUEST["save_dir"]=$_REQUEST["model_save_dir"];
+	AutoCodePreviewReport::$is_first_run=false;
 }
 
 AutoCodeModel::UserInput();

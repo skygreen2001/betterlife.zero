@@ -34,5 +34,9 @@ class Config_AutoCode extends ConfigBB
      * 显示前期报告
      */
     const SHOW_PREVIEW_REPORT=true;
+    /**
+     * 显示前台生成报告
+     */
+    const SHOW_REPORT_FRONT=false;
 }
 ?>

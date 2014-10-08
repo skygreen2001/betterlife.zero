@@ -18,7 +18,10 @@ class AutoCodePreviewReport extends AutoCode
 	 * 应用:模板名称
 	 */
 	public static $m_model="model";
-
+	/**
+	 * 第一次运行
+	 */
+	public static $is_first_run=true;
 	public static $domain_files=array();
 	public static $enum_files=array();
 	public static $action_front_files=array();
@@ -90,7 +93,11 @@ MODEL;
 
 		$title="<a href='$layer_autocode/domain/db_domain.php' target='_blank' style='color:white;'>数据模型<Domain|Model></a>";
 		$moreContent=str_replace("[title]",$title,$module_model);
-		$moreContent=str_replace("[checked]","checked", $moreContent);
+		if(self::$is_first_run){
+			$moreContent=str_replace("[checked]","checked", $moreContent);
+		}else{
+			$moreContent=str_replace("[checked]","", $moreContent);
+		}
 		$moreContent=str_replace("[module_name]","domain",$moreContent);
 
 		$title="<a href='$layer_autocode/domain/db_domain.php' target='_blank'>实体数据对象类</a>";
@@ -112,7 +119,11 @@ MODEL;
 			}else{
 				$file_content=str_replace("[status]",$status[1], $file_content);
 			}
-			$file_content=str_replace("[checked]","checked", $file_content);
+			if(self::$is_first_run){
+				$file_content=str_replace("[checked]","checked", $file_content);
+			}else{
+				$file_content=str_replace("[checked]","", $file_content);
+			}
 			$file_content=str_replace("[module_name]","domain",$file_content);
 			$moreContent.=$file_content;
 		}
@@ -137,7 +148,11 @@ MODEL;
 			}else{
 				$file_content=str_replace("[status]",$status[1], $file_content);
 			}
-			$file_content=str_replace("[checked]","checked", $file_content);
+			if(self::$is_first_run){
+				$file_content=str_replace("[checked]","checked", $file_content);
+			}else{
+				$file_content=str_replace("[checked]","", $file_content);
+			}
 			$file_content=str_replace("[module_name]","domain",$file_content);
 			$moreContent.=$file_content;
 		}
@@ -145,7 +160,11 @@ MODEL;
 		$title="<a href='$dir_autocode/db_all.php' target='_blank' style='color:white;'>[后台]<使用ExtJs框架></a>";
 		$moreContent.=str_replace("[title]",$title,$module_model);
 		$moreContent=str_replace("[module_name]","bg",$moreContent);
-		$moreContent=str_replace("[checked]","checked", $moreContent);
+		if(self::$is_first_run){
+			$moreContent=str_replace("[checked]","checked", $moreContent);
+		}else{
+			$moreContent=str_replace("[checked]","", $moreContent);
+		}
 		//[后台]生成使用ExtJs框架的Service[后台]文件
 		if(self::$service_bg_files&&(count(self::$service_bg_files)>0)){
 			$title="<a href='$layer_autocode/db_service.php?type=3' target='_blank'>服务层文件</a>";
@@ -167,7 +186,11 @@ MODEL;
 			}else{
 				$file_content=str_replace("[status]",$status[1], $file_content);
 			}
-			$file_content=str_replace("[checked]","checked", $file_content);
+			if(self::$is_first_run){
+				$file_content=str_replace("[checked]","checked", $file_content);
+			}else{
+				$file_content=str_replace("[checked]","", $file_content);
+			}
 			$file_content=str_replace("[module_name]","bg",$file_content);
 			$moreContent.=$file_content;
 		}
@@ -187,7 +210,11 @@ MODEL;
 		}else{
 			$file_content=str_replace("[status]","<font color='green'>[新增加]</font>", $file_content);
 		}
-		$file_content=str_replace("[checked]","checked", $file_content);
+		if(self::$is_first_run){
+			$file_content=str_replace("[checked]","checked", $file_content);
+		}else{
+			$file_content=str_replace("[checked]","", $file_content);
+		}
 		$file_content=str_replace("[module_name]","bg",$file_content);
 		$moreContent.=$file_content;
 
@@ -206,7 +233,11 @@ MODEL;
 		}else{
 			$file_content=str_replace("[status]","<font color='green'>[新增加]</font>", $file_content);
 		}
-		$file_content=str_replace("[checked]","checked", $file_content);
+		if(self::$is_first_run){
+			$file_content=str_replace("[checked]","checked", $file_content);
+		}else{
+			$file_content=str_replace("[checked]","", $file_content);
+		}
 		$file_content=str_replace("[module_name]","bg",$file_content);
 		$moreContent.=$file_content;
 
@@ -226,7 +257,11 @@ MODEL;
 		}else{
 			$file_content=str_replace("[status]","<font color='green'>[新增加]</font>", $file_content);
 		}
-		$file_content=str_replace("[checked]","checked", $file_content);
+		if(self::$is_first_run){
+			$file_content=str_replace("[checked]","checked", $file_content);
+		}else{
+			$file_content=str_replace("[checked]","", $file_content);
+		}
 		$file_content=str_replace("[module_name]","bg",$file_content);
 		$moreContent.=$file_content;
 
@@ -243,7 +278,11 @@ MODEL;
 		}else{
 			$file_content=str_replace("[status]","<font color='green'>[新增加]</font>", $file_content);
 		}
-		$file_content=str_replace("[checked]","checked", $file_content);
+		if(self::$is_first_run){
+			$file_content=str_replace("[checked]","checked", $file_content);
+		}else{
+			$file_content=str_replace("[checked]","", $file_content);
+		}
 		$file_content=str_replace("[module_name]","bg",$file_content);
 		$moreContent.=$file_content;
 
@@ -269,7 +308,11 @@ MODEL;
 				$file_content=str_replace("[status]",$status[1], $file_content);
 			}
 
-			$file_content=str_replace("[checked]","checked", $file_content);
+			if(self::$is_first_run){
+				$file_content=str_replace("[checked]","checked", $file_content);
+			}else{
+				$file_content=str_replace("[checked]","", $file_content);
+			}
 			$file_content=str_replace("[module_name]","bg",$file_content);
 			$moreContent.=$file_content;
 		}
@@ -295,7 +338,11 @@ MODEL;
 			}else{
 				$file_content=str_replace("[status]",$status[1], $file_content);
 			}
-			$file_content=str_replace("[checked]","checked", $file_content);
+			if(self::$is_first_run){
+				$file_content=str_replace("[checked]","checked", $file_content);
+			}else{
+				$file_content=str_replace("[checked]","", $file_content);
+			}
 			$file_content=str_replace("[module_name]","bg",$file_content);
 			$moreContent.=$file_content;
 		}
@@ -311,12 +358,22 @@ MODEL;
 			$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 			$file_content=str_replace("[relative_file]",$file, $file_content);
 			if(file_exists($origin_file)){
-				$file_content=str_replace("[status]",$status[0], $file_content);
+				$file_content_old=file_get_contents($origin_file);
+				$file_content_new=file_get_contents(self::$save_dir.$file);
+				if($file_content_old==$file_content_new){
+					$file_content=str_replace("[status]",$status[2], $file_content);
+				}else{
+					$file_content=str_replace("[status]",$status[0], $file_content);
+				}
 			}else{
 				$file_content=str_replace("[status]",$status[1], $file_content);
 			}
 
-			$file_content=str_replace("[checked]","checked", $file_content);
+			if(self::$is_first_run){
+				$file_content=str_replace("[checked]","checked", $file_content);
+			}else{
+				$file_content=str_replace("[checked]","", $file_content);
+			}
 			$file_content=str_replace("[module_name]","bg",$file_content);
 			$moreContent.=$file_content;
 		}
@@ -337,94 +394,118 @@ MODEL;
 			$file_content=str_replace("[status]","<font color='green'>[新增加]</font>", $file_content);
 		}
 
-		$file_content=str_replace("[checked]","checked", $file_content);
+		if(self::$is_first_run){
+			$file_content=str_replace("[checked]","checked", $file_content);
+		}else{
+			$file_content=str_replace("[checked]","", $file_content);
+		}
 		$file_content=str_replace("[module_name]","bg",$file_content);
 		$moreContent.=$file_content;
 
-		$title="<a href='$dir_autocode/db_all.php' target='_blank' style='color:white;'>[前台]</a>";
-		$moreContent.=str_replace("[title]",$title,$module_model);
-		$moreContent=str_replace("[module_name]","front",$moreContent);
-		$moreContent=str_replace("[checked]","", $moreContent);
+		if (Config_AutoCode::SHOW_REPORT_FRONT)
+		{
+			$title="<a href='$dir_autocode/db_all.php' target='_blank' style='color:white;'>[前台]</a>";
+			$moreContent.=str_replace("[title]",$title,$module_model);
+			$moreContent=str_replace("[module_name]","front",$moreContent);
+			$moreContent=str_replace("[checked]","", $moreContent);
 
-		//生成标准方法的Service文件
-		if(self::$service_files&&(count(self::$service_files)>0)){
-			$title="<a href='$layer_autocode/db_service.php?type=2' target='_blank'>标准方法的服务层文件</a>";
+			//生成标准方法的Service文件
+			if(self::$service_files&&(count(self::$service_files)>0)){
+				$title="<a href='$layer_autocode/db_service.php?type=2' target='_blank'>标准方法的服务层文件</a>";
+				$moreContent.=str_replace("[title]",$title,$title_model);
+			}
+			foreach (self::$service_files as $file) {
+				$file_content=str_replace("[file]", self::$save_dir.$file, $model);
+				$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+				$file_content=str_replace("[origin_file]",$origin_file, $file_content);
+				$file_content=str_replace("[relative_file]",$file, $file_content);
+				if(file_exists($origin_file)){
+					$file_content_old=file_get_contents($origin_file);
+					$file_content_new=file_get_contents(self::$save_dir.$file);
+					if($file_content_old==$file_content_new){
+						$file_content=str_replace("[status]",$status[2], $file_content);
+					}else{
+						$file_content=str_replace("[status]",$status[0], $file_content);
+					}
+				}else{
+					$file_content=str_replace("[status]",$status[1], $file_content);
+				}
+				$file_content=str_replace("[checked]","", $file_content);
+				$file_content=str_replace("[module_name]","front",$file_content);
+				$moreContent.=$file_content;
+			}
+
+			//生成前台管理服务类
+			$title="<a href='$layer_autocode/db_service.php?type=2' target='_blank'>服务管理类</a>";
 			$moreContent.=str_replace("[title]",$title,$title_model);
-		}
-		foreach (self::$service_files as $file) {
+			$file=self::$manage_service_file;
 			$file_content=str_replace("[file]", self::$save_dir.$file, $model);
 			$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
 			$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 			$file_content=str_replace("[relative_file]",$file, $file_content);
-			if(file_exists($origin_file)){
-				$file_content=str_replace("[status]",$status[0], $file_content);
+			$file_content_old=file_get_contents($origin_file);
+			$file_content_new=file_get_contents(self::$save_dir.$file);
+			if($file_content_old==$file_content_new){
+				$file_content=str_replace("[status]",$status[2], $file_content);
 			}else{
-				$file_content=str_replace("[status]",$status[1], $file_content);
+				$file_content=str_replace("[status]","<font color='green'>[新增加]</font>", $file_content);
 			}
 			$file_content=str_replace("[checked]","", $file_content);
 			$file_content=str_replace("[module_name]","front",$file_content);
 			$moreContent.=$file_content;
-		}
 
-		//生成前台管理服务类
-		$title="<a href='$layer_autocode/db_service.php?type=2' target='_blank'>服务管理类</a>";
-		$moreContent.=str_replace("[title]",$title,$title_model);
-		$file=self::$manage_service_file;
-		$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-		$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
-		$file_content=str_replace("[origin_file]",$origin_file, $file_content);
-		$file_content=str_replace("[relative_file]",$file, $file_content);
-		$file_content_old=file_get_contents($origin_file);
-		$file_content_new=file_get_contents(self::$save_dir.$file);
-		if($file_content_old==$file_content_new){
-			$file_content=str_replace("[status]",$status[2], $file_content);
-		}else{
-			$file_content=str_replace("[status]","<font color='green'>[新增加]</font>", $file_content);
-		}
-		$file_content=str_replace("[checked]","", $file_content);
-		$file_content=str_replace("[module_name]","front",$file_content);
-		$moreContent.=$file_content;
-
-		// 生成前端Action，继承基本Action
-		if(self::$action_front_files&&(count(self::$action_front_files)>0)){
-			$title="<a href='$layer_autocode/db_action.php' target='_blank'>控制器</a>";
-			$moreContent.=str_replace("[title]",$title,$title_model);
-		}
-		foreach (self::$action_front_files as $file) {
-			$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-			$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
-			$file_content=str_replace("[origin_file]",$origin_file, $file_content);
-			$file_content=str_replace("[relative_file]",$file, $file_content);
-			if(file_exists($origin_file)){
-				$file_content=str_replace("[status]",$status[0], $file_content);
-			}else{
-				$file_content=str_replace("[status]",$status[1], $file_content);
+			// 生成前端Action，继承基本Action
+			if(self::$action_front_files&&(count(self::$action_front_files)>0)){
+				$title="<a href='$layer_autocode/db_action.php' target='_blank'>控制器</a>";
+				$moreContent.=str_replace("[title]",$title,$title_model);
 			}
-			$file_content=str_replace("[checked]","", $file_content);
-			$file_content=str_replace("[module_name]","front",$file_content);
-			$moreContent.=$file_content;
-		}
-
-		// 生成前台所需的表示层页面
-		if(self::$view_front_files&&(count(self::$view_front_files)>0)){
-			$title="<a href='$layer_autocode/view/db_view_default.php' target='_blank'>表示层页面</a>";
-			$moreContent.=str_replace("[title]",$title,$title_model);
-		}
-		foreach (self::$view_front_files as $file) {
-			$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-			$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
-			$file_content=str_replace("[origin_file]",$origin_file, $file_content);
-			$file_content=str_replace("[relative_file]",$file, $file_content);
-			if(file_exists($origin_file)){
-				$file_content=str_replace("[status]",$status[0], $file_content);
-			}else{
-				$file_content=str_replace("[status]",$status[1], $file_content);
+			foreach (self::$action_front_files as $file) {
+				$file_content=str_replace("[file]", self::$save_dir.$file, $model);
+				$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+				$file_content=str_replace("[origin_file]",$origin_file, $file_content);
+				$file_content=str_replace("[relative_file]",$file, $file_content);
+				if(file_exists($origin_file)){
+					$file_content_old=file_get_contents($origin_file);
+					$file_content_new=file_get_contents(self::$save_dir.$file);
+					if($file_content_old==$file_content_new){
+						$file_content=str_replace("[status]",$status[2], $file_content);
+					}else{
+						$file_content=str_replace("[status]",$status[0], $file_content);
+					}
+				}else{
+					$file_content=str_replace("[status]",$status[1], $file_content);
+				}
+				$file_content=str_replace("[checked]","", $file_content);
+				$file_content=str_replace("[module_name]","front",$file_content);
+				$moreContent.=$file_content;
 			}
-			$file_content=str_replace("[checked]","", $file_content);
-			$file_content=str_replace("[module_name]","front",$file_content);
-			$moreContent.=$file_content;
-		}
 
+			// 生成前台所需的表示层页面
+			if(self::$view_front_files&&(count(self::$view_front_files)>0)){
+				$title="<a href='$layer_autocode/view/db_view_default.php' target='_blank'>表示层页面</a>";
+				$moreContent.=str_replace("[title]",$title,$title_model);
+			}
+			foreach (self::$view_front_files as $file) {
+				$file_content=str_replace("[file]", self::$save_dir.$file, $model);
+				$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+				$file_content=str_replace("[origin_file]",$origin_file, $file_content);
+				$file_content=str_replace("[relative_file]",$file, $file_content);
+				if(file_exists($origin_file)){
+					$file_content_old=file_get_contents($origin_file);
+					$file_content_new=file_get_contents(self::$save_dir.$file);
+					if($file_content_old==$file_content_new){
+						$file_content=str_replace("[status]",$status[2], $file_content);
+					}else{
+						$file_content=str_replace("[status]",$status[0], $file_content);
+					}
+				}else{
+					$file_content=str_replace("[status]",$status[1], $file_content);
+				}
+				$file_content=str_replace("[checked]","", $file_content);
+				$file_content=str_replace("[module_name]","front",$file_content);
+				$moreContent.=$file_content;
+			}
+		}
 		$model_module=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.self::$m_model.DIRECTORY_SEPARATOR;
 		if(is_dir($model_module)){
 			$title="<a href='$dir_autocode/db_all.php' target='_blank' style='color:white;'>[通用模板]</a>";
