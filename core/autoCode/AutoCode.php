@@ -10,6 +10,10 @@
 class AutoCode extends Object
 {
 	/**
+	 * 显示生成前结果
+	 */
+	public static $showPreviewReport;
+	/**
 	 * 显示生成结果
 	 */
 	public static $showReport;

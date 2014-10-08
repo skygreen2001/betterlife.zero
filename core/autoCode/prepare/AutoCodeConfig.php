@@ -25,6 +25,10 @@ class AutoCodeConfig extends AutoCode
 	 * 代码生成配置xml文件名
 	 */
 	private static $filename_config_xml;
+	/**
+	 * 代码生成配置xml网络路径
+	 */
+	private static $url_config_xml;
 
 //<editor-fold defaultstate="collapsed" desc="数据结构转换成配置xml文件">
 	/**
@@ -33,6 +37,7 @@ class AutoCodeConfig extends AutoCode
 	public static function init()
 	{
 		self::$filename_config_xml=Gc::$nav_root_path."tools".DIRECTORY_SEPARATOR."tools".DIRECTORY_SEPARATOR."autoCode".DIRECTORY_SEPARATOR."autocode.config.xml";
+		self::$url_config_xml     =Gc::$url_base."tools/tools/autoCode/autocode.config.xml";
 		parent::init();
 	}
 
@@ -46,7 +51,12 @@ class AutoCodeConfig extends AutoCode
 	public static function run($table_names="")
 	{
 		$filename=self::$filename_config_xml;
-		if (file_exists($filename))$filename=dirname($filenamepath)."autocode_create.config.xml";
+		if ((!Config_AutoCode::ALWAYS_AUTOCODE_XML_NEW)&&file_exists($filename))
+		{
+			$filename=dirname($filenamepath)."autocode_create.config.xml";
+			self::$filename_config_xml=$filename;
+			self::$url_config_xml=Gc::$url_base."tools/tools/autoCode/autocode_create.config.xml";
+		}
 
 		self::$config_classes=array("class"=>array());
 		self::$table_key_map=array();
@@ -86,14 +96,14 @@ class AutoCodeConfig extends AutoCode
 		}
 
 		$relation_keys=array("has_one","belong_has_one","has_many","many_many","belongs_many_many");
-		foreach (self::$fieldInfos as $tablename=>$fieldInfo){
+		foreach ($fieldInfos as $tablename=>$fieldInfo){
 			$classname=self::getClassname($tablename);
 			foreach ($relation_keys as  $relation_key) {
 				self::$config_classes["class"][self::$table_key_map[$classname]][$relation_key]=array(
 				);
 			}
 		}
-		foreach (self::$fieldInfos as $tablename=>$fieldInfo){
+		foreach ($fieldInfos as $tablename=>$fieldInfo){
 			$classname=self::getClassname($tablename);
 			$current_class_config= self::$config_classes["class"][self::$table_key_map[$classname]];
 			foreach ($relation_keys as  $relation_key) {
@@ -106,7 +116,7 @@ class AutoCodeConfig extends AutoCode
 			}
 			self::$config_classes["class"][self::$table_key_map[$classname]]=$current_class_config;
 		}
-		foreach (self::$fieldInfos as $tablename=>$fieldInfo){
+		foreach ($fieldInfos as $tablename=>$fieldInfo){
 			foreach ($relation_keys as $relation_key) {
 				$t_k_m=self::$table_key_map[$classname];
 				$c_c=self::$config_classes["class"][$t_k_m];
@@ -117,7 +127,12 @@ class AutoCodeConfig extends AutoCode
 			}
 		}
 		$result =UtilArray::saveXML($filename,self::$config_classes,"classes");
-		echo "&nbsp;&nbsp;成功生成配置文件：".$filename."<br /><br />";
+		self::$showPreviewReport.= "<div style='width: 1000px; margin-left: 80px;'>";
+		self::$showPreviewReport.= "<a href='javascript:' style='cursor:pointer;' onclick=\"(document.getElementById('showCreateConfigXml').style.display=(document.getElementById('showCreateConfigXml').style.display=='none')?'':'none')\">显示生成代码配置文件报告</a>";
+		self::$showPreviewReport.= "<div id='showCreateConfigXml' style='display: none;'>";
+		self::$showPreviewReport.= "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;成功生成配置文件：<font color='#0000FF'><a target='_blank' href='".self::$url_config_xml."'>".$filename."</a></font><br /><br />";
+		self::$showPreviewReport.= "</div>";
+		self::$showPreviewReport.= "</div>";
 		return true;
 	}
 

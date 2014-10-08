@@ -26,5 +26,13 @@ class Config_AutoCode extends ConfigBB
      * 主要是因为中间表的has_many生成后台显示js花费时间较长。
      */
     const AUTOCONFIG_CREATE_FULL=true;
+    /**
+     * 每次都生成代码生成配置文件
+     */
+    const ALWAYS_AUTOCODE_XML_NEW=true;
+    /**
+     * 显示前期报告
+     */
+    const SHOW_PREVIEW_REPORT=true;
 }
 ?>

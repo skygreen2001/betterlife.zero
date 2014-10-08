@@ -21,8 +21,9 @@ class AutoCodeModel extends AutoCode
 		$dest_directory=Gc::$nav_root_path."tools".DIRECTORY_SEPARATOR."tools".DIRECTORY_SEPARATOR."autoCode".DIRECTORY_SEPARATOR;
 		$filename=$dest_directory."autocode.config.xml";
 		AutoCodeValidate::run($table_names);
+		if(Config_AutoCode::ALWAYS_AUTOCODE_XML_NEW)AutoCodeConfig::run();
 		if (!file_exists($filename)){
-			AutoCodeConfig::run($table_names);
+			AutoCodeConfig::run();
 			die("&nbsp;&nbsp;自动生成代码的配置文件已生成，请再次运行以生成所有web应用代码！");
 		}
 		self::$showReport.=AutoCodeFoldHelper::foldEffectReady();
