@@ -324,15 +324,16 @@ class AutoCodeService extends AutoCode
 
 	/**
 	 * 用户输入需求
+	 * @param $default_value 默认值
 	 */
-	public static function UserInput($title=null,$inputArr=null)
+	public static function UserInput($default_value)
 	{
 		$inputArr=array(
-			"1"=>"继承具有标准方法的Service。",
-			"2"=>"生成标准方法的Service。",
-			"3"=>"生成ExtJs框架使用的Service【后台】。"
+			"2"=>"生成标准方法的Service",
+			"1"=>"继承具有标准方法的Service",
+			"3"=>"生成ExtJs框架使用的Service"
 		);
-		parent::UserInput("需要定义生成服务类的输出文件路径参数",$inputArr);
+		parent::UserInput("一键生成服务类定义层",$inputArr,$default_value);
 	}
 
 	/**

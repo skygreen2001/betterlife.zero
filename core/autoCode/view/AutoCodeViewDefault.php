@@ -105,14 +105,15 @@ class AutoCodeViewDefault extends AutoCode
 
 	/**
 	 * 用户输入需求
+	 * @param $default_value 默认值
 	 */
-	public static function UserInput($title=null,$inputArr=null)
+	public static function UserInput($default_value="")
 	{
 		$inputArr=array(
-			"0"=>"生成前台所需的表示层页面。",
-			"1"=>"生成标准的增删改查模板所需的表示层页面。"
+			"0"=>"生成前台所需的表示层页面",
+			"1"=>"生成标准的增删改查模板所需的表示层页面"
 		);
-		return parent::UserInput("默认生成前台所需的表示层页面[用于前台]的输出文件路径参数",$inputArr);
+		return parent::UserInput("一键生成表示层页面",$inputArr,$default_value);
 	}
 
 	/**

@@ -88,9 +88,8 @@ class AutoCodeModel extends AutoCode
 	/**
 	 * 用户输入需求
 	 */
-	public static function UserInput($title=null,$inputArr=null)
+	public static function UserInput()
 	{
-
 		$default_dir=Gc::$nav_root_path."model".DIRECTORY_SEPARATOR;
 		self::$save_dir=$default_dir;
 		self::init();
@@ -99,8 +98,8 @@ class AutoCodeModel extends AutoCode
 		foreach (self::$tableList as $tablename) {
 			$inputArr[$tablename]=$tablename;
 		}
-		echo  "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\r\n
-				<html lang=\"zh-CN\" xml:lang=\"zh-CN\" xmlns=\"http://www.w3.org/1999/xhtml\">\r\n";
+		echo  "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>\r\n
+				<html lang='zh-CN' xml:lang='zh-CN' xmlns='http://www.w3.org/1999/xhtml'>\r\n";
 		echo "<head>\r\n";
 		echo UtilCss::form_css()."\r\n";
 		$url_base=UtilNet::urlbase();
@@ -110,17 +109,17 @@ class AutoCodeModel extends AutoCode
 		echo "<div align='center' height='450'>\r\n";
 		echo "<form>\r\n";
 		echo "  <div style='line-height:1.5em;'>\r\n";
-		echo "      <label>输出文件路径:</label><input style=\"width:400px;text-align:left;padding-left:10px;\" type=\"text\" name=\"save_dir\" value=\"$default_dir\" id=\"save_dir\" />\r\n";
+		echo "      <label>输出文件路径:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' name='save_dir' value='$default_dir' id='save_dir' />\r\n";
 		if (!empty($inputArr)){
 			echo "<br/><br/>\r\n
-					<label>&nbsp;&nbsp;&nbsp;选择需要生成的表:</label><select multiple='multiple' size='8' style='height:320px;' name=\"table_names[]\">\r\n";
+					<label>&nbsp;&nbsp;&nbsp;选择需要生成的表:</label><select multiple='multiple' size='8' style='height:320px;' name='table_names[]'>\r\n";
 			foreach ($inputArr as $key=>$value) {
 				echo "        <option value='$key'>$value</option>\r\n";
 			}
 			echo "      </select>\r\n";
 		}
 		echo "  </div>\r\n";
-		echo "  <input type=\"submit\" value='生成' /><br/>\r\n";
+		echo "  <input type='submit' value='生成' /><br/>\r\n";
 		echo "</form>\r\n";
 		echo "</div>\r\n";
 		echo "</body>\r\n";

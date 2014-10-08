@@ -100,7 +100,7 @@ HTMLCONTENT;
 	}
 
 	/**
-	 * 折叠前半部分:生成Action类[前端和后端]
+	 * 折叠前半部分:生成Action类[增删改查模板、前端和后端]
 	 */
 	public static function foldbeforeaction()
 	{
@@ -112,7 +112,7 @@ HTMLCONTENT;
 
 
 	/**
-	 * 折叠前半部分:生成Action类[前端和后端]
+	 * 折叠前半部分:生成Action类[生成前端Action，继承基本Action]
 	 */
 	public static function foldbeforeaction0()
 	{
@@ -122,7 +122,7 @@ HTMLCONTENT;
 	}
 
 	/**
-	 * 折叠前半部分:生成Action类[前端和后端]
+	 * 折叠前半部分:生成Action类[生成标准的增删改查模板Action，继承基本Action:]
 	 */
 	public static function foldbeforeaction1()
 	{
@@ -132,7 +132,7 @@ HTMLCONTENT;
 	}
 
 	/**
-	 * 折叠后半部分:生成Action类[前端和后端]
+	 * 折叠后半部分:生成Action类[增删改查模板、前端和后端]
 	 */
 	public static function foldafteraction()
 	{

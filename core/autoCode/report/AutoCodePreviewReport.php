@@ -63,9 +63,11 @@ class AutoCodePreviewReport extends AutoCode
 	 */
 	public static function showReport($table_names="")
 	{
-		$file ="C:\wamp\www\betterlife\model\betterlife\src\domain\core\Blog.php";
-		$origin_file="C:\wamp\www\betterlife\home\betterlife\src\domain\core\Blog.php";
+		$file ="";
+		$origin_file="";
 		$url_base=Gc::$url_base;
+		$dir_autocode=$url_base."tools/tools/autoCode";
+		$layer_autocode=$dir_autocode."/layer";
 		$url_base=substr($url_base,0,strlen($url_base)-1);
 
 		$module_model=<<<MODEL
@@ -86,12 +88,12 @@ MODEL;
 MODEL;
 		$status=array("<font color='red'>[会覆盖]</font>","<font color='green'>[新生成]</font>","[未修改]");
 
-		$title="数据模型<Domain|Model>";
+		$title="<a href='$layer_autocode/domain/db_domain.php' target='_blank' style='color:white;'>数据模型<Domain|Model></a>";
 		$moreContent=str_replace("[title]",$title,$module_model);
 		$moreContent=str_replace("[checked]","checked", $moreContent);
 		$moreContent=str_replace("[module_name]","domain",$moreContent);
 
-		$title="实体数据对象类";
+		$title="<a href='$layer_autocode/domain/db_domain.php' target='_blank'>实体数据对象类</a>";
 		$moreContent.=str_replace("[title]",$title,$title_model);
 		//[前台]生成实体数据对象
 		foreach (self::$domain_files as $file) {
@@ -110,7 +112,7 @@ MODEL;
 		}
 		//[前台]生成枚举类型
 		if(self::$enum_files&&(count(self::$enum_files)>0)){
-			$title="枚举类型类";
+			$title="<a href='$layer_autocode/db_domain.php' target='_blank'>枚举类型类</a>";
 			$moreContent.=str_replace("[title]",$title,$title_model);
 		}
 		foreach (self::$enum_files as $file) {
@@ -128,13 +130,13 @@ MODEL;
 			$moreContent.=$file_content;
 		}
 
-		$title="[后台]<使用ExtJs框架>";
+		$title="<a href='$dir_autocode/db_all.php' target='_blank' style='color:white;'>[后台]<使用ExtJs框架></a>";
 		$moreContent.=str_replace("[title]",$title,$module_model);
 		$moreContent=str_replace("[module_name]","bg",$moreContent);
 		$moreContent=str_replace("[checked]","checked", $moreContent);
 		//[后台]生成使用ExtJs框架的Service[后台]文件
 		if(self::$service_bg_files&&(count(self::$service_bg_files)>0)){
-			$title="服务层文件";
+			$title="<a href='$layer_autocode/db_service.php?type=3' target='_blank'>服务层文件</a>";
 			$moreContent.=str_replace("[title]",$title,$title_model);
 		}
 		foreach (self::$service_bg_files as $file) {
@@ -153,7 +155,7 @@ MODEL;
 		}
 
 		//[后台]生成后台管理服务类
-		$title="服务管理类";
+		$title="<a href='$layer_autocode/db_service.php?type=3' target='_blank'>服务管理类</a>";
 		$moreContent.=str_replace("[title]",$title,$title_model);
 		$file=self::$bg_manage_service_ext_file;
 		$file_content=str_replace("[file]", self::$save_dir.$file, $model);
@@ -172,7 +174,7 @@ MODEL;
 		$moreContent.=$file_content;
 
 		//[后台]生成后台服务配置文件:service.config.xml
-		$title="服务配置文件";
+		$title="<a href='$layer_autocode/db_service.php?type=3' target='_blank'>服务配置文件</a>";
 		$moreContent.=str_replace("[title]",$title,$title_model);
 		$file=self::$bg_service_xml_file;
 		$file_content=str_replace("[file]", self::$save_dir.$file, $model);
@@ -191,7 +193,7 @@ MODEL;
 		$moreContent.=$file_content;
 
 		//[后台]控制器Action文件
-		$title="控制器<Action文件>";
+		$title="<a href='$layer_autocode/db_action.php?type=2' target='_blank'>控制器<Action文件></a>";
 		$moreContent.=str_replace("[title]",$title,$title_model);
 		//[后台]核心代码控制器
 		$file=self::$bg_action_index_file;
@@ -229,7 +231,7 @@ MODEL;
 
 		//[后台]生成后端tpl模板显示文件导出
 		if(self::$view_bg_files&&(count(self::$view_bg_files)>0)){
-			$title="显示层文件";
+			$title="<a href='$layer_autocode/view/db_view_ext.php' target='_blank'>显示层文件</a>";
 			$moreContent.=str_replace("[title]",$title,$title_model);
 		}
 		foreach (self::$view_bg_files as $file) {
@@ -250,7 +252,7 @@ MODEL;
 
 		//[后台]采用ExtJs框架生成后端Js文件导出
 		if(self::$bg_ext_js_files&&(count(self::$bg_ext_js_files)>0)){
-			$title="Js文件<显示层核心>";
+			$title="<a href='$layer_autocode/view/db_view_ext.php' target='_blank'>Js文件<显示层核心></a>";
 			$moreContent.=str_replace("[title]",$title,$title_model);
 		}
 		foreach (self::$bg_ext_js_files as $file) {
@@ -270,7 +272,7 @@ MODEL;
 
 		//[后台]生成Ajax请求php文件:
 		if(self::$bg_ajax_php_files&&(count(self::$bg_ajax_php_files)>0)){
-			$title="Ajax请求php文件";
+			$title="<a href='$layer_autocode/view/db_view_ext.php' target='_blank'>Ajax请求php文件</a>";
 			$moreContent.=str_replace("[title]",$title,$title_model);
 		}
 		foreach (self::$bg_ajax_php_files as $file) {
@@ -290,7 +292,7 @@ MODEL;
 		}
 
 		//[后台]在admin/src/view/menu目录下菜单配置文件:menu.config.xml里添加没有的代码
-		$title="左侧菜单配置文件";
+		$title="<a href='$layer_autocode/view/db_view_ext.php' target='_blank'>左侧菜单配置文件</a>";
 		$moreContent.=str_replace("[title]",$title,$title_model);
 		$file=self::$bg_menu_xml_file;
 		$file_content=str_replace("[file]", self::$save_dir.$file, $model);
@@ -309,13 +311,14 @@ MODEL;
 		$file_content=str_replace("[module_name]","bg",$file_content);
 		$moreContent.=$file_content;
 
-		$title="[前台]";
+		$title="<a href='$dir_autocode/db_all.php' target='_blank' style='color:white;'>[前台]</a>";
 		$moreContent.=str_replace("[title]",$title,$module_model);
 		$moreContent=str_replace("[module_name]","front",$moreContent);
 		$moreContent=str_replace("[checked]","", $moreContent);
+
 		//生成标准方法的Service文件
 		if(self::$service_files&&(count(self::$service_files)>0)){
-			$title="标准方法的服务层文件";
+			$title="<a href='$layer_autocode/db_service.php?type=2' target='_blank'>标准方法的服务层文件</a>";
 			$moreContent.=str_replace("[title]",$title,$title_model);
 		}
 		foreach (self::$service_files as $file) {
@@ -334,7 +337,7 @@ MODEL;
 		}
 
 		//生成前台管理服务类
-		$title="服务管理类";
+		$title="<a href='$layer_autocode/db_service.php?type=2' target='_blank'>服务管理类</a>";
 		$moreContent.=str_replace("[title]",$title,$title_model);
 		$file=self::$manage_service_file;
 		$file_content=str_replace("[file]", self::$save_dir.$file, $model);
@@ -354,7 +357,7 @@ MODEL;
 
 		// 生成前端Action，继承基本Action
 		if(self::$action_front_files&&(count(self::$action_front_files)>0)){
-			$title="控制器";
+			$title="<a href='$layer_autocode/db_action.php' target='_blank'>控制器</a>";
 			$moreContent.=str_replace("[title]",$title,$title_model);
 		}
 		foreach (self::$action_front_files as $file) {
@@ -374,7 +377,7 @@ MODEL;
 
 		// 生成前台所需的表示层页面
 		if(self::$view_front_files&&(count(self::$view_front_files)>0)){
-			$title="表示层页面";
+			$title="<a href='$layer_autocode/view/db_view_default.php' target='_blank'>表示层页面</a>";
 			$moreContent.=str_replace("[title]",$title,$title_model);
 		}
 		foreach (self::$view_front_files as $file) {
@@ -394,14 +397,14 @@ MODEL;
 
 		$model_module=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.self::$m_model.DIRECTORY_SEPARATOR;
 		if(is_dir($model_module)){
-			$title="[通用模板]";
+			$title="<a href='$dir_autocode/db_all.php' target='_blank' style='color:white;'>[通用模板]</a>";
 			$moreContent.=str_replace("[title]",$title,$module_model);
 			$moreContent=str_replace("[module_name]","model",$moreContent);
 			$moreContent=str_replace("[checked]","", $moreContent);
 
 			// 生成标准的增删改查模板Action，继承基本Action
 			if(self::$action_model_files&&(count(self::$action_model_files)>0)){
-				$title="控制器";
+				$title="<a href='$layer_autocode/db_action.php?type=1' target='_blank'>控制器</a>";
 				$moreContent.=str_replace("[title]",$title,$title_model);
 			}
 			foreach (self::$action_model_files as $file) {
@@ -426,7 +429,7 @@ MODEL;
 			}
 
 			//生成首页
-			$title="模板首页";
+			$title="<a href='$layer_autocode/view/db_view_default.php?type=1' target='_blank'>模板首页</a>";
 			$moreContent.=str_replace("[title]",$title,$title_model);
 			$file=self::$model_index_file;
 			$file_content=str_replace("[file]", self::$save_dir.$file, $model);
@@ -446,7 +449,7 @@ MODEL;
 
 			// 生成标准的增删改查模板表示层页面
 			if(self::$view_model_files&&(count(self::$view_model_files)>0)){
-				$title="表示层页面";
+				$title="<a href='$layer_autocode/view/db_view_default.php?type=1' target='_blank'>表示层页面</a>";
 				$moreContent.=str_replace("[title]",$title,$title_model);
 			}
 			foreach (self::$view_model_files as $file) {

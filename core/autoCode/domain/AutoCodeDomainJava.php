@@ -47,40 +47,44 @@ class AutoCodeDomainJava extends AutoCode
 		self::$app_dir=Gc::$appName;
 		self::$domain_dir_full=self::$save_dir.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR.self::$domain_dir.DIRECTORY_SEPARATOR;
 		self::init();
-		if (self::$isNoOutputCss)echo UtilCss::form_css()."\r\n";
+		if (self::$isOutputCss)self::$showReport.= UtilCss::form_css()."\r\n";
 		self::$enumClass="";
-		echo '<div id="Content_11" style="display:none;">';
+		self::$showReport.= '<div id="Content_11" style="display:none;">';
+		$link_domain_dir_href="file:///".str_replace("\\", "/", self::$domain_dir_full);
+		self::$showReport.= "<font color='#AAA'>存储路径:<a target='_blank' href='".$link_domain_dir_href."'>".self::$domain_dir_full."</a></font><br/><br/>";
+
 		foreach (self::$fieldInfos as $tablename=>$fieldInfo){
-		   //print_r($fieldInfo);
-		   //echo("<br/>");
 		   $defineJavaFileContent=self::tableToDataObjectDefine($tablename,$fieldInfo);
 		   if (isset(self::$save_dir)&&!empty(self::$save_dir)&&isset($defineJavaFileContent)){
 			   $classname=self::saveDataObjectDefineToDir($tablename,$defineJavaFileContent);
-			   echo "生成导出完成:$tablename=>$classname!<br/>";
+			   self::$showReport.= "生成导出完成:$tablename=>$classname!<br/>";
 		   }else{
-			   echo $defineJavaFileContent."<br/>";
+			   self::$showReport.= $defineJavaFileContent."<br/>";
 		   }
 		   self::tableToEnumClass($tablename,$fieldInfo);
 		}
-		echo "</div><br/>";
-		AutoCodeFoldHelper::foldEffectCommon("Content_12");
-		echo "<font color='#FF0000'>生成枚举类型:</font><br/>";
-		echo '</a>';
-		echo '<div id="Content_12" style="display:none;">';
-		echo self::$enumClass;
-		echo "</div>";
+		self::$showReport.= "</div><br/>";
+		self::$showReport.= AutoCodeFoldHelper::foldEffectCommon("Content_12");
+		self::$showReport.= "<font color='#FF0000'>生成枚举类型:</font><br/>";
+		self::$showReport.= '</a>';
+		self::$showReport.= '<div id="Content_12" style="display:none;">';
+		self::$showReport.= "<font color='#AAA'>存储路径:<a target='_blank' href='".$link_domain_dir_href.self::$enum_dir."'>".self::$domain_dir_full.self::$enum_dir."</a></font><br/><br/>";
+		self::$showReport.= self::$enumClass;
+		self::$showReport.= "</div>";
 	}
 
 	/**
 	 * 用户输入需求
 	 */
-	public static function UserInput($title=null,$inputArr=null)
+	public static function UserInput()
 	{
 		$inputArr=array(
 			"1"=>"对象属性都是private,定义setter和getter方法。",
 			"2"=>"所有的列定义的对象属性都是public"
 		);
-		parent::UserInput("需要定义生成Java实体类的输出文件路径参数",$inputArr);
+		$db_domian_php=Gc::$url_base."tools/tools/autoCode/layer/domain/db_domain.php";
+		$more_content="<br/><br/><a href='$db_domian_php' target='_blank'>生成本框架使用的数据对象实体类</a>";
+		parent::UserInput("一键生成Java实体类数据对象定义层",$inputArr,"1",$more_content);
 	}
 
 	/**

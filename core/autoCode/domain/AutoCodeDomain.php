@@ -70,14 +70,18 @@ class AutoCodeDomain extends AutoCode
 
 	/**
 	 * 用户输入需求
+	 * @param $default_value 默认值
 	 */
-	public static function UserInput($title=null,$inputArr=null)
+	public static function UserInput($default_value="")
 	{
+		$db_domian_java=Gc::$url_base."tools/tools/autoCode/layer/domain/db_domain_java.php";
 		$inputArr=array(
-			"1"=>"对象属性都是private,定义setter和getter方法。",
+			"1"=>"对象属性都是private,定义setter和getter方法",
 			"2"=>"所有的列定义的对象属性都是public"
 		);
-		parent::UserInput("需要定义生成实体类的输出文件路径参数",$inputArr);
+		$more_content="<br/><br/><a href='$db_domian_java' target='_blank'>生成Java实体类</a>";
+		parent::UserInput("一键生成数据对象定义实体类层",$inputArr,$default_value,$more_content);
+
 	}
 
 	/**

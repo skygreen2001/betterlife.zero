@@ -234,15 +234,16 @@ class AutoCodeAction extends AutoCode
 
 	/**
 	 * 用户输入需求
+	 * @param $default_value 默认值
 	 */
-	public static function UserInput($title=null,$inputArr=null)
+	public static function UserInput($default_value="")
 	{
 		$inputArr=array(
-			"0"=>"前端Action，继承基本Action。",
-			"1"=>"生成标准的增删改查模板Action，继承ActionModel。",
-			"2"=>"后端Action，继承ActionExt"
+			"0"=>"前端Action,继承基本Action",
+			"1"=>"生成标准的增删改查模板Action,继承ActionModel",
+			"2"=>"后端Action,继承ActionExt"
 		);
-		parent::UserInput("需要定义生成控制器Action类的输出文件路径参数",$inputArr);
+		parent::UserInput("一键生成控制器Action类定义层",$inputArr,$default_value);
 	}
 
 	/**

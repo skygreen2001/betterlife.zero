@@ -315,21 +315,17 @@ class AutoCode extends Object
 	 * 用户输入需求
 	 * @param $title 标题
 	 * @param $inputArr 输入用户需求的选项
-	 * @param $more_content 更多显示内容
+	 * @param $default_value 默认值
+	 * @param $more_content 更多个性化内容
 	 */
-	protected static function UserInput($title,$inputArr=null,$more_content="")
+	protected static function UserInput($title,$inputArr=null,$default_value="",$more_content="")
 	{
-		/**
-		 * javascript文件夹选择框的两种解决方案,这里选择了第一种
-		 * @link http://www.blogjava.net/supercrsky/archive/2008/06/17/208641.html
-		 */
 		ob_clean();
 		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 				<html lang="zh-CN" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">';
 		echo "<head>\r\n";
 		echo UtilCss::form_css()."\r\n";
 		$url_base=UtilNet::urlbase();
-		//echo "<script type='text/javascript' src='".$url_base."common/js/util/file.js'></script>";
 		echo "</head>";
 		echo "<body>";
 		echo "<br/><br/><br/><br/><br/><h1 align='center'>$title</h1>";
@@ -337,30 +333,21 @@ class AutoCode extends Object
 		echo "<form id='autocodeForm' target='_blank'>";
 		echo "  <div style='line-height:1.5em;'>";
 		$default_dir=Gc::$nav_root_path."model".DIRECTORY_SEPARATOR;
-		echo "      <label>输出文件路径:</label><input style=\"width:400px;text-align:left;padding-left:10px;\" type=\"text\" name=\"save_dir\" value=\"$default_dir\" id=\"save_dir\" />";
-/*		$browser=getbrowser();
-		if (contain($browser,"Internet Explorer")){
-			echo "			<input type=\"button\" onclick=\"browseFolder('save_dir')\" value=\"浏览...\" /><br/><br/>";
-		}*/
+		echo "      <label>输出文件路径:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' name='save_dir' value='$default_dir' id='save_dir' />";
+
 		if (!empty($inputArr)){
 			echo "<br/><br/>
-					<label>&nbsp;&nbsp;&nbsp;生成模式:</label><select name=\"type\">";
+					<label>&nbsp;&nbsp;&nbsp;生成模式:</label><select name='type'>";
 			foreach ($inputArr as $key=>$value) {
-				echo "        <option value='$key'>$value</option>";
+				$selectd="";
+				if($default_value==$key)$selectd="selected='selected'";
+				echo "        <option value='$key' $selectd>$value</option>";
 			}
 			echo "      </select>";
 		}
 		echo "  </div>";
-		echo "  <input type=\"submit\" value='生成' /><br/>";
+		echo "  <input type='submit' value='生成' /><br/>";
 		echo $more_content;
-/*		if (contain($browser,"Internet Explorer")){
-			echo "  <p id='indexPage'>说明： <br/>
-					* 可手动输入文件路径，也可选择浏览指定文件夹。<br/>
-					* 如果您希望选择指定文件夹，特别注意的是,由于安全方面的问题,你还需要如下设置才能使本JS代码正确运行,否则会出现\"没有权限\"的问题。<br/>
-					1.设置可信任站点（例如本地的可以为：http://localhost）<br/>
-					2.其次：可信任站点安全级别自定义设置中：设置下面的选项<br/>
-					\"对没有标记为安全的ActiveX控件进行初始化和脚本运行\"----\"启用\"</p>";
-		}*/
 		echo "</form>";
 		echo "</div>";
 		echo "</body>";

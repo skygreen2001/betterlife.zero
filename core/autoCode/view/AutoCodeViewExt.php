@@ -143,10 +143,11 @@ class AutoCodeViewExt extends AutoCode
 
 	/**
 	 * 用户输入需求
+	 * @param $default_value 默认值
 	 */
-	public static function UserInput($title=null,$inputArr=null)
+	public static function UserInput($default_value)
 	{
-		parent::UserInput("使用ExtJs框架生成表示层【用于后台】的输出文件路径参数");
+		parent::UserInput("一键生成后台表示层<使用ExtJs框架>",$default_value);
 	}
 
 	/**

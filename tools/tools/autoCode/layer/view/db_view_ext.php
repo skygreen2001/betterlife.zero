@@ -47,7 +47,14 @@ if (isset($_REQUEST["save_dir"])&&!empty($_REQUEST["save_dir"]))
 			}
 		}
 	}
+    AutoCodeViewExt::$showReport="";
+	AutoCodeViewExt::$showReport.=AutoCodeFoldHelper::foldEffectReady();
+	AutoCodeViewExt::$showReport.="<br/>";
+	AutoCodeViewExt::$showReport.=AutoCodeFoldHelper::foldbeforeaction();
 	AutoCodeViewExt::AutoCode();
+	AutoCodeViewExt::$showReport.="<br/>";
+	AutoCodeViewExt::$showReport.=AutoCodeFoldHelper::foldafteraction();
+    echo AutoCodeViewExt::$showReport;
 }  else {
 	AutoCodeViewExt::UserInput();
 }
