@@ -193,7 +193,6 @@ class AutoCodeViewExt extends AutoCode
 						$key_i=$key;
 						$key_i{0}=strtolower($key_i{0});
 						$classname=$key;
-						$classname{0}=strtolower($classname{0});
 
 						$fieldInfo=self::$fieldInfos[self::getTablename($key)];
 						if (array_key_exists("parent_id",$fieldInfo)){
@@ -241,6 +240,7 @@ class AutoCodeViewExt extends AutoCode
 							}
 						}
 
+						$classname{0}=strtolower($classname{0});
 						$filename =$classname.Config_F::SUFFIX_FILE_PHP;
 						if (!file_exists(self::$ajax_dir_full.$filename)){
 							$result="<?php \r\n".
