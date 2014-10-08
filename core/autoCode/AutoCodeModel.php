@@ -92,6 +92,7 @@ class AutoCodeModel extends AutoCode
 	{
 		$default_dir=Gc::$nav_root_path."model".DIRECTORY_SEPARATOR;
 		self::$save_dir=$default_dir;
+
 		self::init();
 		$title="一键生成指定表前后台所有模板";
 		$inputArr=array();
@@ -257,6 +258,7 @@ class AutoCodeModel extends AutoCode
 		{
 			$tableList=self::tableListByTable_names($table_names);
 			$content=file_get_contents($file_bg_service_xml_file);
+			$oldcontent=$content;
 			foreach($tableList as $tablename){
 				$classname=self::getClassname($tablename);
 				if(!contain($content,"<service name=\"ExtService{$classname}\">")){
@@ -266,9 +268,11 @@ class AutoCodeModel extends AutoCode
 					$content=$ctrl."\r\n".$section_content.ltrim($ctrr);
 				}
 			}
-			$ctrl=substr($content,0,strrpos($content, "</service>")+12);
-			$ctrr=substr($content, strrpos($content,"</service>")+14);
-			$content=$ctrl.$ctrr;
+			if($content!=$oldcontent){
+				$ctrl=substr($content,0,strrpos($content, "</service>")+12);
+				$ctrr=substr($content,strrpos($content,"</service>")+14);
+				$content=$ctrl.$ctrr;
+			}
 			$file_bg_service_xml_file_model=self::$save_dir.AutoCodePreviewReport::$bg_service_xml_file;
 			file_put_contents($file_bg_service_xml_file_model, $content);
 		}
@@ -345,7 +349,7 @@ class AutoCodeModel extends AutoCode
 		{
 			$file_overwrite=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
 			$content=file_get_contents($model_save_dir.$file);
-			//file_put_contents($file_overwrite, $content);
+			file_put_contents($file_overwrite, $content);
 		}
 
 	}

@@ -28,8 +28,10 @@ if (isset($_REQUEST["save_dir"])&&!empty($_REQUEST["save_dir"]))
         AutoCodeModel::$showReport="";
         AutoCodeModel::AutoCode($table_names);
     }
+
+	$admin_url=Gc::$url_base."admin";
 	echo "<div style='width: 1000px; margin-left: 110px;'>";
-	echo "<span>&nbsp;&nbsp;</span><a style='margin-left:15px;' href='javascript:' style='cursor:pointer;' onclick=\"(document.getElementById('showReport').style.display=(document.getElementById('showReport').style.display=='none')?'':'none')\">显示报告</a>";
+	echo "<p style='height:20px;text-align:right;'><span style='float:left'>&nbsp;&nbsp;<a style='margin-left:15px;' href='javascript:' style='cursor:pointer;' onclick=\"(document.getElementById('showReport').style.display=(document.getElementById('showReport').style.display=='none')?'':'none')\">显示报告</a></span><a href='$admin_url' target='_blank' style='margin-right: -12px;'>返回网站后台</a></p>";
 	echo "<div id='showReport' style='display: none;'>";
 	echo AutoCodeModel::$showReport;
 	echo "</div>";

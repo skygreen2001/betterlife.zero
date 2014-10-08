@@ -102,7 +102,13 @@ MODEL;
 			$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 			$file_content=str_replace("[relative_file]",$file, $file_content);
 			if(file_exists($origin_file)){
-				$file_content=str_replace("[status]",$status[0], $file_content);
+				$file_content_old=file_get_contents($origin_file);
+				$file_content_new=file_get_contents(self::$save_dir.$file);
+				if($file_content_old==$file_content_new){
+					$file_content=str_replace("[status]",$status[2], $file_content);
+				}else{
+					$file_content=str_replace("[status]",$status[0], $file_content);
+				}
 			}else{
 				$file_content=str_replace("[status]",$status[1], $file_content);
 			}
@@ -121,7 +127,13 @@ MODEL;
 			$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 			$file_content=str_replace("[relative_file]",$file, $file_content);
 			if(file_exists($origin_file)){
-				$file_content=str_replace("[status]",$status[0], $file_content);
+				$file_content_old=file_get_contents($origin_file);
+				$file_content_new=file_get_contents(self::$save_dir.$file);
+				if($file_content_old==$file_content_new){
+					$file_content=str_replace("[status]",$status[2], $file_content);
+				}else{
+					$file_content=str_replace("[status]",$status[0], $file_content);
+				}
 			}else{
 				$file_content=str_replace("[status]",$status[1], $file_content);
 			}
@@ -145,7 +157,13 @@ MODEL;
 			$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 			$file_content=str_replace("[relative_file]",$file, $file_content);
 			if(file_exists($origin_file)){
-				$file_content=str_replace("[status]",$status[0], $file_content);
+				$file_content_old=file_get_contents($origin_file);
+				$file_content_new=file_get_contents(self::$save_dir.$file);
+				if($file_content_old==$file_content_new){
+					$file_content=str_replace("[status]",$status[2], $file_content);
+				}else{
+					$file_content=str_replace("[status]",$status[0], $file_content);
+				}
 			}else{
 				$file_content=str_replace("[status]",$status[1], $file_content);
 			}
@@ -240,7 +258,13 @@ MODEL;
 			$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 			$file_content=str_replace("[relative_file]",$file, $file_content);
 			if(file_exists($origin_file)){
-				$file_content=str_replace("[status]",$status[0], $file_content);
+				$file_content_old=file_get_contents($origin_file);
+				$file_content_new=file_get_contents(self::$save_dir.$file);
+				if($file_content_old==$file_content_new){
+					$file_content=str_replace("[status]",$status[2], $file_content);
+				}else{
+					$file_content=str_replace("[status]",$status[0], $file_content);
+				}
 			}else{
 				$file_content=str_replace("[status]",$status[1], $file_content);
 			}
@@ -261,7 +285,13 @@ MODEL;
 			$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 			$file_content=str_replace("[relative_file]",$file, $file_content);
 			if(file_exists($origin_file)){
-				$file_content=str_replace("[status]",$status[0], $file_content);
+				$file_content_old=file_get_contents($origin_file);
+				$file_content_new=file_get_contents(self::$save_dir.$file);
+				if($file_content_old==$file_content_new){
+					$file_content=str_replace("[status]",$status[2], $file_content);
+				}else{
+					$file_content=str_replace("[status]",$status[0], $file_content);
+				}
 			}else{
 				$file_content=str_replace("[status]",$status[1], $file_content);
 			}

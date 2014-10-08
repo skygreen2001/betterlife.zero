@@ -82,7 +82,7 @@ class AutoCodeValidate extends AutoCode
 		foreach ($print_error_info as $key => $value) {
 			if (count($table_error[$key])>0){
 				$isValid=false;
-				$showValidInfo .= "<font color='#00FF00'>&nbsp;&nbsp;/".str_repeat("*",40).$value.str_repeat("*",40)."</font></a><br/>\r\n";
+				$showValidInfo .= "<font color='#FF0000'>&nbsp;&nbsp;/".str_repeat("*",38).$value.str_repeat("*",38)."/</font></a><br/>\r\n";
 				foreach ($table_error[$key] as $first=>$second) {
 					if (is_numeric($first)){
 						$showValidInfo .= "&nbsp;&nbsp;&nbsp;&nbsp;".$second."<br/>\r\n";
@@ -101,7 +101,13 @@ class AutoCodeValidate extends AutoCode
 		}
 		if(!empty($showValidInfo)){
 			$showValidInfo .= "<br/>\r\n";
+			echo "<div style='width: 1000px; margin-left: 110px;'>";
+			echo "<span>&nbsp;&nbsp;</span><a style='margin-left:15px;' href='javascript:' style='cursor:pointer;' onclick=\"(document.getElementById('showValidInfo').style.display=(document.getElementById('showValidInfo').style.display=='none')?'':'none')\">显示校验错误报告</a>";
+			echo "<div id='showValidInfo' style='display: none;'>";
 			echo $showValidInfo;
+			echo "</div>";
+			echo "</div>";
+
 		}
 		return $isValid;
 	}
