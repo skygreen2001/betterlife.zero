@@ -218,7 +218,16 @@ $appName_alias.Layout = {
 							window.location.href="index.php?go=admin.index.logout";
 						}},new Ext.Toolbar.Fill(),'-',{text: "",ref:'../../operator',handler:function(){
 							{$appName_alias}.Layout.Function.OpenWindow("index.php?go=admin.view.admin&admin_id="+$appName_alias.Config.Admin_id);
-						}}]
+						}}],
+				new Ext.Toolbar({
+					height:54,ref:'toolbar',items : [
+						{xtype: 'buttongroup',title: '人员管理',columns: 2,defaults: {scale: 'small'},
+						 items: [
+							{text: '人员管理',iconCls: 'page',ref:"../badmins",handler:function(){
+								$appName_alias.Navigation.AddTabbyUrl($appName_alias.Layout.CenterPanel,"系统管理员","http://echarts.baidu.com/","admin");
+							}}
+						]}
+					]
 				})
 		  ]}
 	}],
@@ -308,6 +317,7 @@ $appName_alias.Layout = {
 				  }
 				});
 			}
+			$appName_alias.Viewport.head.view.menu.toolbar.setChecked(false);
 		}
 	},
 	Function:{
@@ -384,7 +394,6 @@ $appName_alias.Layout = {
 					}
 					catch(err)
 					{
-
 						if((window.outerHeight==screen.height && window.outerWidth==screen.width)){
 							if (isIEPrompt){
 								Ext.Msg.alert('提示', 'IE浏览器请使用快捷键:F11');

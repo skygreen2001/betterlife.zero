@@ -6,7 +6,7 @@ BbView.Admin={};
  */
 BbView.Admin.View={
 	/**
-	 * 视图：产品图片视图
+	 * 视图：系统管理人员
 	 */
 	AdminView:Ext.extend(parent.Ext.Panel, {
 		constructor : function(config) {
