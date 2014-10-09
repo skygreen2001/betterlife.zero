@@ -967,6 +967,7 @@ class AutoCodeService extends AutoCode
 						$owner_idcolumn="";
 						$belong_class="";
 						$belong_idcolumn="";
+						$countC=0;
 						foreach (array_keys($fieldInfo) as $fieldname)
 						{
 							if (!self::isNotColumnKeywork($fieldname))continue;
@@ -976,14 +977,20 @@ class AutoCodeService extends AutoCode
 								$to_class{0}=strtoupper($to_class{0});
 								if (class_exists($to_class)){
 									if ($to_class!=$classname){
-										$belong_class=$to_class;
-										$belong_idcolumn=$fieldname;
+										if(empty($belong_class)||(contain(strtolower($key),strtolower($to_class)))){
+											$belong_class=$to_class;
+											$belong_idcolumn=$fieldname;
+											$countC+=1;
+										}
+										if(($countC>1)&&(contain(strtolower($key),strtolower($belong_class))))break;
 									}else{
+										$countC+=1;
 										$owner_idcolumn=$fieldname;
 									}
 								}
 							}
 						}
+						if(empty($belong_class))continue;
 						$tablename_owner=self::getTablename($classname);
 						$comment_owner=self::tableCommentKey($tablename_owner);
 						$tablename_belong=self::getTablename($belong_class);
@@ -1138,6 +1145,7 @@ MANY2MANYUPDATE;
 						$owner_idcolumn="";
 						$belong_class="";
 						$belong_idcolumn="";
+						$countC=0;
 						foreach (array_keys($fieldInfo) as $fieldname)
 						{
 							if (!self::isNotColumnKeywork($fieldname))continue;
@@ -1147,14 +1155,20 @@ MANY2MANYUPDATE;
 								$to_class{0}=strtoupper($to_class{0});
 								if (class_exists($to_class)){
 									if ($to_class!=$classname){
-										$belong_class=$to_class;
-										$belong_idcolumn=$fieldname;
+										if(empty($belong_class)||(contain(strtolower($key),strtolower($to_class)))){
+											$belong_class=$to_class;
+											$belong_idcolumn=$fieldname;
+											$countC+=1;
+										}
+										if(($countC>1)&&(contain(strtolower($key),strtolower($belong_class))))break;
 									}else{
+										$countC+=1;
 										$owner_idcolumn=$fieldname;
 									}
 								}
 							}
 						}
+						if(empty($belong_class))continue;
 						$tablename_owner=self::getTablename($classname);
 						$comment_owner=self::tableCommentKey($tablename_owner);
 						$tablename_belong=self::getTablename($belong_class);
