@@ -61,15 +61,15 @@ class AutoCodeAction extends AutoCode
 	public static function AutoCode($table_names="")
 	{
 		switch (self::$type) {
-		   case 0:
-			 self::$app_dir=Gc::$appName;
-			 break;
-		   case 1:
-			 self::$app_dir="model";
-			 break;
-		   case 2:
-			 self::$app_dir="admin";
-			 break;
+			case 0:
+				self::$app_dir=Gc::$appName;
+				break;
+			case 1:
+				self::$app_dir="model";
+			 	break;
+			case 2:
+				self::$app_dir="admin";
+				break;
 		}
 		self::$action_dir_full=self::$save_dir.self::$app_dir.DIRECTORY_SEPARATOR.self::$action_dir.DIRECTORY_SEPARATOR;
 		$view_dir_full=self::$save_dir.self::$app_dir.DIRECTORY_SEPARATOR.Config_F::VIEW_VIEW.DIRECTORY_SEPARATOR.Gc::$self_theme_dir.DIRECTORY_SEPARATOR;

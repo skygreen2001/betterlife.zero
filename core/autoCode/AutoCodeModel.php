@@ -146,8 +146,19 @@ class AutoCodeModel extends AutoCode
 			foreach ($fieldInfos as $tablename=>$fieldInfo)
 			{
 				$instancename=self::getInstancename($tablename);
-				if(!contain($content,"public function $instancename()")){
-					$section_content=AutoCodeAction::createBgActionIndex($tablename,$fieldInfo);
+				$section_content=AutoCodeAction::createBgActionIndex($tablename,$fieldInfo);
+				if(contain($content,"public function $instancename()"))
+				{
+					$table_comment=self::tableCommentKey($tablename);
+					$flag_a ="	/**\r\n";
+					$flag_a.="	 * 控制器:$table_comment\r\n";
+					$flag_a.="	 */\r\n";
+					$ctrl=substr($content,0,strpos($content,$flag_a));
+					if(empty($ctrl))$ctrl=substr($content,0,strpos($content,"public function $instancename()"));
+					$content=substr($content,strpos($content,"public function $instancename()"));
+					$ctrr=substr($content,strpos($content,"}")+3);
+					$content=trim($ctrl)."\r\n".rtrim($section_content)."\r\n".$ctrr;
+				}else{
 					$ctrl=substr($content,0,strrpos($content,"}"));
 					$ctrr=substr($content,strrpos($content,"}"));
 					$content=trim($ctrl)."\r\n\r\n".rtrim($section_content)."\r\n".$ctrr;

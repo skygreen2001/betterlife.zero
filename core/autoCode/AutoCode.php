@@ -601,6 +601,18 @@ class AutoCode extends Object
 	{
 		$tablename=self::getTablename($classname);
 		if (contain($tablename,Config_Db::TABLENAME_RELATION."_")){
+			$fieldInfo=self::$fieldInfos[self::getTablename($classname)];
+			$realId=DataObjectSpec::getRealIDColumnName($classname);
+			unset($fieldInfo[$realId]);
+			$countC=0;
+			foreach (array_keys($fieldInfo) as $fieldname)
+			{
+				if (contain($fieldname,"_id"))$countC+=1;
+			}
+			if($countC<=1){
+				return false;
+			}
+
 			return true;
 		}
 		return false;
