@@ -30,7 +30,10 @@ $start = isset($_GET['start']) ? htmlspecialchars($_GET['start']) : 0;
 $end = $start + $size;
 
 /* 获取文件列表 */
-$path = $_SERVER['DOCUMENT_ROOT'] . (substr($path, 0, 1) == "/" ? "":"/") . $path;
+//modify by skygreen
+$real_path=str_replace(DIRECTORY_SEPARATOR,"/",Gc::$nav_root_path);
+$path = $real_path.$path;//$path = $_SERVER['DOCUMENT_ROOT'] . (substr($path, 0, 1) == "/" ? "":"/") . $path;
+
 $files = getfiles($path, $allowFiles);
 if (!count($files)) {
     return json_encode(array(
@@ -73,6 +76,8 @@ function getfiles($path, $allowFiles, &$files = array())
     if (!is_dir($path)) return null;
     if(substr($path, strlen($path) - 1) != '/') $path .= '/';
     $handle = opendir($path);
+    //modify by skygreen
+    $real_path=str_replace(DIRECTORY_SEPARATOR,"/",Gc::$nav_root_path);
     while (false !== ($file = readdir($handle))) {
         if ($file != '.' && $file != '..') {
             $path2 = $path . $file;
@@ -81,7 +86,9 @@ function getfiles($path, $allowFiles, &$files = array())
             } else {
                 if (preg_match("/\.(".$allowFiles.")$/i", $file)) {
                     $files[] = array(
-                        'url'=> substr($path2, strlen($_SERVER['DOCUMENT_ROOT'])),
+                        //modify by skygreen
+                        'url'=>Gc::$url_base.substr($path2, strlen($real_path)),
+                        //'url'=> substr($path2, strlen($_SERVER['DOCUMENT_ROOT'])),
                         'mtime'=> filemtime($path2)
                     );
                 }
