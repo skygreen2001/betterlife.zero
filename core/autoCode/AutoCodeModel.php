@@ -18,7 +18,7 @@ class AutoCodeModel extends AutoCode
 	 */
 	public static function AutoCode($table_names="")
 	{
-		$dest_directory=Gc::$nav_root_path."tools".DIRECTORY_SEPARATOR."tools".DIRECTORY_SEPARATOR."autoCode".DIRECTORY_SEPARATOR;
+		$dest_directory=Gc::$nav_root_path."tools".DS."tools".DS."autoCode".DS;
 		$filename=$dest_directory."autocode.config.xml";
 		AutoCodeValidate::run($table_names);
 		if(Config_AutoCode::ALWAYS_AUTOCODE_XML_NEW)AutoCodeConfig::run();
@@ -91,7 +91,7 @@ class AutoCodeModel extends AutoCode
 	 */
 	public static function UserInput()
 	{
-		$default_dir=Gc::$nav_root_path."model".DIRECTORY_SEPARATOR;
+		$default_dir=Gc::$nav_root_path."model".DS;
 		self::$save_dir=$default_dir;
 
 		self::init();
@@ -139,7 +139,7 @@ class AutoCodeModel extends AutoCode
 	public static function createBgAction($table_names="")
 	{
 		$fieldInfos=self::fieldInfosByTable_names($table_names);
-		$file_bg_action_appname=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.AutoCodePreviewReport::$bg_action_index_file;
+		$file_bg_action_appname=Gc::$nav_root_path.Gc::$module_root.DS.AutoCodePreviewReport::$bg_action_index_file;
 		if(file_exists($file_bg_action_appname))
 		{
 			$content=file_get_contents($file_bg_action_appname);
@@ -168,7 +168,7 @@ class AutoCodeModel extends AutoCode
 			file_put_contents($file_bg_action_appname_model, $content);
 		}
 
-		$file_bg_action_upload=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.AutoCodePreviewReport::$bg_action_upload_file;
+		$file_bg_action_upload=Gc::$nav_root_path.Gc::$module_root.DS.AutoCodePreviewReport::$bg_action_upload_file;
 		if(file_exists($file_bg_action_upload))
 		{
 			$content=file_get_contents($file_bg_action_upload);
@@ -197,7 +197,7 @@ class AutoCodeModel extends AutoCode
 	 */
 	public static function createManageService($table_names="")
 	{
-		$file_manage_service_file=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.AutoCodePreviewReport::$manage_service_file;
+		$file_manage_service_file=Gc::$nav_root_path.Gc::$module_root.DS.AutoCodePreviewReport::$manage_service_file;
 		if(file_exists($file_manage_service_file))
 		{
 			$tableList=self::tableListByTable_names($table_names);
@@ -231,7 +231,7 @@ class AutoCodeModel extends AutoCode
 	 */
 	public static function createManageExtService($table_names="")
 	{
-		$file_manage_ext_service=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.AutoCodePreviewReport::$bg_manage_service_ext_file;
+		$file_manage_ext_service=Gc::$nav_root_path.Gc::$module_root.DS.AutoCodePreviewReport::$bg_manage_service_ext_file;
 		if(file_exists($file_manage_ext_service))
 		{
 			$tableList=self::tableListByTable_names($table_names);
@@ -265,7 +265,7 @@ class AutoCodeModel extends AutoCode
 	 */
 	public static function createServiceXml($table_names="")
 	{
-		$file_bg_service_xml_file=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.AutoCodePreviewReport::$bg_service_xml_file;
+		$file_bg_service_xml_file=Gc::$nav_root_path.Gc::$module_root.DS.AutoCodePreviewReport::$bg_service_xml_file;
 		if(file_exists($file_bg_service_xml_file))
 		{
 			$tableList=self::tableListByTable_names($table_names);
@@ -299,7 +299,7 @@ class AutoCodeModel extends AutoCode
 	 */
 	public static function createMenuConfigXml($table_names="")
 	{
-		$file_bg_menu_xml_file=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.AutoCodePreviewReport::$bg_menu_xml_file;
+		$file_bg_menu_xml_file=Gc::$nav_root_path.Gc::$module_root.DS.AutoCodePreviewReport::$bg_menu_xml_file;
 		if(file_exists($file_bg_menu_xml_file))
 		{
 			$tableList=self::tableListByTable_names($table_names);
@@ -329,7 +329,7 @@ class AutoCodeModel extends AutoCode
 	 */
 	public static function createModelIndex($table_names="")
 	{
-		$file_model_index_file=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.AutoCodePreviewReport::$model_index_file;
+		$file_model_index_file=Gc::$nav_root_path.Gc::$module_root.DS.AutoCodePreviewReport::$model_index_file;
 		if(file_exists($file_model_index_file))
 		{
 			$tableList=self::tableListByTable_names($table_names);
@@ -359,7 +359,7 @@ class AutoCodeModel extends AutoCode
 	{
 		foreach ($files as $file)
 		{
-			$file_overwrite=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+			$file_overwrite=Gc::$nav_root_path.Gc::$module_root.DS.$file;
 			$content=file_get_contents($model_save_dir.$file);
 			UtilFileSystem::createDir(dirname($file_overwrite));
 			file_put_contents($file_overwrite, $content);

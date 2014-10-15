@@ -46,15 +46,15 @@ class AutoCodePreviewReport extends AutoCode
 	 */
 	public static function init()
 	{
-		self::$manage_service_file=Gc::$appName.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR.AutoCodeService::$service_dir.DIRECTORY_SEPARATOR."Manager_Service.php";
+		self::$manage_service_file=Gc::$appName.DS.self::$dir_src.DS.AutoCodeService::$service_dir.DS."Manager_Service.php";
 		$category_cap=Gc::$appName;
 		$category_cap{0}=ucfirst($category_cap{0});
-		self::$bg_action_index_file=self::$m_bg.DIRECTORY_SEPARATOR.AutoCodeAction::$action_dir.DIRECTORY_SEPARATOR."Action_".$category_cap.".php";
-		self::$bg_action_upload_file=self::$m_bg.DIRECTORY_SEPARATOR.AutoCodeAction::$action_dir.DIRECTORY_SEPARATOR."Action_Upload.php";
-		self::$bg_manage_service_ext_file=self::$m_bg.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR.AutoCodeService::$service_dir.DIRECTORY_SEPARATOR.AutoCodeService::$ext_dir.DIRECTORY_SEPARATOR."Manager_ExtService.php";
-		self::$bg_service_xml_file=self::$m_bg.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR.AutoCodeService::$service_dir.DIRECTORY_SEPARATOR."service.config.xml";
-		self::$bg_menu_xml_file=self::$m_bg.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR."view".DIRECTORY_SEPARATOR."menu".DIRECTORY_SEPARATOR."menu.config.xml";
-		self::$model_index_file=self::$m_model.DIRECTORY_SEPARATOR.Config_F::VIEW_VIEW.DIRECTORY_SEPARATOR.Gc::$self_theme_dir.DIRECTORY_SEPARATOR.Config_F::VIEW_CORE.DIRECTORY_SEPARATOR."index".DIRECTORY_SEPARATOR."index".Config_F::SUFFIX_FILE_TPL;
+		self::$bg_action_index_file=self::$m_bg.DS.AutoCodeAction::$action_dir.DS."Action_".$category_cap.".php";
+		self::$bg_action_upload_file=self::$m_bg.DS.AutoCodeAction::$action_dir.DS."Action_Upload.php";
+		self::$bg_manage_service_ext_file=self::$m_bg.DS.self::$dir_src.DS.AutoCodeService::$service_dir.DS.AutoCodeService::$ext_dir.DS."Manager_ExtService.php";
+		self::$bg_service_xml_file=self::$m_bg.DS.self::$dir_src.DS.AutoCodeService::$service_dir.DS."service.config.xml";
+		self::$bg_menu_xml_file=self::$m_bg.DS.self::$dir_src.DS."view".DS."menu".DS."menu.config.xml";
+		self::$model_index_file=self::$m_model.DS.Config_F::VIEW_VIEW.DS.Gc::$self_theme_dir.DS.Config_F::VIEW_CORE.DS."index".DS."index".Config_F::SUFFIX_FILE_TPL;
 	}
 
 	/**
@@ -105,7 +105,7 @@ MODEL;
 		//[前台]生成实体数据对象
 		foreach (self::$domain_files as $file) {
 			$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-			$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+			$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;
 			$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 			$file_content=str_replace("[relative_file]",$file, $file_content);
 			if(file_exists($origin_file)){
@@ -134,7 +134,7 @@ MODEL;
 		}
 		foreach (self::$enum_files as $file) {
 			$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-			$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+			$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;
 			$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 			$file_content=str_replace("[relative_file]",$file, $file_content);
 			if(file_exists($origin_file)){
@@ -172,7 +172,7 @@ MODEL;
 		}
 		foreach (self::$service_bg_files as $file) {
 			$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-			$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+			$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;
 			$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 			$file_content=str_replace("[relative_file]",$file, $file_content);
 			if(file_exists($origin_file)){
@@ -200,7 +200,7 @@ MODEL;
 		$moreContent.=str_replace("[title]",$title,$title_model);
 		$file=self::$bg_manage_service_ext_file;
 		$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-		$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+		$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;
 		$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 		$file_content=str_replace("[relative_file]",$file, $file_content);
 		$file_content_old=file_get_contents($origin_file);
@@ -223,7 +223,7 @@ MODEL;
 		$moreContent.=str_replace("[title]",$title,$title_model);
 		$file=self::$bg_service_xml_file;
 		$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-		$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+		$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;
 		$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 		$file_content=str_replace("[relative_file]",$file, $file_content);
 		$file_content_old=file_get_contents($origin_file);
@@ -247,7 +247,7 @@ MODEL;
 		//[后台]核心代码控制器
 		$file=self::$bg_action_index_file;
 		$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-		$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+		$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;
 		$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 		$file_content=str_replace("[relative_file]",$file, $file_content);
 		$file_content_old=file_get_contents($origin_file);
@@ -268,7 +268,7 @@ MODEL;
 		//[后台]上传文件控制器
 		$file=self::$bg_action_upload_file;
 		$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-		$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+		$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;
 		$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 		$file_content=str_replace("[relative_file]",$file, $file_content);
 		$file_content_old=file_get_contents($origin_file);
@@ -293,7 +293,7 @@ MODEL;
 		}
 		foreach (self::$view_bg_files as $file) {
 			$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-			$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+			$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;
 			$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 			$file_content=str_replace("[relative_file]",$file, $file_content);
 			if(file_exists($origin_file)){
@@ -324,7 +324,7 @@ MODEL;
 		}
 		foreach (self::$bg_ext_js_files as $file) {
 			$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-			$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+			$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;
 			$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 			$file_content=str_replace("[relative_file]",$file, $file_content);
 			if(file_exists($origin_file)){
@@ -354,7 +354,7 @@ MODEL;
 		}
 		foreach (self::$bg_ajax_php_files as $file) {
 			$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-			$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+			$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;
 			$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 			$file_content=str_replace("[relative_file]",$file, $file_content);
 			if(file_exists($origin_file)){
@@ -383,7 +383,7 @@ MODEL;
 		$moreContent.=str_replace("[title]",$title,$title_model);
 		$file=self::$bg_menu_xml_file;
 		$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-		$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+		$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;
 		$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 		$file_content=str_replace("[relative_file]",$file, $file_content);
 		$file_content_old=file_get_contents($origin_file);
@@ -416,7 +416,7 @@ MODEL;
 			}
 			foreach (self::$service_files as $file) {
 				$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-				$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+				$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;
 				$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 				$file_content=str_replace("[relative_file]",$file, $file_content);
 				if(file_exists($origin_file)){
@@ -440,7 +440,7 @@ MODEL;
 			$moreContent.=str_replace("[title]",$title,$title_model);
 			$file=self::$manage_service_file;
 			$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-			$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+			$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;
 			$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 			$file_content=str_replace("[relative_file]",$file, $file_content);
 			$file_content_old=file_get_contents($origin_file);
@@ -461,7 +461,7 @@ MODEL;
 			}
 			foreach (self::$action_front_files as $file) {
 				$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-				$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+				$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;
 				$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 				$file_content=str_replace("[relative_file]",$file, $file_content);
 				if(file_exists($origin_file)){
@@ -487,7 +487,7 @@ MODEL;
 			}
 			foreach (self::$view_front_files as $file) {
 				$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-				$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+				$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;
 				$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 				$file_content=str_replace("[relative_file]",$file, $file_content);
 				if(file_exists($origin_file)){
@@ -506,7 +506,7 @@ MODEL;
 				$moreContent.=$file_content;
 			}
 		}
-		$model_module=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.self::$m_model.DIRECTORY_SEPARATOR;
+		$model_module=Gc::$nav_root_path.Gc::$module_root.DS.self::$m_model.DS;
 		if(is_dir($model_module)){
 			$title="<a href='$dir_autocode/db_all.php' target='_blank' style='color:white;'>[通用模板]</a>";
 			$moreContent.=str_replace("[title]",$title,$module_model);
@@ -520,7 +520,7 @@ MODEL;
 			}
 			foreach (self::$action_model_files as $file) {
 				$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-				$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+				$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;
 				$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 				$file_content=str_replace("[relative_file]",$file, $file_content);
 				if(file_exists($origin_file)){
@@ -544,7 +544,7 @@ MODEL;
 			$moreContent.=str_replace("[title]",$title,$title_model);
 			$file=self::$model_index_file;
 			$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-			$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+			$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;
 			$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 			$file_content=str_replace("[relative_file]",$file, $file_content);
 			$file_content_old=file_get_contents($origin_file);
@@ -565,7 +565,7 @@ MODEL;
 			}
 			foreach (self::$view_model_files as $file) {
 				$file_content=str_replace("[file]", self::$save_dir.$file, $model);
-				$origin_file= Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$file;
+				$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;
 				$file_content=str_replace("[origin_file]",$origin_file, $file_content);
 				$file_content=str_replace("[relative_file]",$file, $file_content);
 				if(file_exists($origin_file)){

@@ -107,10 +107,10 @@ class UtilFileSystem extends Util
 		if(($handle = opendir($path))){
 			while (false !==($file = readdir($handle))){
 				if($file!='.' && $file!='..'){
-					if(is_dir($path.DIRECTORY_SEPARATOR.$file)){
-						self::rmdir($path.DIRECTORY_SEPARATOR.$file);
+					if(is_dir($path.DS.$file)){
+						self::rmdir($path.DS.$file);
 					}else{
-						@unlink($path.DIRECTORY_SEPARATOR.$file);
+						@unlink($path.DS.$file);
 					}
 				}
 			}
@@ -347,7 +347,7 @@ class UtilFileSystem extends Util
 			$dirdata[]=$path;
 			while($file=$dp->read()) {
 				if($file!='.'&& $file!='..'&& $file!='.svn'&& $file!='.git') {
-					$dirdata=self::searchAllDirsInDirectory($path.DIRECTORY_SEPARATOR.$file,$dirdata);
+					$dirdata=self::searchAllDirsInDirectory($path.DS.$file,$dirdata);
 				}
 			}
 			$dp->close();
@@ -372,14 +372,14 @@ class UtilFileSystem extends Util
 				if($file=='.' || $file=='..'|| $file=='.svn'|| $file=='.git') {
 					continue;
 				}
-				$nextpath = $path.DIRECTORY_SEPARATOR.$file;
+				$nextpath = $path.DS.$file;
 
 				if(is_dir($nextpath)) {
 					$data=self::searchAllFilesInDirectory($nextpath,$data,$agreesuffix);
 				}else {
 					if ($file!=="Thumbs.db") {
 						if ($agreesuffix=="*") {
-							$data[dirname($nextpath).DIRECTORY_SEPARATOR.'a'.basename($nextpath)]=$nextpath;
+							$data[dirname($nextpath).DS.'a'.basename($nextpath)]=$nextpath;
 						}else if (is_string($agreesuffix)) {
 							$fileSuffix=explode('.', $file);
 							$fileSuffix=end($fileSuffix);
@@ -395,7 +395,7 @@ class UtilFileSystem extends Util
 									$nextpath_tmp=dirname($nextpath);
 									$nextpath_basename=basename($nextpath);
 								}
-								$data[$nextpath_tmp.DIRECTORY_SEPARATOR.'a'.$nextpath_basename]=$nextpath;
+								$data[$nextpath_tmp.DS.'a'.$nextpath_basename]=$nextpath;
 							}
 						}else if (is_array($agreesuffix)) {
 							foreach ($agreesuffix as $suffix) {
@@ -403,7 +403,7 @@ class UtilFileSystem extends Util
 								$fileSuffix=end($fileSuffix);
 								$fileSuffix=strcasecmp($fileSuffix,$suffix);
 								if ($fileSuffix===0) {
-									$data[dirname($nextpath).DIRECTORY_SEPARATOR.'a'.basename($nextpath)]=$nextpath;
+									$data[dirname($nextpath).DS.'a'.basename($nextpath)]=$nextpath;
 								}
 							}
 						}

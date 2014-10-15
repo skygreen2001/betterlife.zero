@@ -98,7 +98,7 @@ class Initializer
 		if (Gc::$dev_profile_on) {
 			require_once 'helper/Profiler.php';
 			Profiler::init();
-			set_include_path(get_include_path().PATH_SEPARATOR.Gc::$nav_root_path."core".DIRECTORY_SEPARATOR."lang");
+			set_include_path(get_include_path().PATH_SEPARATOR.Gc::$nav_root_path."core".DS."lang");
 			Profiler::mark(Wl::LOG_INFO_PROFILE_RUN);
 			Profiler::mark(Wl::LOG_INFO_PROFILE_INIT);
 		}
@@ -184,8 +184,8 @@ class Initializer
 	{
 		$root_config="config";
 		$root_core="core";
-		self::$NAV_CONFIG_PATH=Gc::$nav_framework_path.$root_config.DIRECTORY_SEPARATOR;
-		self::$NAV_CORE_PATH=Gc::$nav_framework_path.$root_core.DIRECTORY_SEPARATOR;
+		self::$NAV_CONFIG_PATH=Gc::$nav_framework_path.$root_config.DS;
+		self::$NAV_CORE_PATH=Gc::$nav_framework_path.$root_core.DS;
 		//设置时区为中国时区
 		date_default_timezone_set('PRC');
 		//初始化PHP版本校验
@@ -230,7 +230,7 @@ class Initializer
 	*/
 	public static function loadCommonFunctionLibrarys()
 	{
-		$dir_include_function=Gc::$nav_root_path.Config_F::ROOT_INCLUDE_FUNCTION.DIRECTORY_SEPARATOR;
+		$dir_include_function=Gc::$nav_root_path.Config_F::ROOT_INCLUDE_FUNCTION.DS;
 		$files=UtilFileSystem::getAllFilesInDirectory($dir_include_function);
 		if (!class_exists("PEAR")){
 			require_once("helper/PEAR.php");
@@ -246,7 +246,7 @@ class Initializer
 	 */
 	public static function loadLibrary()
 	{
-		$dir_library=Gc::$nav_root_path.Config_F::ROOT_LIBRARY.DIRECTORY_SEPARATOR;
+		$dir_library=Gc::$nav_root_path.Config_F::ROOT_LIBRARY.DS;
 		/**
 		 * 加载第三方库
 		 */
@@ -264,7 +264,7 @@ class Initializer
 	 */
 	public static function loadModule()
 	{
-		$dir_module=Gc::$nav_root_path.Config_F::ROOT_MODULE.DIRECTORY_SEPARATOR;
+		$dir_module=Gc::$nav_root_path.Config_F::ROOT_MODULE.DS;
 		/**
 		 * 加载第三方库
 		 */
@@ -283,7 +283,7 @@ class Initializer
 		$default_language="Zh_Cn";
 		$world_language=Config_C::WORLD_LANGUAGE;
 		$language=ucfirst(Gc::$language);
-		$lan_dir=self::$NAV_CORE_PATH.$core_lang.DIRECTORY_SEPARATOR;
+		$lan_dir=self::$NAV_CORE_PATH.$core_lang.DS;
 		if (strcasecmp(Gc::$language,$default_language)!=0) {
 			if (file_exists($lan_dir.$world_language.self::SUFFIX_FILE_PHP)) {
 				LogMe::log("You need delete file:".$lan_dir.$world_language.self::SUFFIX_FILE_PHP." on run time");
@@ -306,7 +306,7 @@ class Initializer
 				self::$NAV_CORE_PATH,
 				self::$NAV_CORE_PATH.$core_util,
 				self::$NAV_CORE_PATH."log",
-				self::$NAV_CORE_PATH.$core_util.DIRECTORY_SEPARATOR."common",
+				self::$NAV_CORE_PATH.$core_util.DS."common",
 		);
 		set_include_path(get_include_path().PATH_SEPARATOR.join(PATH_SEPARATOR, $include_paths));
 		$dirs_config=UtilFileSystem::getAllDirsInDriectory(self::$NAV_CONFIG_PATH);
@@ -314,10 +314,10 @@ class Initializer
 		$include_paths=array_merge($dirs_root,$dirs_config);
 		$module_Dir=Gc::$nav_root_path;
 		if (strlen(Gc::$module_root)>0) {
-			$module_Dir.=Gc::$module_root.DIRECTORY_SEPARATOR;
+			$module_Dir.=Gc::$module_root.DS;
 		}
 		foreach (Gc::$module_names as $moduleName) {
-			$moduleDir=$module_Dir.$moduleName.DIRECTORY_SEPARATOR;
+			$moduleDir=$module_Dir.$moduleName.DS;
 			if (is_dir($moduleDir))
 			{
 				$modulesubdir=array_keys(UtilFileSystem::getSubDirsInDirectory($moduleDir));
@@ -328,7 +328,7 @@ class Initializer
 				foreach ($modulesubdir as $subdir) {
 					$modulePath=$moduleDir;
 					if (is_dir($moduleDir.$subdir)) {
-						$modulePath.=$subdir.DIRECTORY_SEPARATOR;
+						$modulePath.=$subdir.DS;
 					}
 					$tmps=UtilFileSystem::getAllDirsInDriectory($modulePath);
 					$include_paths=array_merge($include_paths, $tmps);
@@ -376,10 +376,10 @@ class Initializer
 	{
 		$module_dir= Gc::$nav_root_path;
 		if (strlen(Gc::$module_root)>0) {
-			$module_dir.=Gc::$module_root.DIRECTORY_SEPARATOR;
+			$module_dir.=Gc::$module_root.DS;
 		}
 		foreach (Gc::$module_names as $moduleName) {
-			$moduleDir=$module_dir.$moduleName.DIRECTORY_SEPARATOR;
+			$moduleDir=$module_dir.$moduleName.DS;
 			load_module($moduleName, $moduleDir,Gc::$moudle_exclude_subpackage);
 		}
 	}
