@@ -132,7 +132,7 @@ class UtilFileSystem extends Util
 		}
 		while (false !== ($file = readdir($handle))) {
 			if($file != "." && $file != ".."){
-				$file = $dir . DIRECTORY_SEPARATOR .$file;
+				$file = $dir . DS .$file;
 				if (is_dir($file)){
 					self::deleteDir($file);
 				} else {

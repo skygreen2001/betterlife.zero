@@ -15,8 +15,8 @@ $dest_db_config=array
     "user"     => Config_Db::$username,
     "password" => Config_Db::$password,
     "dbname"   => "ej",
-    "script_filename"=>Gc::$nav_root_path . "db".DIRECTORY_SEPARATOR."mysql".DIRECTORY_SEPARATOR."db_betterlife.sql"
+    "script_filename"=>Gc::$nav_root_path . "db".DS."mysql".DS."db_betterlife.sql"
 );
 
-DbInfo_Mysql::run_script($dest_db_config);   
+DbInfo_Mysql::run_script($dest_db_config);
 ?>

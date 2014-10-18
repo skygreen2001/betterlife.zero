@@ -23,7 +23,6 @@ class View {
 	const TEMPLATE_MODE_SMARTTEMPLATE=2;
 	const TEMPLATE_MODE_EASETEMPLATE=3;
 	const TEMPLATE_MODE_TEMPLATELITE=4;
-	const TEMPLATE_MODE_FLEXY=5;
 
 	/**
 	 * EaseTemplate 是否开启Memcache
@@ -35,7 +34,6 @@ class View {
 	 * 显示页面上使用的变量存储对象
 	 * 目前需模版是
 	 *     Smarty:TEMPLATE_MODE_SMARTY
-	 *     Flexy :TEMPLATE_MODE_FLEXY方能支持
 	 */
 	private $viewObject;
 	/**
@@ -223,13 +221,13 @@ class View {
 	private function getTemplate_View_Dir(){
 	   $result="";
 	   if (strlen(Gc::$module_root)>0) {
-		  $result.=Gc::$module_root.DIRECTORY_SEPARATOR;
+		  $result.=Gc::$module_root.DS;
 	   }
-	   $result.= $this->moduleName.DIRECTORY_SEPARATOR.self::VIEW_DIR_VIEW.DIRECTORY_SEPARATOR;
+	   $result.= $this->moduleName.DS.self::VIEW_DIR_VIEW.DS;
 	   if (isset(Gc::$self_theme_dir_every)&&array_key_exists($this->moduleName,Gc::$self_theme_dir_every)){
-		   $result.=Gc::$self_theme_dir_every[$this->moduleName].DIRECTORY_SEPARATOR;
+		   $result.=Gc::$self_theme_dir_every[$this->moduleName].DS;
 	   }else{
-		   $result.=Gc::$self_theme_dir.DIRECTORY_SEPARATOR;
+		   $result.=Gc::$self_theme_dir.DS;
 	   }
 	   return $result;
 	}
@@ -242,8 +240,8 @@ class View {
 		if (empty($template_mode)) {
 			$template_mode=Gc::$template_mode;
 		}
-		$this->template_dir=$this->getTemplate_View_Dir($this->moduleName).Config_F::VIEW_CORE.DIRECTORY_SEPARATOR;
-		$template_tmp_dir= $this->getTemplate_View_Dir($this->moduleName)."tmp".DIRECTORY_SEPARATOR;
+		$this->template_dir=$this->getTemplate_View_Dir($this->moduleName).Config_F::VIEW_CORE.DS;
+		$template_tmp_dir= $this->getTemplate_View_Dir($this->moduleName)."tmp".DS;
 		$this->template_suffix_name=Gc::$template_file_suffix;
 
 		switch ($template_mode) {
@@ -251,9 +249,9 @@ class View {
 				$this->templateMode=self::TEMPLATE_MODE_SMARTY;
 				$this->template = new Smarty;
 				$this->template->template_dir =  Gc::$nav_root_path.$this->template_dir;
-				$this->template->compile_dir =  Gc::$nav_root_path.$template_tmp_dir."templates_c".DIRECTORY_SEPARATOR;
-				$this->template->config_dir =  $template_tmp_dir."configs".DIRECTORY_SEPARATOR;
-				$this->template->cache_dir =  $template_tmp_dir."cache".DIRECTORY_SEPARATOR;
+				$this->template->compile_dir =  Gc::$nav_root_path.$template_tmp_dir."templates_c".DS;
+				$this->template->config_dir =  $template_tmp_dir."configs".DS;
+				$this->template->cache_dir =  $template_tmp_dir."cache".DS;
 				$this->template->compile_check = true;
 				$this->template->allow_php_templates= true;
 				$this->template->allow_php_tag=true;
@@ -279,16 +277,16 @@ class View {
 				$templateFilePath=basename($templatefile).$this->template_suffix_name;
 				$this->template = new QuickSkin($templateFilePath);
 				$this->template->template_dir= $this->template_dir;
-				$this->template->temp_dir= $template_tmp_dir."temp".DIRECTORY_SEPARATOR;
-				$this->template->cache_dir= $template_tmp_dir."cache".DIRECTORY_SEPARATOR;
+				$this->template->temp_dir= $template_tmp_dir."temp".DS;
+				$this->template->cache_dir= $template_tmp_dir."cache".DS;
 				break;
 			case self::TEMPLATE_MODE_EASETEMPLATE:
 				$this->templateMode=self::TEMPLATE_MODE_EASETEMPLATE;
-				$lan_dir=Initializer::$NAV_CORE_PATH.Config_F::CORE_LANG.DIRECTORY_SEPARATOR;
+				$lan_dir=Initializer::$NAV_CORE_PATH.Config_F::CORE_LANG.DS;
 				$tpl_set = array(
 						'ID'        =>'1',            //缓存ID
 						'TplType'    =>str_replace(".","",Gc::$template_file_suffix),//模板格式
-						'CacheDir'    => $template_tmp_dir.'cache'.DIRECTORY_SEPARATOR,        //缓存目录<br />
+						'CacheDir'    => $template_tmp_dir.'cache'.DS,        //缓存目录<br />
 						'TemplateDir'    => $this->template_dir,//模板存放目录<br />
 						'AutoImage'    =>'on',//自动解析图片目录开关 on表示开放 off表示关闭<br />
 						'LangDir'    =>$lan_dir,//语言文件存放的目录<br />
@@ -305,29 +303,7 @@ class View {
 				$this->templateMode=self::TEMPLATE_MODE_TEMPLATELITE;
 				$this->template= new Template_Lite;
 				$this->template->template_dir = $this->template_dir;
-				$this->template->compile_dir =  $template_tmp_dir."compiled".DIRECTORY_SEPARATOR;
-				break;
-			case self::TEMPLATE_MODE_FLEXY:
-				$this->templateMode=self::TEMPLATE_MODE_FLEXY;
-				$dir_pos=strrpos($templatefile, DIRECTORY_SEPARATOR);
-				$sub_dir="";
-				if ($dir_pos>0) {
-					$sub_dir= substr($templatefile,0,$dir_pos);
-				}
-				$this->template= new HTML_Template_Flexy(array(
-								'templateDir' => $this->template_dir.$sub_dir,
-								'compileDir' => $template_tmp_dir.'compiled'.DIRECTORY_SEPARATOR,
-								'debug' => Gc::$dev_debug_on,
-								'forceCompile'  =>  true,  // only suggested for debugging
-								'fatalError'=> HTML_TEMPLATE_FLEXY_ERROR_DIE,
-								'globals'=>true,/*可以在页面模板中使用$_Session,$_Get*/
-								'allowPHP'=> true,
-								'flexyIgnore'=>true
-				));
-				$templateFilePath=basename($templatefile).$this->template_suffix_name;
-				if (file_exists(Gc::$nav_root_path.$this->template_dir.$templatefile.$this->template_suffix_name)) {
-					$this->template->compile($templateFilePath);
-				}
+				$this->template->compile_dir =  $template_tmp_dir."compiled".DS;
 				break;
 			default:
 				$this->templateMode=self::TEMPLATE_MODE_NONE;
@@ -356,11 +332,6 @@ class View {
 				break;
 			case self::TEMPLATE_MODE_EASETEMPLATE:
 				$this->template->set_var($key,$value);
-				break;
-			case self::TEMPLATE_MODE_FLEXY:
-				if (!is_object($this->vars)) {
-					$this->vars=new stdClass();
-				}
 				break;
 		}
 		if (is_array($this->vars)) {
@@ -413,16 +384,6 @@ class View {
 				break;
 			case self::TEMPLATE_MODE_TEMPLATELITE:
 				$this->template->display($templateFilePath);
-				break;
-			case self::TEMPLATE_MODE_FLEXY:
-				if(empty($this->viewObject)) {
-					$this->template->outputObject($this->vars);
-				} else {
-					foreach ($this->vars as $key=>$value) {
-						$this->viewObject->$key=$value;
-					}
-					$this->template->outputObject($this->viewObject);
-				}
 				break;
 			default:
 				$viewvars = $this->getVars($controller);

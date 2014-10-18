@@ -6,7 +6,7 @@ require_once(dirname(__FILE__)."/../../init.php");
 
 UtilAjax::init();
 
-if(extension_loaded('zlib')){//检查服务器是否开启了zlib拓展        
+if(extension_loaded('zlib')){//检查服务器是否开启了zlib拓展
 	ob_start('ob_gzhandler');
 }
 header("Cache-Control: must-revalidate");
@@ -25,27 +25,27 @@ $version = @$_GET['v'];
 
 if (isset ($jsFile)){
 	if (!endWith($jsFile, ".js"))return;
-	header("Content-type: text/javascript; charset: UTF-8");    
+	header("Content-type: text/javascript; charset: UTF-8");
 	if (EnumJsFramework::isEnumValue($group)) {
-		$ajax_root=Gc::$nav_root_path."common".DIRECTORY_SEPARATOR."js".DIRECTORY_SEPARATOR."ajax".DIRECTORY_SEPARATOR;
+		$ajax_root=Gc::$nav_root_path."common".DS."js".DS."ajax".DS;
 		$jsFile=str_replace("/", DIRECTORY_SEPARATOR, $jsFile);
 		switch ($group){
-			case EnumJsFramework::JS_FW_JQUERY:         
-			case EnumJsFramework::JS_FW_MOOTOOLS:   
+			case EnumJsFramework::JS_FW_JQUERY:
+			case EnumJsFramework::JS_FW_MOOTOOLS:
 				echo "请使用UtilAjax的load方法，直接加载".$group."的js文件；无需使用Gzip压缩！";
 				die();
 				break;
 			case EnumJsFramework::JS_FW_PROTOTYPE:
-			case EnumJsFramework::JS_FW_DOJO:     
+			case EnumJsFramework::JS_FW_DOJO:
 			case EnumJsFramework::JS_FW_YUI:
 			case EnumJsFramework::JS_FW_SCRIPTACULOUS:
-				include($ajax_root.$group.DIRECTORY_SEPARATOR.$group.".js");
+				include($ajax_root.$group.DS.$group.".js");
 				break;
 			case EnumJsFramework::JS_FW_EXTJS:
 				if ($version<4){
-					$ext_root=$ajax_root."ext".DIRECTORY_SEPARATOR;
+					$ext_root=$ajax_root."ext".DS;
 				}else{
-					$ext_root=$ajax_root."ext4".DIRECTORY_SEPARATOR;
+					$ext_root=$ajax_root."ext4".DS;
 				}
 				$js_header=$ext_root.$jsFile;
 				include($js_header);
@@ -57,7 +57,7 @@ if (isset ($jsFile)){
 		   $jsFile=str_replace($url_base,"",$jsFile);
 		   $jsFile=Gc::$nav_root_path.$jsFile;
 		   $jsFile=str_replace("/",DIRECTORY_SEPARATOR,$jsFile);
-		}      
+		}
 		include($jsFile);
 	}
 }
@@ -66,14 +66,14 @@ if (isset ($cssFile)){
 	if (!endWith($cssFile, ".css"))return;
 	header("Content-type: text/css; charset: UTF-8");
 	if (EnumJsFramework::isEnumValue($group)) {
-		$ajax_root=Gc::$nav_root_path."common".DIRECTORY_SEPARATOR."js".DIRECTORY_SEPARATOR."ajax".DIRECTORY_SEPARATOR;
+		$ajax_root=Gc::$nav_root_path."common".DS."js".DS."ajax".DS;
 		$cssFile=str_replace("/", DIRECTORY_SEPARATOR, $cssFile);
 		switch ($group){
 			case EnumJsFramework::JS_FW_EXTJS:
 				if ($version<4){
-					$ext_root=$ajax_root."ext".DIRECTORY_SEPARATOR;
+					$ext_root=$ajax_root."ext".DS;
 				}else{
-					$ext_root=$ajax_root."ext4".DIRECTORY_SEPARATOR;
+					$ext_root=$ajax_root."ext4".DS;
 				}
 				include($ext_root.$cssFile);
 				break;

@@ -1,4 +1,4 @@
-<?php   
+<?php
 /**
  +---------------------------------<br/>
  * 工具类：条形码<br/>
@@ -7,7 +7,7 @@
  * @package util.thirdparty
  * @author skygreen
  */
-class UtilBarCode extends Util 
+class UtilBarCode extends Util
 {
 	private static $possibleCodes = array('BCGcodabar', 'BCGcode11', 'BCGcode39', 'BCGcode39extended', 'BCGcode93', 'BCGcode128', 'BCGean8', 'BCGean13', 'BCGgs1128', 'BCGi25', 'BCGisbn', 'BCGmsi', 'BCGs25', 'BCGupca', 'BCGupce', 'BCGupcext2', 'BCGupcext5', 'BCGothercode', 'BCGpostnet', 'BCGintelligentmail');
 	private static $barcodeSupports = array(
@@ -16,7 +16,7 @@ class UtilBarCode extends Util
 	'barcodeIdentifier' => array('BCGintelligentmail'), // Requires also serviceType, mailerIdentifier, serialNumber
 	'setLabel' => array('BCGothercode')
 );
-	
+
 	/**
 	 * 采用Code128算法生成条形码
 	 * @param mixed $origin 源输入值
@@ -115,7 +115,7 @@ class UtilBarCode extends Util
 	{
 		$barcodeName="BCGi25";
 		self::coding($barcodeName,$origin);
-	}	
+	}
 
 	/**
 	 * 采用Standard 2 of 5算法生成条形码
@@ -155,7 +155,7 @@ class UtilBarCode extends Util
 	{
 		$barcodeName="BCGupce";
 		self::coding($barcodeName,$origin);
-	}	
+	}
 
 	/**
 	 * 采用UPC Extension 2 Digits算法生成条形码
@@ -206,7 +206,7 @@ class UtilBarCode extends Util
 		$barcodeName="BCGothercode";
 		self::coding($barcodeName,$origin);
 	}
-	
+
 	/**
 	 * 采用Code 11算法生成条形码
 	 * @param mixed $origin 源输入值
@@ -229,8 +229,8 @@ class UtilBarCode extends Util
 		}
 		$code=new $barcodeName();
 		// Loading Font
-		
-		$font = new BCGFontFile(Gc::$nav_root_path."module".DIRECTORY_SEPARATOR."barcode".DIRECTORY_SEPARATOR.'class/font/Arial.ttf', 18);
+
+		$font = new BCGFontFile(Gc::$nav_root_path."module".DS."barcode".DS.'class/font/Arial.ttf', 18);
 		$color_black = new BCGColor(0, 0, 0);
 		$color_white = new BCGColor(255, 255, 255);
 		$drawException = null;
@@ -275,22 +275,22 @@ class UtilBarCode extends Util
 
 					}
 				}
-			}			
-			
+			}
+
 			$code->setScale(2); // Resolution
 			$code->setThickness(30); // Thickness
 			$code->setForegroundColor($color_black); // Color of bars
 			$code->setBackgroundColor($color_white); // Color of spaces
 			$code->setFont($font); // Font (or 0)
-			$code->parse($origin); // Text			
+			$code->parse($origin); // Text
 			self::drawing($code);
 		} catch(Exception $exception) {
 			$drawException = $exception;
 		}
 	}
-	
+
 	/**
-	 * 绘制条形码图片  
+	 * 绘制条形码图片
 	 * @param mixed $code 条形码对象
 	 */
 	private static function drawing($code)

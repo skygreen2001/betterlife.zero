@@ -44,7 +44,7 @@ class AutoCodeViewDefault extends AutoCode
 			 self::$appName="model";
 			 break;
 		}
-		self::$view_dir_full=self::$save_dir.self::$app_dir.DIRECTORY_SEPARATOR.Config_F::VIEW_VIEW.DIRECTORY_SEPARATOR.Gc::$self_theme_dir.DIRECTORY_SEPARATOR.Config_F::VIEW_CORE.DIRECTORY_SEPARATOR;
+		self::$view_dir_full=self::$save_dir.self::$app_dir.DS.Config_F::VIEW_VIEW.DS.Gc::$self_theme_dir.DS.Config_F::VIEW_CORE.DS;
 
 	}
 
@@ -368,7 +368,7 @@ VIEW;
 					 "		\r\n";
 		$tpl_content=self::tableToViewTplDefine($tpl_content);
 		$filename="index".Config_F::SUFFIX_FILE_TPL;
-		$dir=self::$view_dir_full."index".DIRECTORY_SEPARATOR;
+		$dir=self::$view_dir_full."index".DS;
 		return self::saveDefineToDir($dir,$filename,$tpl_content);
 	}
 
@@ -418,7 +418,7 @@ VIEW;
 	private static function saveTplDefineToDir($tablename,$defineTplFileContent,$filename)
 	{
 		$package =self::getInstancename($tablename);
-		$dir=self::$view_dir_full.$package.DIRECTORY_SEPARATOR;
+		$dir=self::$view_dir_full.$package.DS;
 
 		$classname=self::getClassname($tablename);
 		$relative_path=str_replace(self::$save_dir, "", $dir.$filename);

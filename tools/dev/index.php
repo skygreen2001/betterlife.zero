@@ -43,6 +43,9 @@ class EnumReusePjType extends Enum
  *      4.修改帮助地址
  *      5.修改应用文件夹名称
  *      6.清除在大部分项目中不需要的目录
+ *      7.清除在大部分项目中不需要的文件
+ *      8.清除library下的不常用的库:
+ *            adodb5|linq|mdb2|PHPUnit|yaml|template[EaseTemplate|SmartTemplate|TemplateLite]
  * @author skygreen2001@gmail.com
  */
 class Project_Refactor
@@ -90,6 +93,18 @@ class Project_Refactor
 		"test",
 		"upload"
 	);
+	/**
+	 * 需要忽略的文件【在大部分的项目中都不会用到】
+	 */
+	public static $ignore_files=array(
+		"",
+		"",
+		"faq.txt",
+		".gitignore",
+		".project",
+		"dw_php_codehinting.config",
+		"unlock.cron"
+	);
 
 	/**
 	 * 清除无关的目录
@@ -104,6 +119,16 @@ class Project_Refactor
 			UtilFileSystem::deleteDir(self::$save_dir.DS.Gc::$module_root.DS."business");
 	}
 
+	/**
+	 * 清除无关的文件
+	 */
+	private static function IgnoreFiles()
+	{
+		foreach (self::$ignore_files as $ignore_file) {
+			$toDeleteFile=self::$save_dir.DS.$ignore_file;
+			unlink($toDeleteFile);
+		}
+	}
 
 	/**
 	 * 运行生成Web项目代码重用

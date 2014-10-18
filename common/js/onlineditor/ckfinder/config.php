@@ -81,7 +81,7 @@ Examples:
 
 ATTENTION: The trailing slash is required.
 */
-$baseDir = Gc::$upload_path.'userfiles'.DIRECTORY_SEPARATOR;   
+$baseDir = Gc::$upload_path.'userfiles'.DS;
 //$baseDir = resolveUrl($baseUrl);
 
 /*

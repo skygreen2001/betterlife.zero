@@ -71,9 +71,9 @@ class AutoCodeAction extends AutoCode
 				self::$app_dir="admin";
 				break;
 		}
-		self::$action_dir_full=self::$save_dir.self::$app_dir.DIRECTORY_SEPARATOR.self::$action_dir.DIRECTORY_SEPARATOR;
-		$view_dir_full=self::$save_dir.self::$app_dir.DIRECTORY_SEPARATOR.Config_F::VIEW_VIEW.DIRECTORY_SEPARATOR.Gc::$self_theme_dir.DIRECTORY_SEPARATOR;
-		self::$view_js_package=$view_dir_full."js".DIRECTORY_SEPARATOR."ext".DIRECTORY_SEPARATOR;
+		self::$action_dir_full=self::$save_dir.self::$app_dir.DS.self::$action_dir.DS;
+		$view_dir_full=self::$save_dir.self::$app_dir.DS.Config_F::VIEW_VIEW.DS.Gc::$self_theme_dir.DS;
+		self::$view_js_package=$view_dir_full."js".DS."ext".DS;
 
 		if (!UtilString::is_utf8(self::$action_dir_full)){
 			self::$action_dir_full=UtilString::gbk2utf8(self::$action_dir_full);
@@ -122,7 +122,7 @@ class AutoCodeAction extends AutoCode
 			$category = Gc::$appName;
 			$package  = self::$package_back;
 			$author   = self::$author;
-			include_once("jsmodel".DIRECTORY_SEPARATOR."overalljs.php");
+			include_once("jsmodel".DS."overalljs.php");
 			$overalljs_files=array("index.js"=>$jsIndexContent,"layout.js"=>$jsLayoutContent,"navigation.js"=>$jsNavigationContent);
 			foreach ($overalljs_files as $filename=>$content) {
 				if (!file_exists(self::$view_js_package.$filename)){
@@ -216,9 +216,9 @@ class AutoCodeAction extends AutoCode
 	*/
 	public static function createActionParent()
 	{
-		$dir_home_app=self::$save_dir.DIRECTORY_SEPARATOR.self::$app_dir.DIRECTORY_SEPARATOR."action".DIRECTORY_SEPARATOR;
+		$dir_home_app=self::$save_dir.DS.self::$app_dir.DS."action".DS;
 		$author=self::$author;
-		require("view".DIRECTORY_SEPARATOR."jsmodel".DIRECTORY_SEPARATOR."actionbasicjs.php");
+		require("view".DS."jsmodel".DS."actionbasicjs.php");
 		switch (self::$type) {
 			case 1:
 				self::saveDefineToDir($dir_home_app,"ActionModel.php",$actionModel);

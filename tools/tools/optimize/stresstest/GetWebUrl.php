@@ -21,14 +21,14 @@ class GetWebUrl
 	*/
 	public static function getAllMaybeUrl()
 	{
-		self::$save_urls_path=Gc::$nav_root_path."stressdata".DIRECTORY_SEPARATOR;
+		self::$save_urls_path=Gc::$nav_root_path."stressdata".DS;
 		UtilFileSystem::createDir(self::$save_urls_path);
 		self::$save_urls_path.="urllist.txt";
 		$count=0;
 		$result="";
 		foreach (Gc::$module_names as $moduleName) {
 			if (!contain($moduleName,"admin")){
-				$moduleDir=Gc::$nav_root_path.Gc::$module_root.DIRECTORY_SEPARATOR.$moduleName.DIRECTORY_SEPARATOR."action".DIRECTORY_SEPARATOR;
+				$moduleDir=Gc::$nav_root_path.Gc::$module_root.DS.$moduleName.DS."action".DS;
 				$action_names=UtilFileSystem::getFilesInDirectory($moduleDir);
 				foreach ($action_names as $action_path) {
 					$action_classname_name=basename($action_path,".php");
@@ -69,9 +69,9 @@ class GetWebUrl
 		$result=array();
 		foreach($dataobjectMethods as $method)
 		{
-			$method_name=$method->name;     
+			$method_name=$method->name;
 			$class_name=$method->getDeclaringClass()->name;
-			
+
 			if ($class_name==$object){
 				$result[]=$method_name;
 			}

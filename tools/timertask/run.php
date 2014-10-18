@@ -1,10 +1,10 @@
 <?php
-require_once ("../../init.php"); 
+require_once ("../../init.php");
 
 register_shutdown_function(create_function('','run_cron();'));
- 
+
 /**
- * 运行一个计划任务守护进程 
+ * 运行一个计划任务守护进程
  */
 function run_cron()
 {
@@ -15,34 +15,34 @@ function run_cron()
 
 	while(true)
 	{
-		// 设定定时任务终止条件   
+		// 设定定时任务终止条件
 		$exitflag_file="unlock.cron";
 		if (file_exists($exitflag_file)||
-			file_exists(__DIR__.DIRECTORY_SEPARATOR."core".DIRECTORY_SEPARATOR."main".DIRECTORY_SEPARATOR.$exitflag_file)||
-			file_exists(__DIR__.DIRECTORY_SEPARATOR."tools".DIRECTORY_SEPARATOR."timertask".DIRECTORY_SEPARATOR.$exitflag_file))
+			file_exists(__DIR__.DS."core".DS."main".DS.$exitflag_file)||
+			file_exists(__DIR__.DS."tools".DS."timertask".DS.$exitflag_file))
 		{
 			break;
-		}       
+		}
 		$now=date("Y-m-d H:i:s");
 		Cron::run_once();
-		
+
 //		if (intval(date("i"))%5==0){
-			// 写文件操作开始     
-//			$fp = fopen("test".$count.".txt", "w");     
-//			if($fp)     
+			// 写文件操作开始
+//			$fp = fopen("test".$count.".txt", "w");
+//			if($fp)
 //			{
-//				$flag=fwrite($fp,$now.":这里是文件内容www.betterlife.com\r\n");             
-//				if(!$flag)             
-//				{                 
-//					echo "写入文件失败";                 
-//					break;             
-//				}   
-//			}     
-//			fclose($fp);     
-			// 写文件操作结束   
+//				$flag=fwrite($fp,$now.":这里是文件内容www.betterlife.com\r\n");
+//				if(!$flag)
+//				{
+//					echo "写入文件失败";
+//					break;
+//				}
+//			}
+//			fclose($fp);
+			// 写文件操作结束
 //			LogMe::log($now);
 //		}
-	
+
 		// Sleep for 10 seconds
 		sleep(10);
 	}

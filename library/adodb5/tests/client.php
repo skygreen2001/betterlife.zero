@@ -1,22 +1,22 @@
 <html>
 <body bgcolor=white>
 <?php
-require_once("..".DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR."init.php");
-/** 
+require_once("..".DS."..".DS."..".DS."init.php");
+/**
  * V4.50 6 July 2004  (c) 2001-2002 John Lim (jlim#natsoft.com). All rights reserved.
- * Released under both BSD license and Lesser GPL library license. 
-  Whenever there is any discrepancy between the two licenses, 
-  the BSD license will take precedence. 
- * 
+ * Released under both BSD license and Lesser GPL library license.
+  Whenever there is any discrepancy between the two licenses,
+  the BSD license will take precedence.
+ *
  * set tabs to 8
  */
- 
+
  // documentation on usage is at http://php.weblogs.com/adodb_csv
- 
+
  echo PHP_VERSION,'<br>';
  var_dump(parse_url('odbc_mssql://userserver/'));
  die();
- 
+
 include('../adodb.inc.php');
 include('../tohtml.inc.php');
 
@@ -28,7 +28,7 @@ include('../tohtml.inc.php');
 	if ($err) print $err;
 	return $rs;
  }
- 
+
 $url_base=Gc::$url_base;
 $url_base=UtilNet::urlbase();
 $serverURL = $url_base.'library/adodb5/server.php';
@@ -39,37 +39,37 @@ $sql2 = "insert into products (productname) values ('testprod 1')";
 $sql3 = "insert into products (productname) values ('testprod 2')";
 $sql4 = "delete from products where productid>80";
 $sql5 = 'select * from products';
-	
+
 if ($testhttp) {
 	print "<a href=#c>Client Driver Tests</a><p>";
 	print "<h3>Test Error</h3>";
 	$rs = send2server($serverURL,$sql1);
 	print_pre($rs);
 	print "<hr />";
-	
+
 	print "<h3>Test Insert</h3>";
-	
+
 	$rs = send2server($serverURL,$sql2);
 	print_pre($rs);
 	print "<hr />";
-	
+
 	print "<h3>Test Insert2</h3>";
-	
+
 	$rs = send2server($serverURL,$sql3);
 	print_pre($rs);
 	print "<hr />";
-	
+
 	print "<h3>Test Delete</h3>";
-	
+
 	$rs = send2server($serverURL,$sql4);
 	print_pre($rs);
 	print "<hr />";
-	
-	
+
+
 	print "<h3>Test Select</h3>";
 	$rs = send2server($serverURL,$sql5);
 	if ($rs) rs2html($rs);
-	
+
 	print "<hr />";
 }
 
@@ -109,21 +109,21 @@ http://localhost/php/adodb/server.php?sql=insert+into+products+%28productname%29
 adorecordset Object
 (
 	[dataProvider] => native
-	[fields] => 
+	[fields] =>
 	[blobSize] => 64
-	[canSeek] => 
+	[canSeek] =>
 	[EOF] => 1
-	[emptyTimeStamp] =>  
-	[emptyDate] =>  
-	[debug] => 
+	[emptyTimeStamp] =>
+	[emptyDate] =>
+	[debug] =>
 	[timeToLive] => 0
-	[bind] => 
+	[bind] =>
 	[_numOfRows] => -1
 	[_numOfFields] => 0
 	[_queryID] => 1
 	[_currentRow] => -1
-	[_closed] => 
-	[_inited] => 
+	[_closed] =>
+	[_inited] =>
 	[sql] => insert into products (productname) values ('testprod')
 	[affectedrows] => 1
 	[insertid] => 81
@@ -138,21 +138,21 @@ http://localhost/php/adodb/server.php?sql=insert+into+products+%28productname%29
 adorecordset Object
 (
 	[dataProvider] => native
-	[fields] => 
+	[fields] =>
 	[blobSize] => 64
-	[canSeek] => 
+	[canSeek] =>
 	[EOF] => 1
-	[emptyTimeStamp] =>  
-	[emptyDate] =>  
-	[debug] => 
+	[emptyTimeStamp] =>
+	[emptyDate] =>
+	[debug] =>
 	[timeToLive] => 0
-	[bind] => 
+	[bind] =>
 	[_numOfRows] => -1
 	[_numOfFields] => 0
 	[_queryID] => 1
 	[_currentRow] => -1
-	[_closed] => 
-	[_inited] => 
+	[_closed] =>
+	[_inited] =>
 	[sql] => insert into products (productname) values ('testprod')
 	[affectedrows] => 1
 	[insertid] => 82
@@ -167,21 +167,21 @@ http://localhost/php/adodb/server.php?sql=delete+from+products+where+productid%3
 adorecordset Object
 (
 	[dataProvider] => native
-	[fields] => 
+	[fields] =>
 	[blobSize] => 64
-	[canSeek] => 
+	[canSeek] =>
 	[EOF] => 1
-	[emptyTimeStamp] =>  
-	[emptyDate] =>  
-	[debug] => 
+	[emptyTimeStamp] =>
+	[emptyDate] =>
+	[debug] =>
 	[timeToLive] => 0
-	[bind] => 
+	[bind] =>
 	[_numOfRows] => -1
 	[_numOfFields] => 0
 	[_queryID] => 1
 	[_currentRow] => -1
-	[_closed] => 
-	[_inited] => 
+	[_closed] =>
+	[_inited] =>
 	[sql] => delete from products where productid>80
 	[affectedrows] => 2
 	[insertid] => 0
@@ -189,7 +189,7 @@ adorecordset Object
 
 [more stuff deleted]
  .
- . 
+ .
  .
 */
 ?>

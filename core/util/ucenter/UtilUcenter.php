@@ -15,8 +15,8 @@ class UtilUcenter extends Util
 	 */
 	public static function init()
 	{
-		$uc_client_path= Gc::$nav_root_path."data".DIRECTORY_SEPARATOR.'uc_client'.DIRECTORY_SEPARATOR.'client.php';
-		include_once Gc::$nav_root_path.'api'.DIRECTORY_SEPARATOR.'config.inc.php';
+		$uc_client_path= Gc::$nav_root_path."data".DS.'uc_client'.DS.'client.php';
+		include_once Gc::$nav_root_path.'api'.DS.'config.inc.php';
 		include_once($uc_client_path);
 	}
 

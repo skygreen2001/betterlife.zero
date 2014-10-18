@@ -311,7 +311,7 @@ class AutoCode extends Object
 	protected static function saveDefineToDir($dir,$filename,$definePhpFileContent)
 	{
 		UtilFileSystem::createDir($dir);
-		UtilFileSystem::save_file_content($dir.DIRECTORY_SEPARATOR.$filename,$definePhpFileContent);
+		UtilFileSystem::save_file_content($dir.DS.$filename,$definePhpFileContent);
 		return basename($filename, ".php");
 	}
 
@@ -336,7 +336,7 @@ class AutoCode extends Object
 		echo "<div align='center' height='450'>";
 		echo "<form id='autocodeForm' target='_blank'>";
 		echo "  <div style='line-height:1.5em;'>";
-		$default_dir=Gc::$nav_root_path."model".DIRECTORY_SEPARATOR;
+		$default_dir=Gc::$nav_root_path."model".DS;
 		echo "      <label>输出文件路径:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' name='save_dir' value='$default_dir' id='save_dir' />";
 
 		if (!empty($inputArr)){

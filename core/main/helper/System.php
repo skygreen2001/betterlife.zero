@@ -145,7 +145,7 @@ class System
         natsort($list);
         if ($aktinst < $maxinst || $maxinst == 0) {
             foreach ($list as $val) {
-                $path = $sPath . DIRECTORY_SEPARATOR . $val;
+                $path = $sPath . DS . $val;
                 if (is_dir($path) && !is_link($path)) {
                     $tmp    = System::_dirToStruct($path, $maxinst, $aktinst+1, $silent);
                     $struct = array_merge_recursive($struct, $tmp);
@@ -527,7 +527,7 @@ class System
 
         foreach ($exe_suffixes as $suff) {
             foreach ($path_elements as $dir) {
-                $file = $dir . DIRECTORY_SEPARATOR . $program . $suff;
+                $file = $dir . DS . $program . $suff;
                 if (@$pear_is_executable($file)) {
                     return $file;
                 }

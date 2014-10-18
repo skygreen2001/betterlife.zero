@@ -155,7 +155,7 @@ class ExtServiceAdmin extends ServiceBasic
 		$diffpart=date("YmdHis");
 		if (!empty($files["upload_file"])){
 			$tmptail = end(explode('.', $files["upload_file"]["name"]));
-			$uploadPath =GC::$attachment_path."admin".DIRECTORY_SEPARATOR."import".DIRECTORY_SEPARATOR."admin$diffpart.$tmptail";
+			$uploadPath =GC::$attachment_path."admin".DS."import".DS."admin$diffpart.$tmptail";
 			$result     =UtilFileSystem::uploadFile($files,$uploadPath);
 			if ($result&&($result['success']==true)){
 				if (array_key_exists('file_name',$result)){
@@ -226,7 +226,7 @@ class ExtServiceAdmin extends ServiceBasic
 		}
 		unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
 		$diffpart=date("YmdHis");
-		$outputFileName=Gc::$attachment_path."admin".DIRECTORY_SEPARATOR."export".DIRECTORY_SEPARATOR."admin$diffpart.xls";
+		$outputFileName=Gc::$attachment_path."admin".DS."export".DS."admin$diffpart.xls";
 		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false);
 		$downloadPath  =Gc::$attachment_url."admin/export/admin$diffpart.xls";
 		return array(

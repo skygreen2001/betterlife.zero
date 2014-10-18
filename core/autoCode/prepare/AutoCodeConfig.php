@@ -36,7 +36,7 @@ class AutoCodeConfig extends AutoCode
 	 */
 	public static function init()
 	{
-		self::$filename_config_xml=Gc::$nav_root_path."tools".DIRECTORY_SEPARATOR."tools".DIRECTORY_SEPARATOR."autoCode".DIRECTORY_SEPARATOR."autocode.config.xml";
+		self::$filename_config_xml=Gc::$nav_root_path."tools".DS."tools".DS."autoCode".DS."autocode.config.xml";
 		self::$url_config_xml     =Gc::$url_base."tools/tools/autoCode/autocode.config.xml";
 		parent::init();
 	}

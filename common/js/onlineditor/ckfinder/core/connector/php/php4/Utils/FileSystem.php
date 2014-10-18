@@ -577,7 +577,7 @@ class CKFinder_Connector_Utils_FileSystem
         while (false !== ($filename = readdir($fh))) {
             if ($filename == '.' || $filename == '..') {
                 continue;
-            } else if (is_dir($serverPath . DIRECTORY_SEPARATOR . $filename)) {
+            } else if (is_dir($serverPath . DS . $filename)) {
                 //we have found valid directory
                 $hasChildren = true;
                 break;

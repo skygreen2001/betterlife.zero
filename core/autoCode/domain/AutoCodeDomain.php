@@ -37,7 +37,7 @@ class AutoCodeDomain extends AutoCode
 	public static function AutoCode($table_names="")
 	{
 		self::$app_dir=Gc::$appName;
-		self::$domain_dir_full=self::$save_dir.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR.self::$domain_dir.DIRECTORY_SEPARATOR;
+		self::$domain_dir_full=self::$save_dir.self::$app_dir.DS.self::$dir_src.DS.self::$domain_dir.DS;
 		self::init();
 		if (self::$isOutputCss)self::$showReport.= UtilCss::form_css()."\r\n";
 		self::$enumClass="";
@@ -558,7 +558,7 @@ class AutoCodeDomain extends AutoCode
 		$classname=self::getClassname($tablename);
 		$filename ="$classname.php";
 		$package  =str_replace(".", DIRECTORY_SEPARATOR, $package);
-		$relative_path=str_replace(self::$save_dir, "", self::$domain_dir_full.$package.DIRECTORY_SEPARATOR.$filename);
+		$relative_path=str_replace(self::$save_dir, "", self::$domain_dir_full.$package.DS.$filename);
 		AutoCodePreviewReport::$domain_files[$classname]=$relative_path;
 		return self::saveDefineToDir(self::$domain_dir_full.$package,$filename,$definePhpFileContent);
 	}
@@ -571,7 +571,7 @@ class AutoCodeDomain extends AutoCode
 	private static function saveEnumDefineToDir($enumclassname,$definePhpFileContent)
 	{
 		$filename = $enumclassname.".php";
-		$relative_path=str_replace(self::$save_dir, "",self::$domain_dir_full.self::$enum_dir.DIRECTORY_SEPARATOR.$filename);
+		$relative_path=str_replace(self::$save_dir, "",self::$domain_dir_full.self::$enum_dir.DS.$filename);
 		AutoCodePreviewReport::$enum_files[$enumclassname]=$relative_path;
 		return self::saveDefineToDir(self::$domain_dir_full.self::$enum_dir,$filename,$definePhpFileContent);
 	}

@@ -342,13 +342,13 @@ class Gc
 	public static function init()
 	{
 		if (empty(Gc::$nav_root_path)){
-			Gc::$nav_root_path=dirname(__FILE__).DIRECTORY_SEPARATOR;
-			Gc::$attachment_path=Gc::$nav_root_path."attachment".DIRECTORY_SEPARATOR;
-			Gc::$upload_path=Gc::$nav_root_path."upload".DIRECTORY_SEPARATOR;
+			Gc::$nav_root_path=dirname(__FILE__).DS;
+			Gc::$attachment_path=Gc::$nav_root_path."attachment".DS;
+			Gc::$upload_path=Gc::$nav_root_path."upload".DS;
 		}
 
 		if (empty(Gc::$nav_framework_path)){
-			Gc::$nav_framework_path=dirname(__FILE__).DIRECTORY_SEPARATOR;
+			Gc::$nav_framework_path=dirname(__FILE__).DS;
 		}
 
 		if (empty(Gc::$url_base)){
@@ -366,7 +366,7 @@ class Gc
 			if (strpos(strrev($baseurl), "/") !== 0)$baseurl.='/';
 			Gc::$url_base=$baseurl;
 			$with_file=$_SERVER["SCRIPT_FILENAME"];
-			$file_sub_dir=dirname($with_file).DIRECTORY_SEPARATOR;
+			$file_sub_dir=dirname($with_file).DS;
 			$file_sub_dir=str_replace("/", DIRECTORY_SEPARATOR, $file_sub_dir);
 			$file_sub_dir=str_replace(Gc::$nav_root_path, "", $file_sub_dir);
 			$file_sub_dir=str_replace(DIRECTORY_SEPARATOR, "/", $file_sub_dir);

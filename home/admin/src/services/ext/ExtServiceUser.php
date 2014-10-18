@@ -142,7 +142,7 @@ class ExtServiceUser extends ServiceBasic
 		$diffpart=date("YmdHis");
 		if (!empty($files["upload_file"])){
 			$tmptail = end(explode('.', $files["upload_file"]["name"]));
-			$uploadPath =GC::$attachment_path."user".DIRECTORY_SEPARATOR."import".DIRECTORY_SEPARATOR."user$diffpart.$tmptail";
+			$uploadPath =GC::$attachment_path."user".DS."import".DS."user$diffpart.$tmptail";
 			$result     =UtilFileSystem::uploadFile($files,$uploadPath);
 			if ($result&&($result['success']==true)){
 				if (array_key_exists('file_name',$result)){
@@ -187,7 +187,7 @@ class ExtServiceUser extends ServiceBasic
 		$arr_output_header= self::fieldsMean(User::tablename());
 		unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
 		$diffpart=date("YmdHis");
-		$outputFileName=Gc::$attachment_path."user".DIRECTORY_SEPARATOR."export".DIRECTORY_SEPARATOR."user$diffpart.xls";
+		$outputFileName=Gc::$attachment_path."user".DS."export".DS."user$diffpart.xls";
 		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false);
 		$downloadPath  =Gc::$attachment_url."user/export/user$diffpart.xls";
 		return array(

@@ -45,7 +45,7 @@ class AutoCodeDomainJava extends AutoCode
 	public static function AutoCode()
 	{
 		self::$app_dir=Gc::$appName;
-		self::$domain_dir_full=self::$save_dir.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR.self::$domain_dir.DIRECTORY_SEPARATOR;
+		self::$domain_dir_full=self::$save_dir.self::$app_dir.DS.self::$dir_src.DS.self::$domain_dir.DS;
 		self::init();
 		if (self::$isOutputCss)self::$showReport.= UtilCss::form_css()."\r\n";
 		self::$enumClass="";

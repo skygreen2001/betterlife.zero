@@ -407,7 +407,7 @@ class ServiceBasic extends Service implements IServiceBasic
 		$result="";
 		if (!empty($files[$uploadFlag])&&!empty($files[$uploadFlag]["name"])){
 			$tmptail = end(explode('.', $files[$uploadFlag]["name"]));
-			$uploadPath =GC::$upload_path."images".DIRECTORY_SEPARATOR.$categoryId.DIRECTORY_SEPARATOR.$upload_dir.DIRECTORY_SEPARATOR.$diffpart.".".$tmptail;
+			$uploadPath =GC::$upload_path."images".DS.$categoryId.DS.$upload_dir.DS.$diffpart.".".$tmptail;
 			$result     =UtilFileSystem::uploadFile($files,$uploadPath,$uploadFlag);
 			if ($result&&($result['success']==true)){
 				$result['file_name']="$categoryId/$upload_dir/$diffpart.$tmptail";
@@ -434,8 +434,8 @@ class ServiceBasic extends Service implements IServiceBasic
 		{
 			//上传压缩文件并解压
 			$filename   = date("YmdHis");
-			$upload_dir = GC::$upload_path."images".DIRECTORY_SEPARATOR.$instance_name.DIRECTORY_SEPARATOR;
-			$upload_zip_dir=$upload_dir."zip".DIRECTORY_SEPARATOR;
+			$upload_dir = GC::$upload_path."images".DS.$instance_name.DS;
+			$upload_zip_dir=$upload_dir."zip".DS;
 			$tmptail    = end(explode('.', $files[$upload_field_name]["name"]));
 			$uploadPath = $upload_zip_dir.$filename.".".$tmptail;
 			UtilFileSystem::createDir($upload_zip_dir);

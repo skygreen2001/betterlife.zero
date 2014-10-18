@@ -8,20 +8,20 @@
  * @subpackage yaml
  * @author skygreen
  */
-class UtilConfigYaml extends UtilConfig{    
+class UtilConfigYaml extends UtilConfig{
     function load ($file) {
         if (file_exists($file) == false) { return false; }
         $this->_settings = Spyc::YAMLLoad($file);
     }
-    
+
     /**
     * 调用方法
     */
     public static function main(){
         $settings = New UtilConfigYaml();
-        $settings->load(__DIR__.DIRECTORY_SEPARATOR.'setting.yaml');
+        $settings->load(__DIR__.DS.'setting.yaml');
         echo 'Yaml: ' . $settings->get('db.host') . '';
     }
-  
+
 }
 ?>

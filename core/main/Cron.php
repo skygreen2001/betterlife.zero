@@ -8,7 +8,7 @@
  * @package core.main
  * @author skygreen
  */
-class Cron 
+class Cron
 {
 	/* 配置 */
 	public $_config = array();
@@ -21,35 +21,35 @@ class Cron
 	private $_lock_fp = null;
 
 	/**
-	 * 启动运行计划任务定时执行 
+	 * 启动运行计划任务定时执行
 	 */
 	public static function run()
 	{
 		$exitflag_file="unlock.cron";
-		if (file_exists($exitflag_file)||file_exists(__DIR__.DIRECTORY_SEPARATOR."core".DIRECTORY_SEPARATOR."main".DIRECTORY_SEPARATOR.$exitflag_file))
+		if (file_exists($exitflag_file)||file_exists(__DIR__.DS."core".DS."main".DS.$exitflag_file))
 		{
 			return;
 		}
 		register_shutdown_function(create_function('', '
 			$cron = new Cron();//计划任务实例
-			$cron->execute();//执行		
+			$cron->execute();//执行
 		'));
 	}
-	
+
 	/**
-	 * 提供给工具类循环使用 
+	 * 提供给工具类循环使用
 	 */
 	public static function run_once()
-	{   
+	{
 		global $cron;
 		if (!$cron){
 			$cron = new Cron();//计划任务实例
 		}else{
-			$cron->_now = time();  
+			$cron->_now = time();
 		}
-		$cron->execute();//执行        
+		$cron->execute();//执行
 	}
-	
+
 	public function __construct($setting=array())
 	{
 		$this->Cron($setting);
@@ -87,21 +87,21 @@ class Cron
 	 */
 	public function _init_tasks()
 	{
-		foreach (Gc::$module_names as $module_name) 
+		foreach (Gc::$module_names as $module_name)
 		{
-			$timerconfigpath=Gc::$nav_root_path."home".DIRECTORY_SEPARATOR.$module_name.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."timertask".DIRECTORY_SEPARATOR;
+			$timerconfigpath=Gc::$nav_root_path."home".DS.$module_name.DS."src".DS."timertask".DS;
 			if (file_exists($timerconfigpath."cron.config.xml"))
 			{
 				$this->_config['task_list'][$module_name]=$timerconfigpath."cron.config.xml";
-			}	
-		}    
-		
+			}
+		}
+
 		if (empty($this->_config['task_list'])||((count($this->_config['task_list']))<=0))
 		{
 			return;
 		}else{
 			foreach ($this->_config['task_list'] as $module_name=>$task_file) {
-				$arrObjDatas=UtilXmlSimple::fileXmlAttributesToArray(Gc::$nav_root_path."home".DIRECTORY_SEPARATOR.$module_name.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."timertask".DIRECTORY_SEPARATOR."cron.config.xml");
+				$arrObjDatas=UtilXmlSimple::fileXmlAttributesToArray(Gc::$nav_root_path."home".DS.$module_name.DS."src".DS."timertask".DS."cron.config.xml");
 				foreach ($arrObjDatas as $arrObjData) {
 					if (array_key_exists("name",$arrObjData))
 					{
@@ -134,12 +134,12 @@ class Cron
 
 	private function execute_ignored()
 	{
-		set_time_limit(1800); //半个小时       
+		set_time_limit(1800); //半个小时
 		ignore_user_abort(true);//忽略用户退出
 		$this->execute();
 	}
-	
-	
+
+
 	/**
 	 *    执行
 	 *
@@ -164,7 +164,7 @@ class Cron
 		/* 更新任务列表 */
 		$this->update_tasks($due_tasks);
 	}
-	
+
 	/**
 	 *    获取到期的任务列表
 	 *
@@ -341,7 +341,7 @@ class Cron
 	public function update()
 	{
 		foreach (Gc::$module_names as $module_name) {
-			$timerconfigpath=Gc::$nav_root_path."home".DIRECTORY_SEPARATOR.$module_name.DIRECTORY_SEPARATOR."src".DIRECTORY_SEPARATOR."timertask".DIRECTORY_SEPARATOR;
+			$timerconfigpath=Gc::$nav_root_path."home".DS.$module_name.DS."src".DS."timertask".DS;
 			if (file_exists($timerconfigpath."cron.config.xml"))
 			{
 				$filename=$timerconfigpath."cron.config.xml";
@@ -349,14 +349,14 @@ class Cron
 				if ($xml)
 				{
 					foreach ($xml as $xml_attributes) {
-						$attributes=$xml_attributes->attributes();  
+						$attributes=$xml_attributes->attributes();
 						foreach($this->_tasks as $task_name=>$task) {
 							if (property_exists($attributes,"name")&&($attributes->name==$task_name)){
 								if ($task["module_name"]==$module_name){
 									unset($task["module_name"]);
 									foreach ($task as $key=>$value) {
 										if (property_exists($attributes,$key)){
-											$attributes->$key=$value;                
+											$attributes->$key=$value;
 										}else{
 											if ($value!=null){
 												if ($attributes){
@@ -367,10 +367,10 @@ class Cron
 									}
 								}
 							}
-						}                        
-					}  
-				}   
-				$xml->asXML($filename);   
+						}
+					}
+				}
+				$xml->asXML($filename);
 			}
 		}
 	}
@@ -396,7 +396,7 @@ class Cron
 		}else{
 			return;
 		}
-		
+
 		/* 更新上次执行时间 */
 		$this->_tasks[$task]['last_time'] = $this->_now;
 

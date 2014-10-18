@@ -14,7 +14,7 @@ class AutoCodeOneKey extends AutoCode
 	 */
 	public static function AutoCode()
 	{
-		$dest_directory=Gc::$nav_root_path."tools".DIRECTORY_SEPARATOR."tools".DIRECTORY_SEPARATOR."autoCode".DIRECTORY_SEPARATOR;
+		$dest_directory=Gc::$nav_root_path."tools".DS."tools".DS."autoCode".DS;
 		$filename=$dest_directory."autocode.config.xml";
 		AutoCodeValidate::run();
 		if(Config_AutoCode::ALWAYS_AUTOCODE_XML_NEW)AutoCodeConfig::run();

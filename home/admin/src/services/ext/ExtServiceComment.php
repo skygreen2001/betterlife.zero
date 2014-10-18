@@ -30,7 +30,7 @@ class ExtServiceComment extends ServiceBasic
 		return array(
 			'success' => true,
 			'data'    => $data
-		); 
+		);
 	}
 
 	/**
@@ -51,7 +51,7 @@ class ExtServiceComment extends ServiceBasic
 		return array(
 			'success' => true,
 			'data'    => $data
-		); 
+		);
 	}
 
 	/**
@@ -59,7 +59,7 @@ class ExtServiceComment extends ServiceBasic
 	 * @param array|string $ids 数据对象编号
 	 * 形式如下:
 	 * 1.array:array(1,2,3,4,5)
-	 * 2.字符串:1,2,3,4 
+	 * 2.字符串:1,2,3,4
 	 * @return boolen 是否删除成功；true为操作正常
 	 */
 	public function deleteByIds($ids)
@@ -68,7 +68,7 @@ class ExtServiceComment extends ServiceBasic
 		return array(
 			'success' => true,
 			'data'    => $data
-		); 
+		);
 	}
 
 	/**
@@ -87,8 +87,8 @@ class ExtServiceComment extends ServiceBasic
 			$start=$condition['start']+1;
 		  }
 		if (isset($condition['limit'])){
-			$limit=$condition['limit']; 
-			$limit=$start+$limit-1; 
+			$limit=$condition['limit'];
+			$limit=$start+$limit-1;
 		}
 		unset($condition['start'],$condition['limit']);
 		$condition=$this->filtertoCondition($condition);
@@ -104,7 +104,7 @@ class ExtServiceComment extends ServiceBasic
 				if ($comment["commitTime"]){
 					UtilDateTime::ChinaTime();
 					$comment["commitTime"]=UtilDateTime::timestampToDateTime($comment["commitTime"]);
-				}  
+				}
 			}
 			if ($data==null)$data=array();
 		}else{
@@ -114,7 +114,7 @@ class ExtServiceComment extends ServiceBasic
 			'success' => true,
 			'totalCount'=>$count,
 			'data'    => $data
-		); 
+		);
 	}
 
 	/**
@@ -126,7 +126,7 @@ class ExtServiceComment extends ServiceBasic
 		$diffpart=date("YmdHis");
 		if (!empty($files["upload_file"])){
 			$tmptail = end(explode('.', $files["upload_file"]["name"]));
-			$uploadPath =GC::$attachment_path."comment".DIRECTORY_SEPARATOR."import".DIRECTORY_SEPARATOR."comment$diffpart.$tmptail";
+			$uploadPath =GC::$attachment_path."comment".DS."import".DS."comment$diffpart.$tmptail";
 			$result     =UtilFileSystem::uploadFile($files,$uploadPath);
 			if ($result&&($result['success']==true)){
 				if (array_key_exists('file_name',$result)){
@@ -167,7 +167,7 @@ class ExtServiceComment extends ServiceBasic
 	public function exportComment($filter=null)
 	{
 		if ($filter)$filter=$this->filtertoCondition($filter);
-		$data=Comment::get($filter);              
+		$data=Comment::get($filter);
 		$arr_output_header= self::fieldsMean(Comment::tablename());
         foreach ($data as $comment) {
             if ($comment->user_id){
@@ -181,13 +181,13 @@ class ExtServiceComment extends ServiceBasic
         }
         unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
 		$diffpart=date("YmdHis");
-		$outputFileName=Gc::$attachment_path."comment".DIRECTORY_SEPARATOR."export".DIRECTORY_SEPARATOR."comment$diffpart.xls";
-		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false); 
-		$downloadPath  =Gc::$attachment_url."comment/export/comment$diffpart.xls"; 
+		$outputFileName=Gc::$attachment_path."comment".DS."export".DS."comment$diffpart.xls";
+		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false);
+		$downloadPath  =Gc::$attachment_url."comment/export/comment$diffpart.xls";
 		return array(
 			'success' => true,
 			'data'    => $downloadPath
-		); 
+		);
 	}
 }
 ?>

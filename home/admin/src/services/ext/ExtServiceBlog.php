@@ -126,7 +126,7 @@ class ExtServiceBlog extends ServiceBasic
 		$diffpart=date("YmdHis");
 		if (!empty($files["upload_file"])){
 			$tmptail = end(explode('.', $files["upload_file"]["name"]));
-			$uploadPath =GC::$attachment_path."blog".DIRECTORY_SEPARATOR."import".DIRECTORY_SEPARATOR."blog$diffpart.$tmptail";
+			$uploadPath =GC::$attachment_path."blog".DS."import".DS."blog$diffpart.$tmptail";
 			$result     =UtilFileSystem::uploadFile($files,$uploadPath);
 			if ($result&&($result['success']==true)){
 				if (array_key_exists('file_name',$result)){
@@ -181,7 +181,7 @@ class ExtServiceBlog extends ServiceBasic
 		}
 		unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
 		$diffpart=date("YmdHis");
-		$outputFileName=Gc::$attachment_path."blog".DIRECTORY_SEPARATOR."export".DIRECTORY_SEPARATOR."blog$diffpart.xls";
+		$outputFileName=Gc::$attachment_path."blog".DS."export".DS."blog$diffpart.xls";
 		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false);
 		$downloadPath  =Gc::$attachment_url."blog/export/blog$diffpart.xls";
 		return array(

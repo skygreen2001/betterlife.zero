@@ -67,7 +67,7 @@ class HugeAmountDataPush
 	public static function init()
 	{
 		self::$nowtime=UtilDateTime::now(EnumDateTimeFormat::TIMESTAMP);
-		self::$script_sql_path=Gc::$nav_root_path."stressdata".DIRECTORY_SEPARATOR;
+		self::$script_sql_path=Gc::$nav_root_path."stressdata".DS;
 		UtilFileSystem::createDir(self::$script_sql_path);
 		self::$script_sql_path.="StresstTest".self::$nowtime.".txt";
 		self::$result="";

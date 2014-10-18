@@ -11,9 +11,9 @@
 
 //*****************start:modify by skygreen**************************
 require_once("../../../../../init.php");
-$php_path = Gc::$upload_path."userfiles".DIRECTORY_SEPARATOR;
+$php_path = Gc::$upload_path."userfiles".DS;
 if (!is_dir($php_path)){
-	UtilFileSystem::createDir($php_path);    
+	UtilFileSystem::createDir($php_path);
 }
 $php_url = Gc::$upload_url."userfiles/";
 

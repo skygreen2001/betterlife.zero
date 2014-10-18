@@ -9,7 +9,7 @@
  * @subpackage menu
  * @author skygreen
  */
-class MenuGroup extends Viewable 
+class MenuGroup extends Viewable
 {
 	/**
 	 * 菜单配置文件
@@ -17,24 +17,24 @@ class MenuGroup extends Viewable
 	const CONFIG_MENU_FILE="menu.config.xml";
 	/**
 	 * 编号
-	 * @var string 
+	 * @var string
 	 */
 	public $id;
 	/**
 	 * 菜单分组名称
-	 * @var string 
+	 * @var string
 	 */
 	private $name;
 	/**
 	 * 语言文字种类
-	 * @var string 
+	 * @var string
 	 */
 	private $lang;
 	/**
 	 * 菜单分组的图标Css样式
-	 * @var string 
+	 * @var string
 	 */
-	private $iconCls;      
+	private $iconCls;
 	/**
 	* 是否需要显示
 	* @var bool
@@ -54,24 +54,24 @@ class MenuGroup extends Viewable
 	/**
 	 * 构造器
 	 * @param string $id
-	 * @param string $name 
+	 * @param string $name
 	 */
-	public function __construct($id) 
+	public function __construct($id)
 	{
 		$this->setId($id);
 	}
-	
+
 	//<editor-fold defaultstate="collapsed" desc="默认列Setter和Getter">
 	private function setId($id)
 	{
 		$this->id=$id;
 	}
-	
+
 	public function getId()
 	{
 		return $this->id;
 	}
-	
+
 	public function setName($name)
 	{
 		$this->name=$name;
@@ -81,17 +81,17 @@ class MenuGroup extends Viewable
 	{
 		return $this->name;
 	}
-	
+
 	public function setIconCls($iconCls)
 	{
 		$this->iconCls=$iconCls;
 	}
-	
+
 	public function getIconCls()
 	{
 		return $this->iconCls;
 	}
-	
+
 	public function setLang($lang)
 	{
 		$this->lang=$lang;
@@ -101,39 +101,39 @@ class MenuGroup extends Viewable
 	{
 		return $this->lang;
 	}
-	
+
 	private function setShow($show)
 	{
 		$this->show=$show;
 	}
-	
+
 	public function getShow()
 	{
 		return $this->show;
 	}
-		
-	
+
+
 	/**
 	 * Xml格式存储的文件路径地址
 	 */
 	public static function address()
 	{
-		return dirname(__FILE__).DIRECTORY_SEPARATOR.self::CONFIG_MENU_FILE;    
+		return dirname(__FILE__).DS.self::CONFIG_MENU_FILE;
 	}
-	
-	
+
+
 	private function getMenuConfigs()
 	{
 		if ($this->menuConfigs==null){
 			$uri= self::address();
-			$this->menuConfigs=UtilXmlSimple::fileXmlToObject($uri);        
+			$this->menuConfigs=UtilXmlSimple::fileXmlToObject($uri);
 		}
 		return $this->menuConfigs;
 	}
 	//</editor-fold>
-	
+
 	/**
-	 * 根据菜单分组获取下属所有菜单信息    
+	 * 根据菜单分组获取下属所有菜单信息
 	 * @param string $name 菜单分组ID
 	 */
 	public function getMenus()
@@ -143,10 +143,10 @@ class MenuGroup extends Viewable
 			$this->getByID();
 		}
 		return $this->menus;
-	}   
-	
+	}
+
 	/**
-	 * 根据菜单分组获取菜单分组信息   
+	 * 根据菜单分组获取菜单分组信息
 	 */
 	public function getByID()
 	{
@@ -156,7 +156,7 @@ class MenuGroup extends Viewable
 		   $menuGroup = $menuConfig->xpath("//menuGroup[@id='$this->id']");
 		   if (is_array($menuGroup)&&count($menuGroup)>0)
 		   {
-			   $menuGroup=$menuGroup[0];               
+			   $menuGroup=$menuGroup[0];
 			   $attributes=$menuGroup->attributes();
 			   $this->id= $attributes->id."";
 			   if (empty($this->name))
@@ -165,7 +165,7 @@ class MenuGroup extends Viewable
 			   }
 			   $this->lang= $attributes->lang."";
 			   $this->iconCls= $attributes->iconCls."";
-			   
+
 			   if (empty($this->menus)||(!is_array($this->menus))){
 				   $this->menus=array();
 				   foreach ($menuGroup->menu as $menuItem)
@@ -179,7 +179,7 @@ class MenuGroup extends Viewable
 						   $address=Gc::$url_base.$address;
 					   }
 					   $menu->setAddress($address."");
-					   $menu->setTitle($attributes->title."");    
+					   $menu->setTitle($attributes->title."");
 					   $menu->setIconCls($attributes->iconCls."");
 					   $menu->setLang($attributes->lang."");
 					   $this->menus[]=$menu;
@@ -190,19 +190,19 @@ class MenuGroup extends Viewable
 		unset($this->menuConfigs);
 		return $this;
 	}
-	
+
 	/**
-	 * 获取所有的MenuGroups             
+	 * 获取所有的MenuGroups
 	 */
 	public static function all()
 	{
-		$uri=dirname(__FILE__).DIRECTORY_SEPARATOR.self::CONFIG_MENU_FILE;
-		$menuConfigs=UtilXmlSimple::fileXmlToObject($uri);   
+		$uri=dirname(__FILE__).DS.self::CONFIG_MENU_FILE;
+		$menuConfigs=UtilXmlSimple::fileXmlToObject($uri);
 		$result=array();
 		if ($menuConfigs!=null)
 		{
-			foreach ($menuConfigs as $menuGroup) 
-			{              
+			foreach ($menuConfigs as $menuGroup)
+			{
 				$attributes=$menuGroup->attributes();
 				$id= $attributes->id."";
 				$menuG=new MenuGroup($id);
@@ -212,25 +212,25 @@ class MenuGroup extends Viewable
 		}
 		return $result;
 	}
-	
+
 	/**
-	* 只获取菜单分组信息 
+	* 只获取菜单分组信息
 	* @param int $returnType 返回类型;0:数据对象,1:数组
 	*/
 	public static function allMenuGroups($returnType=EnumReturnType::DATAOBJECT)
 	{
-		$uri=dirname(__FILE__).DIRECTORY_SEPARATOR.self::CONFIG_MENU_FILE;
-		$menuConfigs=UtilXmlSimple::fileXmlToObject($uri);   
+		$uri=dirname(__FILE__).DS.self::CONFIG_MENU_FILE;
+		$menuConfigs=UtilXmlSimple::fileXmlToObject($uri);
 		$result=array();
 		if ($menuConfigs!=null)
 		{
-			foreach ($menuConfigs as $menuGroup) 
-			{              
+			foreach ($menuConfigs as $menuGroup)
+			{
 				$attributes=$menuGroup->attributes();
 				$id= $attributes->id."";
 				$lang=$attributes->lang."";
 				if (empty($lang)){
-				   $lang="cn"; 
+				   $lang="cn";
 				}
 				if ($returnType==EnumReturnType::DATAOBJECT){
 					$menuG=new MenuGroup($id);
@@ -238,7 +238,7 @@ class MenuGroup extends Viewable
 					$menuG->lang=$lang;
 					$menuG->iconCls=$attributes->iconCls."";
 				}else{
-					$menuG['id']=$id;  
+					$menuG['id']=$id;
 					$menuG['name']=$attributes->name."";
 					$menuG['lang']=$lang;
 					$menuG['iconCls']=$attributes->iconCls."";
@@ -246,9 +246,9 @@ class MenuGroup extends Viewable
 				$result[]=$menuG;
 			}
 		}
-		return $result; 
+		return $result;
 	}
-	
+
 	/**
 	 * 菜单总计数
 	 * @param object|string|array $filter<br/>
@@ -259,37 +259,37 @@ class MenuGroup extends Viewable
 	 *          3.array("id"=>"1","name"=>"sky")
 	 * @return 菜单总计数
 	 */
-	public static function count($filter=null) 
+	public static function count($filter=null)
 	{
-		$uri=dirname(__FILE__).DIRECTORY_SEPARATOR.self::CONFIG_MENU_FILE;
-		$menuConfigs=UtilXmlSimple::fileXmlToObject($uri);   
+		$uri=dirname(__FILE__).DS.self::CONFIG_MENU_FILE;
+		$menuConfigs=UtilXmlSimple::fileXmlToObject($uri);
 		$result=array();
 		if ($menuConfigs!=null)
 		{
-			foreach ($menuConfigs as $menuGroup) 
-			{              
+			foreach ($menuConfigs as $menuGroup)
+			{
 				$attributes=$menuGroup->attributes();
 				$id= $attributes->id."";
 				$menuG=new MenuGroup($id);
-				$menus=$menuG->getMenus();  
-				foreach ($menus as $menu){    
-					$menu=UtilObject::object_to_array($menu);                  
-					if (XmlObject::isValidData($menu,$filter)){       
+				$menus=$menuG->getMenus();
+				foreach ($menus as $menu){
+					$menu=UtilObject::object_to_array($menu);
+					if (XmlObject::isValidData($menu,$filter)){
 						$result[]=$menu;
 					}
-				}   
+				}
 			}
 		}
 		return count($result);
 	}
-	
+
 	/**
 	 * 菜单对象分页
 	 * @param string $xmlObject_classname 具体的Xml对象类名
 	 * @param int $startPoint  分页开始记录数
-	 * @param int $endPoint    分页结束记录数 
+	 * @param int $endPoint    分页结束记录数
 	 * @param string|array $filter 过滤条件
-	 * 示例如下：<br/>    
+	 * 示例如下：<br/>
 	 *      string[只有一个查询条件]
 	 *      1. id="1"--精确查找
 	 *      2. name contain 'sky'--模糊查找
@@ -298,45 +298,45 @@ class MenuGroup extends Viewable
 	 *      2.array("id"=>"1","name contain 'sky'")<br/>--模糊查找
 	 * @return mixed 对象分页
 	 */
-	public static function queryPage($startPoint,$endPoint,$filter=null) 
+	public static function queryPage($startPoint,$endPoint,$filter=null)
 	{
-		$uri=dirname(__FILE__).DIRECTORY_SEPARATOR.self::CONFIG_MENU_FILE;
-		$menuConfigs=UtilXmlSimple::fileXmlToObject($uri);   
+		$uri=dirname(__FILE__).DS.self::CONFIG_MENU_FILE;
+		$menuConfigs=UtilXmlSimple::fileXmlToObject($uri);
 		$result=array();
 		if ($menuConfigs!=null)
 		{
-			foreach ($menuConfigs as $menuGroup) 
-			{              
+			foreach ($menuConfigs as $menuGroup)
+			{
 				$attributes=$menuGroup->attributes();
 				$id= $attributes->id."";
 				$menuG=new MenuGroup($id);
-				$menus=$menuG->getMenus();  
-				foreach ($menus as $menu){    
-					$menu=UtilObject::object_to_array($menu);                  
-					if (XmlObject::isValidData($menu,$filter)){       
+				$menus=$menuG->getMenus();
+				foreach ($menus as $menu){
+					$menu=UtilObject::object_to_array($menu);
+					if (XmlObject::isValidData($menu,$filter)){
 						$result[]=$menu;
 					}
-				}   
+				}
 			}
 		}
-		$result=array_slice($result, $startPoint, $endPoint);   
+		$result=array_slice($result, $startPoint, $endPoint);
 		return $result;
 	}
-		   
+
 	/**
 	 * ExtJs菜单显示
 	 */
 	public static function viewForExtJs()
 	{
-		$uri=dirname(__FILE__).DIRECTORY_SEPARATOR.self::CONFIG_MENU_FILE;
-		$menuConfigs=UtilXmlSimple::fileXmlToObject($uri);   
+		$uri=dirname(__FILE__).DS.self::CONFIG_MENU_FILE;
+		$menuConfigs=UtilXmlSimple::fileXmlToObject($uri);
 		$result=Gc::$appName_alias.".Layout.LeftMenuGroups= [\r\n";
 		if ($menuConfigs!=null)
 		{
-			foreach ($menuConfigs as $menuGroup) 
-			{              
+			foreach ($menuConfigs as $menuGroup)
+			{
 				$attributes=$menuGroup->attributes();
-				$isShow=true;  
+				$isShow=true;
 				if (isset($attributes->show)&&$attributes->show=='false')$isShow=false;
 				if ($isShow) {
 					$result.="          {\r\n".
@@ -345,12 +345,12 @@ class MenuGroup extends Viewable
 							 "              border: false,\r\n".
 							 "              iconCls: '$attributes->iconCls'\r\n".
 							 "          },\r\n";
-				} 
+				}
 			}
 		}
 		$result=substr($result,0,strlen($result)-3);
-		$result.="          ];";  
-		if (Gc::$is_online_optimize){                                                         
+		$result.="          ];";
+		if (Gc::$is_online_optimize){
 			$result=UtilString::online_optimize($result);
 		}
 		return $result;

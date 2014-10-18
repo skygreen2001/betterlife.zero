@@ -21,12 +21,12 @@ if (!in_array($_GET['code'], $possibleCodes)) {
 }
 
 $class_dir = '../class';
-require_once($class_dir . DIRECTORY_SEPARATOR . 'BCGColor.php');
-require_once($class_dir . DIRECTORY_SEPARATOR . 'BCGBarcode.php');
-require_once($class_dir . DIRECTORY_SEPARATOR . 'BCGDrawing.php');
-require_once($class_dir . DIRECTORY_SEPARATOR . 'BCGFontFile.php');
+require_once($class_dir . DS . 'BCGColor.php');
+require_once($class_dir . DS . 'BCGBarcode.php');
+require_once($class_dir . DS . 'BCGDrawing.php');
+require_once($class_dir . DS . 'BCGFontFile.php');
 
-if (!include_once($class_dir . DIRECTORY_SEPARATOR . $_GET['code'] . '.barcode.php')) {
+if (!include_once($class_dir . DS . $_GET['code'] . '.barcode.php')) {
     showError();
 }
 

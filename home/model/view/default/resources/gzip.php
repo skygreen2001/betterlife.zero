@@ -25,27 +25,27 @@ $version = @$_GET['v'];
 
 if (isset ($jsFile)){
 	if (!endWith($jsFile, ".js"))return;
-	header("Content-type: text/javascript; charset: UTF-8");    
+	header("Content-type: text/javascript; charset: UTF-8");
 	if (EnumJsFramework::isEnumValue($group)) {
-		$ajax_root=Gc::$nav_root_path."common".DIRECTORY_SEPARATOR."js".DIRECTORY_SEPARATOR."ajax".DIRECTORY_SEPARATOR;
+		$ajax_root=Gc::$nav_root_path."common".DS."js".DS."ajax".DS;
 		$jsFile=str_replace("/", DIRECTORY_SEPARATOR, $jsFile);
 		switch ($group){
-			case EnumJsFramework::JS_FW_JQUERY:         
-			case EnumJsFramework::JS_FW_MOOTOOLS:   
+			case EnumJsFramework::JS_FW_JQUERY:
+			case EnumJsFramework::JS_FW_MOOTOOLS:
 				echo "请使用UtilAjax的load方法，直接加载".$group."的js文件；无需使用Gzip压缩！";
 				die();
 				break;
 			case EnumJsFramework::JS_FW_PROTOTYPE:
-			case EnumJsFramework::JS_FW_DOJO:     
+			case EnumJsFramework::JS_FW_DOJO:
 			case EnumJsFramework::JS_FW_YUI:
 			case EnumJsFramework::JS_FW_SCRIPTACULOUS:
-				include($ajax_root.$group.DIRECTORY_SEPARATOR.$group.".js");
+				include($ajax_root.$group.DS.$group.".js");
 				break;
 			case EnumJsFramework::JS_FW_EXTJS:
 				if ($version<4){
-					$ext_root=$ajax_root."ext".DIRECTORY_SEPARATOR;
+					$ext_root=$ajax_root."ext".DS;
 				}else{
-					$ext_root=$ajax_root."ext4".DIRECTORY_SEPARATOR;
+					$ext_root=$ajax_root."ext4".DS;
 				}
 				$js_header=$ext_root.$jsFile;
 				include($js_header);
@@ -57,23 +57,23 @@ if (isset ($jsFile)){
 		   $jsFile=str_replace($url_base,"",$jsFile);
 		   $jsFile=Gc::$nav_root_path.$jsFile;
 		   $jsFile=str_replace("/",DIRECTORY_SEPARATOR,$jsFile);
-		}      
+		}
 		include($jsFile);
 	}
 }
 
 if (isset ($cssFile)){
 	if (!endWith($cssFile, ".css"))return;
-	header("Content-type: text/css; charset: UTF-8");   
-	if (EnumJsFramework::isEnumValue($group)) {  
-		$ajax_root=Gc::$nav_root_path."common".DIRECTORY_SEPARATOR."js".DIRECTORY_SEPARATOR."ajax".DIRECTORY_SEPARATOR;
-		$cssFile=str_replace("/", DIRECTORY_SEPARATOR, $cssFile);  
+	header("Content-type: text/css; charset: UTF-8");
+	if (EnumJsFramework::isEnumValue($group)) {
+		$ajax_root=Gc::$nav_root_path."common".DS."js".DS."ajax".DS;
+		$cssFile=str_replace("/", DIRECTORY_SEPARATOR, $cssFile);
 		switch ($group){
 			case EnumJsFramework::JS_FW_EXTJS:
 				if ($version<4){
-					$ext_root=$ajax_root."ext".DIRECTORY_SEPARATOR;
+					$ext_root=$ajax_root."ext".DS;
 				}else{
-					$ext_root=$ajax_root."ext4".DIRECTORY_SEPARATOR;
+					$ext_root=$ajax_root."ext4".DS;
 				}
 				include($ext_root.$cssFile);
 				break;
@@ -82,7 +82,7 @@ if (isset ($cssFile)){
 		$url_base=UtilNet::urlbase();
 		if (contain($cssFile,$url_base)){
 		   $cssFile=str_replace($url_base,"",$cssFile);
-		   $cssFile=Gc::$nav_root_path.$cssFile;           
+		   $cssFile=Gc::$nav_root_path.$cssFile;
 		   $cssFile=str_replace("/",DIRECTORY_SEPARATOR,$cssFile);
 		}
 		include($cssFile);
@@ -90,9 +90,9 @@ if (isset ($cssFile)){
 }
 
 if(extension_loaded("zlib")){
-	if (Gc::$is_online_optimize){      
-		$result=ob_get_clean();                 
-		$result=UtilString::online_optimize($result);                                   
+	if (Gc::$is_online_optimize){
+		$result=ob_get_clean();
+		$result=UtilString::online_optimize($result);
 		echo $result;
 	}else{
 		ob_end_flush();//输出buffer中的内容

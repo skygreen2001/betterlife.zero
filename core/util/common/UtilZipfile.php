@@ -234,7 +234,7 @@ class UtilZipfile
 	/**
 	* 将若干个文件压缩成一个文件下载
 	* 调用示例:
-	*	 1.UtilZipfile::zip(array(Gc::$attachment_path."attachment".DIRECTORY_SEPARATOR."20111221034439.xlsx","attachment".DIRECTORY_SEPARATOR."20111221034612.xlsx"),Gc::$attachment_path."goodjob.zip",true);
+	*	 1.UtilZipfile::zip(array(Gc::$attachment_path."attachment".DS."20111221034439.xlsx","attachment".DS."20111221034612.xlsx"),Gc::$attachment_path."goodjob.zip",true);
 	*    2.UtilZipFile::zip(array("a/b/c/abc.txt"=>Gc::$attachment_path."test.txt"),Gc::$attachment_path."test.zip");
 	*      				就是将原来文件名为test.txt压缩到test.zip文件，它的新名称就是test.txt。
 	* @param mixed $arr_filename 需要压缩的文件名称列表

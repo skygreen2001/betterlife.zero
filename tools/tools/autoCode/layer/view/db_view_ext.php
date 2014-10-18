@@ -6,8 +6,8 @@ if (isset($_REQUEST["save_dir"])&&!empty($_REQUEST["save_dir"]))
 	AutoCodeViewExt::$save_dir =$save_dir;
 
 	//读取配置文件里查询条件和关系列显示的配置
-	if (file_exists(dirname(__FILE__).DIRECTORY_SEPARATOR."/../autocode.config.xml")){
-		$classes=UtilXmlSimple::fileXmlToObject(dirname(__FILE__).DIRECTORY_SEPARATOR."/../autocode.config.xml");
+	if (file_exists(dirname(__FILE__).DS."/../autocode.config.xml")){
+		$classes=UtilXmlSimple::fileXmlToObject(dirname(__FILE__).DS."/../autocode.config.xml");
 		$dataobjects = $classes->xpath("//class");
 		foreach ($dataobjects as $dataobject) {
 			$attributes=$dataobject->attributes();

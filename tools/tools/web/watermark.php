@@ -25,7 +25,7 @@ if(isset($_REQUEST["type"])){
 	if(isset($_REQUEST["d"]))$direction=$_REQUEST["d"];
 	if(isset($_REQUEST["f"]))$is_watermark_file_upload=$_REQUEST["f"];
 	$default_img_filename="1.jpg";
-	$source_file_path=Gc::$upload_path."watermark".DIRECTORY_SEPARATOR."originals".DIRECTORY_SEPARATOR.$default_img_filename;
+	$source_file_path=Gc::$upload_path."watermark".DS."originals".DS.$default_img_filename;
 	if($is_watermark_file_upload){
 		if (isset($_FILES["upload_file"])&&!empty($_FILES["upload_file"])){
 			$source_file_path     = UtilWatermark::upload_watermark_source_files($_FILES,'upload_file',"watermark.png",$direction);
@@ -38,21 +38,21 @@ if(isset($_REQUEST["type"])){
 			/********************************* 添加文字水印 *******************************/
 			$result=UtilWatermark::watermark_text(
 				$source_file_path,
-				Gc::$upload_path."watermark".DIRECTORY_SEPARATOR."images".DIRECTORY_SEPARATOR.$default_img_filename,
+				Gc::$upload_path."watermark".DS."images".DS.$default_img_filename,
 				Gc::$site_name,$direction);
 			break;
 	   case 1:
 			/********************************* 添加图片水印 ******************************/
 			$result = UtilWatermark::create_watermark(
 				$source_file_path,
-				Gc::$upload_path."watermark".DIRECTORY_SEPARATOR."images".DIRECTORY_SEPARATOR.$default_img_filename,
+				Gc::$upload_path."watermark".DS."images".DS.$default_img_filename,
 				"watermark.png",$direction);
 		 	break;
 	   case 2:
 			/********************************* 添加多行文字水印 ******************************/
 			$result = UtilWatermark::createWordsWatermark(
 				$source_file_path,
-				Gc::$upload_path."watermark".DIRECTORY_SEPARATOR."images".DIRECTORY_SEPARATOR.$default_img_filename,
+				Gc::$upload_path."watermark".DS."images".DS.$default_img_filename,
 				'完美生活|betterlife',
 				$direction,"255,0,0"
 			);

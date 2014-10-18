@@ -50,7 +50,7 @@ class AutoCodeService extends AutoCode
 		if (!UtilString::is_utf8(self::$service_dir_full)){
 			self::$service_dir_full=UtilString::gbk2utf8(self::$service_dir_full);
 		}
-		self::$service_dir_full=self::$save_dir.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR.self::$service_dir.DIRECTORY_SEPARATOR;
+		self::$service_dir_full=self::$save_dir.self::$app_dir.DS.self::$dir_src.DS.self::$service_dir.DS;
 		self::init();
 
 		if (self::$isOutputCss) self::$showReport.= UtilCss::form_css()."\r\n";
@@ -144,9 +144,9 @@ class AutoCodeService extends AutoCode
 					 "class Manager_ExtService extends Manager\r\n".
 					 "{\r\n".$section_define."\r\n".$section_content."}\r\n";
 			$e_result.="?>";
-			self::saveDefineToDir(self::$service_dir_full.self::$ext_dir.DIRECTORY_SEPARATOR,"Manager_ExtService.php",$e_result);
+			self::saveDefineToDir(self::$service_dir_full.self::$ext_dir.DS,"Manager_ExtService.php",$e_result);
 			$link_service_manage_ext_dir_href="file:///".str_replace("\\", "/", self::$service_dir_full).self::$ext_dir."/Manager_ExtService.php";
-			self::$showReport.=  "新生成的Manager_ExtService文件路径:<font color='#0000FF'><a target='_blank' href='$link_service_manage_ext_dir_href'>".self::$service_dir_full.self::$ext_dir.DIRECTORY_SEPARATOR."Manager_ExtService.php</a></font><br />";
+			self::$showReport.=  "新生成的Manager_ExtService文件路径:<font color='#0000FF'><a target='_blank' href='$link_service_manage_ext_dir_href'>".self::$service_dir_full.self::$ext_dir.DS."Manager_ExtService.php</a></font><br />";
 
 			/**
 			 * 需要在Ext Direct 服务配置文件:service.config.xml里添加的代码
@@ -521,7 +521,7 @@ class AutoCodeService extends AutoCode
 						 "		\$diffpart=date(\"YmdHis\");\r\n".
 						 "		if (!empty(\$files[\"upload_file\"])){\r\n".
 						 "			\$tmptail = end(explode('.', \$files[\"upload_file\"][\"name\"]));\r\n".
-						 "			\$uploadPath =GC::\$attachment_path.\"{$instance_name}\".DIRECTORY_SEPARATOR.\"import\".DIRECTORY_SEPARATOR.\"{$instance_name}\$diffpart.\$tmptail\";\r\n".
+						 "			\$uploadPath =GC::\$attachment_path.\"{$instance_name}\".DS.\"import\".DS.\"{$instance_name}\$diffpart.\$tmptail\";\r\n".
 						 "			\$result	 =UtilFileSystem::uploadFile(\$files,\$uploadPath);\r\n".
 						 "			if (\$result&&(\$result['success']==true)){\r\n".
 						 "				if (array_key_exists('file_name',\$result)){\r\n".
@@ -581,7 +581,7 @@ class AutoCodeService extends AutoCode
 						 $specialResult.
 						 "		unset(\$arr_output_header['updateTime'],\$arr_output_header['commitTime']);\r\n".
 						 "		\$diffpart=date(\"YmdHis\");\r\n".
-						 "		\$outputFileName=Gc::\$attachment_path.\"{$instance_name}\".DIRECTORY_SEPARATOR.\"export\".DIRECTORY_SEPARATOR.\"{$instance_name}\$diffpart.xls\"; \r\n".
+						 "		\$outputFileName=Gc::\$attachment_path.\"{$instance_name}\".DS.\"export\".DS.\"{$instance_name}\$diffpart.xls\"; \r\n".
 						 "		UtilExcel::arraytoExcel(\$arr_output_header,\$data,\$outputFileName,false); \r\n".
 						 "		\$downloadPath  =Gc::\$attachment_url.\"{$instance_name}/export/{$instance_name}\$diffpart.xls\"; \r\n".
 						 "		return array(\r\n".
@@ -1711,7 +1711,7 @@ MANY2MANYQUERYPAGE;
 		}
 		$service_dir_full=self::$service_dir_full;
 		if (self::$type==3){
-			$service_dir_full=$service_dir_full.self::$ext_dir.DIRECTORY_SEPARATOR;
+			$service_dir_full=$service_dir_full.self::$ext_dir.DS;
 		}
 		$relative_path=str_replace(self::$save_dir, "", $service_dir_full.$filename);
 		$classname=self::getClassname($tablename);

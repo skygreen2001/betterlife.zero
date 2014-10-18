@@ -30,7 +30,7 @@ class ExtServiceRegion extends ServiceBasic
         return array(
             'success' => true,
             'data'    => $data
-        ); 
+        );
     }
 
     /**
@@ -51,7 +51,7 @@ class ExtServiceRegion extends ServiceBasic
         return array(
             'success' => true,
             'data'    => $data
-        ); 
+        );
     }
 
     /**
@@ -59,7 +59,7 @@ class ExtServiceRegion extends ServiceBasic
      * @param array|string $ids 数据对象编号
      * 形式如下:
      * 1.array:array(1,2,3,4,5)
-     * 2.字符串:1,2,3,4 
+     * 2.字符串:1,2,3,4
      * @return boolen 是否删除成功；true为操作正常
      */
     public function deleteByIds($ids)
@@ -68,7 +68,7 @@ class ExtServiceRegion extends ServiceBasic
         return array(
             'success' => true,
             'data'    => $data
-        ); 
+        );
     }
 
     /**
@@ -87,8 +87,8 @@ class ExtServiceRegion extends ServiceBasic
             $start=$condition['start']+1;
           }
         if (isset($condition['limit'])){
-            $limit=$condition['limit']; 
-            $limit=$start+$limit-1; 
+            $limit=$condition['limit'];
+            $limit=$start+$limit-1;
         }
         unset($condition['start'],$condition['limit']);
         $condition=$this->filtertoCondition($condition);
@@ -122,7 +122,7 @@ class ExtServiceRegion extends ServiceBasic
             'success' => true,
             'totalCount'=>$count,
             'data'    => $data
-        ); 
+        );
     }
 
     /**
@@ -152,7 +152,7 @@ class ExtServiceRegion extends ServiceBasic
         $diffpart=date("YmdHis");
         if (!empty($files["upload_file"])){
             $tmptail = end(explode('.', $files["upload_file"]["name"]));
-            $uploadPath =GC::$attachment_path."region".DIRECTORY_SEPARATOR."import".DIRECTORY_SEPARATOR."region$diffpart.$tmptail";
+            $uploadPath =GC::$attachment_path."region".DS."import".DS."region$diffpart.$tmptail";
             $result     =UtilFileSystem::uploadFile($files,$uploadPath);
             if ($result&&($result['success']==true)){
                 if (array_key_exists('file_name',$result)){
@@ -233,7 +233,7 @@ class ExtServiceRegion extends ServiceBasic
         {
             Region::propertyShow($data,array('region_type'));
         }
-        $arr_output_header= self::fieldsMean(Region::tablename()); 
+        $arr_output_header= self::fieldsMean(Region::tablename());
         foreach ($data as $region) {
             if ($region->region_typeShow){
                 $region['region_type']=$region->region_typeShow;
@@ -252,13 +252,13 @@ class ExtServiceRegion extends ServiceBasic
         }
         unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
         $diffpart=date("YmdHis");
-        $outputFileName=Gc::$attachment_path."region".DIRECTORY_SEPARATOR."export".DIRECTORY_SEPARATOR."region$diffpart.xls"; 
-        UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false); 
-        $downloadPath  =Gc::$attachment_url."region/export/region$diffpart.xls"; 
+        $outputFileName=Gc::$attachment_path."region".DS."export".DS."region$diffpart.xls";
+        UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false);
+        $downloadPath  =Gc::$attachment_url."region/export/region$diffpart.xls";
         return array(
             'success' => true,
             'data'    => $downloadPath
-        ); 
+        );
     }
 }
 ?>

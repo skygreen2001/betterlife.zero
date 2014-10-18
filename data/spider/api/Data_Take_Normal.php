@@ -71,7 +71,7 @@ class Data_Take_Normal {
 //                )
 //        );
 //        $context = stream_context_create($opts);
-//        $content = file_get_contents($url,false,$context);   
+//        $content = file_get_contents($url,false,$context);
 
 //        $content = htmlspecialchars($content);
         return $content;
@@ -118,9 +118,9 @@ class Data_Take_Normal {
         $fp = fopen($save_file, "a+") or die("Open save file ". $save_file ." failed");
         $content="";
         while(($file = readdir($dp)) != false) {
-            if ($file!="." && $file!=".."&&!is_dir($dir.DIRECTORY_SEPARATOR.$file)) {
+            if ($file!="." && $file!=".."&&!is_dir($dir.DS.$file)) {
                 echo "Read file ". $file ."...<br/>";
-                $file_content = file_get_contents($dir.DIRECTORY_SEPARATOR.$file);
+                $file_content = file_get_contents($dir.DS.$file);
                 echo " OK<br/>";
                 $content.=$file_content;
                 fwrite($fp, $file_content);

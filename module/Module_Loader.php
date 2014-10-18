@@ -44,7 +44,7 @@ class Module_Loader {
 	 */
 	public static function load_run()
 	{
-		$spec_module=UtilXmlSimple::fileXmlToArray(dirname(__FILE__).DIRECTORY_SEPARATOR.self::FILE_SPEC_LOAD_MODULE);
+		$spec_module=UtilXmlSimple::fileXmlToArray(dirname(__FILE__).DS.self::FILE_SPEC_LOAD_MODULE);
 		foreach ($spec_module["block"] as $block){
 			$blockAttr=$block[Util::XML_ELEMENT_ATTRIBUTES];
 			if (array_key_exists(self::SPEC_OPEN, $blockAttr)){
@@ -64,9 +64,9 @@ class Module_Loader {
 	public static function load_barcode()
 	{
 		//加载数据处理方案的所有目录进IncludePath
-		$barcode_root_dir=Gc::$nav_root_path.Config_F::ROOT_MODULE.DIRECTORY_SEPARATOR."barcode".DIRECTORY_SEPARATOR;
-		require_once(Gc::$nav_root_path.Config_F::ROOT_MODULE.DIRECTORY_SEPARATOR."barcode".DIRECTORY_SEPARATOR."UtilBarCode.php");
-		$barcode_root_dir.="class".DIRECTORY_SEPARATOR;
+		$barcode_root_dir=Gc::$nav_root_path.Config_F::ROOT_MODULE.DS."barcode".DS;
+		require_once(Gc::$nav_root_path.Config_F::ROOT_MODULE.DS."barcode".DS."UtilBarCode.php");
+		$barcode_root_dir.="class".DS;
 		//加载模块里所有的文件
 		load_module(Config_F::ROOT_MODULE,$barcode_root_dir);
 	}
@@ -75,16 +75,16 @@ class Module_Loader {
 	public static function load_communication()
 	{
 		//加载数据处理方案的所有目录进IncludePath
-		$communication_root_dir=Gc::$nav_root_path.Config_F::ROOT_MODULE.DIRECTORY_SEPARATOR."communication".DIRECTORY_SEPARATOR;
+		$communication_root_dir=Gc::$nav_root_path.Config_F::ROOT_MODULE.DS."communication".DS;
 		//加载模块里所有的文件
 		load_module(Config_F::ROOT_MODULE,$communication_root_dir,"webservice");
-		load_module(Config_F::ROOT_MODULE,$communication_root_dir."webservice".DIRECTORY_SEPARATOR,"nusoap");
+		load_module(Config_F::ROOT_MODULE,$communication_root_dir."webservice".DS,"nusoap");
 	}
 
 	/**加载nusoap模块*/
 	public static function load_nusoap()
 	{
-		$communication_root_dir=Gc::$nav_root_path.Config_F::ROOT_MODULE.DIRECTORY_SEPARATOR."communication".DIRECTORY_SEPARATOR;
+		$communication_root_dir=Gc::$nav_root_path.Config_F::ROOT_MODULE.DS."communication".DS;
 		$nusoap_dir=$communication_root_dir."webservice/nusoap/lib/";
 		require_once($nusoap_dir."nusoap.php");
 		require_once($nusoap_dir."class.wsdlcache.php");

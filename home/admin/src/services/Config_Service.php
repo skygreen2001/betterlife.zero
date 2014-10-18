@@ -14,7 +14,7 @@ class Config_Service extends ConfigBB
      * 主要提供给Ext Direct的配置文件描述
      */
     const CONFIG_EXT_DIRECT_FILE="service.config.xml";
-    
+
     /**
      * 返回服务配置<br/>
      * 主要提供给Ext Direct的配置。
@@ -22,12 +22,12 @@ class Config_Service extends ConfigBB
      */
     public static function serviceConfig()
     {
-        $configArr=UtilXMLLib::xmltoArray(dirname(__FILE__).DIRECTORY_SEPARATOR.self::CONFIG_EXT_DIRECT_FILE);        
-        //$result=UtilXmlSimple::fileXmlToArray(dirname(__FILE__).DIRECTORY_SEPARATOR.self::CONFIG_EXT_DIRECT_FILE);
+        $configArr=UtilXMLLib::xmltoArray(dirname(__FILE__).DS.self::CONFIG_EXT_DIRECT_FILE);
+        //$result=UtilXmlSimple::fileXmlToArray(dirname(__FILE__).DS.self::CONFIG_EXT_DIRECT_FILE);
         $result=self::parseExtDirectConfigArrary($configArr);
         return $result;
     }
-    
+
     /**
      * 将xml转换后的数组转换成 Ext Direct Remote通信所需的配置数组。
      * @param array $configArr 将xml转换后的数组
@@ -38,7 +38,7 @@ class Config_Service extends ConfigBB
         $result=null;
         $services=array();
 
-        if (is_array($configArr)){        
+        if (is_array($configArr)){
             foreach ($configArr as $service=>$serviceGroup){
                 if (is_array($serviceGroup)){
                     if (!array_key_exists("service attr",$serviceGroup)){
@@ -47,7 +47,7 @@ class Config_Service extends ConfigBB
                     }
                 }
                 if (is_array($serviceGroup)){
-                    foreach ($serviceGroup as $skey => $svalue) {                
+                    foreach ($serviceGroup as $skey => $svalue) {
                         if (contain($skey, "attr")){
                             $servicename=$svalue['name'];
                         }else{
@@ -69,7 +69,7 @@ class Config_Service extends ConfigBB
                                                 if (is_array($paramArr)){
                                                     foreach ($paramArr as $param=>$paramGroup){
                                                         $params=array();
-                                                        if (count($paramGroup)==1){    
+                                                        if (count($paramGroup)==1){
                                                              if (contain($param, "attr")){
                                                                 $paramname=$paramGroup['name'];
                                                              }else{
@@ -88,7 +88,7 @@ class Config_Service extends ConfigBB
                                                                 }
                                                             }
                                                         }
-                                                    }        
+                                                    }
                                                 }
                                             }
                                         }
@@ -97,7 +97,7 @@ class Config_Service extends ConfigBB
                                 }
                             }
                         }
-                    } 
+                    }
                 }
             }
         }
@@ -106,21 +106,21 @@ class Config_Service extends ConfigBB
         }
         return $result;
     }
-    
+
     /**
      * 生成所有服务的配置xml文件信息
      */
     public static function createConfigForAllService()
     {
        header('Content-type: application/xml');
-       $serviceFiles=UtilFileSystem::getAllFilesInDirectory(dirname(__FILE__).DIRECTORY_SEPARATOR);
+       $serviceFiles=UtilFileSystem::getAllFilesInDirectory(dirname(__FILE__).DS);
        $result="<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-       $result.="\r\n<services>";       
+       $result.="\r\n<services>";
        foreach ($serviceFiles as $key=> $serviceFile) {
            if (contain($serviceFile, "Config_Service")||
                 contain($serviceFile, "Manager_Service")||
                 contain($serviceFile, "api")||
-                contain($serviceFile, "router")){ 
+                contain($serviceFile, "router")){
                 unset($serviceFiles[$key]);
            }else{
                 $servicesArray=self::servicetoArray($serviceFile);
@@ -136,24 +136,24 @@ class Config_Service extends ConfigBB
                         $result.="\r\n          </method>";
                     }
                 }
-                $result.="\r\n      </methods>\r\n</service>";   
+                $result.="\r\n      </methods>\r\n</service>";
            }
-       }                
-       $result.="\r\n</services>";   
+       }
+       $result.="\r\n</services>";
        return $result;
-    }    
-    
+    }
+
     /**
      * 为指定服务生成配置xml文件信息
      * @param string $serviceFile 文件名称
      */
     public static function createConfigForService($serviceFile)
     {
-        header('Content-type: application/xml');        
+        header('Content-type: application/xml');
         $servicesArray=self::servicetoArray($serviceFile);
         $servicename=basename($serviceFile, ".php");
         $result="<?xml version=\"1.0\" encoding=\"UTF-8\"?>";
-        $result.="\r\n<services>";    
+        $result.="\r\n<services>";
         $result.="\r\n   <service name=\"$servicename\">\r\n     <methods>";
         if (is_array($servicesArray)){
             $methodsArray=$servicesArray[$servicename]["methods"];
@@ -166,21 +166,21 @@ class Config_Service extends ConfigBB
             }
         }
         $result.="\r\n      </methods>\r\n  </service>";
-        $result.="\r\n</services>";  
-        return $result;        
+        $result.="\r\n</services>";
+        return $result;
     }
-    
+
     /**
      * @param string $serviceFile 文件名称
-     * @return array 
+     * @return array
      */
     private static function servicetoArray($serviceFile)
-    {        
+    {
         $servicename=basename($serviceFile, ".php");
         $result=null;
         $services=array();
         if (class_exists($servicename)){
-           $service=new ReflectionClass($servicename);               
+           $service=new ReflectionClass($servicename);
            $methods=$service->getMethods();
            $methodsArr=array();
            foreach ($methods as $method) {
@@ -192,7 +192,7 @@ class Config_Service extends ConfigBB
                    foreach ($params as $i => $param) {
                        $paramname=$param->getName();
                        if ($paramname=="formHandler"){
-                         $count+=1;  
+                         $count+=1;
                          $paramArr[$paramname]=true;
                        }else{
                            if ($paramname!="id"){
@@ -211,7 +211,7 @@ class Config_Service extends ConfigBB
         if (count($services)>0){
             $result=$services;
         }
-        
+
         //print_r($result);
         return $result;
     }

@@ -45,7 +45,7 @@ if (contain($os,"Windows")) {
 		echo "sudo chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",30);
 	}
 	if (empty(Gc::$log_config["logpath"])){
-		Gc::$log_config["logpath"] = Gc::$nav_root_path.Config_F::LOG_ROOT.DIRECTORY_SEPARATOR;
+		Gc::$log_config["logpath"] = Gc::$nav_root_path.Config_F::LOG_ROOT.DS;
 	}
 	$destination=Gc::$log_config["logpath"];
 	echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",30);
@@ -74,7 +74,7 @@ if (contain($os,"Windows")) {
 		echo "sudo chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",30);
 	}
 	if (empty(Gc::$log_config["logpath"])){
-		Gc::$log_config["logpath"] = Gc::$nav_root_path.Config_F::LOG_ROOT.DIRECTORY_SEPARATOR;
+		Gc::$log_config["logpath"] = Gc::$nav_root_path.Config_F::LOG_ROOT.DS;
 	}
 	$destination=Gc::$log_config["logpath"];
 	echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",30);
@@ -102,7 +102,7 @@ if (contain($os,"Windows")) {
 		echo "chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",30);
 	}
 	if (empty(Gc::$log_config["logpath"])){
-		Gc::$log_config["logpath"] = Gc::$nav_root_path.Config_F::LOG_ROOT.DIRECTORY_SEPARATOR;
+		Gc::$log_config["logpath"] = Gc::$nav_root_path.Config_F::LOG_ROOT.DS;
 	}
 	$destination=Gc::$log_config["logpath"];
 	echo "mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",30);

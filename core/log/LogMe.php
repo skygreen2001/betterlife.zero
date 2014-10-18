@@ -40,7 +40,7 @@ class EnumLogLevel extends Enum
 	/**
 	 * SQL：SQL语句 注意只在调试模式开启时有效
 	 */
-	const SQL     = 8; 
+	const SQL     = 8;
 }
 
 /**
@@ -59,12 +59,12 @@ class LogMe extends Object
 	/**
 	 * 查看是否允许记录的日志级别。
 	 * @param type $level
-	 * @return type 
+	 * @return type
 	 */
 	private static function isNeedLog($level){
 		$logLevels=UtilReflection::getClassConsts("EnumLogLevel");
 		if (in_array($level, $logLevels)){
-			$levelKey=array_search($level, $logLevels);        
+			$levelKey=array_search($level, $logLevels);
 			if (in_array($levelKey,Gc::$log_config["log_record_level"])){
 				return true;
 			}
@@ -78,7 +78,7 @@ class LogMe extends Object
 	 */
 	public static function logPath($destination){
 		if (empty(Gc::$log_config["logpath"])){
-			Gc::$log_config["logpath"] = Gc::$nav_root_path.Config_F::LOG_ROOT.DIRECTORY_SEPARATOR;
+			Gc::$log_config["logpath"] = Gc::$nav_root_path.Config_F::LOG_ROOT.DS;
 		}
 		if (!endWith(Gc::$log_config["logpath"], DIRECTORY_SEPARATOR)){
 			Gc::$log_config["logpath"].=DIRECTORY_SEPARATOR;
@@ -91,7 +91,7 @@ class LogMe extends Object
 
 		//检测日志文件大小，超过配置大小则备份日志文件重新生成
 		if(is_file($destination) && (Gc::$log_config["log_file_size"] <= filesize($destination))){
-			rename($destination,dirname($destination).DIRECTORY_SEPARATOR.basename($destination,Config_F::SUFFIX_FILE_LOG).'-'.time().Config_F::SUFFIX_FILE_LOG);
+			rename($destination,dirname($destination).DS.basename($destination,Config_F::SUFFIX_FILE_LOG).'-'.time().Config_F::SUFFIX_FILE_LOG);
 		}
 		if (isset ($destination)){
 			UtilFileSystem::createDir(dirname($destination));
@@ -167,7 +167,7 @@ class LogMe extends Object
 	 * @param enum $level 日志记录级别
 	 * @param string $category 日志内容业务分类
 	 */
-	public static function log_file($message,$level=EnumLogLevel::INFO,$category=""){ 
+	public static function log_file($message,$level=EnumLogLevel::INFO,$category=""){
 		UtilDateTime::ChinaTime();
 		$conf = array('timeFormat' => Gc::$log_config["timeFormat"]);
 		Log::singleton('file',self::logPath($category),$category,$conf)->log($message,$level);
@@ -210,7 +210,7 @@ class LogMe extends Object
 		Log::singleton('firebug', '', $category,$conf)->log($message,$level);
 	}
 	//</editor-fold>
-	
+
 	//<editor-fold defaultstate="collapsed" desc="实时调试显示日志内容">
 	/**
 	 * 日志信息
@@ -265,7 +265,7 @@ class LogMe extends Object
 	 * 显示当前运行的日志。
 	 */
 	public static function showLogs() {
-		if (Gc::$dev_debug_on){ 
+		if (Gc::$dev_debug_on){
 			if (self::$log){
 				foreach (self::$log as $log) {
 					echo '<pre>';

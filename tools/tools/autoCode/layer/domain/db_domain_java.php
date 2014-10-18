@@ -12,7 +12,7 @@ if (isset($_REQUEST["save_dir"])&&!empty($_REQUEST["save_dir"]))
 	AutoCodeDomainJava::$type     =$type;
 	AutoCodeDomainJava::$type     =$type;
 	//读取配置文件里查询条件和关系列显示的配置
-	$filename_config_xml=Gc::$nav_root_path."tools".DIRECTORY_SEPARATOR."tools".DIRECTORY_SEPARATOR."autoCode".DIRECTORY_SEPARATOR."autocode.config.xml";
+	$filename_config_xml=Gc::$nav_root_path."tools".DS."tools".DS."autoCode".DS."autocode.config.xml";
 	if (file_exists($filename_config_xml)){
 		$classes=UtilXmlSimple::fileXmlToObject($filename_config_xml);
 		$dataobjects = $classes->xpath("//class");

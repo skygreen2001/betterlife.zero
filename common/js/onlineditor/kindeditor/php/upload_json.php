@@ -6,14 +6,14 @@
  * 如果您确定直接使用本程序，使用之前请仔细确认相关安全设置。
  *
  */
-                          
+
 //require_once 'JSON.php';
 
 //*****************start:modify by skygreen**************************
 require_once("../../../../../init.php");
-$php_path = Gc::$upload_path."userfiles".DIRECTORY_SEPARATOR;
+$php_path = Gc::$upload_path."userfiles".DS;
 if (!is_dir($php_path)){
-	UtilFileSystem::createDir($php_path);    
+	UtilFileSystem::createDir($php_path);
 }
 $php_url = Gc::$upload_url."userfiles/";
 //文件保存目录路径

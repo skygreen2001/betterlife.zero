@@ -43,11 +43,11 @@ class AutoCodeViewExt extends AutoCode
 	public static function pathset()
 	{
 		self::$app_dir="admin";
-		self::$view_dir_full=self::$save_dir.self::$app_dir.DIRECTORY_SEPARATOR.Config_F::VIEW_VIEW.DIRECTORY_SEPARATOR.Gc::$self_theme_dir.DIRECTORY_SEPARATOR;
-		self::$menuconfig_dir_full=self::$save_dir.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR."view".DIRECTORY_SEPARATOR."menu".DIRECTORY_SEPARATOR;
-		self::$ajax_dir_full=self::$save_dir.self::$app_dir.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR."httpdata".DIRECTORY_SEPARATOR;
-		self::$view_core=self::$view_dir_full.Config_F::VIEW_CORE.DIRECTORY_SEPARATOR;
-		self::$view_js_package=self::$view_dir_full."js".DIRECTORY_SEPARATOR."ext".DIRECTORY_SEPARATOR;
+		self::$view_dir_full=self::$save_dir.self::$app_dir.DS.Config_F::VIEW_VIEW.DS.Gc::$self_theme_dir.DS;
+		self::$menuconfig_dir_full=self::$save_dir.self::$app_dir.DS.self::$dir_src.DS."view".DS."menu".DS;
+		self::$ajax_dir_full=self::$save_dir.self::$app_dir.DS.self::$dir_src.DS."httpdata".DS;
+		self::$view_core=self::$view_dir_full.Config_F::VIEW_CORE.DS;
+		self::$view_js_package=self::$view_dir_full."js".DS."ext".DS;
 	}
 
 	/**
@@ -61,7 +61,7 @@ class AutoCodeViewExt extends AutoCode
 	{
 		self::pathset();
 		//加载生成实体数据对象的目录路径，以便生成代码中数据对象的ID名称
-		$dirs_root=UtilFileSystem::getAllDirsInDriectory(self::$save_dir.DIRECTORY_SEPARATOR.Gc::$appName.DIRECTORY_SEPARATOR.self::$dir_src.DIRECTORY_SEPARATOR.self::$domain_dir.DIRECTORY_SEPARATOR);
+		$dirs_root=UtilFileSystem::getAllDirsInDriectory(self::$save_dir.DS.Gc::$appName.DS.self::$dir_src.DS.self::$domain_dir.DS);
 		set_include_path(get_include_path().PATH_SEPARATOR.join(PATH_SEPARATOR, $dirs_root));
 		$files = new AppendIterator();
 		foreach ($dirs_root as $dir) {
@@ -349,7 +349,7 @@ class AutoCodeViewExt extends AutoCode
 		$batchUploadImagesWinow		=$upload_mixed["batchUploadImagesWinow"];
 		$result="";
 		$realId=DataObjectSpec::getRealIDColumnName($classname);
-		require("jsmodel".DIRECTORY_SEPARATOR."includemodeljs.php");
+		require("jsmodel".DS."includemodeljs.php");
 		$result.=$jsContent;
 		return $result;
 	}
@@ -680,7 +680,7 @@ class AutoCodeViewExt extends AutoCode
 					}
 					if (!contain($relationClassesView,"{$current_classname}View"))
 					{
-						include("jsmodel".DIRECTORY_SEPARATOR."many2many.php");
+						include("jsmodel".DS."many2many.php");
 						$result['m2mMenu'].=$jsMany2ManyMenu;
 						if(isset($jsMany2ManyRowSelect))$result['m2mRowSelect'].=$jsMany2ManyRowSelect;
 						if(isset($m2mRowSelectElse))$result['m2mRowSelectElse'].=$jsMany2ManyRowSelectElse;
@@ -743,7 +743,7 @@ class AutoCodeViewExt extends AutoCode
 							}
 						}
 						$columns_relation=substr($columns_relation,0,strlen($columns_relation)-3);
-						include("jsmodel".DIRECTORY_SEPARATOR."one2many.php");
+						include("jsmodel".DS."one2many.php");
 						$relationClassesView.=$jsOne2ManyContent;
 					}
 				}
@@ -1837,9 +1837,9 @@ BATCHUPLOADIMAGES;
 	{
 		$filename =self::getInstancename($tablename).Config_F::SUFFIX_FILE_JS;
 		if (Config_AutoCode::JSFILE_DIRECT_CORE){
-			$dir=self::$view_js_package.Config_F::VIEW_CORE.DIRECTORY_SEPARATOR;
+			$dir=self::$view_js_package.Config_F::VIEW_CORE.DS;
 		}else{
-			$dir=self::$view_js_package.self::getInstancename($tablename).DIRECTORY_SEPARATOR;
+			$dir=self::$view_js_package.self::getInstancename($tablename).DS;
 		}
 
 		$classname=self::getClassname($tablename);
@@ -1873,7 +1873,7 @@ BATCHUPLOADIMAGES;
 	private static function saveTplDefineToDir($tablename,$defineTplFileContent)
 	{
 		$filename =self::getInstancename($tablename).Config_F::SUFFIX_FILE_TPL;
-		$dir	  =self::$view_core.Gc::$appName.DIRECTORY_SEPARATOR;
+		$dir	  =self::$view_core.Gc::$appName.DS;
 
 		$classname=self::getClassname($tablename);
 		$relative_path=str_replace(self::$save_dir, "", $dir.$filename);
