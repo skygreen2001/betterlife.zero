@@ -9,17 +9,17 @@ Manager_Communication::init();
  * @author skygreen
  */
 class RemoteObject extends Object
-{   
+{
     /**
      * 第三方进行通信的服务器地址
-     * @var string 
+     * @var string
      */
-    public static $server_addr="http://localhost/betterlife/data/exchange/betterlife/server/";
+    public static $server_addr="http://127.0.0.1/betterlife/data/exchange/betterlife/server/";
     /**
      * 第三方进行通信的服务器索引Index文件地址。
      * @var string
      */
-    public static $index_file="index.php?service=";       
+    public static $index_file="index.php?service=";
     /**
      * 客户端应用名称标识，用以服务端鉴定数据来源
      * @var string
@@ -29,7 +29,7 @@ class RemoteObject extends Object
      * 客户端应用名称标识，用以服务端鉴定数据来源
      * @var string
     */
-    protected $app_name=self::APP_FLAG; 
+    protected $app_name=self::APP_FLAG;
     /**
      * 是否同步进行远程对象通信操作。同步会对当前运行的程序造成阻塞
      * @var bool
@@ -45,10 +45,10 @@ class RemoteObject extends Object
     public $Is_Url_Rewrite=false;
     /**
      * 响应数据类型
-     * @var enum 
+     * @var enum
      */
     public $response_type=EnumResponseType::XML;
-    
+
     //<editor-fold defaultstate="collapsed" desc="远程对象通信操作">
     /**
      * 远程获取数据
@@ -64,7 +64,7 @@ class RemoteObject extends Object
     }
     /**
      * 远程提交新增数据
-     * 
+     *
      */
     public function post()
     {
@@ -76,7 +76,7 @@ class RemoteObject extends Object
     }
     /**
      * 远程提交更新数据
-     * 
+     *
      */
     public function put()
     {
@@ -97,7 +97,7 @@ class RemoteObject extends Object
             return $this->sendRequestAsyncLocal(EnumHttpMethod::DELETE,$this->response_type);
         }
     }
-    //</editor-fold> 
+    //</editor-fold>
 
     //<editor-fold defaultstate="collapsed" desc="与第三方进行通信">
     /**
@@ -108,9 +108,9 @@ class RemoteObject extends Object
     public function sendRequest($method=EnumHttpMethod::POST,$response_type=EnumResponseType::XML)
     {
         if ($response_type==EnumResponseType::XML){
-            header('Content-type: application/xml');   
+            header('Content-type: application/xml');
         }else{
-            header('Content-type: application/json');            
+            header('Content-type: application/json');
         }
         $Is_Url_Rewrite=$this->Is_Url_Rewrite;
         unset ($this->response_type);
@@ -123,10 +123,10 @@ class RemoteObject extends Object
                     foreach ($value as $subkey=>$subvalue){
                         if (is_object($subvalue)){
                             $data[$key][$subkey]=UtilObject::object_to_array($subvalue);
-                        }                      
+                        }
                     }
                 }
-            }    
+            }
         }
         if ($Is_Url_Rewrite){
             return Manager_Communication::newInstance()->currentComm()->sendRequest(
@@ -136,7 +136,7 @@ class RemoteObject extends Object
                    self::$server_addr.self::$index_file.$this->classname(),$data,$method,$response_type);
         }
     }
-    
+
     /**
      * 异步发送请求<br/>
      * @param enum $response_type 返回的数据类型
@@ -145,26 +145,26 @@ class RemoteObject extends Object
     public function sendRequestAsyncLocal($method=EnumHttpMethod::POST,$response_type=EnumResponseType::XML)
     {
         unset ($this->response_type);
-        unset ($this->IsSync);        
+        unset ($this->IsSync);
         $data=UtilObject::object_to_array($this);
         foreach ($data as $key=>$value){
             if (is_array($value)){
                 foreach ($value as $subkey=>$subvalue){
                     if (is_object($subvalue)){
                         $data[$key][$subkey]=UtilObject::object_to_array($subvalue);
-                    }                      
+                    }
                 }
             }
-        }    
-        if (!Gc::$dev_debug_on){            
+        }
+        if (!Gc::$dev_debug_on){
             $data=UtilArray::Array2String($data);
-            $data=array("data"=>$data);  
-        }  
-        $result= Manager_Communication::newInstance()->currentComm()->sendRequestAsync_local($this->classname(),$data,$method,$response_type);   
+            $data=array("data"=>$data);
+        }
+        $result= Manager_Communication::newInstance()->currentComm()->sendRequestAsync_local($this->classname(),$data,$method,$response_type);
         return $result;
-    }    
-    //</editor-fold>    
-    
+    }
+    //</editor-fold>
+
     //<editor-fold defaultstate="collapsed" desc="数据类型转换">
     /**
      * 将数据对象转换成xml
@@ -178,7 +178,7 @@ class RemoteObject extends Object
        $object=clone $this;
        return UtilObject::object_to_xml($object,$filterArray,$isAll);
     }
-    
+
     /**
     * 将数据对象转换成Json类型格式
      * @param $isAll 是否对象所有的field都要生成，包括没有内容或者内容为空的field
@@ -196,14 +196,14 @@ class RemoteObject extends Object
        }
        return json_encode($object_arr);
     }
-    
+
     /**
      * 将数据对象转换成Array
      * @param $isAll 是否对象所有的field都要生成，包括没有内容或者内容为空的field
      * @return 数组
      */
     public function toArray($isAll=true)
-    {  
+    {
        return UtilObject::object_to_array($this,$isAll);
     }
     //</editor-fold>

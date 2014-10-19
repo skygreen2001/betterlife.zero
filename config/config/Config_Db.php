@@ -73,8 +73,8 @@ class EnumDbSource extends Enum{
 	 * 数据库：LDAP
 	 * 可通过Config_Db::$engine=ENGINE_DAL_ADODB配合使用\
 	 * 需要配置如下：
-	 *     Config_Db::$host= 'ldap.baylor.edu';
-	 *     Config_Db::$dbname= 'ou=People,o=Baylor University,c=US';
+	 *		Config_Db::$host= 'ldap.baylor.edu';
+	 *		Config_Db::$dbname= 'ou=People,o=Baylor University,c=US';
 	 */
 	const DB_LDAP=14;
 	/**
@@ -140,11 +140,11 @@ class EnumDbEngine extends Enum{
 	/**
 	 * 配合Adodb使用PDO；仅支持PHP5
 	 */
-	const ENGINE_DAL_ADODB_PDO=113;   
+	const ENGINE_DAL_ADODB_PDO=113;
 	/**
-	 * 
+	 *
 	 */
-	const ENGINE_DAL_MDB2  =114;     
+	const ENGINE_DAL_MDB2  =114;
 }
 //</editor-fold>
 
@@ -153,13 +153,13 @@ class EnumDbEngine extends Enum{
  * 所有数据库配置的父类<br/>
  * @todo Sql Server 和 Pdo的测试-尚不知道如何找到Php5.3的php_pdo_mssql驱动；暂无需求<br/>
  *        Sql Server 第三方方案：http://www.easysoft.com/developer/languages/php/sql_server_unix_tutorial.html#driver<br/>
- * 说明： 目前可使用PHP自带的ODBC方案使用Sql Server；通过配置Config_Db:$db=DB_SQLSERVER和Config_Db:$engine=ENGINE_OBJECT_ODBC即可<br/> 
- +--------------------------------------------------<br/>  
+ * 说明： 目前可使用PHP自带的ODBC方案使用Sql Server；通过配置Config_Db:$db=DB_SQLSERVER和Config_Db:$engine=ENGINE_OBJECT_ODBC即可<br/>
+ +--------------------------------------------------<br/>
  * @category betterlife
  * @package core.config
  * @author skygreen
  */
-class Config_Db extends ConfigBB 
+class Config_Db extends ConfigBB
 {
 	/**
 	 * @var int 当前应用使用Mysql数据库
@@ -172,7 +172,7 @@ class Config_Db extends ConfigBB
 	 */
 	public static $engine=EnumDbEngine::ENGINE_OBJECT_MYSQL_MYSQLI;//ENGINE_OBJECT_MYSQL_MYSQLI   self::ENGINE_DAL_ADODB;
 	/**
-	 * @var string Host 默认本地 localhost                   
+	 * @var string Host 默认本地 localhost
 	 * @static
 	 */
 	public static $host="127.0.0.1";//UF-T4300-2003-9
@@ -183,7 +183,7 @@ class Config_Db extends ConfigBB
 	 * DB2 50000<br/>
 	 * Microsoft Sql Server 10060<br/>
 	 * @var string 默认端口<br/>
-	 * 
+	 *
 	 * @static
 	 */
 	public static $port="";
@@ -200,7 +200,7 @@ class Config_Db extends ConfigBB
 	/**
 	 * 如果数据库指定是文件，如Microsoft Access,Sqlite<br/>
 	 * 则为数据库文件名<br/>
-	 * 如果是Oracle数据库则是SID名称       <br/>                           
+	 * 如果是Oracle数据库则是SID名称       <br/>
 	 * @var string 数据库名称
 	 * @static
 	 */
@@ -215,8 +215,8 @@ class Config_Db extends ConfigBB
 	 +--------------------------------------------------<br/>
 	 * 目前调试通过  该参数对Config_Db::$engine<br/>
 	 *     *ENGINE_DAL_ADODB<br/>
-	 *     *ENGINE_OBJECT_ODBC 有效  <br/> 
-	 * 
+	 *     *ENGINE_OBJECT_ODBC 有效  <br/>
+	 *
 	 * 是否使用了Dsn的设置 <br/>
 	 * true:在Windows里进行了系统DSN的设置，只需在Config_Db::$dbname里输入DSN设置的名称即可<br/>
 	 * false:未进行设置，则需要在Config_Db::$dbname设置数据库文件所在路径或者数据库名称<br/>
@@ -253,7 +253,7 @@ class Config_Db extends ConfigBB
 	 * @var array
 	 * @static
 	 */
-	public static $orm=array(            
+	public static $orm=array(
 	);
 
 	/**
@@ -273,7 +273,7 @@ class Config_Db extends ConfigBB
 			return self::ormByRule($classname);
 		}
 	}
-	
+
 	/**
 	 +--------------------------------------------<br/>
 	 * 根据表命名获取对应的对象定义
@@ -284,7 +284,7 @@ class Config_Db extends ConfigBB
 	 * @param $tablename 表名称
 	 * @return 根据表名称返回对象名称定义
 	 * @final
-	 */    
+	 */
 	final public static function tom($tablename){
 		if (in_array($tablename, self::$orm)) {
 			return array_search($tablename, self::$orm);//在Config_Db::$orm里手动配置类与表的对应关系
@@ -330,7 +330,7 @@ class Config_Db extends ConfigBB
 		$tablename=self::$table_prefix.$subDirname.strtolower($classname);
 		return $tablename;
 	}
-	
+
 	 /**
 	 +-------------------------------------------------<br/>
 	 * 按照类和表的对应关系规则规范自动生成；<br/>
@@ -352,9 +352,9 @@ class Config_Db extends ConfigBB
 				return $classname;
 			}
 			$maybeClassname=self::TABLENAME_CONCAT.$maybeClassname;
-		}      
-		return null;                
-	}   
+		}
+		return null;
+	}
 }
 
 ?>

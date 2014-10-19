@@ -5,7 +5,7 @@
  +---------------------------------<br/>
  * @category betterlife
  * @package core.autoCode
- * @author skygreen skygreen2001@gmail.com
+ * @author skygreen <skygreen2001@gmail.com>
  */
 class AutoCode extends Object
 {

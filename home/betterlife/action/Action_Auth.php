@@ -6,7 +6,7 @@
  * @category betterlife
  * @package  web.front
  * @subpackage auth
- * @author skygreen
+ * @author skygreen <skygreen2001@gmail.com>
  */
 class Action_Auth extends Action
 {

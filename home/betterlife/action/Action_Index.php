@@ -6,14 +6,14 @@
  * @category betterlife
  * @package  web.front
  * @subpackage auth
- * @author skygreen
+ * @author skygreen <skygreen2001@gmail.com>
  */
-class Action_Index extends Action 
+class Action_Index extends Action
 {
 	/**
 	 * 首页
-	 */       
-	public function index() 
+	 */
+	public function index()
 	{
 		//$this->redirect_url(Gc::$url_base."welcome.php");
 		$this->redirect("auth","login");
