@@ -232,7 +232,7 @@ class Config_Db extends ConfigBB
 	public static $is_persistent=false;
 
 	/**
-	 * @var string 数据库表名前缀；
+	 * @var string 数据库表名前缀
 	 * @static
 	 */
 	public static $table_prefix="bb_";

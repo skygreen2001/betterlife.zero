@@ -33,7 +33,7 @@ class View {
 	/**
 	 * 显示页面上使用的变量存储对象
 	 * 目前需模版是
-	 *     Smarty:TEMPLATE_MODE_SMARTY
+	 *	 Smarty:TEMPLATE_MODE_SMARTY
 	 */
 	private $viewObject;
 	/**
@@ -59,12 +59,13 @@ class View {
 	private function init_view_global(){
 		self::$view_global=array(
 			"url_base"=> Gc::$url_base,
-			"encoding"=> Gc::$encoding,
 			"site_name"=> Gc::$site_name,
+			"appName"=> Gc::$appName,
 			"template_url"=>$this->template_url_dir(),
 			"upload_url"=>Gc::$upload_url,
-            "uploadImg_url"=>Gc::$upload_url."images/",
+			"uploadImg_url"=>Gc::$upload_url."images/",
 			"templateDir"=> Gc::$nav_root_path.$this->getTemplate_View_Dir($this->moduleName),
+			"encoding"=> Gc::$encoding
 		);
 	}
 	/**
@@ -108,7 +109,7 @@ class View {
 	/***********************************魔术方法**************************************************/
 	/**
 	 * 说明：若每个具体的实现类希望不想实现set,get方法；
-	 *      则将该方法复制到每个具体继承他的对象类内。
+	 *	  则将该方法复制到每个具体继承他的对象类内。
 	 * 可设定对象未定义的成员变量[但不建议这样做]
 	 * 可无需定义get方法和set方法
 	 * 类定义变量访问权限设定需要是pulbic
@@ -284,14 +285,14 @@ class View {
 				$this->templateMode=self::TEMPLATE_MODE_EASETEMPLATE;
 				$lan_dir=Initializer::$NAV_CORE_PATH.Config_F::CORE_LANG.DS;
 				$tpl_set = array(
-						'ID'        =>'1',            //缓存ID
-						'TplType'    =>str_replace(".","",Gc::$template_file_suffix),//模板格式
-						'CacheDir'    => $template_tmp_dir.'cache'.DS,        //缓存目录<br />
-						'TemplateDir'    => $this->template_dir,//模板存放目录<br />
-						'AutoImage'    =>'on',//自动解析图片目录开关 on表示开放 off表示关闭<br />
-						'LangDir'    =>$lan_dir,//语言文件存放的目录<br />
-						'Language'    =>Config_C::WORLD_LANGUAGE,//语言的默认文件<br />
-						'Copyright'    =>'off',//版权保护<br />
+						'ID'		=>'1',			//缓存ID
+						'TplType'	=>str_replace(".","",Gc::$template_file_suffix),//模板格式
+						'CacheDir'	=> $template_tmp_dir.'cache'.DS,		//缓存目录<br />
+						'TemplateDir'	=> $this->template_dir,//模板存放目录<br />
+						'AutoImage'	=>'on',//自动解析图片目录开关 on表示开放 off表示关闭<br />
+						'LangDir'	=>$lan_dir,//语言文件存放的目录<br />
+						'Language'	=>Config_C::WORLD_LANGUAGE,//语言的默认文件<br />
+						'Copyright'	=>'off',//版权保护<br />
 				);
 				if (self::TEMPLATE_EASETEMPLATE_MEMCACHE_ON) {
 

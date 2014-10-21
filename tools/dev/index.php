@@ -93,16 +93,17 @@ class Project_Refactor
 	 * 需要忽略的目录【在大部分的项目中都不会用到】
 	 */
 	public static $ignore_dir=array(
-		".settings",
-		"_notes",
-		"attachment",
 		"api",
+		"attachment",
 		"data",
+		"document",
 		"nbproject",
 		"phpext",
 		"test",
 		"log",
-		"upload"
+		"upload",
+		".settings",
+		"_notes"
 	);
 	/**
 	 * 需要忽略的文件【在大部分的项目中都不会用到】
@@ -129,6 +130,14 @@ class Project_Refactor
 			UtilFileSystem::deleteDir(self::$save_dir.Gc::$module_root.DS."business");
 		if(is_dir(self::$save_dir.Gc::$module_root.DS."model"))
 			UtilFileSystem::deleteDir(self::$save_dir.Gc::$module_root.DS."model");
+
+
+		if(is_dir(self::$save_dir.Gc::$module_root.DS."admin")){
+			$toDeleteDir=self::$save_dir.Gc::$module_root.DS."admin".DS."src".DS."timertask".DS;
+			UtilFileSystem::deleteDir($toDeleteDir);
+			$toDeleteDir=self::$save_dir.Gc::$module_root.DS."admin".DS."src".DS."remoteobject".DS;
+			UtilFileSystem::deleteDir($toDeleteDir);
+		}
 
 		if(is_dir(self::$save_dir."data")){
 			UtilFileSystem::deleteDir(self::$save_dir."data".DS."spider");
@@ -648,7 +657,7 @@ class Manager_Db extends Manager {
 		\$this->currentdao=\$this->dao_dynamic;
 		return \$this->dao_dynamic;
 	}
-
+}
 ?>
 MANAGEDB;
 		$manager_db_file=$ignore_core_db_dir.DS."Manager_Db.php";
@@ -934,7 +943,7 @@ class Action_Auth extends Action
 ?>
 AUTHCONTENT;
 
-		$action_auth_file=self::$save_dir.Gc::$module_root.DS."action".DS."Action_Auth.php";
+		$action_auth_file=self::$save_dir.Gc::$module_root.DS.self::$pj_name_en.DS."action".DS."Action_Auth.php";
 		if(file_exists($action_auth_file))file_put_contents($action_auth_file, $action_auth_content);
 
 		$util_view_dir=self::$save_dir.$root_core.DS."util".DS."view".DS;
@@ -976,28 +985,28 @@ AUTHCONTENT;
 			self::$pj_name_cn=$_REQUEST["pj_name_cn"];
 		}else{
 			self::UserInput();
-			die("不能为空:新Web项目名称【中文】");
+			die("<div align='center'><font color='red'>不能为空:新Web项目名称【中文】</font></div>");
 		}
 		if(isset($_REQUEST["pj_name_en"])&&!empty($_REQUEST["pj_name_en"]))
 		{
 			self::$pj_name_en=$_REQUEST["pj_name_en"];
 		}else{
 			self::UserInput();
-			die("不能为空:新Web项目名称【英文】");
+			die("<div align='center'><font color='red'>不能为空:新Web项目名称【英文】</font></div>");
 		}
 		if(isset($_REQUEST["pj_name_alias"])&&!empty($_REQUEST["pj_name_alias"]))
 		{
 			self::$pj_name_alias=$_REQUEST["pj_name_alias"];
 		}else{
 			self::UserInput();
-			die("不能为空:新Web项目名称别名");
+			die("<div align='center'><font color='red'>不能为空:新Web项目名称别名</font></div>");
 		}
 		if(isset($_REQUEST["dbname"])&&!empty($_REQUEST["dbname"]))
 		{
 			self::$db_name=$_REQUEST["dbname"];
 		}else{
 			self::UserInput();
-			die("不能为空:数据库名称");
+			die("<div align='center'><font color='red'>不能为空:数据库名称</font></div>");
 		}
 
 		if(isset($_REQUEST["table_prefix"])&&!empty($_REQUEST["table_prefix"]))
@@ -1020,7 +1029,7 @@ AUTHCONTENT;
 		if(is_dir(self::$save_dir)){
 			self::$save_dir=$save_dir;
 			self::UserInput();
-			die("该目录已存在!为防止覆盖您现有的代码,请更名!");
+			die("<div align='center'><font color='red'>该目录已存在!为防止覆盖您现有的代码,请更名!</font></div>");
 		}
 
 		//生成新项目目录
@@ -1033,7 +1042,7 @@ AUTHCONTENT;
 		$content=str_replace(Gc::$appName, self::$pj_name_en, $content);
 		$content=str_replace(Gc::$appName_alias, self::$pj_name_alias, $content);
 		if(self::$reuse_type==EnumReusePjType::MINI){
-			$content=str_replace("\"common\",\r\n", "", $content);
+			$content=str_replace("\"model\",\r\n", "", $content);
 		}
 		file_put_contents($gc_file, $content);
 
@@ -1053,6 +1062,7 @@ AUTHCONTENT;
 			$ctrr=substr($content,strpos($content,"<?php \$help_url=\"")+18);
 			$ctrr=substr($ctrr,strpos($ctrr,"\""));
 			$content=$ctrl.self::$git_name.$ctrr;
+			if(self::$reuse_type==EnumReusePjType::MINI)$content=str_replace("通用模板", "", $content);
 			file_put_contents($welcome_file, $content);
 		}
 
@@ -1075,7 +1085,9 @@ AUTHCONTENT;
 		}
 		self::$save_dir=$save_dir;
 		self::UserInput();
-		die("<div align='center'><font color='green'>生成新Web项目成功！</font></center>");
+		$default_dir=Gc::$url_base;
+		$domain_url=str_replace(Gc::$appName."/", "", $default_dir);
+		die("<div align='center'><font color='green'>生成新Web项目成功！</font><br/><a href='".$domain_url.self::$pj_name_en."/' target='_blank'>新地址</a></div>");
 	}
 
 	/**

@@ -15,8 +15,8 @@ $ExpStr = "Expires: ".gmdate("D, d M Y H:i:s", time() + $offset) . " GMT";
 header($ExpStr);
 ob_start("compress");
 function compress($buffer) {//去除文件中的注释
-	  $buffer = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $buffer);
-	  return $buffer;
+	$buffer = preg_replace('!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $buffer);
+	return $buffer;
 }
 $jsFile = @$_GET['js'];
 $cssFile=@$_GET['css'];
@@ -24,6 +24,7 @@ $group=@$_GET['g'];
 $version = @$_GET['v'];
 
 if (isset ($jsFile)){
+	if(contain($jsFile,"?"))$jsFile=substr($jsFile,0,strpos($jsFile,"?"));
 	if (!endWith($jsFile, ".js"))return;
 	header("Content-type: text/javascript; charset: UTF-8");
 	if (EnumJsFramework::isEnumValue($group)) {
@@ -63,6 +64,7 @@ if (isset ($jsFile)){
 }
 
 if (isset ($cssFile)){
+	if(contain($cssFile,"?"))$cssFile=substr($cssFile,0,strpos($cssFile,"?"));
 	if (!endWith($cssFile, ".css"))return;
 	header("Content-type: text/css; charset: UTF-8");
 	if (EnumJsFramework::isEnumValue($group)) {

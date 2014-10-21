@@ -5,4 +5,7 @@
 * [数据对象通用方法](dataobject.md)
 * [数据库原型设计规范](databasedefinerule.md)
 * [框架介绍](applicationstructure.md)
+   * [Model](model.md)
+   * [View](view.md)
+* [代码重用](codereuse.md)
 

@@ -24,6 +24,7 @@ $group=@$_GET['g'];
 $version = @$_GET['v'];
 
 if (isset ($jsFile)){
+	if(contain($jsFile,"?"))$jsFile=substr($jsFile,0,strpos($jsFile,"?"));
 	if (!endWith($jsFile, ".js"))return;
 	header("Content-type: text/javascript; charset: UTF-8");
 	if (EnumJsFramework::isEnumValue($group)) {
@@ -63,6 +64,7 @@ if (isset ($jsFile)){
 }
 
 if (isset ($cssFile)){
+	if(contain($cssFile,"?"))$cssFile=substr($cssFile,0,strpos($cssFile,"?"));
 	if (!endWith($cssFile, ".css"))return;
 	header("Content-type: text/css; charset: UTF-8");
 	if (EnumJsFramework::isEnumValue($group)) {
