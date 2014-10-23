@@ -141,6 +141,7 @@ class Project_Refactor
 			UtilFileSystem::deleteDir($toDeleteDir);
 			$toDeleteDir=self::$save_dir.Gc::$module_root.DS."admin".DS."view".DS."default".DS."tmp".DS."templates_c".DS;
 			UtilFileSystem::deleteDir($toDeleteDir);
+			UtilFileSystem::createDir($toDeleteDir);
 		}
 
 		if(is_dir(self::$save_dir."data")){
@@ -1077,6 +1078,7 @@ AUTHCONTENT;
 		if(is_dir($old_name)){
 			$toDeleteDir=$old_name."view".DS."default".DS."tmp".DS."templates_c".DS;
 			UtilFileSystem::deleteDir($toDeleteDir);
+			UtilFileSystem::createDir($toDeleteDir);
 			rename($old_name,$new_name);
 		}
 		//重命名后台Action_Betterlife为新应用类
