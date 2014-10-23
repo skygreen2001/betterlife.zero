@@ -42,17 +42,19 @@ class EnumReusePjType extends Enum
  *		3.修改Config_Db.php[数据库名称|数据库表名前缀]
  *		4.修改帮助地址
  *		5.修改应用文件夹名称
+ *      6.重命名后台Action_Betterlife为新应用类
+ *      7.替换Extjs的js文件里的命名空间
  *      精简版还执行了以下操作
- *			6.清除在大部分项目中不需要的目录
- *			7.清除在大部分项目中不需要的文件
- *			8.清除library下的不常用的库:
+ *			1.清除在大部分项目中不需要的目录
+ *			2.清除在大部分项目中不需要的文件
+ *			3.清除library下的不常用的库:
  *				adodb5|linq|mdb2|PHPUnit|yaml|template[EaseTemplate|SmartTemplate|TemplateLite]
- *			9.清除缓存相关的文件
- *      	10.清除mysql|sqlite|postgres以外的其他数据库引擎
- *			11.清除module大部分工程无需的文件
- *			12.清除tools大部分工程无需的文件
- *			13.清除common大部分工程无需的文件
- *          14.清除util大部分工程无需的文件
+ *			4.清除缓存相关的文件
+ *      	5.清除mysql|sqlite|postgres以外的其他数据库引擎
+ *			6.清除module大部分工程无需的文件
+ *			7.清除tools大部分工程无需的文件
+ *			8.清除common大部分工程无需的文件
+ *          9.清除util大部分工程无需的文件
  * @author skygreen2001@gmail.com
  */
 class Project_Refactor
@@ -1070,6 +1072,40 @@ AUTHCONTENT;
 		$old_name=self::$save_dir.Gc::$module_root.DS.Gc::$appName.DS;
 		$new_name=self::$save_dir.Gc::$module_root.DS.self::$pj_name_en.DS;
 		if(is_dir($old_name))rename($old_name,$new_name);
+
+		//重命名后台Action_Betterlife为新应用类
+		$old_name=self::$save_dir.Gc::$module_root.DS."admin".DS."action".DS."Action_".ucfirst(Gc::$appName).".php";
+		$new_name=self::$save_dir.Gc::$module_root.DS."admin".DS."action".DS."Action_".ucfirst(self::$pj_name_en).".php";
+		if(is_dir($old_name))rename($old_name,$new_name);
+
+		//替换Extjs的js文件里的命名空间
+		$extjsDir=self::$save_dir.Gc::$module_root.DS."admin".DS."view".DS."default".DS."js".DS."ext".DS;
+		$jsFiles=UtilFileSystem::getAllFilesInDirectory($extjsDir,array("js"));
+		$o_appName=ucfirst(Gc::$appName);
+		$n_appName=ucfirst(self::$pj_name_en);
+
+		foreach ($jsFiles as $jsFile) {
+			$content=file_get_contents($jsFile);
+			$origin_content=$content;
+            if(contain($jsFile,DS."components".DS))continue;
+            $fileName=basename($jsFile,".js");
+			//*.替换命名空间
+			$fileName=str_replace(".js", "", $fileName);
+			$fileName=ucfirst($fileName);
+			$content=str_replace("Ext.namespace(\"$o_appName.Admin", "Ext.namespace(\"$n_appName.Admin", $content);
+            if(contain($jsFile,DS."ext".DS."view".DS)){
+			    //*.替换命名空间缩写定义
+			    $content=str_replace(Gc::$appName_alias."View = $o_appName.Admin.View;", self::$pj_name_alias."View = $n_appName.Admin.View;", $content);
+                //*.替换命名空间定义前缀
+                $content=str_replace(Gc::$appName_alias.".", self::$pj_name_alias.".", $content);
+			}else{
+                //*.替换命名空间缩写定义
+                $content=str_replace(Gc::$appName_alias." = $o_appName.Admin;", self::$pj_name_alias." = $n_appName.Admin;", $content);
+                //*.替换命名空间定义前缀
+                $content=str_replace(Gc::$appName_alias."View.", self::$pj_name_alias."View.", $content);
+            }                                                                                 
+			if($origin_content!=$content)file_put_contents($jsFile, $content);
+		}
 
 		//清除在大部分项目中不需要的目录
 		if(self::$reuse_type==EnumReusePjType::MINI){
