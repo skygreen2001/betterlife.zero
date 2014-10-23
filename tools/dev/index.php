@@ -1097,12 +1097,13 @@ AUTHCONTENT;
 			    //*.替换命名空间缩写定义
 			    $content=str_replace(Gc::$appName_alias."View = $o_appName.Admin.View;", self::$pj_name_alias."View = $n_appName.Admin.View;", $content);
                 //*.替换命名空间定义前缀
-                $content=str_replace(Gc::$appName_alias.".", self::$pj_name_alias.".", $content);
+                $content=str_replace(Gc::$appName_alias."View.", self::$pj_name_alias."View.", $content);
+                
 			}else{
                 //*.替换命名空间缩写定义
                 $content=str_replace(Gc::$appName_alias." = $o_appName.Admin;", self::$pj_name_alias." = $n_appName.Admin;", $content);
                 //*.替换命名空间定义前缀
-                $content=str_replace(Gc::$appName_alias."View.", self::$pj_name_alias."View.", $content);
+                $content=str_replace(Gc::$appName_alias.".", self::$pj_name_alias.".", $content);
             }                                                                                 
 			if($origin_content!=$content)file_put_contents($jsFile, $content);
 		}
@@ -1123,7 +1124,7 @@ AUTHCONTENT;
 		self::UserInput();
 		$default_dir=Gc::$url_base;
 		$domain_url=str_replace(Gc::$appName."/", "", $default_dir);
-		die("<div align='center'><font color='green'>生成新Web项目成功！</font><br/><a href='".$domain_url.self::$pj_name_en."/' target='_blank'>新地址</a></div>");
+		die("<div align='center'><font color='green'><a href='".$domain_url.self::$pj_name_en."/' target='_blank'>生成新Web项目成功！</a></font><br/><a href='".$domain_url.self::$pj_name_en."/' target='_blank'>新地址</a></div>");
 	}
 
 	/**
