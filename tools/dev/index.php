@@ -139,12 +139,15 @@ class Project_Refactor
 			UtilFileSystem::deleteDir($toDeleteDir);
 			$toDeleteDir=self::$save_dir.Gc::$module_root.DS."admin".DS."src".DS."remoteobject".DS;
 			UtilFileSystem::deleteDir($toDeleteDir);
+			$toDeleteDir=self::$save_dir.Gc::$module_root.DS."admin".DS."view".DS."default".DS."tmp".DS."templates_c".DS;
+			UtilFileSystem::deleteDir($toDeleteDir);
 		}
 
 		if(is_dir(self::$save_dir."data")){
 			UtilFileSystem::deleteDir(self::$save_dir."data".DS."spider");
 			UtilFileSystem::deleteDir(self::$save_dir."data".DS."uc_client");
 		}
+
 	}
 
 	/**
@@ -1071,8 +1074,11 @@ AUTHCONTENT;
 		//修改应用文件夹名称
 		$old_name=self::$save_dir.Gc::$module_root.DS.Gc::$appName.DS;
 		$new_name=self::$save_dir.Gc::$module_root.DS.self::$pj_name_en.DS;
-		if(is_dir($old_name))rename($old_name,$new_name);
-
+		if(is_dir($old_name)){
+			$toDeleteDir=$old_name."view".DS."default".DS."tmp".DS."templates_c".DS;
+			UtilFileSystem::deleteDir($toDeleteDir);
+			rename($old_name,$new_name);
+		}
 		//重命名后台Action_Betterlife为新应用类
 		$old_name=self::$save_dir.Gc::$module_root.DS."admin".DS."action".DS."Action_".ucfirst(Gc::$appName).".php";
 		$new_name=self::$save_dir.Gc::$module_root.DS."admin".DS."action".DS."Action_".ucfirst(self::$pj_name_en).".php";
@@ -1098,13 +1104,14 @@ AUTHCONTENT;
 			    $content=str_replace(Gc::$appName_alias."View = $o_appName.Admin.View;", self::$pj_name_alias."View = $n_appName.Admin.View;", $content);
                 //*.替换命名空间定义前缀
                 $content=str_replace(Gc::$appName_alias."View.", self::$pj_name_alias."View.", $content);
-                
+                //*.替换命名空间定义前缀
+                $content=str_replace("parent.".Gc::$appName_alias, "parent.".self::$pj_name_alias, $content);
 			}else{
                 //*.替换命名空间缩写定义
                 $content=str_replace(Gc::$appName_alias." = $o_appName.Admin;", self::$pj_name_alias." = $n_appName.Admin;", $content);
                 //*.替换命名空间定义前缀
                 $content=str_replace(Gc::$appName_alias.".", self::$pj_name_alias.".", $content);
-            }                                                                                 
+            }
 			if($origin_content!=$content)file_put_contents($jsFile, $content);
 		}
 
