@@ -29,7 +29,7 @@ class Config_AutoCode extends ConfigBB
 	/**
 	 * 每次都生成代码生成配置文件
 	 */
-	const ALWAYS_AUTOCODE_XML_NEW=true;
+	const ALWAYS_AUTOCODE_XML_NEW=false;
 	/**
 	 * 显示前期报告
 	 */
@@ -38,5 +38,12 @@ class Config_AutoCode extends ConfigBB
 	 * 显示前台生成报告
 	 */
 	const SHOW_REPORT_FRONT=true;
+	/**
+	 * Model转换成后台Admin
+	 * 		工程重用选择类型:通用版后
+	 * 		代码生成会转向AutoCodePreviewReportLike
+	 */
+	const AFTER_MODEL_CONVERT_ADMIN=false;
+
 }
 ?>

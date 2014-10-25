@@ -103,6 +103,7 @@ class Project_Refactor
 		"phpext",
 		"test",
 		"log",
+		"model",
 		"upload",
 		".settings",
 		"_notes"
@@ -130,13 +131,8 @@ class Project_Refactor
 
 		if(is_dir(self::$save_dir.Gc::$module_root.DS."business"))
 			UtilFileSystem::deleteDir(self::$save_dir.Gc::$module_root.DS."business");
-		if(is_dir(self::$save_dir.Gc::$module_root.DS."model"))
-			UtilFileSystem::deleteDir(self::$save_dir.Gc::$module_root.DS."model");
-
 
 		if(is_dir(self::$save_dir.Gc::$module_root.DS."admin")){
-			$toDeleteDir=self::$save_dir.Gc::$module_root.DS."admin".DS."src".DS."timertask".DS;
-			UtilFileSystem::deleteDir($toDeleteDir);
 			$toDeleteDir=self::$save_dir.Gc::$module_root.DS."admin".DS."src".DS."remoteobject".DS;
 			UtilFileSystem::deleteDir($toDeleteDir);
 			$toDeleteDir=self::$save_dir.Gc::$module_root.DS."admin".DS."view".DS."default".DS."tmp".DS."templates_c".DS;
@@ -148,7 +144,6 @@ class Project_Refactor
 			UtilFileSystem::deleteDir(self::$save_dir."data".DS."spider");
 			UtilFileSystem::deleteDir(self::$save_dir."data".DS."uc_client");
 		}
-
 	}
 
 	/**
@@ -865,7 +860,6 @@ LIBRARY_XML_CONTENT;
 		}
 	}
 
-
 	/**
 	 * 清除util大部分工程无需的文件
 	 * 1.去除ucenter工具集
@@ -1047,7 +1041,7 @@ AUTHCONTENT;
 		$content=str_replace(Gc::$site_name, self::$pj_name_cn, $content);
 		$content=str_replace(Gc::$appName, self::$pj_name_en, $content);
 		$content=str_replace(Gc::$appName_alias, self::$pj_name_alias, $content);
-		if(self::$reuse_type==EnumReusePjType::MINI){
+		if((self::$reuse_type==EnumReusePjType::MINI)||(self::$reuse_type==EnumReusePjType::LIKE)){
 			$content=str_replace("\"model\",\r\n", "", $content);
 		}
 		file_put_contents($gc_file, $content);
@@ -1117,23 +1111,84 @@ AUTHCONTENT;
 			if($origin_content!=$content)file_put_contents($jsFile, $content);
 		}
 
+		$reuse_type=intval(self::$reuse_type);
 		//清除在大部分项目中不需要的目录
-		if(self::$reuse_type==EnumReusePjType::MINI){
-			self::IgnoreDir();
-			self::IgnoreFiles();
-			self::IgnoreLibraryUnused();
-			self::IgnoreCache();
-			self::IgnoreAllDbEngineExceptMysql();
-			self::IgnoreModules();
-			self::IgnoreTools();
-			self::IgnoreCommons();
-			self::IgnoreUtils();
+		switch ($reuse_type) {
+			case EnumReusePjType::MINI:
+				self::IgnoreInCommon();
+				$toDeleteDir=self::$save_dir.Gc::$module_root.DS."model";
+				if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
+
+				$toDeleteDir=self::$save_dir.Gc::$module_root.DS."admin".DS."src".DS."timertask".DS;
+				if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
+
+				self::IgnoreAllDbEngineExceptMysql();
+				self::IgnoreCommons();
+				self::IgnoreUtils();
+				break;
+			case EnumReusePjType::LIKE:
+				self::IgnoreInCommon();
+				self::IgnoreCommons();
+
+				//删除exjs库
+				$toDeleteDir=self::$save_dir."common".DS."js".DS."ajax".DS."ext".DS;
+				if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
+
+				self::IgnoreUtils();
+
+				$toDeleteDir=self::$save_dir.Gc::$module_root.DS."admin".DS."src".DS."timertask".DS;
+				if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
+
+				//修改model文件夹名称为后台文件夹admin
+				$old_admin_name=self::$save_dir.Gc::$module_root.DS."admin".DS;
+				UtilFileSystem::deleteDir($old_admin_name);
+				$old_model_name=self::$save_dir.Gc::$module_root.DS."model".DS;
+				$new_model_name=self::$save_dir.Gc::$module_root.DS."admin".DS;
+				if(is_dir($old_model_name)){
+					rename($old_model_name,$new_model_name);
+					//替换model的tpl文件里的链接地址
+					$modelTplDir=self::$save_dir.Gc::$module_root.DS."admin".DS."view".DS."default".DS."core".DS;
+					$tplFiles=UtilFileSystem::getAllFilesInDirectory($modelTplDir,array("tpl"));
+
+					foreach ($tplFiles as $tplFile) {
+						$content=file_get_contents($tplFile);
+						$content=str_replace("go=model.", "go=admin.", $content);
+						file_put_contents($tplFile, $content);
+					}
+				}
+
+				//修改Config_AutoCode.php配置文件
+				$config_autocode_file=self::$save_dir."config".DS."config".DS."Config_AutoCode.php";
+				$content=file_get_contents($config_autocode_file);
+				$content=str_replace("const AFTER_MODEL_CONVERT_ADMIN=false;", "const AFTER_MODEL_CONVERT_ADMIN=true;", $content);
+				file_put_contents($config_autocode_file, $content);
+				break;
+			case EnumReusePjType::HIGH:
+				self::IgnoreInCommon();
+				$old_model_name=self::$save_dir.Gc::$module_root.DS."model".DS;
+				if(is_dir($old_model_name))UtilFileSystem::deleteDir($old_model_name);
+				break;
+			default:
+				break;
 		}
 		self::$save_dir=$save_dir;
 		self::UserInput();
 		$default_dir=Gc::$url_base;
 		$domain_url=str_replace(Gc::$appName."/", "", $default_dir);
 		die("<div align='center'><font color='green'><a href='".$domain_url.self::$pj_name_en."/' target='_blank'>生成新Web项目成功！</a></font><br/><a href='".$domain_url.self::$pj_name_en."/' target='_blank'>新地址</a></div>");
+	}
+
+	/**
+	 * 多数情况下都会清除的内容
+	 */
+	private static function IgnoreInCommon()
+	{
+		self::IgnoreDir();
+		self::IgnoreFiles();
+		self::IgnoreLibraryUnused();
+		self::IgnoreCache();
+		self::IgnoreModules();
+		self::IgnoreTools();
 	}
 
 	/**
@@ -1153,6 +1208,7 @@ AUTHCONTENT;
 			$table_prefix=Config_Db::$table_prefix;
 			$git_name="http://skygreen2001.gitbooks.io/betterlife-cms-framework/content/index.html";
 		}else{
+			$reuse_type=self::$reuse_type;
 			$pj_name_cn=self::$pj_name_cn;
 			$pj_name_en=self::$pj_name_en;
 			$pj_name_alias=self::$pj_name_alias;
@@ -1188,11 +1244,14 @@ AUTHCONTENT;
 		echo "		<label>数据库名称&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' name='dbname' value='$dbname' id='dbname' /><br/>\r\n";
 		echo "		<label>数据库表名前缀&nbsp;&nbsp;&nbsp;&nbsp;:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' name='table_prefix' value='$table_prefix' id='table_prefix' /><br/>\r\n";
 		echo "		<label>帮助地址&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' name='git_name' value='$git_name' id='git_name' /><br/>\r\n";
-
+		$selectd_str="";
 		if (!empty($inputArr)){
 			echo "<label>&nbsp;&nbsp;&nbsp;重用类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label><select name='reuse_type'>\r\n";
 			foreach ($inputArr as $key=>$value) {
-				echo "		<option value='$key'>$value</option>\r\n";
+				if(isset($reuse_type)){
+					if($key==$reuse_type)$selectd_str=" selected";else $selectd_str="";
+				}
+				echo "		<option value='$key'$selectd_str>$value</option>\r\n";
 			}
 			echo "		</select>\r\n";
 		}
