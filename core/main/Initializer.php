@@ -138,7 +138,6 @@ class Initializer
 		 * 记录所有开发者新开发功能模块下的文件路径
 		 */
 		self::recordModuleClasses();
-
 		/**
 		 * 其他需要初始化的工作
 		 */
@@ -368,9 +367,7 @@ class Initializer
 	}
 
 	/**
-	 * 第二种方案：
-	 * 2.记录所有开发者新开发功能模块下的文件路径
-	 *
+	 * 记录所有开发者新开发功能模块下的文件路径
 	 */
 	public static function recordModuleClasses()
 	{

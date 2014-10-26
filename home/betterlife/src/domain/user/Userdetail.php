@@ -97,10 +97,27 @@ class Userdetail extends DataObject
 	 * 从属一对一关系
 	 */
 	static $belong_has_one=array(
-		"user"=>"User"
+		"user"=>"User",
+		"country_r"=>"Region",
+		"province_r"=>"Region",
+		"city_r"=>"Region",
+		"district_r"=>"Region"
 	);
 
-	/** 
+	/**
+	 * 规格说明:外键声明
+	 * @var mixed
+	 */
+	public $field_spec=array(
+		EnumDataSpec::FOREIGN_ID=>array(
+			'country_r'=>"country",
+			"province_r"=>"province",
+			"city_r"=>"city",
+			'district_r'=>"district"
+		)
+	);
+
+	/**
 	 * 显示会员性别<br/>
 	 * 0：女-female<br/>
 	 * 1：男-male<br/>
@@ -112,7 +129,7 @@ class Userdetail extends DataObject
 		return self::sexShow($this->sex);
 	}
 
-	/** 
+	/**
 	 * 显示会员性别<br/>
 	 * 0：女-female<br/>
 	 * 1：男-male<br/>

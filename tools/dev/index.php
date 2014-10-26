@@ -46,19 +46,19 @@ class EnumReusePjType extends Enum
  *		3.修改Config_Db.php[数据库名称|数据库表名前缀]
  *		4.修改帮助地址
  *		5.修改应用文件夹名称
- *      6.重命名后台Action_Betterlife为新应用类
- *      7.替换Extjs的js文件里的命名空间
- *      精简版还执行了以下操作
+ *	  6.重命名后台Action_Betterlife为新应用类
+ *	  7.替换Extjs的js文件里的命名空间
+ *	  精简版还执行了以下操作
  *			1.清除在大部分项目中不需要的目录
  *			2.清除在大部分项目中不需要的文件
  *			3.清除library下的不常用的库:
  *				adodb5|linq|mdb2|PHPUnit|yaml|template[EaseTemplate|SmartTemplate|TemplateLite]
  *			4.清除缓存相关的文件
- *      	5.清除mysql|sqlite|postgres以外的其他数据库引擎
+ *	  	5.清除mysql|sqlite|postgres以外的其他数据库引擎
  *			6.清除module大部分工程无需的文件
  *			7.清除tools大部分工程无需的文件
  *			8.清除common大部分工程无需的文件
- *          9.清除util大部分工程无需的文件
+ *		  9.清除util大部分工程无需的文件
  * @author skygreen2001@gmail.com
  */
 class Project_Refactor
@@ -679,7 +679,7 @@ MANAGEDB;
 		//去除module:barcode
 		$dir_module=self::$save_dir.Config_F::ROOT_MODULE.DS;
 		$ignore_module_dir=$dir_module."barcode".DS;
-		UtilFileSystem::deleteDir($ignore_module_dir);
+		if(is_dir($ignore_module_dir))UtilFileSystem::deleteDir($ignore_module_dir);
 
 		$library_loader_content=<<<LIBRARY_LOAD
 <?php
@@ -1037,156 +1037,259 @@ AUTHCONTENT;
 			die("<div align='center'><font color='red'>该目录已存在!为防止覆盖您现有的代码,请更名!</font></div>");
 		}
 
-		//生成新项目目录
-		smartCopy(Gc::$nav_root_path,self::$save_dir);
+		if(self::$reuse_type==EnumReusePjType::MINI)
+		{
+			$include_dirs=array(
+				"admin",
+				"config",
+				"install",
+				"core",
+				"include",
+				"tools"
+			);
 
-		//修改Gc.php配置文件
-		$gc_file=self::$save_dir."Gc.php";
-		$content=file_get_contents($gc_file);
-		$content=str_replace(Gc::$site_name, self::$pj_name_cn, $content);
-		$content=str_replace(Gc::$appName, self::$pj_name_en, $content);
-		$content=str_replace(Gc::$appName_alias, self::$pj_name_alias, $content);
-		if((self::$reuse_type!=EnumReusePjType::FULL)){
+			UtilFileSystem::createDir(self::$save_dir);
+			foreach ($include_dirs as $include_dir) {
+				smartCopy(Gc::$nav_root_path.$include_dir.DS,self::$save_dir.$include_dir.DS);
+			}
+
+			$homeAppDir=self::$save_dir.Gc::$module_root.DS.self::$pj_name_en;
+			UtilFileSystem::createDir($homeAppDir.DS."src".DS."domain".DS);
+
+			//修改Initializer.php初始化文件
+			$init_file=self::$save_dir."core".DS."main".DS."Initializer.php";
+			$content=file_get_contents($init_file);
+			$content=str_replace("Library_Loader::load_phpexcel_autoload(\$class_name);","",$content);
+			$content=str_replace("self::loadLibrary();", "//self::loadLibrary();", $content);
+			$content=str_replace("self::loadModule();", "//self::loadModule();", $content);
+			//$content=str_replace("self::recordModuleClasses();", "//self::recordModuleClasses();", $content);
+			file_put_contents($init_file, $content);
+
+			$include_files=array(
+				".htaccess",
+				"favicon.ico",
+				"Gc.php",
+				"index.php",
+				"init.php",
+				"test.php",
+				"welcome.php"
+			);
+			foreach ($include_files as $include_file) {
+				copy(Gc::$nav_root_path.$include_file, self::$save_dir.$include_file);
+			}
+
+			//修改Gc.php配置文件
+			$gc_file=self::$save_dir."Gc.php";
+			$content=file_get_contents($gc_file);
 			$content=str_replace("\"model\",\r\n", "", $content);
-		}
-		file_put_contents($gc_file, $content);
+			$content=str_replace("\"admin\",\r\n", "", $content);
+			$content=str_replace(Gc::$site_name, self::$pj_name_cn, $content);
+			$content=str_replace(Gc::$appName, self::$pj_name_en, $content);
+			$content=str_replace(Gc::$appName_alias, self::$pj_name_alias, $content);
+			file_put_contents($gc_file, $content);
 
-		//修改Config_Db.php配置文件
-		$conf_db_file=self::$save_dir."config".DS."config".DS."Config_Db.php";
-		$content=file_get_contents($conf_db_file);
-		$content=str_replace("\$dbname=\"".Config_Db::$dbname."\"", "\$dbname=\"".self::$db_name."\"", $content);
-		$content=str_replace("\$table_prefix=\"".Config_Db::$table_prefix."\"", "\$table_prefix=\"".self::$table_prefix."\"", $content);
-		file_put_contents($conf_db_file, $content);
+			//修改Config_Db.php配置文件
+			$conf_db_file=self::$save_dir."config".DS."config".DS."Config_Db.php";
+			$content=file_get_contents($conf_db_file);
+			$content=str_replace("\$dbname=\"".Config_Db::$dbname."\"", "\$dbname=\"".self::$db_name."\"", $content);
+			$content=str_replace("\$table_prefix=\"".Config_Db::$table_prefix."\"", "\$table_prefix=\"".self::$table_prefix."\"", $content);
+			file_put_contents($conf_db_file, $content);
 
-		//修改Welcome.php文件
-		if(!empty(self::$git_name)){
+			//修改Welcome.php文件
 			$welcome_file=self::$save_dir."welcome.php";
 			$content=file_get_contents($welcome_file);
-
-			$ctrl=substr($content,0,strpos($content,"<?php \$help_url=\"")+17);
-			$ctrr=substr($content,strpos($content,"<?php \$help_url=\"")+18);
-			$ctrr=substr($ctrr,strpos($ctrr,"\""));
-			$content=$ctrl.self::$git_name.$ctrr;
-			if(self::$reuse_type!=EnumReusePjType::FULL){
-				$content=str_replace("通用模板", "", $content);
+			if(!empty(self::$git_name)){
+				$ctrl=substr($content,0,strpos($content,"<?php \$help_url=\"")+17);
+				$ctrr=substr($content,strpos($content,"<?php \$help_url=\"")+18);
+				$ctrr=substr($ctrr,strpos($ctrr,"\""));
+				$content=$ctrl.self::$git_name.$ctrr;
 			}
-
+			$content=str_replace("网站后台", "", $content);
+			$content=str_replace("通用模板", "", $content);
+			$content=str_replace("工程重用</a>|", "", $content);
 			file_put_contents($welcome_file, $content);
-		}
 
-		//修改应用文件夹名称
-		$old_name=self::$save_dir.Gc::$module_root.DS.Gc::$appName.DS;
-		$new_name=self::$save_dir.Gc::$module_root.DS.self::$pj_name_en.DS;
-		if(is_dir($old_name)){
-			$toDeleteDir=$old_name."view".DS."default".DS."tmp".DS."templates_c".DS;
-			UtilFileSystem::deleteDir($toDeleteDir);
-			UtilFileSystem::createDir($toDeleteDir);
-			rename($old_name,$new_name);
-		}
+			self::IgnoreCache();
+			self::IgnoreTools();
 
-		//修改前台的注释:* @category 应用名称
-		if(self::$reuse_type!=EnumReusePjType::MINI){
-			$frontActionDir=self::$save_dir.Gc::$module_root.DS.self::$pj_name_en.DS."action".DS;
-			$actionFiles=UtilFileSystem::getAllFilesInDirectory($frontActionDir,array("php"));
+			self::IgnoreAllDbEngineExceptMysql();
+			self::IgnoreUtils();
 
-			foreach ($actionFiles as $actionFile) {
-				$content=file_get_contents($actionFile);
-				$content=str_replace("* @category ".Gc::$appName, "* @category ".self::$pj_name_en, $content);
-				file_put_contents($actionFile, $content);
+			//修改Config_AutoCode.php配置文件
+			$config_autocode_file=self::$save_dir."config".DS."config".DS."Config_AutoCode.php";
+			$content=file_get_contents($config_autocode_file);
+			$content=str_replace("const ONLY_DOMAIN=false;", "const ONLY_DOMAIN=true;", $content);
+			file_put_contents($config_autocode_file, $content);
+		}else{
+			//生成新项目目录
+			smartCopy(Gc::$nav_root_path,self::$save_dir);
+
+			//修改Gc.php配置文件
+			$gc_file=self::$save_dir."Gc.php";
+			$content=file_get_contents($gc_file);
+			$content=str_replace(Gc::$site_name, self::$pj_name_cn, $content);
+			$content=str_replace(Gc::$appName, self::$pj_name_en, $content);
+			$content=str_replace(Gc::$appName_alias, self::$pj_name_alias, $content);
+			if((self::$reuse_type!=EnumReusePjType::FULL)){
+				$content=str_replace("\"model\",\r\n", "", $content);
+			}
+			file_put_contents($gc_file, $content);
+
+			//修改Config_Db.php配置文件
+			$conf_db_file=self::$save_dir."config".DS."config".DS."Config_Db.php";
+			$content=file_get_contents($conf_db_file);
+			$content=str_replace("\$dbname=\"".Config_Db::$dbname."\"", "\$dbname=\"".self::$db_name."\"", $content);
+			$content=str_replace("\$table_prefix=\"".Config_Db::$table_prefix."\"", "\$table_prefix=\"".self::$table_prefix."\"", $content);
+			file_put_contents($conf_db_file, $content);
+
+			//修改Welcome.php文件
+			if(!empty(self::$git_name)){
+				$welcome_file=self::$save_dir."welcome.php";
+				$content=file_get_contents($welcome_file);
+
+				$ctrl=substr($content,0,strpos($content,"<?php \$help_url=\"")+17);
+				$ctrr=substr($content,strpos($content,"<?php \$help_url=\"")+18);
+				$ctrr=substr($ctrr,strpos($ctrr,"\""));
+				$content=$ctrl.self::$git_name.$ctrr;
+				if(self::$reuse_type!=EnumReusePjType::FULL){
+					$content=str_replace("通用模板", "", $content);
+				}
+
+				file_put_contents($welcome_file, $content);
 			}
 
-			$frontSrcDir=self::$save_dir.Gc::$module_root.DS.self::$pj_name_en.DS."src".DS;
-			$srcFiles=UtilFileSystem::getAllFilesInDirectory($frontSrcDir,array("php"));
-
-			foreach ($srcFiles as $srcFile) {
-				$content=file_get_contents($srcFile);
-				$content=str_replace("* @category ".Gc::$appName, "* @category ".self::$pj_name_en, $content);
-				file_put_contents($srcFile, $content);
+			//修改应用文件夹名称
+			$old_name=self::$save_dir.Gc::$module_root.DS.Gc::$appName.DS;
+			$new_name=self::$save_dir.Gc::$module_root.DS.self::$pj_name_en.DS;
+			if(is_dir($old_name)){
+				$toDeleteDir=$old_name."view".DS."default".DS."tmp".DS."templates_c".DS;
+				UtilFileSystem::deleteDir($toDeleteDir);
+				UtilFileSystem::createDir($toDeleteDir);
+				rename($old_name,$new_name);
 			}
-		}
 
-		//重命名后台Action_Betterlife为新应用类
-		$old_name=self::$save_dir.Gc::$module_root.DS."admin".DS."action".DS."Action_".ucfirst(Gc::$appName).".php";
-		$new_name=self::$save_dir.Gc::$module_root.DS."admin".DS."action".DS."Action_".ucfirst(self::$pj_name_en).".php";
-		if(is_dir($old_name))rename($old_name,$new_name);
+			//修改前台的注释:* @category 应用名称
+			if(self::$reuse_type!=EnumReusePjType::MINI){
+				$frontActionDir=self::$save_dir.Gc::$module_root.DS.self::$pj_name_en.DS."action".DS;
+				$actionFiles=UtilFileSystem::getAllFilesInDirectory($frontActionDir,array("php"));
 
-		//替换Extjs的js文件里的命名空间
-		$extjsDir=self::$save_dir.Gc::$module_root.DS."admin".DS."view".DS."default".DS."js".DS."ext".DS;
-		$jsFiles=UtilFileSystem::getAllFilesInDirectory($extjsDir,array("js"));
-		$o_appName=ucfirst(Gc::$appName);
-		$n_appName=ucfirst(self::$pj_name_en);
+				foreach ($actionFiles as $actionFile) {
+					$content=file_get_contents($actionFile);
+					$content=str_replace("* @category ".Gc::$appName, "* @category ".self::$pj_name_en, $content);
+					file_put_contents($actionFile, $content);
+				}
 
-		foreach ($jsFiles as $jsFile) {
-			$content=file_get_contents($jsFile);
-			$origin_content=$content;
-            if(contain($jsFile,DS."components".DS))continue;
-            $fileName=basename($jsFile,".js");
-			//*.替换命名空间
-			$fileName=str_replace(".js", "", $fileName);
-			$fileName=ucfirst($fileName);
-			$content=str_replace("Ext.namespace(\"$o_appName.Admin", "Ext.namespace(\"$n_appName.Admin", $content);
-            if(contain($jsFile,DS."ext".DS."view".DS)){
-			    //*.替换命名空间缩写定义
-			    $content=str_replace(Gc::$appName_alias."View = $o_appName.Admin.View;", self::$pj_name_alias."View = $n_appName.Admin.View;", $content);
-                //*.替换命名空间定义前缀
-                $content=str_replace(Gc::$appName_alias."View.", self::$pj_name_alias."View.", $content);
-                //*.替换命名空间定义前缀
-                $content=str_replace("parent.".Gc::$appName_alias, "parent.".self::$pj_name_alias, $content);
-			}else{
-                //*.替换命名空间缩写定义
-                $content=str_replace(Gc::$appName_alias." = $o_appName.Admin;", self::$pj_name_alias." = $n_appName.Admin;", $content);
-                //*.替换命名空间定义前缀
-                $content=str_replace(Gc::$appName_alias.".", self::$pj_name_alias.".", $content);
-            }
-			if($origin_content!=$content)file_put_contents($jsFile, $content);
-		}
+				$frontSrcDir=self::$save_dir.Gc::$module_root.DS.self::$pj_name_en.DS."src".DS;
+				$srcFiles=UtilFileSystem::getAllFilesInDirectory($frontSrcDir,array("php"));
 
-		$reuse_type=intval(self::$reuse_type);
-		//清除在大部分项目中不需要的目录
-		switch ($reuse_type) {
-			case EnumReusePjType::MINI:
-				break;
-			case EnumReusePjType::SIMPLE:
-				self::IgnoreInCommon();
-				$toDeleteDir=self::$save_dir.Gc::$module_root.DS."model";
-				if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
+				foreach ($srcFiles as $srcFile) {
+					$content=file_get_contents($srcFile);
+					$content=str_replace("* @category ".Gc::$appName, "* @category ".self::$pj_name_en, $content);
+					file_put_contents($srcFile, $content);
+				}
+			}
 
-				self::IgnoreAllDbEngineExceptMysql();
-				self::IgnoreCommons();
-				self::IgnoreUtils();
-				break;
-			case EnumReusePjType::LIKE:
-				self::IgnoreInCommon();
-				self::IgnoreCommons();
+			//重命名后台Action_Betterlife为新应用类
+			$old_name=self::$save_dir.Gc::$module_root.DS."admin".DS."action".DS."Action_".ucfirst(Gc::$appName).".php";
+			$new_name=self::$save_dir.Gc::$module_root.DS."admin".DS."action".DS."Action_".ucfirst(self::$pj_name_en).".php";
+			if(is_dir($old_name))rename($old_name,$new_name);
 
-				//删除exjs库
-				$toDeleteDir=self::$save_dir."common".DS."js".DS."ajax".DS."ext".DS;
-				if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
+			//替换Extjs的js文件里的命名空间
+			$extjsDir=self::$save_dir.Gc::$module_root.DS."admin".DS."view".DS."default".DS."js".DS."ext".DS;
+			$jsFiles=UtilFileSystem::getAllFilesInDirectory($extjsDir,array("js"));
+			$o_appName=ucfirst(Gc::$appName);
+			$n_appName=ucfirst(self::$pj_name_en);
 
-				self::IgnoreUtils();
+			foreach ($jsFiles as $jsFile) {
+				$content=file_get_contents($jsFile);
+				$origin_content=$content;
+				if(contain($jsFile,DS."components".DS))continue;
+				$fileName=basename($jsFile,".js");
+				//*.替换命名空间
+				$fileName=str_replace(".js", "", $fileName);
+				$fileName=ucfirst($fileName);
+				$content=str_replace("Ext.namespace(\"$o_appName.Admin", "Ext.namespace(\"$n_appName.Admin", $content);
+				if(contain($jsFile,DS."ext".DS."view".DS)){
+					//*.替换命名空间缩写定义
+					$content=str_replace(Gc::$appName_alias."View = $o_appName.Admin.View;", self::$pj_name_alias."View = $n_appName.Admin.View;", $content);
+					//*.替换命名空间定义前缀
+					$content=str_replace(Gc::$appName_alias."View.", self::$pj_name_alias."View.", $content);
+					//*.替换命名空间定义前缀
+					$content=str_replace("parent.".Gc::$appName_alias, "parent.".self::$pj_name_alias, $content);
+				}else{
+					//*.替换命名空间缩写定义
+					$content=str_replace(Gc::$appName_alias." = $o_appName.Admin;", self::$pj_name_alias." = $n_appName.Admin;", $content);
+					//*.替换命名空间定义前缀
+					$content=str_replace(Gc::$appName_alias.".", self::$pj_name_alias.".", $content);
+				}
+				if($origin_content!=$content)file_put_contents($jsFile, $content);
+			}
 
-				$toDeleteDir=self::$save_dir.Gc::$module_root.DS."admin".DS."src".DS."timertask".DS;
-				if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
+			switch (self::$reuse_type) {
+				case EnumReusePjType::SIMPLE:
+					self::IgnoreInCommon();
+					$toDeleteDir=self::$save_dir.Gc::$module_root.DS."model";
+					if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
 
-				//修改model文件夹名称为后台文件夹admin
-				$old_admin_name=self::$save_dir.Gc::$module_root.DS."admin".DS;
-				UtilFileSystem::deleteDir($old_admin_name);
-				$old_model_name=self::$save_dir.Gc::$module_root.DS."model".DS;
-				$new_model_name=self::$save_dir.Gc::$module_root.DS."admin".DS;
-				if(is_dir($old_model_name)){
-					rename($old_model_name,$new_model_name);
-					//替换model的tpl文件里的链接地址
-					$modelTplDir=self::$save_dir.Gc::$module_root.DS."admin".DS."view".DS."default".DS."core".DS;
-					$tplFiles=UtilFileSystem::getAllFilesInDirectory($modelTplDir,array("tpl"));
+					self::IgnoreAllDbEngineExceptMysql();
+					self::IgnoreCommons();
+					self::IgnoreUtils();
+					break;
+				case EnumReusePjType::LIKE:
+					self::IgnoreInCommon();
+					self::IgnoreCommons();
 
-					foreach ($tplFiles as $tplFile) {
-						$content=file_get_contents($tplFile);
-						$content=str_replace("go=model.", "go=admin.", $content);
-						file_put_contents($tplFile, $content);
+					//删除exjs库
+					$toDeleteDir=self::$save_dir."common".DS."js".DS."ajax".DS."ext".DS;
+					if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
+
+					self::IgnoreUtils();
+
+					$toDeleteDir=self::$save_dir.Gc::$module_root.DS."admin".DS."src".DS."timertask".DS;
+					if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
+
+					//修改model文件夹名称为后台文件夹admin
+					$old_admin_name=self::$save_dir.Gc::$module_root.DS."admin".DS;
+					UtilFileSystem::deleteDir($old_admin_name);
+					$old_model_name=self::$save_dir.Gc::$module_root.DS."model".DS;
+					$new_model_name=self::$save_dir.Gc::$module_root.DS."admin".DS;
+					if(is_dir($old_model_name)){
+						rename($old_model_name,$new_model_name);
+						//替换model的tpl文件里的链接地址
+						$modelTplDir=self::$save_dir.Gc::$module_root.DS."admin".DS."view".DS."default".DS."core".DS;
+						$tplFiles=UtilFileSystem::getAllFilesInDirectory($modelTplDir,array("tpl"));
+
+						foreach ($tplFiles as $tplFile) {
+							$content=file_get_contents($tplFile);
+							$content=str_replace("go=model.", "go=admin.", $content);
+							file_put_contents($tplFile, $content);
+						}
+
+						//修改Action控制器类的注释:* @category 应用名称
+						$modelActionDir=self::$save_dir.Gc::$module_root.DS."admin".DS."action".DS;
+						$actionFiles=UtilFileSystem::getAllFilesInDirectory($modelActionDir,array("php"));
+
+						foreach ($actionFiles as $actionFile) {
+							$content=file_get_contents($actionFile);
+							$content=str_replace("* @category ".Gc::$appName, "* @category ".self::$pj_name_en, $content);
+							file_put_contents($actionFile, $content);
+						}
 					}
 
+					//修改Config_AutoCode.php配置文件
+					$config_autocode_file=self::$save_dir."config".DS."config".DS."Config_AutoCode.php";
+					$content=file_get_contents($config_autocode_file);
+					$content=str_replace("const AFTER_MODEL_CONVERT_ADMIN=false;", "const AFTER_MODEL_CONVERT_ADMIN=true;", $content);
+					file_put_contents($config_autocode_file, $content);
+					break;
+				case EnumReusePjType::HIGH:
+					self::IgnoreInCommon();
+					$old_model_name=self::$save_dir.Gc::$module_root.DS."model".DS;
+					if(is_dir($old_model_name))UtilFileSystem::deleteDir($old_model_name);
+					break;
+				default:
 					//修改Action控制器类的注释:* @category 应用名称
-					$modelActionDir=self::$save_dir.Gc::$module_root.DS."admin".DS."action".DS;
+					$modelActionDir=self::$save_dir.Gc::$module_root.DS."model".DS."action".DS;
 					$actionFiles=UtilFileSystem::getAllFilesInDirectory($modelActionDir,array("php"));
 
 					foreach ($actionFiles as $actionFile) {
@@ -1194,30 +1297,8 @@ AUTHCONTENT;
 						$content=str_replace("* @category ".Gc::$appName, "* @category ".self::$pj_name_en, $content);
 						file_put_contents($actionFile, $content);
 					}
-				}
-
-				//修改Config_AutoCode.php配置文件
-				$config_autocode_file=self::$save_dir."config".DS."config".DS."Config_AutoCode.php";
-				$content=file_get_contents($config_autocode_file);
-				$content=str_replace("const AFTER_MODEL_CONVERT_ADMIN=false;", "const AFTER_MODEL_CONVERT_ADMIN=true;", $content);
-				file_put_contents($config_autocode_file, $content);
-				break;
-			case EnumReusePjType::HIGH:
-				self::IgnoreInCommon();
-				$old_model_name=self::$save_dir.Gc::$module_root.DS."model".DS;
-				if(is_dir($old_model_name))UtilFileSystem::deleteDir($old_model_name);
-				break;
-			default:
-				//修改Action控制器类的注释:* @category 应用名称
-				$modelActionDir=self::$save_dir.Gc::$module_root.DS."model".DS."action".DS;
-				$actionFiles=UtilFileSystem::getAllFilesInDirectory($modelActionDir,array("php"));
-
-				foreach ($actionFiles as $actionFile) {
-					$content=file_get_contents($actionFile);
-					$content=str_replace("* @category ".Gc::$appName, "* @category ".self::$pj_name_en, $content);
-					file_put_contents($actionFile, $content);
-				}
-				break;
+					break;
+			}
 		}
 		self::$save_dir=$save_dir;
 		self::UserInput();
@@ -1269,6 +1350,7 @@ AUTHCONTENT;
 		}
 		$inputArr=array(
 			"4"=>"精简版",
+			"5"=>"MINI版",
 			"2"=>"通用版",
 			"3"=>"高级版",
 			"1"=>"完整版"

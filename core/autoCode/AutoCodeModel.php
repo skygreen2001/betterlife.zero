@@ -35,6 +35,13 @@ class AutoCodeModel extends AutoCode
 		self::$showReport.=AutoCodeFoldHelper::foldafterdomain();
 		AutoCode::$isOutputCss=false;
 
+		if(Config_AutoCode::ONLY_DOMAIN){
+			self::$showReport.= "</div>";
+
+			//将新添加的内容放置在文件最后作为可覆盖的内容
+			AutoCodePreviewReport::init();
+			return;
+		}
 		//生成提供服务类[前端和后端基于Ext的Service类]
 		AutoCodeService::$save_dir =self::$save_dir;
 		self::$showReport.=AutoCodeFoldHelper::foldbeforeservice();

@@ -157,6 +157,11 @@ MODEL;
 			$moreContent.=$file_content;
 		}
 
+		if(Config_AutoCode::ONLY_DOMAIN){
+			$showResult=self::modelShowDetailReport($table_names,$moreContent);
+			return $showResult;
+		}
+
 		$title="<a href='$dir_autocode/db_all.php' target='_blank' style='color:white;'>[后台]<使用ExtJs框架></a>";
 		$moreContent.=str_replace("[title]",$title,$module_model);
 		$moreContent=str_replace("[module_name]","bg",$moreContent);
@@ -585,6 +590,21 @@ MODEL;
 			}
 		}
 
+		$showResult=self::modelShowDetailReport($table_names,$moreContent);
+		return $showResult;
+	}
+
+	/**
+	 * 生成代码的报告可交互操作
+	 * @param array|string $table_names
+	 * 示例如下：
+	 *  1.array:array('bb_user_admin','bb_core_blog')
+	 *  2.字符串:'bb_user_admin,bb_core_blog'
+	 * @param string $content 生成代码的报告主要内容
+	 * @return 生成代码的报告可交互操作
+	 */
+	private static function modelShowDetailReport($table_names,$content)
+	{
 		$save_dir=self::$save_dir;
 		if(is_array($table_names))$table_names=implode(",", $table_names);
 		$showResult=<<<REPORT
@@ -688,7 +708,7 @@ function toggle(source)
 		<th class="file">文件路径</th>
 		<th class="file">操作</th>
 	</tr>
-$moreContent
+$content
   </tbody>
 </table>
 	<input type="submit" value='覆盖生成' />
