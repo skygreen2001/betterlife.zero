@@ -1,7 +1,12 @@
 <?php
 /**
-* 控制器:评论
-*/
+ +---------------------------------------<br/>
+ * 控制器:评论<br/>
+ +---------------------------------------
+ * @category betterlife
+ * @package web.front.action
+ * @author skygreen skygreen2001@gmail.com
+ */
 class Action_Comment extends Action
 {
 	/**

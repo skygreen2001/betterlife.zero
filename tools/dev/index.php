@@ -1026,7 +1026,6 @@ AUTHCONTENT;
 		if(isset($_REQUEST["git_name"])&&!empty($_REQUEST["git_name"]))
 			self::$git_name=$_REQUEST["git_name"];
 
-
 		$default_dir=Gc::$nav_root_path;
 		$domain_root=str_replace(Gc::$appName.DS, "", $default_dir);
 		$save_dir=self::$save_dir;
@@ -1084,6 +1083,28 @@ AUTHCONTENT;
 			UtilFileSystem::createDir($toDeleteDir);
 			rename($old_name,$new_name);
 		}
+
+		//修改前台的注释:* @category 应用名称
+		if(self::$reuse_type!=EnumReusePjType::MINI){
+			$frontActionDir=self::$save_dir.Gc::$module_root.DS.self::$pj_name_en.DS."action".DS;
+			$actionFiles=UtilFileSystem::getAllFilesInDirectory($frontActionDir,array("php"));
+
+			foreach ($actionFiles as $actionFile) {
+				$content=file_get_contents($actionFile);
+				$content=str_replace("* @category ".Gc::$appName, "* @category ".self::$pj_name_en, $content);
+				file_put_contents($actionFile, $content);
+			}
+
+			$frontSrcDir=self::$save_dir.Gc::$module_root.DS.self::$pj_name_en.DS."src".DS;
+			$srcFiles=UtilFileSystem::getAllFilesInDirectory($frontSrcDir,array("php"));
+
+			foreach ($srcFiles as $srcFile) {
+				$content=file_get_contents($srcFile);
+				$content=str_replace("* @category ".Gc::$appName, "* @category ".self::$pj_name_en, $content);
+				file_put_contents($srcFile, $content);
+			}
+		}
+
 		//重命名后台Action_Betterlife为新应用类
 		$old_name=self::$save_dir.Gc::$module_root.DS."admin".DS."action".DS."Action_".ucfirst(Gc::$appName).".php";
 		$new_name=self::$save_dir.Gc::$module_root.DS."admin".DS."action".DS."Action_".ucfirst(self::$pj_name_en).".php";
@@ -1163,6 +1184,7 @@ AUTHCONTENT;
 						$content=str_replace("go=model.", "go=admin.", $content);
 						file_put_contents($tplFile, $content);
 					}
+
 					//修改Action控制器类的注释:* @category 应用名称
 					$modelActionDir=self::$save_dir.Gc::$module_root.DS."admin".DS."action".DS;
 					$actionFiles=UtilFileSystem::getAllFilesInDirectory($modelActionDir,array("php"));
@@ -1186,6 +1208,15 @@ AUTHCONTENT;
 				if(is_dir($old_model_name))UtilFileSystem::deleteDir($old_model_name);
 				break;
 			default:
+				//修改Action控制器类的注释:* @category 应用名称
+				$modelActionDir=self::$save_dir.Gc::$module_root.DS."model".DS."action".DS;
+				$actionFiles=UtilFileSystem::getAllFilesInDirectory($modelActionDir,array("php"));
+
+				foreach ($actionFiles as $actionFile) {
+					$content=file_get_contents($actionFile);
+					$content=str_replace("* @category ".Gc::$appName, "* @category ".self::$pj_name_en, $content);
+					file_put_contents($actionFile, $content);
+				}
 				break;
 		}
 		self::$save_dir=$save_dir;
