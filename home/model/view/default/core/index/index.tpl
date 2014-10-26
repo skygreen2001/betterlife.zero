@@ -16,6 +16,10 @@
 		<tr class="entry"><td class="content"><a href="{$url_base}index.php?go=model.role.lists">角色</a></td></tr>
 		<tr class="entry"><td class="content"><a href="{$url_base}index.php?go=model.user.lists">用户</a></td></tr>
 		<tr class="entry"><td class="content"><a href="{$url_base}index.php?go=model.userdetail.lists">用户详细信息</a></td></tr>
+		<tr class="entry"><td class="content"><a href="{$url_base}index.php?go=model.logsystem.lists">系统日志</a></td></tr>
+		<tr class="entry"><td class="content"><a href="{$url_base}index.php?go=model.loguser.lists">用户日志</a></td></tr>
+
+
 	</table>
 
 

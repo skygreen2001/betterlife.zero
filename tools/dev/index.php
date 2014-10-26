@@ -1155,7 +1155,17 @@ AUTHCONTENT;
 						$content=str_replace("go=model.", "go=admin.", $content);
 						file_put_contents($tplFile, $content);
 					}
+					//修改Action控制器类的注释:* @category 应用名称
+					$modelActionDir=self::$save_dir.Gc::$module_root.DS."admin".DS."action".DS;
+					$actionFiles=UtilFileSystem::getAllFilesInDirectory($modelActionDir,array("php"));
+
+					foreach ($actionFiles as $actionFile) {
+						$content=file_get_contents($actionFile);
+						$content=str_replace("* @category ".Gc::$appName, "* @category ".self::$pj_name_en, $content);
+						file_put_contents($actionFile, $content);
+					}
 				}
+
 
 				//修改Config_AutoCode.php配置文件
 				$config_autocode_file=self::$save_dir."config".DS."config".DS."Config_AutoCode.php";

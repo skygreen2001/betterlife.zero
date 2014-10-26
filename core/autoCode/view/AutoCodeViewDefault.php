@@ -257,14 +257,14 @@ UETC;
 		}
 		$result = <<<EDIT
  <div class="block">
-	<div><h1>编辑{$table_comment}</h1><p><font color="red">{\$message|default:''}</font></p></div>
+	<div><h1>{if \${$instancename}}编辑{else}新增{/if}{$table_comment}</h1><p><font color="red">{\$message|default:''}</font></p></div>
 	<form name="{$instancename}Form" method="post"$hasImgFormFlag><input type="hidden" name="$idColumnName" value="{\${$instancename}.$idColumnName}"/>
 	<table class="viewdoblock">
 $headerscontents
 		<tr class="entry"><td class="content" colspan="2" align="center"><input type="submit" value="提交" class="btnSubmit" /></td></tr>
 	</table>
 	</form>
-	<div align="center"><my:a href='{\$url_base}index.php?go=$appname.{$instancename}.lists&pageNo={\$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{\$url_base}index.php?go=$appname.{$instancename}.view&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}'>查看{$table_comment}</my:a></div>
+	<div align="center"><my:a href='{\$url_base}index.php?go=$appname.{$instancename}.lists&pageNo={\$smarty.get.pageNo|default:"1"}'>返回列表</my:a>{if \${$instancename}}|<my:a href='{\$url_base}index.php?go=$appname.{$instancename}.view&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}'>查看{$table_comment}</my:a>{/if}</div>
 </div>$ueTextareacontents
 EDIT;
 		if (count($text_area_fieldname)>=1){

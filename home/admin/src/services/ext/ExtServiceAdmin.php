@@ -29,7 +29,7 @@ class ExtServiceAdmin extends ServiceBasic
 		}
 		return array(
 			'success' => true,
-			'data'    => $data
+			'data'	=> $data
 		);
 	}
 
@@ -44,17 +44,13 @@ class ExtServiceAdmin extends ServiceBasic
 			$adminObj=new Admin($admin);
 		}
 		if ($adminObj instanceof Admin){
-			if(empty($adminObj->password))
-			{
-				$adminObj->password= $admin["password_old"];
-			}
 			$data=$adminObj->update();
 		}else{
 			$data=false;
 		}
 		return array(
 			'success' => true,
-			'data'    => $data
+			'data'	=> $data
 		);
 	}
 
@@ -71,7 +67,7 @@ class ExtServiceAdmin extends ServiceBasic
 		$data=Admin::deleteByIds($ids);
 		return array(
 			'success' => true,
-			'data'    => $data
+			'data'	=> $data
 		);
 	}
 
@@ -79,7 +75,7 @@ class ExtServiceAdmin extends ServiceBasic
 	 * 数据对象:系统管理人员分页查询
 	 * @param stdclass $formPacket  查询条件对象
 	 * 必须传递分页参数：start:分页开始数，默认从0开始
-	 *                   limit:分页查询数，默认10个。
+	 *				   limit:分页查询数，默认15个。
 	 * @return 数据对象:系统管理人员分页查询列表
 	 */
 	public function queryPageAdmin($formPacket=null)
@@ -105,6 +101,7 @@ class ExtServiceAdmin extends ServiceBasic
 				Admin::propertyShow($data,array('roletype','seescope'));
 			}
 			foreach ($data as $admin) {
+				$department_instance=null;
 				if ($admin->department_id){
 					$department_instance=Department::get_by_id($admin->department_id);
 					$admin['department_name']=$department_instance->department_name;
@@ -117,34 +114,9 @@ class ExtServiceAdmin extends ServiceBasic
 		return array(
 			'success' => true,
 			'totalCount'=>$count,
-			'data'    => $data
+			'data'	=> $data
 		);
 	}
-
-	/**
-	 * 根据管理员标识显示管理员信息
-	 * @param mixed $viewId 管理员标识
-	 */
-	public function viewAdmin($viewId)
-	{
-		if (!empty($viewId)){
-			$admin=Admin::get_by_id($viewId);
-			if (!empty($admin))
-			{
-				$admin->roletypeShow=$admin->getRoletypeShow();
-				$admin->seescope=$admin->getSeescopeShow();
-			}
-			return array(
-				'success' => true,
-				'data'    => $admin
-			);
-		}
-		return array(
-			'success' => false,
-			'msg'     => "无法查找到需查看的管理员信息！"
-		);
-	}
-
 
 	/**
 	 * 批量上传系统管理人员
@@ -156,16 +128,16 @@ class ExtServiceAdmin extends ServiceBasic
 		if (!empty($files["upload_file"])){
 			$tmptail = end(explode('.', $files["upload_file"]["name"]));
 			$uploadPath =GC::$attachment_path."admin".DS."import".DS."admin$diffpart.$tmptail";
-			$result     =UtilFileSystem::uploadFile($files,$uploadPath);
+			$result	 =UtilFileSystem::uploadFile($files,$uploadPath);
 			if ($result&&($result['success']==true)){
 				if (array_key_exists('file_name',$result)){
 					$arr_import_header = self::fieldsMean(Admin::tablename());
-					$data              = UtilExcel::exceltoArray($uploadPath,$arr_import_header);
+					$data			  = UtilExcel::exceltoArray($uploadPath,$arr_import_header);
 					$result=false;
 					foreach ($data as $admin) {
 						if (!is_numeric($admin["department_id"])){
-							$department=Department::get_one("department_name='".$admin["department_id"]."'");
-							if ($department) $admin["department_id"]=$department->department_id;
+							$department_r=Department::get_one("department_name='".$admin["department_id"]."'");
+							if ($department_r) $admin["department_id"]=$department_r->department_id;
 						}
 						$admin=new Admin($admin);
 						if (!EnumRoletype::isEnumValue($admin->roletype)){
@@ -195,7 +167,7 @@ class ExtServiceAdmin extends ServiceBasic
 		}
 		return array(
 			'success' => true,
-			'data'    => $result
+			'data'	=> $result
 		);
 	}
 
@@ -219,6 +191,7 @@ class ExtServiceAdmin extends ServiceBasic
 			if ($admin->seescopeShow){
 				$admin['seescope']=$admin->seescopeShow;
 			}
+			$department_instance=null;
 			if ($admin->department_id){
 				$department_instance=Department::get_by_id($admin->department_id);
 				$admin['department_id']=$department_instance->department_name;
@@ -231,7 +204,7 @@ class ExtServiceAdmin extends ServiceBasic
 		$downloadPath  =Gc::$attachment_url."admin/export/admin$diffpart.xls";
 		return array(
 			'success' => true,
-			'data'    => $downloadPath
+			'data'	=> $downloadPath
 		);
 	}
 }

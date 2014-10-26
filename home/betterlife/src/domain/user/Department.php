@@ -55,9 +55,13 @@ class Department extends DataObject
 	 */
 	public $actualsalary;
 	//</editor-fold>
-		 
+
+	/**
+	 * 一对多关系
+	 */
 	static $has_many=array(
-	  "users"=>"User",
-	);  
+		"admins"=>"Admin"
+	);
+
 }
 ?>

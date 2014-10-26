@@ -74,7 +74,7 @@ class Admin extends DataObject
 		"department"=>"Department"
 	);
 
-	/**
+	/** 
 	 * 显示扮演角色<br/>
 	 * 系统管理员扮演角色。<br/>
 	 * 0:超级管理员-superadmin<br/>
@@ -87,7 +87,7 @@ class Admin extends DataObject
 		return self::roletypeShow($this->roletype);
 	}
 
-	/**
+	/** 
 	 * 显示视野<br/>
 	 * 0:只能查看自己的信息-self<br/>
 	 * 1:查看所有的信息-all<br/>
@@ -97,7 +97,7 @@ class Admin extends DataObject
 		return self::seescopeShow($this->seescope);
 	}
 
-	/**
+	/** 
 	 * 显示扮演角色<br/>
 	 * 系统管理员扮演角色。<br/>
 	 * 0:超级管理员-superadmin<br/>
@@ -110,7 +110,7 @@ class Admin extends DataObject
 		return EnumRoletype::roletypeShow($roletype);
 	}
 
-	/**
+	/** 
 	 * 显示视野<br/>
 	 * 0:只能查看自己的信息-self<br/>
 	 * 1:查看所有的信息-all<br/>

@@ -29,7 +29,7 @@ class ExtServiceComment extends ServiceBasic
 		}
 		return array(
 			'success' => true,
-			'data'    => $data
+			'data'	=> $data
 		);
 	}
 
@@ -50,7 +50,7 @@ class ExtServiceComment extends ServiceBasic
 		}
 		return array(
 			'success' => true,
-			'data'    => $data
+			'data'	=> $data
 		);
 	}
 
@@ -67,7 +67,7 @@ class ExtServiceComment extends ServiceBasic
 		$data=Comment::deleteByIds($ids);
 		return array(
 			'success' => true,
-			'data'    => $data
+			'data'	=> $data
 		);
 	}
 
@@ -75,7 +75,7 @@ class ExtServiceComment extends ServiceBasic
 	 * 数据对象:评论分页查询
 	 * @param stdclass $formPacket  查询条件对象
 	 * 必须传递分页参数：start:分页开始数，默认从0开始
-	 *                   limit:分页查询数，默认10个。
+	 *				   limit:分页查询数，默认10个。
 	 * @return 数据对象:评论分页查询列表
 	 */
 	public function queryPageComment($formPacket=null)
@@ -85,7 +85,7 @@ class ExtServiceComment extends ServiceBasic
 		$condition=UtilObject::object_to_array($formPacket);
 		if (isset($condition['start'])){
 			$start=$condition['start']+1;
-		  }
+		}
 		if (isset($condition['limit'])){
 			$limit=$condition['limit'];
 			$limit=$start+$limit-1;
@@ -113,7 +113,7 @@ class ExtServiceComment extends ServiceBasic
 		return array(
 			'success' => true,
 			'totalCount'=>$count,
-			'data'    => $data
+			'data'	=> $data
 		);
 	}
 
@@ -127,11 +127,11 @@ class ExtServiceComment extends ServiceBasic
 		if (!empty($files["upload_file"])){
 			$tmptail = end(explode('.', $files["upload_file"]["name"]));
 			$uploadPath =GC::$attachment_path."comment".DS."import".DS."comment$diffpart.$tmptail";
-			$result     =UtilFileSystem::uploadFile($files,$uploadPath);
+			$result	 =UtilFileSystem::uploadFile($files,$uploadPath);
 			if ($result&&($result['success']==true)){
 				if (array_key_exists('file_name',$result)){
 					$arr_import_header = self::fieldsMean(Comment::tablename());
-					$data              = UtilExcel::exceltoArray($uploadPath,$arr_import_header);
+					$data			  = UtilExcel::exceltoArray($uploadPath,$arr_import_header);
 					$result=false;
 					foreach ($data as $comment) {
 						$comment=new Comment($comment);
@@ -156,7 +156,7 @@ class ExtServiceComment extends ServiceBasic
 		}
 		return array(
 			'success' => true,
-			'data'    => $result
+			'data'	=> $result
 		);
 	}
 
@@ -169,24 +169,24 @@ class ExtServiceComment extends ServiceBasic
 		if ($filter)$filter=$this->filtertoCondition($filter);
 		$data=Comment::get($filter);
 		$arr_output_header= self::fieldsMean(Comment::tablename());
-        foreach ($data as $comment) {
-            if ($comment->user_id){
-                $user_instance=User::get_by_id($comment->user_id);
-                $comment['user_id']=$user_instance->username;
-            }
-            if ($comment->blog_id){
-                $blog_instance=Blog::get_by_id($comment->blog_id);
-                $comment['blog_id']=$blog_instance->blog_name;
-            }
-        }
-        unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
+		foreach ($data as $comment) {
+			if ($comment->user_id){
+				$user_instance=User::get_by_id($comment->user_id);
+				$comment['user_id']=$user_instance->username;
+			}
+			if ($comment->blog_id){
+				$blog_instance=Blog::get_by_id($comment->blog_id);
+				$comment['blog_id']=$blog_instance->blog_name;
+			}
+		}
+		unset($arr_output_header['updateTime'],$arr_output_header['commitTime']);
 		$diffpart=date("YmdHis");
 		$outputFileName=Gc::$attachment_path."comment".DS."export".DS."comment$diffpart.xls";
 		UtilExcel::arraytoExcel($arr_output_header,$data,$outputFileName,false);
 		$downloadPath  =Gc::$attachment_url."comment/export/comment$diffpart.xls";
 		return array(
 			'success' => true,
-			'data'    => $downloadPath
+			'data'	=> $downloadPath
 		);
 	}
 }

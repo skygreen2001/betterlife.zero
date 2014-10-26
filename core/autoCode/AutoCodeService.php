@@ -1508,6 +1508,7 @@ MANY2MANYQUERYPAGE;
 								$result.="			\${$i_name}_instance=null;\r\n";
 								$result.="			if (\${$instance_name}->$fieldname){\r\n";
 								$result.="				\${$i_name}_instance=$key::get_by_id(\${$instance_name}->$fieldname);\r\n";
+								$result.="				\${$instance_name}['$fieldname']=\${$i_name}_instance->$show_fieldname;\r\n";
 								$result.="			}\r\n";
 							}else{
 								$result.="			unset(\$arr_output_header[\"$fieldname\"]);\r\n";
