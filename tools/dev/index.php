@@ -18,9 +18,13 @@ class EnumReusePjType extends Enum
 	 */
 	const HIGH	= 3;
 	/**
-	 * 精简版【只包括框架核心】
+	 * 精简版【只包括框架核心-包括MVC,前后台】
 	 */
-	const MINI	= 4;
+	const SIMPLE	= 4;
+	/**
+	 * 精简版【只包括框架核心-只包括了DAO,不包括显示组件、Service层等】
+	 */
+	const MINI	= 5;
 }
 
 /**
@@ -135,6 +139,8 @@ class Project_Refactor
 		if(is_dir(self::$save_dir.Gc::$module_root.DS."admin")){
 			$toDeleteDir=self::$save_dir.Gc::$module_root.DS."admin".DS."src".DS."remoteobject".DS;
 			UtilFileSystem::deleteDir($toDeleteDir);
+			$toDeleteDir=self::$save_dir.Gc::$module_root.DS."admin".DS."src".DS."timertask".DS;
+			if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
 			$toDeleteDir=self::$save_dir.Gc::$module_root.DS."admin".DS."view".DS."default".DS."tmp".DS."templates_c".DS;
 			UtilFileSystem::deleteDir($toDeleteDir);
 			UtilFileSystem::createDir($toDeleteDir);
@@ -1041,7 +1047,7 @@ AUTHCONTENT;
 		$content=str_replace(Gc::$site_name, self::$pj_name_cn, $content);
 		$content=str_replace(Gc::$appName, self::$pj_name_en, $content);
 		$content=str_replace(Gc::$appName_alias, self::$pj_name_alias, $content);
-		if((self::$reuse_type==EnumReusePjType::MINI)||(self::$reuse_type==EnumReusePjType::LIKE)){
+		if((self::$reuse_type!=EnumReusePjType::FULL)){
 			$content=str_replace("\"model\",\r\n", "", $content);
 		}
 		file_put_contents($gc_file, $content);
@@ -1062,7 +1068,10 @@ AUTHCONTENT;
 			$ctrr=substr($content,strpos($content,"<?php \$help_url=\"")+18);
 			$ctrr=substr($ctrr,strpos($ctrr,"\""));
 			$content=$ctrl.self::$git_name.$ctrr;
-			if(self::$reuse_type==EnumReusePjType::MINI)$content=str_replace("通用模板", "", $content);
+			if(self::$reuse_type!=EnumReusePjType::FULL){
+				$content=str_replace("通用模板", "", $content);
+			}
+
 			file_put_contents($welcome_file, $content);
 		}
 
@@ -1115,11 +1124,10 @@ AUTHCONTENT;
 		//清除在大部分项目中不需要的目录
 		switch ($reuse_type) {
 			case EnumReusePjType::MINI:
+				break;
+			case EnumReusePjType::SIMPLE:
 				self::IgnoreInCommon();
 				$toDeleteDir=self::$save_dir.Gc::$module_root.DS."model";
-				if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
-
-				$toDeleteDir=self::$save_dir.Gc::$module_root.DS."admin".DS."src".DS."timertask".DS;
 				if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
 
 				self::IgnoreAllDbEngineExceptMysql();
@@ -1165,7 +1173,6 @@ AUTHCONTENT;
 						file_put_contents($actionFile, $content);
 					}
 				}
-
 
 				//修改Config_AutoCode.php配置文件
 				$config_autocode_file=self::$save_dir."config".DS."config".DS."Config_AutoCode.php";

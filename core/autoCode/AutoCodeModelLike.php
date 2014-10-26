@@ -33,7 +33,7 @@ class AutoCodeModelLike extends AutoCode
 		self::$showReport.=AutoCodeFoldHelper::foldbeforedomain();
 		AutoCodeDomain::AutoCode($table_names);
 		self::$showReport.=AutoCodeFoldHelper::foldafterdomain();
-		AutoCode::$isOutputCss=true;
+		AutoCode::$isOutputCss=false;
 
 		//生成提供服务类[前端和后端通用模板]
 		AutoCodeService::$save_dir =self::$save_dir;
@@ -59,6 +59,7 @@ class AutoCodeModelLike extends AutoCode
 		AutoCodeViewDefault::$type     =1;
 		AutoCodeViewDefault::AutoCode($table_names);
 		self::$showReport.=AutoCodeFoldHelper::foldafterviewdefault();
+		self::$showReport.= "</div>";
 
 		//将新添加的内容放置在文件最后作为可覆盖的内容
 		AutoCodePreviewReportLike::init();

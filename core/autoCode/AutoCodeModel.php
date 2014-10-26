@@ -33,7 +33,7 @@ class AutoCodeModel extends AutoCode
 		self::$showReport.=AutoCodeFoldHelper::foldbeforedomain();
 		AutoCodeDomain::AutoCode($table_names);
 		self::$showReport.=AutoCodeFoldHelper::foldafterdomain();
-		AutoCode::$isOutputCss=true;
+		AutoCode::$isOutputCss=false;
 
 		//生成提供服务类[前端和后端基于Ext的Service类]
 		AutoCodeService::$save_dir =self::$save_dir;
