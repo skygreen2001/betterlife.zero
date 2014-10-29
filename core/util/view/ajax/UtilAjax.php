@@ -191,15 +191,25 @@ class UtilAjax extends Util
 				if (in_array($jsFile, self::$JsLoaded)){
 					return ;
 				}
-				$result="    <script type=\"text/javascript\" src=\"".$url_base.self::$JS_GZIP."{$jsFile}\"></script>\r\n";
+				$file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+				if(contain($file_sub_dir,Gc::$nav_root_path)){
+					$result="	<script type=\"text/javascript\" src=\"".$url_base.self::$JS_GZIP."{$jsFile}\"></script>\r\n";
+				}else{
+					$isLocalJsFile=str_replace(Gc::$url_base,$file_sub_dir,$jsFile);
+					if (contain($isLocalJsFile,"home".DS))
+						$isLocalJsFile=substr($isLocalJsFile,0,strpos($isLocalJsFile,"home".DS));
+					$js_gzip=str_replace($_SERVER["DOCUMENT_ROOT"],"",$isLocalJsFile);
+					$js_gzip=str_replace("\\","/",$js_gzip);
+					$result="	<script type=\"text/javascript\" src=\"".$url_base.$js_gzip.self::$JS_GZIP."{$jsFile}\"></script>\r\n";
+				}
 			}else{
 				if (in_array($jsFile, self::$JsLoaded)){
 					return ;
 				}
 				if (startWith($jsFile, "http")){
-					$result="    <script type=\"text/javascript\" src=\"".$jsFile."\"></script>\r\n";
+					$result="	<script type=\"text/javascript\" src=\"".$jsFile."\"></script>\r\n";
 				}else{
-					$result="    <script type=\"text/javascript\" src=\"".$url_base.$jsFile."\"></script>\r\n";
+					$result="	<script type=\"text/javascript\" src=\"".$url_base.$jsFile."\"></script>\r\n";
 				}
 			}
 			self::$JsLoaded[]=$jsFile;
@@ -238,9 +248,9 @@ class UtilAjax extends Util
 	public static function loadJsContentSentence($jsContent)
 	{
 		if (!contain($jsContent,"<script")){
-			$result="    <script type=\"text/javascript\">\r\n";
-			$result.="        ".$jsContent."\r\n";
-			$result.="    </script>\r\n";
+			$result="	<script type=\"text/javascript\">\r\n";
+			$result.="		".$jsContent."\r\n";
+			$result.="	</script>\r\n";
 		}else{
 			$result.=$jsContent;
 		}

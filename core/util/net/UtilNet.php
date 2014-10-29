@@ -1,4 +1,4 @@
-<?php  
+<?php
 /**
  +---------------------------------<br/>
  * 工具类：网络<br/>
@@ -7,7 +7,7 @@
  * @package util.net
  * @author skygreen
  */
-class UtilNet extends Util 
+class UtilNet extends Util
 {
 	/**
 	* 从网络Url地址中获取域名或者Ip地址
@@ -24,7 +24,7 @@ class UtilNet extends Util
 		//preg_match('/[^.]+\.[^.]+$/', $host, $matches);
 		//echo "domain name is: {$matches[0]}\n";
 		//return $matches[0];
-		return $host; 
+		return $host;
 	}
 
 	/**
@@ -38,7 +38,7 @@ class UtilNet extends Util
 		}
 		return isset($addrs[0])?trim($addrs[0]):$_SERVER['HTTP_HOST'];
 	}
-	
+
 	/**
 	 * 获取网站的根路径
 	*  @param string $with_file 如指定文件名。
@@ -48,14 +48,17 @@ class UtilNet extends Util
 		$with_file=$_SERVER["SCRIPT_FILENAME"];
 		$file_sub_dir=dirname($with_file).DIRECTORY_SEPARATOR;
 		$file_sub_dir=str_replace("/", DIRECTORY_SEPARATOR, $file_sub_dir);
-		$file_sub_dir=str_replace(Gc::$nav_root_path, "", $file_sub_dir);
+		if(contain($file_sub_dir,Gc::$nav_root_path)){
+			$file_sub_dir=str_replace(Gc::$nav_root_path, "", $file_sub_dir);
+		}else{
+			$file_sub_dir=str_replace($_SERVER["DOCUMENT_ROOT"], "", $file_sub_dir);
+		}
 		$file_sub_dir=str_replace(DIRECTORY_SEPARATOR, "/", $file_sub_dir);
 		$url_base=Gc::$url_base;
 		$url_base=str_replace($file_sub_dir, "", $url_base);
 		return $url_base;
 	}
-	
-	
+
 	/**
 	* 获取指定文件的Url基本路径
 	* @param string $with_file 如指定文件名，则路径会带上文件名。
@@ -78,7 +81,7 @@ class UtilNet extends Util
 		return $baseurl;
 	}
 
-	
+
 	/**
 	 * 下载数据到文件。
 	 * @param string $fname  文件名
@@ -110,7 +113,7 @@ class UtilNet extends Util
 			exit();
 		}
 	}
-	
+
 	/**
 	 * 在网络上发送文件内容
 	 */
@@ -122,13 +125,13 @@ class UtilNet extends Util
 		}
 		fclose($handle);
 	}
-	
+
 	/**
 	 * 创建html标签
 	 * @param array $params 属性
 	 * @param string $tag 标签名
 	 * @param bool $finish 是否结束
-	 * @return string html标签字符串 
+	 * @return string html标签字符串
 	 */
 	public static function buildTag($params,$tag,$finish=true){
 		foreach($params as $k=>$v){
@@ -140,27 +143,27 @@ class UtilNet extends Util
 			}
 		}
 		return '<'.$tag.' '.implode(' ',$ret).($finish?' /':'').'>';
-	}   
-	
-	/** 
-	 * 将url query字符串转换成数组 
-	 * Returns the url query as associative array 
+	}
+
+	/**
+	 * 将url query字符串转换成数组
+	 * Returns the url query as associative array
 	 * @example http://php.net/manual/en/function.parse-url.php
-	 * @param    string    query 
-	 * @return    array    params 
-	 */ 
-	public static function parse_urlquery($query) { 
-		$query  = html_entity_decode($query); 
-		$queryParts = explode('&', $query); 
-		
-		$params = array(); 
-		foreach ($queryParts as $param) { 
-			$item = explode('=', $param); 
-			$params[$item[0]] = $item[1]; 
-		} 
-		
-		return $params;    
-	}  
+	 * @param    string    query
+	 * @return    array    params
+	 */
+	public static function parse_urlquery($query) {
+		$query  = html_entity_decode($query);
+		$queryParts = explode('&', $query);
+
+		$params = array();
+		foreach ($queryParts as $param) {
+			$item = explode('=', $param);
+			$params[$item[0]] = $item[1];
+		}
+
+		return $params;
+	}
 
 	/**
 	 * 获取客户端IP地址
@@ -199,6 +202,6 @@ class UtilNet extends Util
 		//echo "你的IP:".$ip ;
 		return $ip;
 	}
-} 
-  
+}
+
 ?>

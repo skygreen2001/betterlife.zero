@@ -39,20 +39,20 @@ class UtilCss extends Util
 	 */
 	public static function loadExt($viewObject=null,$version="3.3.0")
 	{
-	   UtilAjax::init();
-	   $g_flag_ext=EnumJsFramework::JS_FW_EXTJS;
-	   $ext_resource_root="resources/css/";
-	   if ($viewObject){
-		   self::loadCssReady($viewObject,$ext_resource_root."ext-all.css",true,$g_flag_ext,$version);
-		   self::loadCssReady($viewObject,$ext_resource_root."xtheme-gray.css",true,$g_flag_ext,$version);
-		   self::loadCssReady($viewObject,$ext_resource_root."ext-patch.css",true,$g_flag_ext,$version);
-		   self::loadCssReady($viewObject,"shared/tabscroller/TabScrollerMenu.css",true,$g_flag_ext,$version);
-	   }else{
-		   self::loadCss($ext_resource_root."ext-all.css",true,$g_flag_ext,$version);
-		   self::loadCss($ext_resource_root."xtheme-gray.css",true,$g_flag_ext,$version);
-		   self::loadCss($ext_resource_root."ext-patch.css",true,$g_flag_ext,$version);
-		   self::loadCss("shared/tabscroller/TabScrollerMenu.css",true,$g_flag_ext,$version);
-	   }
+		UtilAjax::init();
+		$g_flag_ext=EnumJsFramework::JS_FW_EXTJS;
+		$ext_resource_root="resources/css/";
+		if ($viewObject){
+			self::loadCssReady($viewObject,$ext_resource_root."ext-all.css",true,$g_flag_ext,$version);
+			self::loadCssReady($viewObject,$ext_resource_root."xtheme-gray.css",true,$g_flag_ext,$version);
+			self::loadCssReady($viewObject,$ext_resource_root."ext-patch.css",true,$g_flag_ext,$version);
+			self::loadCssReady($viewObject,"shared/tabscroller/TabScrollerMenu.css",true,$g_flag_ext,$version);
+		}else{
+			self::loadCss($ext_resource_root."ext-all.css",true,$g_flag_ext,$version);
+			self::loadCss($ext_resource_root."xtheme-gray.css",true,$g_flag_ext,$version);
+			self::loadCss($ext_resource_root."ext-patch.css",true,$g_flag_ext,$version);
+			self::loadCss("shared/tabscroller/TabScrollerMenu.css",true,$g_flag_ext,$version);
+		}
 	}
 
 	/**
@@ -109,7 +109,13 @@ class UtilCss extends Util
 				}
 				$css_gzip=self::$CSS_GZIP;
 				if (contain($cssFile,Gc::$url_base)){
-					$isLocalCssFile=str_replace(Gc::$url_base,Gc::$nav_root_path,$cssFile);
+					$file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+					if(contain($file_sub_dir,Gc::$nav_root_path)){
+						$isLocalCssFile=str_replace(Gc::$url_base,Gc::$nav_root_path,$cssFile);
+					}else{
+						$isLocalCssFile=str_replace(Gc::$url_base,$file_sub_dir,$cssFile);
+					}
+
 					if (is_server_windows()){
 						$isLocalCssFile=str_replace("/","\\",$isLocalCssFile);
 					}
@@ -118,19 +124,23 @@ class UtilCss extends Util
 					}
 					$isLocalGzip=$isLocalCssFile.DIRECTORY_SEPARATOR."gzip.php";
 					if (file_exists($isLocalGzip)){
-						$css_gzip=str_replace(Gc::$nav_root_path,"",$isLocalGzip)."?css=";
+						if(contain($file_sub_dir,Gc::$nav_root_path)){
+							$css_gzip=str_replace(Gc::$nav_root_path,"",$isLocalGzip)."?css=";
+						}else{
+							$css_gzip=str_replace($_SERVER["DOCUMENT_ROOT"],"",$isLocalGzip)."?css=";
+						}
 						$css_gzip=str_replace("\\","/",$css_gzip);
 					}
 				}
-				$result= "    <link rel=\"stylesheet\" type=\"text/css\" href=\"".$url_base.$css_gzip.$cssFile."\" />\r\n";
+				$result= "	 <link rel=\"stylesheet\" type=\"text/css\" href=\"".$url_base.$css_gzip.$cssFile."\" />\r\n";
 			}else{
 				if (in_array($cssFile, self::$CssLoaded)){
 					return ;
 				}
 				if (startWith($cssFile, "http")){
-					$result= "    <link rel=\"stylesheet\" type=\"text/css\" href=\"".$cssFile."\" />\r\n";
+					$result= "	 <link rel=\"stylesheet\" type=\"text/css\" href=\"".$cssFile."\" />\r\n";
 				}else{
-					$result= "    <link rel=\"stylesheet\" type=\"text/css\" href=\"".$url_base.$cssFile."\" />\r\n";
+					$result= "	 <link rel=\"stylesheet\" type=\"text/css\" href=\"".$url_base.$cssFile."\" />\r\n";
 				}
 			}
 			self::$CssLoaded[]=$cssFile;
@@ -168,9 +178,9 @@ class UtilCss extends Util
 	 */
 	public static function loadCssContentSentence($cssContent)
 	{
-		$result="    <style type=\"text/css\">\r\n";
-		$result.="      ".$cssContent."\r\n";
-		$result.="    </style>\r\n";
+		$result="	 <style type=\"text/css\">\r\n";
+		$result.="		".$cssContent."\r\n";
+		$result.="	 </style>\r\n";
 		return $result;
 	}
 
@@ -277,9 +287,9 @@ class UtilCss extends Util
 					height:22px;
 					line-height:28px;
 					vertical-align:bottom;
-    				box-sizing: content-box;
-    				-moz-box-sizing:content-box;
-    				-webkit-box-sizing:content-box;
+	 				box-sizing: content-box;
+	 				-moz-box-sizing:content-box;
+	 				-webkit-box-sizing:content-box;
 				}
 				input[type=button]{
 					border:1px solid;

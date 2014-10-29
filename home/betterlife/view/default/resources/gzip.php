@@ -55,9 +55,14 @@ if (isset ($jsFile)){
 	}else{
 		$url_base=UtilNet::urlbase();
 		if (contain($jsFile,$url_base)){
-		   $jsFile=str_replace($url_base,"",$jsFile);
-		   $jsFile=Gc::$nav_root_path.$jsFile;
-		   $jsFile=str_replace("/",DIRECTORY_SEPARATOR,$jsFile);
+			$jsFile=str_replace($url_base,"",$jsFile);
+			$file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+			if(contain($file_sub_dir,Gc::$nav_root_path)){
+				$jsFile=Gc::$nav_root_path.$jsFile;
+			}else{
+				$jsFile=$_SERVER["DOCUMENT_ROOT"].$jsFile;
+			}
+			$jsFile=str_replace("/",DIRECTORY_SEPARATOR,$jsFile);
 		}
 		include($jsFile);
 	}
@@ -83,9 +88,14 @@ if (isset ($cssFile)){
 	}else{
 		$url_base=UtilNet::urlbase();
 		if (contain($cssFile,$url_base)){
-		   $cssFile=str_replace($url_base,"",$cssFile);
-		   $cssFile=Gc::$nav_root_path.$cssFile;
-		   $cssFile=str_replace("/",DIRECTORY_SEPARATOR,$cssFile);
+			$cssFile=str_replace($url_base,"",$cssFile);
+			$file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+			if(contain($file_sub_dir,Gc::$nav_root_path)){
+				$cssFile=Gc::$nav_root_path.$cssFile;
+			}else{
+				$cssFile=$_SERVER["DOCUMENT_ROOT"].$cssFile;
+			}
+			$cssFile=str_replace("/",DIRECTORY_SEPARATOR,$cssFile);
 		}
 		include($cssFile);
 	}

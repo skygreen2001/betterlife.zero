@@ -123,7 +123,11 @@ class Gc
 	 * @static
 	 */
 	public static $appName="betterlife";
-	public static $appName_alias="Bb";//应用名的缩写，主要用在后台Extjs生成代码的命名空间缩写
+	/**
+	 * 应用名的缩写
+	 * 主要用在后台Extjs生成代码的命名空间缩写
+	 */
+	public static $appName_alias="Bb";
 	/**
 	 * 业务应用部署的根目录<br/>
 	 * 说明：该框架采用模块组建的方式<br/>
