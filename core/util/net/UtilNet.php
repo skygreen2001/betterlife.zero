@@ -55,7 +55,7 @@ class UtilNet extends Util
 		}
 		$file_sub_dir=str_replace(DIRECTORY_SEPARATOR, "/", $file_sub_dir);
 		$url_base=Gc::$url_base;
-		$url_base=str_replace($file_sub_dir, "", $url_base);
+		if($file_sub_dir!="/")$url_base=str_replace($file_sub_dir, "", $url_base);
 		return $url_base;
 	}
 
