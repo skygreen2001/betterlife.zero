@@ -1,3 +1,11 @@
+<?php
+require_once ("Gc.php");
+require_once("include/common.php");
+if(!contains($_SERVER['HTTP_HOST'],array("127.0.0.1","localhost"))){
+	header("location:".Gc::$url_base."index.php?go=".Gc::$appName.".index.index");
+	die();
+}
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html lang="zh-CN" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -65,7 +73,7 @@ h1{
 	position: absolute;
 	top: -50%;
 	width: 300px;
-	margin: 110px 0px 0px -120px;
+	margin: 110px 0px 0px -100px;
 }
 div#content{
 	border-style:outset;
@@ -93,7 +101,7 @@ div#content{
 			</div>
 		</div>
 		<div id="footnav"><?php $help_url="http://skygreen2001.gitbooks.io/betterlife-cms-framework/content/index.html" ?>
-			<a href="<?php echo Gc::$url_base?>tools/dev/index.php" target="_blank">工程重用</a>|<a href="<?php echo Gc::$url_base?>tools/tools/db/manual/db_normal.php" target="_blank">数据库说明书</a>|<a href="<?php echo Gc::$url_base?>tools/tools/autocode/db_onekey.php" target="_blank">一键生成</a>|<a style="cursor:pointer;" onclick="if (confirm('确认需要一键部署，该操作不可还原！')==true){window.location.href='<?php echo Gc::$url_base?>tools/tools/web/deploy.php'}" target="_blank">线上部署</a>|<a href="<?php echo $help_url ?>" target="_blank">帮助</a>
+			<a href="<?php echo Gc::$url_base?>tools/dev/index.php" target="_blank">工程重用</a>|<a href="<?php echo Gc::$url_base?>tools/tools/db/manual/db_normal.php" target="_blank">数据库说明书</a>|<a href="<?php echo Gc::$url_base?>tools/tools/autocode/db_onekey.php" target="_blank">一键生成</a>|<a href="<?php echo $help_url ?>" target="_blank">帮助</a>
 		</div>
 	</div>
 </body>

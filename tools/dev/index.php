@@ -22,7 +22,7 @@ class EnumReusePjType extends Enum
 	 */
 	const SIMPLE	= 4;
 	/**
-	 * 精简版【只包括框架核心-只包括了DAO,不包括显示组件、Service层等】
+	 * MINI版【只包括框架核心-只包括了DAO,不包括显示组件、Service层等】
 	 */
 	const MINI	= 5;
 }
@@ -39,26 +39,27 @@ class EnumReusePjType extends Enum
  *			1.完整版【同现有版本一样】
  *			2.通用版【后台使用Jquery框架】
  *			3.高级版【后台使用Extjs框架】
- *			4.精简版【只包括框架核心】
+ *			4.精简版【只包括框架核心-包括MVC,前后台】
+ *			5.MINI版【只包括框架核心-只包括了DAO,不包括显示组件、Service层等】
  * 处理流程操作:
  *		1.复制整个项目到新的路径
  *		2.修改Gc.php相关配置
  *		3.修改Config_Db.php[数据库名称|数据库表名前缀]
  *		4.修改帮助地址
  *		5.修改应用文件夹名称
- *	  6.重命名后台Action_Betterlife为新应用类
- *	  7.替换Extjs的js文件里的命名空间
+ *	  	6.重命名后台Action_Betterlife为新应用类
+ *	  	7.替换Extjs的js文件里的命名空间
  *	  精简版还执行了以下操作
  *			1.清除在大部分项目中不需要的目录
  *			2.清除在大部分项目中不需要的文件
  *			3.清除library下的不常用的库:
  *				adodb5|linq|mdb2|PHPUnit|yaml|template[EaseTemplate|SmartTemplate|TemplateLite]
  *			4.清除缓存相关的文件
- *	  	5.清除mysql|sqlite|postgres以外的其他数据库引擎
+ *	  		5.清除mysql|sqlite|postgres以外的其他数据库引擎
  *			6.清除module大部分工程无需的文件
  *			7.清除tools大部分工程无需的文件
  *			8.清除common大部分工程无需的文件
- *		  9.清除util大部分工程无需的文件
+ *		  	9.清除util大部分工程无需的文件
  * @author skygreen2001@gmail.com
  */
 class Project_Refactor
@@ -138,17 +139,19 @@ class Project_Refactor
 
 		if(is_dir(self::$save_dir.Gc::$module_root.DS."admin")){
 			$toDeleteDir=self::$save_dir.Gc::$module_root.DS."admin".DS."src".DS."remoteobject".DS;
-			UtilFileSystem::deleteDir($toDeleteDir);
+			if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
 			$toDeleteDir=self::$save_dir.Gc::$module_root.DS."admin".DS."src".DS."timertask".DS;
 			if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
 			$toDeleteDir=self::$save_dir.Gc::$module_root.DS."admin".DS."view".DS."default".DS."tmp".DS."templates_c".DS;
-			UtilFileSystem::deleteDir($toDeleteDir);
+			if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
 			UtilFileSystem::createDir($toDeleteDir);
 		}
 
 		if(is_dir(self::$save_dir."data")){
-			UtilFileSystem::deleteDir(self::$save_dir."data".DS."spider");
-			UtilFileSystem::deleteDir(self::$save_dir."data".DS."uc_client");
+			$toDeleteDir=self::$save_dir."data".DS."spider";
+			if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
+			$toDeleteDir=self::$save_dir."data".DS."uc_client";
+			if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
 		}
 	}
 
@@ -413,16 +416,22 @@ LIBRARY_XML_CONTENT;
 		$root_config="config";
 		//1.清除配置文件:config/db
 		$ignore_config_db_dir=self::$save_dir.$root_config.DS."config".DS."db".DS;
-		UtilFileSystem::deleteDir($ignore_config_db_dir."dal".DS);
-		unlink($ignore_config_db_dir."object".DS."Config_Mssql.php");
-		unlink($ignore_config_db_dir."object".DS."Config_Odbc.php");
+		$toDeleteDir=$ignore_config_db_dir."dal".DS;
+		if(is_dir($toDeleteDir))UtilFileSystem::deleteDir();
+		$toDeleteFile=$ignore_config_db_dir."object".DS."Config_Mssql.php";
+		if(file_exists($toDeleteFile))unlink($toDeleteFile);
+		$toDeleteFile=$ignore_config_db_dir."object".DS."Config_Odbc.php";
+		if(file_exists($toDeleteFile))unlink($toDeleteFile);
 
 		//2.数据库引擎文件:core/db/
 		$root_core="core";
 		$ignore_core_db_dir=self::$save_dir.$root_core.DS."db".DS;
-		UtilFileSystem::deleteDir($ignore_core_db_dir."dal".DS);
-		UtilFileSystem::deleteDir($ignore_core_db_dir."object".DS."odbc".DS);
-		UtilFileSystem::deleteDir($ignore_core_db_dir."object".DS."sqlserver".DS);
+		$toDeleteDir=$ignore_core_db_dir."dal".DS;
+		if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
+		$toDeleteDir=$ignore_core_db_dir."object".DS."odbc".DS;
+		if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
+		$toDeleteDir=$ignore_core_db_dir."object".DS."sqlserver".DS;
+		if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
 
 		//3.数据库备份:db/
 		$ignore_db_dirs=array(
@@ -1169,24 +1178,22 @@ AUTHCONTENT;
 			}
 
 			//修改前台的注释:* @category 应用名称
-			if(self::$reuse_type!=EnumReusePjType::MINI){
-				$frontActionDir=self::$save_dir.Gc::$module_root.DS.self::$pj_name_en.DS."action".DS;
-				$actionFiles=UtilFileSystem::getAllFilesInDirectory($frontActionDir,array("php"));
+			$frontActionDir=self::$save_dir.Gc::$module_root.DS.self::$pj_name_en.DS."action".DS;
+			$actionFiles=UtilFileSystem::getAllFilesInDirectory($frontActionDir,array("php"));
 
-				foreach ($actionFiles as $actionFile) {
-					$content=file_get_contents($actionFile);
-					$content=str_replace("* @category ".Gc::$appName, "* @category ".self::$pj_name_en, $content);
-					file_put_contents($actionFile, $content);
-				}
+			foreach ($actionFiles as $actionFile) {
+				$content=file_get_contents($actionFile);
+				$content=str_replace("* @category ".Gc::$appName, "* @category ".self::$pj_name_en, $content);
+				file_put_contents($actionFile, $content);
+			}
 
-				$frontSrcDir=self::$save_dir.Gc::$module_root.DS.self::$pj_name_en.DS."src".DS;
-				$srcFiles=UtilFileSystem::getAllFilesInDirectory($frontSrcDir,array("php"));
+			$frontSrcDir=self::$save_dir.Gc::$module_root.DS.self::$pj_name_en.DS."src".DS;
+			$srcFiles=UtilFileSystem::getAllFilesInDirectory($frontSrcDir,array("php"));
 
-				foreach ($srcFiles as $srcFile) {
-					$content=file_get_contents($srcFile);
-					$content=str_replace("* @category ".Gc::$appName, "* @category ".self::$pj_name_en, $content);
-					file_put_contents($srcFile, $content);
-				}
+			foreach ($srcFiles as $srcFile) {
+				$content=file_get_contents($srcFile);
+				$content=str_replace("* @category ".Gc::$appName, "* @category ".self::$pj_name_en, $content);
+				file_put_contents($srcFile, $content);
 			}
 
 			//重命名后台Action_Betterlife为新应用类
