@@ -167,12 +167,12 @@ class Initializer
 	private static function is_can_run()
 	{
 		$is_not_run_betterlife=false;
-		//if (ini_get('register_globals') != 1) {echo "请在php.ini配置文件里设置register_globals = On<br/>";$is_not_run_betterlife=true;}
-		//if (ini_get('allow_call_time_pass_reference') != 1) {echo "请在php.ini配置文件里设置allow_call_time_pass_reference = On<br/>";$is_not_run_betterlife=true;}
-		if(!function_exists("imagecreate")){echo "没有安装GD模块支持,名称:php_gd2,请加载<br/>Ubuntu服务器下执行: sudo apt-get install php5-gd<br/>";$is_not_run_betterlife=true;}
-		if(!function_exists("curl_init")) {echo "没有安装Curl模块支持,名称:php_curl,请加载<br/>Ubuntu服务器下执行: sudo apt-get install php5-curl<br/>";$is_not_run_betterlife=true;}
-		if(!function_exists("mb_check_encoding")) {echo "没有安装mbstring模块支持,名称:php_mbstring,请加载<br/>";$is_not_run_betterlife=true;}
-		if(!function_exists("mysqli_stmt_fetch")) {echo "没有安装mysqli模块支持,名称:php_mysqli,请加载<br/>";$is_not_run_betterlife=true;}
+		//if (ini_get('register_globals') != 1) {echo "<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>请在php.ini配置文件里设置register_globals = On<br/></p>";$is_not_run_betterlife=true;}
+		//if (ini_get('allow_call_time_pass_reference') != 1) {echo "<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>请在php.ini配置文件里设置allow_call_time_pass_reference = On<br/></p>";$is_not_run_betterlife=true;}
+		if(!function_exists("imagecreate")){echo "<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>没有安装GD模块支持,名称:php_gd2,请加载<br/>Ubuntu服务器下执行: sudo apt-get install php5-gd<br/></p>";$is_not_run_betterlife=true;}
+		if(!function_exists("curl_init")) {echo "<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>没有安装Curl模块支持,名称:php_curl,请加载<br/>Ubuntu服务器下执行: sudo apt-get install php5-curl<br/></p>";$is_not_run_betterlife=true;}
+		if(!function_exists("mb_check_encoding")) {echo "<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>没有安装mbstring模块支持,名称:php_mbstring,请加载<br/></p>";$is_not_run_betterlife=true;}
+		if(!function_exists("mysqli_stmt_fetch")) {echo "<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>没有安装mysqli模块支持,名称:php_mysqli,请加载<br/></p>";$is_not_run_betterlife=true;}
 		if ($is_not_run_betterlife)die();
 	}
 
@@ -190,7 +190,7 @@ class Initializer
 		//初始化PHP版本校验
 		if(version_compare(phpversion(), 5, '<')) {
 			header("HTTP/1.1 500 Server Error");
-			echo "<h1>需要PHP 5</h1><h2>才能运行BetterLife框架, 请安装PHP 5.0或者更高的版本.</h2><p>我们已经探测到您正在运行 PHP 版本号: <b>".phpversion()."</b>.  为了能正常运行 BetterLife,您的电脑上需要安装PHP 版本 5.1 或者更高的版本, 并且如果可能的话，我们推荐安装 PHP 5.2 或者更高的版本.</p>";
+			echo "<h1>需要PHP 5</h1><h2>才能运行Betterlife框架, 请安装PHP 5.0或者更高的版本.</h2><p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>我们已经探测到您正在运行 PHP 版本号: <b>".phpversion()."</b>.  为了能正常运行 BetterLife,您的电脑上需要安装PHP 版本 5.1 或者更高的版本, 并且如果可能的话，我们推荐安装 PHP 5.2 或者更高的版本.</p>";
 			die();
 		}
 		/**
@@ -285,7 +285,7 @@ class Initializer
 		$lan_dir=self::$NAV_CORE_PATH.$core_lang.DS;
 		if (strcasecmp(Gc::$language,$default_language)!=0) {
 			if (file_exists($lan_dir.$world_language.self::SUFFIX_FILE_PHP)) {
-				LogMe::log("You need delete file:".$lan_dir.$world_language.self::SUFFIX_FILE_PHP." on run time");
+				LogMe::log("需要在运行期删除文件:".$lan_dir.$world_language.self::SUFFIX_FILE_PHP);
 			}
 			require_once $lan_dir.$language.self::SUFFIX_FILE_PHP;
 		}
@@ -334,7 +334,7 @@ class Initializer
 				}
 			}else{
 				$module=basename($moduleDir);
-				echo "加载应用模块路径不存在:".$moduleDir."<br/>请去除Gc.php文件里\$module_names的模块：".$module."。<br/>再重新运行！";
+				echo "<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>加载应用模块路径不存在:".$moduleDir."<br/>请去除Gc.php文件里\$module_names的模块：".$module."。<br/>再重新运行！</p>";
 				die();
 			}
 		}
