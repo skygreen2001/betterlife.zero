@@ -4,7 +4,7 @@
  * 工具类:自动生成代码-生成单张表或者对应类的前后台所有模板文件<br/>
  +---------------------------------<br/>
  * @category betterlife
- * @package core.autoCode
+ * @package core.autocode
  * @author skygreen skygreen2001@gmail.com
  */
 class AutoCodeModelLike extends AutoCode
@@ -18,7 +18,7 @@ class AutoCodeModelLike extends AutoCode
 	 */
 	public static function AutoCode($table_names="")
 	{
-		$dest_directory=Gc::$nav_root_path."tools".DS."tools".DS."autoCode".DS;
+		$dest_directory=Gc::$nav_root_path."tools".DS."tools".DS."autocode".DS;
 		$filename=$dest_directory."autocode.config.xml";
 		AutoCodeValidate::run($table_names);
 		if(Config_AutoCode::ALWAYS_AUTOCODE_XML_NEW)AutoCodeConfig::run();

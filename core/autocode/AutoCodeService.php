@@ -4,7 +4,7 @@
  * 工具类:自动生成代码-服务类<br/>
  +---------------------------------<br/>
  * @category betterlife
- * @package core.autoCode
+ * @package core.autocode
  * @author skygreen skygreen2001@gmail.com
  */
 class AutoCodeService extends AutoCode

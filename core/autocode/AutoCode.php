@@ -4,7 +4,7 @@
  * 所有自动生成代码工具的父类<br/>
  +---------------------------------<br/>
  * @category betterlife
- * @package core.autoCode
+ * @package core.autocode
  * @author skygreen <skygreen2001@gmail.com>
  */
 class AutoCode extends Object

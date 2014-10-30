@@ -4,7 +4,7 @@
  * 工具类:自动生成代码-实体类<br/>
  +---------------------------------<br/>
  * @category betterlife
- * @package core.autoCode
+ * @package core.autocode
  * @author skygreen skygreen2001@gmail.com
  */
 class AutoCodeDomain extends AutoCode
@@ -74,7 +74,7 @@ class AutoCodeDomain extends AutoCode
 	 */
 	public static function UserInput($default_value="")
 	{
-		$db_domian_java=Gc::$url_base."tools/tools/autoCode/layer/domain/db_domain_java.php";
+		$db_domian_java=Gc::$url_base."tools/tools/autocode/layer/domain/db_domain_java.php";
 		$inputArr=array(
 			"1"=>"对象属性都是private,定义setter和getter方法",
 			"2"=>"所有的列定义的对象属性都是public"

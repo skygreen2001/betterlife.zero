@@ -4,7 +4,7 @@
  * 工具类:自动生成代码-实体类[基于Java的实体类]<br/>
  +---------------------------------<br/>
  * @category betterlife
- * @package core.autoCode
+ * @package core.autocode
  * @author skygreen skygreen2001@gmail.com
  */
 class AutoCodeDomainJava extends AutoCode
@@ -82,7 +82,7 @@ class AutoCodeDomainJava extends AutoCode
 			"1"=>"对象属性都是private,定义setter和getter方法。",
 			"2"=>"所有的列定义的对象属性都是public"
 		);
-		$db_domian_php=Gc::$url_base."tools/tools/autoCode/layer/domain/db_domain.php";
+		$db_domian_php=Gc::$url_base."tools/tools/autocode/layer/domain/db_domain.php";
 		$more_content="<br/><br/><a href='$db_domian_php' target='_blank'>生成本框架使用的数据对象实体类</a>";
 		parent::UserInput("一键生成Java实体类数据对象定义层",$inputArr,"1",$more_content);
 	}

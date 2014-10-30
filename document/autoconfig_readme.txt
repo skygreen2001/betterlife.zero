@@ -1,5 +1,4 @@
-﻿一键生成所有代码地址:http://localhost/betterlife/tools/tools/autoCode/db_onekey.php
-
+﻿一键生成所有代码地址:http://127.0.0.1/betterlife/tools/tools/autocode/db_onekey.php
 
 *********************************************************************
 *********************************************************************

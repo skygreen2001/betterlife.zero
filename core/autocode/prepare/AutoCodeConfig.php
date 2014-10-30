@@ -4,7 +4,7 @@
  * 工具类:自动生成配置文件<br/>
  +---------------------------------<br/>
  * @category betterlife
- * @package core.autoCode
+ * @package core.autocode
  * @author skygreen skygreen2001@gmail.com
  */
 class AutoCodeConfig extends AutoCode
@@ -36,8 +36,8 @@ class AutoCodeConfig extends AutoCode
 	 */
 	public static function init()
 	{
-		self::$filename_config_xml=Gc::$nav_root_path."tools".DS."tools".DS."autoCode".DS."autocode.config.xml";
-		self::$url_config_xml     =Gc::$url_base."tools/tools/autoCode/autocode.config.xml";
+		self::$filename_config_xml=Gc::$nav_root_path."tools".DS."tools".DS."autocode".DS."autocode.config.xml";
+		self::$url_config_xml     =Gc::$url_base."tools/tools/autocode/autocode.config.xml";
 		parent::init();
 	}
 
@@ -55,7 +55,7 @@ class AutoCodeConfig extends AutoCode
 		{
 			$filename=dirname($filenamepath)."autocode_create.config.xml";
 			self::$filename_config_xml=$filename;
-			self::$url_config_xml=Gc::$url_base."tools/tools/autoCode/autocode_create.config.xml";
+			self::$url_config_xml=Gc::$url_base."tools/tools/autocode/autocode_create.config.xml";
 		}
 
 		self::$config_classes=array("class"=>array());

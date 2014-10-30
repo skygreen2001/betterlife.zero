@@ -4,7 +4,7 @@
  * 工具类:自动生成代码-前端默认的表示层
  +---------------------------------<br/>
  * @category betterlife
- * @package core.autoCode.view
+ * @package core.autocode.view
  * @author skygreen skygreen2001@gmail.com
  */
 class AutoCodeViewDefault extends AutoCode

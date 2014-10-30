@@ -4,7 +4,7 @@
  * 工具类:自动生成代码-使用ExtJs生成的表示层<br/>
  +---------------------------------<br/>
  * @category betterlife
- * @package core.autoCode.view
+ * @package core.autocode.view
  * @author skygreen skygreen2001@gmail.com
  */
 class AutoCodeViewExt extends AutoCode

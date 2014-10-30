@@ -5,7 +5,7 @@
  * 可以预览生成代码的报告列表<br/>
  +---------------------------------<br/>
  * @category betterlife
- * @package core.autoCode
+ * @package core.autocode
  * @author skygreen skygreen2001@gmail.com
  */
 class AutoCodePreviewReportLike extends AutoCode
@@ -69,7 +69,7 @@ class AutoCodePreviewReportLike extends AutoCode
 		$file ="";
 		$origin_file="";
 		$url_base=Gc::$url_base;
-		$dir_autocode=$url_base."tools/tools/autoCode";
+		$dir_autocode=$url_base."tools/tools/autocode";
 		$layer_autocode=$dir_autocode."/layer";
 		$url_base=substr($url_base,0,strlen($url_base)-1);
 

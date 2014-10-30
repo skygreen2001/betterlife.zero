@@ -5,7 +5,7 @@
  * 自动折叠列表清单，可以更清晰看到生成代码的主干部分<br/>
  +---------------------------------<br/>
  * @category betterlife
- * @package core.autoCode
+ * @package core.autocode
  * @author skygreen skygreen2001@gmail.com
  */
 class AutoCodeFoldHelper extends AutoCode
