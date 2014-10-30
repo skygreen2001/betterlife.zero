@@ -1,4 +1,4 @@
-### Better Life START ###
+### Betterlife START ###
 # 需要设置apache的相应的config文件，指定所在的Directory设置AllowOverride None 为AllowOverride All
 #Options -Indexes
 ErrorDocument 403 /
@@ -8,4 +8,4 @@ ErrorDocument 404 /
        RewriteCond $1 !^(index\.php|public|robots\.txt)
        RewriteRule ^(.*)$ index.php/$1 [L]
 </IfModule>
-### Better Life END ###
+### Betterlife END ###
