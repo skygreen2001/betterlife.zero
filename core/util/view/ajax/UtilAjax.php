@@ -200,6 +200,11 @@ class UtilAjax extends Util
 						$isLocalJsFile=substr($isLocalJsFile,0,strpos($isLocalJsFile,"home".DS));
 					$js_gzip=str_replace($_SERVER["DOCUMENT_ROOT"],"",$isLocalJsFile);
 					$js_gzip=str_replace("\\","/",$js_gzip);
+					
+					if (contain(strtolower(php_uname()),"darwin")){
+						$js_gzip=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir);
+					}
+					
 					$result="	<script type=\"text/javascript\" src=\"".$url_base.$js_gzip.self::$JS_GZIP."{$jsFile}\"></script>\r\n";
 				}
 			}else{
@@ -209,6 +214,10 @@ class UtilAjax extends Util
 				if (startWith($jsFile, "http")){
 					$result="	<script type=\"text/javascript\" src=\"".$jsFile."\"></script>\r\n";
 				}else{
+					if (contain(strtolower(php_uname()),"darwin")){
+						$file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+						$jsFile=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir).$jsFile;
+					}					
 					$result="	<script type=\"text/javascript\" src=\"".$url_base.$jsFile."\"></script>\r\n";
 				}
 			}

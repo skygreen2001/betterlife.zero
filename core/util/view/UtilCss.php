@@ -127,9 +127,14 @@ class UtilCss extends Util
 						if(contain($file_sub_dir,Gc::$nav_root_path)){
 							$css_gzip=str_replace(Gc::$nav_root_path,"",$isLocalGzip)."?css=";
 						}else{
-							$css_gzip=str_replace($_SERVER["DOCUMENT_ROOT"],"",$isLocalGzip)."?css=";
+							$css_gzip=str_replace($_SERVER["DOCUMENT_ROOT"]."/","",$isLocalGzip)."?css=";
 						}
 						$css_gzip=str_replace("\\","/",$css_gzip);
+					}
+				}else{
+					if (contain(strtolower(php_uname()),"darwin")){
+						$file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+						$css_gzip=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir).$css_gzip;
 					}
 				}
 				$result= "	 <link rel=\"stylesheet\" type=\"text/css\" href=\"".$url_base.$css_gzip.$cssFile."\" />\r\n";
@@ -140,6 +145,10 @@ class UtilCss extends Util
 				if (startWith($cssFile, "http")){
 					$result= "	 <link rel=\"stylesheet\" type=\"text/css\" href=\"".$cssFile."\" />\r\n";
 				}else{
+					if (contain(strtolower(php_uname()),"darwin")){
+						$file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+						$cssFile=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir).$cssFile;
+					}
 					$result= "	 <link rel=\"stylesheet\" type=\"text/css\" href=\"".$url_base.$cssFile."\" />\r\n";
 				}
 			}

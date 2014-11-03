@@ -14,7 +14,8 @@ class UtilNet extends Util
 	* @param $url 网络Url地址
 	* @return 域名或者Ip地址
 	*/
-	public static function host($url){
+	public static function host($url)
+	{
 		// get host name from URL
 		preg_match('@^(?:http://)?([^/]+)@i',
 			$url, $matches);
@@ -31,7 +32,8 @@ class UtilNet extends Util
 	 * 获取域名或者Ip地址
 	 * @return 域名或者Ip地址
 	 */
-	public static function hostname(){
+	public static function hostname()
+	{
 		$addrs = array();
 		if(isset($_SERVER['HTTP_X_FORWARDED_HOST'])){
 			$addrs = array_reverse( explode( ',',  $_SERVER['HTTP_X_FORWARDED_HOST'] ) );
@@ -44,7 +46,8 @@ class UtilNet extends Util
 	*  @param string $with_file 如指定文件名。
 	 * @return 网站的根路径
 	 */
-	public static function urlbase(){
+	public static function urlbase()
+	{
 		$with_file=$_SERVER["SCRIPT_FILENAME"];
 		$file_sub_dir=dirname($with_file).DIRECTORY_SEPARATOR;
 		$file_sub_dir=str_replace("/", DIRECTORY_SEPARATOR, $file_sub_dir);
@@ -56,6 +59,7 @@ class UtilNet extends Util
 		$file_sub_dir=str_replace(DIRECTORY_SEPARATOR, "/", $file_sub_dir);
 		$url_base=Gc::$url_base;
 		if($file_sub_dir!="/")$url_base=str_replace($file_sub_dir, "", $url_base);
+		if(!endwith($url_base,"/"))$url_base.="/";
 		return $url_base;
 	}
 
@@ -64,7 +68,8 @@ class UtilNet extends Util
 	* @param string $with_file 如指定文件名，则路径会带上文件名。
 	* @return Url基本路径
 	*/
-	public static function base_url($with_file=false){
+	public static function base_url($with_file=false)
+	{
 		if(isset($_SERVER['HTTPS']) && strpos('on',$_SERVER['HTTPS'])){
 			$baseurl = 'https://'.$_SERVER['HTTP_HOST'];
 			if($_SERVER['SERVER_PORT']!=443)$baseurl.=':'.$_SERVER['SERVER_PORT'];
@@ -88,7 +93,8 @@ class UtilNet extends Util
 	 * @param string $data 数据
 	 * @param string $mimeType MIME类型。
 	 */
-	public static function download($fname='data',$data=null,$mimeType='application/force-download'){
+	public static function download($fname='data',$data=null,$mimeType='application/force-download')
+	{
 		if(headers_sent($file,$line)){
 			echo 'Header already sent @ '.$file.':'.$line;
 			exit();
@@ -117,7 +123,8 @@ class UtilNet extends Util
 	/**
 	 * 在网络上发送文件内容
 	 */
-	function sendfile($file){
+	function sendfile($file)
+	{
 		$handle = fopen($file, "r");
 		while($buffer = fread($handle,102400)){
 			echo $buffer;
@@ -133,7 +140,8 @@ class UtilNet extends Util
 	 * @param bool $finish 是否结束
 	 * @return string html标签字符串
 	 */
-	public static function buildTag($params,$tag,$finish=true){
+	public static function buildTag($params,$tag,$finish=true)
+	{
 		foreach($params as $k=>$v){
 			if(!is_null($v) && !is_array($v)){
 				if($k=='value'){
@@ -152,7 +160,8 @@ class UtilNet extends Util
 	 * @param    string    query
 	 * @return    array    params
 	 */
-	public static function parse_urlquery($query) {
+	public static function parse_urlquery($query)
+	{
 		$query  = html_entity_decode($query);
 		$queryParts = explode('&', $query);
 

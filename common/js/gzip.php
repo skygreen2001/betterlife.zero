@@ -60,7 +60,7 @@ if (isset ($jsFile)){
 			if(contain($file_sub_dir,Gc::$nav_root_path)){
 				$jsFile=Gc::$nav_root_path.$jsFile;
 			}else{
-				$jsFile=$_SERVER["DOCUMENT_ROOT"].$jsFile;
+				$jsFile=$_SERVER["DOCUMENT_ROOT"]."/".$jsFile;
 			}
 			$jsFile=str_replace("/",DIRECTORY_SEPARATOR,$jsFile);
 		}
@@ -93,7 +93,7 @@ if (isset ($cssFile)){
 			if(contain($file_sub_dir,Gc::$nav_root_path)){
 				$cssFile=Gc::$nav_root_path.$cssFile;
 			}else{
-				$cssFile=$_SERVER["DOCUMENT_ROOT"].$cssFile;
+				$cssFile=$_SERVER["DOCUMENT_ROOT"]."/".$cssFile;
 			}
 			$cssFile=str_replace("/",DIRECTORY_SEPARATOR,$cssFile);
 		}
