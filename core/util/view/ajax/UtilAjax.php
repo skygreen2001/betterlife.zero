@@ -200,11 +200,16 @@ class UtilAjax extends Util
 						$isLocalJsFile=substr($isLocalJsFile,0,strpos($isLocalJsFile,"home".DS));
 					$js_gzip=str_replace($_SERVER["DOCUMENT_ROOT"],"",$isLocalJsFile);
 					$js_gzip=str_replace("\\","/",$js_gzip);
-					
+
 					if (contain(strtolower(php_uname()),"darwin")){
 						$js_gzip=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir);
+
+						$start_str=substr($js_gzip, 0,strpos($js_gzip, "/"));
+						$url_basei=substr($url_base, 0,strlen($url_base)-1);
+						$end_str=substr($url_basei,strrpos($url_basei, "/")+1);
+						if($start_str==$end_str)$js_gzip=str_replace($end_str."/","",$js_gzip);
 					}
-					
+
 					$result="	<script type=\"text/javascript\" src=\"".$url_base.$js_gzip.self::$JS_GZIP."{$jsFile}\"></script>\r\n";
 				}
 			}else{
@@ -217,7 +222,12 @@ class UtilAjax extends Util
 					if (contain(strtolower(php_uname()),"darwin")){
 						$file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
 						$jsFile=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir).$jsFile;
-					}					
+
+						$start_str=substr($jsFile, 0,strpos($jsFile, "/"));
+						$url_basei=substr($url_base, 0,strlen($url_base)-1);
+						$end_str=substr($url_basei,strrpos($url_basei, "/")+1);
+						if($start_str==$end_str)$jsFile=str_replace($end_str."/","",$jsFile);
+					}
 					$result="	<script type=\"text/javascript\" src=\"".$url_base.$jsFile."\"></script>\r\n";
 				}
 			}

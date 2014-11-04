@@ -31,7 +31,16 @@ if(Config_AutoCode::AFTER_MODEL_CONVERT_ADMIN){
 	        AutoCodeModelLike::AutoCode($table_names);
 	    }
 
-		$admin_url=Gc::$url_base."admin";
+		$admin_url=Gc::$url_base."admin/";
+
+		if (contain(strtolower(php_uname()),"darwin")){
+			$admin_url=UtilNet::urlbase();
+			$file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+			if (contain($file_sub_dir,"tools".DS))
+				$file_sub_dir=substr($file_sub_dir,0,strpos($file_sub_dir,"tools".DS));
+			$domainSubDir=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir);
+			if(!endwith($admin_url,$domainSubDir))$admin_url.=$domainSubDir."admin/";
+		}
 
 		if(Config_AutoCode::SHOW_PREVIEW_REPORT){
 			echo "<div style='width: 1000px; margin-left: 110px;'>";
@@ -80,7 +89,16 @@ if(Config_AutoCode::AFTER_MODEL_CONVERT_ADMIN){
 	        AutoCodeModel::AutoCode($table_names);
 	    }
 
-		$admin_url=Gc::$url_base."admin";
+		$admin_url=Gc::$url_base."admin/";
+
+		if (contain(strtolower(php_uname()),"darwin")){
+			$admin_url=UtilNet::urlbase();
+			$file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+			if (contain($file_sub_dir,"tools".DS))
+				$file_sub_dir=substr($file_sub_dir,0,strpos($file_sub_dir,"tools".DS));
+			$domainSubDir=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir);
+			if(!endwith($admin_url,$domainSubDir))$admin_url.=$domainSubDir."admin/";
+		}
 
 		if(Config_AutoCode::SHOW_PREVIEW_REPORT){
 			echo "<div style='width: 1000px; margin-left: 110px;'>";

@@ -163,7 +163,7 @@ class Gc
 	 * 0 (普通模式);<br/>
 	 * 1 (PATHINFO 模式); eg:<br/>
 	 * 2 (REWRITE  模式); 需要打开.htaccess里的注释行: RewriteEngine On;
-     *                    eg: http://localhost/betterlife/betterlife/auth/login<br/>
+	 *					eg: http://localhost/betterlife/betterlife/auth/login<br/>
 	 * 3 兼容模式(通过一个GET变量将PATHINFO传递给dispather，默认为s index.php?s=/module/action/id/1)<br/>
 	 * 当URL_DISPATCH_ON开启后有效; 默认为PATHINFO 模式，提供最好的用户体验和SEO支持
 	 * @var int
@@ -356,13 +356,18 @@ class Gc
 		}
 
 		if (empty(Gc::$url_base)){
+			$baseurl="";
 			if(isset($_SERVER['HTTPS']) && strpos('on',$_SERVER['HTTPS'])){
 				$baseurl = 'https://'.$_SERVER['HTTP_HOST'];
 				if($_SERVER['SERVER_PORT']!=443)$baseurl.=':'.$_SERVER['SERVER_PORT'];
 			}else{
-				$baseurl = 'http://'.$_SERVER['HTTP_HOST'];
-				if (!(strpos($_SERVER['HTTP_HOST'],$_SERVER['SERVER_PORT'])!== false)){
-					if($_SERVER['SERVER_PORT']!=80)$baseurl.=':'.$_SERVER['SERVER_PORT'];
+				if(array_key_exists('HTTP_HOST',$_SERVER)){
+					$baseurl = 'http://'.$_SERVER['HTTP_HOST'];
+					if(array_key_exists('SERVER_PORT',$_SERVER)){
+						if (!(strpos($_SERVER['HTTP_HOST'],$_SERVER['SERVER_PORT'])!== false)){
+							if($_SERVER['SERVER_PORT']!=80)$baseurl.=':'.$_SERVER['SERVER_PORT'];
+						}
+					}
 				}
 			}
 			$baseDir = dirname($_SERVER['SCRIPT_NAME']);

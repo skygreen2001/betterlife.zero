@@ -135,6 +135,10 @@ class UtilCss extends Util
 					if (contain(strtolower(php_uname()),"darwin")){
 						$file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
 						$css_gzip=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir).$css_gzip;
+						$start_str=substr($css_gzip, 0,strpos($css_gzip, "/"));
+						$url_basei=substr($url_base, 0,strlen($url_base)-1);
+						$end_str=substr($url_basei,strrpos($url_basei, "/")+1);
+						if($start_str==$end_str)$css_gzip=str_replace($end_str."/","",$css_gzip);
 					}
 				}
 				$result= "	 <link rel=\"stylesheet\" type=\"text/css\" href=\"".$url_base.$css_gzip.$cssFile."\" />\r\n";
@@ -148,6 +152,11 @@ class UtilCss extends Util
 					if (contain(strtolower(php_uname()),"darwin")){
 						$file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
 						$cssFile=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir).$cssFile;
+
+						$start_str=substr($cssFile, 0,strpos($cssFile, "/"));
+						$url_basei=substr($url_base, 0,strlen($url_base)-1);
+						$end_str=substr($url_basei,strrpos($url_basei, "/")+1);
+						if($start_str==$end_str)$cssFile=str_replace($end_str."/","",$cssFile);
 					}
 					$result= "	 <link rel=\"stylesheet\" type=\"text/css\" href=\"".$url_base.$cssFile."\" />\r\n";
 				}

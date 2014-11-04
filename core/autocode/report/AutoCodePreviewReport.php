@@ -69,8 +69,18 @@ class AutoCodePreviewReport extends AutoCode
 		$file ="";
 		$origin_file="";
 		$url_base=Gc::$url_base;
-		$dir_autocode=$url_base."tools/tools/autocode";
-		$layer_autocode=$dir_autocode."/layer";
+
+		if (contain(strtolower(php_uname()),"darwin")){
+			$url_base=UtilNet::urlbase();
+			$file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+			if (contain($file_sub_dir,"tools".DS))
+				$file_sub_dir=substr($file_sub_dir,0,strpos($file_sub_dir,"tools".DS));
+			$domainSubDir=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir);
+			if(!endwith($url_base,$domainSubDir))$url_base.=$domainSubDir;
+		}
+
+		$dir_autocode=$url_base."tools/tools/autocode/";
+		$layer_autocode=$dir_autocode."layer";
 		$url_base=substr($url_base,0,strlen($url_base)-1);
 
 		$module_model=<<<MODEL

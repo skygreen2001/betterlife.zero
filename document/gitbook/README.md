@@ -1,3 +1,4 @@
+#
 # Betterlife CMS Framework
 
 下载地址：https://github.com/skygreen2001/betterlife

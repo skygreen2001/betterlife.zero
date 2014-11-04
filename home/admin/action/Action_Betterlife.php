@@ -51,7 +51,7 @@ class Action_Betterlife extends ActionExt
 		$this->ExtDirectMode();
 		$this->ExtUpload();
 		$this->loadExtComponent("ComboBoxTree.js");
-		$this->loadExtJs('core/region.js');
+		$this->loadExtJs('dic/region.js');
 	}
 
 	/**

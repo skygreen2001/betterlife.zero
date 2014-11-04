@@ -2,20 +2,29 @@
 /*!
  * upload demo for php
  * @requires xhEditor
- * 
+ *
  * @author Yanis.Wang<yanis.wang@gmail.com>
  * @site http://xheditor.com/
  * @licence LGPL(http://www.opensource.org/licenses/lgpl-license.php)
- * 
+ *
  * @Version: 0.9.6 (build 111027)
- * 
+ *
  * 注1：本程序仅为演示用，请您务必根据自己需求进行相应修改，或者重开发
  * 注2：本程序特别针对HTML5上传，加入了特殊处理
  */
 header('Content-Type: text/html; charset=UTF-8');
 //*****************start:modify by skygreen**************************
 require_once("../../../../../init.php");
-$urlbase=UtilNet::urlbase(); 
+$urlbase=UtilNet::urlbase();
+
+if (contain(strtolower(php_uname()),"darwin")){
+	$file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+	if (contain($file_sub_dir,"tools".DS))
+		$file_sub_dir=substr($file_sub_dir,0,strpos($file_sub_dir,"tools".DS));
+	$domainSubDir=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir);
+	if(!endwith($urlbase,$domainSubDir))$urlbase.=$domainSubDir;
+}
+
 //*****************end  :modify by skygreen**************************
 $inputName='filedata';//表单文件域name
 $attachDir='upload'.DIRECTORY_SEPARATOR."userfiles".DIRECTORY_SEPARATOR."images";//上传文件保存路径，结尾不要带/
@@ -33,7 +42,7 @@ $tempPath=Gc::$nav_root_path.$attachDir.'/'.date("YmdHis").mt_rand(10000,99999).
 $tempPath=str_replace("/","\\",$tempPath);
 $tempPath_dir=dirname($tempPath);
 if (!file_exists($tempPath_dir)){
-	UtilFileSystem::createDir($tempPath_dir);    
+	UtilFileSystem::createDir($tempPath_dir);
 }
 //*****************end  :modify by skygreen**************************
 $localName='';
@@ -95,9 +104,9 @@ if($err==''){
 				case 1: $attachSubDir = 'day_'.date('ymd'); break;
 				case 2: $attachSubDir = 'month_'.date('ym'); break;
 				case 3: $attachSubDir = 'ext_'.$extension; break;
-			}            
+			}
 			//*****************start:modify by skygreen**************************
-			$attachDir = Gc::$nav_root_path.$attachDir.'/'.$attachSubDir;            
+			$attachDir = Gc::$nav_root_path.$attachDir.'/'.$attachSubDir;
 			$attachDir=str_replace("\\","/",$attachDir);
 			//*****************end  :modify by skygreen**************************
 			if(!is_dir($attachDir))
@@ -108,17 +117,17 @@ if($err==''){
 			PHP_VERSION < '4.2.0' && mt_srand((double)microtime() * 1000000);
 			$newFilename=date("YmdHis").mt_rand(1000,9999).'.'.$extension;
 			$targetPath = $attachDir.'/'.$newFilename;
-			
+
 			rename($tempPath,$targetPath);
-			@chmod($targetPath,0755);            
+			@chmod($targetPath,0755);
 			//*****************start:modify by skygreen**************************
-			$targetPath=str_replace("/","\\",$targetPath);      
-			//*****************end  :modify by skygreen************************** 
-			$targetPath=jsonString($targetPath);            
+			$targetPath=str_replace("/","\\",$targetPath);
+			//*****************end  :modify by skygreen**************************
+			$targetPath=jsonString($targetPath);
 			//*****************start:modify by skygreen**************************
-			$targetPath=str_replace("\\\\","\\",$targetPath);   
-			$targetPath=str_replace(Gc::$nav_root_path,"",$targetPath);          
-			$targetPath=str_replace("\\","/",$targetPath);                                    
+			$targetPath=str_replace("\\\\","\\",$targetPath);
+			$targetPath=str_replace(Gc::$nav_root_path,"",$targetPath);
+			$targetPath=str_replace("\\","/",$targetPath);
 			if($immediate=='1')$targetPath='!'.$urlbase.$targetPath;
 			//*****************end  :modify by skygreen**************************
 			if($msgType==1)$msg="'$targetPath'";
