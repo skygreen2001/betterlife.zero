@@ -185,7 +185,7 @@ class UtilString extends Util
 	 */
 	public static function utf82gbk($string)
 	{
-		return iconv("utf-8","gbk",$string);
+		return iconv("utf-8","gbk//IGNORE",$string);
 	}
 
     /**
