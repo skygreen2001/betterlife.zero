@@ -199,7 +199,7 @@ class UtilZipfile
 		if (is_array($files)){
 			foreach($files as $showName => $file)
 			{
-				if (UtilString::is_utf8($file)) $file=UtilString::utf82gbk($file);
+				if (contain(strtolower(php_uname()),"Windows")) if (UtilString::is_utf8($file)) $file=UtilString::utf82gbk($file);
 				if (is_file($file)) //directory check
 				{
 					$data = implode("",file($file));
@@ -207,7 +207,7 @@ class UtilZipfile
 				}
 			}
 		}else if (is_string($files)){
-			if (UtilString::is_utf8($file)) $file=UtilString::utf82gbk($file);
+			if (contain(strtolower(php_uname()),"Windows")) if (UtilString::is_utf8($file)) $file=UtilString::utf82gbk($file);
 			if (is_file($files)){
 				$data = implode("",file($files));
 				$this->addFile($data,$files,$showName);
