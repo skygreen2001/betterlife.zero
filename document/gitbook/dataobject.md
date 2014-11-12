@@ -4,6 +4,7 @@
 文件名称：DataObject.php
 github路径:https://github.com/skygreen2001/betterlife/blob/master/core/model/DataObject.php
 
+每个数据对象都继承它，可以使用以下方法直接执行数据库的操作
 
 定义通用方法说明如下
 实例方法【需实例化数据对象】
@@ -39,3 +40,4 @@ github路径:https://github.com/skygreen2001/betterlife/blob/master/core/model/D
 * sum
 * countMultitable
 * queryPageMultitable
+

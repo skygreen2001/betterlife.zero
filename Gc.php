@@ -90,28 +90,28 @@ class Gc
 	 */
 	public static $nav_framework_path;//="C:\\wamp\\www\\betterlife\\";
 	/**
-	* 上传或者下载文件的路径
-	*
-	* @var mixed
-	*/
+	 * 上传或者下载文件的路径
+	 *
+	 * @var mixed
+	 */
 	public static $attachment_path;//="C:\\wamp\\www\\betterlife\\attachment\\";
 	/**
-	* 上传或者下载文件的网络路径[可删除]
-	*
-	* @var mixed
-	*/
+	 * 上传或者下载文件的网络路径
+	 *
+	 * @var mixed
+	 */
 	public static $attachment_url;//="http://localhost/betterlife/attachment/";
 	/**
-	* 上传图片的网络路径
-	*
-	* @var mixed
-	*/
+	 * 上传图片的网络路径
+	 *
+	 * @var mixed
+	 */
 	public static $upload_url;//="http://localhost/betterlife/upload/";
 	/**
-	* 上传图片的路径
-	*
-	* @var mixed
-	*/
+	 * 上传图片的路径
+	 *
+	 * @var mixed
+	 */
 	public static $upload_path;//="C:\\wamp\\www\\betterlife\\upload\\";
 	//</editor-fold>
 

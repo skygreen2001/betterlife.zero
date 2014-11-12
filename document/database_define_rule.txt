@@ -8,7 +8,7 @@
       库名缩写：bb
       目录名：core
       类名：Blog
-     所以订单表名:bb_core_blog
+     所以博客表名:bb_core_blog
   表名最后一段不能命名为特殊关键字如new：如bb_core_new
 
 *.每张表需定义字段：
