@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__)."/../../../../../Gc.php");
+require_once(dirname(__FILE__)."/../../../../../init.php");
 /**
  * Created by JetBrains PhpStorm.
  * User: taoqili
@@ -122,7 +122,18 @@ class Uploader
         } else { //移动成功
             $this->stateInfo = $this->stateMap[0];
         }
-        $this->fullName=Gc::$url_base.$this->fullName;
+
+        $url_base=UtilNet::urlbase();
+
+        if (contain(strtolower(php_uname()),"darwin")){
+            $file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+            if (contain($file_sub_dir,"home".DS))
+                $file_sub_dir=substr($file_sub_dir,0,strpos($file_sub_dir,"home".DS));
+            $domainSubDir=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir);
+            if(!endwith($urlbase,$domainSubDir))$urlbase.=$domainSubDir;
+        }
+
+        $this->fullName=$url_base.$this->fullName;
     }
 
     /**
