@@ -207,4 +207,22 @@ function print_pre($s,$isEcho=false)
 	}
 }
 
+/**
+ * 将字符串从unicode转为utf-8
+ * @param string $str 原内容
+ * @return string 新内容
+ */
+function unicode2utf8($str)
+{
+	if(!$str) return $str;
+	$decode = json_decode($str);
+	if($decode) return $decode;
+	$str = '["' . $str . '"]';
+	$decode = json_decode($str);
+	if(count($decode) == 1){
+		return $decode[0];
+	}
+	return $str;
+}
+
 ?>

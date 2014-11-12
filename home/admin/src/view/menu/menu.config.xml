@@ -4,7 +4,7 @@
 		<menu name="系统管理人员" id="admin" address="index.php?go=admin.betterlife.admin" />
 		<menu name="博客" id="blog" address="index.php?go=admin.betterlife.blog" />
 		<menu name="用户" id="user" address="index.php?go=admin.betterlife.user" />
-        <menu name="地区" id="region" address="index.php?go=admin.betterlife.region" />
+		<menu name="地区" id="region" address="index.php?go=admin.betterlife.region" />
 		<menu name="退出" id="logout" address="index.php?go=admin.index.logout" />
 	</menuGroup>
 	<menuGroup id="navProgram" lang="en" name="程序员区" iconCls="settings">

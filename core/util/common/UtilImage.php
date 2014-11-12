@@ -7,7 +7,7 @@
  * @package util.common
  * @author skygreen
  */
-class UtilImage 
+class UtilImage
 {
 	/**
 	 +----------------------------------------------------------<br/>
@@ -21,7 +21,7 @@ class UtilImage
 	 * @return mixed
 	 +----------------------------------------------------------
 	 */
-	public static function getImageInfo($img) 
+	public static function getImageInfo($img)
 	{
 		$imageInfo = getimagesize($img);
 		if( $imageInfo!== false) {
@@ -56,7 +56,7 @@ class UtilImage
 	 * @return void
 	 +----------------------------------------------------------
 	 */
-	public static function showImg($imgFile,$text='',$width=80,$height=30) 
+	public static function showImg($imgFile,$text='',$width=80,$height=30)
 	{
 		//获取图像文件信息
 		$info = self::getImageInfo($imgFile);
@@ -87,14 +87,14 @@ class UtilImage
 		imagestring($im, 4, 5, 5, "NO PIC", $tc);
 		self::output($im);
 		return ;
-	} 
+	}
 
 	/**
-	 * 从中心开始往外裁剪     
+	 * 从中心开始往外裁剪
 	 * @param mixed $src_file 源文件，若不指定，则为相对路径
-	 * @param mixed $dim_file 目标文件，若不指定，则为相对路径 
+	 * @param mixed $dim_file 目标文件，若不指定，则为相对路径
 	 * @param mixed $dimWidth 目标尺寸，若不写"%"，则为指定大小
-	 * @param mixed $dimHeight 目标尺寸，若不写"%"，则为指定大小  
+	 * @param mixed $dimHeight 目标尺寸，若不写"%"，则为指定大小
 	 * @return 图片
 	 * @else return  false
 	 */
@@ -102,7 +102,7 @@ class UtilImage
 	{
 		//获取原图信息
 		$info =self::getImageInfo($src_file);
-		
+
 		if($info !==false){
 			//设置src_file的信息
 			$srcWidth = $info['width'];
@@ -110,30 +110,30 @@ class UtilImage
 			$type = empty($type)?$info['type']:$type;
 			$type = strtolower($type);
 			unset($info);
-			
+
 			//计算是按照具体尺寸还是 %修改图片
 			if (contain($dimWidth,"%"))
 			{
 				$dimWidth=substr($dimWidth,0,(strlen($dimWidth)-1));
 				$dimWidth=$srcWidth*$maxWidth/100;
-			}    
+			}
 			else
 				$mWidth=$dimWidth;
-	
+
 			if (contain($dimHeight,"%"))
 			{
 				$dimHeight=substr($dimHeight,0,(strlen($dimHeight)-1));
 				$dimHeight=$srcHeight*$dimHeight/100;
-			}    
+			}
 			else
-				$dimHeight=$dimHeight; 
-					  
+				$dimHeight=$dimHeight;
+
 			//判断裁剪的大小是否溢出，若溢出，则按照原始大小作为裁剪大小
 			if($dimWidth>$srcWidth)
 				$dimWidth=$srcWidth;
 			if($dimHeight>$srcHeight)
 				$dimHeight=$srcHeight;
-				
+
 			//设定以中心位置散开后，开始裁剪的起始位置
 			$cut_x=($srcWidth-$dimWidth)/2;
 			$cut_y=($srcHeight-$dimHeight)/2;
@@ -141,19 +141,19 @@ class UtilImage
 			// 载入原图
 			$createFun = 'ImageCreateFrom'.($type=='jpg'?'jpeg':$type);
 			$srcImg = $createFun($src_file);
-			
+
 			//创建图片
-			if($type!='gif' && function_exists("imagecreatetruecolor")) {  
+			if($type!='gif' && function_exists("imagecreatetruecolor")) {
 				$dim = imagecreatetruecolor($dimWidth, $dimHeight);
-			} else {  
+			} else {
 				$dim = imagecreate($$dimWidthxx, $dimHeight);
-			}            
+			}
 
 			if('gif'==$type || 'png'==$type) {
 				$background_color  =  imagecolorallocate($dim,  0,255,0);  //  指派一个绿色
 				imagecolortransparent($dim,$background_color);  //  设置为透明色，若注释掉该行则输出绿色的图
 			}
-			
+
 			//图片开始裁剪
 			imagecopy ( $dim , $srcImg , "0" , "0" ,$cut_x ,$cut_y, $srcWidth , $srcHeight ) ;
 
@@ -162,15 +162,15 @@ class UtilImage
 			// 生成图片
 			$imageFun = 'image'.($type=='jpg'?'jpeg':$type);
 			$dim_file_dir=dirname($dim_file);
-			UtilFileSystem::createDir($dim_file_dir);   
+			UtilFileSystem::createDir($dim_file_dir);
 			$imageFun($dim,$dim_file);
 			imagedestroy($dim);
 			imagedestroy($srcImg);
 			return $dim_file;
 		}
-		return false;     
-	}    
-	
+		return false;
+	}
+
 	/**
 	 +----------------------------------------------------------<br/>
 	 * 生成缩略图<br/>
@@ -178,7 +178,7 @@ class UtilImage
 	 * @static
 	 * @access public
 	 +----------------------------------------------------------
-	 * @param string $image  原图文件名          
+	 * @param string $image  原图文件名
 	 * @param string $thumbname 缩略图文件名 example d://abc.jpg 则指向d盘下面
 	 * @param string $type 图像格式.如:jpg,png,gif
 	 * @param string $maxWidth 宽度 若带"%"  则表示比例
@@ -190,7 +190,7 @@ class UtilImage
 	 * @return void
 	 +----------------------------------------------------------
 	 */
-	public static function thumb($image,$thumbname,$type='',$maxWidth=200,$maxHeight=50,$interlace=true,$isStrict=false) 
+	public static function thumb($image,$thumbname,$type='',$maxWidth=200,$maxHeight=50,$interlace=true,$isStrict=false)
 	{
 		// 获取原图信息
 		$info  = self::getImageInfo($image);
@@ -201,23 +201,23 @@ class UtilImage
 			$type = strtolower($type);
 			$interlace  =  $interlace? 1:0;
 			unset($info);
-			
+
 			//计算是按照具体尺寸还是 %修改图片
 			if (contain($maxWidth,"%"))
 			{
 				$maxWidth=substr($maxWidth,0,(strlen($maxWidth)-1));
 				$mWidth=$srcWidth*$maxWidth/100;
-			}    
+			}
 			else
 				$mWidth=$maxWidth;
-	
+
 			if (contain($maxHeight,"%"))
 			{
 				$maxHeight=substr($maxHeight,0,(strlen($maxHeight)-1));
 				$mHeight=$srcHeight*$maxHeight/100;
-			}    
+			}
 			else
-				$mHeight=$maxHeight;           
+				$mHeight=$maxHeight;
 			$scale = min($mWidth/$srcWidth, $mHeight/$srcHeight); // 计算缩放比例
 			if ($isStrict){
 				$width   =  $mWidth;
@@ -257,7 +257,7 @@ class UtilImage
 			}
 
 			// 对jpeg图形设置隔行扫描
-			if('jpg'==$type || 'jpeg'==$type)     imageinterlace($thumbImg,$interlace);
+			if('jpg'==$type || 'jpeg'==$type)	 imageinterlace($thumbImg,$interlace);
 
 			//$gray=ImageColorAllocate($thumbImg,255,0,0);
 			//ImageString($thumbImg,2,5,5,"ThinkPHP",$gray);
@@ -290,7 +290,7 @@ class UtilImage
 	 * @return string
 	 +----------------------------------------------------------
 	 */
-	public static function buildString($string,$rgb=array(),$filename='',$type='png',$disturb=1,$border=true,$font='simhei.ttf,8',$size=array(48,22)) 
+	public static function buildString($string,$rgb=array(),$filename='',$type='png',$disturb=1,$border=true,$font='simhei.ttf,8',$size=array(48,22))
 	{
 		if(is_string($size)) {
 			$size=explode(',',$size);
@@ -315,9 +315,9 @@ class UtilImage
 		}else {
 			$color = imagecolorallocate($im, $rgb[0], $rgb[1], $rgb[2]);
 		}
-		$backColor = imagecolorallocate($im, 255,255,255);    //背景色（随机）
-		$borderColor = imagecolorallocate($im, 100, 100, 100);                    //边框色
-		$pointColor = imagecolorallocate($im,mt_rand(0,255),mt_rand(0,255),mt_rand(0,255));                 //点颜色
+		$backColor = imagecolorallocate($im, 255,255,255);	//背景色（随机）
+		$borderColor = imagecolorallocate($im, 100, 100, 100);					//边框色
+		$pointColor = imagecolorallocate($im,mt_rand(0,255),mt_rand(0,255),mt_rand(0,255));				 //点颜色
 
 		@imagefilledrectangle($im, 0, 0, $width - 1, $height - 1, $backColor);
 		@imagerectangle($im, 0, 0, $width-1, $height-1, $borderColor);
@@ -353,11 +353,11 @@ class UtilImage
 	 * @return string
 	 +----------------------------------------------------------
 	 */
-	public static function buildImageVerify($length=4,$mode=1,$type='png',$width=48,$height=22,$verifyName='verify') 
+	public static function buildImageVerify($length=4,$mode=1,$type='png',$width=48,$height=22,$verifyName='verify')
 	{
 		HttpSession::init();
 		$randval = UtilString::rand_string($length,$mode);
-		HttpSession::set($verifyName,md5($randval));//存入Session     
+		HttpSession::set($verifyName,md5($randval));//存入Session
 		$width = ($length*10+10)>$width?$length*10+10:$width;
 		if ( $type!='gif' && function_exists('imagecreatetruecolor')) {
 			$im = @imagecreatetruecolor($width,$height);
@@ -370,8 +370,8 @@ class UtilImage
 		$key = mt_rand(0,3);
 
 		$backColor=  imagecolorallocate($im,64,64,64);
-		$borderColor = imagecolorallocate($im, 100, 100, 100);                    //边框色
-		$pointColor = imagecolorallocate($im,mt_rand(0,255),mt_rand(0,255),mt_rand(0,255));                 //点颜色
+		$borderColor = imagecolorallocate($im, 100, 100, 100);					//边框色
+		$pointColor = imagecolorallocate($im,mt_rand(0,255),mt_rand(0,255),mt_rand(0,255));				 //点颜色
 
 		@imagefilledrectangle($im, 0, 0, $width - 1, $height - 1, $backColor);
 		@imagerectangle($im, 0, 0, $width-1, $height-1, $borderColor);
@@ -382,7 +382,7 @@ class UtilImage
 		}
 		self::output($im,$type);
 	}
-	
+
 	/**
 	 +----------------------------------------------------------<br/>
 	 * 生成图像验证码<br/>
@@ -399,7 +399,7 @@ class UtilImage
 	 * @return string
 	 +----------------------------------------------------------
 	 */
-	public static function buildImageVerifyAdvanced($length=4,$mode=1,$type='png',$width=48,$height=22,$verifyName='verify') 
+	public static function buildImageVerifyAdvanced($length=4,$mode=1,$type='png',$width=48,$height=22,$verifyName='verify')
 	{
 		session_start();
 		$randval = UtilString::rand_string($length,$mode);
@@ -415,9 +415,9 @@ class UtilImage
 		$b = Array(225,236,166,125);
 		$key = mt_rand(0,3);
 
-		$backColor = imagecolorallocate($im, $r[$key],$g[$key],$b[$key]);    //背景色（随机）
-		$borderColor = imagecolorallocate($im, 100, 100, 100);                    //边框色
-		$pointColor = imagecolorallocate($im,mt_rand(0,255),mt_rand(0,255),mt_rand(0,255));                 //点颜色
+		$backColor = imagecolorallocate($im, $r[$key],$g[$key],$b[$key]);	//背景色（随机）
+		$borderColor = imagecolorallocate($im, 100, 100, 100);					//边框色
+		$pointColor = imagecolorallocate($im,mt_rand(0,255),mt_rand(0,255),mt_rand(0,255));				 //点颜色
 
 		@imagefilledrectangle($im, 0, 0, $width - 1, $height - 1, $backColor);
 		@imagerectangle($im, 0, 0, $width-1, $height-1, $borderColor);
@@ -434,7 +434,7 @@ class UtilImage
 		for($i=0;$i<$length;$i++) {
 			imagestring($im,5,$i*10+5,mt_rand(1,8),$randval{$i}, $stringColor);
 		}
-//        @imagestring($im, 5, 5, 3, $randval, $stringColor);
+//		@imagestring($im, 5, 5, 3, $randval, $stringColor);
 		self::output($im,$type);
 	}
 
@@ -452,13 +452,13 @@ class UtilImage
 	 * @param string $fontface 字体信息 fontface,fontsize 或者 array(fontface,fontsize)
 	 * @param Image $verifyName 中文验证码
 	 */
-	public static function GBVerify($length=4,$type='png',$width=180,$height=50,$fontface='simhei.ttf',$verifyName='verify') 
+	public static function GBVerify($length=4,$type='png',$width=180,$height=50,$fontface='simhei.ttf',$verifyName='verify')
 	{
 		$code = UtilString::rand_string($length,4);
 		$width = ($length*45)>$width?$length*45:$width;
 		$_SESSION[$verifyName]= md5($code);
 		$im=imagecreatetruecolor($width,$height);
-		$borderColor = imagecolorallocate($im, 100, 100, 100);                    //边框色
+		$borderColor = imagecolorallocate($im, 100, 100, 100);					//边框色
 		$bkcolor=imagecolorallocate($im,250,250,250);
 		imagefill($im,0,0,$bkcolor);
 		@imagerectangle($im, 0, 0, $width-1, $height-1, $borderColor);
@@ -495,7 +495,7 @@ class UtilImage
 	 * @return string
 	 +----------------------------------------------------------
 	 */
-	public static function showASCIIImg($image,$string='',$type='') 
+	public static function showASCIIImg($image,$string='',$type='')
 	{
 		$info  = self::getImageInfo($image);
 		if($info !== false) {
@@ -503,7 +503,7 @@ class UtilImage
 			unset($info);
 			// 载入原图
 			$createFun = 'ImageCreateFrom'.($type=='jpg'?'jpeg':$type);
-			$im     = $createFun($image);
+			$im	 = $createFun($image);
 			$dx = imagesx($im);
 			$dy = imagesy($im);
 			$i	=	0;
@@ -539,7 +539,7 @@ class UtilImage
 	 * @return string
 	 +----------------------------------------------------------
 	 */
-	public static function showAdvVerify($type='png',$width=180,$height=40,$verifyName='verifyCode') 
+	public static function showAdvVerify($type='png',$width=180,$height=40,$verifyName='verifyCode')
 	{
 		$rand	=	range('a','z');
 		shuffle($rand);
@@ -552,7 +552,7 @@ class UtilImage
 		$b = array(225,236,166,125);
 		$key = mt_rand(0,3);
 		$backColor = imagecolorallocate($im, $r[$key],$g[$key],$b[$key]);
-		$borderColor = imagecolorallocate($im, 100, 100, 100);                    //边框色
+		$borderColor = imagecolorallocate($im, 100, 100, 100);					//边框色
 		imagefilledrectangle($im, 0, 0, $width - 1, $height - 1, $backColor);
 		imagerectangle($im, 0, 0, $width-1, $height-1, $borderColor);
 		$numberColor = imagecolorallocate($im, 255,rand(0,100), rand(0,100));
@@ -587,7 +587,7 @@ class UtilImage
 	 * @return string
 	 +----------------------------------------------------------
 	 */
-	public static function UPCA($code,$type='png',$lw=2,$hi=100) 
+	public static function UPCA($code,$type='png',$lw=2,$hi=100)
 	{
 		static $Lencode = array('0001101','0011001','0010011','0111101','0100011',
 		'0110001','0101111','0111011','0110111','0001011');
@@ -656,7 +656,7 @@ class UtilImage
 		self::output($im,$type);
 	}
 
-	private static function output($im,$type='png',$filename='') 
+	private static function output($im,$type='png',$filename='')
 	{
 		header("Content-type: image/".$type);
 		$ImageFun='image'.$type;
