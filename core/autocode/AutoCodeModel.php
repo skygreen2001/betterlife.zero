@@ -364,12 +364,25 @@ class AutoCodeModel extends AutoCode
 	 */
 	public static function overwrite($files,$model_save_dir)
 	{
+		$overwrite_not_arr=array();//发现Mac电脑因为权限不能写文件需提示
 		foreach ($files as $file)
 		{
 			$file_overwrite=Gc::$nav_root_path.Gc::$module_root.DS.$file;
 			$content=file_get_contents($model_save_dir.$file);
-			UtilFileSystem::createDir(dirname($file_overwrite));
-			file_put_contents($file_overwrite, $content);
+			$dir_overwrite=dirname($file_overwrite);
+			UtilFileSystem::createDir($dir_overwrite);
+			file_put_contents($file_overwrite, $content) or
+			$overwrite_not_arr[]=$dir_overwrite;
+		}
+		if(count($overwrite_not_arr)>0){
+			$overwrite_not_dir_str="";
+			foreach ($overwrite_not_arr as $overwrite_not_dir) {
+				$overwrite_not_dir_str.="sudo mkdir -p ".$overwrite_not_dir."<br/>".str_repeat("&nbsp;",8).
+				"sudo chmod -R 0777 ".$overwrite_not_dir."<br/>".str_repeat("&nbsp;",8);
+			}
+			die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>因为安全原因，需要手动在操作系统中创建目录:".Gc::$attachment_path."<br/>".
+				"Linux系统需要执行指令:<br/>".str_repeat("&nbsp;",8).
+				$overwrite_not_dir_str."</p>");
 		}
 
 	}
