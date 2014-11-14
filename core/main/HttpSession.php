@@ -14,7 +14,13 @@ class HttpSession
 	 */
 	public static function init()
 	{
-		if(!isset($_SESSION))session_start();
+		if(!isset($_SESSION))
+		{
+			session_start() or
+			die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>需要手动修改php.ini文件以下配置,并重启:<br/>".str_repeat("&nbsp;",8).
+				"session.save_path = \"/tmp\"<br/>".str_repeat("&nbsp;",8)).
+				"请注意save_path路径，网站拥有者是否有权限可以访问！</p>";
+		}
 	}
 
 	/**
@@ -95,7 +101,7 @@ class HttpSession
 	 */
 	public static function remove($key)
 	{
-        if (empty($_SESSION))self::init();
+		if (empty($_SESSION))self::init();
 		if(isset($_SESSION[$key])) {
 			unset($_SESSION[$key]);
 		}
@@ -108,7 +114,7 @@ class HttpSession
 	 */
 	public static function removes($keys)
 	{
-        if (empty($_SESSION))self::init();
+		if (empty($_SESSION))self::init();
 		if ($keys&&is_array($keys)&&(count($keys)>0))
 		{
 			foreach ($keys as $key) {
