@@ -379,7 +379,7 @@ class Gc
 			$file_sub_dir=str_replace("/", DIRECTORY_SEPARATOR, $file_sub_dir);
 			$file_sub_dir=str_replace(Gc::$nav_root_path, "", $file_sub_dir);
 			$file_sub_dir=str_replace(DIRECTORY_SEPARATOR, "/", $file_sub_dir);
-			Gc::$url_base=str_replace($file_sub_dir, "", Gc::$url_base);
+			Gc::$url_base=str_replace(strtolower($file_sub_dir), "", strtolower(Gc::$url_base));
 			if (empty(Gc::$attachment_url)){
 				Gc::$attachment_url=Gc::$url_base;
 				$same_part=explode(DIRECTORY_SEPARATOR,Gc::$nav_root_path);

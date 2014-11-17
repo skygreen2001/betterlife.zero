@@ -150,42 +150,42 @@ class MenuGroup extends Viewable
 	 */
 	public function getByID()
 	{
-	   $menuConfig= $this->getMenuConfigs();
-	   if ($menuConfig!=null)
-	   {
-		   $menuGroup = $menuConfig->xpath("//menuGroup[@id='$this->id']");
-		   if (is_array($menuGroup)&&count($menuGroup)>0)
-		   {
-			   $menuGroup=$menuGroup[0];
-			   $attributes=$menuGroup->attributes();
-			   $this->id= $attributes->id."";
-			   if (empty($this->name))
-			   {
+		$menuConfig= $this->getMenuConfigs();
+		if ($menuConfig!=null)
+		{
+			$menuGroup = $menuConfig->xpath("//menuGroup[@id='$this->id']");
+			if (is_array($menuGroup)&&count($menuGroup)>0)
+			{
+				$menuGroup=$menuGroup[0];
+				$attributes=$menuGroup->attributes();
+				$this->id= $attributes->id."";
+				if (empty($this->name))
+				{
 					$this->name= $attributes->name."";
-			   }
-			   $this->lang= $attributes->lang."";
-			   $this->iconCls= $attributes->iconCls."";
+				}
+				$this->lang= $attributes->lang."";
+				$this->iconCls= $attributes->iconCls."";
 
-			   if (empty($this->menus)||(!is_array($this->menus))){
-				   $this->menus=array();
-				   foreach ($menuGroup->menu as $menuItem)
-				   {
-					   $attributes=$menuItem->attributes();
-					   $menu=new Menu();
-					   $menu->setId($attributes->id."");
-					   $menu->setName($attributes->name."");
-					   $address=$attributes->address;
-					   if (!startWith($address, "http")){
-						   $address=Gc::$url_base.$address;
-					   }
-					   $menu->setAddress($address."");
-					   $menu->setTitle($attributes->title."");
-					   $menu->setIconCls($attributes->iconCls."");
-					   $menu->setLang($attributes->lang."");
-					   $this->menus[]=$menu;
-				   }
-			   }
-		   }
+				if (empty($this->menus)||(!is_array($this->menus))){
+					$this->menus=array();
+					foreach ($menuGroup->menu as $menuItem)
+					{
+						$attributes=$menuItem->attributes();
+						$menu=new Menu();
+						$menu->setId($attributes->id."");
+						$menu->setName($attributes->name."");
+						$address=$attributes->address;
+						if (!startWith($address, "http")){
+							$address=Gc::$url_base.$address;
+						}
+						$menu->setAddress($address."");
+						$menu->setTitle($attributes->title."");
+						$menu->setIconCls($attributes->iconCls."");
+						$menu->setLang($attributes->lang."");
+						$this->menus[]=$menu;
+					}
+				}
+			}
 		}
 		unset($this->menuConfigs);
 		return $this;
@@ -230,7 +230,7 @@ class MenuGroup extends Viewable
 				$id= $attributes->id."";
 				$lang=$attributes->lang."";
 				if (empty($lang)){
-				   $lang="cn";
+					$lang="cn";
 				}
 				if ($returnType==EnumReturnType::DATAOBJECT){
 					$menuG=new MenuGroup($id);
@@ -252,11 +252,11 @@ class MenuGroup extends Viewable
 	/**
 	 * 菜单总计数
 	 * @param object|string|array $filter<br/>
-	 *      $filter 格式示例如下：<br/>
-	 *          0.允许对象如new User(id="1",name="green");<br/>
-	 *          1."id=1","name='sky'"<br/>
-	 *          2.array("id=1","name='sky'")<br/>
-	 *          3.array("id"=>"1","name"=>"sky")
+	 *		$filter 格式示例如下：<br/>
+	 *			 0.允许对象如new User(id="1",name="green");<br/>
+	 *			 1."id=1","name='sky'"<br/>
+	 *			 2.array("id=1","name='sky'")<br/>
+	 *			 3.array("id"=>"1","name"=>"sky")
 	 * @return 菜单总计数
 	 */
 	public static function count($filter=null)
@@ -286,16 +286,16 @@ class MenuGroup extends Viewable
 	/**
 	 * 菜单对象分页
 	 * @param string $xmlObject_classname 具体的Xml对象类名
-	 * @param int $startPoint  分页开始记录数
-	 * @param int $endPoint    分页结束记录数
+	 * @param int $startPoint 分页开始记录数
+	 * @param int $endPoint 分页结束记录数
 	 * @param string|array $filter 过滤条件
 	 * 示例如下：<br/>
-	 *      string[只有一个查询条件]
-	 *      1. id="1"--精确查找
-	 *      2. name contain 'sky'--模糊查找
-	 *      array[多个查询条件]
-	 *      1.array("id"=>"1","name"=>"sky")<br/>--精确查找
-	 *      2.array("id"=>"1","name contain 'sky'")<br/>--模糊查找
+	 *		string[只有一个查询条件]
+	 *		1. id="1"--精确查找
+	 *		2. name contain 'sky'--模糊查找
+	 *		array[多个查询条件]
+	 *		1.array("id"=>"1","name"=>"sky")<br/>--精确查找
+	 *		2.array("id"=>"1","name contain 'sky'")<br/>--模糊查找
 	 * @return mixed 对象分页
 	 */
 	public static function queryPage($startPoint,$endPoint,$filter=null)
@@ -339,17 +339,17 @@ class MenuGroup extends Viewable
 				$isShow=true;
 				if (isset($attributes->show)&&$attributes->show=='false')$isShow=false;
 				if ($isShow) {
-					$result.="          {\r\n".
-							 "              contentEl:'$attributes->id',\r\n".
-							 "              title:'$attributes->name',\r\n".
-							 "              border: false,\r\n".
-							 "              iconCls: '$attributes->iconCls'\r\n".
-							 "          },\r\n";
+					$result.="			{\r\n".
+							 "				contentEl:'$attributes->id',\r\n".
+							 "				title:'$attributes->name',\r\n".
+							 "				border: false,\r\n".
+							 "				iconCls: '$attributes->iconCls'\r\n".
+							 "			},\r\n";
 				}
 			}
 		}
 		$result=substr($result,0,strlen($result)-3);
-		$result.="          ];";
+		$result.="			];";
 		if (Gc::$is_online_optimize){
 			$result=UtilString::online_optimize($result);
 		}
