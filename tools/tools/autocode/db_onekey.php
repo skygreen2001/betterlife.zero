@@ -19,17 +19,17 @@ if(Config_AutoCode::AFTER_MODEL_CONVERT_ADMIN){
 	AutoCodeModelLike::UserInput();
 	if (isset($_REQUEST["save_dir"])&&!empty($_REQUEST["save_dir"]))
 	{
-	    $save_dir=$_REQUEST["save_dir"];
-	    AutoCodeModelLike::$save_dir =$save_dir;
+		$save_dir=$_REQUEST["save_dir"];
+		AutoCodeModelLike::$save_dir =$save_dir;
 
-	    $table_names=$_GET["table_names"];
-	    if(empty($table_names)){
-	    	die("<div align='center'><font color='red'>至少选择一张表,请确认！</font></div>");
-	    }else{
-	        AutoCodeConfig::Decode();
-	        AutoCodeModelLike::$showReport="";
-	        AutoCodeModelLike::AutoCode($table_names);
-	    }
+		$table_names=$_GET["table_names"];
+		if(empty($table_names)){
+			die("<div align='center'><font color='red'>至少选择一张表,请确认！</font></div>");
+		}else{
+			AutoCodeConfig::Decode();
+			AutoCodeModelLike::$showReport="";
+			AutoCodeModelLike::AutoCode($table_names);
+		}
 
 		$admin_url=Gc::$url_base."admin/";
 
@@ -77,17 +77,17 @@ if(Config_AutoCode::AFTER_MODEL_CONVERT_ADMIN){
 	AutoCodeModel::UserInput();
 	if (isset($_REQUEST["save_dir"])&&!empty($_REQUEST["save_dir"]))
 	{
-	    $save_dir=$_REQUEST["save_dir"];
-	    AutoCodeModel::$save_dir =$save_dir;
+		$save_dir=$_REQUEST["save_dir"];
+		AutoCodeModel::$save_dir =$save_dir;
 
-	    $table_names=$_GET["table_names"];
-	    if(empty($table_names)){
-	    	die("<div align='center'><font color='red'>至少选择一张表,请确认！</font></div>");
-	    }else{
-	        AutoCodeConfig::Decode();
-	        AutoCodeModel::$showReport="";
-	        AutoCodeModel::AutoCode($table_names);
-	    }
+		$table_names=$_GET["table_names"];
+		if(empty($table_names)){
+			die("<div align='center'><font color='red'>至少选择一张表,请确认！</font></div>");
+		}else{
+			AutoCodeConfig::Decode();
+			AutoCodeModel::$showReport="";
+			AutoCodeModel::AutoCode($table_names);
+		}
 
 		$admin_url=Gc::$url_base."admin/";
 

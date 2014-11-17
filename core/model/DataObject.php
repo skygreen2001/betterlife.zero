@@ -317,6 +317,11 @@ abstract class DataObject extends Object implements ArrayAccess
 	public function save()
 	{
 		$this->onBeforeWrite();
+		$id= $this->getId();
+		if (empty($id)){
+			$idColumn=DataObjectSpec::getRealIDColumnName($this);
+			unset($this->{$idColumn});
+		}
 		return self::dao()->save($this);
 	}
 
