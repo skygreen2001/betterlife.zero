@@ -34,7 +34,7 @@ class Region extends DataObject
 	 * 1:省-province<br/>
 	 * 2:市-city<br/>
 	 * 3:区-region<br/>
-	 * 
+	 *
 	 * @var enum
 	 * @access public
 	 */
@@ -54,7 +54,17 @@ class Region extends DataObject
 		"region_p"=>"Region"
 	);
 
-	/** 
+	/**
+	 * 规格说明:外键声明
+	 * @var array
+	 */
+	public $field_spec=array(
+		EnumDataSpec::FOREIGN_ID=>array(
+			"region_p"=>"parent_id"
+		)
+	);
+
+	/**
 	 * 显示地区类型<br/>
 	 * 0:国家-country<br/>
 	 * 1:省-province<br/>
@@ -67,7 +77,7 @@ class Region extends DataObject
 		return self::region_typeShow($this->region_type);
 	}
 
-	/** 
+	/**
 	 * 显示地区类型<br/>
 	 * 0:国家-country<br/>
 	 * 1:省-province<br/>
@@ -81,7 +91,7 @@ class Region extends DataObject
 	}
 
 	/**
-	 * 最高的层次，默认为3 
+	 * 最高的层次，默认为3
 	 */
 	public static function maxlevel()
 	{

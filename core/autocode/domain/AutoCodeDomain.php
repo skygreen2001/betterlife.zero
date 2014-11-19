@@ -108,11 +108,11 @@ class AutoCodeDomain extends AutoCode
 					$result="<?php\r\n".
 							 "/**\r\n".
 							 " *---------------------------------------<br/>\r\n".
-							 " * 枚举类型:$comment  <br/> \r\n".
+							 " * 枚举类型:$comment  <br/>\r\n".
 							 " *---------------------------------------<br/>\r\n".
 							 " * @category $category\r\n".
 							 " * @package domain\r\n".
-							 " * @subpackage enum \r\n".
+							 " * @subpackage enum\r\n".
 							 " * @author $author\r\n".
 							 " */\r\n".
 							 "class $enumclassname extends Enum\r\n".
@@ -131,17 +131,17 @@ class AutoCodeDomain extends AutoCode
 					$comment  =str_replace("\r", "	 * ", $comment);
 					$comment  =str_replace("\n", "	 * ", $comment);
 					$comment  =str_replace("	 * ", "<br/>\r\n	 * ", $comment);
-					$result.="	/** \r\n".
+					$result.="	/**\r\n".
 							 "	 * 显示".$comment."<br/>\r\n".
 							 "	 */\r\n".
 							 "	public static function {$fieldname}Show(\${$fieldname})\r\n".
 							 "	{\r\n".
-							 "	   switch(\${$fieldname}){ \r\n";
+							 "	   switch(\${$fieldname}){\r\n";
 					foreach ($enum_columnDefine as $enum_column) {
 						$enumname=strtoupper($enum_column['name']) ;
 						$enumcomment=$enum_column['comment'];
 						$result.="			case self::{$enumname}:\r\n".
-								 "				return \"{$enumcomment}\"; \r\n";
+								 "				return \"{$enumcomment}\";\r\n";
 					}
 					$result.="	   }\r\n";
 					$result.="	   return \"未知\";\r\n".
@@ -150,18 +150,18 @@ class AutoCodeDomain extends AutoCode
 					if (count($comment)>0){
 						$comment=$comment[0];
 					}
-					$result.="	/** \r\n".
+					$result.="	/**\r\n".
 							 "	 * 根据{$comment}显示文字获取{$comment}<br/>\r\n".
 							 "	 * @param mixed \${$fieldname}Show {$comment}显示文字\r\n".
 							 "	 */\r\n".
 							 "	public static function {$fieldname}ByShow(\${$fieldname}Show)\r\n".
 							 "	{\r\n".
-							 "	   switch(\${$fieldname}Show){ \r\n";
+							 "	   switch(\${$fieldname}Show){\r\n";
 					foreach ($enum_columnDefine as $enum_column) {
 						$enumname=strtoupper($enum_column['name']);
 						$enumcomment=$enum_column['comment'];
 						$result.="			case \"{$enumcomment}\":\r\n".
-								 "				return self::{$enumname}; \r\n";
+								 "				return self::{$enumname};\r\n";
 					}
 					$result.="	   }\r\n";
 					if (!empty($enum_columnDefine)&&(count($enum_columnDefine)>0)){
@@ -332,6 +332,22 @@ class AutoCodeDomain extends AutoCode
 						"	static \$belong_has_one=array(\r\n".
 						$belong_has_one_effect."\r\n".
 						"	);\r\n";
+				$classname_lc=$classname;
+				$classname_lc{0}=strtolower($classname_lc{0});
+				foreach ($belong_has_one as $key=>$value) {
+					if($value==$classname_lc."_p"){
+						$result.="\r\n".
+								"	/**\r\n".
+								"	 * 规格说明:外键声明\r\n".
+								"	 * @var array\r\n".
+								"	 */\r\n".
+								"	public \$field_spec=array(\r\n".
+								"		EnumDataSpec::FOREIGN_ID=>array(\r\n".
+								"			\"".$classname_lc."_p"."\"=>\"parent_id\"\r\n".
+								"		)\r\n".
+								"	);\r\n";
+					}
+				}
 			}
 			//导出一对多关系规范定义(如果存在)
 			if (array_key_exists("has_many",$relationSpec))
@@ -442,7 +458,7 @@ class AutoCodeDomain extends AutoCode
 					$comment  =str_replace("\n", "	 * ", $comment);
 					$comment  =str_replace("	 * ", "<br/>\r\n	 * ", $comment);
 					$result.= "\r\n".
-							  "	/** \r\n".
+							  "	/**\r\n".
 							  "	 * 显示".$comment."<br/>\r\n".
 							  "	 */\r\n";
 					$enumclassname=self::enumClassName($fieldname,$tablename);
@@ -474,7 +490,7 @@ class AutoCodeDomain extends AutoCode
 					$comment  =str_replace("\n", "	 * ", $comment);
 					$comment  =str_replace("	 * ", "<br/>\r\n	 * ", $comment);
 					$result.= "\r\n".
-							  "	/** \r\n".
+							  "	/**\r\n".
 							  "	 * 显示".$comment."<br/>\r\n".
 							  "	 */\r\n";
 					$enumclassname=self::enumClassName($fieldname,$tablename);
@@ -513,7 +529,7 @@ class AutoCodeDomain extends AutoCode
 		}
 		if (array_key_exists("level",$fieldInfo)){
 			$result.="	/**\r\n".
-					 "	 * 最高的层次，默认为3 \r\n".
+					 "	 * 最高的层次，默认为3\r\n".
 					 "	 */\r\n".
 					 "	public static function maxlevel()\r\n".
 					 "	{\r\n".
@@ -521,7 +537,7 @@ class AutoCodeDomain extends AutoCode
 					 "	}\r\n\r\n";
 		}else if (array_key_exists("region_type",$fieldInfo)){
 			$result.="	/**\r\n".
-					 "	 * 最高的层次，默认为3 \r\n".
+					 "	 * 最高的层次，默认为3\r\n".
 					 "	 */\r\n".
 					 "	public static function maxlevel()\r\n".
 					 "	{\r\n".
