@@ -161,7 +161,7 @@ div.x-tab-strip-wrap .add-tab a span.x-tab-strip-inner {
 .viewdoblock .content img{
 	max-height:600px;
 	max-width:600px;
-	*bottom:50%;*
+/*	*bottom:50%;*/
 	right:50%;
 	margin:0 auto;
 }
