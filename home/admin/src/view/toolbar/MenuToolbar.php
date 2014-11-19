@@ -4,17 +4,17 @@
  +---------------------------------<br/>
  * 菜单分组<br/>
  +---------------------------------
- * @category betterlife
+ * @category jiabo
  * @package web.back
  * @subpackage menu
- * @author skygreen skygreen2001@gmail.com
+ *
  */
-class MenuGroup extends Viewable
+class MenuToolbar extends Viewable
 {
 	/**
 	 * 菜单配置文件
 	 */
-	const CONFIG_LEFTMENU_FILE="leftmenu.config.xml";
+	const CONFIG_TOOLBAR_FILE="toolbar.config.xml";
 	/**
 	 * 编号
 	 * @var string
@@ -124,7 +124,7 @@ class MenuGroup extends Viewable
 	 */
 	public static function address()
 	{
-		return dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.self::CONFIG_LEFTMENU_FILE;
+		return dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.self::CONFIG_TOOLBAR_FILE;
 	}
 
 
@@ -452,53 +452,65 @@ class MenuGroup extends Viewable
 	}
 
 	/**
-	 * ExtJs菜单显示
+	 * ExtJs工具栏显示
 	 */
 	public static function viewForExtJs()
 	{
 		//生成ExtJs左侧主菜单，若是没有进入主菜单下子菜单的权限，则不予显示
 		$admin=HttpSession::get("admin");
 		$roletype=$admin->roletype;
-		if($roletype==EnumRoletype::SUPERADMIN){
+		$uri=self::address();
+		$menuConfigs=UtilXmlSimple::fileXmlToObject($uri);
+		$roletype=EnumRoletype::roletypeEnumKey($roletype);
+		$menuConfigs = $menuConfigs->xpath("//roleplayer[@id='$roletype']");
+		$menuConfigs = $menuConfigs[0]->menuGroups;
+		$menuConfigs=$menuConfigs->menuGroup;
+		if(!array_key_exists("@attributes", $menuConfigs)){
 			$uri=Menu::address();
 			$menuConfigs=UtilXmlSimple::fileXmlToObject($uri);
-		}else{
-			$uri=self::address();
-			$menuConfigs=UtilXmlSimple::fileXmlToObject($uri);
-			$roletype=EnumRoletype::roletypeEnumKey($roletype);
-			$menuConfigs = $menuConfigs->xpath("//roleplayer[@id='$roletype']");
-			$menuConfigs = $menuConfigs[0]->menuGroups;
-			$menuConfigs=$menuConfigs->menuGroup;
-			if(!array_key_exists("@attributes", $menuConfigs)){
-				$uri=Menu::address();
-				$menuConfigs=UtilXmlSimple::fileXmlToObject($uri);
-			}
 		}
 
-		$result=Gc::$appName_alias.".Layout.LeftMenuGroups= [\r\n";
+		$result="";
+		$tbgStr="";
 		if ($menuConfigs!=null)
 		{
+			$count=0;
 			foreach ($menuConfigs as $menuGroup)
 			{
-				$attributes=$menuGroup->attributes();
-				//判断是否拥有进入子菜单的权限
+				$attributesG=$menuGroup->attributes();
+				$menusStr="";
+				$count+=1;
+				$tbgStr.="toolbarG".$count.",";
+				$menuCount=0;
 				foreach ($menuGroup->menu as $menu)
 				{
-					$result.="{
-						contentEl:'$attributes->id',
-						title:'$attributes->name',
-						border: false,
-						iconCls: '$attributes->iconCls'},";
-					break;
+					$attributes=$menu->attributes();
+					$menuCount+=1;
+					$paa=Gc::$appName_alias;
+					$menusStr.="
+					{text: '$attributes->name',iconCls: 'page',ref:'../b{$attributes->id}s',handler:function(){
+						$paa.Navigation.AddTabbyUrl($paa.Layout.CenterPanel,'$attributes->name','$attributes->address','{$attributes->id}');
+					}},";
+				}
+				if(!empty($menusStr)){
+					$menusStr=substr($menusStr, 0, strlen($menusStr)-1);
+					$result.="
+			var toolbarG$count={xtype: 'buttongroup',title: '$attributesG->name',columns: $menuCount,defaults: {scale: 'small'},
+				 items: [
+				 	$menusStr
+			]};
+					";
 				}
 			}
 		}
-		if (contain($result,"contentEl")){
-			$result=substr($result,0,strlen($result)-1);
-		}
-		$result.="];";
+
 		if (Gc::$is_online_optimize){
 			$result=UtilString::online_optimize($result);
+		}
+
+		if(!empty($tbgStr)){
+			$tbgStr=substr($tbgStr, 0,strlen($tbgStr)-1);
+			$result.="			var toolbars=new Array($tbgStr);";
 		}
 		return $result;
 	}

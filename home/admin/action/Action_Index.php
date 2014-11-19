@@ -4,7 +4,7 @@
  * 控制器:网站后台管理首页|登录|登出<br/>
  +---------------------------------
  * @category betterlife
- * @package  web.back.admin
+ * @package web.back.admin
  * @subpackage action
  * @author skygreen
  */
@@ -31,7 +31,7 @@ class Action_Index extends ActionExt
 			if (empty($admindata)) {
 				$this->view->set("message","用户名或者密码错误");
 			}else {
-				HttpSession::set('admin_id',$admindata->admin_id);
+				HttpSession::sets(array('admin_id'=>$admindata->member_id,'admin'=>$admindata,'operator'=>$admindata->username));
 				HttpSession::set(Gc::$appName_alias.'admin_id',$admindata->admin_id);
 				HttpCookie::sets(array("admin_id"=>$admindata->admin_id,"operator"=>$admindata->username,'roletype'=>$admindata->roletype,'roleid'=>$admindata->roleid));
 				$this->redirect("index","index");
@@ -39,34 +39,42 @@ class Action_Index extends ActionExt
 		}
 	}
 
-	 /**
-	  * 控制器:首页
-	  */
-	 public function index()
-	 {
-		 $this->init();
-		 $this->loadIndexJs();
-		 //加载菜单
-		 $this->view->menuGroups=MenuGroup::all();
-	 }
+	/**
+	 * 控制器:首页
+	 */
+	public function index()
+	{
+		$this->init();
+		$this->loadIndexJs();
+		//加载菜单
+		$admin=HttpSession::get("admin");
+		$roletype=$admin->roletype;
+		if($roletype==EnumRoletype::SUPERADMIN){
+			$this->view->menuGroups=MenuGroup::all();
+		}else{
+			$roletype=EnumRoletype::roletypeEnumKey($roletype);
+			$roleMenugroups=MenuGroup::allrole();
+			$this->view->menuGroups=$roleMenugroups[$roletype];
+		}
+	}
 
 	/**
 	 * 控制器:登出
 	 */
 	public function logout()
 	{
-	  HttpSession::remove("admin_id");
-	  HttpSession::remove(Gc::$appName_alias."admin_id");
-	  $this->redirect("index","login");
+		HttpSession::remove("admin_id");
+		HttpSession::remove(Gc::$appName_alias."admin_id");
+		$this->redirect("index","login");
 	}
 
-	 /**
-	  * 预加载首页JS定义库。
-	  * @param ViewObject $viewobject 表示层显示对象
-	  * @param string $templateurl
-	  */
-	 private function loadIndexJs()
-	 {
+	/**
+	 * 预加载首页JS定义库。
+	 * @param ViewObject $viewobject 表示层显示对象
+	 * @param string $templateurl
+	 */
+	private function loadIndexJs()
+	{
 		$viewobject=$this->view->viewObject;
 		$this->loadExtCss("index.css",true);
 		if ($viewobject)
@@ -76,6 +84,9 @@ class Action_Index extends ActionExt
 			$this->loadExtJs("layout.js",true);
 			//左侧菜单组生成显示
 			UtilJavascript::loadJsContentReady($viewobject,MenuGroup::viewForExtJs());
+
+			//顶部工具栏生成显示
+			UtilJavascript::loadJsContentReady($viewobject,MenuToolbar::viewForExtJs());
 			//核心功能:导航[Tab新建窗口]
 			$this->loadExtJs("navigation.js",true);
 		}
@@ -93,6 +104,8 @@ class Action_Index extends ActionExt
 			UtilJavascript::loadJs($templateurl.$module_templateurl_relative."layout.js",true);
 			//左侧菜单组生成显示
 			UtilJavascript::loadJsContent(MenuGroup::viewForExtJs());
+			//顶部工具栏生成显示
+			UtilJavascript::loadJsContent(MenuToolbar::viewForExtJs());
 			//核心功能:导航[Tab新建窗口]
 			UtilJavascript::loadJs($templateurl.$module_templateurl_relative."navigation.js",true);
 		}
