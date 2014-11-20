@@ -9,6 +9,7 @@
  */
 class Initializer
 {
+	public static $default_language="Zh_Cn";
 	public static $IS_CGI=false;
 	public static $IS_WIN=true;
 	public static $IS_CLI=false;
@@ -58,7 +59,7 @@ class Initializer
 				}
 			}
 		}else {
-			require($class_name.self::SUFFIX_FILE_PHP);
+			class_exists($class_name) || require($class_name.self::SUFFIX_FILE_PHP);
 			return;
 		}
 		if (!empty(self::$moduleFiles)) {
@@ -111,6 +112,10 @@ class Initializer
 		 */
 		self::set_include_path();
 		/**
+		 * 加载通用函数库
+		 */
+		self::loadCommonFunctionLibrarys();
+		/**
 		 * 设定网站语言，最终需由用户设置
 		 */
 		self::set_language();
@@ -118,10 +123,6 @@ class Initializer
 		 * 记录框架核心所有的对象类加载进来
 		 */
 		self::recordCoreClasses();
-		/**
-		 * 加载通用函数库
-		 */
-		self::loadCommonFunctionLibrarys();
 		/**
 		 * 加载第三方库
 		 */
@@ -220,8 +221,8 @@ class Initializer
 		}
 
 		if (function_exists('mb_http_output')) {
-			mb_http_output('UTF-8');
-			mb_internal_encoding('UTF-8');
+			mb_http_output(Gc::$encoding);
+			mb_internal_encoding(Gc::$encoding);
 		}
 
 	}
@@ -281,19 +282,17 @@ class Initializer
 	public static function set_language()
 	{
 		$core_lang=Config_F::CORE_LANG;
-		$default_language="Zh_Cn";
 		$world_language=Config_C::WORLD_LANGUAGE;
 		$language=ucfirst(Gc::$language);
 		$lan_dir=self::$NAV_CORE_PATH.$core_lang.DS;
-		if (strcasecmp(Gc::$language,$default_language)!=0) {
+		if (strcasecmp(Gc::$language,self::$default_language)!=0) {
 			if (file_exists($lan_dir.$world_language.self::SUFFIX_FILE_PHP)) {
 				LogMe::log("需要在运行期删除文件:".$lan_dir.$world_language.self::SUFFIX_FILE_PHP);
 			}
 			require_once $lan_dir.$language.self::SUFFIX_FILE_PHP;
 		}
-		if (!file_exists($lan_dir.$world_language.self::SUFFIX_FILE_PHP)) {
-			class_alias($world_language,$language);
-		}
+		if (file_exists($lan_dir.$world_language.self::SUFFIX_FILE_PHP))
+			class_alias($language,$world_language);
 	}
 
 	/**

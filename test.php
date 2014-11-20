@@ -1,5 +1,10 @@
 <?php
 require_once ("init.php");
+echo Wl::INFO_DB_CHARACTER;
+
+// $region=Region::get_by_id("666");
+// print_r($region);
+// print_r($region->region_p);
 /**
 $user=User::get_by_id(1);
 $userDetail=$user->userdetail;

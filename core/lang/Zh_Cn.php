@@ -11,8 +11,7 @@ class Zh_Cn {
     const INFO_REDIRECT_PART1="系统将在";
     const INFO_REDIRECT_PART2="秒之后自动跳转到";
     const INFO_DB_CHARACTER="当前数据库客户端连接字符集是：";
-                                        
-    const ERROR_INFO_SEARCH_NONE="无法找到数据库！"; 
+
     const ERROR_INFO_CONNECT_FAIL="数据库连接失败，错误信息 :";//Failed to connect, the error message is :
     const ERROR_INFO_SEARCH_NONE="无法找到数据库！";
     const ERROR_INFO_INSERT_ID="新增对象ID已经存在！";
@@ -40,6 +39,6 @@ class Zh_Cn {
     const EXCEPTION_REPORT_DETAIL="详细信息";
     const EXCEPTION_REPORT_TRACKTIME="跟踪时间";
     const EXCEPTION_REPORT_TRACKINFO="跟踪信息";
-    const EXCEPTION_REPORT_TYPE="异常类型";     
+    const EXCEPTION_REPORT_TYPE="异常类型";
 }
 ?>
