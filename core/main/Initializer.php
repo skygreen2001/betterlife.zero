@@ -275,7 +275,6 @@ class Initializer
 		Module_Loader::load_run();
 	}
 
-
 	/**
 	 * 定义网站语言版本，默认为中文
 	 */
@@ -285,12 +284,6 @@ class Initializer
 		$world_language=Config_C::WORLD_LANGUAGE;
 		$language=ucfirst(Gc::$language);
 		$lan_dir=self::$NAV_CORE_PATH.$core_lang.DS;
-		if (strcasecmp(Gc::$language,self::$default_language)!=0) {
-			if (file_exists($lan_dir.$world_language.self::SUFFIX_FILE_PHP)) {
-				LogMe::log("需要在运行期删除文件:".$lan_dir.$world_language.self::SUFFIX_FILE_PHP);
-			}
-			require_once $lan_dir.$language.self::SUFFIX_FILE_PHP;
-		}
 		if (file_exists($lan_dir.$world_language.self::SUFFIX_FILE_PHP))
 			class_alias($language,$world_language);
 	}
