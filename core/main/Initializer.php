@@ -9,7 +9,6 @@
  */
 class Initializer
 {
-	public static $default_language="Zh_Cn";
 	public static $IS_CGI=false;
 	public static $IS_WIN=true;
 	public static $IS_CLI=false;
@@ -115,10 +114,6 @@ class Initializer
 		 * 加载通用函数库
 		 */
 		self::loadCommonFunctionLibrarys();
-		/**
-		 * 设定网站语言，最终需由用户设置
-		 */
-		self::set_language();
 		/**
 		 * 记录框架核心所有的对象类加载进来
 		 */
@@ -273,19 +268,6 @@ class Initializer
 		$classname="Module_Loader";
 		require_once($dir_module.$classname.self::SUFFIX_FILE_PHP);
 		Module_Loader::load_run();
-	}
-
-	/**
-	 * 定义网站语言版本，默认为中文
-	 */
-	public static function set_language()
-	{
-		$core_lang=Config_F::CORE_LANG;
-		$world_language=Config_C::WORLD_LANGUAGE;
-		$language=ucfirst(Gc::$language);
-		$lan_dir=self::$NAV_CORE_PATH.$core_lang.DS;
-		if (file_exists($lan_dir.$world_language.self::SUFFIX_FILE_PHP))
-			class_alias($language,$world_language);
 	}
 
 	/**

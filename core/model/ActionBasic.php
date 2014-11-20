@@ -319,7 +319,7 @@ class ActionBasic extends Object
 					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.all.js");
 					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.parse.js");
 				}else{
-					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.all.min.js");				
+					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.all.min.js");
 					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.parse.min.js");
 				}
 				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/lang/zh-cn/zh-cn.js");
@@ -395,6 +395,10 @@ class ActionBasic extends Object
 	{
 		$this->view->set("keywords",$this->keywords);
 		$this->view->set("description",$this->description);
+		/**
+		 * 设定网站语言，最终需由用户设置
+		 */
+		class_alias(ucfirst(Gc::$language),Config_C::WORLD_LANGUAGE);
 	}
 }
 

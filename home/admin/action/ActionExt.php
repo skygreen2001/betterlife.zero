@@ -116,6 +116,7 @@ class ActionExt extends ActionBasic
 	 */
 	public function beforeAction()
 	{
+		parent::beforeAction();
 		if (contain($this->data["go"],"admin")){
 			if(($this->data["go"]!="admin.index.login")&&!HttpSession::isHave(Gc::$appName_alias.'admin_id')) {
 				if ($this->data["go"]=="admin.index.index"){
@@ -137,6 +138,7 @@ class ActionExt extends ActionBasic
 	 */
 	public function afterAction()
 	{
+		parent::afterAction();
 	}
 
 	/**
