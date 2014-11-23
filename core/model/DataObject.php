@@ -549,7 +549,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	}
 
 	/**
-	 * 查询当前对象需显示属性的列表
+	 * 查询当前对象单个需显示的属性
 	 * @param string 指定的显示属性，同SQL语句中的Select部分。
 	 * 示例如下：<br/>
 	 *     id,name,commitTime
@@ -579,7 +579,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	}
 
 	/**
-	 * 查询当前对象列表
+	 * 查询数据对象列表
 	 * @param object|string|array $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
 	 *      0."id=1,name='sky'"<br/>

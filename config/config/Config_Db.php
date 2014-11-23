@@ -142,7 +142,7 @@ class EnumDbEngine extends Enum{
 	 */
 	const ENGINE_DAL_ADODB_PDO=113;
 	/**
-	 *
+	 * MDB2
 	 */
 	const ENGINE_DAL_MDB2  =114;
 }

@@ -61,10 +61,9 @@ $role->setId(2);
 print_r($role->getUsers());
 print_r($role->Users());
 $joe=new User();
+$joe->setUsername("joy");
 $joe->setPassword("tttt");
-		$joe->setId($this->id);
-$joe->setName("joy");
-		$joe["name"]="wb";
+$joe["username"]="wb";
 $joe->save($joe);
 
 $role=new Role();

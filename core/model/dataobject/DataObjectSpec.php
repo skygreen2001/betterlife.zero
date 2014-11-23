@@ -55,24 +55,24 @@ class EnumDataObjectDefaultKeyword extends Enum
 class EnumTableRelation extends Enum
 {
 	/**
-	* 一对一关联
-	*/
+	 * 一对一关联
+	 */
 	const HAS_ONE    = 'has_one';
 	/**
-	* 从属一对一关联，即主表中一字段关联关系表中的主键
-	*/
+	 * 从属一对一关联，即主表中一字段关联关系表中的主键
+	 */
 	const BELONG_HAS_ONE = 'belong_has_one';
 	/**
-	* 一对多关联
-	*/
+	 * 一对多关联
+	 */
 	const HAS_MANY   = 'has_many';
 	/**
-	* 多对多关联
-	*/
+	 * 多对多关联
+	 */
 	const MANY_MANY  = 'many_many';
 	/**
-	* 从属多对多关联
-	*/
+	 * 从属多对多关联
+	 */
 	const BELONGS_TO = 'belongs_many_many';
 }
 

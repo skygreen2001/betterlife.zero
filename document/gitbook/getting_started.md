@@ -1,23 +1,19 @@
 # 新手上路
 
 ##准备工作
-1. 数据库定义
-
-   按照［数据库原型设计规范］定义需要的表。
-
-   可运行框架下自带的脚本文件:db_betterlife.sql
-   
-   在根路径下db/mysql目录下:
+1. 安装Wamp|Lamp|Mamp
 
 
+2. 安装Git
 
-2. 项目重用
 
-   参考 [项目重用]
+3. 安装示例数据库
 
-3. 生成代码
+    如果是Wamp,一般自带了Phpmyadmin，也可以安装Mysql数据库工具客户端如MysqlWorkbench或者Navicat等
 
-   参考 [代码生成]
+    如果是Lamp或者Mamp需要另行安装Phpmyadmin
+
+    示例数据库放置在根路径下:db/mysql 文件名称：db_betterlife.sql;它是本框架示例数据库mysql sql脚本备份。
 
 
 ##一步上手
