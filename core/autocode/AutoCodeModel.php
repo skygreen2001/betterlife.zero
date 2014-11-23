@@ -378,7 +378,8 @@ class AutoCodeModel extends AutoCode
 			$overwrite_not_dir_str="";
 			foreach ($overwrite_not_arr as $overwrite_not_dir) {
 				$overwrite_not_dir_str.="sudo mkdir -p ".$overwrite_not_dir."<br/>".str_repeat("&nbsp;",8).
-				"sudo chmod -R 0777 ".$overwrite_not_dir."<br/>".str_repeat("&nbsp;",8);
+				"sudo chown -R www-data:www-data ".$overwrite_not_dir."<br/>".str_repeat("&nbsp;",8).
+				"sudo chmod -R 0755 ".$overwrite_not_dir."<br/>".str_repeat("&nbsp;",8);
 			}
 			die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>因为安全原因，需要手动在操作系统中创建目录:".Gc::$attachment_path."<br/>".
 				"Linux系统需要执行指令:<br/>".str_repeat("&nbsp;",8).

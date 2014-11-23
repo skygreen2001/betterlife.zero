@@ -42,20 +42,24 @@ if (contain($os,"Windows")) {
 	foreach (Gc::$module_names as $template_tmp_dir) {
 		$destination=Gc::$nav_root_path.Gc::$module_root."/".$template_tmp_dir."/".View::VIEW_DIR_VIEW."/".Gc::$self_theme_dir."/tmp/templates_c/";
 		echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",30);
-		echo "sudo chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",30);
+		echo "sudo chown -R www-data:www-data ".$destination."<br/>".str_repeat("&nbsp;",30);
+		echo "sudo chmod 0755 ".$destination."<br/>".str_repeat("&nbsp;",30);
 	}
 	if (empty(Gc::$log_config["logpath"])){
 		Gc::$log_config["logpath"] = Gc::$nav_root_path.Config_F::LOG_ROOT.DS;
 	}
 	$destination=Gc::$log_config["logpath"];
 	echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",30);
-	echo "sudo chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",30);
+	echo "sudo chown -R www-data:www-data ".$destination."<br/>".str_repeat("&nbsp;",30);
+	echo "sudo chmod 0755 ".$destination."<br/>".str_repeat("&nbsp;",30);
 	$destination=Gc::$attachment_path;
 	echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",30);
-	echo "sudo chmod -R 0777 ".$destination."<br/>".str_repeat("&nbsp;",30);
+	echo "sudo chown -R www-data:www-data ".$destination."<br/>".str_repeat("&nbsp;",30);
+	echo "sudo chmod -R 0755 ".$destination."<br/>".str_repeat("&nbsp;",30);
 	$destination=Gc::$upload_path;
 	echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",30);
-	echo "sudo chmod -R 0777 ".$destination."<br/>".str_repeat("&nbsp;",12);
+	echo "sudo chown -R www-data:www-data ".$destination."<br/>".str_repeat("&nbsp;",30);
+	echo "sudo chmod -R 0755 ".$destination."<br/>".str_repeat("&nbsp;",12);
 	echo "*.重新运行apache:sudo apachectl restart";
 } else if (contain($os,"ubuntu")) {
 	echo "您使用的是Ubuntu系统<br/>";
@@ -71,20 +75,24 @@ if (contain($os,"Windows")) {
 	foreach (Gc::$module_names as $template_tmp_dir) {
 		$destination=Gc::$nav_root_path.Gc::$module_root."/".$template_tmp_dir."/".View::VIEW_DIR_VIEW."/".Gc::$self_theme_dir."/tmp/templates_c/";
 		echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",30);
-		echo "sudo chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",30);
+		echo "sudo chown -R www-data:www-data ".$destination."<br/>".str_repeat("&nbsp;",30);
+		echo "sudo chmod 0755 ".$destination."<br/>".str_repeat("&nbsp;",30);
 	}
 	if (empty(Gc::$log_config["logpath"])){
 		Gc::$log_config["logpath"] = Gc::$nav_root_path.Config_F::LOG_ROOT.DS;
 	}
 	$destination=Gc::$log_config["logpath"];
 	echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",30);
-	echo "sudo chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",30);
+	echo "sudo chown -R www-data:www-data ".$destination."<br/>".str_repeat("&nbsp;",30);
+	echo "sudo chmod 0755 ".$destination."<br/>".str_repeat("&nbsp;",30);
 	$destination=Gc::$attachment_path;
 	echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",30);
-	echo "sudo chmod -R 0777 ".$destination."<br/>".str_repeat("&nbsp;",30);
+	echo "sudo chown -R www-data:www-data ".$destination."<br/>".str_repeat("&nbsp;",30);
+	echo "sudo chmod -R 0755 ".$destination."<br/>".str_repeat("&nbsp;",30);
 	$destination=Gc::$upload_path;
 	echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",30);
-	echo "sudo chmod -R 0777 ".$destination."<br/>".str_repeat("&nbsp;",12);
+	echo "sudo chown -R www-data:www-data ".$destination."<br/>".str_repeat("&nbsp;",30);
+	echo "sudo chmod -R 0755 ".$destination."<br/>".str_repeat("&nbsp;",12);
 	echo "*.重新运行apache:sudo service apache2 restart";
 } else if (contain($os,"linux")) {
 	echo "您使用的是linux系统<br/>";
@@ -98,21 +106,25 @@ if (contain($os,"Windows")) {
 	echo "*.需要手动在服务器上执行脚本:<br/>".str_repeat("&nbsp;",30);
 	foreach (Gc::$module_names as $template_tmp_dir) {
 		$destination=Gc::$nav_root_path.Gc::$module_root."/".$template_tmp_dir."/".View::VIEW_DIR_VIEW."/".Gc::$self_theme_dir."/tmp/templates_c/";
-		echo "mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",30);
-		echo "chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",30);
+		echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",30);
+		echo "sudo chown -R www-data:www-data ".$destination."<br/>".str_repeat("&nbsp;",30);
+		echo "sudo chmod 0755 ".$destination."<br/>".str_repeat("&nbsp;",30);
 	}
 	if (empty(Gc::$log_config["logpath"])){
 		Gc::$log_config["logpath"] = Gc::$nav_root_path.Config_F::LOG_ROOT.DS;
 	}
 	$destination=Gc::$log_config["logpath"];
-	echo "mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",30);
-	echo "chmod 0777 ".$destination."<br/>".str_repeat("&nbsp;",30);
+	echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",30);
+	echo "sudo chown -R www-data:www-data ".$destination."<br/>".str_repeat("&nbsp;",30);
+	echo "sudo chmod 0755 ".$destination."<br/>".str_repeat("&nbsp;",30);
 	$destination=Gc::$attachment_path;
-	echo "mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",30);
-	echo "chmod -R 0777 ".$destination."<br/>".str_repeat("&nbsp;",30);
+	echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",30);
+	echo "sudo chown -R www-data:www-data ".$destination."<br/>".str_repeat("&nbsp;",30);
+	echo "sudo chmod -R 0755 ".$destination."<br/>".str_repeat("&nbsp;",30);
 	$destination=Gc::$upload_path;
-	echo "mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",30);
-	echo "chmod -R 0777 ".$destination."<br/>".str_repeat("&nbsp;",12);
+	echo "sudo mkdir -p ".$destination."<br/>".str_repeat("&nbsp;",30);
+	echo "sudo chown -R www-data:www-data ".$destination."<br/>".str_repeat("&nbsp;",30);
+	echo "sudo chmod -R 0755 ".$destination."<br/>".str_repeat("&nbsp;",12);
 	echo "*.重新运行apache:sudo service httpd restart";
 	$mysql_config=<<<MYSQLCONFIG
 
