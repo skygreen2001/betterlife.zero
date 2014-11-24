@@ -90,7 +90,8 @@ class AutoCode extends Object
 			die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>因为安全原因，需要手动在操作系统中创建目录:".self::$save_dir."<br/>".
 				"Linux系统需要执行指令:<br/>".str_repeat("&nbsp;",8).
 				"sudo mkdir -p ".self::$save_dir."<br/>".str_repeat("&nbsp;",8).
-				"sudo chmod 0777 ".self::$save_dir."</p>");
+				"sudo chown -R www-data:www-data ".self::$save_dir."<br/>".str_repeat("&nbsp;",8).
+				"sudo chmod 0755 ".self::$save_dir."</p>");
 		}
 		if (empty(self::$tableList)){
 			self::$tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList();
