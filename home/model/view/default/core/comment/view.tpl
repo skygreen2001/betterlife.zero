@@ -8,6 +8,6 @@
 		<tr class="entry"><th class="head">评论</th><td class="content">{$comment.comment}</td></tr> 
 		<tr class="entry"><th class="head">博客标识</th><td class="content">{$comment.blog_id}</td></tr> 
 	</table>
-	<div align="center"><my:a href='{$url_base}index.php?go=model.comment.lists&pageNo={$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{$url_base}index.php?go=model.comment.edit&id={$comment.id}&pageNo={$smarty.get.pageNo|default:"1"}'>修改评论</my:a></div>
+	<div align="center"><my:a href='{$url_base}index.php?go=model.comment.lists&pageNo={$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{$url_base}index.php?go=model.comment.edit&id={$comment.comment_id}&pageNo={$smarty.get.pageNo|default:"1"}'>修改评论</my:a></div>
 </div>
 {/block}

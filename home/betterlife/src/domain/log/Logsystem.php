@@ -63,7 +63,7 @@ class Logsystem extends DataObject
 		)
 	);
 
-	/** 
+	/**
 	 * 显示优先级<br/>
 	 * 0:严重错误-EMERG<br/>
 	 * 1:警戒性错误-ALERT<br/>
@@ -80,7 +80,7 @@ class Logsystem extends DataObject
 		return self::priorityShow($this->priority);
 	}
 
-	/** 
+	/**
 	 * 显示优先级<br/>
 	 * 0:严重错误-EMERG<br/>
 	 * 1:警戒性错误-ALERT<br/>

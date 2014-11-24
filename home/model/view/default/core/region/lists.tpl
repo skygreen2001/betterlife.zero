@@ -18,7 +18,7 @@
 			<td class="content">{$region.region_name}</td>
 			<td class="content">{$region.region_type}</td>
 			<td class="content">{$region.level}</td>
-			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.region.view&id={$region.id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.region.edit&id={$region.id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.region.delete&id={$region.id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
+			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.region.view&id={$region.region_id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.region.edit&id={$region.region_id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.region.delete&id={$region.region_id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
 		</tr>
 		{/foreach}
 	</table>

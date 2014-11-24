@@ -154,18 +154,32 @@ class ActionExt extends ActionBasic
 		UtilFileSystem::createDir(Gc::\$attachment_path);
 		UtilFileSystem::createDir(Gc::\$upload_path);
 		if (!is_dir(Gc::\$attachment_path)){
-			die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>因为安全原因，需要手动在操作系统中创建目录:".Gc::\$attachment_path."<br/>".
-				"Linux系统需要执行指令:<br/>".str_repeat("&nbsp;",8).
-				"sudo mkdir -p ".Gc::\$attachment_path."<br/>".str_repeat("&nbsp;",8).
-				"sudo chown -R www-data:www-data ".Gc::\$attachment_path."<br/>".str_repeat("&nbsp;",8).
-				"sudo chmod -R 0755 ".Gc::\$attachment_path."</p>");
+			if (contain(strtolower(php_uname()),"darwin")){
+				die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>因为安全原因，需要手动在操作系统中创建目录:".Gc::\$attachment_path."<br/>".
+					"Linux系统需要执行指令:<br/>".str_repeat("&nbsp;",8).
+					"sudo mkdir -p ".Gc::\$attachment_path."<br/>".str_repeat("&nbsp;",8).
+					"sudo chmod -R 0777 ".Gc::\$attachment_path."</p>");
+			}else{
+				die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>因为安全原因，需要手动在操作系统中创建目录:".Gc::\$attachment_path."<br/>".
+					"Linux系统需要执行指令:<br/>".str_repeat("&nbsp;",8).
+					"sudo mkdir -p ".Gc::\$attachment_path."<br/>".str_repeat("&nbsp;",8).
+					"sudo chown -R www-data:www-data ".Gc::\$attachment_path."<br/>".str_repeat("&nbsp;",8).
+					"sudo chmod -R 0755 ".Gc::\$attachment_path."</p>");
+			}
 		}
 		if (!is_dir(Gc::\$upload_path)){
-			die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>因为安全原因，需要手动在操作系统中创建目录:".Gc::\$upload_path."<br/>".
-				"Linux系统需要执行指令:<br/>".str_repeat("&nbsp;",8).
-				"sudo mkdir -p ".Gc::\$upload_path."<br/>".str_repeat("&nbsp;",8).
-				"sudo chown -R www-data:www-data ".Gc::\$upload_path."<br/>".str_repeat("&nbsp;",8).
-				"sudo chmod -R 0755 ".Gc::\$upload_path."</p>");
+			if (contain(strtolower(php_uname()),"darwin")){
+				die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>因为安全原因，需要手动在操作系统中创建目录:".Gc::\$upload_path."<br/>".
+					"Linux系统需要执行指令:<br/>".str_repeat("&nbsp;",8).
+					"sudo mkdir -p ".Gc::\$upload_path."<br/>".str_repeat("&nbsp;",8).
+					"sudo chmod -R 0777 ".Gc::\$upload_path."</p>");
+			}else{
+				die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>因为安全原因，需要手动在操作系统中创建目录:".Gc::\$upload_path."<br/>".
+					"Linux系统需要执行指令:<br/>".str_repeat("&nbsp;",8).
+					"sudo mkdir -p ".Gc::\$upload_path."<br/>".str_repeat("&nbsp;",8).
+					"sudo chown -R www-data:www-data ".Gc::\$upload_path."<br/>".str_repeat("&nbsp;",8).
+					"sudo chmod -R 0755 ".Gc::\$upload_path."</p>");
+			}
 		}
 	}
 }

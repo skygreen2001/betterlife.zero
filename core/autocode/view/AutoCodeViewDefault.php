@@ -152,6 +152,7 @@ class AutoCodeViewDefault extends AutoCode
 			$headers=substr($headers,0,strlen($headers)-2);
 			$contents=substr($contents,0,strlen($contents)-2);
 		}
+		$realId=DataObjectSpec::getRealIDColumnName($classname);
 		$result = <<<LISTS
 <div class="block">
 	<div><h1>{$table_comment}列表(共计{\$count{$classname}s}个)</h1></div>
@@ -163,7 +164,7 @@ $headers
 		{foreach item={$instancename} from=\${$instancename}s}
 		<tr class="entry">
 $contents
-			<td class="btnCol"><my:a href="{\$url_base}index.php?go={$appname}.{$instancename}.view&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{\$url_base}index.php?go={$appname}.{$instancename}.edit&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{\$url_base}index.php?go={$appname}.{$instancename}.delete&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}">删除</my:a></td>
+			<td class="btnCol"><my:a href="{\$url_base}index.php?go={$appname}.{$instancename}.view&id={\${$instancename}.$realId}&pageNo={\$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{\$url_base}index.php?go={$appname}.{$instancename}.edit&id={\${$instancename}.$realId}&pageNo={\$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{\$url_base}index.php?go={$appname}.{$instancename}.delete&id={\${$instancename}.$realId}&pageNo={\$smarty.get.pageNo|default:"1"}">删除</my:a></td>
 		</tr>
 		{/foreach}
 	</table>
@@ -312,13 +313,14 @@ EDIT;
 		if (!empty($headerscontents)&&(strlen($headerscontents)>2)){
 			$headerscontents=substr($headerscontents,0,strlen($headerscontents)-2);
 		}
+		$realId=DataObjectSpec::getRealIDColumnName($classname);
 		$result = <<<VIEW
 <div class="block">
 	<div><h1>查看{$table_comment}</h1></div>
 	<table class="viewdoblock">
 $headerscontents
 	</table>
-	<div align="center"><my:a href='{\$url_base}index.php?go=$appname.{$instancename}.lists&pageNo={\$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{\$url_base}index.php?go=$appname.{$instancename}.edit&id={\${$instancename}.id}&pageNo={\$smarty.get.pageNo|default:"1"}'>修改{$table_comment}</my:a></div>
+	<div align="center"><my:a href='{\$url_base}index.php?go=$appname.{$instancename}.lists&pageNo={\$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{\$url_base}index.php?go=$appname.{$instancename}.edit&id={\${$instancename}.$realId}&pageNo={\$smarty.get.pageNo|default:"1"}'>修改{$table_comment}</my:a></div>
 </div>
 VIEW;
 		$result=self::tableToViewTplDefine($result);

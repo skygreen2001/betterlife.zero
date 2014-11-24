@@ -1,11 +1,11 @@
 <?php
 /**
  *---------------------------------------<br/>
- * 枚举类型:会员性别  <br/> 
+ * 枚举类型:会员性别  <br/>
  *---------------------------------------<br/>
  * @category betterlife
  * @package domain
- * @subpackage enum 
+ * @subpackage enum
  * @author skygreen skygreen2001@gmail.com
  */
 class EnumSex extends Enum
@@ -23,7 +23,7 @@ class EnumSex extends Enum
 	 */
 	const UNKNOWN='-1';
 
-	/** 
+	/**
 	 * 显示会员性别<br/>
 	 * 0：女-female<br/>
 	 * 1：男-male<br/>
@@ -32,32 +32,48 @@ class EnumSex extends Enum
 	 */
 	public static function sexShow($sex)
 	{
-	   switch($sex){ 
+		switch($sex){
 			case self::FEMALE:
-				return "女"; 
+				return "女";
 			case self::MALE:
-				return "男"; 
+				return "男";
 			case self::UNKNOWN:
-				return "待确认"; 
-	   }
-	   return "未知";
+				return "待确认";
+		}
+		return "未知";
 	}
 
-	/** 
+	/**
 	 * 根据会员性别显示文字获取会员性别<br/>
 	 * @param mixed $sexShow 会员性别显示文字
 	 */
 	public static function sexByShow($sexShow)
 	{
-	   switch($sexShow){ 
+		switch($sexShow){
 			case "女":
-				return self::FEMALE; 
+				return self::FEMALE;
 			case "男":
-				return self::MALE; 
+				return self::MALE;
 			case "待确认":
-				return self::UNKNOWN; 
-	   }
-	   return self::FEMALE;
+				return self::UNKNOWN;
+		}
+		return self::FEMALE;
+	}
+
+	/**
+	 * 通过枚举值获取枚举键定义<br/>
+	 */
+	public static function sexEnumKey($sex)
+	{
+		switch($sex){
+			case '0':
+				return "FEMALE";
+			case '1':
+				return "MALE";
+			case '-1':
+				return "UNKNOWN";
+		}
+		return "FEMALE";
 	}
 
 }

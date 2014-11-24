@@ -16,7 +16,7 @@
 			<td class="content">{$notice.noticeType}</td>
 			<td class="content">{$notice.title}</td>
 			<td class="content">{$notice.notice_content}</td>
-			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.notice.view&id={$notice.id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.notice.edit&id={$notice.id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.notice.delete&id={$notice.id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
+			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.notice.view&id={$notice.notice_id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.notice.edit&id={$notice.notice_id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.notice.delete&id={$notice.notice_id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
 		</tr>
 		{/foreach}
 	</table>

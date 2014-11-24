@@ -14,7 +14,7 @@
 			<td class="content">{$rolefunctions.rolefunctions_id}</td>
 			<td class="content">{$rolefunctions.role_id}</td>
 			<td class="content">{$rolefunctions.functions_id}</td>
-			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.rolefunctions.view&id={$rolefunctions.id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.rolefunctions.edit&id={$rolefunctions.id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.rolefunctions.delete&id={$rolefunctions.id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
+			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.rolefunctions.view&id={$rolefunctions.rolefunctions_id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.rolefunctions.edit&id={$rolefunctions.rolefunctions_id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.rolefunctions.delete&id={$rolefunctions.rolefunctions_id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
 		</tr>
 		{/foreach}
 	</table>

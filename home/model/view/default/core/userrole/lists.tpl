@@ -14,7 +14,7 @@
 			<td class="content">{$userrole.userrole_id}</td>
 			<td class="content">{$userrole.user_id}</td>
 			<td class="content">{$userrole.role_id}</td>
-			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.userrole.view&id={$userrole.id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.userrole.edit&id={$userrole.id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.userrole.delete&id={$userrole.id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
+			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.userrole.view&id={$userrole.userrole_id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.userrole.edit&id={$userrole.userrole_id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.userrole.delete&id={$userrole.userrole_id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
 		</tr>
 		{/foreach}
 	</table>

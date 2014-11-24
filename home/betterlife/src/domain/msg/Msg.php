@@ -60,7 +60,7 @@ class Msg extends DataObject
 	public $status;
 	//</editor-fold>
 
-	/** 
+	/**
 	 * 显示消息状态<br/>
 	 * 枚举类型。<br/>
 	 * 0:未读-unread<br/>
@@ -71,7 +71,7 @@ class Msg extends DataObject
 		return self::statusShow($this->status);
 	}
 
-	/** 
+	/**
 	 * 显示消息状态<br/>
 	 * 枚举类型。<br/>
 	 * 0:未读-unread<br/>

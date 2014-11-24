@@ -136,15 +136,15 @@ class AutoCodeDomain extends AutoCode
 							 "	 */\r\n".
 							 "	public static function {$fieldname}Show(\${$fieldname})\r\n".
 							 "	{\r\n".
-							 "	   switch(\${$fieldname}){\r\n";
+							 "		switch(\${$fieldname}){\r\n";
 					foreach ($enum_columnDefine as $enum_column) {
 						$enumname=strtoupper($enum_column['name']) ;
 						$enumcomment=$enum_column['comment'];
 						$result.="			case self::{$enumname}:\r\n".
 								 "				return \"{$enumcomment}\";\r\n";
 					}
-					$result.="	   }\r\n";
-					$result.="	   return \"未知\";\r\n".
+					$result.="		}\r\n";
+					$result.="		return \"未知\";\r\n".
 							 "	}\r\n\r\n";
 					$comment=explode("<br/>",$comment);
 					if (count($comment)>0){
@@ -156,21 +156,47 @@ class AutoCodeDomain extends AutoCode
 							 "	 */\r\n".
 							 "	public static function {$fieldname}ByShow(\${$fieldname}Show)\r\n".
 							 "	{\r\n".
-							 "	   switch(\${$fieldname}Show){\r\n";
+							 "		switch(\${$fieldname}Show){\r\n";
 					foreach ($enum_columnDefine as $enum_column) {
 						$enumname=strtoupper($enum_column['name']);
 						$enumcomment=$enum_column['comment'];
 						$result.="			case \"{$enumcomment}\":\r\n".
 								 "				return self::{$enumname};\r\n";
 					}
-					$result.="	   }\r\n";
+					$result.="		}\r\n";
 					if (!empty($enum_columnDefine)&&(count($enum_columnDefine)>0)){
 						$enumname=strtoupper($enum_columnDefine[0]['name']);
-						$result.="	   return self::{$enumname};\r\n";
+						$result.="		return self::{$enumname};\r\n";
 					}else{
-						$result.="	   return null;\r\n";
+						$result.="		return null;\r\n";
 					}
 					$result.="	}\r\n\r\n";
+
+
+
+					$result.="	/**\r\n".
+							 "	 * 通过枚举值获取枚举键定义<br/>\r\n".
+							 "	 */\r\n".
+							 "	public static function {$fieldname}EnumKey(\${$fieldname})\r\n".
+							 "	{\r\n".
+							 "		switch(\${$fieldname}){\r\n";
+					foreach ($enum_columnDefine as $enum_column) {
+						$enumname=strtoupper($enum_column['name']);
+						$enumvalue=$enum_column['value'];
+						$result.="			case '{$enumvalue}':\r\n".
+								 "				return \"{$enumname}\";\r\n";
+					}
+					$result.="		}\r\n";
+					if (!empty($enum_columnDefine)&&(count($enum_columnDefine)>0)){
+						$enumname=strtoupper($enum_columnDefine[0]['name']);
+						$result.="		return \"{$enumname}\";\r\n";
+					}else{
+						$result.="		return null;\r\n";
+					}
+					$result.="	}\r\n\r\n";
+
+
+
 					$result.="}\r\n".
 							 "?>\r\n";
 					self::$enumClass.="生成导出完成:".$tablename."[".$fieldname."]=>".self::saveEnumDefineToDir($enumclassname,$result)."!<br/>";

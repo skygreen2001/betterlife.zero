@@ -266,11 +266,19 @@ class View {
 					$isRoot= fileperms($this->template->compile_dir);
 					$isRoot= substr(sprintf('%o',$isRoot),-4);
 					if (!is_dir($this->template->compile_dir)||($isRoot=='0755')){
-						die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>因为安全原因，需要手动在操作系统中创建目录:".$this->template->compile_dir."<br/>".
-							"Linux系统需要执行指令:<br/>".str_repeat("&nbsp;",40).
-							"sudo mkdir -p ".$this->template->compile_dir."<br/>".str_repeat("&nbsp;",40).
-							"sudo chown -R www-data:www-data ".$this->template->compile_dir."<br/>".str_repeat("&nbsp;",40).
-							"sudo chmod 0755 ".$this->template->compile_dir."</p>");
+						if (contain(strtolower(php_uname()),"darwin")){
+							die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>因为安全原因，需要手动在操作系统中创建目录:".$this->template->compile_dir."<br/>".
+								"Linux系统需要执行指令:<br/>".str_repeat("&nbsp;",40).
+								"sudo mkdir -p ".$this->template->compile_dir."<br/>".str_repeat("&nbsp;",40).
+								"sudo chmod 0777 ".$this->template->compile_dir."</p>");
+						}else{
+							die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>因为安全原因，需要手动在操作系统中创建目录:".$this->template->compile_dir."<br/>".
+								"Linux系统需要执行指令:<br/>".str_repeat("&nbsp;",40).
+								"sudo mkdir -p ".$this->template->compile_dir."<br/>".str_repeat("&nbsp;",40).
+								"sudo chown -R www-data:www-data ".$this->template->compile_dir."<br/>".str_repeat("&nbsp;",40).
+								"sudo chmod 0755 ".$this->template->compile_dir."</p>");
+
+						}
 					}
 				}
 				break;

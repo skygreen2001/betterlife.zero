@@ -24,7 +24,7 @@
 			<td class="content">{$admin.roletype}</td>
 			<td class="content">{$admin.seescope}</td>
 			<td class="content">{$admin.loginTimes}</td>
-			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.admin.view&id={$admin.id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.admin.edit&id={$admin.id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.admin.delete&id={$admin.id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
+			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.admin.view&id={$admin.admin_id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.admin.edit&id={$admin.admin_id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.admin.delete&id={$admin.admin_id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
 		</tr>
 		{/foreach}
 	</table>

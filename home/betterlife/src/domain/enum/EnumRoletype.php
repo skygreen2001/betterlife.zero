@@ -37,7 +37,7 @@ class EnumRoletype extends Enum
 	 */
 	public static function roletypeShow($roletype)
 	{
-	   switch($roletype){
+		switch($roletype){
 			case self::SUPERADMIN:
 				return "超级管理员";
 			case self::MANAGER:
@@ -46,8 +46,8 @@ class EnumRoletype extends Enum
 				return "运维人员";
 			case self::PARTNER:
 				return "合作伙伴";
-	   }
-	   return "未知";
+		}
+		return "未知";
 	}
 
 	/**
@@ -56,7 +56,7 @@ class EnumRoletype extends Enum
 	 */
 	public static function roletypeByShow($roletypeShow)
 	{
-	   switch($roletypeShow){
+		switch($roletypeShow){
 			case "超级管理员":
 				return self::SUPERADMIN;
 			case "管理人员":
@@ -65,16 +65,16 @@ class EnumRoletype extends Enum
 				return self::NORMAL;
 			case "合作伙伴":
 				return self::PARTNER;
-	   }
-	   return self::SUPERADMIN;
+		}
+		return self::SUPERADMIN;
 	}
 
 	/**
-	 * 通过枚举值获取枚举键定义
+	 * 通过枚举值获取枚举键定义<br/>
 	 */
 	public static function roletypeEnumKey($roletype)
 	{
-	   switch($roletype){
+		switch($roletype){
 			case '0':
 				return "SUPERADMIN";
 			case '1':
@@ -83,8 +83,9 @@ class EnumRoletype extends Enum
 				return "NORMAL";
 			case '3':
 				return "PARTNER";
-	   }
-	   return "NORMAL";
+		}
+		return "SUPERADMIN";
 	}
+
 }
 ?>

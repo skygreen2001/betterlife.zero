@@ -12,7 +12,7 @@
 		<tr class="entry">
 			<td class="content">{$role.role_id}</td>
 			<td class="content">{$role.role_name}</td>
-			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.role.view&id={$role.id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.role.edit&id={$role.id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.role.delete&id={$role.id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
+			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.role.view&id={$role.role_id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.role.edit&id={$role.role_id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.role.delete&id={$role.role_id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
 		</tr>
 		{/foreach}
 	</table>

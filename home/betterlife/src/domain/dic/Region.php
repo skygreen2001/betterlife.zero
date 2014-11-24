@@ -34,7 +34,7 @@ class Region extends DataObject
 	 * 1:省-province<br/>
 	 * 2:市-city<br/>
 	 * 3:区-region<br/>
-	 *
+	 * 
 	 * @var enum
 	 * @access public
 	 */

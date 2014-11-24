@@ -22,7 +22,7 @@
 			<td class="content">{$department.actualexpenses}</td>
 			<td class="content">{$department.estsalary}</td>
 			<td class="content">{$department.actualsalary}</td>
-			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.department.view&id={$department.id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.department.edit&id={$department.id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.department.delete&id={$department.id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
+			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.department.view&id={$department.department_id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.department.edit&id={$department.department_id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.department.delete&id={$department.department_id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
 		</tr>
 		{/foreach}
 	</table>

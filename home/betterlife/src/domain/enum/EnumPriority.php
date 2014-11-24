@@ -1,11 +1,11 @@
 <?php
 /**
  *---------------------------------------<br/>
- * 枚举类型:优先级  <br/> 
+ * 枚举类型:优先级  <br/>
  *---------------------------------------<br/>
  * @category betterlife
  * @package domain
- * @subpackage enum 
+ * @subpackage enum
  * @author skygreen skygreen2001@gmail.com
  */
 class EnumPriority extends Enum
@@ -47,7 +47,7 @@ class EnumPriority extends Enum
 	 */
 	const SQL='8';
 
-	/** 
+	/**
 	 * 显示优先级<br/>
 	 * 0:严重错误-EMERG<br/>
 	 * 1:警戒性错误-ALERT<br/>
@@ -61,56 +61,84 @@ class EnumPriority extends Enum
 	 */
 	public static function priorityShow($priority)
 	{
-	   switch($priority){ 
+		switch($priority){
 			case self::EMERG:
-				return "严重错误"; 
+				return "严重错误";
 			case self::ALERT:
-				return "警戒性错误"; 
+				return "警戒性错误";
 			case self::CRIT:
-				return "临界值错误"; 
+				return "临界值错误";
 			case self::ERR:
-				return "一般错误"; 
+				return "一般错误";
 			case self::WARN:
-				return "警告性错误"; 
+				return "警告性错误";
 			case self::NOTICE:
-				return "通知"; 
+				return "通知";
 			case self::INFO:
-				return "信息"; 
+				return "信息";
 			case self::DEBUG:
-				return "调试"; 
+				return "调试";
 			case self::SQL:
-				return "SQL"; 
-	   }
-	   return "未知";
+				return "SQL";
+		}
+		return "未知";
 	}
 
-	/** 
+	/**
 	 * 根据优先级显示文字获取优先级<br/>
 	 * @param mixed $priorityShow 优先级显示文字
 	 */
 	public static function priorityByShow($priorityShow)
 	{
-	   switch($priorityShow){ 
+		switch($priorityShow){
 			case "严重错误":
-				return self::EMERG; 
+				return self::EMERG;
 			case "警戒性错误":
-				return self::ALERT; 
+				return self::ALERT;
 			case "临界值错误":
-				return self::CRIT; 
+				return self::CRIT;
 			case "一般错误":
-				return self::ERR; 
+				return self::ERR;
 			case "警告性错误":
-				return self::WARN; 
+				return self::WARN;
 			case "通知":
-				return self::NOTICE; 
+				return self::NOTICE;
 			case "信息":
-				return self::INFO; 
+				return self::INFO;
 			case "调试":
-				return self::DEBUG; 
+				return self::DEBUG;
 			case "SQL":
-				return self::SQL; 
-	   }
-	   return self::EMERG;
+				return self::SQL;
+		}
+		return self::EMERG;
+	}
+
+	/**
+	 * 通过枚举值获取枚举键定义<br/>
+	 */
+	public static function priorityEnumKey($priority)
+	{
+		switch($priority){
+			case '0':
+				return "EMERG";
+			case '1':
+				return "ALERT";
+			case '2':
+				return "CRIT";
+			case '3':
+				return "ERR";
+			case '4':
+				return "WARN";
+			case '5':
+				return "NOTICE";
+			case '6':
+				return "INFO";
+			case '7':
+				return "DEBUG";
+			case '8':
+				return "SQL";
+		}
+		return "EMERG";
 	}
 
 }

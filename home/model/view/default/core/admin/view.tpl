@@ -12,6 +12,6 @@
 		<tr class="entry"><th class="head">视野</th><td class="content">{$admin.seescope}</td></tr> 
 		<tr class="entry"><th class="head">登录次数</th><td class="content">{$admin.loginTimes}</td></tr> 
 	</table>
-	<div align="center"><my:a href='{$url_base}index.php?go=model.admin.lists&pageNo={$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{$url_base}index.php?go=model.admin.edit&id={$admin.id}&pageNo={$smarty.get.pageNo|default:"1"}'>修改系统管理人员</my:a></div>
+	<div align="center"><my:a href='{$url_base}index.php?go=model.admin.lists&pageNo={$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{$url_base}index.php?go=model.admin.edit&id={$admin.admin_id}&pageNo={$smarty.get.pageNo|default:"1"}'>修改系统管理人员</my:a></div>
 </div>
 {/block}

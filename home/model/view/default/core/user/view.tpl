@@ -10,6 +10,6 @@
 		<tr class="entry"><th class="head">手机电话</th><td class="content">{$user.cellphone}</td></tr> 
 		<tr class="entry"><th class="head">访问次数</th><td class="content">{$user.loginTimes}</td></tr> 
 	</table>
-	<div align="center"><my:a href='{$url_base}index.php?go=model.user.lists&pageNo={$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{$url_base}index.php?go=model.user.edit&id={$user.id}&pageNo={$smarty.get.pageNo|default:"1"}'>修改用户</my:a></div>
+	<div align="center"><my:a href='{$url_base}index.php?go=model.user.lists&pageNo={$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{$url_base}index.php?go=model.user.edit&id={$user.user_id}&pageNo={$smarty.get.pageNo|default:"1"}'>修改用户</my:a></div>
 </div>
 {/block}

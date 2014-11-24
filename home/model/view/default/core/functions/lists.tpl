@@ -12,7 +12,7 @@
 		<tr class="entry">
 			<td class="content">{$functions.functions_id}</td>
 			<td class="content">{$functions.url}</td>
-			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.functions.view&id={$functions.id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.functions.edit&id={$functions.id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.functions.delete&id={$functions.id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
+			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.functions.view&id={$functions.functions_id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.functions.edit&id={$functions.functions_id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.functions.delete&id={$functions.functions_id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
 		</tr>
 		{/foreach}
 	</table>

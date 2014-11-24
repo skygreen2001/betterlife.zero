@@ -129,11 +129,18 @@ class AutoCodeConfig extends AutoCode
 		$result =UtilArray::saveXML($filename,self::$config_classes,"classes");
 		if(!file_exists($filename)){
 			$dir_autocode=Gc::$nav_root_path."tools".DS."tools".DS."autocode".DS;
-			die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>因为安全原因，需要手动在操作系统中创建目录:".$dir_autocode."<br/>".
-				"Linux系统需要执行指令:<br/>".str_repeat("&nbsp;",8).
-				"sudo mkdir -p ".$dir_autocode."<br/>".str_repeat("&nbsp;",8);
-				"sudo chown -R www-data:www-data ".$dir_autocode."<br/>".str_repeat("&nbsp;",8).
-				"sudo chmod -R 0755 ".$dir_autocode."</p>");
+			if (contain(strtolower(php_uname()),"darwin")){			
+				die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>因为安全原因，需要手动在操作系统中创建目录:".$dir_autocode."<br/>".
+					"Linux系统需要执行指令:<br/>".str_repeat("&nbsp;",8).
+					"sudo mkdir -p ".$dir_autocode."<br/>".str_repeat("&nbsp;",8).
+					"sudo chmod -R 0777 ".$dir_autocode."</p>");
+			}else{
+				die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>因为安全原因，需要手动在操作系统中创建目录:".$dir_autocode."<br/>".
+					"Linux系统需要执行指令:<br/>".str_repeat("&nbsp;",8).
+					"sudo mkdir -p ".$dir_autocode."<br/>".str_repeat("&nbsp;",8).
+					"sudo chown -R www-data:www-data ".$dir_autocode."<br/>".str_repeat("&nbsp;",8).
+					"sudo chmod -R 0755 ".$dir_autocode."</p>");
+			}
 		}else{
 			self::$showPreviewReport.= "<div style='width: 1000px; margin-left: 80px;'>";
 			self::$showPreviewReport.= "<a href='javascript:' style='cursor:pointer;' onclick=\"(document.getElementById('showCreateConfigXml').style.display=(document.getElementById('showCreateConfigXml').style.display=='none')?'':'none')\">显示生成代码配置文件报告</a>";

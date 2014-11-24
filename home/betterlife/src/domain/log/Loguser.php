@@ -57,7 +57,7 @@ class Loguser extends DataObject
 		"user"=>"User"
 	);
 
-	/** 
+	/**
 	 * 显示类型<br/>
 	 * 1:登录-LOGIN<br/>
 	 * 2:写日志-BLOG<br/>
@@ -68,7 +68,7 @@ class Loguser extends DataObject
 		return self::userTypeShow($this->userType);
 	}
 
-	/** 
+	/**
 	 * 显示类型<br/>
 	 * 1:登录-LOGIN<br/>
 	 * 2:写日志-BLOG<br/>
