@@ -4,6 +4,7 @@
 	<div><h1>{if $region}编辑{else}新增{/if}地区</h1><p><font color="red">{$message|default:''}</font></p></div>
 	<form name="regionForm" method="post"><input type="hidden" name="region_id" value="{$region.region_id}"/>
 	<table class="viewdoblock">
+		<tr class="entry"><th class="head">标识</th><td class="content">{$region.region_id}</td></tr>
 		<tr class="entry"><th class="head">父地区标识</th><td class="content"><input type="text" class="edit" name="parent_id" value="{$region.parent_id}"/></td></tr>
 		<tr class="entry"><th class="head">地区名称</th><td class="content"><input type="text" class="edit" name="region_name" value="{$region.region_name}"/></td></tr>
 		<tr class="entry"><th class="head">地区类型</th><td class="content"><input type="text" class="edit" name="region_type" value="{$region.region_type}"/></td></tr>

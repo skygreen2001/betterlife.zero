@@ -4,6 +4,7 @@
 	<div><h1>{if $admin}编辑{else}新增{/if}系统管理人员</h1><p><font color="red">{$message|default:''}</font></p></div>
 	<form name="adminForm" method="post"><input type="hidden" name="admin_id" value="{$admin.admin_id}"/>
 	<table class="viewdoblock">
+		<tr class="entry"><th class="head">管理员标识</th><td class="content">{$admin.admin_id}</td></tr>
 		<tr class="entry"><th class="head">部门标识</th><td class="content"><input type="text" class="edit" name="department_id" value="{$admin.department_id}"/></td></tr>
 		<tr class="entry"><th class="head">用户名</th><td class="content"><input type="text" class="edit" name="username" value="{$admin.username}"/></td></tr>
 		<tr class="entry"><th class="head">真实姓名</th><td class="content"><input type="text" class="edit" name="realname" value="{$admin.realname}"/></td></tr>

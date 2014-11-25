@@ -21,7 +21,7 @@ Bb.Library = {
 };
 
 /**
- * Model:资源库数据模型 
+ * Model:资源库数据模型
  */
 Bb.Library.Store = {
 	// Typical Store collecting the Proxy, Reader and Writer together.
@@ -95,7 +95,7 @@ Bb.Library.Store = {
 		listeners : {
 			/**
 			 * 保证分页也将查询条件带上
-			 */			
+			 */
 			'beforeload' : function(store, options) {
 				if (Ext.isReady) {
 					Ext.apply(options.params, Bb.Library.View.Form.getForm().getValues());
@@ -106,9 +106,9 @@ Bb.Library.Store = {
 }
 
 /**
-* View:资源库显示组件   
+* View:资源库显示组件
 */
-Bb.Library.View={  
+Bb.Library.View={
 	/**
 	 * 创建一个典型的具备RowEditor Plugin的 GridPanel 类
 	 */
@@ -117,7 +117,7 @@ Bb.Library.View={
 			Bb.Library.Store.libraryStore.setDefaultSort('id', 'desc');
 			/**
 			 * 解决了CheckboxSelectionModel和RowEditor的冲突问题
-			 * 
+			 *
 			 * @link http://www.sencha.com/forum/showthread.php?116823-OPEN-1419-RowEditor-CheckboxSelectionModel-causes-error.
 			 * @link http://www.sencha.com/forum/showthread.php?115154-RowEditor-and-CheckboxSelectionModel-together-Problem
 			 */
@@ -125,7 +125,7 @@ Bb.Library.View={
 				getEditor : function() {
 					return false;
 				}
-			});    
+			});
 			config = Ext.apply({
 				region : 'center',
 				iconCls : 'icon-grid',
@@ -140,8 +140,8 @@ Bb.Library.View={
 				},
 				cm : new Ext.grid.ColumnModel({
 					columns : [
-						this.rm, 
-						this.sm, 
+						this.rm,
+						this.sm,
 						{
 							header : "库名称",
 							width : 100,
@@ -190,28 +190,28 @@ Bb.Library.View={
 				loadMask : true,// {msg:'正在加载数据，请稍侯……'}
 				stripeRows : true,
 				tbar : [{
-						text: '反选',  
-						iconCls : 'icon-reverse',                                     
-						scope: this,                                              
+						text: '反选',
+						iconCls : 'icon-reverse',
+						scope: this,
 						handler: function(){
 							this.onReverseSelect();
 						}
 					}, '-',{
 						ref : '../addBtn',
-						scope: this,  
+						scope: this,
 						text : '新增',
 						iconCls : 'icon-add',
 						handler : this.onAdd
 					}, '-',{
 						id : 'removeBtn',
-						scope: this,  
+						scope: this,
 						text : '删除',
 						disabled : true,
 						iconCls : 'icon-delete',
 						handler : this.onDelete
 					}, '-',{
 						ref : '../saveBtn',
-						scope: this,  
+						scope: this,
 						iconCls : 'icon-commit',
 						text : '提交',
 						handler : function() {
@@ -219,21 +219,21 @@ Bb.Library.View={
 						}
 					}, '-'/**, {
 						ref : '../importBtn',
-						scope: this,  
+						scope: this,
 						iconCls : 'icon-import',
 						text : '导入',
 						handler : function() {
-							
+
 						}
 					}, {
 						xtype : 'tbseparator'
 					}, {
 						ref : '../exportBtn',
-						scope: this,  
+						scope: this,
 						iconCls : 'icon-export',
 						text : '导出',
 						handler : function() {
-							
+
 						}
 					}, {
 						xtype : 'tbseparator'
@@ -309,11 +309,11 @@ Bb.Library.View={
 					this.sm.selectRow(i, true);
 				}
 			}
-		}, 
+		},
 		/**
 		 * 新增
 		 */
-		onAdd : function(btn, ev) {		
+		onAdd : function(btn, ev) {
 			var u = new this.store.recordType({
 				name : '',
 				init : '',
@@ -329,8 +329,8 @@ Bb.Library.View={
 		/**
 		 * 删除
 		 */
-		onDelete : function() {		
-			Ext.MessageBox.confirm('提示', '确实要删除所选的记录吗?', this.showResult,this);
+		onDelete : function() {
+			Ext.MessageBox.confirm('提示', '确认要删除所选的记录吗?', this.showResult,this);
 		},
 		/**
 		 * 批量删除
@@ -358,13 +358,13 @@ Bb.Library.View={
 			// this.getView().refresh();//刷新整个grid视图,重新排序.
 		},
 		/**
-		 * pluggable renders 
+		 * pluggable renders
 		renderOperation : function(value, p, record) {
 			return String.format('<a href="index.php?go=admin.system.library.view" target="_blank">浏览</a>|'
 						+ '<a href="index.php?go=admin.system.library.edit" target="_blank">编辑</a>|'
 						+ '<a href="index.php?go=admin.system.library.delete" target="_blank">删除</a>',
 						record.data.id);
-		}*/ 
+		}*/
 	}),
 
 	/**

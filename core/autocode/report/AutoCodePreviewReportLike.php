@@ -219,6 +219,7 @@ MODEL;
 			$file_content=str_replace("[relative_file]",$file, $file_content);
 			$file_content_old=file_get_contents($origin_file);
 			$file_content_new=file_get_contents(self::$save_dir.$file);
+			$file_content_new=str_replace("go=model.", "go=admin.", $file_content_new);
 			if($file_content_old==$file_content_new){
 				$file_content=str_replace("[status]",$status[2], $file_content);
 			}else{

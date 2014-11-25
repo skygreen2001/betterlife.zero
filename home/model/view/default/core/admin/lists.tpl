@@ -5,7 +5,7 @@
 	<table class="viewdoblock">
 		<tr class="entry">
 			<th class="header">管理员标识</th>
-			<th class="header">部门标识</th>
+			<th class="header">部门</th>
 			<th class="header">用户名</th>
 			<th class="header">真实姓名</th>
 			<th class="header">密码</th>
@@ -17,7 +17,7 @@
 		{foreach item=admin from=$admins}
 		<tr class="entry">
 			<td class="content">{$admin.admin_id}</td>
-			<td class="content">{$admin.department_id}</td>
+			<td class="content">{$admin.department_name}</td>
 			<td class="content">{$admin.username}</td>
 			<td class="content">{$admin.realname}</td>
 			<td class="content">{$admin.password}</td>

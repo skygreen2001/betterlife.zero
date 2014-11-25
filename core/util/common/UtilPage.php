@@ -21,7 +21,7 @@ class UtilPage {
 	/**
 	* 默认每页显示记录数
 	*/
-	public static $default_pagesize=3;
+	public static $default_pagesize=5;
 	private $count = 10; // 记录总数
 	private $allPageCount;//总页数
 	private $nowpage = 1; // 当前页数

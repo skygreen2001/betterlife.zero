@@ -140,14 +140,65 @@ class AutoCodeViewDefault extends AutoCode
 		}
 		$headers="";
 		$contents="";
+
+		//关系列的显示
 		foreach ($fieldNameAndComments as $key=>$value) {
 			if (self::isNotColumnKeywork($key)){
 				$isImage =self::columnIsImage($key,$value);
 				if ($isImage)continue;
-				$headers.="			<th class=\"header\">$value</th>\r\n";
-				$contents.="			<td class=\"content\">{\${$instancename}.$key}</td>\r\n";
+				$is_no_relation=true;
+				if (is_array(self::$relation_viewfield)&&(count(self::$relation_viewfield)>0))
+				{
+					if (array_key_exists($classname,self::$relation_viewfield))
+					{
+						$relationSpecs=self::$relation_viewfield[$classname];
+						if (array_key_exists($key,$relationSpecs))
+						{
+							$relationShow=$relationSpecs[$key];
+							foreach ($relationShow as $key_r=>$value_r) {
+								$realId=DataObjectSpec::getRealIDColumnName($key_r);
+								if (empty($realId))$realId=$key;
+								if ((!array_key_exists($value_r,$fieldInfo))||($classname==$key_r)){
+									$show_fieldname=$value_r;
+									if ($realId!=$key){
+										if (contain($key,"_id")){
+											$key=str_replace("_id","",$key);
+										}
+										$show_fieldname.="_".$key;
+									}
+									if ($show_fieldname=="name"){
+										$show_fieldname= strtolower($key_r)."_".$value_r;
+									}
+									if (!array_key_exists("$show_fieldname",$fieldInfo)){
+										$field_comment=$value;
+										$field_comment=self::columnCommentKey($field_comment,$key);
+										$headers.="			<th class=\"header\">$field_comment</th>\r\n";
+										$contents.="			<td class=\"content\">{\${$instancename}.$show_fieldname}</td>\r\n";
+										$is_no_relation=false;
+									}
+								}else{
+									if ($value_r=="name"){
+										$show_fieldname= strtolower($key_r)."_".$value_r;
+										if (!array_key_exists("$show_fieldname",$fieldInfo)){
+											$field_comment=$value;
+											$field_comment=self::columnCommentKey($field_comment,$key);
+											$headers.="			<th class=\"header\">$field_comment</th>\r\n";
+											$contents.="			<td class=\"content\">{\${$instancename}.$show_fieldname}</td>\r\n";
+											$is_no_relation=false;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				if($is_no_relation){
+					$headers.="			<th class=\"header\">$value</th>\r\n";
+					$contents.="			<td class=\"content\">{\${$instancename}.$key}</td>\r\n";
+				}
 			}
 		}
+
 		if (!empty($headers)&&(strlen($headers)>2)){
 			$headers=substr($headers,0,strlen($headers)-2);
 			$contents=substr($contents,0,strlen($contents)-2);
@@ -209,9 +260,11 @@ LISTS;
 		$hasImgFormFlag="";
 		foreach ($fieldNameAndComments as $key=>$value) {
 			$idColumnName=DataObjectSpec::getRealIDColumnName($classname);
-			if (self::isNotColumnKeywork($key)&&($idColumnName!=$key)){
+			if (self::isNotColumnKeywork($key)){
 				$isImage =self::columnIsImage($key,$value);
-				if ($isImage){
+				if($idColumnName==$key){
+					$headerscontents.="		<tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\">{\${$instancename}.$key}</td></tr>\r\n";
+				}else if ($isImage){
 					$hasImgFormFlag=" enctype=\"multipart/form-data\"";
 					$headerscontents.="		<tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\"><input type=\"file\" class=\"edit\" name=\"{$key}Upload\" accept=\"image/png,image/gif,image/jpg,image/jpeg\" value=\"{\${$instancename}.$key}\"/></td></tr>\r\n";
 				}else{
@@ -305,9 +358,57 @@ EDIT;
 					$headerscontents.="		<tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\">\r\n".
 					"			<div class=\"wrap_2_inner\"><img src=\"{\$uploadImg_url|cat:\$$instancename.$key}\" alt=\"$value\"></div>\r\n".
 					"			<br/>存储相对路径:{\$$instancename.$key}</td></tr>\r\n";
-				}else{
-					$headerscontents.="		<tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\">{\$$instancename.$key}</td></tr> \r\n";
+					continue;
 				}
+
+				//关系列的显示
+				// $is_no_relation=true;
+				if (is_array(self::$relation_viewfield)&&(count(self::$relation_viewfield)>0))
+				{
+					if (array_key_exists($classname,self::$relation_viewfield))
+					{
+						$relationSpecs=self::$relation_viewfield[$classname];
+						if (array_key_exists($key,$relationSpecs))
+						{
+							$relationShow=$relationSpecs[$key];
+							foreach ($relationShow as $key_r=>$value_r) {
+								$realId=DataObjectSpec::getRealIDColumnName($key_r);
+								if (empty($realId))$realId=$key;
+								if ((!array_key_exists($value_r,$fieldInfo))||($classname==$key_r)){
+									$show_fieldname=$value_r;
+									if ($realId!=$key){
+										if (contain($key,"_id")){
+											$key=str_replace("_id","",$key);
+										}
+										$show_fieldname.="_".$key;
+									}
+									if ($show_fieldname=="name"){
+										$show_fieldname= strtolower($key_r)."_".$value_r;
+									}
+									if (!array_key_exists("$show_fieldname",$fieldInfo)){
+										$field_comment=$value;
+										$field_comment=self::columnCommentKey($field_comment,$key);
+										$headerscontents.="		<tr class=\"entry\"><th class=\"head\">$field_comment</th><td class=\"content\">{\${$instancename}.$show_fieldname}</td></tr>\r\n";
+										// $is_no_relation=false;
+									}
+								}else{
+									if ($value_r=="name"){
+										$show_fieldname= strtolower($key_r)."_".$value_r;
+										if (!array_key_exists("$show_fieldname",$fieldInfo)){
+											$field_comment=$value;
+											$field_comment=self::columnCommentKey($field_comment,$key);
+											$headerscontents.="		<tr class=\"entry\"><th class=\"head\">$field_comment</th><td class=\"content\">{\${$instancename}.$show_fieldname}</td></tr>\r\n";
+											// $is_no_relation=false;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				//if($is_no_relation){
+				$headerscontents.="		<tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\">{\$$instancename.$key}</td></tr>\r\n";
+				//}
 			}
 		}
 		if (!empty($headerscontents)&&(strlen($headerscontents)>2)){

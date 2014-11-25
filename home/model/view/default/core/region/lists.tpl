@@ -5,7 +5,7 @@
 	<table class="viewdoblock">
 		<tr class="entry">
 			<th class="header">标识</th>
-			<th class="header">父地区标识</th>
+			<th class="header">父地区</th>
 			<th class="header">地区名称</th>
 			<th class="header">地区类型</th>
 			<th class="header">目录层级</th>
@@ -14,7 +14,7 @@
 		{foreach item=region from=$regions}
 		<tr class="entry">
 			<td class="content">{$region.region_id}</td>
-			<td class="content">{$region.parent_id}</td>
+			<td class="content">{$region.region_name_parent}</td>
 			<td class="content">{$region.region_name}</td>
 			<td class="content">{$region.region_type}</td>
 			<td class="content">{$region.level}</td>

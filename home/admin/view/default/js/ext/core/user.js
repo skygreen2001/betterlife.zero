@@ -709,7 +709,7 @@ Bb.User.View={
 			 * 删除博客
 			 */
 			deleteBlog : function() {
-				Ext.Msg.confirm('提示', '确实要删除所选的博客吗?', this.confirmDeleteBlog,this);
+				Ext.Msg.confirm('提示', '确认要删除所选的博客吗?', this.confirmDeleteBlog,this);
 			},
 			/**
 			 * 确认删除博客
@@ -1098,7 +1098,7 @@ Bb.User.View={
 			 * 删除评论
 			 */
 			deleteComment : function() {
-				Ext.Msg.confirm('提示', '确实要删除所选的评论吗?', this.confirmDeleteComment,this);
+				Ext.Msg.confirm('提示', '确认要删除所选的评论吗?', this.confirmDeleteComment,this);
 			},
 			/**
 			 * 确认删除评论
@@ -1643,7 +1643,7 @@ Bb.User.View={
 		 * 删除用户
 		 */
 		deleteUser : function() {
-			Ext.Msg.confirm('提示', '确实要删除所选的用户吗?', this.confirmDeleteUser,this);
+			Ext.Msg.confirm('提示', '确认要删除所选的用户吗?', this.confirmDeleteUser,this);
 		},
 		/**
 		 * 确认删除用户

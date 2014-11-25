@@ -23,6 +23,18 @@ class Action_Comment extends ActionModel
 		$bb_page=UtilPage::init($nowpage,$count);
 		$this->view->countComments=$count;
 		$comments = Comment::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+		foreach ($comments as $comment) {
+			$user_instance=null;
+			if ($comment->user_id){
+				$user_instance=User::get_by_id($comment->user_id);
+				$comment['username']=$user_instance->username;
+			}
+			$blog_instance=null;
+			if ($comment->blog_id){
+				$blog_instance=Blog::get_by_id($comment->blog_id);
+				$comment['blog_name']=$blog_instance->blog_name;
+			}
+		}
 		$this->view->set("comments",$comments);
 	}
 	/**
@@ -32,6 +44,16 @@ class Action_Comment extends ActionModel
 	{
 		$commentId=$this->data["id"];
 		$comment = Comment::get_by_id($commentId);
+		$user_instance=null;
+		if ($comment->user_id){
+			$user_instance=User::get_by_id($comment->user_id);
+			$comment['username']=$user_instance->username;
+		}
+		$blog_instance=null;
+		if ($comment->blog_id){
+			$blog_instance=Blog::get_by_id($comment->blog_id);
+			$comment['blog_name']=$blog_instance->blog_name;
+		}
 		$this->view->set("comment",$comment);
 	}
 	/**

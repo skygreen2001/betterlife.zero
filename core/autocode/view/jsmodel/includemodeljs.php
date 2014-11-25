@@ -782,7 +782,7 @@ $filterdoSelect
 		 * 删除{$table_comment}
 		 */
 		delete$classname : function() {
-			Ext.Msg.confirm('提示', '确实要删除所选的{$table_comment}吗?', this.confirmDelete$classname,this);
+			Ext.Msg.confirm('提示', '确认要删除所选的{$table_comment}吗?', this.confirmDelete$classname,this);
 		},
 		/**
 		 * 确认删除{$table_comment}

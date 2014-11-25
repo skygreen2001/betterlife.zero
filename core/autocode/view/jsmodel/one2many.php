@@ -249,7 +249,7 @@ EDITWINDOW;
 			 * 删除{$table_comment12n}
 			 */
 			delete{$current_classname} : function() {
-				Ext.Msg.confirm('提示', '确实要删除所选的{$table_comment12n}吗?', this.confirmDelete{$current_classname},this);
+				Ext.Msg.confirm('提示', '确认要删除所选的{$table_comment12n}吗?', this.confirmDelete{$current_classname},this);
 			},
 			/**
 			 * 确认删除{$table_comment12n}

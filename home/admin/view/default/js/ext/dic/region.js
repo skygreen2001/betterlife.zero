@@ -860,7 +860,7 @@ Bb.Region.View={
 		 * 删除地区
 		 */
 		deleteRegion : function() {
-			Ext.Msg.confirm('提示', '确实要删除所选的地区吗?', this.confirmDeleteRegion,this);
+			Ext.Msg.confirm('提示', '确认要删除所选的地区吗?', this.confirmDeleteRegion,this);
 		},
 		/**
 		 * 确认删除地区

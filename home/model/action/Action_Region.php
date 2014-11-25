@@ -23,6 +23,17 @@ class Action_Region extends ActionModel
 		$bb_page=UtilPage::init($nowpage,$count);
 		$this->view->countRegions=$count;
 		$regions = Region::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+		foreach ($regions as $region) {
+			$region_instance=null;
+			if ($region->parent_id){
+				$region_instance=Region::get_by_id($region->parent_id);
+				$region['region_name_parent']=$region_instance->region_name;
+			}
+			if ($region_instance){
+				$level=$region_instance->level;
+				$region["regionShowAll"]=$this->regionShowAll($region->parent_id,$level);
+			}
+		}
 		$this->view->set("regions",$regions);
 	}
 	/**
@@ -32,6 +43,15 @@ class Action_Region extends ActionModel
 	{
 		$regionId=$this->data["id"];
 		$region = Region::get_by_id($regionId);
+		$region_instance=null;
+		if ($region->parent_id){
+			$region_instance=Region::get_by_id($region->parent_id);
+			$region['region_name_parent']=$region_instance->region_name;
+		}
+		if ($region_instance){
+			$level=$region_instance->level;
+			$region["regionShowAll"]=$this->regionShowAll($region->parent_id,$level);
+		}
 		$this->view->set("region",$region);
 	}
 	/**

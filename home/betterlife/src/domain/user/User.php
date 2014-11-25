@@ -52,7 +52,7 @@ class User extends DataObject
 	 * 一对一关系
 	 */
 	static $has_one=array(
-		"userDetail"=>"Userdetail"
+		"userdetail"=>"Userdetail"
 	);
 
 	/**
@@ -60,20 +60,19 @@ class User extends DataObject
 	 */
 	static $has_many=array(
 		"blogs"=>"Blog",
-		"comment"=>"Comment"
+		"comments"=>"Comment",
+		"logusers"=>"Loguser",
+		"usernotices"=>"Usernotice",
+		"userroles"=>"Userrole"
 	);
 
 	/**
 	 * 多对多关系
 	 */
 	static $many_many=array(
+		"notices"=>"Notice",
 		"roles"=>"Role"
 	);
 
-	public function getUsernameShow() {
-		$username=UtilString::gbk2utf8($this->username);
-		return $username;
-	}
 }
-
 ?>

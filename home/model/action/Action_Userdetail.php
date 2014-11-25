@@ -23,6 +23,13 @@ class Action_Userdetail extends ActionModel
 		$bb_page=UtilPage::init($nowpage,$count);
 		$this->view->countUserdetails=$count;
 		$userdetails = Userdetail::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+		foreach ($userdetails as $userdetail) {
+			$user_instance=null;
+			if ($userdetail->user_id){
+				$user_instance=User::get_by_id($userdetail->user_id);
+				$userdetail['username']=$user_instance->username;
+			}
+		}
 		$this->view->set("userdetails",$userdetails);
 	}
 	/**
@@ -32,6 +39,11 @@ class Action_Userdetail extends ActionModel
 	{
 		$userdetailId=$this->data["id"];
 		$userdetail = Userdetail::get_by_id($userdetailId);
+		$user_instance=null;
+		if ($userdetail->user_id){
+			$user_instance=User::get_by_id($userdetail->user_id);
+			$userdetail['username']=$user_instance->username;
+		}
 		$this->view->set("userdetail",$userdetail);
 	}
 	/**

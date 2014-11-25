@@ -23,6 +23,18 @@ class Action_Rolefunctions extends ActionModel
 		$bb_page=UtilPage::init($nowpage,$count);
 		$this->view->countRolefunctionss=$count;
 		$rolefunctionss = Rolefunctions::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+		foreach ($rolefunctionss as $rolefunctions) {
+			$role_instance=null;
+			if ($rolefunctions->role_id){
+				$role_instance=Role::get_by_id($rolefunctions->role_id);
+				$rolefunctions['role_name']=$role_instance->role_name;
+			}
+			$functions_instance=null;
+			if ($rolefunctions->functions_id){
+				$functions_instance=Functions::get_by_id($rolefunctions->functions_id);
+				$rolefunctions['functions_name']=$functions_instance->name;
+			}
+		}
 		$this->view->set("rolefunctionss",$rolefunctionss);
 	}
 	/**
@@ -32,6 +44,16 @@ class Action_Rolefunctions extends ActionModel
 	{
 		$rolefunctionsId=$this->data["id"];
 		$rolefunctions = Rolefunctions::get_by_id($rolefunctionsId);
+		$role_instance=null;
+		if ($rolefunctions->role_id){
+			$role_instance=Role::get_by_id($rolefunctions->role_id);
+			$rolefunctions['role_name']=$role_instance->role_name;
+		}
+		$functions_instance=null;
+		if ($rolefunctions->functions_id){
+			$functions_instance=Functions::get_by_id($rolefunctions->functions_id);
+			$rolefunctions['functions_name']=$functions_instance->name;
+		}
 		$this->view->set("rolefunctions",$rolefunctions);
 	}
 	/**

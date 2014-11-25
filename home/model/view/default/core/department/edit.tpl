@@ -4,6 +4,7 @@
 	<div><h1>{if $department}编辑{else}新增{/if}用户所属部门</h1><p><font color="red">{$message|default:''}</font></p></div>
 	<form name="departmentForm" method="post"><input type="hidden" name="department_id" value="{$department.department_id}"/>
 	<table class="viewdoblock">
+		<tr class="entry"><th class="head">编号</th><td class="content">{$department.department_id}</td></tr>
 		<tr class="entry"><th class="head">部门名称</th><td class="content"><input type="text" class="edit" name="department_name" value="{$department.department_name}"/></td></tr>
 		<tr class="entry"><th class="head">管理者</th><td class="content"><input type="text" class="edit" name="manager" value="{$department.manager}"/></td></tr>
 		<tr class="entry"><th class="head">预算</th><td class="content"><input type="text" class="edit" name="budget" value="{$department.budget}"/></td></tr>

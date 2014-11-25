@@ -710,7 +710,7 @@ function toggle(source)
 </script>
 
 <div align="center">
-<form><input type="hidden" name="model_save_dir" value="$save_dir" /><input type="hidden" name="table_names" value="$table_names" />
+<form method="post"><input type="hidden" name="model_save_dir" value="$save_dir" /><input type="hidden" name="table_names" value="$table_names" />
 <table class="preview">
   <tbody>
 	<tr>

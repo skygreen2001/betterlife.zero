@@ -5,7 +5,7 @@
 	<table class="viewdoblock">
 		<tr class="entry">
 			<th class="header">标识</th>
-			<th class="header">用户标识</th>
+			<th class="header">用户</th>
 			<th class="header">真实姓名</th>
 			<th class="header">国家</th>
 			<th class="header">省</th>
@@ -20,7 +20,7 @@
 		{foreach item=userdetail from=$userdetails}
 		<tr class="entry">
 			<td class="content">{$userdetail.userdetail_id}</td>
-			<td class="content">{$userdetail.user_id}</td>
+			<td class="content">{$userdetail.username}</td>
 			<td class="content">{$userdetail.realname}</td>
 			<td class="content">{$userdetail.country}</td>
 			<td class="content">{$userdetail.province}</td>

@@ -871,7 +871,7 @@ Bb.Admin.View={
 		 * 删除系统管理人员
 		 */
 		deleteAdmin : function() {
-			Ext.Msg.confirm('提示', '确实要删除所选的系统管理人员吗?', this.confirmDeleteAdmin,this);
+			Ext.Msg.confirm('提示', '确认要删除所选的系统管理人员吗?', this.confirmDeleteAdmin,this);
 		},
 		/**
 		 * 确认删除系统管理人员

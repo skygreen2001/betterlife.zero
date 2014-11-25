@@ -4,6 +4,7 @@
 	<div><h1>{if $usernotice}编辑{else}新增{/if}用户收到通知</h1><p><font color="red">{$message|default:''}</font></p></div>
 	<form name="usernoticeForm" method="post"><input type="hidden" name="usernotice_id" value="{$usernotice.usernotice_id}"/>
 	<table class="viewdoblock">
+		<tr class="entry"><th class="head">标识</th><td class="content">{$usernotice.usernotice_id}</td></tr>
 		<tr class="entry"><th class="head">用户编号</th><td class="content"><input type="text" class="edit" name="user_id" value="{$usernotice.user_id}"/></td></tr>
 		<tr class="entry"><th class="head">通知编号</th><td class="content"><input type="text" class="edit" name="notice_id" value="{$usernotice.notice_id}"/></td></tr>
 		<tr class="entry"><td class="content" colspan="2" align="center"><input type="submit" value="提交" class="btnSubmit" /></td></tr>
