@@ -16,7 +16,7 @@
 		<tr class="entry"><th class="head">区</th><td class="content">{$userdetail.district}</td></tr>
 		<tr class="entry"><th class="head">家庭住址</th><td class="content">{$userdetail.address}</td></tr>
 		<tr class="entry"><th class="head">QQ号</th><td class="content">{$userdetail.qq}</td></tr>
-		<tr class="entry"><th class="head">会员性别</th><td class="content">{$userdetail.sex}</td></tr>
+		<tr class="entry"><th class="head">会员性别</th><td class="content">{$userdetail.sexShow}</td></tr>
 		<tr class="entry"><th class="head">生日</th><td class="content">{$userdetail.birthday}</td></tr>
 	</table>
 	<div align="center"><my:a href='{$url_base}index.php?go=model.userdetail.lists&pageNo={$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{$url_base}index.php?go=model.userdetail.edit&id={$userdetail.userdetail_id}&pageNo={$smarty.get.pageNo|default:"1"}'>修改用户详细信息</my:a></div>

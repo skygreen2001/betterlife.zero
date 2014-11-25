@@ -36,6 +36,25 @@ class Action_Region extends ActionModel
 		}
 		$this->view->set("regions",$regions);
 	}
+
+	/**
+	 * 显示父地区[全]
+	 * 注:采用了递归写法
+	 * @param 对象 $parent_id 父地区标识
+	 * @param mixed $level 目录层级
+	 */
+	private function regionShowAll($parent_id,$level)
+	{
+		$region_p=Region::get_by_id($parent_id);
+		if ($level==1){
+			$regionShowAll=$region_p->region_name;
+		}else{
+			$parent_id=$region_p->parent_id;
+			$regionShowAll=$this->regionShowAll($parent_id,$level-1)."->".$region_p->region_name;
+		}
+		return $regionShowAll;
+	}
+
 	/**
 	 * 查看地区
 	 */

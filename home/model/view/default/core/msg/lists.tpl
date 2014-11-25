@@ -21,7 +21,7 @@
 			<td class="content">{$msg.senderName}</td>
 			<td class="content">{$msg.receiverName}</td>
 			<td class="content">{$msg.content}</td>
-			<td class="content">{$msg.status}</td>
+			<td class="content">{$msg.statusShow}</td>
 			<td class="btnCol"><my:a href="{$url_base}index.php?go=model.msg.view&id={$msg.msg_id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.msg.edit&id={$msg.msg_id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.msg.delete&id={$msg.msg_id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
 		</tr>
 		{/foreach}

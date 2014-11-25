@@ -1371,7 +1371,7 @@ MANY2MANYQUERYPAGE;
 	 * @param mixed $classname 数据对象列名
 	 * @param mixed $fieldInfo 表列信息列表
 	 */
-	private static function relationFieldTreeRecursive($instance_name,$classname,$fieldInfo)
+	public static function relationFieldTreeRecursive($instance_name,$classname,$fieldInfo)
 	{
 		$result="";
 		if (is_array(self::$relation_viewfield)&&(count(self::$relation_viewfield)>0))

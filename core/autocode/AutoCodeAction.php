@@ -269,6 +269,7 @@ class AutoCodeAction extends AutoCode
 			case 1:
 				$package=self::$package_model;
 				$relationField=self::relationFieldShow($instancename,$classname,$fieldInfo,"	");
+				$specialResult="";
 				if ((!empty($relationField))){
 					$specialResult.="		foreach (\${$instancename}s as \$$instancename) {\r\n".
 									$relationField.
@@ -301,6 +302,11 @@ class AutoCodeAction extends AutoCode
 						 $specialResult.
 						 "		\$this->view->set(\"{$instancename}s\",\${$instancename}s);\r\n".
 						 "	}\r\n";
+
+				//如果是目录树【parent_id】,需要附加一个递归函数显示父目录[全]
+				$relationFieldTreeRecursive=AutoCodeService::relationFieldTreeRecursive($instancename,$classname,$fieldInfo);
+				if($relationFieldTreeRecursive)$relationFieldTreeRecursive="\r\n".$relationFieldTreeRecursive;
+				$result.=$relationFieldTreeRecursive;
 				$relationField=self::relationFieldShow($instancename,$classname,$fieldInfo);
 				$result.="	/**\r\n".
 						 "	 * 查看{$table_comment}\r\n".

@@ -45,7 +45,6 @@ class AutoCodeViewDefault extends AutoCode
 			 break;
 		}
 		self::$view_dir_full=self::$save_dir.self::$app_dir.DS.Config_F::VIEW_VIEW.DS.Gc::$self_theme_dir.DS.Config_F::VIEW_CORE.DS;
-
 	}
 
 	/**
@@ -128,6 +127,7 @@ class AutoCodeViewDefault extends AutoCode
 		$classname=self::getClassname($tablename);
 		$instancename=self::getInstancename($tablename);
 		$fieldNameAndComments=array();
+		$enumColumns=array();
 		foreach ($fieldInfo as $fieldname=>$field)
 		{
 			$field_comment=$field["Comment"];
@@ -137,16 +137,21 @@ class AutoCodeViewDefault extends AutoCode
 				$field_comment=$field_comment[0];
 			}
 			$fieldNameAndComments[$fieldname]=$field_comment;
+			$datatype=self::comment_type($field["Type"]);
+			if ($datatype=='enum'){
+				$enumColumns[]=$fieldname;
+			}
 		}
 		$headers="";
 		$contents="";
 
-		//关系列的显示
 		foreach ($fieldNameAndComments as $key=>$value) {
 			if (self::isNotColumnKeywork($key)){
 				$isImage =self::columnIsImage($key,$value);
 				if ($isImage)continue;
+
 				$is_no_relation=true;
+				//关系列的显示
 				if (is_array(self::$relation_viewfield)&&(count(self::$relation_viewfield)>0))
 				{
 					if (array_key_exists($classname,self::$relation_viewfield))
@@ -188,13 +193,25 @@ class AutoCodeViewDefault extends AutoCode
 										}
 									}
 								}
+								$relation_classcomment=self::relation_classcomment(self::$class_comments[$key_r]);
+
+								$fieldInfo_relationshow=self::$fieldInfos[self::getTablename($key_r)];
+								$key_r{0}=strtolower($key_r{0});
+								if (array_key_exists("parent_id",$fieldInfo_relationshow)){
+									$headers.="			<th class=\"header\">{$field_comment}[全]</th>\r\n";
+									$contents.="			<td class=\"content\">{\${$instancename}.{$key_r}ShowAll}</td>\r\n";
+								}
 							}
 						}
 					}
 				}
 				if($is_no_relation){
 					$headers.="			<th class=\"header\">$value</th>\r\n";
-					$contents.="			<td class=\"content\">{\${$instancename}.$key}</td>\r\n";
+					if((count($enumColumns)>0)&&(in_array($key, $enumColumns))){
+						$contents.="			<td class=\"content\">{\${$instancename}.{$key}Show}</td>\r\n";
+					}else{
+						$contents.="			<td class=\"content\">{\${$instancename}.$key}</td>\r\n";
+					}
 				}
 			}
 		}
@@ -240,6 +257,7 @@ LISTS;
 		$instancename=self::getInstancename($tablename);
 		$fieldNameAndComments=array();
 		$text_area_fieldname=array();
+		$enumColumns=array();
 		foreach ($fieldInfo as $fieldname=>$field)
 		{
 			$field_comment=$field["Comment"];
@@ -253,6 +271,10 @@ LISTS;
 				$text_area_fieldname[$fieldname]=$field_comment;
 			}else{
 				$fieldNameAndComments[$fieldname]=$field_comment;
+			}
+			$datatype=self::comment_type($field["Type"]);
+			if ($datatype=='enum'){
+				$enumColumns[]=$fieldname;
 			}
 		}
 		$headerscontents="";
@@ -340,6 +362,7 @@ EDIT;
 		$classname=self::getClassname($tablename);
 		$instancename=self::getInstancename($tablename);
 		$fieldNameAndComments=array();
+		$enumColumns=array();
 		foreach ($fieldInfo as $fieldname=>$field)
 		{
 			$field_comment=$field["Comment"];
@@ -349,6 +372,10 @@ EDIT;
 				$field_comment=$field_comment[0];
 			}
 			$fieldNameAndComments[$fieldname]=$field_comment;
+			$datatype=self::comment_type($field["Type"]);
+			if ($datatype=='enum'){
+				$enumColumns[]=$fieldname;
+			}
 		}
 		$headerscontents="";
 		foreach ($fieldNameAndComments as $key=>$value) {
@@ -377,10 +404,11 @@ EDIT;
 								if ((!array_key_exists($value_r,$fieldInfo))||($classname==$key_r)){
 									$show_fieldname=$value_r;
 									if ($realId!=$key){
+										$key_m=$key;
 										if (contain($key,"_id")){
-											$key=str_replace("_id","",$key);
+											$key_m=str_replace("_id","",$key_m);
 										}
-										$show_fieldname.="_".$key;
+										$show_fieldname.="_".$key_m;
 									}
 									if ($show_fieldname=="name"){
 										$show_fieldname= strtolower($key_r)."_".$value_r;
@@ -402,13 +430,24 @@ EDIT;
 										}
 									}
 								}
+
+								$relation_classcomment=self::relation_classcomment(self::$class_comments[$key_r]);
+
+								$fieldInfo_relationshow=self::$fieldInfos[self::getTablename($key_r)];
+								$key_r{0}=strtolower($key_r{0});
+								if (array_key_exists("parent_id",$fieldInfo_relationshow)){
+									$headerscontents.="		<tr class=\"entry\"><th class=\"head\">{$field_comment}[全]</th><td class=\"content\">{\${$instancename}.{$key_r}ShowAll}</td></tr>\r\n";
+								}
 							}
 						}
 					}
 				}
-				//if($is_no_relation){
-				$headerscontents.="		<tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\">{\$$instancename.$key}</td></tr>\r\n";
-				//}
+
+				if((count($enumColumns)>0)&&(in_array($key, $enumColumns))){
+					$headerscontents.="		<tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\">{\$$instancename.{$key}Show}</td></tr>\r\n";
+				}else{
+					$headerscontents.="		<tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\">{\$$instancename.$key}</td></tr>\r\n";
+				}
 			}
 		}
 		if (!empty($headerscontents)&&(strlen($headerscontents)>2)){
@@ -426,6 +465,20 @@ $headerscontents
 VIEW;
 		$result=self::tableToViewTplDefine($result);
 		return $result;
+	}
+
+	/**
+	 * 表注释只获取第一行内容
+	 * @param array $classcomment 表注释
+	 */
+	private static function relation_classcomment($classcomment)
+	{
+		$classcomment=str_replace("关系表","",$classcomment);
+		if (contain($classcomment,"\r")||contain($classcomment,"\n")){
+			$classcomment=preg_split("/[\s,]+/", $classcomment);
+			$classcomment=$classcomment[0];
+		}
+		return $classcomment;
 	}
 
 	/**
