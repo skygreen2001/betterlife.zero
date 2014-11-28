@@ -218,6 +218,7 @@ class AutoCodeAction extends AutoCode
 	{
 		$dir_home_app=self::$save_dir.DS.self::$app_dir.DS."action".DS;
 		$author=self::$author;
+		$category=Gc::$appName;
 		require("view".DS."jsmodel".DS."actionbasicjs.php");
 		switch (self::$type) {
 			case 1:

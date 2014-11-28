@@ -365,17 +365,30 @@ class AutoCodeModelLike extends AutoCode
 		}
 		if(count($overwrite_not_arr)>0){
 			$overwrite_not_dir_str="";
+			$overwrite_not_run_arr=array();
+			$app_dir="model";
 			foreach ($overwrite_not_arr as $overwrite_not_dir) {
-				if (contain(strtolower(php_uname()),"darwin")){
-					$overwrite_not_dir_str.="sudo mkdir -p ".$overwrite_not_dir."<br/>".str_repeat("&nbsp;",8).
-					"sudo chmod -R 0777 ".$overwrite_not_dir."<br/>".str_repeat("&nbsp;",8);
+				if(contain($overwrite_not_dir,Gc::$nav_root_path.Gc::$module_root.DS.$app_dir.DS))
+				{
+					if(!in_array(Gc::$nav_root_path.Gc::$module_root.DS.$app_dir.DS, $overwrite_not_run_arr)){
+						$overwrite_not_run_arr[]=Gc::$nav_root_path.Gc::$module_root.DS.$app_dir.DS;
+					}
 				}else{
-					$overwrite_not_dir_str.="sudo mkdir -p ".$overwrite_not_dir."<br/>".str_repeat("&nbsp;",8).
-						"sudo chown -R www-data:www-data ".$overwrite_not_dir."<br/>".str_repeat("&nbsp;",8).
-						"sudo chmod -R 0755 ".$overwrite_not_dir."<br/>".str_repeat("&nbsp;",8);
+					$overwrite_not_run_arr[]=$overwrite_not_dir;
 				}
 			}
-			die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>因为安全原因，需要手动在操作系统中创建目录<br/>".
+
+			foreach ($overwrite_not_run_arr as $overwrite_not_dir) {
+				if (contain(strtolower(php_uname()),"darwin")){
+					$overwrite_not_dir_str.="sudo mkdir -p ".$overwrite_not_dir."<br/>".str_repeat("&nbsp;",8).
+								"sudo chmod -R 0777 ".$overwrite_not_dir."<br/>".str_repeat("&nbsp;",8);
+				}else{
+					$overwrite_not_dir_str.="sudo mkdir -p ".$overwrite_not_dir."<br/>".str_repeat("&nbsp;",8).
+								"sudo chown -R www-data:www-data ".$overwrite_not_dir."<br/>".str_repeat("&nbsp;",8).
+								"sudo chmod -R 0755 ".$overwrite_not_dir."<br/>".str_repeat("&nbsp;",8);
+				}
+			}
+			die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>因为安全原因，需要手动在操作系统中创建以下目录<br/>".
 				"Linux系统需要执行指令:<br/>".str_repeat("&nbsp;",8).
 				$overwrite_not_dir_str."</p>");
 		}

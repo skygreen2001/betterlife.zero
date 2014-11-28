@@ -533,6 +533,31 @@ MODEL;
 				$title="<a href='$layer_autocode/db_action.php?type=1' target='_blank'>控制器</a>";
 				$moreContent.=str_replace("[title]",$title,$title_model);
 			}
+
+			// 生成控制器Index和模板父类:ActionModel
+			$arr_action_models=array("Action_Index","ActionModel");
+			foreach ($arr_action_models as $action_model) {
+				$file="model".DS."action".DS.$action_model.".php";
+				$file_content=str_replace("[file]", self::$save_dir.$file, $model);
+				$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;
+				$file_content=str_replace("[origin_file]",$origin_file, $file_content);
+				$file_content=str_replace("[relative_file]",$file, $file_content);
+				if(file_exists($origin_file)){
+					$file_content_old=file_get_contents($origin_file);
+					$file_content_new=file_get_contents(self::$save_dir.$file);
+					if($file_content_old==$file_content_new){
+						$file_content=str_replace("[status]",$status[2], $file_content);
+					}else{
+						$file_content=str_replace("[status]",$status[0], $file_content);
+					}
+				}else{
+					$file_content=str_replace("[status]",$status[1], $file_content);
+				}
+				$file_content=str_replace("[checked]","", $file_content);
+				$file_content=str_replace("[module_name]","model",$file_content);
+				$moreContent.=$file_content;
+			}
+
 			foreach (self::$action_model_files as $file) {
 				$file_content=str_replace("[file]", self::$save_dir.$file, $model);
 				$origin_file= Gc::$nav_root_path.Gc::$module_root.DS.$file;

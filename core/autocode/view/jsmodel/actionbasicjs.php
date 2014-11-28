@@ -5,7 +5,7 @@ $actionExt =<<<ACTIONEXT
  +----------------------------------------------<br/>
  * 所有采用Ext JS Javascript框架的控制器的父类<br/>
  +----------------------------------------------
- * @category betterlife
+ * @category $category
  * @package web.back.admin
  * @author $author
  */
@@ -193,7 +193,7 @@ $action =<<<ACTION
  +----------------------------------------------<br/>
  * 所有控制器的父类<br/>
  +----------------------------------------------
- * @category betterlife
+ * @category $category
  * @package  web.front
  * @author $author
  */
@@ -230,7 +230,7 @@ $actionModel =<<<ACTIONMODEL
  +----------------------------------------------<br/>
  * 所有Model应用控制器的父类<br/>
  +----------------------------------------------
- * @category betterlife
+ * @category $category
  * @package web.model
  * @author $author
  */
