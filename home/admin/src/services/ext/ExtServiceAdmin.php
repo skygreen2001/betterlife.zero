@@ -119,6 +119,30 @@ class ExtServiceAdmin extends ServiceBasic
 	}
 
 	/**
+	 * 根据管理员标识显示管理员信息
+	 * @param mixed $viewId 管理员标识
+	 */
+	public function viewAdmin($viewId)
+	{
+		if (!empty($viewId)){
+			$admin=Admin::get_by_id($viewId);
+			if (!empty($admin))
+			{
+				$admin->roletypeShow=$admin->getRoletypeShow();
+				$admin->seescope=$admin->getSeescopeShow();
+			}
+			return array(
+				'success' => true,
+				'data'    => $admin
+			);
+		}
+		return array(
+			'success' => false,
+			'msg'     => "无法查找到需查看的管理员信息！"
+		);
+	}
+
+	/**
 	 * 批量上传系统管理人员
 	 * @param mixed $upload_file <input name="upload_file" type="file">
 	 */

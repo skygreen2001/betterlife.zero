@@ -117,22 +117,7 @@ Bb.Layout = {
 				}),
 				new Ext.Toolbar({
 					height:54,ref:'toolbar',enableOverflow: true,
-					items : [
-/*						{xtype: 'buttongroup',title: '人员管理',columns: 2,defaults: {scale: 'small'},
-						 items: [
-							{text: '人员管理',iconCls: 'page',ref:"../badmins",handler:function(){
-								Bb.Navigation.AddTabbyUrl(Bb.Layout.CenterPanel,"系统管理员","index.php?go=admin.betterlife.admin","admin");
-							}}
-						]},
-						{xtype: 'buttongroup',title: '博客管理',columns: 2,defaults: {scale: 'small'},
-						 items: [{text: '添加',iconCls: 'page',ref:"../addBlog",handler:function(){
-								Bb.Navigation.AddTabbyUrl(Bb.Layout.CenterPanel,"博客","index.php?go=admin.betterlife.blog","blog");
-							}},
-							{text: '管理',iconCls: 'page',ref:"../blogs",handler:function(){
-								Bb.Navigation.AddTabbyUrl(Bb.Layout.CenterPanel,"博客","index.php?go=admin.betterlife.blog","blog");
-							}}
-						]}*/
-					]
+					items : []
 				})
 		  ]}
 	}],

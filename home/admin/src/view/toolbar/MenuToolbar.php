@@ -487,9 +487,11 @@ class MenuToolbar extends Viewable
 					$attributes=$menu->attributes();
 					$menuCount+=1;
 					$paa=Gc::$appName_alias;
+					$attributes_id=$attributes->id;
+					if(empty($attributes_id))$attributes_id=$attributes->name;
 					$menusStr.="
 					{text: '$attributes->name',iconCls: 'page',ref:'../b{$attributes->id}s',handler:function(){
-						$paa.Navigation.AddTabbyUrl($paa.Layout.CenterPanel,'$attributes->name','$attributes->address','{$attributes->id}');
+						$paa.Navigation.AddTabbyUrl($paa.Layout.CenterPanel,'$attributes->name','$attributes->address','$attributes_id');
 					}},";
 				}
 				if(!empty($menusStr)){
