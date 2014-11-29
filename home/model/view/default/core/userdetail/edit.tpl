@@ -4,7 +4,7 @@
 	<div><h1>{if $userdetail}编辑{else}新增{/if}用户详细信息</h1><p><font color="red">{$message|default:''}</font></p></div>
 	<form name="userdetailForm" method="post" enctype="multipart/form-data"><input type="hidden" name="userdetail_id" value="{$userdetail.userdetail_id}"/>
 	<table class="viewdoblock">
-		<tr class="entry"><th class="head">标识</th><td class="content">{$userdetail.userdetail_id}</td></tr>
+		{if $userdetail}<tr class="entry"><th class="head">标识</th><td class="content">{$userdetail.userdetail_id}</td></tr>{/if}
 		<tr class="entry"><th class="head">用户标识</th><td class="content"><input type="text" class="edit" name="user_id" value="{$userdetail.user_id}"/></td></tr>
 		<tr class="entry"><th class="head">真实姓名</th><td class="content"><input type="text" class="edit" name="realname" value="{$userdetail.realname}"/></td></tr>
 		<tr class="entry"><th class="head">头像</th><td class="content"><input type="file" class="edit" name="profileUpload" accept="image/png,image/gif,image/jpg,image/jpeg" value="{$userdetail.profile}"/></td></tr>

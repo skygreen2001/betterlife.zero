@@ -20,17 +20,18 @@ class Action_Blog extends ActionModel
 			$nowpage=1;
 		}
 		$count=Blog::count();
-		$bb_page=UtilPage::init($nowpage,$count);
 		$this->view->countBlogs=$count;
-		$blogs = Blog::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
-		foreach ($blogs as $blog) {
-			$user_instance=null;
-			if ($blog->user_id){
-				$user_instance=User::get_by_id($blog->user_id);
-				$blog['username']=$user_instance->username;
+		if($count>0){			$bb_page=UtilPage::init($nowpage,$count);
+			$blogs = Blog::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+			foreach ($blogs as $blog) {
+				$user_instance=null;
+				if ($blog->user_id){
+					$user_instance=User::get_by_id($blog->user_id);
+					$blog['username']=$user_instance->username;
+				}
 			}
+			$this->view->set("blogs",$blogs);
 		}
-		$this->view->set("blogs",$blogs);
 	}
 	/**
 	 * 查看博客

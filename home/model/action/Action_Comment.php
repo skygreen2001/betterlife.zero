@@ -20,22 +20,23 @@ class Action_Comment extends ActionModel
 			$nowpage=1;
 		}
 		$count=Comment::count();
-		$bb_page=UtilPage::init($nowpage,$count);
 		$this->view->countComments=$count;
-		$comments = Comment::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
-		foreach ($comments as $comment) {
-			$user_instance=null;
-			if ($comment->user_id){
-				$user_instance=User::get_by_id($comment->user_id);
-				$comment['username']=$user_instance->username;
+		if($count>0){			$bb_page=UtilPage::init($nowpage,$count);
+			$comments = Comment::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+			foreach ($comments as $comment) {
+				$user_instance=null;
+				if ($comment->user_id){
+					$user_instance=User::get_by_id($comment->user_id);
+					$comment['username']=$user_instance->username;
+				}
+				$blog_instance=null;
+				if ($comment->blog_id){
+					$blog_instance=Blog::get_by_id($comment->blog_id);
+					$comment['blog_name']=$blog_instance->blog_name;
+				}
 			}
-			$blog_instance=null;
-			if ($comment->blog_id){
-				$blog_instance=Blog::get_by_id($comment->blog_id);
-				$comment['blog_name']=$blog_instance->blog_name;
-			}
+			$this->view->set("comments",$comments);
 		}
-		$this->view->set("comments",$comments);
 	}
 	/**
 	 * 查看评论

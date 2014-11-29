@@ -20,22 +20,23 @@ class Action_Usernotice extends ActionModel
 			$nowpage=1;
 		}
 		$count=Usernotice::count();
-		$bb_page=UtilPage::init($nowpage,$count);
 		$this->view->countUsernotices=$count;
-		$usernotices = Usernotice::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
-		foreach ($usernotices as $usernotice) {
-			$user_instance=null;
-			if ($usernotice->user_id){
-				$user_instance=User::get_by_id($usernotice->user_id);
-				$usernotice['username']=$user_instance->username;
+		if($count>0){			$bb_page=UtilPage::init($nowpage,$count);
+			$usernotices = Usernotice::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+			foreach ($usernotices as $usernotice) {
+				$user_instance=null;
+				if ($usernotice->user_id){
+					$user_instance=User::get_by_id($usernotice->user_id);
+					$usernotice['username']=$user_instance->username;
+				}
+				$notice_instance=null;
+				if ($usernotice->notice_id){
+					$notice_instance=Notice::get_by_id($usernotice->notice_id);
+					$usernotice['noticeType']=$notice_instance->noticeType;
+				}
 			}
-			$notice_instance=null;
-			if ($usernotice->notice_id){
-				$notice_instance=Notice::get_by_id($usernotice->notice_id);
-				$usernotice['noticeType']=$notice_instance->noticeType;
-			}
+			$this->view->set("usernotices",$usernotices);
 		}
-		$this->view->set("usernotices",$usernotices);
 	}
 	/**
 	 * 查看用户收到通知

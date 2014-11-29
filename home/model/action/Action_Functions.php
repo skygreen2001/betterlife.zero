@@ -20,10 +20,11 @@ class Action_Functions extends ActionModel
 			$nowpage=1;
 		}
 		$count=Functions::count();
-		$bb_page=UtilPage::init($nowpage,$count);
 		$this->view->countFunctionss=$count;
-		$functionss = Functions::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
-		$this->view->set("functionss",$functionss);
+		if($count>0){			$bb_page=UtilPage::init($nowpage,$count);
+			$functionss = Functions::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+			$this->view->set("functionss",$functionss);
+		}
 	}
 	/**
 	 * 查看功能信息

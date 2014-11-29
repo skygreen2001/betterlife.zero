@@ -14,7 +14,7 @@
 	<div><h1>{if $notice}编辑{else}新增{/if}通知</h1><p><font color="red">{$message|default:''}</font></p></div>
 	<form name="noticeForm" method="post"><input type="hidden" name="notice_id" value="{$notice.notice_id}"/>
 	<table class="viewdoblock">
-		<tr class="entry"><th class="head">编号</th><td class="content">{$notice.notice_id}</td></tr>
+		{if $notice}<tr class="entry"><th class="head">编号</th><td class="content">{$notice.notice_id}</td></tr>{/if}
 		<tr class="entry"><th class="head">通知分类</th><td class="content"><input type="text" class="edit" name="noticeType" value="{$notice.noticeType}"/></td></tr>
 		<tr class="entry"><th class="head">标题</th><td class="content"><input type="text" class="edit" name="title" value="{$notice.title}"/></td></tr>
 		<tr class="entry"><th class="head">通知内容</th><td class="content">

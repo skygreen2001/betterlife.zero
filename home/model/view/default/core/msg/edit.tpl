@@ -14,7 +14,7 @@
 	<div><h1>{if $msg}编辑{else}新增{/if}消息</h1><p><font color="red">{$message|default:''}</font></p></div>
 	<form name="msgForm" method="post"><input type="hidden" name="msg_id" value="{$msg.msg_id}"/>
 	<table class="viewdoblock">
-		<tr class="entry"><th class="head">标识</th><td class="content">{$msg.msg_id}</td></tr>
+		{if $msg}<tr class="entry"><th class="head">标识</th><td class="content">{$msg.msg_id}</td></tr>{/if}
 		<tr class="entry"><th class="head">发送者</th><td class="content"><input type="text" class="edit" name="senderId" value="{$msg.senderId}"/></td></tr>
 		<tr class="entry"><th class="head">接收者</th><td class="content"><input type="text" class="edit" name="receiverId" value="{$msg.receiverId}"/></td></tr>
 		<tr class="entry"><th class="head">发送者名称</th><td class="content"><input type="text" class="edit" name="senderName" value="{$msg.senderName}"/></td></tr>

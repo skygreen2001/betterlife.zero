@@ -20,10 +20,11 @@ class Action_User extends ActionModel
 			$nowpage=1;
 		}
 		$count=User::count();
-		$bb_page=UtilPage::init($nowpage,$count);
 		$this->view->countUsers=$count;
-		$users = User::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
-		$this->view->set("users",$users);
+		if($count>0){			$bb_page=UtilPage::init($nowpage,$count);
+			$users = User::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+			$this->view->set("users",$users);
+		}
 	}
 	/**
 	 * 查看用户

@@ -14,7 +14,7 @@
 	<div><h1>{if $blog}编辑{else}新增{/if}博客</h1><p><font color="red">{$message|default:''}</font></p></div>
 	<form name="blogForm" method="post"><input type="hidden" name="blog_id" value="{$blog.blog_id}"/>
 	<table class="viewdoblock">
-		<tr class="entry"><th class="head">标识</th><td class="content">{$blog.blog_id}</td></tr>
+		{if $blog}<tr class="entry"><th class="head">标识</th><td class="content">{$blog.blog_id}</td></tr>{/if}
 		<tr class="entry"><th class="head">用户标识</th><td class="content"><input type="text" class="edit" name="user_id" value="{$blog.user_id}"/></td></tr>
 		<tr class="entry"><th class="head">博客标题</th><td class="content"><input type="text" class="edit" name="blog_name" value="{$blog.blog_name}"/></td></tr>
 		<tr class="entry"><th class="head">博客内容</th><td class="content">

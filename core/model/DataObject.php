@@ -10,9 +10,9 @@ DataObjectSpec::init();
  * 该实体类设计为ActiveRecord模式。<br/>
  * 可直接在对象上操作CRUD增删改查操作<br/>
  * 查主要为：根据主键和名称查找对象。<br/>
- *          总记录数和分页查找等常规方法。<br/>
+ *			总记录数和分页查找等常规方法。<br/>
  * 框架定义数据对象的默认列[关键字可通过数据对象列规格$field_spec修改]：<br/>
- *     id,commitTime，updateTime<br/>
+ *			id,commitTime，updateTime<br/>
  * id:数据对象的唯一标识<br/>
  * committime:数据创建的时间，当没有updateTime时，其亦代表数据最后更新的时间<br/>
  * updateTime:数据最后更新的时间。<br/>
@@ -25,30 +25,30 @@ abstract class DataObject extends Object implements ArrayAccess
 {
 	//<editor-fold defaultstate="collapsed" desc="定义部分">
 	/**
-	* @var enum $id_name_strategy ID名称定义的策略
-	*/
+	 * @var enum $id_name_strategy ID名称定义的策略
+	 */
 	public static $idname_strategy=EnumIDNameStrategy::TABLENAME_ID;
 	/**
-	* ID名称中的连接符。<br/>
-	* ID名称定义的策略为TABLENAME_ID有效。
-	* @static
-	*/
+	 * ID名称中的连接符。<br/>
+	 * ID名称定义的策略为TABLENAME_ID有效。
+	 * @static
+	 */
 	public static $idname_concat='_';
 	/**
-	* @var enum $foreignid_name_strategy Foreign ID名称定义的策略
-	*/
+	 * @var enum $foreignid_name_strategy Foreign ID名称定义的策略
+	 */
 	public static $foreignid_name_strategy=EnumForeignIDNameStrategy::TABLENAME_ID;
 	/**
-	* Foreign ID名称中的连接符。<br/>
-	* Foreign ID名称定义的策略为TABLENAME_ID有效。
-	* @static
-	*/
+	 * Foreign ID名称中的连接符。<br/>
+	 * Foreign ID名称定义的策略为TABLENAME_ID有效。
+	 * @static
+	 */
 	public static $foreignid_concat='_';
 	/**
-	* 数据对象定义需定义字段：public $field_spec<br/>
-	* 它定义了当前数据对象的列规格说明。<br/>
-	* 数据对象的列规格说明可参考DataObjectSpec::$field_spec_default的定义
-	*/
+	 * 数据对象定义需定义字段：public $field_spec<br/>
+	 * 它定义了当前数据对象的列规格说明。<br/>
+	 * 数据对象的列规格说明可参考DataObjectSpec::$field_spec_default的定义
+	 */
 	public $field_spec;
 	/**
 	 * @var mixed 数据对象的唯一标识
@@ -78,8 +78,8 @@ abstract class DataObject extends Object implements ArrayAccess
 		return self::$currentDao;
 	}
 	/**
-	* 静态方法:获取数据对象的类名
-	*/
+	 * 静态方法:获取数据对象的类名
+	 */
 	public static function classname_static()
 	{
 		$result=get_called_class();
@@ -89,10 +89,10 @@ abstract class DataObject extends Object implements ArrayAccess
 
 	//<editor-fold defaultstate="collapsed" desc="魔术方法">
 	/**
-	* 从数组创建对象。
-	* @param mixed $array
-	* @return DataObject
-	*/
+	 * 从数组创建对象。
+	 * @param mixed $array
+	 * @return DataObject
+	 */
 	public function __construct($array=null)
 	{
 		if (!empty($array)){
@@ -102,7 +102,7 @@ abstract class DataObject extends Object implements ArrayAccess
 
 	/**
 	 * 说明：若每个具体的实现类希望不想实现set,get方法；<br/>
-	 *      则将该方法复制到每个具体继承他的对象类内。<br/>
+	 *		则将该方法复制到每个具体继承他的对象类内。<br/>
 	 * 可设定对象未定义的成员变量[但不建议这样做]<br/>
 	 * 可无需定义get方法和set方法<br/>
 	 * 类定义变量访问权限设定需要是pulbic<br/>
@@ -136,7 +136,7 @@ abstract class DataObject extends Object implements ArrayAccess
 		return DataObjectFunc::set($this,$property,$value);
 	}
 
-	 /**
+	/**
 	 * 打印当前对象的数据结构
 	 * @return string 描述当前对象。
 	 */
@@ -330,21 +330,21 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * 数据对象存在多对多|从属于多对多关系时，因为存在一张中间表。<br>
 	 * 因此它们的关系需要单独进行存储<br>
 	 * 示例1【多对多-主控端】：<br>
-	 *      $user=new User();<br>
-	 *      $user->setId(2);<br>
-	 *      $user->saveRelationForManyToMany("roles","3",array("commitTime"=>date("Y-m-d H:i:s")));<br>
-	 *      说明:roles是在User数据对象中定义的变量：<br>
-	 *      static $many_many=array(<br>
-	 *        "roles"=>"Role",<br>
-	 *      );<br>
+	 *		$user=new User();<br>
+	 *		$user->setId(2);<br>
+	 *		$user->saveRelationForManyToMany("roles","3",array("commitTime"=>date("Y-m-d H:i:s")));<br>
+	 *		说明:roles是在User数据对象中定义的变量：<br>
+	 *		static $many_many=array(<br>
+	 *			"roles"=>"Role",<br>
+	 *		);<br>
 	 * 示例2【多对多-被控端】：<br>
-	 *      $role=new Role();
-	 *      $role->setId(5);
-	 *      $role->saveRelationForManyToMany("users","6",array("commitTime"=>date("Y-m-d H:i:s")));
-	 *      说明:users是在Role数据对象中定义的变量：<br>
-	 *      static $belongs_many_many=array(
-	 *        "users"=>"User",
-	 *      );
+	 *		$role=new Role();
+	 *		$role->setId(5);
+	 *		$role->saveRelationForManyToMany("users","6",array("commitTime"=>date("Y-m-d H:i:s")));
+	 *		说明:users是在Role数据对象中定义的变量：<br>
+	 *		static $belongs_many_many=array(
+	 *			"users"=>"User",
+	 *		);
 	 +----------------------------------------------------<br>
 	 * @param mixed $relation_object 多对多|从属于多对多关系定义对象
 	 * @param mixed $relation_id_value 关系对象的主键ID值。
@@ -381,10 +381,10 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * 根据条件删除多条记录
 	 * @param mixed $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
-	 *      0."id=1,name='sky'"<br/>
-	 *      1.array("id=1","name='sky'")<br/>
-	 *      2.array("id"=>"1","name"=>"sky")<br/>
-	 *      3.允许对象如new User(id="1",name="green");<br/>
+	 *		0."id=1,name='sky'"<br/>
+	 *		1.array("id=1","name='sky'")<br/>
+	 *		2.array("id"=>"1","name"=>"sky")<br/>
+	 *		3.允许对象如new User(id="1",name="green");<br/>
 	 * 默认:SQL Where条件子语句。如："(id=1 and name='sky') or (name like 'sky')"<br/>
 	 */
 	public static function deleteBy($filter)
@@ -425,14 +425,14 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * 更新对象指定的属性
 	 * @param array|string $sql_ids 需更新数据的ID编号或者ID编号的Sql语句<br/>
 	 * 示例如下：<br/>
-	 *     $sql_ids:<br/>
-	 *         1.1,2,3<br/>
-	 *         2.array(1,2,3)<br/>
+	 *		$sql_ids:<br/>
+	 *			1.1,2,3<br/>
+	 *			2.array(1,2,3)<br/>
 	 * @param string $array_properties 指定的属性<br/>
 	 * 示例如下：<br/>
-	 *     $array_properties<br/>
-	 *      1.pass=1,name='sky'<br/>
-	 *      2.array("pass"=>"1","name"=>"sky")<br/>
+	 *		$array_properties<br/>
+	 *			1.pass=1,name='sky'<br/>
+	 *			2.array("pass"=>"1","name"=>"sky")<br/>
 	 * @return boolen 是否更新成功；true为操作正常<br/>
 	 */
 	public static function updateProperties($sql_ids,$array_properties)
@@ -444,16 +444,16 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * 根据条件更新数据对象指定的属性
 	 * @param mixed $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
-	 *      0."id=1,name='sky'"<br/>
-	 *      1.array("id=1","name='sky'")<br/>
-	 *      2.array("id"=>"1","name"=>"sky")<br/>
-	 *      3.允许对象如new User(id="1",name="green");<br/>
+	 *		0."id=1,name='sky'"<br/>
+	 *		1.array("id=1","name='sky'")<br/>
+	 *		2.array("id"=>"1","name"=>"sky")<br/>
+	 *		3.允许对象如new User(id="1",name="green");<br/>
 	 * 默认:SQL Where条件子语句。如："(id=1 and name='sky') or (name like 'sky')"<br/>
 	 * @param string $array_properties 指定的属性<br/>
 	 * 示例如下：<br/>
-	 *     $array_properties<br/>
-	 *      1.pass=1,name='sky'<br/>
-	 *      2.array("pass"=>"1","name"=>"sky")<br/>
+	 *		$array_properties<br/>
+	 *			1.pass=1,name='sky'<br/>
+	 *			2.array("pass"=>"1","name"=>"sky")<br/>
 	 * @return boolen 是否更新成功；true为操作正常<br/>
 	 */
 	public static function updateBy($filter,$array_properties)
@@ -466,34 +466,34 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * 对属性进行递增
 	 * @param object|string|array $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
-	 *      0."id=1,name='sky'"<br/>
-	 *      1.array("id=1","name='sky'")<br/>
-	 *      2.array("id"=>"1","name"=>"sky")<br/>
-	 *      3.允许对象如new User(id="1",name="green");<br/>
+	 *		0."id=1,name='sky'"<br/>
+	 *		1.array("id=1","name='sky'")<br/>
+	 *		2.array("id"=>"1","name"=>"sky")<br/>
+	 *		3.允许对象如new User(id="1",name="green");<br/>
 	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
 	 * @param string property_name 属性名称
 	 * @param int incre_value 递增数
 	 */
 	public static function increment($filter=null,$property_name,$incre_value=1)
 	{
-		 return DataObjectFunc::increment(get_called_class(),$filter,$property_name,$incre_value);
+		return DataObjectFunc::increment(get_called_class(),$filter,$property_name,$incre_value);
 	}
 
 	/**
 	 * 对属性进行递减
 	 * @param object|string|array $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
-	 *      0."id=1,name='sky'"<br/>
-	 *      1.array("id=1","name='sky'")<br/>
-	 *      2.array("id"=>"1","name"=>"sky")<br/>
-	 *      3.允许对象如new User(id="1",name="green");<br/>
+	 *		0."id=1,name='sky'"<br/>
+	 *		1.array("id=1","name='sky'")<br/>
+	 *		2.array("id"=>"1","name"=>"sky")<br/>
+	 *		3.允许对象如new User(id="1",name="green");<br/>
 	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
 	 * @param string property_name 属性名称
 	 * @param int decre_value 递减数
 	 */
 	public static function decrement($filter=null,$property_name,$decre_value=1)
 	{
-		 return DataObjectFunc::decrement(get_called_class(),$filter,$property_name,$decre_value);
+		return DataObjectFunc::decrement(get_called_class(),$filter,$property_name,$decre_value);
 	}
 
 	/**
@@ -510,10 +510,10 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * 判断符合条件的数据对象是否存在
 	 * @param mixed $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
-	 *      0."id=1,name='sky'"<br/>
-	 *      1.array("id=1","name='sky'")<br/>
-	 *      2.array("id"=>"1","name"=>"sky")<br/>
-	 *      3.允许对象如new User(id="1",name="green");<br/>
+	 *		0."id=1,name='sky'"<br/>
+	 *		1.array("id=1","name='sky'")<br/>
+	 *		2.array("id"=>"1","name"=>"sky")<br/>
+	 *		3.允许对象如new User(id="1",name="green");<br/>
 	 * 默认:SQL Where条件子语句。如："(id=1 and name='sky') or (name like 'sky')"<br/>
 	 * @return bool 是否存在
 	 */
@@ -526,21 +526,21 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * 查询当前对象需显示属性的列表
 	 * @param string $columns指定的显示属性，同SQL语句中的Select部分。
 	 * 示例如下：<br/>
-	 *     id,name,commitTime
+	 *		id,name,commitTime
 	 * @param object|string|array $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
-	 *      0."id=1,name='sky'"<br/>
-	 *      1.array("id=1","name='sky'")<br/>
-	 *      2.array("id"=>"1","name"=>"sky")<br/>
-	 *      3.允许对象如new User(id="1",name="green");<br/>
+	 *		0."id=1,name='sky'"<br/>
+	 *		1.array("id=1","name='sky'")<br/>
+	 *		2.array("id"=>"1","name"=>"sky")<br/>
+	 *		3.允许对象如new User(id="1",name="green");<br/>
 	 * 默认:SQL Where条件子语句。如："(id=1 and name='sky') or (name like 'sky')"<br/>
 	 * @param string $sort 排序条件<br/>
 	 * 示例如下：<br/>
-	 *      1.id asc;<br/>
-	 *      2.name desc;<br/>
+	 *		1.id asc;<br/>
+	 *		2.name desc;<br/>
 	 * @param string $limit 分页数目:同Mysql limit语法
 	 * 示例如下：<br/>
-	 *    0,10<br/>
+	 *	0,10<br/>
 	 * @return 查询列数组，当只有一个值的时候如select count(表名_id)，自动从数组中转换出来值字符串
 	 */
 	public static function select($columns,$filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null)
@@ -552,21 +552,21 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * 查询当前对象单个需显示的属性
 	 * @param string 指定的显示属性，同SQL语句中的Select部分。
 	 * 示例如下：<br/>
-	 *     id,name,commitTime
+	 *		id,name,commitTime
 	 * @param object|string|array $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
-	 *      0."id=1,name='sky'"<br/>
-	 *      1.array("id=1","name='sky'")<br/>
-	 *      2.array("id"=>"1","name"=>"sky")<br/>
-	 *      3.允许对象如new User(id="1",name="green");<br/>
+	 *		0."id=1,name='sky'"<br/>
+	 *		1.array("id=1","name='sky'")<br/>
+	 *		2.array("id"=>"1","name"=>"sky")<br/>
+	 *		3.允许对象如new User(id="1",name="green");<br/>
 	 * 默认:SQL Where条件子语句。如："(id=1 and name='sky') or (name like 'sky')"<br/>
 	 * @param string $sort 排序条件<br/>
 	 * 示例如下：<br/>
-	 *      1.id asc;<br/>
-	 *      2.name desc;<br/>
+	 *		1.id asc;<br/>
+	 *		2.name desc;<br/>
 	 * @param string $limit 分页数目:同Mysql limit语法
 	 * 示例如下：<br/>
-	 *    0,10<br/>
+	 *		0,10<br/>
 	 * @return 查询列数组，自动从数组中转换出来值字符串,最后只返回一个值
 	 */
 	public static function select_one($columns,$filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null)
@@ -582,18 +582,18 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * 查询数据对象列表
 	 * @param object|string|array $filter 查询条件，在where后的条件<br/>
 	 * 示例如下：<br/>
-	 *      0."id=1,name='sky'"<br/>
-	 *      1.array("id=1","name='sky'")<br/>
-	 *      2.array("id"=>"1","name"=>"sky")<br/>
-	 *      3.允许对象如new User(id="1",name="green");<br/>
+	 *		0."id=1,name='sky'"<br/>
+	 *		1.array("id=1","name='sky'")<br/>
+	 *		2.array("id"=>"1","name"=>"sky")<br/>
+	 *		3.允许对象如new User(id="1",name="green");<br/>
 	 * 默认:SQL Where条件子语句。如："(id=1 and name='sky') or (name like 'sky')"<br/>
 	 * @param string $sort 排序条件<br/>
 	 * 示例如下：<br/>
-	 *      1.id asc;<br/>
-	 *      2.name desc;<br/>
+	 *		1.id asc;<br/>
+	 *		2.name desc;<br/>
 	 * @param string $limit 分页数目:同Mysql limit语法
 	 * 示例如下：<br/>
-	 *    0,10<br/>
+	 *	0,10<br/>
 	 * @return 对象列表数组
 	 */
 	public static function get($filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null)
@@ -605,15 +605,15 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * 查询得到单个对象实体
 	 * @param object|string|array $filter 查询条件，在where后的条件
 	 * 示例如下：<br/>
-	 *      0."id=1,name='sky'"<br/>
-	 *      1.array("id=1","name='sky'")<br/>
-	 *      2.array("id"=>"1","name"=>"sky")<br/>
-	 *      3.允许对象如new User(id="1",name="green");<br/>
+	 *		0."id=1,name='sky'"<br/>
+	 *		1.array("id=1","name='sky'")<br/>
+	 *		2.array("id"=>"1","name"=>"sky")<br/>
+	 *		3.允许对象如new User(id="1",name="green");<br/>
 	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
 	 * @param string $sort 排序条件
 	 * 示例如下：
-	 *      1.id asc;
-	 *      2.name desc;
+	 *		1.id asc;
+	 *		2.name desc;
 	 * @return 单个对象实体
 	 */
 	public static function get_one($filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)
@@ -634,11 +634,11 @@ abstract class DataObject extends Object implements ArrayAccess
 	/**
 	 * 对象总计数
 	 * @param object|string|array $filter<br/>
-	 *      $filter 格式示例如下：<br/>
-	 *          0.允许对象如new User(id="1",name="green");<br/>
-	 *          1."id=1","name='sky'"<br/>
-	 *          2.array("id=1","name='sky'")<br/>
-	 *          3.array("id"=>"1","name"=>"sky")
+	 *		$filter 格式示例如下：<br/>
+	 *			0.允许对象如new User(id="1",name="green");<br/>
+	 *			1."id=1","name='sky'"<br/>
+	 *			2.array("id=1","name='sky'")<br/>
+	 *			3.array("id"=>"1","name"=>"sky")
 	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
 	 * @return 对象总计数
 	 */
@@ -652,16 +652,16 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * @param string|class $object 需要查询的对象实体|类名称
 	 * @param string|array $from 来自多张表或者多个类[必须是数据对象类名]，在from后的多张表名，表名之间以逗号[,]隔开
 	 * 示例如下：<br/>
-	 *      0."table1,table2"<br/>
-	 *      1.array("table1","table2")<br/>
-	 *      2."class1,class2"<br/>
-	 *      3.array("class1","class2")<br/>
+	 *		0."table1,table2"<br/>
+	 *		1.array("table1","table2")<br/>
+	 *		2."class1,class2"<br/>
+	 *		3.array("class1","class2")<br/>
 	 * @param object|string|array $filter
-	 *      $filter 格式示例如下：<br/>
-	 *          0.允许对象如new User(id="1",name="green");<br/>
-	 *          1."id=1","name='sky'"<br/>
-	 *          2.array("id=1","name='sky'")<br/>
-	 *          3.array("id"=>"1","name"=>"sky")<br/>
+	 *		$filter 格式示例如下：<br/>
+	 *			0.允许对象如new User(id="1",name="green");<br/>
+	 *			1."id=1","name='sky'"<br/>
+	 *			2.array("id=1","name='sky'")<br/>
+	 *			3.array("id"=>"1","name"=>"sky")<br/>
 	 * @return 对象总计数
 	 */
 	public static function countMultitable($object,$from,$filter=null)
@@ -671,7 +671,7 @@ abstract class DataObject extends Object implements ArrayAccess
 
 	/**
 	 * 数据对象标识最大值
-     * @param string $column_name 列名，默认为数据对象标识
+	 * @param string $column_name 列名，默认为数据对象标识
 	 * @param object|string|array $filter 查询条件，在where后的条件
 	 * @return int 数据对象标识最大值<br/>
 	 */
@@ -680,48 +680,49 @@ abstract class DataObject extends Object implements ArrayAccess
 		return DataObjectFunc::max(get_called_class(),$column_name,$filter);
 	}
 
-    /**
-     * 数据对象指定列名最小值，如未指定列名，为标识最小值
-     * @param string $column_name 列名，默认为数据对象标识
+	/**
+	 * 数据对象指定列名最小值，如未指定列名，为标识最小值
+	 * @param string $column_name 列名，默认为数据对象标识
 	 * @param object|string|array $filter 查询条件，在where后的条件
-     * @return int 数据对象列名最小值，如未指定列名，为标识最小值<br/>
-     */
-    public static function min($column_name=null,$filter=null)
-    {
-        return DataObjectFunc::min(get_called_class(),$column_name,$filter);
-    }
+	 * @return int 数据对象列名最小值，如未指定列名，为标识最小值<br/>
+	 */
+	public static function min($column_name=null,$filter=null)
+	{
+		return DataObjectFunc::min(get_called_class(),$column_name,$filter);
+	}
 
-    /**
-     * 数据对象指定列名总数
-     * @param string $column_name 列名
+	/**
+	 * 数据对象指定列名总数
+	 * @param string $column_name 列名
 	 * @param object|string|array $filter 查询条件，在where后的条件
-     * @return int 数据对象列名总数<br/>
-     */
-    public static function sum($column_name=null,$filter=null)
-    {
-        return DataObjectFunc::sum(get_called_class(),$column_name,$filter);
-    }
+	 * @return int 数据对象列名总数<br/>
+	 */
+	public static function sum($column_name=null,$filter=null)
+	{
+		return DataObjectFunc::sum(get_called_class(),$column_name,$filter);
+	}
 
 	/**
 	 * 对象分页
 	 * @param int $startPoint  分页开始记录数
-	 * @param int $endPoint    分页结束记录数
+	 * @param int $endPoint	分页结束记录数
 	 * @param object|string|array $filter 查询条件，在where后的条件
 	 * 示例如下：<br/>
-	 *      0."id=1,name='sky'"<br/>
-	 *      1.array("id=1","name='sky'")<br/>
-	 *      2.array("id"=>"1","name"=>"sky")<br/>
-	 *      3.允许对象如new User(id="1",name="green");<br/>
+	 *		0."id=1,name='sky'"<br/>
+	 *		1.array("id=1","name='sky'")<br/>
+	 *		2.array("id"=>"1","name"=>"sky")<br/>
+	 *		3.允许对象如new User(id="1",name="green");<br/>
 	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
 	 * @param string $sort 排序条件<br/>
 	 * 默认为 id desc<br/>
 	 * 示例如下：<br/>
-	 *      1.id asc;<br/>
-	 *      2.name desc;
+	 *	  1.id asc;<br/>
+	 *	  2.name desc;
 	 * @return mixed 对象分页
 	 */
 	public static function queryPage($startPoint,$endPoint,$filter=null,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)
 	{
+		if(($startPoint>$endPoint)||($endPoint==0))return null;
 		return self::dao()->queryPage(get_called_class(),$startPoint,$endPoint,$filter,$sort);
 	}
 
@@ -731,20 +732,20 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * @param int $pageSize 每页显示记录数
 	 * @param object|string|array $filter 查询条件，在where后的条件
 	 * 示例如下：<br/>
-	 *      0."id=1,name='sky'"<br/>
-	 *      1.array("id=1","name='sky'")<br/>
-	 *      2.array("id"=>"1","name"=>"sky")<br/>
-	 *      3.允许对象如new User(id="1",name="green");<br/>
+	 *		0."id=1,name='sky'"<br/>
+	 *		1.array("id=1","name='sky'")<br/>
+	 *		2.array("id"=>"1","name"=>"sky")<br/>
+	 *		3.允许对象如new User(id="1",name="green");<br/>
 	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
 	 * @param string $sort 排序条件<br/>
 	 * 默认为 id desc<br/>
 	 * 示例如下：<br/>
-	 *      1.id asc;<br/>
-	 *      2.name desc;
+	 *		1.id asc;<br/>
+	 *		2.name desc;
 	 * @return array
-	 *           count    :符合条件的记录总计数
-	 *           pageCount:符合条件的总页数
-	 *           data     :对象分页
+	 *		count	:符合条件的记录总计数
+	 *		pageCount:符合条件的总页数
+	 *		data	 :对象分页
 	 */
 	public static function queryPageByPageNo($pageNo,$filter=null,$pageSize=10,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)
 	{
@@ -767,38 +768,39 @@ abstract class DataObject extends Object implements ArrayAccess
 			}
 		}
 		return array(
-			"count"    =>$count,
+			"count"	=>$count,
 			"pageCount"=>$pageCount,
-			"data"    =>$data
+			"data"	=>$data
 		);
 	}
 
 	/**
 	 * 对象分页[多表关联查询]
 	 * @param int $startPoint  分页开始记录数
-	 * @param int $endPoint    分页结束记录数
+	 * @param int $endPoint	分页结束记录数
 	 * @param string|array $from 来自多张表或者多个类[必须是数据对象类名]，在from后的多张表名，表名之间以逗号[,]隔开
 	 * 示例如下：<br/>
-	 *      0."table1,table2"<br/>
-	 *      1.array("table1","table2")<br/>
-	 *      2."class1,class2"<br/>
-	 *      3.array("class1","class2")<br/>
+	 *		0."table1,table2"<br/>
+	 *		1.array("table1","table2")<br/>
+	 *		2."class1,class2"<br/>
+	 *		3.array("class1","class2")<br/>
 	 * @param object|string|array $filter 查询条件，在where后的条件
 	 * 示例如下：<br/>
-	 *      0."id=1,name='sky'"<br/>
-	 *      1.array("id=1","name='sky'")<br/>
-	 *      2.array("id"=>"1","name"=>"sky")<br/>
-	 *      3.允许对象如new User(id="1",name="green");<br/>
+	 *		0."id=1,name='sky'"<br/>
+	 *		1.array("id=1","name='sky'")<br/>
+	 *		2.array("id"=>"1","name"=>"sky")<br/>
+	 *		3.允许对象如new User(id="1",name="green");<br/>
 	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
 	 * @param string $sort 排序条件<br/>
 	 * 默认为 id desc<br/>
 	 * 示例如下：<br/>
-	 *      1.id asc;<br/>
-	 *      2.name desc;
+	 *		1.id asc;<br/>
+	 *		2.name desc;
 	 * @return mixed 对象分页
 	 */
 	public static function queryPageMultitable($startPoint,$endPoint,$from,$filter=null,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)
 	{
+		if(($startPoint>$endPoint)||($endPoint==0))return null;
 		return self::dao()->queryPageMultitable(get_called_class(),$startPoint,$endPoint,$from,$filter,$sort);
 	}
 	//</editor-fold>

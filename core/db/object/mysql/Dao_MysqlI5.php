@@ -242,9 +242,9 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 	 */
 	public function queryPage($object,$startPoint,$endPoint,$filter=null,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)
 	{
-		if (!$this->validParameter($object)) {
-			return null;
-		}
+		if(($startPoint>$endPoint)||($endPoint==0))return null;
+		if (!$this->validParameter($object))return null;
+
 		return $this->queryPageMultitable($object,$startPoint,$endPoint,$this->classname,$filter,$sort);
 	}
 

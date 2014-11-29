@@ -20,10 +20,11 @@ class Action_Role extends ActionModel
 			$nowpage=1;
 		}
 		$count=Role::count();
-		$bb_page=UtilPage::init($nowpage,$count);
 		$this->view->countRoles=$count;
-		$roles = Role::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
-		$this->view->set("roles",$roles);
+		if($count>0){			$bb_page=UtilPage::init($nowpage,$count);
+			$roles = Role::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+			$this->view->set("roles",$roles);
+		}
 	}
 	/**
 	 * 查看角色

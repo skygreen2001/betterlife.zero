@@ -20,17 +20,18 @@ class Action_Userdetail extends ActionModel
 			$nowpage=1;
 		}
 		$count=Userdetail::count();
-		$bb_page=UtilPage::init($nowpage,$count);
 		$this->view->countUserdetails=$count;
-		$userdetails = Userdetail::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
-		foreach ($userdetails as $userdetail) {
-			$user_instance=null;
-			if ($userdetail->user_id){
-				$user_instance=User::get_by_id($userdetail->user_id);
-				$userdetail['username']=$user_instance->username;
+		if($count>0){			$bb_page=UtilPage::init($nowpage,$count);
+			$userdetails = Userdetail::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+			foreach ($userdetails as $userdetail) {
+				$user_instance=null;
+				if ($userdetail->user_id){
+					$user_instance=User::get_by_id($userdetail->user_id);
+					$userdetail['username']=$user_instance->username;
+				}
 			}
+			$this->view->set("userdetails",$userdetails);
 		}
-		$this->view->set("userdetails",$userdetails);
 	}
 	/**
 	 * 查看用户详细信息

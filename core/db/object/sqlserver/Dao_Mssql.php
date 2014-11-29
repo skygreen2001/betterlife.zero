@@ -226,7 +226,7 @@ class Dao_Mssql extends Dao implements IDaoNormal{
 	/**
 	 * 保存或更新当前对象
 	 * @param Object $dataobject
-	 * @return boolen|int 更新:是否更新成功；true为操作正常|保存:保存对象记录的ID标识号 
+	 * @return boolen|int 更新:是否更新成功；true为操作正常|保存:保存对象记录的ID标识号
 	 */
 	public function saveOrUpdate($dataobject)
 	{
@@ -479,9 +479,9 @@ class Dao_Mssql extends Dao implements IDaoNormal{
 	public function queryPage($object,$startPoint,$endPoint,$filter=null,$sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)
 	{
 		try {
-			if (!$this->validParameter($object)) {
-				return null;
-			}
+			if(($startPoint>$endPoint)||($endPoint==0))return null;
+			if (!$this->validParameter($object))return null;
+
 			$_SQL=new Crud_Sql_Select();
 			$_SQL->isPreparedStatement=true;
 			$this->saParams=$_SQL->parseValidInputParam($filter);

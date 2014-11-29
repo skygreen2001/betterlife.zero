@@ -20,10 +20,11 @@ class Action_Msg extends ActionModel
 			$nowpage=1;
 		}
 		$count=Msg::count();
-		$bb_page=UtilPage::init($nowpage,$count);
 		$this->view->countMsgs=$count;
-		$msgs = Msg::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
-		$this->view->set("msgs",$msgs);
+		if($count>0){			$bb_page=UtilPage::init($nowpage,$count);
+			$msgs = Msg::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+			$this->view->set("msgs",$msgs);
+		}
 	}
 	/**
 	 * 查看消息

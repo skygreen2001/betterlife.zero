@@ -285,7 +285,7 @@ LISTS;
 			if (self::isNotColumnKeywork($key)){
 				$isImage =self::columnIsImage($key,$value);
 				if($idColumnName==$key){
-					$headerscontents.="		<tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\">{\${$instancename}.$key}</td></tr>\r\n";
+					$headerscontents.="		{if \${$instancename}}<tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\">{\${$instancename}.$key}</td></tr>{/if}\r\n";
 				}else if ($isImage){
 					$hasImgFormFlag=" enctype=\"multipart/form-data\"";
 					$headerscontents.="		<tr class=\"entry\"><th class=\"head\">$value</th><td class=\"content\"><input type=\"file\" class=\"edit\" name=\"{$key}Upload\" accept=\"image/png,image/gif,image/jpg,image/jpeg\" value=\"{\${$instancename}.$key}\"/></td></tr>\r\n";

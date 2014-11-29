@@ -386,6 +386,10 @@ class ActionBasic extends Object
 	{
 		$this->keywords=Gc::$site_name;
 		$this->description=Gc::$site_name;
+		/**
+		 * 设定网站语言，最终需由用户设置
+		 */
+		class_alias(ucfirst(Gc::$language),Config_C::WORLD_LANGUAGE);
 	}
 
 	/**
@@ -395,10 +399,6 @@ class ActionBasic extends Object
 	{
 		$this->view->set("keywords",$this->keywords);
 		$this->view->set("description",$this->description);
-		/**
-		 * 设定网站语言，最终需由用户设置
-		 */
-		class_alias(ucfirst(Gc::$language),Config_C::WORLD_LANGUAGE);
 	}
 }
 

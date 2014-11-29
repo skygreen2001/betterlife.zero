@@ -20,17 +20,18 @@ class Action_Loguser extends ActionModel
 			$nowpage=1;
 		}
 		$count=Loguser::count();
-		$bb_page=UtilPage::init($nowpage,$count);
 		$this->view->countLogusers=$count;
-		$logusers = Loguser::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
-		foreach ($logusers as $loguser) {
-			$user_instance=null;
-			if ($loguser->user_id){
-				$user_instance=User::get_by_id($loguser->user_id);
-				$loguser['username']=$user_instance->username;
+		if($count>0){			$bb_page=UtilPage::init($nowpage,$count);
+			$logusers = Loguser::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+			foreach ($logusers as $loguser) {
+				$user_instance=null;
+				if ($loguser->user_id){
+					$user_instance=User::get_by_id($loguser->user_id);
+					$loguser['username']=$user_instance->username;
+				}
 			}
+			$this->view->set("logusers",$logusers);
 		}
-		$this->view->set("logusers",$logusers);
 	}
 	/**
 	 * 查看用户日志

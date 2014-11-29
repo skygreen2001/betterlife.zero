@@ -20,10 +20,11 @@ class Action_Notice extends ActionModel
 			$nowpage=1;
 		}
 		$count=Notice::count();
-		$bb_page=UtilPage::init($nowpage,$count);
 		$this->view->countNotices=$count;
-		$notices = Notice::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
-		$this->view->set("notices",$notices);
+		if($count>0){			$bb_page=UtilPage::init($nowpage,$count);
+			$notices = Notice::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+			$this->view->set("notices",$notices);
+		}
 	}
 	/**
 	 * 查看通知

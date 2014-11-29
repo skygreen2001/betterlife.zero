@@ -269,12 +269,12 @@ class AutoCodeAction extends AutoCode
 				return "";
 			case 1:
 				$package=self::$package_model;
-				$relationField=self::relationFieldShow($instancename,$classname,$fieldInfo,"	");
+				$relationField=self::relationFieldShow($instancename,$classname,$fieldInfo,"		");
 				$specialResult="";
 				if ((!empty($relationField))){
-					$specialResult.="		foreach (\${$instancename}s as \$$instancename) {\r\n".
+					$specialResult.="			foreach (\${$instancename}s as \$$instancename) {\r\n".
 									$relationField.
-									"		}\r\n";
+									"			}\r\n";
 				}
 				$result.="/**\r\n".
 						 " +---------------------------------------<br/>\r\n".
@@ -297,11 +297,13 @@ class AutoCodeAction extends AutoCode
 						 "			\$nowpage=1;\r\n".
 						 "		}\r\n".
 						 "		\$count={$classname}::count();\r\n".
-						 "		\${$appname_alias}_page=UtilPage::init(\$nowpage,\$count);\r\n".
 						 "		\$this->view->count{$classname}s=\$count;\r\n".
-						 "		\${$instancename}s = {$classname}::queryPage(\${$appname_alias}_page->getStartPoint(),\${$appname_alias}_page->getEndPoint());\r\n".
+						 "		if(\$count>0){".
+						 "			\${$appname_alias}_page=UtilPage::init(\$nowpage,\$count);\r\n".
+						 "			\${$instancename}s = {$classname}::queryPage(\${$appname_alias}_page->getStartPoint(),\${$appname_alias}_page->getEndPoint());\r\n".
 						 $specialResult.
-						 "		\$this->view->set(\"{$instancename}s\",\${$instancename}s);\r\n".
+						 "			\$this->view->set(\"{$instancename}s\",\${$instancename}s);\r\n".
+						 "		}\r\n".
 						 "	}\r\n";
 
 				//如果是目录树【parent_id】,需要附加一个递归函数显示父目录[全]

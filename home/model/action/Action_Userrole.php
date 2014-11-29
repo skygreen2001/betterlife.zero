@@ -20,22 +20,23 @@ class Action_Userrole extends ActionModel
 			$nowpage=1;
 		}
 		$count=Userrole::count();
-		$bb_page=UtilPage::init($nowpage,$count);
 		$this->view->countUserroles=$count;
-		$userroles = Userrole::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
-		foreach ($userroles as $userrole) {
-			$user_instance=null;
-			if ($userrole->user_id){
-				$user_instance=User::get_by_id($userrole->user_id);
-				$userrole['username']=$user_instance->username;
+		if($count>0){			$bb_page=UtilPage::init($nowpage,$count);
+			$userroles = Userrole::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+			foreach ($userroles as $userrole) {
+				$user_instance=null;
+				if ($userrole->user_id){
+					$user_instance=User::get_by_id($userrole->user_id);
+					$userrole['username']=$user_instance->username;
+				}
+				$role_instance=null;
+				if ($userrole->role_id){
+					$role_instance=Role::get_by_id($userrole->role_id);
+					$userrole['role_name']=$role_instance->role_name;
+				}
 			}
-			$role_instance=null;
-			if ($userrole->role_id){
-				$role_instance=Role::get_by_id($userrole->role_id);
-				$userrole['role_name']=$role_instance->role_name;
-			}
+			$this->view->set("userroles",$userroles);
 		}
-		$this->view->set("userroles",$userroles);
 	}
 	/**
 	 * 查看用户角色

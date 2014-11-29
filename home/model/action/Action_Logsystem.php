@@ -20,10 +20,11 @@ class Action_Logsystem extends ActionModel
 			$nowpage=1;
 		}
 		$count=Logsystem::count();
-		$bb_page=UtilPage::init($nowpage,$count);
 		$this->view->countLogsystems=$count;
-		$logsystems = Logsystem::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
-		$this->view->set("logsystems",$logsystems);
+		if($count>0){			$bb_page=UtilPage::init($nowpage,$count);
+			$logsystems = Logsystem::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+			$this->view->set("logsystems",$logsystems);
+		}
 	}
 	/**
 	 * 查看系统日志
