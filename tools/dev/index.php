@@ -1040,7 +1040,7 @@ AUTHCONTENT;
 		$save_dir=self::$save_dir;
 		self::$save_dir=$domain_root.self::$save_dir.DS;
 
-		if(is_dir(self::$save_dir)){
+		if(is_dir(self::$save_dir."core".DS)){
 			self::$save_dir=$save_dir;
 			self::UserInput();
 			die("<div align='center'><font color='red'>该目录已存在!为防止覆盖您现有的代码,请更名!</font></div>");
@@ -1131,6 +1131,15 @@ AUTHCONTENT;
 			file_put_contents($config_autocode_file, $content);
 		}else{
 			//生成新项目目录
+			UtilFileSystem::createDir(self::$save_dir);
+			if(!is_dir(self::$save_dir)){
+				if (contain(strtolower(php_uname()),"darwin")){
+					die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>因为安全原因，需要手动在操作系统中创建目录:".self::$save_dir."<br/>".
+						"Linux系统需要执行指令:<br/>".str_repeat("&nbsp;",8).
+						"sudo mkdir -p ".self::$save_dir."<br/>".str_repeat("&nbsp;",8).
+						"sudo chmod -R 0777 ".self::$save_dir."</p>");
+				}
+			}
 			smartCopy(Gc::$nav_root_path,self::$save_dir);
 
 			//修改Gc.php配置文件
@@ -1463,7 +1472,7 @@ function smartCopy($source, $dest, $options=array('folderPermission'=>0755,'file
 		$dirHandle=opendir($source);
 		while($file=readdir($dirHandle))
 		{
-			if($file!="." && $file!=".."&& $file!=".git"&& $file!=".svn")
+			if($file!="." && $file!=".."&& $file!=".git"&& $file!=".svn"&& $file!=".DS_Store")
 			{
 				 if(!is_dir($source."/".$file)) {
 					$__dest=$dest."/".$file;

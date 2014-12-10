@@ -8,7 +8,7 @@
  * @package core.main
  * @author skygreen
  */
-class Router 
+class Router
 {
 	//<editor-fold defaultstate="collapsed" desc="定义部分">
 	//支持的URL模式
@@ -24,18 +24,18 @@ class Router
 	 * 1 普通模式(参数没有顺序,例如/m/module/a/action/id/1);
 	 * 2 智能模式(系统默认使用的模式，可自动识别模块和操作/module/action/id/1/ 或者 /module,action,id,1/...);
 	 */
-	const URL_PATHINFO_MODEL=2;              
+	const URL_PATHINFO_MODEL=2;
 
 	/**
 	 * 是否开启URL路由
 	 */
-	const URL_ROUTER_ON= true;    
+	const URL_ROUTER_ON= true;
 
 	/**
 	 *  URL地址是否不区分大小写
 	 */
 	const URL_CASE_INSENSITIVE  = false;
-		
+
 	/**
 	 * PATHINFO模式下，各参数之间的分割符号
 	 */
@@ -149,7 +149,7 @@ class Router
 	 * @var string WEB应用模块名
 	 */
 	private $module;
-	/**  
+	/**
 	 * @var string Action Controller名称
 	 */
 	private $controller;
@@ -158,15 +158,15 @@ class Router
 	* @example:如控制器Action_Library所在目录为system目录下，则tpl文件所在目录为system/library/目录下。
 	*/
 	private $controller_path;
-	/**  
+	/**
 	 * @var string 具体的导航页面名称
 	 */
 	private $action;
-	/**    
+	/**
 	 * @var array 所有的参数
 	 */
 	private $params;
-	/**        
+	/**
 	 * @var array 真正需要的数据
 	 */
 	private $data;
@@ -186,7 +186,7 @@ class Router
 		 */
 		if(Gc::$session_auto_start){
 		   HttpSession::init();
-		}  
+		}
 		$this->analyzeNavition();
 		if (Gc::$dev_profile_on) Profiler::unmark('负责WEB URL的解析');
 	}
@@ -231,9 +231,9 @@ class Router
 				$_varModule =   self::VAR_MODULE;
 				$_varAction =  self::VAR_ACTION;
 				$_depr  =   self::URL_PATHINFO_DEPR;
-				$_pathModel =   self::URL_PATHINFO_MODEL;    
+				$_pathModel =   self::URL_PATHINFO_MODEL;
 				$_varDispatch=self::VAR_DISPATCH;
-				
+
 				// 组装新的URL地址
 				$_URL = '/';
 				if (empty($_varDispatch)){
@@ -250,11 +250,11 @@ class Router
 					$data = array_merge($_POST,$_GET);
 					$_NavSection=explode(self::VAR_DISPATCH_DEPR,$data[self::VAR_DISPATCH]);
 					$_GET[self::VAR_GROUP] = @$_NavSection[0];
-					$_GET[self::VAR_ACTION] = @end($_NavSection);  
+					$_GET[self::VAR_ACTION] = @end($_NavSection);
 					unset($_NavSection[count($_NavSection)-1]);
 					unset($_NavSection[0]);
 					if (!empty($_NavSection)&&count($_NavSection)>0){
-						$_GET[self::VAR_MODULE] = @$_NavSection[count($_NavSection)]; 
+						$_GET[self::VAR_MODULE] = @$_NavSection[count($_NavSection)];
 						unset($_NavSection[count($_NavSection)]);
 					}
 					if($_pathModel==self::URL_PATHINFO_DEFAULT) {
@@ -286,7 +286,7 @@ class Router
 		}else {
 			// 普通URL模式 检查路由规则
 			if(isset($_GET[self::VAR_ROUTER])) self::routerCheck();
-			$this->url_mcrypt_decode();  
+			$this->url_mcrypt_decode();
 			$this->resolveNavDispathParam();
 			$_REQUEST = array_merge($_POST,$_GET);
 		}
@@ -294,24 +294,24 @@ class Router
 			$this->setRouteProperties($_REQUEST);
 		}
 	}
-	
+
 	/**
-	 * 对加密过的链接地址进行解码 
+	 * 对加密过的链接地址进行解码
 	 * 加密的url具有以下特征：
 	 */
 	private function url_mcrypt_decode()
-	{   
-		if (class_exists("TagHrefClass")&&TagHrefClass::$isMcrypt){     
+	{
+		if (class_exists("TagHrefClass")&&TagHrefClass::$isMcrypt){
 			if ((count($_GET)==1)){
 				$get=each($_GET);
-				if (((empty($get["1"]))||($get["1"]=="="))&&(base64_decode($get["0"], true))) {   
-					$path = base64_decode($get["0"]); 
-					$_GET = UtilNet::parse_urlquery($path);  
+				if (((empty($get["1"]))||($get["1"]=="="))&&(base64_decode($get["0"], true))) {
+					$path = base64_decode($get["0"]);
+					$_GET = UtilNet::parse_urlquery($path);
 				}
 			}
 		}
 	}
-	
+
 	/**
 	* 支持通过go=admin.index.index的快捷方式进行导航<br/>
 	* 参考cs-cart的导航规则进行了改进。
@@ -321,16 +321,16 @@ class Router
 		$data = array_merge($_POST,$_GET);
 		if(!empty($data[self::VAR_DISPATCH])){
 			$_NavSection=explode(self::VAR_DISPATCH_DEPR,$data[self::VAR_DISPATCH]);
-			$_GET[self::VAR_GROUP] = @$_NavSection[0];   
-			$_GET[self::VAR_ACTION] = @end($_NavSection);//@$_NavSection[2];   
-			unset($_NavSection[count($_NavSection)-1]);             
-			unset($_NavSection[0]);                   
+			$_GET[self::VAR_GROUP] = @$_NavSection[0];
+			$_GET[self::VAR_ACTION] = @end($_NavSection);//@$_NavSection[2];
+			unset($_NavSection[count($_NavSection)-1]);
+			unset($_NavSection[0]);
 			if (!empty($_NavSection)&&count($_NavSection)>0){
-				$_GET[self::VAR_MODULE] = @$_NavSection[count($_NavSection)]; 
+				$_GET[self::VAR_MODULE] = @$_NavSection[count($_NavSection)];
 				unset($_NavSection[count($_NavSection)]);
-			}            
+			}
 			if (!empty($_NavSection)&&count($_NavSection)>0){
-				$this->controller_path= implode(DIRECTORY_SEPARATOR,$_NavSection);//@$_NavSection[1]; 
+				$this->controller_path= implode(DIRECTORY_SEPARATOR,$_NavSection);//@$_NavSection[1];
 			}
 		}
 	}
@@ -346,27 +346,27 @@ class Router
 		 * 设置模块
 		 */
 		$var  = self::VAR_GROUP;
-		$group= !empty($route[$var])?$route[$var]:Gc::$module_names[2];                          
+		$group= !empty($route[$var])?$route[$var]:Gc::$module_names[2];
 		if(!empty($route[$var])){
-			$group=$route[$var]; 
+			$group=$route[$var];
 			unset($route[$var]);
-			$this->module=strtolower($group); 
+			$this->module=strtolower($group);
 		}else{
 		  if (count(Gc::$module_names)>=3){
-			$group= Gc::$module_names[2];  
-		  }  
-		  $this->module=strtolower($group); 
-		}  
+			$group= Gc::$module_names[2];
+		  }
+		  $this->module=strtolower($group);
+		}
 		/**
 		 * 设置控制器
 		 */
 		$var  =  self::VAR_MODULE;
 		$controller = !empty($route[$var])?$route[$var]:self::URL_DEFAULT_CONTROLLER;
 		//支持路径的控制器
-		if (contain($controller,self::VAR_DISPATCH_DEPR)){            
+		if (contain($controller,self::VAR_DISPATCH_DEPR)){
 			$_NavSection=explode(self::VAR_DISPATCH_DEPR,$controller);
 			$controller=$_NavSection[count($_NavSection)-1];
-			unset($_NavSection[count($_NavSection)-1]);            
+			unset($_NavSection[count($_NavSection)-1]);
 			$this->controller_path=implode(DIRECTORY_SEPARATOR,$_NavSection);
 		}
 		$this->controller =$controller;
@@ -387,9 +387,13 @@ class Router
 
 		$this->extras=array_intersect_key($route, self::$extrasList);
 		$this->data=array_diff_key($route, self::$extrasList);
+		$this->data["router"]=array();
+		$this->data["router"][self::VAR_MODULE]=$this->getController();
+		$this->data["router"][self::VAR_ACTION]=$this->getAction();
+		$this->data["router"][self::VAR_GROUP]=$this->getModule();
 		$this->data=new DataObjectArray($this->data);
 	}
-			 
+
 	/**
 	 +----------------------------------------------------------
 	 * 获得实际的分组名称
@@ -406,12 +410,12 @@ class Router
 	public function getController() {
 		return $this->controller;
 	}
-	
+
 	public function getController_path() {
 		return $this->controller_path;
 	}
 
-	
+
 	public function getAction() {
 		return $this->action;
 	}
@@ -440,7 +444,7 @@ class Router
 	public static function routerCheck() {
 		// 搜索路由映射 把路由名称解析为对应的模块和操作
 		$routes = array(
-				"welcome"=>array('Auth','login',"id,name,time","rand=10000"),
+			"welcome"=>array('Auth','login',"id,name,time","rand=10000"),
 		);
 		if(!empty($routes)) {
 			if(isset($_GET[self::VAR_ROUTER])) {

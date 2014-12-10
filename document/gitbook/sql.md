@@ -42,7 +42,10 @@ function sqlExecute($sqlstring,$object=null)```
 查询所有的博客数据[只需要三句]
 
 ```
+<?php
 require_once("init.php");
 $sqlstr="select * from bb_core_blog";
-sqlExecute($sqlstr);```
+sqlExecute($sqlstr);
+?>
+```
 

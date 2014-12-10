@@ -96,6 +96,10 @@ abstract class DataObject extends Object implements ArrayAccess
 	public function __construct($array=null)
 	{
 		if (!empty($array)){
+			$id_name=DataObjectSpec::getRealIDColumnNameStatic($this);
+			if (is_array($array)&&array_key_exists($id_name, $array)){
+				if (empty($array[$id_name]))unset($array[$id_name]);
+			}
 			UtilObject::array_to_object($array,$this);
 		}
 	}
