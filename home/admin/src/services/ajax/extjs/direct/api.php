@@ -24,7 +24,7 @@ class ConfigApi{
 	 */
 	public static function render()
 	{
-		header('Content-Type: text/javascript');
+		header('Content-Type:text/javascript;charset=UTF-8');
 		// convert API config to Ext.Direct spec
 		$actions = array();
 		foreach (self::$configApi as $aname => $a) {

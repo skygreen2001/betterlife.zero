@@ -48,7 +48,7 @@ class RemoteServiceCall
 		//$post_data = file_get_contents("php://input");
 		//$post_data='{"url":"http:\/\/127.0.0.1\/betterlife\/core\/util\/view\/ajax\/extjs\/direct\/router.php","type":"remoting","actions":{"MemberService":[{"name":"doSelect","len":2,"formHandler":true},{"name":"getInfo","len":1},{"name":"getApp","len":1}]}}';
 		if (isset($post_data)) {
-			header('Content-Type: text/javascript');
+			header('Content-Type:text/javascript;charset=UTF-8');
 			$data = json_decode($post_data);
 		} else if (isset($_POST['extAction'])) { // form post
 			$this->isForm = true;
