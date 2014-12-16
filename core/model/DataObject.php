@@ -233,9 +233,8 @@ abstract class DataObject extends Object implements ArrayAccess
 		{
 			$columnName=DataObjectSpec::getRealColumnName($this,EnumColumnNameDefault::UPDATETIME);
 			$this->$columnName= $updateTime;
-		}else{
-			$this->setCommitTime($updateTime);
 		}
+		// else{$this->setCommitTime($updateTime);}
 		unset($this->real_fieldspec);
 	}
 
