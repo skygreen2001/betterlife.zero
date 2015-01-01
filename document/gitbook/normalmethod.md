@@ -1,5 +1,13 @@
 # 数据对象通用方法
 
+数据对象通用方法都定义在类DataObject和DataObjectFunc里
+
+路径    :core/model/
+
+文件名称：DataObject.php
+
+文件名称：DataObjectFunc.php
+
 ##定义通用方法列表
 定义通用方法分为两类:实例方法和类方法。
 

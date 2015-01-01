@@ -41,3 +41,13 @@ github路径:https://github.com/skygreen2001/betterlife/blob/master/db/mysql/dbd
 | bb_user_user | 用户 | 用户 |
 | bb_user_userdetail | 用户详细信息 | 用户详细信息 |
 
+##更多详情
+访问示例数据库的说明书可通过访问框架本地首页地址:
+http://127.0.0.1/betterlife/
+
+下方应有以下文字链接:工程重用|数据库说明书|一键生成|帮助;
+点击其中的文字链接:数据库说明书
+
+数据库说明书链接地址:http://127.0.0.1/betterlife/tools/tools/db/manual/db_normal.php
+
+需要说明的是:该数据库说明书是实时的,当你新建一个项目，创建了不同的数据库，只要按照框架定义数据库，那么这个地址可以实时生成数据库说明书，而它真正做到了一处定义，全局使用。

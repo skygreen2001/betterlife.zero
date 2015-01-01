@@ -82,7 +82,17 @@ class AutoCodeDomainJava extends AutoCode
 			"1"=>"对象属性都是private,定义setter和getter方法。",
 			"2"=>"所有的列定义的对象属性都是public"
 		);
-		$db_domian_php=Gc::$url_base."tools/tools/autocode/layer/domain/db_domain.php";
+
+		$url_base=Gc::$url_base;
+		if (contain(strtolower(php_uname()),"darwin")){
+			$url_base=UtilNet::urlbase();
+			$file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+			if (contain($file_sub_dir,"tools".DS))
+				$file_sub_dir=substr($file_sub_dir,0,strpos($file_sub_dir,"tools".DS));
+			$domainSubDir=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir);
+			if(!endwith($url_base,$domainSubDir))$url_base.=$domainSubDir;
+		}
+		$db_domian_php=$url_base."tools/tools/autocode/layer/domain/db_domain.php";
 		$more_content="<br/><br/><a href='$db_domian_php' target='_blank'>生成本框架使用的数据对象实体类</a>";
 		parent::UserInput("一键生成Java实体类数据对象定义层",$inputArr,"1",$more_content);
 	}

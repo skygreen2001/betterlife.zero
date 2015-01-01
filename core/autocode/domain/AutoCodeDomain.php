@@ -74,7 +74,16 @@ class AutoCodeDomain extends AutoCode
 	 */
 	public static function UserInput($default_value="")
 	{
-		$db_domian_java=Gc::$url_base."tools/tools/autocode/layer/domain/db_domain_java.php";
+		$url_base=Gc::$url_base;
+		if (contain(strtolower(php_uname()),"darwin")){
+			$url_base=UtilNet::urlbase();
+			$file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+			if (contain($file_sub_dir,"tools".DS))
+				$file_sub_dir=substr($file_sub_dir,0,strpos($file_sub_dir,"tools".DS));
+			$domainSubDir=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir);
+			if(!endwith($url_base,$domainSubDir))$url_base.=$domainSubDir;
+		}
+		$db_domian_java=$url_base."tools/tools/autocode/layer/domain/db_domain_java.php";
 		$inputArr=array(
 			"1"=>"对象属性都是private,定义setter和getter方法",
 			"2"=>"所有的列定义的对象属性都是public"

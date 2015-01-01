@@ -16,14 +16,14 @@ if (!isset($old_prefix)||!isset($old_prefix)){
 	echo UtilCss::form_css();
 	echo "</head>";
 	echo "<body>";
-	echo "<br/><br/><br/><br/><br/><h1 align='center'>需要定义Get参数：【原前缀名】和【新前缀名】</h1>";    
+	echo "<br/><br/><br/><br/><br/><h1 align='center'>修改数据库表前缀名：【原前缀名】和【新前缀名】</h1>";
 	echo "<div align='center' height='600'>";
 	echo "<form>";
 	echo "  <div>";
 	echo "      <label>原前缀名</label><input name=\"old_prefix\" /><br/>";
 	echo "      <label>新前缀名</label><input name=\"new_prefix\" />";
 	echo "  </div>";
-	echo "  <input type=\"submit\" />";
+	echo "  <input type=\"submit\" value='提交' />";
 	echo "</form>";
 	echo "</div>";
 	echo "</body>";

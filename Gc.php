@@ -361,12 +361,10 @@ class Gc
 				$baseurl = 'https://'.$_SERVER['HTTP_HOST'];
 				if($_SERVER['SERVER_PORT']!=443)$baseurl.=':'.$_SERVER['SERVER_PORT'];
 			}else{
-				if(array_key_exists('HTTP_HOST',$_SERVER)){
-					$baseurl = 'http://'.$_SERVER['HTTP_HOST'];
-					if(array_key_exists('SERVER_PORT',$_SERVER)){
-						if (!(strpos($_SERVER['HTTP_HOST'],$_SERVER['SERVER_PORT'])!== false)){
-							if($_SERVER['SERVER_PORT']!=80)$baseurl.=':'.$_SERVER['SERVER_PORT'];
-						}
+				if(array_key_exists('HTTP_HOST',$_SERVER))$baseurl = 'http://'.$_SERVER['HTTP_HOST'];
+				if(array_key_exists('SERVER_PORT',$_SERVER)){
+					if (!(strpos($_SERVER['HTTP_HOST'],$_SERVER['SERVER_PORT'])!== false)){
+						if($_SERVER['SERVER_PORT']!=80)$baseurl.=':'.$_SERVER['SERVER_PORT'];
 					}
 				}
 			}

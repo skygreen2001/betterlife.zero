@@ -202,7 +202,7 @@ class MenuGroup extends Viewable
 	 */
 	public static function all()
 	{
-		$uri=Menu::address();;
+		$uri=Menu::address();
 		$menuConfigs=UtilXmlSimple::fileXmlToObject($uri);
 		$result=array();
 		if ($menuConfigs!=null)
