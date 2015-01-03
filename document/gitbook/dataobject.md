@@ -94,7 +94,7 @@ github路径:https://github.com/skygreen2001/betterlife/blob/master/core/model/D
 
     在实际的开发中，多对多关系往往更多的是使用这种一对多的方式进行处理。
 
-对数据对象的关系定义可参考[3.3.框架数据对象规格说明];对数据对象的关系定义变量参见类:DataObjectSpec,对数据对象的关系定义实现参见类:DataObjectRelation
+对数据对象的关系定义可参考[3.3.框架数据对象规格说明];对数据对象的关系定义变量参见类:DataObjectSpec,对数据对象的关系定义实现参见类:DataObjectRelation。
 
 
 ##高级定义

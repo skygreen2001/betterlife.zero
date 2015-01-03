@@ -91,7 +91,7 @@ class EnumColumnNameDefault extends Enum
 	 */
 	const ID="id";
 	/**
-	 * 数据创建的时间，当没有updateTime时，其亦代表数据最后更新的时间
+	 * 数据创建的时间
 	 */
 	const COMMITTIME="commitTime";
 	/**
@@ -143,14 +143,14 @@ class EnumIDNameStrategy extends Enum
 class EnumForeignIDNameStrategy extends Enum
 {
 	/**
-	* ID名称为:对象名+'id'<br/>
-	* 如果对象名为User,则ID名称为:userid【头字母大小写均可】
-	*/
+	 * ID名称为:对象名+'id'<br/>
+	 * 如果对象名为User,则ID名称为:userid【头字母大小写均可】
+	 */
 	const TABLENAMEID=1;
 	/**
-	* ID名称为:对象名+连接符+'id' <br/>
-	* 如果对象名为User,连接符为'_';则ID名称为:user_id【头字母大小写均可】
-	*/
+	 * ID名称为:对象名+连接符+'id' <br/>
+	 * 如果对象名为User,连接符为'_';则ID名称为:user_id【头字母大小写均可】
+	 */
 	const TABLENAME_ID=2;
 }
 
@@ -195,18 +195,18 @@ class EnumDataSpec extends Enum
  *        如User和Role是多对多关系，数据库表名前缀为bb,文件夹目录是user,TABLENAME_RELATION是re；那么在Role里定义$belongs_many_many包含:User;则对应的表名是:bb_user_re_userrole.<br/>
  * 4.foreign_id:在对象之间或者说表之间存在一对一，一对多，多对多的关系时，可通过它指定外键的名称，如果没有指定，则按默认定义。<br/>
  *   外键的名称默认定义：<br/>
- *   一对一:【关系表类名+Id】；注意关系表类名头字母小写，Id头字母大写；<br/>
- *                      如UserDetail和User是一对一关系，则在UserDetail中对应User的外键就是：userId。<br/>
+ *   一对一:【关系表类名+"_"+id】；注意关系表类名头字母小写<br/>
+ *                      如UserDetail和User是一对一关系，则在UserDetail中对应User的外键就是：user_id。<br/>
  *                      在User中定义$has_one是UserDetail，在UserDetail定义$belong_has_one是User<br/>
- *   一对多:【关系表类名+Id】；注意关系表类名头字母小写，Id头字母大写；<br/>
- *                      如Department和User是一对多关系，则在User中对应Department的外键就是：departmentId<br/>
+ *   一对多:【关系表类名+"_"+id】；注意关系表类名头字母小写<br/>
+ *                      如Department和User是一对多关系，则在User中对应Department的外键就是：department_id<br/>
  *                      在User中定义$belong_has_one是Department，在Department中定义$has_many是User。<br/>
  *   多对多【主控端】:多对多关系会产生一张中间表,它定义在EnumDataSpec::MANY_MANY_TABLE里，<br/>
- *                   注意表类名头字母小写，Id头字母大写。 <br/>
- *                   主表类外键名称：【主表类名+Id】，关系表类外键名称：【关系表类名+Id】<br/>
+ *                   注意表类名头字母小写 <br/>
+ *                   主表类外键名称：【主表类名+"_"+id】，关系表类外键名称：【关系表类名+"_"+id】<br/>
  *   多对多【从属端】:多对多关系会产生一张中间表,它定义在EnumDataSpec::MANY_MANY_TABLE里，<br/>
- *                   注意表类名头字母小写，Id头字母大写。<br/>
- *                   主表类外键名称：【主表类名+Id】，关系表类外键名称：【关系表类名+Id】<br/>
+ *                   注意表类名头字母小写 <br/>
+ *                   主表类外键名称：【主表类名+"_"+id】，关系表类外键名称：【关系表类名+"_"+id】<br/>
  * 说明：$field_spec_default为默认的数据对象的列规格说明，它全局的定义了当前应用的列规格说明；<br/>
  *      数据对象定义需定义字段：public $field_spec，它定义了当前数据对象的列规格说明。
  * @category betterlife

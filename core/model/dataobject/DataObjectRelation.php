@@ -101,13 +101,13 @@ class DataObjectRelation extends Object
 				 * 定义如下：
 				 * class Department extends DataObject {
 				 *     static $has_many=array(
-				 *         "users"=>"User",
+				 *         "admins"=>"Admin",
 				 *     );
 				 * 示例如下：
-				 *       $department=new Department();
-				 *       $department->setId(5);
-				 *       print_r($department->getUsers());
-				 *       print_r($department->Users());
+				 *       $department=Department::get_by_id(1);
+				 *       print_r($department->admins);//第1种方式
+				 *       print_r($department->getAdmins());//第2种方式
+				 *       print_r($department->admins());//第3种方式
 				 */
 				//<editor-fold defaultstate="collapsed" desc="一对多">
 				if ($propertyName==EnumTableRelation::HAS_MANY) {
@@ -145,10 +145,10 @@ class DataObjectRelation extends Object
 				 *        "roles"=>"Role",
 				 *     );
 				 * 示例如下：
-				 *       $user=new User();
-				 *       $user->setId(2);
-				 *       print_r($user->getRoles());
-				 *       print_r($user->Roles());
+				 *       $user=User::get_by_id(1);
+				 *       print_r($user->roles);//第1种方式
+				 *       print_r($user->getRoles());//第2种方式
+				 *       print_r($user->roles());//第3种方式
 				 */
 				//<editor-fold defaultstate="collapsed" desc="多对多">
 				if ($propertyName==EnumTableRelation::MANY_MANY) {
@@ -189,9 +189,10 @@ class DataObjectRelation extends Object
 				 *        "users"=>"User",
 				 *     );
 				 * 示例如下：
-				 *       $role=new Role();
-				 *       $role->setId(2);
-				 *       print_r($role->getUsers());
+				 *       $role=Role::get_by_id(1);
+				 *       print_r($role->users);//第1种方式
+				 *       print_r($role->getUsers());//第2种方式
+				 *       print_r($role->users());//第3种方式
 				 */
 				//<editor-fold defaultstate="collapsed" desc="从属于多对多">
 				if ($propertyName==EnumTableRelation::BELONGS_TO) {
@@ -228,13 +229,13 @@ class DataObjectRelation extends Object
 				 * 定义如下：
 				 * class User extends DataObject {
 				 *     static $has_one=array(
-				 *        "userDetail"=> "UserDetail",
+				 *        "userdetail"=> "UserDetail",
 				 *     );
 				 * 示例如下：
-				 *      $user=new User();
-				 *      $user->setId(3);
-				 *      $user->getUserDetail();
-				 *      $user->UserDetail();
+				 *      $user=User::get_by_id(1);
+				 *      $user->userdetail;//第1种方式
+				 *      //$user->getUserdetail();//第2种方式
+				 *      //$user->userdetail();//第3种方式
 				 */
 				//<editor-fold defaultstate="collapsed" desc="一对一">
 				if ($propertyName==EnumTableRelation::HAS_ONE) {
@@ -271,10 +272,10 @@ class DataObjectRelation extends Object
 				 *    "user"=>"User"
 				 *  );
 				 * 示例如下：
-				 *      $comment=new Comment();
-				 *      $comment->setId(3);
-				 *      $comment->getUser();
-				 *      $comment->user();
+				 *      $comment=Comment::get_by_id(3);
+				 *      $comment->user;//第1种方式
+				 *      //$comment->getUser();//第2种方式
+				 *      //$comment->user();//第3种方式
 				 */
 				//<editor-fold defaultstate="collapsed" desc="从属于一对一">
 				if ($propertyName==EnumTableRelation::BELONG_HAS_ONE) {
