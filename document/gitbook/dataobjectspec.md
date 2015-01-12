@@ -345,3 +345,29 @@
 
     数据对象外键名称定义，如无定义，则按默认规则查找指定外键。
 
+
+##项目默认配置统一调整
+
+以上配置的使用都定义在文件DataObject.php里,所有的数据对象都继承它,默认都采用在该文件中的配置;作者推荐尽量使用该配置；如果在实际项目中,确实需要调整该配置,可以通过以上配置说明中的值进行定制。
+
+路径    :core/model/
+
+文件名称：DataObject.php
+
+详细定义:
+
+* public static $idname_strategy=EnumIDNameStrategy::TABLENAME_ID;
+
+    ID名称定义的策略
+
+* public static $idname_concat='_';
+
+    ID名称中的连接符。ID名称定义的策略为TABLENAME_ID有效。
+
+* public static $foreignid_name_strategy=EnumForeignIDNameStrategy::TABLENAME_ID;
+
+    Foreign ID名称定义的策略
+
+* $foreignid_concat='_';
+
+    Foreign ID名称中的连接符。Foreign ID名称定义的策略为TABLENAME_ID有效。

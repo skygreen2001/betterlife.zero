@@ -72,6 +72,7 @@ class AutoCodeModelLike extends AutoCode
 
 		//将AutoCodePreviewReport相关值转移到AutoCodePreviewReportLike里【AutoCode具体生成代码的报告数组都是放置在AutoCodePreviewReport里，因此需要执行该操作】
 		AutoCodePreviewReportLike::$domain_files=AutoCodePreviewReport::$domain_files;
+		AutoCodePreviewReportLike::$enum_files=AutoCodePreviewReport::$enum_files;
 		AutoCodePreviewReportLike::$action_front_files=AutoCodePreviewReport::$action_front_files;
 		AutoCodePreviewReportLike::$service_files=AutoCodePreviewReport::$service_files;
 		AutoCodePreviewReportLike::$view_front_files=AutoCodePreviewReport::$view_front_files;

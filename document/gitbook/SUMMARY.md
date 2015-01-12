@@ -10,7 +10,7 @@
    * [各种类型的数据库](alltypedb.md)
 * [数据对象](dataobject.md)
    * [数据对象通用方法](normalmethod.md)
-   * [数据对象详细说明](dataobjectdetail.md)
+   * [通用方法详细说明](dataobjectdetail.md)
    * [数据对象规格说明](dataobjectspec.md)
    * [框架数据对象示例](dataobjectsample.md)
 * [项目重用](reuse.md)

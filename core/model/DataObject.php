@@ -362,6 +362,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	/**
 	 * 由标识删除指定ID数据对象
 	 * @param mixed $id 数据对象编号
+	 * @return boolen 是否修改成功
 	 */
 	public static function deleteByID($id)
 	{
@@ -374,6 +375,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 *  形式如下:
 	 *  1.array:array(1,2,3,4,5)
 	 *  2.字符串:1,2,3,4
+	 * @return boolen 是否修改成功
 	 */
 	public static function deleteByIds($ids)
 	{
@@ -389,6 +391,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 *		2.array("id"=>"1","name"=>"sky")<br/>
 	 *		3.允许对象如new User(id="1",name="green");<br/>
 	 * 默认:SQL Where条件子语句。如："(id=1 and name='sky') or (name like 'sky')"<br/>
+	 * @return boolen 是否修改成功
 	 */
 	public static function deleteBy($filter)
 	{
@@ -406,7 +409,7 @@ abstract class DataObject extends Object implements ArrayAccess
 
 	/**
 	 * 保存或更新当前对象
-	 * @return boolen 是否更新成功；true为操作正常
+	 * @return boolen 是否保存或更新成功；true为操作正常
 	 */
 	public function saveOrUpdate()
 	{
@@ -464,7 +467,6 @@ abstract class DataObject extends Object implements ArrayAccess
 		return DataObjectFunc::updateBy(get_called_class(),$filter,$array_properties);
 	}
 
-
 	/**
 	 * 对属性进行递增
 	 * @param object|string|array $filter 查询条件，在where后的条件<br/>
@@ -476,6 +478,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
 	 * @param string property_name 属性名称
 	 * @param int incre_value 递增数
+	 * @return boolen 是否修改成功
 	 */
 	public static function increment($filter=null,$property_name,$incre_value=1)
 	{
@@ -493,6 +496,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * 默认:SQL Where条件子语句。如：(id=1 and name='sky') or (name like 'sky')<br/>
 	 * @param string property_name 属性名称
 	 * @param int decre_value 递减数
+	 * @return boolen 是否修改成功
 	 */
 	public static function decrement($filter=null,$property_name,$decre_value=1)
 	{
@@ -626,8 +630,8 @@ abstract class DataObject extends Object implements ArrayAccess
 
 	/**
 	 * 根据表ID主键获取指定的对象[ID对应的表列]
-	 * @param string $id
-	 * @return 对象
+	 * @param string $id 数据对象编号
+	 * @return 数据对象
 	 */
 	public static function get_by_id($id)
 	{

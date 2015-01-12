@@ -74,7 +74,6 @@ github路径:https://github.com/skygreen2001/betterlife/blob/master/core/model/D
       多对多关系数据对象:Userrole
       角色[从数据对象]和用户[主数据对象]就是从属于多对多关系
 
-
 * 多对多分解成一对多
 
     在将关系型数据库的表转换成面向对象的类进行代码的开发处理之后，作为开发者，我们往往发现，多对多都会分解为一对多来进行处理。

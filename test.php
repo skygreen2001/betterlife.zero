@@ -1,6 +1,50 @@
 <?php
 require_once ("init.php");
-echo Wl::INFO_DB_CHARACTER;
+// echo Wl::INFO_DB_CHARACTER;
+
+
+//调用一对一
+// $user=User::get_by_id(1);
+// $userdetail=$user->userdetail;
+// print_r($user->userdetail);
+
+//调用从属于一对一
+// $userdetail=Userdetail::get_by_id(1);
+// $user=$userdetail->user;
+// print_r($user);
+
+// //调用一对多
+// $department=new Department();
+// $department->setId(5);
+// print_r($department->getUsers());
+// print_r($department->Users());
+
+// //调用多对多【主控的一方】
+// $user=new User();
+// $user->setId(2);
+// print_r($user->getRoles());
+// print_r($user->Roles());
+
+// //调用多对多【被控的一方】
+// $role=new Role();
+// $role->setId(2);
+// print_r($role->getUsers());
+// print_r($role->Users());
+// $joe=new User();
+// $joe->setUsername("joy");
+// $joe->setPassword("tttt");
+// $joe["username"]="wb";
+// $joe->save($joe);
+
+
+// // 分页方法调用
+// $blogs=Blog::queryPage(1,5);
+// $blogs=Blog::queryPageByPageNo(1,null,3);
+// print_r($blogs);
+
+
+
+
 
 // $region=Region::get_by_id("666");
 // print_r($region);
@@ -37,34 +81,6 @@ $user->user_id=2;
 print_r($user->userdetail);
 print_r(User::get(array(username=> "like '%ad%'")));
 
-//调用一对一
-$user=new User;
-$user->setId(2);
-print_r($user->getUserdetail());
-print_r($user->Userdetail());
-
-//调用一对多
-$department=new Department();
-$department->setId(5);
-print_r($department->getUsers());
-print_r($department->Users());
-
-//调用多对多【主控的一方】
-$user=new User();
-$user->setId(2);
-print_r($user->getRoles());
-print_r($user->Roles());
-
-//调用多对多【被控的一方】
-$role=new Role();
-$role->setId(2);
-print_r($role->getUsers());
-print_r($role->Users());
-$joe=new User();
-$joe->setUsername("joy");
-$joe->setPassword("tttt");
-$joe["username"]="wb";
-$joe->save($joe);
 
 $role=new Role();
 $role->setId(5);

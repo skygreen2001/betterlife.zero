@@ -129,7 +129,7 @@ class AutoCodeConfig extends AutoCode
 		$result =UtilArray::saveXML($filename,self::$config_classes,"classes");
 		if(!file_exists($filename)){
 			$dir_autocode=Gc::$nav_root_path."tools".DS."tools".DS."autocode".DS;
-			if (contain(strtolower(php_uname()),"darwin")){			
+			if (contain(strtolower(php_uname()),"darwin")){
 				die("<p style='font: 15px/1.5em Arial;margin:15px;line-height:2em;'>因为安全原因，需要手动在操作系统中创建目录:".$dir_autocode."<br/>".
 					"Linux系统需要执行指令:<br/>".str_repeat("&nbsp;",8).
 					"sudo mkdir -p ".$dir_autocode."<br/>".str_repeat("&nbsp;",8).
@@ -510,7 +510,7 @@ class AutoCodeConfig extends AutoCode
 	 * @param string classname 导出的类名
 	 * @param array dataobject 来自xml配置文件单个类的所有说明
 	 */
-	private static function relation_specification_create($classname,$dataobject)
+	public static function relation_specification_create($classname,$dataobject)
 	{
 		//导出一对一关系规范定义(如果存在)
 		$has_one_spec=$dataobject->has_one->relationclass;
