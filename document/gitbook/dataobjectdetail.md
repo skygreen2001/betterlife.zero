@@ -245,7 +245,7 @@
     	 *		2.name desc;
     	 * @return 单个对象实体
 
-* get_by_id:根据表ID主键获取指定的对象[ID对应的表列]
+* get_by_id:根据表ID主键获取指定的对象
 
 	  函数定义:	public static function get_by_id($id)
       函数说明:

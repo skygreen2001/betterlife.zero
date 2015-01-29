@@ -180,9 +180,6 @@ class AutoCodeDomain extends AutoCode
 						$result.="		return null;\r\n";
 					}
 					$result.="	}\r\n\r\n";
-
-
-
 					$result.="	/**\r\n".
 							 "	 * 通过枚举值获取枚举键定义<br/>\r\n".
 							 "	 */\r\n".
@@ -203,8 +200,6 @@ class AutoCodeDomain extends AutoCode
 						$result.="		return null;\r\n";
 					}
 					$result.="	}\r\n\r\n";
-
-
 
 					$result.="}\r\n".
 							 "?>\r\n";
@@ -583,7 +578,7 @@ class AutoCodeDomain extends AutoCode
 	}
 
 	/**
-	 *从表名称获取子文件夹的信息。
+	 * 从表名称获取子文件夹的信息。
 	 * @param string $tablename 表名称
 	 * @return string 返回对象所在的Package名
 	 */

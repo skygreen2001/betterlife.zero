@@ -3689,6 +3689,11 @@ CREATE TABLE `bb_user_re_userrole` (
 -- ----------------------------
 -- Records of bb_user_re_userrole
 -- ----------------------------
+INSERT INTO `bb_user_re_userrole` (`userrole_id`, `user_id`, `role_id`)
+VALUES
+  (1,1,1),
+  (2,1,2),
+  (3,1,3);
 
 -- ----------------------------
 -- Table structure for `bb_user_role`
@@ -3705,6 +3710,11 @@ CREATE TABLE `bb_user_role` (
 -- ----------------------------
 -- Records of bb_user_role
 -- ----------------------------
+INSERT INTO `bb_user_role` (`role_id`, `role_name`, `commitTime`, `updateTime`)
+VALUES
+  (1,'项目经理',1331953386,'2015-01-17 20:51:45'),
+  (2,'研发经理',1331953386,'2015-01-17 20:51:45'),
+  (3,'技术经理',1331953386,'2015-01-17 20:51:45');
 
 -- ----------------------------
 -- Table structure for `bb_user_user`

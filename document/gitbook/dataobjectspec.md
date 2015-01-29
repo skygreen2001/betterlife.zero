@@ -231,9 +231,9 @@
 ####示例说明
 定义示例:
 
-    class User extends DataObject {
-    	static $has_one=array(
-    		"userDetail"=> "UserDetail",
+    class Role extends DataObject {
+    	static $belongs_many_many=array(
+    		"users"=>"User"
     	);
 
 调用示例:
