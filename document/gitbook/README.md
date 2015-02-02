@@ -103,5 +103,7 @@
 在发布到服务器上，无需修改任何编码即可默认进入网站前台，它是项目真正用户的界面入口
 
 后台界面入口默认从根路径下admin访问
+
 如框架的域名为http://www.betterlife.com
+
 那么后台入口地址为:http://www.betterlife.com/admin/

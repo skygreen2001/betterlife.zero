@@ -341,22 +341,20 @@ class DataObjectRelation extends Object
 		if ($dataobject instanceof DataObject){
 			$properties=UtilReflection::getClassStaticProperties($dataobject);
 			$properties=DataObjectSpec::removeNotObjectDataField($properties,$dataobject);
-			if (empty($properties)) {
-				return null;
-			}
+			if (empty($properties))return null;
 			$relation_class=null;
 			if(array_key_exists(EnumTableRelation::MANY_MANY, $properties)){
-				$properties=$properties[EnumTableRelation::MANY_MANY];
-				if (array_key_exists($relation_object, $properties)){
+				$properties_m=$properties[EnumTableRelation::MANY_MANY];
+				if (array_key_exists($relation_object, $properties_m)){
 					$classname_has=$dataobject->classname();
-					$classname_belong=$properties[$relation_object];
+					$classname_belong=$properties_m[$relation_object];
 					$relation_class=$classname_belong;
 				}
 			}
 			if(array_key_exists(EnumTableRelation::BELONGS_TO, $properties)){
-				$properties=$properties[EnumTableRelation::BELONGS_TO];
-				if (array_key_exists($relation_object,$properties)){
-					$classname_has=$properties[$relation_object];
+				$properties_bm=$properties[EnumTableRelation::BELONGS_TO];
+				if (array_key_exists($relation_object,$properties_bm)){
+					$classname_has=$properties_bm[$relation_object];
 					$classname_belong=$dataobject->classname();
 					$relation_class=$classname_has;
 				}
@@ -376,7 +374,7 @@ class DataObjectRelation extends Object
 				$sQuery=$_SQL->insert($relation_table)->values($array_properties)->result();
 				return DataObject::dao()->sqlExecute($sQuery);
 			}else{
-				LogMe::log($dataobject->classname()."在多对多关系中对".$relation_object."-".$relation_id_value."映射不正确，请确认代码中变量定义是否正确！");
+				LogMe::log($dataobject->classname()."在多对多关系中对".$relation_object.":".$relation_id_value."映射不正确，请确认代码中变量定义是否正确！");
 			}
 		}else{
 			LogMe::record(Wl::ERROR_INFO_EXTENDS_CLASS);

@@ -411,7 +411,7 @@ class DataObjectFunc
 	{
 		$tablename=Config_Db::orm($classname);
 		$_SQL=new Crud_Sql_Select();
-		if (empty($column_name)&&($classname instanceof DataObject)){
+		if (empty($column_name)){
 			if (is_string($classname)) {
 				if (class_exists($classname)) {
 					$classname=new $classname();
@@ -419,7 +419,7 @@ class DataObjectFunc
 			}
 			$column_name=DataObjectSpec::getRealIDColumnName($classname);
 		}
-		if (isset($idColumn)){
+		if (isset($column_name)){
 			$max_string="max($column_name)";
 			$sQuery=$_SQL->select($max_string)->from($tablename)->where($filter)->result();
 			return DataObject::dao()->sqlExecute($sQuery);
@@ -439,7 +439,7 @@ class DataObjectFunc
 	{
 		$tablename=Config_Db::orm($classname);
 		$_SQL=new Crud_Sql_Select();
-		if (empty($column_name)&&($classname instanceof DataObject)){
+		if (empty($column_name)){
 			if (is_string($classname)) {
 				if (class_exists($classname)) {
 					$classname=new $classname();
@@ -447,7 +447,7 @@ class DataObjectFunc
 			}
 			$column_name=DataObjectSpec::getRealIDColumnName($classname);
 		}
-		if (isset($idColumn)){
+		if (isset($column_name)){
 			$min_string="min($column_name)";
 			$sQuery=$_SQL->select($min_string)->from($tablename)->where($filter)->result();
 			return DataObject::dao()->sqlExecute($sQuery);
@@ -467,7 +467,7 @@ class DataObjectFunc
 	{
 		$tablename=Config_Db::orm($classname);
 		$_SQL=new Crud_Sql_Select();
-		if (empty($column_name)&&($classname instanceof DataObject)){
+		if (empty($column_name)){
 			if (is_string($classname)) {
 				if (class_exists($classname)) {
 					$classname=new $classname();

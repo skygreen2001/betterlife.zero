@@ -30,7 +30,7 @@
 * [框架介绍](applicationstructure.md)
    * [Model](model.md)
    * [View](view.md)
-   * [Controller](controller)
+   * [Controller](controller.md)
 * [原创技术](original/README.md)
    * [自定义标签](original/customtag.md)
 

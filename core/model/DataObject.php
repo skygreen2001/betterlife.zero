@@ -656,7 +656,6 @@ abstract class DataObject extends Object implements ArrayAccess
 
 	/**
 	 * 对象总计数[多表关联查询]
-	 * @param string|class $object 需要查询的对象实体|类名称
 	 * @param string|array $from 来自多张表或者多个类[必须是数据对象类名]，在from后的多张表名，表名之间以逗号[,]隔开
 	 * 示例如下：<br/>
 	 *		0."table1,table2"<br/>
@@ -671,7 +670,7 @@ abstract class DataObject extends Object implements ArrayAccess
 	 *			3.array("id"=>"1","name"=>"sky")<br/>
 	 * @return 对象总计数
 	 */
-	public static function countMultitable($object,$from,$filter=null)
+	public static function countMultitable($from,$filter=null)
 	{
 		return self::dao()->countMultitable(get_called_class(), $from, $filter);
 	}

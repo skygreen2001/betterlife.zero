@@ -3735,8 +3735,8 @@ CREATE TABLE `bb_user_user` (
 -- ----------------------------
 -- Records of bb_user_user
 -- ----------------------------
-INSERT INTO `bb_user_user` VALUES ('1', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'skygreen2001@gmail.com', '13917320293', '0', '1331953415', '2013-12-26 14:31:27');
-INSERT INTO `bb_user_user` VALUES ('2', 'china', 'edbd0effac3fcc98e725920a512881e0', 'skygreen2001@sina.com', '13917320293', '0', '1331953421', '2013-12-26 14:31:30');
+INSERT INTO `bb_user_user` VALUES ('1', 'admin', '21232f297a57a5a743894a0e4a801fc3', 'skygreen2001@gmail.com', '139******93', '0', '1331953415', '2013-12-26 14:31:27');
+INSERT INTO `bb_user_user` VALUES ('2', 'china', 'edbd0effac3fcc98e725920a512881e0', 'skygreen2001@sina.com', '139******93', '0', '1331953421', '2013-12-26 14:31:30');
 
 -- ----------------------------
 -- Table structure for `bb_user_userdetail`
@@ -3764,4 +3764,4 @@ CREATE TABLE `bb_user_userdetail` (
 -- ----------------------------
 -- Records of bb_user_userdetail
 -- ----------------------------
-INSERT INTO `bb_user_userdetail` VALUES ('1', '1', '周月璞', 'userdetail/profile/20140211094832.png', '1', '25', '321', '2709', '上海市石岚三村80号404室', '412731900', '1', '1979-03-10', '1331953386', '2014-01-09 19:39:52');
+INSERT INTO `bb_user_userdetail` VALUES ('1', '1', '薛碧天', 'userdetail/profile/20140211094832.png', '1', '25', '321', '2709', '上海市石岚*村**号***室', '412731900', '1', '1979-03-10', '1331953386', '2014-01-09 19:39:52');
