@@ -11,7 +11,7 @@ ampps:http://www.ampps.com
 
     官方下载地址:http://www.wampserver.com/en/
 
-**Lamp**:LAMP指的Linux（操作系统）、ApacheHTTP 服务器，MySQL（有时也指MariaDB，数据库软件） 和PHP（有时也是指Perl或Python） 的第一个字母
+**Lamp**:LAMP指的Linux、Apache，MySQL和PHP的第一个字母
 
     安装说明    :查看附录:在Linux上安装LAMP
     安装详细说明:http://blog.csdn.net/skygreen_2001/article/details/19912159
@@ -33,10 +33,9 @@ ampps:http://www.ampps.com
 
 * 安装Git客户端工具:
 
-    1.sourcetree:
+    1.sourcetree:http://www.sourcetreeapp.com
 
-    2.tortoiseGit:
-
+    2.tortoiseGit:http://baoku.360.cn/soft/show/appid/102345451
 
 ###3. 安装示例数据库
 
@@ -126,6 +125,10 @@ Array
 
 ##五.工程重用
 
+****项目重用侧重于对已有功能模块、数据库表和代码的重用****
+
+项目重用即工程重用,是同一个功能的两种说法。
+
 前面我们掌握了这个框架最基础的概念,接下来我们关注的是怎样根据自己项目的需要,快速搭建一个项目的框架;
 
 工程重用可通过访问框架本地首页地址:
@@ -159,6 +162,8 @@ http://127.0.0.1/betterlife/
 * 重用类型           :通用版
 
 ##六.代码生成
+
+****代码生成侧重于对新增功能模块、数据库表和代码的快速上手使用****
 
 在新生成的项目里:bettercity
 
@@ -220,11 +225,3 @@ http://127.0.0.1/bettercity/
       <?php
          phpinfo();
       ?>
-
-
-
-
-
-
-
-

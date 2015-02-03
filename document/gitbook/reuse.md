@@ -1,4 +1,7 @@
 # 项目重用
+
+****项目重用侧重于对已有功能模块、数据库表和代码的重用****
+
 ##设计初衷
 学过Java面向对象思想的开发者，都了解重构的方法，应该也用过Eclipse之类IDE相关的重构的工具，微软的VS IDE工具如VS2012也有类似的重构工具；这些工具能重用已有项目的代码工具级的积累，快速构建新的项目的框架，能大大开发者的效率。
 
@@ -51,5 +54,27 @@
 		8.清除common大部分工程无需的文件
 		9.清除util大部分工程无需的文件
 
+##定位
+路径    :tools/dev/
+
+* 文件名称：index.php
+
+##相关配置
+路径    :config/config/
+
+* 文件名称：Config_AutoCode.php
+
+配置设置说明如下
+
+	/**
+	 * Model转换成后台Admin
+	 * 		工程重用选择类型:通用版后
+	 * 		代码生成会转向AutoCodePreviewReportLike
+	 */
+	const AFTER_MODEL_CONVERT_ADMIN=false;
+	/**
+	 * 工程重用为MINI后,只需要生成实体类
+	 */
+	const ONLY_DOMAIN=false;
 
 
