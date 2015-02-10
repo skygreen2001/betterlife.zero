@@ -39,7 +39,7 @@ ampps:http://www.ampps.com
 
 ###3. 安装示例数据库
 
-* 如果是Wamp,一般自带了Phpmyadmin，也可以安装Mysql数据库工具客户端如MysqlWorkbench或者Navicat等
+* 如果是Wamp,一般自带了Phpmyadmin，也可以安装Mysql数据库工具客户端如MysqlWorkbench、Sequel Pro或者Navicat等
 
 * 如果是Lamp或者Mamp需要另行安装Phpmyadmin
 
@@ -96,7 +96,7 @@ Array
 
 ##四.面向对象
 
-参考 [3.数据对象通用方法]
+参考 [3.1.数据对象通用方法]
 
 以类方法:分页查询queryPage为例
 ```
@@ -105,7 +105,6 @@ print_r($blogs);```
 
 输出打印显示如下:
 ```
-
 Array
 (
     [0] => Blog Object
@@ -169,7 +168,6 @@ http://127.0.0.1/betterlife/
 
 * 如果新项目的业务逻辑和主流程大致相同,那么可以考虑重用现有的数据库，使用［2.4数据库定义的小工具］里的工具[修改数据库表前缀名]
 
-
     访问地址:http://127.0.0.1/bettercity/tools/tools/db/rename_db_prefix.php
 
 * 如果新项目的业务逻辑和原项目的主流程不同,可以按照[2.数据库原型设计规范]定义数据库
@@ -183,7 +181,6 @@ http://127.0.0.1/bettercity/
 点击其中的文字链接:一键生成
 
 一键生成链接地址:http://127.0.0.1/bettercity/tools/tools/autocode/db_onekey.php
-
 
 ##附录:在Linux上安装LAMP
 以下在Ubuntu Desktop 和Ubuntu Server上均有效

@@ -1320,6 +1320,15 @@ AUTHCONTENT;
 		self::UserInput();
 		$default_dir=Gc::$url_base;
 		$domain_url=str_replace(Gc::$appName."/", "", $default_dir);
+		if (contain(strtolower(php_uname()),"darwin")){
+			$domain_url=UtilNet::urlbase();
+			$file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+			if (contain($file_sub_dir,"tools".DS))
+				$file_sub_dir=substr($file_sub_dir,0,strpos($file_sub_dir,"tools".DS));
+			$domainSubDir=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir);
+			if(!endwith($domain_url,$domainSubDir))$domain_url.=$domainSubDir;
+			$domain_url=str_replace(Gc::$appName."/", "", $domain_url);
+		}
 		die("<div align='center'><font color='green'><a href='".$domain_url.self::$pj_name_en."/' target='_blank'>生成新Web项目成功！</a></font><br/><a href='".$domain_url.self::$pj_name_en."/' target='_blank'>新地址</a></div>");
 	}
 

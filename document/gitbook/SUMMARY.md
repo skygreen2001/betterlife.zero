@@ -14,7 +14,7 @@
    * [数据对象规格说明](dataobjectspec.md)
    * [框架数据对象示例](dataobjectsample.md)
 * [项目重用](reuse.md)
-   * [Mini版](mini.md)
+   * [MINI版](mini.md)
    * [精简版](essence.md)
    * [通用版](commonv.md)
    * [高级版](advancev.md)
