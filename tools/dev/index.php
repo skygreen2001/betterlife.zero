@@ -417,7 +417,7 @@ LIBRARY_XML_CONTENT;
 		//1.清除配置文件:config/db
 		$ignore_config_db_dir=self::$save_dir.$root_config.DS."config".DS."db".DS;
 		$toDeleteDir=$ignore_config_db_dir."dal".DS;
-		if(is_dir($toDeleteDir))UtilFileSystem::deleteDir();
+		if(is_dir($toDeleteDir))UtilFileSystem::deleteDir($toDeleteDir);
 		$toDeleteFile=$ignore_config_db_dir."object".DS."Config_Mssql.php";
 		if(file_exists($toDeleteFile))unlink($toDeleteFile);
 		$toDeleteFile=$ignore_config_db_dir."object".DS."Config_Odbc.php";
