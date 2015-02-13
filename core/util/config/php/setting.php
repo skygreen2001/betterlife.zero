@@ -6,12 +6,12 @@
  * @category betterlife
  * @package util.config
  * @subpackage php
- * @author skygreen                                                                     
+ * @author skygreen
  */
 $db = array();
 
 // Enter your database name here:
-$db['name'] = 'test';
+$db['name'] = 'setting';
 
 // Enter the hostname of your MySQL server:
 $db['host'] = 'localhost';

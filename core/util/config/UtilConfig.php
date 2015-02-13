@@ -10,35 +10,38 @@
  * @author skygreen
  */
 class UtilConfig extends Util{
-   public $_settings = array(); 
+   public $_settings = array();
    private static $config_xml=1;
-   private static $config_ini=2;  
+   private static $config_ini=2;
    private static $config_yaml=3;
-   private static $config_php=4;  
-   private static $current;                        
+   private static $config_php=4;
+   private static $config_json=5;
+   private static $current;
    public static $config=1;
-   
-   
+
    public static function Instance(){
       switch (self::$config){
           case self::$config_xml:
                self::$current=new UtilConfigXml();
-               break;    
+               break;
           case self::$config_ini:
                self::$current=new UtilConfigIni();
-               break; 
+               break;
           case self::$config_yaml:
                self::$current=new UtilConfigYaml();
-               break; 
+               break;
           case self::$config_php:
-               self::$current=new UtilConfigPhp(); 
-               break; 
-      } 
+               self::$current=new UtilConfigPhp();
+               break;
+          case self::$config_json:
+               self::$current=new UtilConfigJson();
+               break;
+      }
       return self::$current;
    }
-   
+
    /**
-    * 获取某些设置的值  
+    * 获取某些设置的值
     * @param unknown_type $var
     * @return unknown
     */

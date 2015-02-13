@@ -571,14 +571,11 @@ abstract class DataObject extends Object implements ArrayAccess
 	 * 示例如下：<br/>
 	 *		1.id asc;<br/>
 	 *		2.name desc;<br/>
-	 * @param string $limit 分页数目:同Mysql limit语法
-	 * 示例如下：<br/>
-	 *		0,10<br/>
 	 * @return 查询列数组，自动从数组中转换出来值字符串,最后只返回一个值
 	 */
-	public static function select_one($columns,$filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID, $limit=null)
+	public static function select_one($columns,$filter=null, $sort=Crud_SQL::SQL_ORDER_DEFAULT_ID)
 	{
-		$result=DataObjectFunc::showColumns(get_called_class(),$columns,$filter, $sort, $limit);
+		$result=DataObjectFunc::showColumns(get_called_class(),$columns,$filter, $sort, "0,1");
 		if (!empty($result)&&(is_array($result))&&(count($result)>0)){
 			$result=$result[0];
 		}

@@ -206,6 +206,11 @@ require_once ("init.php");
 // print_r($result);
 
 //加载配置
+//读取json变量配置
+UtilConfigJson::main();
+//读取php变量配置
+// UtilConfigPhp::main();
+//读取xml变量配置
 // $xml=UtilConfig::Instance();
 // $xml->load(Gc::$nav_root_path."core\\util\\config\\xml\\"."setting.xml");
 // echo 'PHP:'. $xml->get('db.host').'';

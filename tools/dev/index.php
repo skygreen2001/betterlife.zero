@@ -1050,6 +1050,7 @@ AUTHCONTENT;
 		{
 			$include_dirs=array(
 				"admin",
+				"db",
 				"config",
 				"install",
 				"core",
@@ -1059,7 +1060,9 @@ AUTHCONTENT;
 
 			UtilFileSystem::createDir(self::$save_dir);
 			foreach ($include_dirs as $include_dir) {
-				smartCopy(Gc::$nav_root_path.$include_dir.DS,self::$save_dir.$include_dir.DS);
+				if(is_dir(Gc::$nav_root_path.$include_dir.DS)){
+					smartCopy(Gc::$nav_root_path.$include_dir.DS,self::$save_dir.$include_dir.DS);
+				}
 			}
 
 			$homeAppDir=self::$save_dir.Gc::$module_root.DS.self::$pj_name_en;
@@ -1129,6 +1132,15 @@ AUTHCONTENT;
 			$content=file_get_contents($config_autocode_file);
 			$content=str_replace("const ONLY_DOMAIN=false;", "const ONLY_DOMAIN=true;", $content);
 			file_put_contents($config_autocode_file, $content);
+
+			//修改数据库脚本表前缀
+			$db_bak_file=self::$save_dir."db".DS."mysql".DS."db_".Gc::$appName.".sql";
+			if(file_exists($db_bak_file)){
+				$content=file_get_contents($db_bak_file);
+				$content=str_replace(Config_Db::$table_prefix ,self::$table_prefix , $content);
+				file_put_contents($db_bak_file, $content);
+			}
+
 		}else{
 			//生成新项目目录
 			UtilFileSystem::createDir(self::$save_dir);

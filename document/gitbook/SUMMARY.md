@@ -24,7 +24,7 @@
    * [准备工作](readyforautocode.md)
 * [工具集](util.md)
    * [工具类](toolsclass.md)
-   * [工具方法](toolsfunction.md)
+   * [通用函数](toolsfunction.md)
 * [高手进阶](advancein.md)
 * [框架核心](core.md)
 * [框架介绍](applicationstructure.md)
