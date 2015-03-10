@@ -4,12 +4,14 @@
  *
  * @author zyp
  */
-class TagPageClass extends TagClass {
+class TagPageClass extends TagClass
+{
 	public static $tag_page_sessionname="bb_page";
 	private $src;//链接地址
 	private $style;//分页风格，默认是1
 
-	function setHtml() {
+	public function setHtml()
+	{
 		$page=HttpSession::get(self::$tag_page_sessionname);
 		if ($page) {
 			$this->html="";

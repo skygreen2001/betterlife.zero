@@ -50,6 +50,7 @@ class ActionBasic extends Object
 	 * 1.CKEditor
 	 * 2.KindEditor
 	 * 3.xhEditor
+	 * 4.ueditor
 	 * @var mixed
 	 */
 	public $online_editor=EnumOnlineEditorType::UEDITOR;//CKEDITOR

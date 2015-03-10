@@ -19,6 +19,12 @@ github路径:https://github.com/skygreen2001/betterlife/blob/master/core/model/D
     那么博客数据对象即:Blog[头字母大些]
 
 
+##数据模型层
+
+数据对象类定义都放置在前台,如示例就放置在根路径[home/betterlife/src/domain]路径下,数据模型层详细描述可参考［9.1.Model］定义说明。
+
+以下示例中提到的Blog、Comment、Role、Userdetail和User等类的定义都放置在该路径下的文件里；如Blog.php放置在:[home/betterlife/src/domain/core/Blog.php]。
+
 ##基本定义
 
 数据对象的属性定义包括以下两种方式:
@@ -97,6 +103,12 @@ github路径:https://github.com/skygreen2001/betterlife/blob/master/core/model/D
 
 
 ##高级定义
+
+ * 所有数据实体类如POJO的父类
+ * 该实体类设计为ActiveRecord模式。
+ * 可直接在对象上操作CRUD增删改查操作
+ * 查主要为：根据主键和名称查找对象。
+ *			总记录数和分页查找等常规方法。
 
 更多高级定义情参考[3.3数据对象规格说明]
 

@@ -2,7 +2,7 @@
 
 * [介绍](README.md)
 * [新手上路](getting_started.md)
-* [数据库原型设计规范](databasedefinerule.md)
+* [数据库设计规范](databasedefinerule.md)
    * [执行SQL查询语句](sql.md)
    * [框架数据库示例](example.md)
    * [数据库定义](database_define.md)

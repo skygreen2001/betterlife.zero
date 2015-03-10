@@ -13,3 +13,14 @@
 * encoding:网站字符编码,一般为UTF-8或者GBK
 
 
+
+## 扩展特性
+框架在开发初期参考Thinkphp实际整合了五套表示层框架，如下所示：
+
+        * Smarty
+        * EaseTemplate
+        * Flexy
+        * SmartTemplate
+        * TemplateLite
+
+在实践中完整验证了Smarty的通用性，其它并未实践使用过，有待考验。
