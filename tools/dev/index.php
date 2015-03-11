@@ -1093,7 +1093,7 @@ AUTHCONTENT;
 			//修改Gc.php配置文件
 			$gc_file=self::$save_dir."Gc.php";
 			$content=file_get_contents($gc_file);
-			$content=str_replace("\"model\",\r\n", "", $content);
+			$content=str_replace("\"model\",", "", $content);
 			$content=str_replace("\"admin\",\r\n", "", $content);
 			$content=str_replace(Gc::$site_name, self::$pj_name_cn, $content);
 			$content=str_replace(Gc::$appName, self::$pj_name_en, $content);
@@ -1161,7 +1161,7 @@ AUTHCONTENT;
 			$content=str_replace(Gc::$appName, self::$pj_name_en, $content);
 			$content=str_replace(Gc::$appName_alias, self::$pj_name_alias, $content);
 			if((self::$reuse_type!=EnumReusePjType::FULL)){
-				$content=str_replace("\"model\",\r\n", "", $content);
+				$content=str_replace("\"model\",", "", $content);
 			}
 			file_put_contents($gc_file, $content);
 
@@ -1332,6 +1332,7 @@ AUTHCONTENT;
 		self::UserInput();
 		$default_dir=Gc::$url_base;
 		$domain_url=str_replace(Gc::$appName."/", "", $default_dir);
+
 		if (contain(strtolower(php_uname()),"darwin")){
 			$domain_url=UtilNet::urlbase();
 			$file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
