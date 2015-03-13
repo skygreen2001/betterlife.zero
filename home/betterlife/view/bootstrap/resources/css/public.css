@@ -28,6 +28,10 @@ p {
 	margin:5px;
 }
 
+label{
+	margin-left: 90px;
+}
+
 div .block {
 	margin-top:10px;
 	border:1px solid #cfcfcf;
