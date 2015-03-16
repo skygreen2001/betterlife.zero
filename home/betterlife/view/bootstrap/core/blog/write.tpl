@@ -16,7 +16,7 @@
 		pageInit_blog_content();});</script>
 	{/if}
 
-	<div class="contentBox">
+	<div class="contentBox" >
 		<b><my:a href="{$url_base}index.php?go={$appName}.auth.logout">退出</my:a></b><br/>
 		<my:a href="{$url_base}index.php?go={$appName}.blog.display&pageNo={$smarty.get.pageNo|default:"1"}">博客列表</my:a>
 		<br/><font color="{$color}">{$message|nl2br|default:''}</font><br/>

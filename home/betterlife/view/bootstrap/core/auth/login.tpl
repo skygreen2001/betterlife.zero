@@ -8,11 +8,11 @@
 				<div class="modal-dialog">
 					<div class="modal-content">
 						<div class="modal-header">
-							<h4 class="modal-title">Betterlife CMS 框架前台</h4>
+							<h3 class="modal-title">Betterlife CMS 框架前台</h3>
 						</div>
 						<div class="modal-body" style="height:100px;">
 						   <label>用户名</label><input class="inputNormal" type="text" name="username" style="width:260px;" /><br/><br/>
-						   <label>密&nbsp;&nbsp;&nbsp;&nbsp;码</label><input class="inputNormal" type="password" name="password" style="width:260px;" /><br/>
+						   <label>密&nbsp;&nbsp;码</label><input class="inputNormal" type="password" name="password" style="width:260px;" /><br/>
 						   <br/><br/><font style="margin-left:80px;" color="red">{$message}</font>
 						</div>
 						<div class="modal-footer">
