@@ -255,7 +255,7 @@ class UtilCss extends Util
 					margin:15px;
 				}
 				h1 {
-					font:bold 150% STXingkai;
+					font:bold 150% SimSun,sans-serif,STXingkai;
 				}
 				p#indexPage {
 					line-height:2em;
@@ -296,18 +296,43 @@ class UtilCss extends Util
 					line-height:28px;
 					color:white;
 					background:gray;
+
+					margin:10px 0px 0px 0px;
+					font-size: 14px;
+					color: #555;
+					vertical-align: middle;
+					background-color: #fff;
+					border: 1px solid #ccc;
+					border-radius: 4px;
+					-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+					box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+					-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+					transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 				}
 				select{
-					width:400px;
+					width:410px;
 					text-align:left;
 					padding:6px 0px 4px 10px;
 					font-size:14px;
-					height:22px;
+					height:28px;
 					line-height:28px;
 					vertical-align:bottom;
 	 				box-sizing: content-box;
 	 				-moz-box-sizing:content-box;
 	 				-webkit-box-sizing:content-box;
+
+
+					margin:10px 0px 0px 0px;
+					font-size: 14px;
+					color: #555;
+					vertical-align: middle;
+					background-color: #fff;
+					border: 1px solid #ccc;
+					border-radius: 4px;
+					-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+					box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+					-webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+					transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
 				}
 				input[type=button]{
 					border:1px solid;

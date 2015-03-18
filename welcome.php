@@ -73,7 +73,7 @@ h1{
 	position: absolute;
 	top: -50%;
 	width: 300px;
-	margin: 110px 0px 0px -100px;
+	margin: 120px 0px 0px -100px;
 }
 div#content{
 	border-style:outset;

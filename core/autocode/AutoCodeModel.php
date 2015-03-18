@@ -118,7 +118,7 @@ class AutoCodeModel extends AutoCode
 		echo "<div align='center' height='450'>\r\n";
 		echo "<form>\r\n";
 		echo "  <div style='line-height:1.5em;'>\r\n";
-		echo "      <label>输出文件路径:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' name='save_dir' value='$default_dir' id='save_dir' />\r\n";
+		echo "      <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;输出文件路径:</label><input style='width:410px;text-align:left;padding-left:10px;' type='text' name='save_dir' value='$default_dir' id='save_dir' />\r\n";
 		if (!empty($inputArr)){
 			echo "<br/><br/>\r\n
 					<label>&nbsp;&nbsp;&nbsp;选择需要生成的表:</label><select multiple='multiple' size='8' style='height:320px;' name='table_names[]'>\r\n";

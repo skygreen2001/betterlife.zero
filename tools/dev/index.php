@@ -1405,16 +1405,16 @@ AUTHCONTENT;
 		echo "<div align='center' height='450'>\r\n";
 		echo "<form>\r\n";
 		echo "	<div style='line-height:1.5em;'>\r\n";
-		echo "		<label>Web项目名称【中文】:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' name='pj_name_cn' value='$pj_name_cn' id='pj_name_cn' /><br/>\r\n";
-		echo "		<label>Web项目名称【英文】:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' name='pj_name_en' value='$pj_name_en' id='pj_name_en' oninput=\"document.getElementById('dbname').value=this.value;document.getElementById('save_dir').value=this.value;\" /><br/>\r\n";
-		echo "		<label title='最好两个字母,头字母大写'>Web项目别名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label><input title='最好两个字母,头字母大写' style='width:400px;text-align:left;padding-left:10px;' type='text' name='pj_name_alias' value='$pj_name_alias' id='pj_name_alias' /><br/>\r\n";
-		echo "		<label>输出Web项目路径&nbsp;&nbsp;&nbsp;:</label>$domain_root<input style='width:306px;text-align:left;padding-left:10px;' type='text' name='save_dir' value='$default_dir' id='save_dir' /><br/>\r\n";
-		echo "		<label>数据库名称&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' name='dbname' value='$dbname' id='dbname' /><br/>\r\n";
-		echo "		<label>数据库表名前缀&nbsp;&nbsp;&nbsp;&nbsp;:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' name='table_prefix' value='$table_prefix' id='table_prefix' /><br/>\r\n";
-		echo "		<label>帮助地址&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' name='git_name' value='$git_name' id='git_name' /><br/>\r\n";
+		echo "		<label>Web项目名称【中文】:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' placeholder='Web项目名称【中文】' name='pj_name_cn' value='$pj_name_cn' id='pj_name_cn' /><br/>\r\n";
+		echo "		<label>Web项目名称【英文】:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' placeholder='Web项目名称【英文】' name='pj_name_en' value='$pj_name_en' id='pj_name_en' oninput=\"document.getElementById('dbname').value=this.value;document.getElementById('save_dir').value=this.value;\" /><br/>\r\n";
+		echo "		<label title='最好两个字母,头字母大写'>Web项目别名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label><input title='最好两个字母,头字母大写' style='width:400px;text-align:left;padding-left:10px;' type='text' name='pj_name_alias' value='$pj_name_alias' id='pj_name_alias' /><br/>\r\n";
+		echo "		<label>输出Web项目路径&nbsp;&nbsp;&nbsp;&nbsp;:</label>$domain_root<input style='width:280px;text-align:left;padding-left:10px;' type='text' name='save_dir' value='$default_dir' id='save_dir' /><br/>\r\n";
+		echo "		<label>数据库名称&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' name='dbname' value='$dbname' id='dbname' /><br/>\r\n";
+		echo "		<label>数据库表名前缀&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' name='table_prefix' value='$table_prefix' id='table_prefix' /><br/>\r\n";
+		echo "		<label>帮助地址&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' name='git_name' value='$git_name' id='git_name' /><br/>\r\n";
 		$selectd_str="";
 		if (!empty($inputArr)){
-			echo "<label>&nbsp;&nbsp;&nbsp;重用类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label><select name='reuse_type'>\r\n";
+			echo "<label>重用类型&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:</label><select name='reuse_type'>\r\n";
 			foreach ($inputArr as $key=>$value) {
 				if(isset($reuse_type)){
 					if($key==$reuse_type)$selectd_str=" selected";else $selectd_str="";
