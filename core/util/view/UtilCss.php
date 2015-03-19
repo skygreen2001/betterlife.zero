@@ -254,8 +254,8 @@ class UtilCss extends Util
 				div {
 					margin:15px;
 				}
-				h1 {
-					font:bold 150% SimSun,sans-serif,STXingkai;
+				h1,h2,h3 {
+					font:bold 150% Arial,sans-serif,Microsoft YaHei UI,Microsoft YaHei, SimSun,sans-serif,STXihei;
 				}
 				p#indexPage {
 					line-height:2em;
