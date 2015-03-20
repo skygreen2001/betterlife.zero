@@ -413,6 +413,7 @@ Bb.Region.View={
 					},
 					columns : [
 						this.sm,
+						new Ext.grid.RowNumberer({width:40,header:'行号'}),
                         {header : '标识',dataIndex : 'region_id',hidden:true},
                         {header : '父地区',dataIndex : 'region_name_parent'},
                         {header : '地区名称',dataIndex : 'region_name'},
