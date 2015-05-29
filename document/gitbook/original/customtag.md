@@ -14,11 +14,21 @@
     *. 自定义分页标签
     *. 自定义标签示例
 
+## 定义标示
+自定义标签定义标示:my
+
+源码文件:taglib/taglib/TagClass.php
+    abstract class TagClass {
+    const PREFIX="my";
+
 ## 自定义超链接
 
 路径    :taglib/taglib/
 
 文件名称:TagHrefClass.php
+
+    示例如下:
+        页面:home/betterlife/view/default/core/blog/display.tpl里定义为:<my:a href=...
 
 ## 自定义分页标签
 
@@ -26,6 +36,8 @@
 
 文件名称:TagPageClass.php
 
+    示例如下:
+        页面:home/betterlife/view/default/core/blog/display.tpl里定义为:<my:page src=...
 
 ## 自定义标签示例
 
