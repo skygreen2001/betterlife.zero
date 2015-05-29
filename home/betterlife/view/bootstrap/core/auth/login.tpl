@@ -10,10 +10,10 @@
 						<div class="modal-header">
 							<h3 class="modal-title">Betterlife CMS 框架前台</h3>
 						</div>
-						<div class="modal-body" style="height:100px;">
-						   <label>用户名</label><input class="inputNormal" type="text" name="username" style="width:260px;" /><br/><br/>
-						   <label>密&nbsp;&nbsp;码</label><input class="inputNormal" type="password" name="password" style="width:260px;" /><br/>
-						   <br/><br/><font style="margin-left:80px;" color="red">{$message}</font>
+						<div class="modal-body" style="height:120px;"><nobr>
+						   <label>用户名</label><input class="inputNormal" type="text" name="username" style="width:80%;" /><br/><br/>
+						   <label>密&nbsp;&nbsp;码</label><input class="inputNormal" type="password" name="password" style="width:80%;" /><br/>
+						   <br/><br/><font style="margin-left:80px;" color="red">{$message}</font></nobr>
 						</div>
 						<div class="modal-footer">
 							<input type="submit" name="Submit" value="登录" class="btnSubmit" />

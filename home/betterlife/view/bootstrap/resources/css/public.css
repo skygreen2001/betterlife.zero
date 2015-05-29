@@ -30,7 +30,7 @@ p {
 }
 
 label{
-	margin-left: 90px;
+	margin-left: 20px;
 }
 
 div .block {
@@ -103,8 +103,8 @@ textarea {
 .inputNormal {
 	border-radius: 6px 6px 6px 6px;
 	text-align:center;
-	height:28px;
-	line-height:28px;
+	height:36px;
+	line-height:36px;
 	background:gray;
 	color:#FFF;
 	background-color:gray;
