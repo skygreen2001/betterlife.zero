@@ -1466,8 +1466,8 @@ function smartCopy($source, $dest, $options=array('folderPermission'=>0755,'file
 		} else {
 			$__dest=$dest;
 		}
-                $dest_dir=dirname($__dest);
-                UtilFileSystem::createDir($dest_dir);
+		$dest_dir=dirname($__dest);
+		UtilFileSystem::createDir($dest_dir);
 		$result=copy($source, $__dest);
 		chmod($__dest,$options['filePermission']);
 
