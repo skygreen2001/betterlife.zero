@@ -75,14 +75,6 @@ class Router
 	 */
 	const VAR_ROUTER='r';
 	/**
-	 * 默认分页跳转变量
-	 */
-	const VAR_PAGE='p';
-	/**
-	 * 默认模板切换变量
-	 */
-	const VAR_TEMPLATE= 't';
-	/**
 	 * PATHINFO 兼容模式获取变量例如 ?s=/module/action/method/id/1
 	 * 后面的参数取决于URL_PATHINFO_MODEL 和 URL_PATHINFO_DEPR
 	 */

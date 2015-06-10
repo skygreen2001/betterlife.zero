@@ -1,7 +1,7 @@
 {extends file="$templateDir/layout/normal/layout.tpl"}
 {block name=body}
 	<form method="POST">
-	<div class="col-lg-6" style="margin-left:300px;margin-top:180px;">
+	<div class="col-lg-6" style="position: absolute;width:600px;height:300px;left:50%;top:300px;margin-left:-300px;margin-top:-150px;">
 		<h2></h2>
 		<div class="bs-component">
 			<div class="modal">

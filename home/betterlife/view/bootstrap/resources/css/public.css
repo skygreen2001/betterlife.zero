@@ -9,9 +9,14 @@ html,body {
 	margin:2px 0 0;
 	padding:0;
 }
-.contentBox{
-	/*margin:8px;*/
-	margin:20px 0px 0px 300px;
+.contentBox{                  
+    position: absolute;   
+    width:600px;
+    height:300px;   
+    left:50%;   
+    top:300px;                     
+    margin-left:-300px;   
+    margin-top:-290px; 
 }
 .en-head {
 	font:bold .8em Geneva,Arial,Helvetica,sans-serif;
