@@ -299,7 +299,7 @@ class Initializer
 				/**
 				 * view主要为html,javascript,css文件；因此应该排除在外
 				 */
-				$modulesubdir=array_diff($modulesubdir, Gc::$moudle_exclude_subpackage);
+				$modulesubdir=array_diff($modulesubdir, Gc::$module_exclude_subpackage);
 				foreach ($modulesubdir as $subdir) {
 					$modulePath=$moduleDir;
 					if (is_dir($moduleDir.$subdir)) {
@@ -353,7 +353,7 @@ class Initializer
 		}
 		foreach (Gc::$module_names as $moduleName) {
 			$moduleDir=$module_dir.$moduleName.DS;
-			load_module($moduleName, $moduleDir,Gc::$moudle_exclude_subpackage);
+			load_module($moduleName, $moduleDir,Gc::$module_exclude_subpackage);
 		}
 	}
 }

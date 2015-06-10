@@ -155,7 +155,7 @@ class Gc
 	 * @var array
 	 * @static
 	 */
-	public static $moudle_exclude_subpackage=array(
+	public static $module_exclude_subpackage=array(
 			"view",
 	);
 	/**
