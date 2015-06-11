@@ -1,14 +1,14 @@
 <?php
 /**
- * 定时轮循节假日 
- * @category ele
+ * 定时轮循节假日
+ * @category timertask
  * @package web.front.timertask
  * @author skygreen
  */
 class FestivalTask extends BaseTask
 {
 	/**
-	 * 定时轮循节假日 
+	 * 定时轮循节假日
 	 */
 	public function run()
 	{
