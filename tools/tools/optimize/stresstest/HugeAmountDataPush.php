@@ -56,7 +56,7 @@ class HugeAmountDataPush
 	* 不符合关系列定义的列名
 	*/
 	public static $relation_fields=array(
-		"ns_product_re_productspec"=>array("attribute_id")
+		"bb_msg_re_usernotice"=>array("notice_id")
 	);
 	/**
 	 * 所有表列信息
@@ -757,7 +757,7 @@ class UtilHugeAmount
 
 HugeAmountDataPush::init();
 HugeAmountDataPush::$relation_fields=array(
-	"ns_product_re_productspec"=>array("attribute_id")
+	"bb_msg_re_usernotice"=>array("notice_id")
 );
 HugeAmountDataPush::createDatabaseData();
 // HugeAmountDataPush::createTablesData(array("ns_ads","ns_member_admin"));
