@@ -20,7 +20,6 @@
 			</menuGroup>
 			<menuGroup id="navdesign" lang="en" name="展示区" iconCls="navdesign">
 				<menu name="美图看看" title="美图看看网页版" address="http://xiuxiu.web.meitu.com/main.html" />
-				<menu name="Photoshop Online" address="http://www.photoshop.com/tools" />
 				<menu name="PhotoEditor" title="Pixlr Photo editor" address="http://pixlr.com/editor" />
 			</menuGroup>
 			<menuGroup id="navDev" name="开发者园地" iconCls="nav">
