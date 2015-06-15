@@ -37,7 +37,16 @@ class GetWebUrl
 
 					foreach ($methods as $method) {
 						$action_name=strtolower($action_name);
-						$result.=Gc::$url_base."index.php?go=".$moduleName.".".$action_name."."."".$method."\r\n";
+
+						$urlbase=UtilNet::urlbase();
+						if (contain(strtolower(php_uname()),"darwin")){
+							$file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+							if (contain($file_sub_dir,"tools".DS))
+								$file_sub_dir=substr($file_sub_dir,0,strpos($file_sub_dir,"tools".DS));
+							$domainSubDir=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir);
+							if(!endwith($urlbase,$domainSubDir))$urlbase.=$domainSubDir;
+						}
+						$result.=$urlbase."index.php?go=".$moduleName.".".$action_name."."."".$method."\r\n";
 
 						$count+=1;
 					}

@@ -1,14 +1,14 @@
 1.复制web目录一份在同级目录下
-  cp -R ikmall ikmalldev
-  移动ikmalldev到同级目录下
-  mv ikmalldev ikmall
+  cp -R betterlife betterlifedev
+  移动betterlifedev到同级目录下
+  mv betterlifedev betterlife
 
 2.复制数据库备份一份
-  kmall  kmalldev
-  *.在phpmyadmin里导出sql脚本如kmall.sql
-  *.从kmall.sql生成压缩文件kmall.sql.zip
-  *.新建数据库kmalldev
-  *.在kmalldev里导入kmall.sql.zip
+  betterlife  betterlifedev
+  *.在phpmyadmin里导出sql脚本如betterlife.sql
+  *.从betterlife.sql生成压缩文件betterlife.sql.zip
+  *.新建数据库betterlifedev
+  *.在betterlifedev里导入betterlife.sql.zip
 
 3.模拟账户已登录
 
