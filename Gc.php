@@ -229,7 +229,8 @@ class Gc
 	 * @var mixed
 	 */
 	public static $self_theme_dir_every=array(
-		'betterlife'=>'bootstrap'
+		'betterlife'=>'bootstrap',
+		'model'=>'bootstrap'
 	);
 	/**
 	 * 是否与Ucenter的用户中心进行整合
