@@ -21,7 +21,8 @@ class Action_Blog extends ActionModel
 		}
 		$count=Blog::count();
 		$this->view->countBlogs=$count;
-		if($count>0){			$bb_page=UtilPage::init($nowpage,$count);
+		if($count>0){
+			$bb_page=UtilPage::init($nowpage,$count);
 			$blogs = Blog::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
 			foreach ($blogs as $blog) {
 				$user_instance=null;

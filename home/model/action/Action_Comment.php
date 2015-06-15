@@ -21,7 +21,8 @@ class Action_Comment extends ActionModel
 		}
 		$count=Comment::count();
 		$this->view->countComments=$count;
-		if($count>0){			$bb_page=UtilPage::init($nowpage,$count);
+		if($count>0){
+			$bb_page=UtilPage::init($nowpage,$count);
 			$comments = Comment::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
 			foreach ($comments as $comment) {
 				$user_instance=null;
