@@ -19,10 +19,27 @@ class Action_Region extends ActionModel
 		}else{
 			$nowpage=1;
 		}
-		$count=Region::count();
+		$conditions=" 1=1 ";
+
+		$region = $this->model->Region;
+		$region_type=$region->region_type;
+		if(($_POST["region_type"]>0)||(!$_POST)){
+			if(array_key_exists("region_type", $_POST))if($_POST["region_type"])$region_type=$_POST["region_type"];
+			if($region_type){
+				$conditions.=" and region_type=".$region_type;
+				$this->view->region_type=$region_type;
+			}
+		}
+		$region_name=$region->region_name;
+		if($region_name)$conditions.=" and region_name like '%".$region_name."%'";
+
+		$this->view->region=$region;
+
+		$count=Region::count($conditions);
 		$this->view->countRegions=$count;
-		if($count>0){			$bb_page=UtilPage::init($nowpage,$count);
-			$regions = Region::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
+		if($count>0){
+			$bb_page=UtilPage::init($nowpage,$count);
+			$regions = Region::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint(),$conditions);
 			foreach ($regions as $region) {
 				$region_instance=null;
 				if ($region->parent_id){

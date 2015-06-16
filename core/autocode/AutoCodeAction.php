@@ -298,7 +298,7 @@ class AutoCodeAction extends AutoCode
 						 "		}\r\n".
 						 "		\$count={$classname}::count();\r\n".
 						 "		\$this->view->count{$classname}s=\$count;\r\n".
-						 "		if(\$count>0){".
+						 "		if(\$count>0){\r\n".
 						 "			\${$appname_alias}_page=UtilPage::init(\$nowpage,\$count);\r\n".
 						 "			\${$instancename}s = {$classname}::queryPage(\${$appname_alias}_page->getStartPoint(),\${$appname_alias}_page->getEndPoint());\r\n".
 						 $specialResult.
