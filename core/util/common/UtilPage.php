@@ -80,7 +80,9 @@ class UtilPage {
 		}
 
 		$this->linkUrl = $linkUrl;
-		$_SESSION[TagPageClass::$tag_page_sessionname]=$this;
+        HttpSession::init();
+        HttpSession::set(TagPageClass::$tag_page_sessionname,$this);
+		//$_SESSION[TagPageClass::$tag_page_sessionname]=$this;
 	}
 
 	/**

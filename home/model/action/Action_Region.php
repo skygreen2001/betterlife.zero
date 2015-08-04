@@ -37,8 +37,8 @@ class Action_Region extends ActionModel
 
 		$count=Region::count($conditions);
 		$this->view->countRegions=$count;
-		if($count>0){
-			$bb_page=UtilPage::init($nowpage,$count);
+        $bb_page=UtilPage::init($nowpage,$count);
+		if($count>0){                               
 			$regions = Region::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint(),$conditions);
 			foreach ($regions as $region) {
 				$region_instance=null;
@@ -51,8 +51,8 @@ class Action_Region extends ActionModel
 					$region["regionShowAll"]=$this->regionShowAll($region->parent_id,$level);
 				}
 			}
-			$this->view->set("regions",$regions);
 		}
+        $this->view->set("regions",$regions);
 	}
 
 	/**
