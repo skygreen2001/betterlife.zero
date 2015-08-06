@@ -29,8 +29,8 @@
 				<param name="len">1</param>
 				<param name="formHandler">true</param>
 			</method>
-			<method name="delete">
-				<param name="len">1</param>
+			<method name="deleteByIds">
+				<param name="len">2</param>
 			</method>
 			<method name="getMenusByGroupId">
 				<param name="len">1</param>

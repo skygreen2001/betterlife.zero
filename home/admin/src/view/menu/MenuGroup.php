@@ -188,6 +188,7 @@ class MenuGroup extends Viewable
 						$menu->setIconCls($attributes->iconCls."");
 						$menu->setLang($attributes->lang."");
 						$menu->setFor($attributes->for."");
+						$menu->setMenuGroup_id($this->id);
 						$this->menus[]=$menu;
 					}
 				}
@@ -196,6 +197,30 @@ class MenuGroup extends Viewable
 		unset($this->menuConfigs);
 		return $this;
 	}
+
+	public static function deleteMenuByIds($del_menugroup_id,$del_menu_id)
+    {
+		$uri=Menu::address();
+		$menuConfigs=UtilXmlSimple::fileXmlToObject($uri);
+		$xml_child=$menuConfigs->xpath("//menuGroup[@id='".$del_menugroup_id."']");
+		foreach( $xml_child as $el){
+			$menus=$el->menu;
+			foreach( $menus  as $menu){
+				if($menu["name"]==$del_menu_id)
+				{
+					$domRef = dom_import_simplexml($menu);
+					$domRef->parentNode->removeChild($domRef);
+				}
+			}
+		}
+		// return $del_menugroup_id."---".$del_menu_id."---".print_pre($xml_child);
+		$dom = new DOMDocument('1.0',"UTF-8");
+		$dom->preserveWhiteSpace = false;
+		$dom->formatOutput = true;
+		$dom->loadXML($menuConfigs->asXML());
+		$dom->save($uri);
+		return true;
+    }
 
 	/**
 	 * 获取所有的MenuGroups

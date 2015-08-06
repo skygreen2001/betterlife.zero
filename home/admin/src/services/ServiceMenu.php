@@ -10,61 +10,72 @@
  * @author skygreen
  */
 class ServiceMenu extends Service
-{     
+{
     /**
     * 新建保存菜单
     */
     public function save($menu)
-    {             
-        return array(  
-            'success'=>true,  
+    {
+        return array(
+            'success'=>true,
             'data'=>true
-        ); 
-        
+        );
+
     }
-    
+
     /**
     * 更新菜单
     */
     public function update($menu)
     {
-        
+
     }
-    
+
     /**
     * 删除指定编号的菜单
-    * 
+    *
     * @param mixed $id
     */
-    public function delete($id)
+    public function deleteByIds($del_menugroup_id,$del_menu_ids)
     {
-        
+        $name_arr=explode(",", $del_menu_ids);
+        $data=true;
+        foreach ($name_arr as $name) {
+            if ($name){
+                $data=MenuGroup::deleteMenuByIds($del_menugroup_id,$name);
+            }
+        }
+        return array(
+            'success' => true,
+            'data'    => $data
+        );
+
     }
 
     /**
     * 根据菜单分组标识获取所有相关的菜单
-    * 
+    *
     * @param mixed $menuGroup_id
     */
     public function getMenusByGroupId($menuGroup_id)
-    {           
+    {
         $menugroup=new MenuGroup($menuGroup_id);
-        $menugroup->getByID();   
-        $menus=$menugroup->getMenus();         
+        $menugroup->getByID();
+        $menus=$menugroup->getMenus();
         $data=array();
         if ($menus){
             foreach($menus as $menu){
-               $menu->menuGroup_id=$menuGroup_id; 
-               $data[]=UtilObject::object_to_array($menu);  
-            }       
+               $menu->menuGroup_id=$menuGroup_id;
+               $data[]=UtilObject::object_to_array($menu);
+            }
         }
-        if ($data==null)$data=array();             
-        return array(  
-            'success'=>true,  
+        if ($data==null)$data=array();
+        return array(
+            'success'=>true,
             'data'=>$data
-        ); 
+        );
     }
-    
+
     /**
     * 分页查询:菜单列表
     */
@@ -72,7 +83,7 @@ class ServiceMenu extends Service
     {
         return $this->QueryPageMenu($formPacket);
     }
-    
+
     /**
     * 分页查询:菜单列表
     */
@@ -85,33 +96,33 @@ class ServiceMenu extends Service
         foreach ($formPacket as $key=>$value){
            if (!empty($value)){
                if ($key=='name') {
-                    $condition[]="$key contain '$value'";    
+                    $condition[]="$key contain '$value'";
                } else if ($key=='address') {
-                    $condition[]="$key contain '$value'";    
+                    $condition[]="$key contain '$value'";
                } else {
                     $condition[$key]=$value;
                }
-           } 
-        }  
-        
+           }
+        }
+
         $startPoint=0;
-        $endPoint=10;  
+        $endPoint=10;
         if (isset($formPacket['start'])){
             $startPoint=$formPacket['start'];
-        }          
-        if (isset($formPacket['limit'])){
-            $endPoint=$formPacket['limit']; 
         }
-        
+        if (isset($formPacket['limit'])){
+            $endPoint=$formPacket['limit'];
+        }
+
         unset($condition['start']);
-        unset($condition['limit']);   
+        unset($condition['limit']);
         $count=MenuGroup::count($condition);
-        $data=MenuGroup::queryPage($startPoint,$endPoint,$condition);          
-        return array(  
-            'success'=>true,  
-            'totalCount'=>$count,    
+        $data=MenuGroup::queryPage($startPoint,$endPoint,$condition);
+        return array(
+            'success'=>true,
+            'totalCount'=>$count,
             'data'=>$data
-        );          
-    }      
+        );
+    }
 }
 ?>
