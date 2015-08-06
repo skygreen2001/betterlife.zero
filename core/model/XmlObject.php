@@ -352,7 +352,7 @@ class XmlObject extends Object implements ArrayAccess
 		$filename=call_user_func("$classname::address");
 		$xml=UtilXmlSimple::fileXmlToObject($filename);
 		$classname{0} = strtolower($classname{0});
-		$xml_child=$xml->xpath("//$classname"."[@".self::$name_id_property."=$node]");
+		$xml_child=$xml->xpath("//$classname"."[@".self::$name_id_property."='$node']");
 		if ($xml_child)
 		{
 			$xml_attributes=$xml_child[0];
@@ -396,7 +396,7 @@ class XmlObject extends Object implements ArrayAccess
 		$filename=call_user_func("$classname::address");
 		$xml=UtilXmlSimple::fileXmlToObject($filename);
 		$classname{0} = strtolower($classname{0});
-		$xml_child=$xml->xpath("//$classname[@".self::$name_id_property."='$node']");
+		$xml_child=$xml->xpath("//$classname"."[@".self::$name_id_property."='$node']");
 		foreach( $xml_child  as $el){
 			if($el[self::$name_id_property]==$node)
 			{
