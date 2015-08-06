@@ -198,6 +198,9 @@ class MenuGroup extends Viewable
 		return $this;
 	}
 
+	/**
+	 * 删除菜单
+	 */
 	public static function deleteMenuByIds($del_menugroup_id,$del_menu_id)
     {
 		$uri=Menu::address();
@@ -213,7 +216,37 @@ class MenuGroup extends Viewable
 				}
 			}
 		}
-		// return $del_menugroup_id."---".$del_menu_id."---".print_pre($xml_child);
+		$dom = new DOMDocument('1.0',"UTF-8");
+		$dom->preserveWhiteSpace = false;
+		$dom->formatOutput = true;
+		$dom->loadXML($menuConfigs->asXML());
+		$dom->save($uri);
+		return true;
+    }
+
+    /**
+     * 保存菜单
+     */
+	public static function saveMenuByMenugroupId($menugroup_id,$name,$address,$title="")
+    {
+		$uri=Menu::address();
+		$menuConfigs=UtilXmlSimple::fileXmlToObject($uri);
+		$xml_child=$menuConfigs->xpath("//menuGroup[@id='".$menugroup_id."']");
+		foreach( $xml_child as $el){
+			$menus=$el->menu;
+
+			$child=$menus->addChild("menu");
+			$name=htmlentities( $name,ENT_COMPAT,"UTF-8");
+			$child->addAttribute("name",$name);
+
+			$address=htmlentities( $address,ENT_COMPAT,"UTF-8");
+			$child->addAttribute("address",$address);
+
+			if($title){
+				$title=htmlentities( $title,ENT_COMPAT,"UTF-8");
+				$child->addAttribute("title",$title);
+			}
+		}
 		$dom = new DOMDocument('1.0',"UTF-8");
 		$dom->preserveWhiteSpace = false;
 		$dom->formatOutput = true;

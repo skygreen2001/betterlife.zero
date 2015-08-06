@@ -9,7 +9,6 @@
   </menuGroup>
   <menuGroup id="navProgram" lang="en" name="程序员区" iconCls="settings">
     <menu name="Stumbleupon" address="http://www.stumbleupon.com/"/>
-    <menu name="CSDN" address="http://www.csdn.net"/>
     <menu name="InfoQ" address="http://www.infoq.com"/>
     <menu name="PHP" address="http://www.php.net"/>
     <menu name="CS-Cart" address="http://www.cs-cart.com"/>
@@ -19,7 +18,6 @@
   </menuGroup>
   <menuGroup id="navdesign" lang="en" name="展示区" iconCls="navdesign">
     <menu name="美图看看" title="美图看看网页版" address="http://xiuxiu.web.meitu.com/main.html"/>
-    <menu name="Photoshop Online" address="http://www.photoshop.com/tools"/>
     <menu name="PhotoEditor" title="Pixlr Photo editor" address="http://pixlr.com/editor"/>
     <menu name="LifeVC" address="http://www.lifevc.com"/>
     <menu name="人人小站" address="http://zhan.renren.com"/>
