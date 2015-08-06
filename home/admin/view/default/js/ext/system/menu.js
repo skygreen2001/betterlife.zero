@@ -121,10 +121,10 @@ Bb.Menu.View={
 						this.store.insert(0,p);
 						this.editor.startEditing(0, 0);
 					}
-				  },'-', {
+				},'-', {
 					text: '删除',
 					disabled: true,
-	  				scope:this,
+						scope:this,
 					iconCls: 'icon-delete',
 					id: 'removeBtn',
 					handler:function() {
@@ -136,7 +136,13 @@ Bb.Menu.View={
 							}
 						},this);
 					}
-				  }, '-'])}, config);
+				}, '-',{
+					ref : '../saveBtn',
+					scope: this,
+					iconCls : 'icon-commit',
+					text : '提交'
+				}, '-'])
+			}, config);
 			Bb.Menu.View.GroupGrid.superclass.constructor.call(this, config);
 		},
 		/**

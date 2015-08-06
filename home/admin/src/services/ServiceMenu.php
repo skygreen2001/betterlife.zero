@@ -22,7 +22,7 @@ class ServiceMenu extends Service
         $title=$menu["title"];
         $data=true;
         $data=MenuGroup::saveMenuByMenugroupId($menugroup_id,$name,$address,$title);
-        $data= $name."---".$address."---".$title;
+        // $data= $name."---".$address."---".$title;
         return array(
             'success'=>true,
             'data'=>$data
