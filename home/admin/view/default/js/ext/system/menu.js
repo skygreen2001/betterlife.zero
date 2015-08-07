@@ -99,7 +99,7 @@ Bb.Menu.View={
 				height:180,
 				layout: 'fit',
 				autoScroll:true,
-				clicksToEdit: 5,
+				// clicksToEdit: 2,
 				headerAsText:false,//是否显示标题栏
 				// plugins : [this.editor],
 				cm:this.cm,
