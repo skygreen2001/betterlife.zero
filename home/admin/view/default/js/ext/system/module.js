@@ -327,7 +327,7 @@ Bb.Module.View={
             this.store.save();
             this.getBottomToolbar().updateInfo();
             // this.getView().refresh();//刷新整个grid视图,重新排序.
-        },
+        }
         /**
          * pluggable renders
         renderOperation : function(value, p, record) {
