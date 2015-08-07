@@ -193,7 +193,7 @@ Bb.Menu.View={
 				  if (rec.data.id){
 					  Bb.Menu.View.current_menuGroup_id=rec.data.id;
 					  // Bb.Menu.View.SaveForm.cmenuGroup_id.setValue(rec.data.id);
-					  
+
                       Bb.Menu.View.SaveForm.cmenuGroup_id.setValue(rec.data.id);
                       Bb.Menu.View.SaveForm.menuGroup_id.setValue(rec.data.id);
 					  this.grid.getMenusByGroupId(rec.data.id);
@@ -534,6 +534,7 @@ Bb.Menu.View={
 				var del_menugroup_id=selectedRows[0].data.menuGroup_id;
 				ServiceMenu.deleteByIds(del_menugroup_id,del_menu_ids);
 				Ext.Msg.alert("提示", "删除成功！");
+				Ext.getCmp('groupGrid').getMenusByGroupId(Bb.Menu.View.current_menuGroup_id);
 			}
 		}
 	}),
@@ -569,7 +570,7 @@ Bb.Menu.View={
             allowBlank : false,
             name : 'name'
         },
-  //       {
+  		//       {
 		// 	id : 'cmenuGroup_id',
 		// 	name : 'menuGroup_id',
 		// 	ref:'cmenuGroup_id',
