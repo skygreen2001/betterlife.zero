@@ -130,18 +130,20 @@ Bb.Menu.View={
 					handler:function() {
 						Ext.Msg.confirm('信息','确定要删除？',function(btn) {
 							if(btn == 'yes') {
-								var cell = this.getSelectionModel().getSelectedCell();
-								var record = Bb.Menu.Store.groupStore.getAt(cell[0]);
-								Bb.Menu.Store.groupStore.remove(record);
+								var deleteRow = this.getSelectionModel().getSelected();
+								// var record = Bb.Menu.Store.groupStore.getAt(0);
+								Bb.Menu.Store.groupStore.remove(deleteRow);
 							}
 						},this);
 					}
-				}, '-',{
-					ref : '../saveBtn',
-					scope: this,
-					iconCls : 'icon-commit',
-					text : '提交'
-				}, '-'])
+				},'-'
+				// ,{
+				// 	ref : '../saveBtn',
+				// 	scope: this,
+				// 	iconCls : 'icon-commit',
+				// 	text : '提交'
+				// },'-'
+				])
 			}, config);
 			Bb.Menu.View.GroupGrid.superclass.constructor.call(this, config);
 		},
@@ -155,7 +157,13 @@ Bb.Menu.View={
 				if (!e.getTarget('.x-grid3-row-checker')) {
 					this.constructor.prototype.onRowClick.apply(this, arguments);
 				}
-			}// ,clicksToEdit: 2
+			},
+            listeners:{
+                afteredit:function(roweditor, changes, record, rowIndex){
+                	// alert(record.data.name);
+			 	}
+            }
+			// ,clicksToEdit: 2
 		}),
 		cm:new Ext.grid.ColumnModel([
 			{header: "名称", width: 250, sortable: true, dataIndex: 'name', editor: new Ext.form.TextField({})},
