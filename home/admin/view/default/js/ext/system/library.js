@@ -172,16 +172,7 @@ Bb.Library.View={
 							editor : {
 								xtype : 'checkbox'
 							}
-						}
-						/**, {
-							header : "操作",
-							width : 150,
-							id : 'id',
-							align : 'center',
-							renderer : this.renderOperation,
-							sortable : false
-						}*/
-						]
+						}]
 					}),
 				sm : this.sm,
 				trackMouseOver : true,
@@ -217,27 +208,7 @@ Bb.Library.View={
 						handler : function() {
 							this.store.save();
 						}
-					}, '-'/**, {
-						ref : '../importBtn',
-						scope: this,
-						iconCls : 'icon-import',
-						text : '导入',
-						handler : function() {
-
-						}
-					}, {
-						xtype : 'tbseparator'
-					}, {
-						ref : '../exportBtn',
-						scope: this,
-						iconCls : 'icon-export',
-						text : '导出',
-						handler : function() {
-
-						}
-					}, {
-						xtype : 'tbseparator'
-					}*/],
+					}, '-'],
 				bbar : new Ext.PagingToolbar({
 					pageSize : Bb.Library.Config.PageSize,
 					store : Bb.Library.Store.libraryStore,
@@ -447,6 +418,7 @@ Bb.Library.View={
 					width : 80,
 					handler : function() {
 						Bb.Library.View.Form.getForm().reset();
+						Bb.Library.View.Form.onSubmitQuery();
 					}
 				}]
 			}, {
