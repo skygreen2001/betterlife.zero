@@ -193,6 +193,8 @@ Bb.Menu.View={
 				  if (rec.data.id){
 					  Bb.Menu.View.current_menuGroup_id=rec.data.id;
 					  // Bb.Menu.View.SaveForm.cmenuGroup_id.setValue(rec.data.id);
+					  
+                      Bb.Menu.View.SaveForm.cmenuGroup_id.setValue(rec.data.id);
                       Bb.Menu.View.SaveForm.menuGroup_id.setValue(rec.data.id);
 					  this.grid.getMenusByGroupId(rec.data.id);
 				  }
@@ -553,10 +555,16 @@ Bb.Menu.View={
 		},
 		items : [{
             fieldLabel : '菜单分组',
+            name : 'cmenuGroup_id',
+            ref:'cmenuGroup_id',
+            xtype:'displayfield'
+        },
+        {
             name : 'menuGroup_id',
             ref:'menuGroup_id',
-            // xtype:'displayfield'
-        },{
+            xtype:'hidden'
+        },
+        {
             fieldLabel : '名称(<font color=red>*</font>)',
             allowBlank : false,
             name : 'name'
