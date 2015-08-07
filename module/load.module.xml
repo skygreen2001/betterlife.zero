@@ -11,8 +11,8 @@
 	 */
  -->
 <modules>
-   <module name="communication" open="yes" init="load_communication" />
-   <module name="barcode" open="yes" init="load_barcode" />
+   <module name="communication" open="true" init="load_communication" />
+   <module name="barcode" open="true" init="load_barcode" />
 
 
 </modules>
