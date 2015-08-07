@@ -232,10 +232,8 @@ class MenuGroup extends Viewable
 		$uri=Menu::address();
 		$menuConfigs=UtilXmlSimple::fileXmlToObject($uri);
 		$xml_child=$menuConfigs->xpath("//menuGroup[@id='".$menugroup_id."']");
-		foreach( $xml_child as $el){
-			$menus=$el->menu;
-
-			$child=$menus->addChild("menu");
+		if($xml_child){
+			$child=$xml_child[0]->addChild("menu");
 
 			$name=htmlentities( $name,ENT_COMPAT,"UTF-8");
 			$child->addAttribute("name",$name);
