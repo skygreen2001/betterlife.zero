@@ -1,5 +1,4 @@
 <?php
-
 /**
   +---------------------------------<br/>
  * 在这里实现Module模块的加载<br/>
@@ -8,7 +7,12 @@
  * @package module
  * @author zhouyuepu
  */
-class Module_Loader {
+class Module_Loader 
+{
+	/**
+	 * @var 加载Module的标识
+	 */
+	const SPEC_ID="id";
 	/**
 	 * @var 加载Module模块的名称
 	 */
@@ -22,13 +26,17 @@ class Module_Loader {
 	 */
 	const SPEC_INIT="init";
 	/**
+	 * @var 是否必须加载的
+	 */
+	const SPEC_REQUIRED="required";
+	/**
 	 * @var 是否加载：是
 	 */
-	const OPEN_YES="yes";
+	const OPEN_YES="true";
 	/**
 	 * @var 是否加载：否
 	 */
-	const OPEN_NO="no";
+	const OPEN_NO="false";
 	/**
 	 * 加载Module模块的规格Xml文件名。
 	 */
@@ -49,10 +57,13 @@ class Module_Loader {
 			$blockAttr=$block[Util::XML_ELEMENT_ATTRIBUTES];
 			if (array_key_exists(self::SPEC_OPEN, $blockAttr)){
 				if (strtolower($blockAttr[self::SPEC_OPEN])==self::OPEN_YES){
-					self::$blockAttr[self::SPEC_INIT]();
+					if(method_exists(self, $blockAttr[self::SPEC_INIT])){
+						@self::$blockAttr[self::SPEC_INIT]();
+					}
 				}
 			}else{
-				self::$blockAttr[self::SPEC_INIT]();
+				if(method_exists(self, $blockAttr[self::SPEC_INIT]))
+					@self::$blockAttr[self::SPEC_INIT]();
 			}
 		}
 	}
