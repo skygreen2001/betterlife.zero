@@ -235,7 +235,7 @@ class MenuGroup extends Viewable
 		foreach( $xml_child as $el){
 			$menus=$el->menu;
 
-			$child=$menus->appendChild("menu");
+			$child=$menus->addChild("menu");
 
 			$name=htmlentities( $name,ENT_COMPAT,"UTF-8");
 			$child->addAttribute("name",$name);
