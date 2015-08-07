@@ -555,7 +555,7 @@ Bb.Menu.View={
             fieldLabel : '菜单分组',
             name : 'menuGroup_id',
             ref:'menuGroup_id',
-            xtype:'displayfield'
+            // xtype:'displayfield'
         },{
             fieldLabel : '名称(<font color=red>*</font>)',
             allowBlank : false,

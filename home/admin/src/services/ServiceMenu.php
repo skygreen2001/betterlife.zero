@@ -16,7 +16,7 @@ class ServiceMenu extends Service
     */
     public function save($menu)
     {
-        $menugroup_id=$menu["menugroup_id"];
+        $menugroup_id=$menu["menuGroup_id"];
         $name=$menu["name"];
         $address=$menu["address"];
         $title=$menu["title"];
@@ -35,7 +35,7 @@ class ServiceMenu extends Service
     */
     public function update($menu)
     {
-        $menugroup_id=$menu["menugroup_id"];
+        $menugroup_id=$menu["menuGroup_id"];
         $name=$menu["name"];
         $address=$menu["address"];
         $title=$menu["title"];
