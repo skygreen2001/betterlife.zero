@@ -106,7 +106,9 @@ class Action_System extends ActionExt
 		UtilCss::loadExt($this->view->viewObject,UtilAjaxExtjs::$ext_version);
 		$this->loadExtComponentCss("RowEditor.css");
 		UtilAjaxExtjs::load(UtilAjaxExtjs::$ext_version,$this->view->viewObject);
+		$this->loadExtJs("shared/message.js",true);
 		$this->loadExtJs("shared/grid/roweditor.js",true);
+		$this->loadExtJs("shared/grid/checkcolumn.js",true);
 		$this->loadExtJs("system/module.js");
 		$this -> ExtDirectMode();
 	}

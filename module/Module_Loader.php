@@ -45,7 +45,7 @@ class Module_Loader {
 	public static function load_run()
 	{
 		$spec_module=UtilXmlSimple::fileXmlToArray(dirname(__FILE__).DS.self::FILE_SPEC_LOAD_MODULE);
-		foreach ($spec_module["block"] as $block){
+		foreach ($spec_module["module"] as $block){
 			$blockAttr=$block[Util::XML_ELEMENT_ATTRIBUTES];
 			if (array_key_exists(self::SPEC_OPEN, $blockAttr)){
 				if (strtolower($blockAttr[self::SPEC_OPEN])==self::OPEN_YES){

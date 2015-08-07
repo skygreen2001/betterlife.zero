@@ -10,9 +10,9 @@
 	 * 6.group:若干Module属于同一个解决方案。
 	 */
  -->
-<module>
-   <block name="communication" open="yes" init="load_communication" />
-   <block name="barcode" open="yes" init="load_barcode" />
+<modules>
+   <module name="communication" open="yes" init="load_communication" />
+   <module name="barcode" open="yes" init="load_barcode" />
 
 
-</module>
+</modules>

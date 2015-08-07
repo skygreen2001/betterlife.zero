@@ -1,456 +1,243 @@
-Ext.namespace("Betterlife.Admin.Menu");
+Ext.ns("Betterlife.Admin.Library");
 
 Bb = Betterlife.Admin;
+/**
+ * 资源库
+ */
+Bb.Module = {
+    /**
+     * 全局配置
+     */
+    Config : {
+        /**
+         * 分页:每页显示记录数
+         */
+        PageSize : 10
+    },
+    /**
+     * 显示用户操作回馈的应用实例
+     */
+    App : new Ext.App({})
+};
 
 /**
- * 菜单
+ * Model:资源库数据模型
  */
-Bb.Menu={
-	/**
-	 * 全局配置
-	 */
-	Config:{
-        /**
-         *分页:每页显示记录数
-         */        
-        PageSize:10
-	}
-};       
- 
-/**
-* Model:菜单数据模型   
-*/
-Bb.Menu.Store = {
-    /**
-    * 菜单分组数据模型
-    */
-    groupStore:new Ext.data.JsonStore({
-        fields: [
-        {
-            name: 'id',
-            type: 'string'
+Bb.Module.Store = {
+    // Typical Store collecting the Proxy, Reader and Writer together.
+    libraryStore : new Ext.data.Store({
+        id : 'resourceLibrary',
+        restful : true, // <-- This Store is RESTful
+        proxy : new Ext.data.HttpProxy({
+            url : 'home/admin/src/services/ajax/extjs/remote/service.php/Module',
+            // centralized listening of DataProxy events "beforewrite", "write"
+            // and "writeexception" upon Ext.data.DataProxy class.
+            listeners : {
+                // /Listen to all DataProxy beforewrite events
+                'beforewrite' : function(proxy, action) {
+                    // Bb.Module.App.setAlert(Bb.Module.App.STATUS_NOTICE, "在
+                    // " + action + "之前");
+                },
+                // / all write events
+                'write' : function(proxy, action, result, res, rs) {
+                    Bb.Module.App.setAlert(true, action + ':' + res.message);
+                },
+                // / all exception events
+                "exception" : function(proxy, type, action, options, res) {
+                    // this.rejectChanges();
+                    Bb.Module.App.setAlert(false, "发生异常，执行： " + action);
+                }
+            }
+        }),
+        autoLoad : {
+            params : {
+                start : 0,
+                limit : Bb.Module.Config.PageSize
+            }
         },
-        {
-            name: 'name',
-            type: 'string'
-        },
-        {
-            name: 'lang',
-            type: 'string'
-        },
-        {
-            name: 'iconCls',
-            type: 'string'
-        }]
-    }),
-    /**
-    * 菜单数据模型
-    */ 
-    menuStore:new Ext.data.Store({
-        id:'menuStore',    
-        reader: new Ext.data.JsonReader({
-		    totalProperty: 'totalCount',
-		    successProperty: 'success',  
-		    root: 'data',       
-		    remoteSort: true,                
-		    fields : [{name: 'name',type: 'string'},
-			    {name: 'address',type: 'string'},  
-                {name: 'menuGroup_id',type: 'string'},  
-			    {name: 'lang',type: 'string'},  
-			    {name: 'iconCls',type: 'string'},  
-			    {name: 'title',type: 'string'}
-           ]}         
-	    ),
-        writer: new Ext.data.JsonWriter({
-		    encode: false   // <-- don't return encoded JSON -- causes Ext.Ajax#request to send data using jsonData config rather than HTTP params
-	    }),
-	    listeners : {
-		    /**
-		     * 保证分页也将查询条件带上
-		     */			
-		    'beforeload' : function(store, options) {
-			    if (Ext.isReady) {  
-				    Ext.apply(options.params, Bb.Menu.View.GetForm.getForm().getValues());
-			    }
-		    }
-	    }    
-    })     
+        autoSave : false,
+        autoDestroy : true,
+        reader : new Ext.data.JsonReader({
+            totalProperty : 'totalCount',
+            successProperty : 'success',
+            idProperty : 'id',
+            root : 'data',
+            remoteSort : true,
+            messageProperty : 'message',
+            fields : [{
+                name : 'id',
+                type : 'string'
+            }, {
+                name : 'name',
+                type : 'string'
+            },
+            {
+                name : 'open',
+                type : 'bool'
+            }, {
+                name : 'required',
+                type : 'bool'
+            }, {
+                name : 'init',
+                type : 'string'
+            }]
+        }),
+        // The new DataWriter component.
+        writer : new Ext.data.JsonWriter({
+            /**
+             * Don't return encoded JSON -- causes Ext.Ajax#request to send data
+             * using jsonData config rather than HTTP params
+             * @type Boolean
+             */
+            encode : false
+                // ,writeAllFields: false
+        }),
+        listeners : {
+            /**
+             * 保证分页也将查询条件带上
+             */
+            'beforeload' : function(store, options) {
+                if (Ext.isReady) {
+                    Ext.apply(options.params, Bb.Module.View.Form.getForm().getValues());
+                }
+            }
+        }
+    })
 }
 
 /**
-* View:菜单显示组件   
+* View:资源库显示组件
 */
-Bb.Menu.View={ 
+Bb.Module.View={
     /**
-    * 当前选择的菜单分组编号
-    */
-    current_menuGroup_id:'',  
-    /**
-    * 当前创建的新建窗口
-    */
-    current_savewindow:null,     
-    /**
-    * 菜单分组
-    */       
-    GroupGrid:Ext.extend(Ext.grid.EditorGridPanel, {   
-	    constructor : function(config) {
-	        config = Ext.apply({	
-	            store: Bb.Menu.Store.groupStore,      
-	            height:180,                 
-	            layout: 'fit',
-	            autoScroll:true,  
-	            clicksToEdit: 2,
-	            headerAsText:false,//是否显示标题栏   
-	            plugins : [this.editor],
-	            cm:this.cm,
-    	        stripeRows:true,  
-    	        sm:this.sm,
-    	        tbar: new Ext.Toolbar(['-', {
-                    ref: '../addBtn',
-                    text: '新增',
-      	            scope:this,	 
-                    iconCls: 'icon-add',
-                    handler:function() {
-                        var p = new Ext.data.Record({
-                            id:'',
-                            name:'',
-                            lang:'',
-                            iconCls:''
-                        });
-                        this.editor.stopEditing();
-                        this.store.insert(0,p);
-                        this.editor.startEditing(0, 0);
-                    }
-                  },'-', {
-                    text: '删除',
-                    disabled: true,
-      	            scope:this,	        
-                    iconCls: 'icon-delete',
-                    id: 'removeBtn',
-                    handler:function() {
-                        Ext.Msg.confirm('信息','确定要删除？',function(btn) {
-                            if(btn == 'yes') {     
-                                var cell = this.getSelectionModel().getSelectedCell();   
-                                var record = Bb.Menu.Store.groupStore.getAt(cell[0]);
-                                Bb.Menu.Store.groupStore.remove(record);
-                            }
-                        },this);
-                    }
-                  }, '-'])}, config);
-	        Bb.Menu.View.GroupGrid.superclass.constructor.call(this, config);   
-	    },	
-	    /**
-	     * 编辑器
-	     */
-	    editor : new Ext.ux.grid.RowEditor({
-		    saveText : '修改',
-		    // 保证选择左侧的选择框时，不影响启动显示RowEdior
-		    onRowClick : function(g, rowIndex, e) {
-			    if (!e.getTarget('.x-grid3-row-checker')) {
-				    this.constructor.prototype.onRowClick.apply(this, arguments);
-			    }
-		    }// ,clicksToEdit: 2
-	    }),
-        cm:new Ext.grid.ColumnModel([   
-	        {header: "名称", width: 250, sortable: true, dataIndex: 'name', editor: new Ext.form.TextField({})},
-	        {header: "标识", width: 250, sortable: true, dataIndex: 'id', editor: new Ext.form.TextField({})},
-	        {header: "中英文", width: 250, sortable: true, dataIndex: 'lang',  editor: new Ext.form.ComboBox({
-		        emptyText : '',
-                mode : 'local',        
-		        /**    
-		         *  菜单分组中英文
-		         */
-                store : new Ext.data.SimpleStore({
-			        fields : ['value', 'text'],
-			        data : [['cn', 'cn'], ['en', 'en']]
-		        }),  
-                triggerAction : 'all',
-                valueField : 'value',//值
-                displayField : 'text'//显示文本
-		    })},
-	        {header: "图标类", width: 250, sortable: true, dataIndex: 'iconCls', editor: new Ext.form.TextField({})}		    
-	    ]),  
-        sm: new Ext.grid.RowSelectionModel({
-          singleSelect: true,  
-          scope:this,
-          listeners: {
-              rowselect: function(sm, row, rec) {    
-                  //Bb.Menu.Store.load();      
-                  if (rec.data.id){    
-                      Bb.Menu.View.current_menuGroup_id=rec.data.id;
-                      Bb.Menu.View.SaveForm.cmenuGroup_id.setValue(rec.data.id);
-                      this.grid.getMenusByGroupId(rec.data.id);
-                  }                      
-              },
-              ////判断删除按钮是否可以激活
-              selectionchange:function(sm) {
-          	    Ext.getCmp('removeBtn').setDisabled(sm.getCount() < 1);
-              }
-          }
-        }),
-        getMenusByGroupId:function($menugroup_id){
-          /**
-           * 菜单分组查询分组表单
-           */                              
-          ServiceMenu.getMenusByGroupId($menugroup_id,function(provider, response){    
-              var result= new Array();
-              result['data']=response.result.data;                                       
-              Bb.Menu.Store.menuStore.loadData(result);          
-          });   
-        }                         
-    }),  
-            
-    /**
-     * 菜单分组所在的容器面板
-     */    
-    GroupPanel:Ext.extend(Ext.Panel,{
-        constructor : function(config) { 
-            config = Ext.apply({   
-                region: 'north',// a center region is ALWAYS required for border layout
-                id: 'menuGroupPanel',     
-                title:'菜单分组',      
-                contentEl: 'top',   
-                height:190,     
-                split: true, 
-                frame: true,       
-                collapseMode: 'mini',              
-                collapsible: true,  
-                autoScroll:true,    
-                defaults:{
-                    margins:'5 5 5 5'
-                },//定义边距与间距
-                layout:{
-                    type:'fit'
-                },
-                items:[
-                    new Bb.Menu.View.GroupGrid({id:'groupGrid'})
-                ]
+     * 创建一个典型的具备RowEditor Plugin的 GridPanel 类
+     */
+    Grid:Ext.extend(Ext.grid.GridPanel, {
+        constructor : function(config) {
+            Bb.Module.Store.libraryStore.setDefaultSort('id', 'desc');
+            /**
+             * 解决了CheckboxSelectionModel和RowEditor的冲突问题
+             *
+             * @link http://www.sencha.com/forum/showthread.php?116823-OPEN-1419-RowEditor-CheckboxSelectionModel-causes-error.
+             * @link http://www.sencha.com/forum/showthread.php?115154-RowEditor-and-CheckboxSelectionModel-together-Problem
+             */
+            Ext.applyIf(this.sm, {
+                getEditor : function() {
+                    return false;
+                }
             });
-            Bb.Menu.View.GroupPanel.superclass.constructor.call(this, config);    
-        } 
-    }),       
-            
-    /**
-     * 菜单查询Form
-     */
-    GetForm:new Ext.form.FormPanel({    
-        labelAlign: 'left', 
-        labelWidth:64,   
-        frame:false,   
-        height:55,
-        bodyStyle : 'padding:5px 5px 0',                         
-        headerAsText:false,//是否显示标题栏              
-        api: {},  
-        items:[{            
-            xtype: 'fieldset',    
-            layout:"column",                               
-            style:'border:0;padding-bottom:0;margin-top:5',    
-            autoHeight:true,  
-            collapsible: false,    
-            defaults: {
-                flex  : 1
-            },                                
-            items: [{                  
-                anchor:"90%",
-                xtype:"container", 
-                labelAlign: 'right',           
-                labelWidth:40,   
-                layout:"form",  
-                items:[{
-                    fieldLabel: '名称', 
-                    xtype:"textfield",     
-                    labelStyle: 'white-space:nowrap;', 
-                    width: 260,    
-                    name: 'name'    
-                }]},{                    
-                    layout:"form",  
-                    anchor:"90%",
-                    xtype:"container",  
-                    items:[{          
-                        fieldLabel: '&nbsp;&nbsp;菜单地址',         
-                        xtype:"textfield",
-                        labelStyle: 'white-space:nowrap',      
-                        width: 260,     
-                        name: 'address'
-                    }]   
-                },{
-                    xtype: 'hidden',
-                    id: 'limit',
-                    name: 'limit',
-                    value: Bb.Menu.Config.PageSize
-                },{                    
-                    layout:'form',
-                    anchor:"80%",
-                    xtype:"container",
-                    items:[{                    
-                        xtype:'button',
-                        id:'btn',
-                        text:'搜索',     
-                        width:80, 
-                        scope: this,  
-                        style:'align:left;cursor:pointer;margin-left:5px;',
-                        listeners:{
-                            render:function(){
-                                Ext.fly(this.el).on('click',function(){
-                                    //Bb.Menu.Store.load({
-                                    //  params:params   
-                                    //});                    
-                                    Bb.Menu.View.GetForm.getForm().submit({
-                                        success:function(form, action) {//表单提交成功后,调用的函数.参数分为两个,一个是提交的表单对象,另一个是JSP返回的参数值对象
-                                            var result= new Array();
-                                            result['data']=action.result.data;
-                                            result['totalCount']=action.result.totalCount;   
-                                            Bb.Menu.Store.menuStore.loadData(result);
-                                        },
-                                        failure: function(form, action) {
-                                            Ext.Msg.alert('提示', '查询失败！');
-                                        }
-                                    });
-                                },this);
-                            }
-                        }}]
-                },{                    
-                    layout:'form',
-                    anchor:"80%",  
-                    style : 'padding:0 5px 0 3px',
-                    xtype:"container", 
-                    items:[{
-                            xtype : 'button',
-                            id : 'reset',
-                            text : '重置',
-                            width : 80,
-                            handler : function() {
-                                Bb.Menu.View.GetForm.getForm().reset();
-                            }     
-                    }]
-                }         
-            ]     
-        }]  
-    }),
-    
-    /**
-     * 菜单Grid
-     */
-    Grid:Ext.extend(Ext.grid.GridPanel,{
-        constructor : function(config) { 
             config = Ext.apply({
-                region: 'center',// a center region is ALWAYS required for border layout    
-                contentEl: 'center',    
-                store: Bb.Menu.Store.menuStore,      
-                height:460,                 
-                layout: 'fit',  
-                autoScroll:true,
-                split: true, 
-                frame: true,
-                headerAsText:false,//是否显示标题栏    
-                stripeRows: true,             
+                region : 'center',
+                iconCls : 'icon-grid',
+                frame : true,
+                title : '模块管理',
+                width : 800,
+                height : 400,
+                store : Bb.Module.Store.libraryStore,
+                plugins : [this.editor],
+                defaults : {
+                    autoScroll : true
+                },
                 cm : new Ext.grid.ColumnModel({
                     columns : [
-                        this.sm,         
+                        this.rm,
+                        this.sm,
                         {
-                            header: '名称',
-                            sortable: true,
-                            width    : 200,  
-                            dataIndex: 'name'
-                        },
-                        {
-                            header: '菜单分组', 
-                            sortable: true,
-                            width    : 200,  
-                            dataIndex: 'menuGroup_id'
-                        },           
-                        {
-                            header: '菜单地址',
-                            sortable: true,
-                            width    : 400, 
-                            dataIndex: 'address'
-                        },
-                        {
-                            header: '说明', 
-                            sortable: true,
-                            width    : 200,  
-                            dataIndex: 'title'
-                        }                        
-                    ]
-                }),                 
-                tbar:{
-                    xtype : 'container',
-                    layout : 'anchor',  
-                    height : 80, 
-                    defaults : {     
-                        anchor : '100%'
-                    },        
-                    items : [
-                        Bb.Menu.View.GetForm,
-                        new Ext.Toolbar({  
-                            height : 27,    
-                            items : [{
-                                    text: '反选',  
-                                    iconCls : 'icon-reverse',                                     
-                                    scope: this,                                              
-                                    handler: function(){
-                                        this.onReverseSelect();
-                                    }
-                                }, '-',{
-                                    ref : '../addBtn',
-                                    scope: this,  
-                                    text : '新增',
-                                    iconCls : 'icon-add',
-                                    handler : this.onAdd   
-                                }, '-',{
-                                    ref : '../editBtn',
-                                    scope: this,  
-                                    text : '修改',
-                                    iconCls : 'icon-edit'
-                                }, '-',{
-                                    id : 'removeButton',
-                                    scope: this,  
-                                    text : '删除',
-                                    disabled : true,
-                                    iconCls : 'icon-delete'
-                                }, '-',{
-                                    ref : '../saveBtn',
-                                    scope: this,  
-                                    iconCls : 'icon-commit',
-                                    text : '提交'
-                                }, '-'/**, {
-                                    ref : '../importBtn',
-                                    scope: this,  
-                                    iconCls : 'icon-import',
-                                    text : '导入',
-                                    handler : function() {
-                                        
-                                    }
-                                }, {
-                                    xtype : 'tbseparator'
-                                }, {
-                                    ref : '../exportBtn',
-                                    scope: this,  
-                                    iconCls : 'icon-export',
-                                    text : '导出',
-                                    handler : function() {
-                                        
-                                    }
-                                }, {
-                                    xtype : 'tbseparator'
-                                }*/]
-                })]},
-                bbar: new Ext.PagingToolbar({
-                    pageSize: Bb.Menu.Config.PageSize,
-                    store: Bb.Menu.Store.menuStore,
-                    autoShow:true,
-                    displayInfo: true,
-                    displayMsg: '当前显示 {0} - {1}条记录/共 {2}条记录。',
-                    emptyMsg: "无显示数据"
-                })                                         
-            }, config);  
-        
-            //菜单分组初始化
-            ServiceMenuGroup.allMenuGroup(function(provider, response){           
-                Bb.Menu.Store.groupStore.loadData(response.result.data);                                   
-            });             
-            Bb.Menu.View.Grid.superclass.constructor.call(this, config);   
-        },  
+                            header : "模块名称",
+                            width : 100,
+                            sortable : true,
+                            dataIndex : 'name',
+                            editor : new Ext.form.TextField({})
+                        }, {
+                            header : "已加载",
+                            width : 150,
+                            sortable : true,
+                            dataIndex : 'open',
+                            xtype : 'checkcolumn',
+                            editor : {
+                                xtype : 'checkbox'
+                            }
+                        }, {
+                            header : "初始化方法",
+                            width : 150,
+                            sortable : true,
+                            dataIndex : 'init',
+                            editor : new Ext.form.TextField({})
+                        }, {
+                            header : "必须加载",
+                            width : 150,
+                            sortable : true,
+                            dataIndex : 'required',
+                            xtype : 'checkcolumn',
+                            editor : {
+                                xtype : 'checkbox'
+                            }
+                        }]
+                    }),
+                sm : this.sm,
+                trackMouseOver : true,
+                enableColumnMove : true,
+                columnLines : true,
+                loadMask : true,// {msg:'正在加载数据，请稍侯……'}
+                stripeRows : true,
+                tbar : [{
+                        text: '反选',
+                        iconCls : 'icon-reverse',
+                        scope: this,
+                        handler: function(){
+                            this.onReverseSelect();
+                        }
+                    }, '-',{
+                        ref : '../addBtn',
+                        scope: this,
+                        text : '新增',
+                        iconCls : 'icon-add',
+                        handler : this.onAdd
+                    }, '-',{
+                        id : 'removeBtn',
+                        scope: this,
+                        text : '删除',
+                        disabled : true,
+                        iconCls : 'icon-delete',
+                        handler : this.onDelete
+                    }, '-',{
+                        ref : '../saveBtn',
+                        scope: this,
+                        iconCls : 'icon-commit',
+                        text : '提交',
+                        handler : function() {
+                            this.store.save();
+                        }
+                    }, '-'],
+                bbar : new Ext.PagingToolbar({
+                    pageSize : Bb.Module.Config.PageSize,
+                    store : Bb.Module.Store.libraryStore,
+                    autoShow : true,
+                    prependButtons : true,
+                    displayInfo : true,
+                    displayMsg : '当前显示 {0} - {1}条记录 /共 {2}条记录',
+                    emptyMsg : "无显示数据"
+                }),
+                viewConfig : {
+                    forceFit : true
+                }
+            }, config);
+            Bb.Module.View.Grid.superclass.constructor.call(this, config);
+        },
+        /**
+         * 自动行号
+         */
+        rm : new Ext.grid.RowNumberer({
+            header : '序号',
+            width : 40,
+            renderer : function(value, metadata, record, rowIndex) {
+                if (this.rowspan) {
+                    p.cellAttr = 'rowspan="' + this.rowspan + '"';
+                }
+                var start = record.store.lastOptions.params.start;
+                return start + rowIndex + 1;
+            }
+        }),
         /**
          * 行选择器
          */
@@ -465,11 +252,23 @@ Bb.Menu.View={
                 },
                 'selectionchange' : function(sm) {
                     // 判断删除按钮是否可以激活
-                    Ext.getCmp("removeButton").setDisabled(sm.getCount() < 1);
+                    Ext.getCmp("removeBtn").setDisabled(sm.getCount() < 1);
                     // console.log('selectionchange',sm.getSelections().length);
                 }
             }
-        }), 
+        }),
+        /**
+         * 编辑器
+         */
+        editor : new Ext.ux.grid.RowEditor({
+            saveText : '修改',
+            // 保证选择左侧的选择框时，不影响启动显示RowEdior
+            onRowClick : function(g, rowIndex, e) {
+                if (!e.getTarget('.x-grid3-row-checker')) {
+                    this.constructor.prototype.onRowClick.apply(this, arguments);
+                }
+            }// ,clicksToEdit: 2
+        }),
         /**
          * 反选
          */
@@ -481,170 +280,195 @@ Bb.Menu.View={
                     this.sm.selectRow(i, true);
                 }
             }
-        }, 
+        },
         /**
          * 新增
          */
-        onAdd : function(btn, ev) {  
-           if (!Bb.Menu.View.current_savewindow){ 
-               Bb.Menu.View.current_savewindow=new Bb.Menu.View.SaveWindow();
-           }              
-           Bb.Menu.View.current_savewindow.show();   
-        }
-    }),
-    
-    /**
-     * 表单：新建菜单
-     */
-    SaveForm:new Ext.form.FormPanel({
-        labelWidth : 80,
-        width : 350,
-        bodyStYle : 'padding:5px 5px 0',
-        labelAlign : "center",
-        align : "center",
-        autoWidth : true,  
-        api: {},     
-        defaults : {
-            xtype : 'textfield',
-            width : 270
+        onAdd : function(btn, ev) {
+            var u = new this.store.recordType({
+                name : '',
+                init : '',
+                open : false,
+                required : false
+            });
+            this.editor.stopEditing();
+            this.store.insert(0, u);
+            this.getView().refresh();
+            this.editor.startEditing(0, 0);
+            this.getBottomToolbar().updateInfo();
         },
-        items : [{
-            fieldLabel : '名称(<font color=red>*</font>)',
-            allowBlank : false,
-            name : 'name'
-        }, { 
-            id : 'cmenuGroup_id',               
-            name : 'menuGroup_id',
-            ref:'cmenuGroup_id',        
-            fieldLabel : '菜单分组(<font color=red>*</font>)',     
-            xtype : 'combo',    
-            triggerAction : 'all',
-            hideTrigger : false,
-            mode : 'local',
-            typeAhead : true,
-            store : Bb.Menu.Store.groupStore, 
-            emptyText : '请选择菜单分组', 
-            valueField : 'id',// 值
-            displayField : 'name',// 显示文本
-            editable : true,// 是否允许输入
-            allowBlank : false,
-            selectOnFocus : true,    
-            onSelect : function(record, index) {
-                if (this.fireEvent('beforeselect', this, record, index) !== false) {
-                    this.setValue(record.data[this.valueField
-                            || this.displayField]);
-                    this.collapse();
-                    this.fireEvent('select', this, record, index);
-                }  
-                Bb.Menu.View.current_menuGroup_id=record.data.id;                                                   
-            },
-        },{
-            fieldLabel : '网址(<font color=red>*</font>)',
-            allowBlank : false,      
-            name : 'address'
-        }, {
-            fieldLabel : '描述', 
-            name : 'title'
-        }, {
-            fieldLabel : '中英文', 
-            name : 'lang',
-            xtype : 'combo',
-            emptyText : '',
-            mode : 'local',        
-            /**    
-             *  菜单分组中英文
-             */
-            store : new Ext.data.SimpleStore({
-                fields : ['value', 'text'],
-                data : [['cn', 'cn'], ['en', 'en']]
-            }),  
-            triggerAction : 'all',
-            valueField : 'value',//值
-            displayField : 'text'//显示文本
-        }, {
-            fieldLabel : '图标', 
-            name : 'iconCls'
-        }]
-    }),  
-          
+        /**
+         * 删除
+         */
+        onDelete : function() {
+            Ext.MessageBox.confirm('提示', '确认要删除所选的记录吗?', this.showResult,this);
+        },
+        /**
+         * 批量删除
+         */
+        showResult : function showResult(btn) {
+            // 删除单条记录
+            // var rec = this.getSelectionModel().getSelected();
+            // if (!rec) {
+            // return false;
+            // }
+            // this.store.remove(rec);
+            // 确定要删除你选定项的信息
+            if (btn == 'yes') {
+                this.editor.stopEditing();
+                var selectedRows = this.getSelectionModel().getSelections();
+                for (var i = 0, r; r = selectedRows[i]; i++) {
+                    if (!selectedRows[i]) {
+                        continue;
+                    }
+                    this.store.remove(r);
+                }
+            }
+            this.store.save();
+            this.getBottomToolbar().updateInfo();
+            // this.getView().refresh();//刷新整个grid视图,重新排序.
+        },
+        /**
+         * pluggable renders
+        renderOperation : function(value, p, record) {
+            return String.format('<a href="index.php?go=admin.system.library.view" target="_blank">浏览</a>|'
+                        + '<a href="index.php?go=admin.system.library.edit" target="_blank">编辑</a>|'
+                        + '<a href="index.php?go=admin.system.library.delete" target="_blank">删除</a>',
+                        record.data.id);
+        }*/
+    }),
+
     /**
-     * 窗口：新建菜单
-     */    
-    SaveWindow:Ext.extend(Ext.Window,{
-        constructor : function(config) { 
-            config = Ext.apply({
-                width : 400,
-                height : 385,
-                minWidth : 400,
-                minHeight : 300,
-                closeAction : "hide",
-                title : '添加菜单',
-                layout : 'fit',
-                plain : true,
-                buttonAlign : 'center',            
-                items : [Bb.Menu.View.SaveForm],
-                buttons : [{
-                    text : "保 存",
-                    scope:this,
+     * 查询Form表单:根据条件查询资源库
+     */
+    Form:new Ext.form.FormPanel({
+        region : 'north',
+        labelAlign : 'right',
+        labelWidth : 75,
+        title : '高级查询',
+        frame : true,// True表示为面板的边框外框可自定义的，false表示为边框可1px的点线,这个属性很重要，不显式地设置为true时，FormPanel中的指定的items和buttons的背景色会不一致
+        collapsible : true,
+        collapseMode : 'mini',
+        // collapsed:true,
+        bodyStyle : 'padding:5px 5px 0',
+        height : 70,
+        items : [{
+            layout : 'column',
+            items : [{
+                columnWidth : .25,
+                layout : 'form',
+                items : [{
+                    fieldLabel : '模块名称',
+                    anchor : '90%',
+                    xtype : 'textfield',
+                    name : 'name',
+                    id : 'name'
+                }]
+            }, {
+                columnWidth : .25,
+                layout : 'form',
+                items : [{
+                    fieldLabel : '初始化方法',
+                    anchor : '90%',
+                    xtype : 'textfield',
+                    name : 'init'
+                }]
+            }, {
+                columnWidth : .25,
+                layout : 'form',
+                items : [{
+                    fieldLabel : '是否已加载',
+                    anchor : '90%',
+                    xtype : 'combo',
+                    name : 'open',
+                    emptyText : '',
+                    mode : 'local',// 数据模式，local代表本地数据
+                    store : new Ext.data.SimpleStore({
+                        fields : ['value', 'text'],
+                        data : [['true', '是'],
+                                ['false', '否']]
+                    }),// 库加载状态
+                    hiddenName : 'open',
+                    // readOnly : true,//是否只读
+                    // allowBlank : false,//不允许为空
+                    triggerAction : 'all',// 显示所有下列数据，一定要设置属性triggerAction为all
+                    valueField : 'value',// 值
+                    displayField : 'text',// 显示文本
+                    editable : false// 是否允许输入
+                }]
+            }, {
+                columnWidth : .08,
+                layout : 'form',
+                items : [{
+                    xtype : 'button',
+                    id : 'btn',
+                    text : '查询',
+                    width : 80,
                     handler : function() {
-                        saveWindow=this;
-                        Bb.Menu.View.SaveForm.getForm().submit({                             
-                            success : function(form, action) {// 表单提交成功后,调用的函数.参数分为两个,一个是提交的表单对象,另一个是PHP返回的参数值对象
-                                Ext.MessageBox.alert("提示","保存成功！");
-                                Ext.getCmp('groupGrid').getMenusByGroupId(Bb.Menu.View.current_menuGroup_id);  
-                                saveWindow.hide();
-                                Bb.Menu.View.SaveForm.getForm().reset();  
-                            },
-                            failure : function(form, action) {
-                                Ext.Msg.alert('提示', '失败');
-                            }
-                        });
+                        Bb.Module.View.Form.onSubmitQuery();
                     }
-                }, {
-                    text : "取 消",
-                    scope:this,
+                }]
+            }, {
+                columnWidth : .08,
+                layout : 'form',
+                items : [{
+                    xtype : 'button',
+                    id : 'reset',
+                    text : '重置',
+                    width : 80,
                     handler : function() {
-                        this.hide();
+                        Bb.Module.View.Form.getForm().reset();
+                        Bb.Module.View.Form.onSubmitQuery();
                     }
-                }]                     
-            }, config);  
-            Bb.Menu.View.SaveWindow.superclass.constructor.call(this, config);     
+                }]
+            }, {
+                columnWidth : .09
+            }]
+        }],
+        /**
+         * 处理键盘回车事件
+         */
+        keys : [{
+            key : Ext.EventObject.ENTER,
+            fn : function() {
+                Bb.Module.View.Form.onSubmitQuery();
+            },
+            scope : this
+        }],
+        /**
+         * 根据条件查询资料库
+         */
+        onSubmitQuery : function() {
+            Bb.Module.Config.params = Bb.Module.View.Form.getForm().getValues();
+            Bb.Module.Config.params.start = 0;
+            Bb.Module.Config.params.limit = Bb.Module.Config.PageSize;
+            Bb.Module.Store.libraryStore.load({
+                params : Bb.Module.Config.params
+            })
         }
     })
-}      
+}
 
 /**
  * Controller:主程序
  */
-Ext.onReady(function(){
+Ext.onReady(function() {
     Ext.QuickTips.init();
     Ext.state.Manager.setProvider(new Ext.state.CookieProvider());
-    Ext.Direct.addProvider(Ext.app.REMOTING_API); 
-    Bb.Menu.Store.menuStore.proxy=new Ext.data.DirectProxy({ 
-        api: {
-           read:ServiceMenu.queryPageMenu
-        }
-    });   
-    Bb.Menu.View.SaveForm.api.submit=ServiceMenu.save;   
-    Bb.Menu.View.GetForm.api.submit=ServiceMenu.queryPageMenuForm;  
-    
-  
-    
-    Bb.Menu.Viewport = new Ext.Viewport({
-        layout: 'border',   
-        items: [
-          new Bb.Menu.View.GroupPanel(),   
-          new Bb.Menu.View.Grid()
+
+    Bb.Module.Viewport = new Ext.Viewport({
+        layout : 'border',
+        items : [Bb.Module.View.Form,
+            new Bb.Module.View.Grid()
         ]
-    });    
-    
-    Bb.Menu.Viewport.doLayout(); 
-    
-    setTimeout(function(){
+    });
+
+    Bb.Module.Viewport.doLayout();
+
+    setTimeout(function() {
         Ext.get('loading').remove();
         Ext.get('loading-mask').fadeOut({
-            remove:true
+            remove : true
         });
     }, 250);
 });
-                     
