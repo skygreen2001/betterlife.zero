@@ -104,46 +104,46 @@ Bb.Menu.View={
 				plugins : [this.editor],
 				cm:this.cm,
 				stripeRows:true,
-				sm:this.sm,
-				tbar: new Ext.Toolbar(['-', {
-					ref: '../addBtn',
-					text: '新增',
-	  				scope:this,
-					iconCls: 'icon-add',
-					handler:function() {
-						var p = new Ext.data.Record({
-							id:'',
-							name:'',
-							lang:'',
-							iconCls:''
-						});
-						this.editor.stopEditing();
-						this.store.insert(0,p);
-						this.editor.startEditing(0, 0);
-					}
-				},'-', {
-					text: '删除',
-					disabled: true,
-						scope:this,
-					iconCls: 'icon-delete',
-					id: 'removeBtn',
-					handler:function() {
-						Ext.Msg.confirm('信息','确定要删除？',function(btn) {
-							if(btn == 'yes') {
-								var deleteRow = this.getSelectionModel().getSelected();
-								// var record = Bb.Menu.Store.groupStore.getAt(0);
-								Bb.Menu.Store.groupStore.remove(deleteRow);
-							}
-						},this);
-					}
-				},'-'
+				sm:this.sm //,
+				// tbar: new Ext.Toolbar(['-', {
+				// 	ref: '../addBtn',
+				// 	text: '新增',
+	  	// 			scope:this,
+				// 	iconCls: 'icon-add',
+				// 	handler:function() {
+				// 		var p = new Ext.data.Record({
+				// 			id:'',
+				// 			name:'',
+				// 			lang:'',
+				// 			iconCls:''
+				// 		});
+				// 		this.editor.stopEditing();
+				// 		this.store.insert(0,p);
+				// 		this.editor.startEditing(0, 0);
+				// 	}
+				// },'-', {
+				// 	text: '删除',
+				// 	disabled: true,
+				// 		scope:this,
+				// 	iconCls: 'icon-delete',
+				// 	id: 'removeBtn',
+				// 	handler:function() {
+				// 		Ext.Msg.confirm('信息','确定要删除？',function(btn) {
+				// 			if(btn == 'yes') {
+				// 				var deleteRow = this.getSelectionModel().getSelected();
+				// 				// var record = Bb.Menu.Store.groupStore.getAt(0);
+				// 				Bb.Menu.Store.groupStore.remove(deleteRow);
+				// 			}
+				// 		},this);
+				// 	}
+				// },'-'
 				// ,{
 				// 	ref : '../saveBtn',
 				// 	scope: this,
 				// 	iconCls : 'icon-commit',
 				// 	text : '提交'
 				// },'-'
-				])
+				// ])
 			}, config);
 			Bb.Menu.View.GroupGrid.superclass.constructor.call(this, config);
 		},
