@@ -92,16 +92,16 @@ Bb.Menu.View={
 	/**
 	* 菜单分组
 	*/
-	GroupGrid:Ext.extend(Ext.grid.EditorGridPanel, {
+	GroupGrid:Ext.extend(Ext.grid.GridPanel, {//EditorGridPanel
 		constructor : function(config) {
 			config = Ext.apply({
 				store: Bb.Menu.Store.groupStore,
 				height:180,
 				layout: 'fit',
 				autoScroll:true,
-				clicksToEdit: 2,
+				clicksToEdit: 5,
 				headerAsText:false,//是否显示标题栏
-				plugins : [this.editor],
+				// plugins : [this.editor],
 				cm:this.cm,
 				stripeRows:true,
 				sm:this.sm //,
