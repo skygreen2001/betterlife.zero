@@ -42,14 +42,14 @@
   如用户详情表中的性别定义为：sexType
   类型:enum('0','1','2')
   性别
-	0:女-female
-	1:男-male
-	2:待确认-unknown
+    0:女-female
+    1:男-male
+    2:待确认-unknown
 
 * updateTime默认值是CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 
 * 图片列定义规则：
-	列名称为：image|img|ico|logo|pic
+    列名称为：image|img|ico|logo|pic
 
 * 需TextArea输入大文本列定义规则:
     1. 列名称为：intro|memo

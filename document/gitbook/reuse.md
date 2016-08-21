@@ -24,35 +24,35 @@
 
 输入项目:
 
-	项目路径|项目名称【中文-英文】|项目别名
+    项目路径|项目名称【中文-英文】|项目别名
 
-	重用类型
-		1.完整版【同现有版本一样】
-		2.通用版【后台使用Jquery框架】
-		3.高级版【后台使用Extjs框架】
-		4.精简版【只包括框架核心-包括MVC,前后台】
-		5.MINI版【只包括框架核心-只包括了DAO,不包括显示组件、Service层等】
+    重用类型
+        1.完整版【同现有版本一样】
+        2.通用版【后台使用Jquery框架】
+        3.高级版【后台使用Extjs框架】
+        4.精简版【只包括框架核心-包括MVC,前后台】
+        5.MINI版【只包括框架核心-只包括了DAO,不包括显示组件、Service层等】
 
 处理流程操作:
 
-	1.复制整个项目到新的路径
-	2.修改Gc.php相关配置
-	3.修改Config_Db.php[数据库名称|数据库表名前缀]
-	4.修改帮助地址
-	5.修改应用文件夹名称
-	6.重命名后台Action_Betterlife为新应用类
-	7.替换Extjs的js文件里的命名空间
+    1.复制整个项目到新的路径
+    2.修改Gc.php相关配置
+    3.修改Config_Db.php[数据库名称|数据库表名前缀]
+    4.修改帮助地址
+    5.修改应用文件夹名称
+    6.重命名后台Action_Betterlife为新应用类
+    7.替换Extjs的js文件里的命名空间
     精简版还执行了以下操作
-		1.清除在大部分项目中不需要的目录
-		2.清除在大部分项目中不需要的文件
-		3.清除library下的不常用的库:
-			adodb5|linq|mdb2|PHPUnit|yaml|template[EaseTemplate|SmartTemplate|TemplateLite]
-		4.清除缓存相关的文件
-		5.清除mysql|sqlite|postgres以外的其他数据库引擎
-		6.清除module大部分工程无需的文件
-		7.清除tools大部分工程无需的文件
-		8.清除common大部分工程无需的文件
-		9.清除util大部分工程无需的文件
+        1.清除在大部分项目中不需要的目录
+        2.清除在大部分项目中不需要的文件
+        3.清除library下的不常用的库:
+            adodb5|linq|mdb2|PHPUnit|yaml|template[EaseTemplate|SmartTemplate|TemplateLite]
+        4.清除缓存相关的文件
+        5.清除mysql|sqlite|postgres以外的其他数据库引擎
+        6.清除module大部分工程无需的文件
+        7.清除tools大部分工程无需的文件
+        8.清除common大部分工程无需的文件
+        9.清除util大部分工程无需的文件
 
 ##定位
 路径    :tools/dev/
@@ -66,16 +66,16 @@
 
 配置设置说明如下
 
-	/**
-	 * Model转换成后台Admin
-	 * 		工程重用选择类型:通用版后
-	 * 		代码生成会转向AutoCodePreviewReportLike
-	 */
-	const AFTER_MODEL_CONVERT_ADMIN=false;
-	/**
-	 * 工程重用为MINI后,只需要生成实体类
-	 */
-	const ONLY_DOMAIN=false;
+    /**
+     * Model转换成后台Admin
+     *         工程重用选择类型:通用版后
+     *         代码生成会转向AutoCodePreviewReportLike
+     */
+    const AFTER_MODEL_CONVERT_ADMIN=false;
+    /**
+     * 工程重用为MINI后,只需要生成实体类
+     */
+    const ONLY_DOMAIN=false;
 
 
 ##项目重用使用说明

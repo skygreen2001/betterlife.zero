@@ -5,12 +5,12 @@ require_once ("../../../init.php");
 $tableList=Manager_Db::newInstance()->dbinfo()->tableList();
 $fieldInfos=array();
 foreach ($tableList as $tablename){
-	$fieldInfoList=Manager_Db::newInstance()->dbinfo()->fieldInfoList($tablename);
-	foreach($fieldInfoList as $fieldname=>$field){
-		$fieldInfos[$tablename][$fieldname]["Field"]=$field["Field"];
-		$fieldInfos[$tablename][$fieldname]["Type"]=$field["Type"];
-		$fieldInfos[$tablename][$fieldname]["Comment"]=$field["Comment"];
-	}
+    $fieldInfoList=Manager_Db::newInstance()->dbinfo()->fieldInfoList($tablename);
+    foreach($fieldInfoList as $fieldname=>$field){
+        $fieldInfos[$tablename][$fieldname]["Field"]=$field["Field"];
+        $fieldInfos[$tablename][$fieldname]["Type"]=$field["Type"];
+        $fieldInfos[$tablename][$fieldname]["Comment"]=$field["Comment"];
+    }
 }
 
 $tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList(); 
@@ -27,24 +27,24 @@ echo "<br/>";
  */
 function getClassname($tablename)
 {
-	if (in_array($tablename, Config_Db::$orm)) {
-		$classname=array_search($tablename, Config_Db::$orm);
-	}else {
-		$classnameSplit= explode("_", $tablename);
-		$classnameSplit=array_reverse($classnameSplit);
-		$classname=ucfirst($classnameSplit[0]);
-	}
-	return $classname;
+    if (in_array($tablename, Config_Db::$orm)) {
+        $classname=array_search($tablename, Config_Db::$orm);
+    }else {
+        $classnameSplit= explode("_", $tablename);
+        $classnameSplit=array_reverse($classnameSplit);
+        $classname=ucfirst($classnameSplit[0]);
+    }
+    return $classname;
 }
 foreach ($tableList as $tablename){  
-	$classname=getClassname($tablename);
-	$fieldname=DataObjectSpec::getRealIDColumnNameStatic($classname);
-	// $classname{0}=strtolower($classname{0});
-	// $fieldname=$classname."_id";
+    $classname=getClassname($tablename);
+    $fieldname=DataObjectSpec::getRealIDColumnNameStatic($classname);
+    // $classname{0}=strtolower($classname{0});
+    // $fieldname=$classname."_id";
 
-	if (!Manager_Db::newInstance()->dbinfo()->hasUnique($tablename,$fieldname)){ 
-		echo "alter table $tablename add unique($fieldname);<br/>";
-	}
+    if (!Manager_Db::newInstance()->dbinfo()->hasUnique($tablename,$fieldname)){ 
+        echo "alter table $tablename add unique($fieldname);<br/>";
+    }
 }
 
 ?>

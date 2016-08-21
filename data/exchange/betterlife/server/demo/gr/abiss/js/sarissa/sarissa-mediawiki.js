@@ -39,9 +39,9 @@
  * @param {Function} callback the callback function to use
  */ 
 function SarissaMediaWikiContext(apiUrl, arrLanguages){
-	this.baseUrl = apiUrl;
-	this.format = "json";
-	this.languages = arrLanguages;
+    this.baseUrl = apiUrl;
+    this.format = "json";
+    this.languages = arrLanguages;
 };
 
 
@@ -52,14 +52,14 @@ function SarissaMediaWikiContext(apiUrl, arrLanguages){
  * @param {int} iLimit the maximum number of results to retreive
  */ 
 SarissaMediaWikiContext.prototype.doArticleGet = function(sFor, callback){
-	Sarissa.setRemoteJsonCallback(
-		this.baseUrl + 
-			//"?action=query&redirects&format=" + 
-			"?action=parse&redirects&format=" +
-			this.format + 
-			"&page" + 
-			encodeURIComponent(sFor), 
-		callback);
+    Sarissa.setRemoteJsonCallback(
+        this.baseUrl + 
+            //"?action=query&redirects&format=" + 
+            "?action=parse&redirects&format=" +
+            this.format + 
+            "&page" + 
+            encodeURIComponent(sFor), 
+        callback);
 };
 
 /**
@@ -70,15 +70,15 @@ SarissaMediaWikiContext.prototype.doArticleGet = function(sFor, callback){
  * @param {Function} callback the callback function to use
  */ 
 SarissaMediaWikiContext.prototype.doBacklinksGet = function(sFor, iLimit, callback){
-	Sarissa.setRemoteJsonCallback(
-		this.baseUrl + 
-			"?&generator=backlinks&format=" + 
-			this.format + 
-			"&gbllimit=" + 
-			iLimit + 
-			"&gbltitle" + 
-			encodeURIComponent(sFor), 
-		callback);
+    Sarissa.setRemoteJsonCallback(
+        this.baseUrl + 
+            "?&generator=backlinks&format=" + 
+            this.format + 
+            "&gbllimit=" + 
+            iLimit + 
+            "&gbltitle" + 
+            encodeURIComponent(sFor), 
+        callback);
 };
 
 /**
@@ -89,15 +89,15 @@ SarissaMediaWikiContext.prototype.doBacklinksGet = function(sFor, iLimit, callba
  * @param {Function} callback the callback function to use
  */ 
 SarissaMediaWikiContext.prototype.doSearch = function(sFor, iLimit, callback){
-	Sarissa.setRemoteJsonCallback(
-		this.baseUrl + 
-			"?action=query&list=search&srsearch=" + 
-			encodeURIComponent(sFor) + 
-			"&srwhat=text&srnamespace=0&format=" +
-			this.format + 
-			"&srlimit=" + 
-			iLimit, 
-		callback);
+    Sarissa.setRemoteJsonCallback(
+        this.baseUrl + 
+            "?action=query&list=search&srsearch=" + 
+            encodeURIComponent(sFor) + 
+            "&srwhat=text&srnamespace=0&format=" +
+            this.format + 
+            "&srlimit=" + 
+            iLimit, 
+        callback);
 };
 
 /**
@@ -109,15 +109,15 @@ SarissaMediaWikiContext.prototype.doSearch = function(sFor, iLimit, callback){
  * @param {Function} callback the callback function to use
  */ 
 SarissaMediaWikiContext.prototype.doCategorySearch = function(sFor, iLimit, callback){
-	Sarissa.setRemoteJsonCallback(
-		this.baseUrl + 
-			"?format=" + 
-			this.format + 
-			"&list=categorymembers&action=query&cmlimit=" + 
-			iLimit + 
-			"&cmtitle=Category:" + 
-			encodeURIComponent(sFor), 
-		callback);
+    Sarissa.setRemoteJsonCallback(
+        this.baseUrl + 
+            "?format=" + 
+            this.format + 
+            "&list=categorymembers&action=query&cmlimit=" + 
+            iLimit + 
+            "&cmtitle=Category:" + 
+            encodeURIComponent(sFor), 
+        callback);
 };
 /**
  * Asynchronously obtain the Wiki categories an article belongs to, 
@@ -128,13 +128,13 @@ SarissaMediaWikiContext.prototype.doCategorySearch = function(sFor, iLimit, call
  * @param {Function} callback the callback function to use
  */ 
 SarissaMediaWikiContext.prototype.doArticleCategoriesGet = function(sFor, iLimit, callback){
-	Sarissa.setRemoteJsonCallback(
-		this.baseUrl + 
-			"?format=" + 
-			this.format + 
-			"&action=query&prop=categories&titles=" + 
-			encodeURIComponent(sFor), 
-		callback);
+    Sarissa.setRemoteJsonCallback(
+        this.baseUrl + 
+            "?format=" + 
+            this.format + 
+            "&action=query&prop=categories&titles=" + 
+            encodeURIComponent(sFor), 
+        callback);
 };
 
 

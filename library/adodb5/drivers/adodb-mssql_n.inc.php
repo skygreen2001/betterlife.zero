@@ -51,18 +51,18 @@ if (!defined('SINGLEQUOTE')) define('SINGLEQUOTE', "'");
 include_once(ADODB_DIR.'/drivers/adodb-mssql.inc.php');
 
 class ADODB_mssql_n extends ADODB_mssql {
-	var $databaseType = "mssql_n";
-	
-	function ADODB_mssqlpo()
-	{
-		ADODB_mssql::ADODB_mssql();
-	}
+    var $databaseType = "mssql_n";
+    
+    function ADODB_mssqlpo()
+    {
+        ADODB_mssql::ADODB_mssql();
+    }
 
-	function _query($sql,$inputarr=false)
-	{
+    function _query($sql,$inputarr=false)
+    {
         $sql = $this->_appendN($sql);
-		return ADODB_mssql::_query($sql,$inputarr);
-	}
+        return ADODB_mssql::_query($sql,$inputarr);
+    }
 
     /**
      * This function will intercept all the literals used in the SQL, prepending the "N" char to them
@@ -162,10 +162,10 @@ class ADODB_mssql_n extends ADODB_mssql {
 }
 
 class ADORecordset_mssql_n extends ADORecordset_mssql {
-	var $databaseType = "mssql_n";
-	function ADORecordset_mssql_n($id,$mode=false)
-	{
-		$this->ADORecordset_mssql($id,$mode);
-	}
+    var $databaseType = "mssql_n";
+    function ADORecordset_mssql_n($id,$mode=false)
+    {
+        $this->ADORecordset_mssql($id,$mode);
+    }
 }
 ?>

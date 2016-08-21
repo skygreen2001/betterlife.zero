@@ -208,12 +208,12 @@ class HTML_Template_Flexy_Plugin_Savant {
     * For example, if you have three values in a cycle (a, b, c) the iteration
     * returns look like this:
     * 
-    * 0	=> a
-    * 1	=> b
-    * 2	=> c
-    * 3	=> a
-    * 4	=> b
-    * 5	=> c
+    * 0    => a
+    * 1    => b
+    * 2    => c
+    * 3    => a
+    * 4    => b
+    * 5    => c
     * 
     * If you repeat each cycle value (a,b,c) 2 times on the iterations,
     * the returns look like this:
@@ -634,9 +634,9 @@ class HTML_Template_Flexy_Plugin_Savant {
     * radio button value and the value is the radio button label.
     * 
     * $options = array (
-    * 	0 => 'zero',
-    *	1 => 'one',
-    *	2 => 'two'
+    *     0 => 'zero',
+    *    1 => 'one',
+    *    2 => 'two'
     * );
     * 
     * @param string $checked A comparison string; if any of the $option

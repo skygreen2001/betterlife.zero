@@ -52,10 +52,10 @@ We used the contact type as a return value for newContact() and getContacts() so
 need to define what a contact looks like. For that we create a class called contact:
 
 class contact{
-	/** @var string */
-	public $name;
-	/** @var string */
-	public $address;
+    /** @var string */
+    public $name;
+    /** @var string */
+    public $address;
 }
 
 Since string is (just as boolean and int) a known datatype we don't need to specify it

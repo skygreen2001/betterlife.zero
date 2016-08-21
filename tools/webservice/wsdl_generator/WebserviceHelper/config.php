@@ -6,10 +6,10 @@
 
 //error_reporting(E_ALL | E_STRICT);
 
-define("WEBSERVICEUSER", "test");				//the required login name
-define("WEBSERVICEPASSWORD", "test");			//the required password
-define("WSURI", "http://schema.betterlife.com");	//schema URI
-define("AUTHENTICATE", false); 					// enable or disable user authentication
+define("WEBSERVICEUSER", "test");                //the required login name
+define("WEBSERVICEPASSWORD", "test");            //the required password
+define("WSURI", "http://schema.betterlife.com");    //schema URI
+define("AUTHENTICATE", false);                     // enable or disable user authentication
 
 //cache directory (with trailing slash)
 $cache_dir = dirname(__FILE__)."/wsdl_cache/";
@@ -17,7 +17,7 @@ $compression = false;
 
 /* All the allowed webservice classes */
 $WSClasses = array(
-	"contactManager"
+    "contactManager"
 );
 
 /* The classmap associative array. When you want to allow objects as a parameter for
@@ -27,8 +27,8 @@ $WSClasses = array(
  * given type. Requires PHP 5.0.3+ 
  */
 $WSStructures = array(
-	"contact" => "contact",
-	"address" => "address",
+    "contact" => "contact",
+    "address" => "address",
 );
 
 //start session

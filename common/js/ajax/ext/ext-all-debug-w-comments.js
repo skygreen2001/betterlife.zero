@@ -1297,24 +1297,24 @@ All selectors, attribute filters and pseudos below can be combined infinitely in
  */
 Ext.DomQuery = function(){
     var cache = {}, 
-    	simpleCache = {}, 
-    	valueCache = {},
-    	nonSpace = /\S/,
-    	trimRe = /^\s+|\s+$/g,
-    	tplRe = /\{(\d+)\}/g,
-    	modeRe = /^(\s?[\/>+~]\s?|\s|$)/,
-    	tagTokenRe = /^(#)?([\w\-\*]+)/,
-    	nthRe = /(\d*)n\+?(\d*)/, 
-    	nthRe2 = /\D/,
-    	// This is for IE MSXML which does not support expandos.
-	// IE runs the same speed using setAttribute, however FF slows way down
-	// and Safari completely fails so they need to continue to use expandos.
-	isIE = window.ActiveXObject ? true : false,
-	key = 30803;
+        simpleCache = {}, 
+        valueCache = {},
+        nonSpace = /\S/,
+        trimRe = /^\s+|\s+$/g,
+        tplRe = /\{(\d+)\}/g,
+        modeRe = /^(\s?[\/>+~]\s?|\s|$)/,
+        tagTokenRe = /^(#)?([\w\-\*]+)/,
+        nthRe = /(\d*)n\+?(\d*)/, 
+        nthRe2 = /\D/,
+        // This is for IE MSXML which does not support expandos.
+    // IE runs the same speed using setAttribute, however FF slows way down
+    // and Safari completely fails so they need to continue to use expandos.
+    isIE = window.ActiveXObject ? true : false,
+    key = 30803;
     
     // this eval is stop the compressor from
     // renaming the variable to something shorter
-    eval("var batch = 30803;");    	
+    eval("var batch = 30803;");        
 
     // Retrieve the child node from a particular
     // parent at the specified index.
@@ -1333,7 +1333,7 @@ Ext.DomQuery = function(){
     }
 
     // retrieve the next element node
-    function next(n){	
+    function next(n){    
         while((n = n.nextSibling) && n.nodeType != 1);
         return n;
     }
@@ -1348,20 +1348,20 @@ Ext.DomQuery = function(){
     // removing empty text nodes.
     function children(parent){
         var n = parent.firstChild,
-	    nodeIndex = -1,
-	    nextNode;
-	while(n){
-	    nextNode = n.nextSibling;
-	    // clean worthless empty nodes.
-	    if(n.nodeType == 3 && !nonSpace.test(n.nodeValue)){
-		parent.removeChild(n);
-	    }else{
-		// add an expando nodeIndex
-		n.nodeIndex = ++nodeIndex;
-	    }
-	    n = nextNode;
-	}
-	return this;
+        nodeIndex = -1,
+        nextNode;
+    while(n){
+        nextNode = n.nextSibling;
+        // clean worthless empty nodes.
+        if(n.nodeType == 3 && !nonSpace.test(n.nodeValue)){
+        parent.removeChild(n);
+        }else{
+        // add an expando nodeIndex
+        n.nodeIndex = ++nodeIndex;
+        }
+        n = nextNode;
+    }
+    return this;
     }
 
 
@@ -1381,7 +1381,7 @@ Ext.DomQuery = function(){
     };
 
     function attrValue(n, attr){
-	// if its an array, use the first node.
+    // if its an array, use the first node.
         if(!n.tagName && typeof n.length != "undefined"){
             n = n[0];
         }
@@ -1409,13 +1409,13 @@ Ext.DomQuery = function(){
             return result;
         }
         tagName = tagName || "*";
-	// convert to array
+    // convert to array
         if(typeof ns.getElementsByTagName != "undefined"){
             ns = [ns];
         }
-	
-	// no mode specified, grab all elements by tagName
-	// at any depth
+    
+    // no mode specified, grab all elements by tagName
+    // at any depth
         if(!mode){
             for(var i = 0, ni; ni = ns[i]; i++){
                 cs = ni.getElementsByTagName(tagName);
@@ -1423,8 +1423,8 @@ Ext.DomQuery = function(){
                     result[++ri] = ci;
                 }
             }
-	// Direct Child mode (/ or >)
-	// E > F or E/F all direct children elements of E that have the tag 	
+    // Direct Child mode (/ or >)
+    // E > F or E/F all direct children elements of E that have the tag     
         } else if(mode == "/" || mode == ">"){
             var utag = tagName.toUpperCase();
             for(var i = 0, ni, cn; ni = ns[i]; i++){
@@ -1435,8 +1435,8 @@ Ext.DomQuery = function(){
                     }
                 }
             }
-	// Immediately Preceding mode (+)
-	// E + F all elements with the tag F that are immediately preceded by an element with the tag E
+    // Immediately Preceding mode (+)
+    // E + F all elements with the tag F that are immediately preceded by an element with the tag E
         }else if(mode == "+"){
             var utag = tagName.toUpperCase();
             for(var i = 0, n; n = ns[i]; i++){
@@ -1445,8 +1445,8 @@ Ext.DomQuery = function(){
                     result[++ri] = n;
                 }
             }
-	// Sibling mode (~)
-	// E ~ F all elements with the tag F that are preceded by a sibling element with the tag E
+    // Sibling mode (~)
+    // E ~ F all elements with the tag F that are preceded by a sibling element with the tag E
         }else if(mode == "~"){
             var utag = tagName.toUpperCase();
             for(var i = 0, n; n = ns[i]; i++){
@@ -1509,14 +1509,14 @@ Ext.DomQuery = function(){
     function byAttribute(cs, attr, value, op, custom){
         var result = [], 
             ri = -1, 
-            useGetStyle = custom == "{",	    
-            fn = Ext.DomQuery.operators[op],	    
+            useGetStyle = custom == "{",        
+            fn = Ext.DomQuery.operators[op],        
             a,
             xml,
             hasXml;
             
         for(var i = 0, ci; ci = cs[i]; i++){
-	    // skip non-element nodes.
+        // skip non-element nodes.
             if(ci.nodeType != 1){
                 continue;
             }
@@ -1525,7 +1525,7 @@ Ext.DomQuery = function(){
                 xml = Ext.DomQuery.isXml(ci);
                 hasXml = true;
             }
-	    
+        
             // we only need to change the property names if we're dealing with html nodes, not XML
             if(!xml){
                 if(useGetStyle){
@@ -1535,8 +1535,8 @@ Ext.DomQuery = function(){
                 } else if (attr == "for"){
                     a = ci.htmlFor;
                 } else if (attr == "href"){
-		    // getAttribute href bug
-		    // http://www.glennjones.net/Post/809/getAttributehrefbug.htm
+            // getAttribute href bug
+            // http://www.glennjones.net/Post/809/getAttributehrefbug.htm
                     a = ci.getAttribute("href", 2);
                 } else{
                     a = ci.getAttribute(attr);
@@ -1625,8 +1625,8 @@ Ext.DomQuery = function(){
 
     function quickDiff(c1, c2){
         var len1 = c1.length,
-        	d = ++key,
-        	r = [];
+            d = ++key,
+            r = [];
         if(!len1){
             return c2;
         }
@@ -1667,21 +1667,21 @@ Ext.DomQuery = function(){
         compile : function(path, type){
             type = type || "select";
 
-    	    // setup fn preamble
+            // setup fn preamble
             var fn = ["var f = function(root){\n var mode; ++batch; var n = root || document;\n"],
-        		mode,		
-        		lastPath,
-            	matchers = Ext.DomQuery.matchers,
-            	matchersLn = matchers.length,
-            	modeMatch,
-            	// accept leading mode switch
-            	lmode = path.match(modeRe);
+                mode,        
+                lastPath,
+                matchers = Ext.DomQuery.matchers,
+                matchersLn = matchers.length,
+                modeMatch,
+                // accept leading mode switch
+                lmode = path.match(modeRe);
             
             if(lmode && lmode[1]){
                 fn[fn.length] = 'mode="'+lmode[1].replace(trimRe, "")+'";';
                 path = path.replace(lmode[1], "");
             }
-	    
+        
             // strip leading slashes
             while(path.substr(0, 1)=="/"){
                 path = path.substr(1);
@@ -1692,9 +1692,9 @@ Ext.DomQuery = function(){
                 var tokenMatch = path.match(tagTokenRe);
                 if(type == "select"){
                     if(tokenMatch){
-			// ID Selector
+            // ID Selector
                         if(tokenMatch[1] == "#"){
-                            fn[fn.length] = 'n = quickId(n, mode, root, "'+tokenMatch[2]+'");';			
+                            fn[fn.length] = 'n = quickId(n, mode, root, "'+tokenMatch[2]+'");';            
                         }else{
                             fn[fn.length] = 'n = getNodes(n, mode, "'+tokenMatch[2]+'");';
                         }
@@ -1702,7 +1702,7 @@ Ext.DomQuery = function(){
                     }else if(path.substr(0, 1) != '@'){
                         fn[fn.length] = 'n = getNodes(n, mode, "*");';
                     }
-		// type of "simple"
+        // type of "simple"
                 }else{
                     if(tokenMatch){
                         if(tokenMatch[1] == "#"){
@@ -1720,8 +1720,8 @@ Ext.DomQuery = function(){
                         var m = path.match(t.re);
                         if(m){
                             fn[fn.length] = t.select.replace(tplRe, function(x, i){
-				return m[i];
-			    });
+                return m[i];
+                });
                             path = path.replace(m[0], "");
                             matched = true;
                             break;
@@ -1737,10 +1737,10 @@ Ext.DomQuery = function(){
                     path = path.replace(modeMatch[1], "");
                 }
             }
-	    // close fn out
+        // close fn out
             fn[fn.length] = "return nodup(n);\n}";
-	    
-	    // eval fn and return it
+        
+        // eval fn and return it
             eval(fn.join(""));
             return f;
         },
@@ -1752,20 +1752,20 @@ Ext.DomQuery = function(){
          * @return {Array} An Array of DOM elements which match the selector. If there are
          * no matches, and empty Array is returned.
          */
-	jsSelect: function(path, root, type){
-	    // set root to doc if not specified.
-	    root = root || document;
-	    
+    jsSelect: function(path, root, type){
+        // set root to doc if not specified.
+        root = root || document;
+        
             if(typeof root == "string"){
                 root = document.getElementById(root);
             }
             var paths = path.split(","),
-            	results = [];
-		
-	    // loop over each selector
-            for(var i = 0, len = paths.length; i < len; i++){		
+                results = [];
+        
+        // loop over each selector
+            for(var i = 0, len = paths.length; i < len; i++){        
                 var subPath = paths[i].replace(trimRe, "");
-		// compile and place in cache
+        // compile and place in cache
                 if(!cache[subPath]){
                     cache[subPath] = Ext.DomQuery.compile(subPath);
                     if(!cache[subPath]){
@@ -1777,31 +1777,31 @@ Ext.DomQuery = function(){
                     results = results.concat(result);
                 }
             }
-	    
-	    // if there were multiple selectors, make sure dups
-	    // are eliminated
+        
+        // if there were multiple selectors, make sure dups
+        // are eliminated
             if(paths.length > 1){
                 return nodup(results);
             }
             return results;
         },
-	isXml: function(el) {
-	    var docEl = (el ? el.ownerDocument || el : 0).documentElement;
-	    return docEl ? docEl.nodeName !== "HTML" : false;
-	},
+    isXml: function(el) {
+        var docEl = (el ? el.ownerDocument || el : 0).documentElement;
+        return docEl ? docEl.nodeName !== "HTML" : false;
+    },
         select : document.querySelectorAll ? function(path, root, type) {
-	    root = root || document;
-	    if (!Ext.DomQuery.isXml(root)) {
-		try {
-		    var cs = root.querySelectorAll(path);
-		    return Ext.toArray(cs);
-		}
-		catch (ex) {}		
-	    }	    
-	    return Ext.DomQuery.jsSelect.call(this, path, root, type);
-	} : function(path, root, type) {
-	    return Ext.DomQuery.jsSelect.call(this, path, root, type);
-	},
+        root = root || document;
+        if (!Ext.DomQuery.isXml(root)) {
+        try {
+            var cs = root.querySelectorAll(path);
+            return Ext.toArray(cs);
+        }
+        catch (ex) {}        
+        }        
+        return Ext.DomQuery.jsSelect.call(this, path, root, type);
+    } : function(path, root, type) {
+        return Ext.DomQuery.jsSelect.call(this, path, root, type);
+    },
 
         /**
          * Selects a single element.
@@ -1827,11 +1827,11 @@ Ext.DomQuery = function(){
             }
             var n = valueCache[path](root), v;
             n = n[0] ? n[0] : n;
-            	    
-	    // overcome a limitation of maximum textnode size
-	    // Rumored to potentially crash IE6 but has not been confirmed.
-	    // http://reference.sitepoint.com/javascript/Node/normalize
-	    // https://developer.mozilla.org/En/DOM/Node.normalize	    
+                    
+        // overcome a limitation of maximum textnode size
+        // Rumored to potentially crash IE6 but has not been confirmed.
+        // http://reference.sitepoint.com/javascript/Node/normalize
+        // https://developer.mozilla.org/En/DOM/Node.normalize        
             if (typeof n.normalize == 'function') n.normalize();
             
             v = (n && n.firstChild ? n.firstChild.nodeValue : null);
@@ -1861,7 +1861,7 @@ Ext.DomQuery = function(){
                 el = document.getElementById(el);
             }
             var isArray = Ext.isArray(el),
-            	result = Ext.DomQuery.filter(isArray ? el : [el], ss);
+                result = Ext.DomQuery.filter(isArray ? el : [el], ss);
             return isArray ? (result.length == el.length) : (result.length > 0);
         },
 
@@ -1987,8 +1987,8 @@ var externalLinks = Ext.select("a:external");
 
             "nth-child" : function(c, a) {
                 var r = [], ri = -1,
-                	m = nthRe.exec(a == "even" && "2n" || a == "odd" && "2n+1" || !nthRe2.test(a) && "n+" + a || a),
-                	f = (m[1] || 1) - 0, l = m[2] - 0;
+                    m = nthRe.exec(a == "even" && "2n" || a == "odd" && "2n+1" || !nthRe2.test(a) && "n+" + a || a),
+                    f = (m[1] || 1) - 0, l = m[2] - 0;
                 for(var i = 0, n; n = c[i]; i++){
                     var pn = n.parentNode;
                     if (batch != pn._batch) {
@@ -2076,7 +2076,7 @@ var externalLinks = Ext.select("a:external");
 
             "any" : function(c, selectors){
                 var ss = selectors.split('|'),
-                	r = [], ri = -1, s;
+                    r = [], ri = -1, s;
                 for(var i = 0, ci; ci = c[i]; i++){
                     for(var j = 0; s = ss[j]; j++){
                         if(Ext.DomQuery.is(ci, s)){
@@ -2110,7 +2110,7 @@ var externalLinks = Ext.select("a:external");
 
             "has" : function(c, ss){
                 var s = Ext.DomQuery.select,
-                	r = [], ri = -1;
+                    r = [], ri = -1;
                 for(var i = 0, ci; ci = c[i]; i++){
                     if(s(ss, ci).length > 0){
                         r[++ri] = ci;
@@ -2121,7 +2121,7 @@ var externalLinks = Ext.select("a:external");
 
             "next" : function(c, ss){
                 var is = Ext.DomQuery.is,
-                	r = [], ri = -1;
+                    r = [], ri = -1;
                 for(var i = 0, ci; ci = c[i]; i++){
                     var n = next(ci);
                     if(n && is(n, ss)){
@@ -2133,7 +2133,7 @@ var externalLinks = Ext.select("a:external");
 
             "prev" : function(c, ss){
                 var is = Ext.DomQuery.is,
-                	r = [], ri = -1;
+                    r = [], ri = -1;
                 for(var i = 0, ci; ci = c[i]; i++){
                     var n = prev(ci);
                     if(n && is(n, ss)){
@@ -2186,13 +2186,13 @@ Ext.get('myInputField').on('keypress', function(){
  */
 Ext.util.DelayedTask = function(fn, scope, args){
     var me = this,
-    	id,    	
-    	call = function(){
-    		clearInterval(id);
-	        id = null;
-	        fn.apply(scope, args || []);
-	    };
-	    
+        id,        
+        call = function(){
+            clearInterval(id);
+            id = null;
+            fn.apply(scope, args || []);
+        };
+        
     /**
      * Cancels any pending timeout and queues a new one
      * @param {Number} delay The milliseconds to delay
@@ -3242,225 +3242,225 @@ if(Ext.isIE || Ext.isGecko){
  * @class Ext.Element
  */
 Ext.Element.addMethods(function(){
-	var PARENTNODE = 'parentNode',
-		NEXTSIBLING = 'nextSibling',
-		PREVIOUSSIBLING = 'previousSibling',
-		DQ = Ext.DomQuery,
-		GET = Ext.get;
-	
-	return {
-		/**
-	     * Looks at this node and then at parent nodes for a match of the passed simple selector (e.g. div.some-class or span:first-child)
-	     * @param {String} selector The simple selector to test
-	     * @param {Number/Mixed} maxDepth (optional) The max depth to search as a number or element (defaults to 50 || document.body)
-	     * @param {Boolean} returnEl (optional) True to return a Ext.Element object instead of DOM node
-	     * @return {HTMLElement} The matching DOM node (or null if no match was found)
-	     */
-	    findParent : function(simpleSelector, maxDepth, returnEl){
-	        var p = this.dom,
-	        	b = document.body, 
-	        	depth = 0, 	        	
-	        	stopEl;	        
+    var PARENTNODE = 'parentNode',
+        NEXTSIBLING = 'nextSibling',
+        PREVIOUSSIBLING = 'previousSibling',
+        DQ = Ext.DomQuery,
+        GET = Ext.get;
+    
+    return {
+        /**
+         * Looks at this node and then at parent nodes for a match of the passed simple selector (e.g. div.some-class or span:first-child)
+         * @param {String} selector The simple selector to test
+         * @param {Number/Mixed} maxDepth (optional) The max depth to search as a number or element (defaults to 50 || document.body)
+         * @param {Boolean} returnEl (optional) True to return a Ext.Element object instead of DOM node
+         * @return {HTMLElement} The matching DOM node (or null if no match was found)
+         */
+        findParent : function(simpleSelector, maxDepth, returnEl){
+            var p = this.dom,
+                b = document.body, 
+                depth = 0,                 
+                stopEl;            
             if(Ext.isGecko && Object.prototype.toString.call(p) == '[object XULElement]') {
                 return null;
             }
-	        maxDepth = maxDepth || 50;
-	        if (isNaN(maxDepth)) {
-	            stopEl = Ext.getDom(maxDepth);
-	            maxDepth = Number.MAX_VALUE;
-	        }
-	        while(p && p.nodeType == 1 && depth < maxDepth && p != b && p != stopEl){
-	            if(DQ.is(p, simpleSelector)){
-	                return returnEl ? GET(p) : p;
-	            }
-	            depth++;
-	            p = p.parentNode;
-	        }
-	        return null;
-	    },
-	
-	    /**
-	     * Looks at parent nodes for a match of the passed simple selector (e.g. div.some-class or span:first-child)
-	     * @param {String} selector The simple selector to test
-	     * @param {Number/Mixed} maxDepth (optional) The max depth to
-	            search as a number or element (defaults to 10 || document.body)
-	     * @param {Boolean} returnEl (optional) True to return a Ext.Element object instead of DOM node
-	     * @return {HTMLElement} The matching DOM node (or null if no match was found)
-	     */
-	    findParentNode : function(simpleSelector, maxDepth, returnEl){
-	        var p = Ext.fly(this.dom.parentNode, '_internal');
-	        return p ? p.findParent(simpleSelector, maxDepth, returnEl) : null;
-	    },
-	
-	    /**
-	     * Walks up the dom looking for a parent node that matches the passed simple selector (e.g. div.some-class or span:first-child).
-	     * This is a shortcut for findParentNode() that always returns an Ext.Element.
-	     * @param {String} selector The simple selector to test
-	     * @param {Number/Mixed} maxDepth (optional) The max depth to
-	            search as a number or element (defaults to 10 || document.body)
-	     * @return {Ext.Element} The matching DOM node (or null if no match was found)
-	     */
-	    up : function(simpleSelector, maxDepth){
-	        return this.findParentNode(simpleSelector, maxDepth, true);
-	    },
-	
-	    /**
-	     * Creates a {@link Ext.CompositeElement} for child nodes based on the passed CSS selector (the selector should not contain an id).
-	     * @param {String} selector The CSS selector
-	     * @return {CompositeElement/CompositeElementLite} The composite element
-	     */
-	    select : function(selector){
-	        return Ext.Element.select(selector, this.dom);
-	    },
-	
-	    /**
-	     * Selects child nodes based on the passed CSS selector (the selector should not contain an id).
-	     * @param {String} selector The CSS selector
-	     * @return {Array} An array of the matched nodes
-	     */
-	    query : function(selector){
-	        return DQ.select(selector, this.dom);
-	    },
-	
-	    /**
-	     * Selects a single child at any depth below this element based on the passed CSS selector (the selector should not contain an id).
-	     * @param {String} selector The CSS selector
-	     * @param {Boolean} returnDom (optional) True to return the DOM node instead of Ext.Element (defaults to false)
-	     * @return {HTMLElement/Ext.Element} The child Ext.Element (or DOM node if returnDom = true)
-	     */
-	    child : function(selector, returnDom){
-	        var n = DQ.selectNode(selector, this.dom);
-	        return returnDom ? n : GET(n);
-	    },
-	
-	    /**
-	     * Selects a single *direct* child based on the passed CSS selector (the selector should not contain an id).
-	     * @param {String} selector The CSS selector
-	     * @param {Boolean} returnDom (optional) True to return the DOM node instead of Ext.Element (defaults to false)
-	     * @return {HTMLElement/Ext.Element} The child Ext.Element (or DOM node if returnDom = true)
-	     */
-	    down : function(selector, returnDom){
-	        var n = DQ.selectNode(" > " + selector, this.dom);
-	        return returnDom ? n : GET(n);
-	    },
-	
-		 /**
-	     * Gets the parent node for this element, optionally chaining up trying to match a selector
-	     * @param {String} selector (optional) Find a parent node that matches the passed simple selector
-	     * @param {Boolean} returnDom (optional) True to return a raw dom node instead of an Ext.Element
-	     * @return {Ext.Element/HTMLElement} The parent node or null
-		 */
-	    parent : function(selector, returnDom){
-	        return this.matchNode(PARENTNODE, PARENTNODE, selector, returnDom);
-	    },
-	
-	     /**
-	     * Gets the next sibling, skipping text nodes
-	     * @param {String} selector (optional) Find the next sibling that matches the passed simple selector
-	     * @param {Boolean} returnDom (optional) True to return a raw dom node instead of an Ext.Element
-	     * @return {Ext.Element/HTMLElement} The next sibling or null
-		 */
-	    next : function(selector, returnDom){
-	        return this.matchNode(NEXTSIBLING, NEXTSIBLING, selector, returnDom);
-	    },
-	
-	    /**
-	     * Gets the previous sibling, skipping text nodes
-	     * @param {String} selector (optional) Find the previous sibling that matches the passed simple selector
-	     * @param {Boolean} returnDom (optional) True to return a raw dom node instead of an Ext.Element
-	     * @return {Ext.Element/HTMLElement} The previous sibling or null
-		 */
-	    prev : function(selector, returnDom){
-	        return this.matchNode(PREVIOUSSIBLING, PREVIOUSSIBLING, selector, returnDom);
-	    },
-	
-	
-	    /**
-	     * Gets the first child, skipping text nodes
-	     * @param {String} selector (optional) Find the next sibling that matches the passed simple selector
-	     * @param {Boolean} returnDom (optional) True to return a raw dom node instead of an Ext.Element
-	     * @return {Ext.Element/HTMLElement} The first child or null
-		 */
-	    first : function(selector, returnDom){
-	        return this.matchNode(NEXTSIBLING, 'firstChild', selector, returnDom);
-	    },
-	
-	    /**
-	     * Gets the last child, skipping text nodes
-	     * @param {String} selector (optional) Find the previous sibling that matches the passed simple selector
-	     * @param {Boolean} returnDom (optional) True to return a raw dom node instead of an Ext.Element
-	     * @return {Ext.Element/HTMLElement} The last child or null
-		 */
-	    last : function(selector, returnDom){
-	        return this.matchNode(PREVIOUSSIBLING, 'lastChild', selector, returnDom);
-	    },
-	    
-	    matchNode : function(dir, start, selector, returnDom){
-	        var n = this.dom[start];
-	        while(n){
-	            if(n.nodeType == 1 && (!selector || DQ.is(n, selector))){
-	                return !returnDom ? GET(n) : n;
-	            }
-	            n = n[dir];
-	        }
-	        return null;
-	    }	
+            maxDepth = maxDepth || 50;
+            if (isNaN(maxDepth)) {
+                stopEl = Ext.getDom(maxDepth);
+                maxDepth = Number.MAX_VALUE;
+            }
+            while(p && p.nodeType == 1 && depth < maxDepth && p != b && p != stopEl){
+                if(DQ.is(p, simpleSelector)){
+                    return returnEl ? GET(p) : p;
+                }
+                depth++;
+                p = p.parentNode;
+            }
+            return null;
+        },
+    
+        /**
+         * Looks at parent nodes for a match of the passed simple selector (e.g. div.some-class or span:first-child)
+         * @param {String} selector The simple selector to test
+         * @param {Number/Mixed} maxDepth (optional) The max depth to
+                search as a number or element (defaults to 10 || document.body)
+         * @param {Boolean} returnEl (optional) True to return a Ext.Element object instead of DOM node
+         * @return {HTMLElement} The matching DOM node (or null if no match was found)
+         */
+        findParentNode : function(simpleSelector, maxDepth, returnEl){
+            var p = Ext.fly(this.dom.parentNode, '_internal');
+            return p ? p.findParent(simpleSelector, maxDepth, returnEl) : null;
+        },
+    
+        /**
+         * Walks up the dom looking for a parent node that matches the passed simple selector (e.g. div.some-class or span:first-child).
+         * This is a shortcut for findParentNode() that always returns an Ext.Element.
+         * @param {String} selector The simple selector to test
+         * @param {Number/Mixed} maxDepth (optional) The max depth to
+                search as a number or element (defaults to 10 || document.body)
+         * @return {Ext.Element} The matching DOM node (or null if no match was found)
+         */
+        up : function(simpleSelector, maxDepth){
+            return this.findParentNode(simpleSelector, maxDepth, true);
+        },
+    
+        /**
+         * Creates a {@link Ext.CompositeElement} for child nodes based on the passed CSS selector (the selector should not contain an id).
+         * @param {String} selector The CSS selector
+         * @return {CompositeElement/CompositeElementLite} The composite element
+         */
+        select : function(selector){
+            return Ext.Element.select(selector, this.dom);
+        },
+    
+        /**
+         * Selects child nodes based on the passed CSS selector (the selector should not contain an id).
+         * @param {String} selector The CSS selector
+         * @return {Array} An array of the matched nodes
+         */
+        query : function(selector){
+            return DQ.select(selector, this.dom);
+        },
+    
+        /**
+         * Selects a single child at any depth below this element based on the passed CSS selector (the selector should not contain an id).
+         * @param {String} selector The CSS selector
+         * @param {Boolean} returnDom (optional) True to return the DOM node instead of Ext.Element (defaults to false)
+         * @return {HTMLElement/Ext.Element} The child Ext.Element (or DOM node if returnDom = true)
+         */
+        child : function(selector, returnDom){
+            var n = DQ.selectNode(selector, this.dom);
+            return returnDom ? n : GET(n);
+        },
+    
+        /**
+         * Selects a single *direct* child based on the passed CSS selector (the selector should not contain an id).
+         * @param {String} selector The CSS selector
+         * @param {Boolean} returnDom (optional) True to return the DOM node instead of Ext.Element (defaults to false)
+         * @return {HTMLElement/Ext.Element} The child Ext.Element (or DOM node if returnDom = true)
+         */
+        down : function(selector, returnDom){
+            var n = DQ.selectNode(" > " + selector, this.dom);
+            return returnDom ? n : GET(n);
+        },
+    
+         /**
+         * Gets the parent node for this element, optionally chaining up trying to match a selector
+         * @param {String} selector (optional) Find a parent node that matches the passed simple selector
+         * @param {Boolean} returnDom (optional) True to return a raw dom node instead of an Ext.Element
+         * @return {Ext.Element/HTMLElement} The parent node or null
+         */
+        parent : function(selector, returnDom){
+            return this.matchNode(PARENTNODE, PARENTNODE, selector, returnDom);
+        },
+    
+         /**
+         * Gets the next sibling, skipping text nodes
+         * @param {String} selector (optional) Find the next sibling that matches the passed simple selector
+         * @param {Boolean} returnDom (optional) True to return a raw dom node instead of an Ext.Element
+         * @return {Ext.Element/HTMLElement} The next sibling or null
+         */
+        next : function(selector, returnDom){
+            return this.matchNode(NEXTSIBLING, NEXTSIBLING, selector, returnDom);
+        },
+    
+        /**
+         * Gets the previous sibling, skipping text nodes
+         * @param {String} selector (optional) Find the previous sibling that matches the passed simple selector
+         * @param {Boolean} returnDom (optional) True to return a raw dom node instead of an Ext.Element
+         * @return {Ext.Element/HTMLElement} The previous sibling or null
+         */
+        prev : function(selector, returnDom){
+            return this.matchNode(PREVIOUSSIBLING, PREVIOUSSIBLING, selector, returnDom);
+        },
+    
+    
+        /**
+         * Gets the first child, skipping text nodes
+         * @param {String} selector (optional) Find the next sibling that matches the passed simple selector
+         * @param {Boolean} returnDom (optional) True to return a raw dom node instead of an Ext.Element
+         * @return {Ext.Element/HTMLElement} The first child or null
+         */
+        first : function(selector, returnDom){
+            return this.matchNode(NEXTSIBLING, 'firstChild', selector, returnDom);
+        },
+    
+        /**
+         * Gets the last child, skipping text nodes
+         * @param {String} selector (optional) Find the previous sibling that matches the passed simple selector
+         * @param {Boolean} returnDom (optional) True to return a raw dom node instead of an Ext.Element
+         * @return {Ext.Element/HTMLElement} The last child or null
+         */
+        last : function(selector, returnDom){
+            return this.matchNode(PREVIOUSSIBLING, 'lastChild', selector, returnDom);
+        },
+        
+        matchNode : function(dir, start, selector, returnDom){
+            var n = this.dom[start];
+            while(n){
+                if(n.nodeType == 1 && (!selector || DQ.is(n, selector))){
+                    return !returnDom ? GET(n) : n;
+                }
+                n = n[dir];
+            }
+            return null;
+        }    
     };
 }());/**
  * @class Ext.Element
  */
 Ext.Element.addMethods(
 function() {
-	var GETDOM = Ext.getDom,
-		GET = Ext.get,
-		DH = Ext.DomHelper;
-	
-	return {
-	    /**
-	     * Appends the passed element(s) to this element
-	     * @param {String/HTMLElement/Array/Element/CompositeElement} el
-	     * @return {Ext.Element} this
-	     */
-	    appendChild: function(el){        
-	        return GET(el).appendTo(this);        
-	    },
-	
-	    /**
-	     * Appends this element to the passed element
-	     * @param {Mixed} el The new parent element
-	     * @return {Ext.Element} this
-	     */
-	    appendTo: function(el){        
-	        GETDOM(el).appendChild(this.dom);        
-	        return this;
-	    },
-	
-	    /**
-	     * Inserts this element before the passed element in the DOM
-	     * @param {Mixed} el The element before which this element will be inserted
-	     * @return {Ext.Element} this
-	     */
-	    insertBefore: function(el){  	          
-	        (el = GETDOM(el)).parentNode.insertBefore(this.dom, el);
-	        return this;
-	    },
-	
-	    /**
-	     * Inserts this element after the passed element in the DOM
-	     * @param {Mixed} el The element to insert after
-	     * @return {Ext.Element} this
-	     */
-	    insertAfter: function(el){
-	        (el = GETDOM(el)).parentNode.insertBefore(this.dom, el.nextSibling);
-	        return this;
-	    },
-	
-	    /**
-	     * Inserts (or creates) an element (or DomHelper config) as the first child of this element
-	     * @param {Mixed/Object} el The id or element to insert or a DomHelper config to create and insert
-	     * @return {Ext.Element} The new child
-	     */
-	    insertFirst: function(el, returnDom){
+    var GETDOM = Ext.getDom,
+        GET = Ext.get,
+        DH = Ext.DomHelper;
+    
+    return {
+        /**
+         * Appends the passed element(s) to this element
+         * @param {String/HTMLElement/Array/Element/CompositeElement} el
+         * @return {Ext.Element} this
+         */
+        appendChild: function(el){        
+            return GET(el).appendTo(this);        
+        },
+    
+        /**
+         * Appends this element to the passed element
+         * @param {Mixed} el The new parent element
+         * @return {Ext.Element} this
+         */
+        appendTo: function(el){        
+            GETDOM(el).appendChild(this.dom);        
+            return this;
+        },
+    
+        /**
+         * Inserts this element before the passed element in the DOM
+         * @param {Mixed} el The element before which this element will be inserted
+         * @return {Ext.Element} this
+         */
+        insertBefore: function(el){                
+            (el = GETDOM(el)).parentNode.insertBefore(this.dom, el);
+            return this;
+        },
+    
+        /**
+         * Inserts this element after the passed element in the DOM
+         * @param {Mixed} el The element to insert after
+         * @return {Ext.Element} this
+         */
+        insertAfter: function(el){
+            (el = GETDOM(el)).parentNode.insertBefore(this.dom, el.nextSibling);
+            return this;
+        },
+    
+        /**
+         * Inserts (or creates) an element (or DomHelper config) as the first child of this element
+         * @param {Mixed/Object} el The id or element to insert or a DomHelper config to create and insert
+         * @return {Ext.Element} The new child
+         */
+        insertFirst: function(el, returnDom){
             el = el || {};
             if(el.nodeType || el.dom || typeof el == 'string'){ // element
                 el = GETDOM(el);
@@ -3470,26 +3470,26 @@ function() {
                 return this.createChild(el, this.dom.firstChild, returnDom);
             }
         },
-	
-	    /**
-	     * Replaces the passed element with this element
-	     * @param {Mixed} el The element to replace
-	     * @return {Ext.Element} this
-	     */
-	    replace: function(el){
-	        el = GET(el);
-	        this.insertBefore(el);
-	        el.remove();
-	        return this;
-	    },
-	
-	    /**
-	     * Replaces this element with the passed element
-	     * @param {Mixed/Object} el The new element or a DomHelper config of an element to create
-	     * @return {Ext.Element} this
-	     */
-	    replaceWith: function(el){
-		    var me = this;
+    
+        /**
+         * Replaces the passed element with this element
+         * @param {Mixed} el The element to replace
+         * @return {Ext.Element} this
+         */
+        replace: function(el){
+            el = GET(el);
+            this.insertBefore(el);
+            el.remove();
+            return this;
+        },
+    
+        /**
+         * Replaces this element with the passed element
+         * @param {Mixed/Object} el The new element or a DomHelper config of an element to create
+         * @return {Ext.Element} this
+         */
+        replaceWith: function(el){
+            var me = this;
                 
             if(el.nodeType || el.dom || typeof el == 'string'){
                 el = GETDOM(el);
@@ -3497,53 +3497,53 @@ function() {
             }else{
                 el = DH.insertBefore(me.dom, el);
             }
-	        
-	        delete Ext.elCache[me.id];
-	        Ext.removeNode(me.dom);      
-	        me.id = Ext.id(me.dom = el);
-	        Ext.Element.addToCache(me.isFlyweight ? new Ext.Element(me.dom) : me);     
+            
+            delete Ext.elCache[me.id];
+            Ext.removeNode(me.dom);      
+            me.id = Ext.id(me.dom = el);
+            Ext.Element.addToCache(me.isFlyweight ? new Ext.Element(me.dom) : me);     
             return me;
-	    },
-	    
-		/**
-		 * Creates the passed DomHelper config and appends it to this element or optionally inserts it before the passed child element.
-		 * @param {Object} config DomHelper element config object.  If no tag is specified (e.g., {tag:'input'}) then a div will be
-		 * automatically generated with the specified attributes.
-		 * @param {HTMLElement} insertBefore (optional) a child element of this element
-		 * @param {Boolean} returnDom (optional) true to return the dom node instead of creating an Element
-		 * @return {Ext.Element} The new child element
-		 */
-		createChild: function(config, insertBefore, returnDom){
-		    config = config || {tag:'div'};
-		    return insertBefore ? 
-		    	   DH.insertBefore(insertBefore, config, returnDom !== true) :	
-		    	   DH[!this.dom.firstChild ? 'overwrite' : 'append'](this.dom, config,  returnDom !== true);
-		},
-		
-		/**
-		 * Creates and wraps this element with another element
-		 * @param {Object} config (optional) DomHelper element config object for the wrapper element or null for an empty div
-		 * @param {Boolean} returnDom (optional) True to return the raw DOM element instead of Ext.Element
-		 * @return {HTMLElement/Element} The newly created wrapper element
-		 */
-		wrap: function(config, returnDom){        
-		    var newEl = DH.insertBefore(this.dom, config || {tag: "div"}, !returnDom);
-		    newEl.dom ? newEl.dom.appendChild(this.dom) : newEl.appendChild(this.dom);
-		    return newEl;
-		},
-		
-		/**
-		 * Inserts an html fragment into this element
-		 * @param {String} where Where to insert the html in relation to this element - beforeBegin, afterBegin, beforeEnd, afterEnd.
-		 * @param {String} html The HTML fragment
-		 * @param {Boolean} returnEl (optional) True to return an Ext.Element (defaults to false)
-		 * @return {HTMLElement/Ext.Element} The inserted node (or nearest related if more than 1 inserted)
-		 */
-		insertHtml : function(where, html, returnEl){
-		    var el = DH.insertHtml(where, this.dom, html);
-		    return returnEl ? Ext.get(el) : el;
-		}
-	};
+        },
+        
+        /**
+         * Creates the passed DomHelper config and appends it to this element or optionally inserts it before the passed child element.
+         * @param {Object} config DomHelper element config object.  If no tag is specified (e.g., {tag:'input'}) then a div will be
+         * automatically generated with the specified attributes.
+         * @param {HTMLElement} insertBefore (optional) a child element of this element
+         * @param {Boolean} returnDom (optional) true to return the dom node instead of creating an Element
+         * @return {Ext.Element} The new child element
+         */
+        createChild: function(config, insertBefore, returnDom){
+            config = config || {tag:'div'};
+            return insertBefore ? 
+                   DH.insertBefore(insertBefore, config, returnDom !== true) :    
+                   DH[!this.dom.firstChild ? 'overwrite' : 'append'](this.dom, config,  returnDom !== true);
+        },
+        
+        /**
+         * Creates and wraps this element with another element
+         * @param {Object} config (optional) DomHelper element config object for the wrapper element or null for an empty div
+         * @param {Boolean} returnDom (optional) True to return the raw DOM element instead of Ext.Element
+         * @return {HTMLElement/Element} The newly created wrapper element
+         */
+        wrap: function(config, returnDom){        
+            var newEl = DH.insertBefore(this.dom, config || {tag: "div"}, !returnDom);
+            newEl.dom ? newEl.dom.appendChild(this.dom) : newEl.appendChild(this.dom);
+            return newEl;
+        },
+        
+        /**
+         * Inserts an html fragment into this element
+         * @param {String} where Where to insert the html in relation to this element - beforeBegin, afterBegin, beforeEnd, afterEnd.
+         * @param {String} html The HTML fragment
+         * @param {Boolean} returnEl (optional) True to return an Ext.Element (defaults to false)
+         * @return {HTMLElement/Ext.Element} The inserted node (or nearest related if more than 1 inserted)
+         */
+        insertHtml : function(where, html, returnEl){
+            var el = DH.insertHtml(where, this.dom, html);
+            return returnEl ? Ext.get(el) : el;
+        }
+    };
 }());/**
  * @class Ext.Element
  */
@@ -4057,7 +4057,7 @@ var D = Ext.lib.Dom,
         ZINDEX = "z-index";
 
 Ext.Element.addMethods({
-	/**
+    /**
       * Gets the current X position of the element based on page coordinates.  Element must be part of the DOM tree to have page coordinates (display:none or elements not appended return false).
       * @return {Number} The X position of the element
       */
@@ -4088,7 +4088,7 @@ Ext.Element.addMethods({
       */
     getOffsetsTo : function(el){
         var o = this.getXY(),
-        	e = Ext.fly(el, '_internal').getXY();
+            e = Ext.fly(el, '_internal').getXY();
         return [o[0]-e[0],o[1]-e[1]];
     },
 
@@ -4098,8 +4098,8 @@ Ext.Element.addMethods({
      * @param {Boolean/Object} animate (optional) True for the default animation, or a standard Element animation config object
      * @return {Ext.Element} this
      */
-    setX : function(x, animate){	    
-	    return this.setXY([x, this.getY()], this.animTest(arguments, animate, 1));
+    setX : function(x, animate){        
+        return this.setXY([x, this.getY()], this.animTest(arguments, animate, 1));
     },
 
     /**
@@ -4108,8 +4108,8 @@ Ext.Element.addMethods({
      * @param {Boolean/Object} animate (optional) True for the default animation, or a standard Element animation config object
      * @return {Ext.Element} this
      */
-    setY : function(y, animate){	    
-	    return this.setXY([this.getX(), y], this.animTest(arguments, animate, 1));
+    setY : function(y, animate){        
+        return this.setXY([this.getX(), y], this.animTest(arguments, animate, 1));
     },
 
     /**
@@ -4160,7 +4160,7 @@ Ext.Element.addMethods({
      * @return {Ext.Element} this
      */
     setXY : function(pos, animate){
-	    var me = this;
+        var me = this;
         if(!animate || !me.anim){
             D.setXY(me.dom, pos);
         }else{
@@ -4199,7 +4199,7 @@ Ext.Element.addMethods({
      * @return {Number}
      */
     getLeft : function(local){
-	    return !local ? this.getX() : parseInt(this.getStyle(LEFT), 10) || 0;
+        return !local ? this.getX() : parseInt(this.getStyle(LEFT), 10) || 0;
     },
 
     /**
@@ -4208,8 +4208,8 @@ Ext.Element.addMethods({
      * @return {Number}
      */
     getRight : function(local){
-	    var me = this;
-	    return !local ? me.getX() + me.getWidth() : (me.getLeft(true) + me.getWidth()) || 0;
+        var me = this;
+        return !local ? me.getX() + me.getWidth() : (me.getLeft(true) + me.getWidth()) || 0;
     },
 
     /**
@@ -4218,7 +4218,7 @@ Ext.Element.addMethods({
      * @return {Number}
      */
     getTop : function(local) {
-	    return !local ? this.getY() : parseInt(this.getStyle(TOP), 10) || 0;
+        return !local ? this.getY() : parseInt(this.getStyle(TOP), 10) || 0;
     },
 
     /**
@@ -4227,8 +4227,8 @@ Ext.Element.addMethods({
      * @return {Number}
      */
     getBottom : function(local){
-	    var me = this;
-	    return !local ? me.getY() + me.getHeight() : (me.getTop(true) + me.getHeight()) || 0;
+        var me = this;
+        return !local ? me.getY() + me.getHeight() : (me.getTop(true) + me.getHeight()) || 0;
     },
 
     /**
@@ -4240,8 +4240,8 @@ Ext.Element.addMethods({
     * @param {Number} y (optional) Set the page Y position
     */
     position : function(pos, zIndex, x, y){
-	    var me = this;
-	    
+        var me = this;
+        
         if(!pos && me.isStyle(POSITION, STATIC)){           
             me.setStyle(POSITION, RELATIVE);           
         } else if(pos) {
@@ -4295,9 +4295,9 @@ Ext.Element.addMethods({
     * @return {Ext.Element} this
      */
     setPositioning : function(pc){
-	    var me = this,
-	    	style = me.dom.style;
-	    	
+        var me = this,
+            style = me.dom.style;
+            
         me.setStyle(pc);
         
         if(pc.right == AUTO){
@@ -4309,21 +4309,21 @@ Ext.Element.addMethods({
         
         return me;
     },    
-	
+    
     /**
      * Translates the passed page coordinates into left/top css values for this element
      * @param {Number/Array} x The page x or an array containing [x, y]
      * @param {Number} y (optional) The page y, required if x is not an array
      * @return {Object} An object with left and top properties. e.g. {left: (value), top: (value)}
      */
-    translatePoints : function(x, y){        	     
-	    y = isNaN(x[1]) ? y : x[1];
+    translatePoints : function(x, y){                 
+        y = isNaN(x[1]) ? y : x[1];
         x = isNaN(x[0]) ? x : x[0];
         var me = this,
-        	relative = me.isStyle(POSITION, RELATIVE),
-        	o = me.getXY(),
-        	l = parseInt(me.getStyle(LEFT), 10),
-        	t = parseInt(me.getStyle(TOP), 10);
+            relative = me.isStyle(POSITION, RELATIVE),
+            o = me.getXY(),
+            l = parseInt(me.getStyle(LEFT), 10),
+            t = parseInt(me.getStyle(TOP), 10);
         
         l = !isNaN(l) ? l : (relative ? 0 : me.dom.offsetLeft);
         t = !isNaN(t) ? t : (relative ? 0 : me.dom.offsetTop);        
@@ -8731,8 +8731,8 @@ Ext.applyIf(Number.prototype, {
 });
 Ext.lib.Dom.getRegion = function(el) {
     return Ext.lib.Region.getRegion(el);
-};	Ext.lib.Region = function(t, r, b, l) {
-		var me = this;
+};    Ext.lib.Region = function(t, r, b, l) {
+        var me = this;
         me.top = t;
         me[1] = t;
         me.right = r;
@@ -8743,7 +8743,7 @@ Ext.lib.Dom.getRegion = function(el) {
 
     Ext.lib.Region.prototype = {
         contains : function(region) {
-	        var me = this;
+            var me = this;
             return ( region.left >= me.left &&
                      region.right <= me.right &&
                      region.top >= me.top &&
@@ -8752,16 +8752,16 @@ Ext.lib.Dom.getRegion = function(el) {
         },
 
         getArea : function() {
-	        var me = this;
+            var me = this;
             return ( (me.bottom - me.top) * (me.right - me.left) );
         },
 
         intersect : function(region) {
             var me = this,
-            	t = Math.max(me.top, region.top),
-            	r = Math.min(me.right, region.right),
-            	b = Math.min(me.bottom, region.bottom),
-            	l = Math.max(me.left, region.left);
+                t = Math.max(me.top, region.top),
+                r = Math.min(me.right, region.right),
+                b = Math.min(me.bottom, region.bottom),
+                l = Math.max(me.left, region.left);
 
             if (b >= t && r >= l) {
                 return new Ext.lib.Region(t, r, b, l);
@@ -8769,17 +8769,17 @@ Ext.lib.Dom.getRegion = function(el) {
         },
         
         union : function(region) {
-	        var me = this,
-            	t = Math.min(me.top, region.top),
-            	r = Math.max(me.right, region.right),
-            	b = Math.max(me.bottom, region.bottom),
-            	l = Math.min(me.left, region.left);
+            var me = this,
+                t = Math.min(me.top, region.top),
+                r = Math.max(me.right, region.right),
+                b = Math.max(me.bottom, region.bottom),
+                l = Math.min(me.left, region.left);
 
             return new Ext.lib.Region(t, r, b, l);
         },
 
         constrainTo : function(r) {
-	        var me = this;
+            var me = this;
             me.top = me.top.constrain(r.top, r.bottom);
             me.bottom = me.bottom.constrain(r.top, r.bottom);
             me.left = me.left.constrain(r.left, r.right);
@@ -8788,7 +8788,7 @@ Ext.lib.Dom.getRegion = function(el) {
         },
 
         adjust : function(t, l, b, r) {
-	        var me = this;
+            var me = this;
             me.top += t;
             me.left += l;
             me.right += r;
@@ -8799,13 +8799,13 @@ Ext.lib.Dom.getRegion = function(el) {
 
     Ext.lib.Region.getRegion = function(el) {
         var p = Ext.lib.Dom.getXY(el),
-        	t = p[1],
-        	r = p[0] + el.offsetWidth,
-        	b = p[1] + el.offsetHeight,
-        	l = p[0];
+            t = p[1],
+            r = p[0] + el.offsetWidth,
+            b = p[1] + el.offsetHeight,
+            l = p[0];
 
         return new Ext.lib.Region(t, r, b, l);
-    };	Ext.lib.Point = function(x, y) {
+    };    Ext.lib.Point = function(x, y) {
         if (Ext.isArray(x)) {
             y = x[1];
             x = x[0];
@@ -10094,32 +10094,32 @@ Ext.Element.addMethods({
     getAnchorXY : function(anchor, local, s){
         //Passing a different size is useful for pre-calculating anchors,
         //especially for anchored animations that change the el size.
-		anchor = (anchor || "tl").toLowerCase();
+        anchor = (anchor || "tl").toLowerCase();
         s = s || {};
         
         var me = this,        
-        	vp = me.dom == document.body || me.dom == document,
-        	w = s.width || vp ? Ext.lib.Dom.getViewWidth() : me.getWidth(),
-        	h = s.height || vp ? Ext.lib.Dom.getViewHeight() : me.getHeight(),         	        	
-        	xy,       	
-        	r = Math.round,
-        	o = me.getXY(),
-        	scroll = me.getScroll(),
-        	extraX = vp ? scroll.left : !local ? o[0] : 0,
-        	extraY = vp ? scroll.top : !local ? o[1] : 0,
-        	hash = {
-	        	c  : [r(w * 0.5), r(h * 0.5)],
-	        	t  : [r(w * 0.5), 0],
-	        	l  : [0, r(h * 0.5)],
-	        	r  : [w, r(h * 0.5)],
-	        	b  : [r(w * 0.5), h],
-	        	tl : [0, 0],	
-	        	bl : [0, h],
-	        	br : [w, h],
-	        	tr : [w, 0]
-        	};
+            vp = me.dom == document.body || me.dom == document,
+            w = s.width || vp ? Ext.lib.Dom.getViewWidth() : me.getWidth(),
+            h = s.height || vp ? Ext.lib.Dom.getViewHeight() : me.getHeight(),                         
+            xy,           
+            r = Math.round,
+            o = me.getXY(),
+            scroll = me.getScroll(),
+            extraX = vp ? scroll.left : !local ? o[0] : 0,
+            extraY = vp ? scroll.top : !local ? o[1] : 0,
+            hash = {
+                c  : [r(w * 0.5), r(h * 0.5)],
+                t  : [r(w * 0.5), 0],
+                l  : [0, r(h * 0.5)],
+                r  : [w, r(h * 0.5)],
+                b  : [r(w * 0.5), h],
+                tl : [0, 0],    
+                bl : [0, h],
+                br : [w, h],
+                tr : [w, 0]
+            };
         
-        xy = hash[anchor];	
+        xy = hash[anchor];    
         return [xy[0] + extraX, xy[1] + extraY]; 
     },
 
@@ -10135,7 +10135,7 @@ Ext.Element.addMethods({
      * @return {Ext.Element} this
      */
     anchorTo : function(el, alignment, offsets, animate, monitorScroll, callback){        
-	    var me = this,
+        var me = this,
             dom = me.dom,
             scroll = !Ext.isEmpty(monitorScroll),
             action = function(){
@@ -10202,7 +10202,7 @@ Ext.Element.addMethods({
      * @param {Array} offsets (optional) Offset the positioning by [x, y]
      * @return {Array} [x, y]
      */
-    getAlignToXY : function(el, p, o){	    
+    getAlignToXY : function(el, p, o){        
         el = Ext.get(el);
         
         if(!el || !el.dom){
@@ -10213,32 +10213,32 @@ Ext.Element.addMethods({
         p = (!p || p == "?" ? "tl-bl?" : (!(/-/).test(p) && p !== "" ? "tl-" + p : p || "tl-bl")).toLowerCase();       
                 
         var me = this,
-        	d = me.dom,
-        	a1,
-        	a2,
-        	x,
-        	y,
-        	//constrain the aligned el to viewport if necessary
-        	w,
-        	h,
-        	r,
-        	dw = Ext.lib.Dom.getViewWidth() -10, // 10px of margin for ie
-        	dh = Ext.lib.Dom.getViewHeight()-10, // 10px of margin for ie
-        	p1y,
-        	p1x,        	
-        	p2y,
-        	p2x,
-        	swapY,
-        	swapX,
-        	doc = document,
-        	docElement = doc.documentElement,
-        	docBody = doc.body,
-        	scrollX = (docElement.scrollLeft || docBody.scrollLeft || 0)+5,
-        	scrollY = (docElement.scrollTop || docBody.scrollTop || 0)+5,
-        	c = false, //constrain to viewport
-        	p1 = "", 
-        	p2 = "",
-        	m = p.match(/^([a-z]+)-([a-z]+)(\?)?$/);
+            d = me.dom,
+            a1,
+            a2,
+            x,
+            y,
+            //constrain the aligned el to viewport if necessary
+            w,
+            h,
+            r,
+            dw = Ext.lib.Dom.getViewWidth() -10, // 10px of margin for ie
+            dh = Ext.lib.Dom.getViewHeight()-10, // 10px of margin for ie
+            p1y,
+            p1x,            
+            p2y,
+            p2x,
+            swapY,
+            swapX,
+            doc = document,
+            docElement = doc.documentElement,
+            docBody = doc.body,
+            scrollX = (docElement.scrollLeft || docBody.scrollLeft || 0)+5,
+            scrollY = (docElement.scrollTop || docBody.scrollTop || 0)+5,
+            c = false, //constrain to viewport
+            p1 = "", 
+            p2 = "",
+            m = p.match(/^([a-z]+)-([a-z]+)(\?)?$/);
         
         if(!m){
            throw "Element.alignTo with an invalid alignment " + p;
@@ -10257,7 +10257,7 @@ Ext.Element.addMethods({
         y = a2[1] - a1[1] + o[1];
 
         if(c){    
-	       w = me.getWidth();
+           w = me.getWidth();
            h = me.getHeight();
            r = el.getRegion();       
            //If we are at a viewport boundary and the aligned el is anchored on a target border that is
@@ -10339,9 +10339,9 @@ el.alignTo("other-el", "c-bl", [-6, 0]);
      * @return {Ext.Element} this
      */
     alignTo : function(element, position, offsets, animate){
-	    var me = this;
+        var me = this;
         return me.setXY(me.getAlignToXY(element, position, offsets),
-          		        me.preanim && !!animate ? me.preanim(arguments, 3) : false);
+                          me.preanim && !!animate ? me.preanim(arguments, 3) : false);
     },
     
     // private ==>  used outside of core
@@ -10351,7 +10351,7 @@ el.alignTo("other-el", "c-bl", [-6, 0]);
 
     // private ==>  used outside of core
     getConstrainToXY : function(el, local, offsets, proposedXY){   
-	    var os = {top:0, left:0, bottom:0, right: 0};
+        var os = {top:0, left:0, bottom:0, right: 0};
 
         return function(el, local, offsets, proposedXY){
             el = Ext.get(el);
@@ -10411,29 +10411,29 @@ el.alignTo("other-el", "c-bl", [-6, 0]);
             return moved ? [x, y] : false;
         };
     }(),
-	    
-	    
-	        
+        
+        
+            
 //         el = Ext.get(el);
 //         offsets = Ext.applyIf(offsets || {}, {top : 0, left : 0, bottom : 0, right : 0});
 
-//         var	me = this,
-//         	doc = document,
-//         	s = el.getScroll(),
-//         	vxy = el.getXY(),
-//         	vx = offsets.left + s.left, 
-//         	vy = offsets.top + s.top,            	
-//         	vw = -offsets.right, 
-//         	vh = -offsets.bottom, 
-//         	vr,
-//         	vb,
-//         	xy = proposedXY || (!local ? me.getXY() : [me.getLeft(true), me.getTop(true)]),
-//         	x = xy[0],
-//         	y = xy[1],
-//         	w = me.dom.offsetWidth, h = me.dom.offsetHeight,
-//         	moved = false; // only move it if it needs it
+//         var    me = this,
+//             doc = document,
+//             s = el.getScroll(),
+//             vxy = el.getXY(),
+//             vx = offsets.left + s.left, 
+//             vy = offsets.top + s.top,                
+//             vw = -offsets.right, 
+//             vh = -offsets.bottom, 
+//             vr,
+//             vb,
+//             xy = proposedXY || (!local ? me.getXY() : [me.getLeft(true), me.getTop(true)]),
+//             x = xy[0],
+//             y = xy[1],
+//             w = me.dom.offsetWidth, h = me.dom.offsetHeight,
+//             moved = false; // only move it if it needs it
 //       
-//         	
+//             
 //         if(el.dom == doc.body || el.dom == doc){
 //             vw += Ext.lib.Dom.getViewWidth();
 //             vh += Ext.lib.Dom.getViewHeight();
@@ -10505,37 +10505,37 @@ Ext.Element.addMethods({
  * @class Ext.Element
  */
 Ext.apply(Ext.Element.prototype, function() {
-	var GETDOM = Ext.getDom,
-		GET = Ext.get,
-		DH = Ext.DomHelper;
-	
-	return {	
-		/**
-	     * Inserts (or creates) the passed element (or DomHelper config) as a sibling of this element
-	     * @param {Mixed/Object/Array} el The id, element to insert or a DomHelper config to create and insert *or* an array of any of those.
-	     * @param {String} where (optional) 'before' or 'after' defaults to before
-	     * @param {Boolean} returnDom (optional) True to return the raw DOM element instead of Ext.Element
-	     * @return {Ext.Element} The inserted Element. If an array is passed, the last inserted element is returned.
-	     */
-	    insertSibling: function(el, where, returnDom){
-	        var me = this,
-	        	rt,
+    var GETDOM = Ext.getDom,
+        GET = Ext.get,
+        DH = Ext.DomHelper;
+    
+    return {    
+        /**
+         * Inserts (or creates) the passed element (or DomHelper config) as a sibling of this element
+         * @param {Mixed/Object/Array} el The id, element to insert or a DomHelper config to create and insert *or* an array of any of those.
+         * @param {String} where (optional) 'before' or 'after' defaults to before
+         * @param {Boolean} returnDom (optional) True to return the raw DOM element instead of Ext.Element
+         * @return {Ext.Element} The inserted Element. If an array is passed, the last inserted element is returned.
+         */
+        insertSibling: function(el, where, returnDom){
+            var me = this,
+                rt,
                 isAfter = (where || 'before').toLowerCase() == 'after',
                 insertEl;
-	        	
-	        if(Ext.isArray(el)){
+                
+            if(Ext.isArray(el)){
                 insertEl = me;
-	            Ext.each(el, function(e) {
-		            rt = Ext.fly(insertEl, '_internal').insertSibling(e, where, returnDom);
+                Ext.each(el, function(e) {
+                    rt = Ext.fly(insertEl, '_internal').insertSibling(e, where, returnDom);
                     if(isAfter){
                         insertEl = rt;
                     }
-	            });
-	            return rt;
-	        }
-	                
-	        el = el || {};
-	       	
+                });
+                return rt;
+            }
+                    
+            el = el || {};
+               
             if(el.nodeType || el.dom){
                 rt = me.dom.parentNode.insertBefore(GETDOM(el), isAfter ? me.dom.nextSibling : me.dom);
                 if (!returnDom) {
@@ -10548,8 +10548,8 @@ Ext.apply(Ext.Element.prototype, function() {
                     rt = DH[isAfter ? 'insertAfter' : 'insertBefore'](me.dom, el, !returnDom);
                 }
             }
-	        return rt;
-	    }
+            return rt;
+        }
     };
 }());/**
  * @class Ext.Element
@@ -10917,8 +10917,8 @@ Ext.Element.addMethods({
      */
     setBox : function(box, adjust, animate){
         var me = this,
-        	w = box.width, 
-        	h = box.height;
+            w = box.width, 
+            h = box.height;
         if((adjust && !me.autoBoxAdjust) && !me.isBorderBox()){
            w -= (me.getBorderWidth("lr") + me.getPadding("lr"));
            h -= (me.getBorderWidth("tb") + me.getPadding("tb"));
@@ -10945,17 +10945,17 @@ Ext.Element.addMethods({
      * The returned object may also be addressed as an Array where index 0 contains the X position
      * and index 1 contains the Y position. So the result may also be used for {@link #setXY}
      */
-	getBox : function(contentBox, local) {	    
-	    var me = this,
-        	xy,
-        	left,
-        	top,
-        	getBorderWidth = me.getBorderWidth,
-        	getPadding = me.getPadding, 
-        	l,
-        	r,
-        	t,
-        	b;
+    getBox : function(contentBox, local) {        
+        var me = this,
+            xy,
+            left,
+            top,
+            getBorderWidth = me.getBorderWidth,
+            getPadding = me.getPadding, 
+            l,
+            r,
+            t,
+            b;
         if(!local){
             xy = me.getXY();
         }else{
@@ -10976,8 +10976,8 @@ Ext.Element.addMethods({
         bx.right = bx.x + bx.width;
         bx.bottom = bx.y + bx.height;
         return bx;
-	},
-	
+    },
+    
     /**
      * Move this element relative to its current position.
      * @param {String} direction Possible values are: "l" (or "left"), "r" (or "right"), "t" (or "top", or "up"), "b" (or "bottom", or "down").
@@ -10986,29 +10986,29 @@ Ext.Element.addMethods({
      * @return {Ext.Element} this
      */
      move : function(direction, distance, animate){
-        var me = this,        	
-        	xy = me.getXY(),
-        	x = xy[0],
-        	y = xy[1],        	
-        	left = [x - distance, y],
-        	right = [x + distance, y],
-        	top = [x, y - distance],
-        	bottom = [x, y + distance],
-	       	hash = {
-	        	l :	left,
-	        	left : left,
-	        	r : right,
-	        	right : right,
-	        	t : top,
-	        	top : top,
-	        	up : top,
-	        	b : bottom, 
-	        	bottom : bottom,
-	        	down : bottom	        		
-	        };
+        var me = this,            
+            xy = me.getXY(),
+            x = xy[0],
+            y = xy[1],            
+            left = [x - distance, y],
+            right = [x + distance, y],
+            top = [x, y - distance],
+            bottom = [x, y + distance],
+               hash = {
+                l :    left,
+                left : left,
+                r : right,
+                right : right,
+                t : top,
+                top : top,
+                up : top,
+                b : bottom, 
+                bottom : bottom,
+                down : bottom                    
+            };
         
- 	    direction = direction.toLowerCase();    
- 	    me.moveTo(hash[direction][0], hash[direction][1], me.animTest.call(me, arguments, animate, 2));
+         direction = direction.toLowerCase();    
+         me.moveTo(hash[direction][0], hash[direction][1], me.animTest.call(me, arguments, animate, 2));
     },
     
     /**
@@ -11018,8 +11018,8 @@ Ext.Element.addMethods({
      * @return {Ext.Element} this
      */
      setLeftTop : function(left, top){
-	    var me = this,
-	    	style = me.dom.style;
+        var me = this,
+            style = me.dom.style;
         style.left = me.addUnits(left);
         style.top = me.addUnits(top);
         return me;
@@ -11050,14 +11050,14 @@ Ext.Element.addMethods({
      * @return {Ext.Element} this
      */
     setBounds : function(x, y, width, height, animate){
-	    var me = this;
+        var me = this;
         if (!animate || !me.anim) {
             me.setSize(width, height);
             me.setLocation(x, y);
         } else {
             me.anim({points: {to: [x, y]}, 
-            		 width: {to: me.adjustWidth(width)}, 
-            		 height: {to: me.adjustHeight(height)}},
+                     width: {to: me.adjustWidth(width)}, 
+                     height: {to: me.adjustHeight(height)}},
                      me.preanim(arguments, 4), 
                      'motion');
         }
@@ -15044,8 +15044,8 @@ Ext.XTemplate.from = function(el){
  * @singleton
  */
 Ext.util.CSS = function(){
-	var rules = null;
-   	var doc = document;
+    var rules = null;
+       var doc = document;
 
     var camelRe = /(-[a-z])/gi;
     var camelFn = function(m, a){ return a.charAt(1).toUpperCase(); };
@@ -15136,39 +15136,39 @@ Ext.util.CSS = function(){
     * @return {Object} An object (hash) of rules indexed by selector
     */
    getRules : function(refreshCache){
-   		if(rules === null || refreshCache){
-   			rules = {};
-   			var ds = doc.styleSheets;
-   			for(var i =0, len = ds.length; i < len; i++){
-   			    try{
-    		        this.cacheStyleSheet(ds[i]);
-    		    }catch(e){} 
-	        }
-   		}
-   		return rules;
-   	},
-   	
-   	/**
+           if(rules === null || refreshCache){
+               rules = {};
+               var ds = doc.styleSheets;
+               for(var i =0, len = ds.length; i < len; i++){
+                   try{
+                    this.cacheStyleSheet(ds[i]);
+                }catch(e){} 
+            }
+           }
+           return rules;
+       },
+       
+       /**
     * Gets an an individual CSS rule by selector(s)
     * @param {String/Array} selector The CSS selector or an array of selectors to try. The first selector that is found is returned.
     * @param {Boolean} refreshCache true to refresh the internal cache if you have recently updated any rules or added styles dynamically
     * @return {CSSRule} The CSS rule or null if one is not found
     */
    getRule : function(selector, refreshCache){
-   		var rs = this.getRules(refreshCache);
-   		if(!Ext.isArray(selector)){
-   		    return rs[selector.toLowerCase()];
-   		}
-   		for(var i = 0; i < selector.length; i++){
-			if(rs[selector[i]]){
-				return rs[selector[i].toLowerCase()];
-			}
-		}
-		return null;
-   	},
-   	
-   	
-   	/**
+           var rs = this.getRules(refreshCache);
+           if(!Ext.isArray(selector)){
+               return rs[selector.toLowerCase()];
+           }
+           for(var i = 0; i < selector.length; i++){
+            if(rs[selector[i]]){
+                return rs[selector[i].toLowerCase()];
+            }
+        }
+        return null;
+       },
+       
+       
+       /**
     * Updates a rule property
     * @param {String/Array} selector If it's an array it tries each selector until it finds one. Stops immediately once one is found.
     * @param {String} property The css property
@@ -15176,22 +15176,22 @@ Ext.util.CSS = function(){
     * @return {Boolean} true If a rule was found and updated
     */
    updateRule : function(selector, property, value){
-   		if(!Ext.isArray(selector)){
-   			var rule = this.getRule(selector);
-   			if(rule){
-   				rule.style[property.replace(camelRe, camelFn)] = value;
-   				return true;
-   			}
-   		}else{
-   			for(var i = 0; i < selector.length; i++){
-   				if(this.updateRule(selector[i], property, value)){
-   					return true;
-   				}
-   			}
-   		}
-   		return false;
-   	}
-   };	
+           if(!Ext.isArray(selector)){
+               var rule = this.getRule(selector);
+               if(rule){
+                   rule.style[property.replace(camelRe, camelFn)] = value;
+                   return true;
+               }
+           }else{
+               for(var i = 0; i < selector.length; i++){
+                   if(this.updateRule(selector[i], property, value)){
+                       return true;
+                   }
+               }
+           }
+           return false;
+       }
+   };    
 }();/**
  @class Ext.util.ClickRepeater
  @extends Ext.util.Observable
@@ -15519,10 +15519,10 @@ Ext.KeyNav.prototype = {
         this.disable();    
     },
 
-	/**
-	 * Enable this KeyNav
-	 */
-	enable: function() {
+    /**
+     * Enable this KeyNav
+     */
+    enable: function() {
         if (this.disabled) {
             if (Ext.isSafari2) {
                 // call stopKeyUp() on "keyup" event
@@ -15534,10 +15534,10 @@ Ext.KeyNav.prototype = {
         }
     },
 
-	/**
-	 * Disable this KeyNav
-	 */
-	disable: function() {
+    /**
+     * Disable this KeyNav
+     */
+    disable: function() {
         if (!this.disabled) {
             if (Ext.isSafari2) {
                 // remove "keyup" event handler
@@ -15660,7 +15660,7 @@ map.addBinding({
 </code></pre>
      * @param {Object/Array} config A single KeyMap config or an array of configs
      */
-	addBinding : function(config){
+    addBinding : function(config){
         if(Ext.isArray(config)){
             Ext.each(config, function(c){
                 this.addBinding(c);
@@ -15671,9 +15671,9 @@ map.addBinding({
             fn = config.fn || config.handler,
             scope = config.scope;
 
-	if (config.stopEvent) {
-	    this.stopEvent = config.stopEvent;    
-	}	
+    if (config.stopEvent) {
+        this.stopEvent = config.stopEvent;    
+    }    
 
         if(typeof keyCode == "string"){
             var ks = [];
@@ -15709,7 +15709,7 @@ map.addBinding({
             }
         };
         this.bindings.push(handler);
-	},
+    },
     
     // private
     checkModifiers: function(config, e){
@@ -15754,41 +15754,41 @@ map.addBinding({
 
     // private
     handleKeyDown : function(e){
-	    if(this.enabled){ //just in case
-    	    var b = this.bindings;
-    	    for(var i = 0, len = b.length; i < len; i++){
-    	        b[i].call(this, e);
-    	    }
-	    }
-	},
+        if(this.enabled){ //just in case
+            var b = this.bindings;
+            for(var i = 0, len = b.length; i < len; i++){
+                b[i].call(this, e);
+            }
+        }
+    },
 
-	/**
-	 * Returns true if this KeyMap is enabled
-	 * @return {Boolean}
-	 */
-	isEnabled : function(){
-	    return this.enabled;
-	},
+    /**
+     * Returns true if this KeyMap is enabled
+     * @return {Boolean}
+     */
+    isEnabled : function(){
+        return this.enabled;
+    },
 
-	/**
-	 * Enables this KeyMap
-	 */
-	enable: function(){
-		if(!this.enabled){
-		    this.el.on(this.eventName, this.handleKeyDown, this);
-		    this.enabled = true;
-		}
-	},
+    /**
+     * Enables this KeyMap
+     */
+    enable: function(){
+        if(!this.enabled){
+            this.el.on(this.eventName, this.handleKeyDown, this);
+            this.enabled = true;
+        }
+    },
 
-	/**
-	 * Disable this KeyMap
-	 */
-	disable: function(){
-		if(this.enabled){
-		    this.el.removeListener(this.eventName, this.handleKeyDown, this);
-		    this.enabled = false;
-		}
-	},
+    /**
+     * Disable this KeyMap
+     */
+    disable: function(){
+        if(this.enabled){
+            this.el.removeListener(this.eventName, this.handleKeyDown, this);
+            this.enabled = false;
+        }
+    },
     
     /**
      * Convenience function for setting disabled/enabled by boolean.
@@ -28522,9 +28522,9 @@ cp.on('select', function(palette, selColor){
  * @xtype colorpalette
  */
 Ext.ColorPalette = Ext.extend(Ext.Component, {
-	/**
-	 * @cfg {String} tpl An existing XTemplate instance to be used in place of the default template for rendering the component.
-	 */
+    /**
+     * @cfg {String} tpl An existing XTemplate instance to be used in place of the default template for rendering the component.
+     */
     /**
      * @cfg {String} itemCls
      * The CSS class to apply to the containing element (defaults to 'x-color-palette')
@@ -28621,7 +28621,7 @@ cp.colors = ['000000', '993300', '333300'];
         t.overwrite(this.el, this.colors);
         this.mon(this.el, this.clickEvent, this.handleClick, this, {delegate: 'a'});
         if(this.clickEvent != 'click'){
-        	this.mon(this.el, 'click', Ext.emptyFn, this, {delegate: 'a', preventDefault: true});
+            this.mon(this.el, 'click', Ext.emptyFn, this, {delegate: 'a', preventDefault: true});
         }
     },
 
@@ -31378,11 +31378,11 @@ Ext.dd.DragDrop.prototype = {
         this.resetConstraints();
         this.setXConstraint(leftSpace - (pad.left||0), // left
                 c.width - leftSpace - b.width - (pad.right||0), //right
-				this.xTickSize
+                this.xTickSize
         );
         this.setYConstraint(topSpace - (pad.top||0), //top
                 c.height - topSpace - b.height - (pad.bottom||0), //bottom
-				this.yTickSize
+                this.yTickSize
         );
     },
 
@@ -34024,67 +34024,67 @@ Ext.extend(Ext.dd.DDTarget, Ext.dd.DragDrop, {
 Ext.dd.DragTracker = Ext.extend(Ext.util.Observable,  {    
     /**
      * @cfg {Boolean} active
-	 * Defaults to <tt>false</tt>.
-	 */	
+     * Defaults to <tt>false</tt>.
+     */    
     active: false,
     /**
      * @cfg {Number} tolerance
-	 * Number of pixels the drag target must be moved before dragging is considered to have started. Defaults to <tt>5</tt>.
-	 */	
+     * Number of pixels the drag target must be moved before dragging is considered to have started. Defaults to <tt>5</tt>.
+     */    
     tolerance: 5,
     /**
      * @cfg {Boolean/Number} autoStart
-	 * Defaults to <tt>false</tt>. Specify <tt>true</tt> to defer trigger start by 1000 ms.
-	 * Specify a Number for the number of milliseconds to defer trigger start.
-	 */	
+     * Defaults to <tt>false</tt>. Specify <tt>true</tt> to defer trigger start by 1000 ms.
+     * Specify a Number for the number of milliseconds to defer trigger start.
+     */    
     autoStart: false,
     
     constructor : function(config){
         Ext.apply(this, config);
-	    this.addEvents(
-	        /**
-	         * @event mousedown
-	         * @param {Object} this
-	         * @param {Object} e event object
-	         */
-	        'mousedown',
-	        /**
-	         * @event mouseup
-	         * @param {Object} this
-	         * @param {Object} e event object
-	         */
-	        'mouseup',
-	        /**
-	         * @event mousemove
-	         * @param {Object} this
-	         * @param {Object} e event object
-	         */
-	        'mousemove',
-	        /**
-	         * @event dragstart
-	         * @param {Object} this
-	         * @param {Object} e event object
-	         */
-	        'dragstart',
-	        /**
-	         * @event dragend
-	         * @param {Object} this
-	         * @param {Object} e event object
-	         */
-	        'dragend',
-	        /**
-	         * @event drag
-	         * @param {Object} this
-	         * @param {Object} e event object
-	         */
-	        'drag'
-	    );
-	
-	    this.dragRegion = new Ext.lib.Region(0,0,0,0);
-	
-	    if(this.el){
-	        this.initEl(this.el);
-	    }
+        this.addEvents(
+            /**
+             * @event mousedown
+             * @param {Object} this
+             * @param {Object} e event object
+             */
+            'mousedown',
+            /**
+             * @event mouseup
+             * @param {Object} this
+             * @param {Object} e event object
+             */
+            'mouseup',
+            /**
+             * @event mousemove
+             * @param {Object} this
+             * @param {Object} e event object
+             */
+            'mousemove',
+            /**
+             * @event dragstart
+             * @param {Object} this
+             * @param {Object} e event object
+             */
+            'dragstart',
+            /**
+             * @event dragend
+             * @param {Object} this
+             * @param {Object} e event object
+             */
+            'dragend',
+            /**
+             * @event drag
+             * @param {Object} this
+             * @param {Object} e event object
+             */
+            'drag'
+        );
+    
+        this.dragRegion = new Ext.lib.Region(0,0,0,0);
+    
+        if(this.el){
+            this.initEl(this.el);
+        }
         Ext.dd.DragTracker.superclass.constructor.call(this, config);
     },
 
@@ -34383,7 +34383,7 @@ Ext.dd.ScrollManager = function(){
         register : function(el){
             if(Ext.isArray(el)){
                 for(var i = 0, len = el.length; i < len; i++) {
-                	this.register(el[i]);
+                    this.register(el[i]);
                 }
             }else{
                 el = Ext.get(el);
@@ -34398,7 +34398,7 @@ Ext.dd.ScrollManager = function(){
         unregister : function(el){
             if(Ext.isArray(el)){
                 for(var i = 0, len = el.length; i < len; i++) {
-                	this.unregister(el[i]);
+                    this.unregister(el[i]);
                 }
             }else{
                 el = Ext.get(el);
@@ -34515,7 +34515,7 @@ isHandle   True if the element passed in triggers<br />
             if(data.handles){
                 var hs = data.handles;
                 for(var i = 0, len = hs.length; i < len; i++){
-                	handles[getId(hs[i])] = data;
+                    handles[getId(hs[i])] = data;
                 }
             }
         },
@@ -34532,7 +34532,7 @@ isHandle   True if the element passed in triggers<br />
                 if(data.handles){
                     var hs = data.handles;
                     for(var i = 0, len = hs.length; i < len; i++){
-                    	delete handles[getId(hs[i], false)];
+                        delete handles[getId(hs[i], false)];
                     }
                 }
             }
@@ -35982,7 +35982,7 @@ Ext.data.SortTypes = {
      * @return {String} The comparison value
      */
     asUCString : function(s) {
-    	return String(s).toUpperCase();
+        return String(s).toUpperCase();
     },
     
     /**
@@ -35997,7 +35997,7 @@ Ext.data.SortTypes = {
         if(Ext.isDate(s)){
             return s.getTime();
         }
-    	return Date.parse(String(s));
+        return Date.parse(String(s));
     },
     
     /**
@@ -36006,8 +36006,8 @@ Ext.data.SortTypes = {
      * @return {Float} The comparison value
      */
     asFloat : function(s) {
-    	var val = parseFloat(String(s).replace(/,/g, ""));
-    	return isNaN(val) ? 0 : val;
+        var val = parseFloat(String(s).replace(/,/g, ""));
+        return isNaN(val) ? 0 : val;
     },
     
     /**
@@ -41885,7 +41885,7 @@ paramOrder: 'param1|param2|param'
 
         switch (action) {
             case Ext.data.Api.actions.create:
-                args.push(params.jsonData);		// <-- create(Hash)
+                args.push(params.jsonData);        // <-- create(Hash)
                 break;
             case Ext.data.Api.actions.read:
                 // If the method has no parameters, ignore the paramOrder/paramsAsHash.
@@ -46027,10 +46027,10 @@ Ext.state.CookieProvider = Ext.extend(Ext.state.Provider, {
         var cookies = {},
             c = document.cookie + ";",
             re = /\s?(.*?)=(.*?);/g,
-    	    matches,
+            matches,
             name,
             value;
-    	while((matches = re.exec(c)) != null){
+        while((matches = re.exec(c)) != null){
             name = matches[1];
             value = matches[2];
             if(name && name.substring(0,3) == "ys-"){
@@ -46287,7 +46287,7 @@ Ext.DataView = Ext.extend(Ext.BoxComponent, {
     afterRender : function(){
         Ext.DataView.superclass.afterRender.call(this);
 
-		this.mon(this.getTemplateTarget(), {
+        this.mon(this.getTemplateTarget(), {
             "click": this.onClick,
             "dblclick": this.onDblClick,
             "contextmenu": this.onContextMenu,
@@ -49568,25 +49568,25 @@ Ext.ButtonToggleMgr = function(){
  * <pre><code>
 // display a dropdown menu:
 new Ext.SplitButton({
-	renderTo: 'button-ct', // the container id
-   	text: 'Options',
-   	handler: optionsHandler, // handle a click on the button itself
-   	menu: new Ext.menu.Menu({
+    renderTo: 'button-ct', // the container id
+       text: 'Options',
+       handler: optionsHandler, // handle a click on the button itself
+       menu: new Ext.menu.Menu({
         items: [
-        	// these items will render as dropdown menu items when the arrow is clicked:
-	        {text: 'Item 1', handler: item1Handler},
-	        {text: 'Item 2', handler: item2Handler}
+            // these items will render as dropdown menu items when the arrow is clicked:
+            {text: 'Item 1', handler: item1Handler},
+            {text: 'Item 2', handler: item2Handler}
         ]
-   	})
+       })
 });
 
 // Instead of showing a menu, you provide any type of custom
 // functionality you want when the dropdown arrow is clicked:
 new Ext.SplitButton({
-	renderTo: 'button-ct',
-   	text: 'Options',
-   	handler: optionsHandler,
-   	arrowHandler: myCustomHandler
+    renderTo: 'button-ct',
+       text: 'Options',
+       handler: optionsHandler,
+       arrowHandler: myCustomHandler
 });
 </code></pre>
  * @cfg {Function} arrowHandler A function called when the arrow button is clicked (can be used instead of click event)
@@ -49597,7 +49597,7 @@ new Ext.SplitButton({
  * @xtype splitbutton
  */
 Ext.SplitButton = Ext.extend(Ext.Button, {
-	// private
+    // private
     arrowSelector : 'em',
     split: true,
 
@@ -49636,13 +49636,13 @@ Ext.SplitButton = Ext.extend(Ext.Button, {
     },
 
     isClickOnArrow : function(e){
-	if (this.arrowAlign != 'bottom') {
-	    var visBtn = this.el.child('em.x-btn-split');
-	    var right = visBtn.getRegion().right - visBtn.getPadding('r');
-	    return e.getPageX() > right;
-	} else {
-	    return e.getPageY() > this.btnEl.getRegion().bottom;
-	}
+    if (this.arrowAlign != 'bottom') {
+        var visBtn = this.el.child('em.x-btn-split');
+        var right = visBtn.getRegion().right - visBtn.getPadding('r');
+        return e.getPageX() > right;
+    } else {
+        return e.getPageY() > this.btnEl.getRegion().bottom;
+    }
     },
 
     // private
@@ -55177,7 +55177,7 @@ Ext.tree.TreeNode = Ext.extend(Ext.data.Node, {
         if(deep === true){
             var cs = this.childNodes;
             for(var i = 0, len = cs.length; i < len; i++) {
-            	cs[i].collapse(true, false);
+                cs[i].collapse(true, false);
             }
         }
     },
@@ -55232,7 +55232,7 @@ Ext.tree.TreeNode = Ext.extend(Ext.data.Node, {
             i,
             len = cs.length;
         for (i = 0; i < len; i++) {
-        	cs[i].expand(deep, anim);
+            cs[i].expand(deep, anim);
         }
     },
 
@@ -55243,7 +55243,7 @@ Ext.tree.TreeNode = Ext.extend(Ext.data.Node, {
     collapseChildNodes : function(deep){
         var cs = this.childNodes;
         for(var i = 0, len = cs.length; i < len; i++) {
-        	cs[i].collapse(deep);
+            cs[i].collapse(deep);
         }
     },
 
@@ -56520,7 +56520,7 @@ Ext.tree.TreeFilter.prototype = {
             throw 'Illegal filter type, must be string or regex';
         }
         this.filterBy(f, null, startNode);
-	},
+    },
 
     /**
      * Filter by a function. The passed function will be called with each
@@ -57178,13 +57178,13 @@ Ext.extend(Ext.tree.TreeEditor, Ext.Editor, {
      */
     triggerEdit : function(node, defer){
         this.completeEdit();
-		if(node.attributes.editable !== false){
+        if(node.attributes.editable !== false){
            /**
             * The {@link Ext.tree.TreeNode TreeNode} this editor is bound to. Read-only.
             * @type Ext.tree.TreeNode
             * @property editNode
             */
-			this.editNode = node;
+            this.editNode = node;
             if(this.tree.autoScroll){
                 Ext.fly(node.ui.getEl()).scrollIntoView(this.tree.body);
             }
@@ -60595,33 +60595,33 @@ Ext.menu.CheckItem = Ext.extend(Ext.menu.Item, {
     
     initComponent : function(){
         Ext.menu.CheckItem.superclass.initComponent.call(this);
-	    this.addEvents(
-	        /**
-	         * @event beforecheckchange
-	         * Fires before the checked value is set, providing an opportunity to cancel if needed
-	         * @param {Ext.menu.CheckItem} this
-	         * @param {Boolean} checked The new checked value that will be set
-	         */
-	        "beforecheckchange" ,
-	        /**
-	         * @event checkchange
-	         * Fires after the checked value has been set
-	         * @param {Ext.menu.CheckItem} this
-	         * @param {Boolean} checked The checked value that was set
-	         */
-	        "checkchange"
-	    );
-	    /**
-	     * A function that handles the checkchange event.  The function is undefined by default, but if an implementation
-	     * is provided, it will be called automatically when the checkchange event fires.
-	     * @param {Ext.menu.CheckItem} this
-	     * @param {Boolean} checked The checked value that was set
-	     * @method checkHandler
-	     */
-	    if(this.checkHandler){
-	        this.on('checkchange', this.checkHandler, this.scope);
-	    }
-	    Ext.menu.MenuMgr.registerCheckable(this);
+        this.addEvents(
+            /**
+             * @event beforecheckchange
+             * Fires before the checked value is set, providing an opportunity to cancel if needed
+             * @param {Ext.menu.CheckItem} this
+             * @param {Boolean} checked The new checked value that will be set
+             */
+            "beforecheckchange" ,
+            /**
+             * @event checkchange
+             * Fires after the checked value has been set
+             * @param {Ext.menu.CheckItem} this
+             * @param {Boolean} checked The checked value that was set
+             */
+            "checkchange"
+        );
+        /**
+         * A function that handles the checkchange event.  The function is undefined by default, but if an implementation
+         * is provided, it will be called automatically when the checkchange event fires.
+         * @param {Ext.menu.CheckItem} this
+         * @param {Boolean} checked The checked value that was set
+         * @method checkHandler
+         */
+        if(this.checkHandler){
+            this.on('checkchange', this.checkHandler, this.scope);
+        }
+        Ext.menu.MenuMgr.registerCheckable(this);
     },
 
     // private
@@ -60874,7 +60874,7 @@ Ext.reg('menucheckitem', Ext.menu.CheckItem);/**
          * @event select
          * Fires when a color is selected from the {@link #palette Ext.ColorPalette}
          * @param {Ext.ColorPalette} palette The {@link #palette Ext.ColorPalette}
-	     * @param {String} color The 6-digit color hex code (without the # symbol)
+         * @param {String} color The 6-digit color hex code (without the # symbol)
          */
         this.relayEvents(this.palette, ['select']);
         this.on('select', this.menuHide, this);
@@ -61841,7 +61841,7 @@ var myField = new Ext.form.NumberField({
             this.mon(this.el, 'keyup', this.filterValidation, this);
         }
         else if(this.validationEvent !== false && this.validationEvent != 'blur'){
-        	this.mon(this.el, this.validationEvent, this.validate, this, {buffer: this.validationDelay});
+            this.mon(this.el, this.validationEvent, this.validate, this, {buffer: this.validationDelay});
         }
         if(this.selectOnFocus || this.emptyText){            
             this.mon(this.el, 'mousedown', this.onMouseDown, this);
@@ -61851,11 +61851,11 @@ var myField = new Ext.form.NumberField({
             }
         }
         if(this.maskRe || (this.vtype && this.disableKeyFilter !== true && (this.maskRe = Ext.form.VTypes[this.vtype+'Mask']))){
-        	this.mon(this.el, 'keypress', this.filterKeys, this);
+            this.mon(this.el, 'keypress', this.filterKeys, this);
         }
         if(this.grow){
-        	this.mon(this.el, 'keyup', this.onKeyUpBuffered, this, {buffer: 50});
-			this.mon(this.el, 'click', this.autoSize, this);
+            this.mon(this.el, 'keyup', this.onKeyUpBuffered, this, {buffer: 50});
+            this.mon(this.el, 'click', this.autoSize, this);
         }
         if(this.enableKeyEvents){
             this.mon(this.el, {
@@ -62166,14 +62166,14 @@ var myField = new Ext.form.NumberField({
         this.el.setWidth(w);
         this.fireEvent('autosize', this, w);
     },
-	
-	onDestroy: function(){
-		if(this.validationTask){
-			this.validationTask.cancel();
-			this.validationTask = null;
-		}
-		Ext.form.TextField.superclass.onDestroy.call(this);
-	}
+    
+    onDestroy: function(){
+        if(this.validationTask){
+            this.validationTask.cancel();
+            this.validationTask = null;
+        }
+        Ext.form.TextField.superclass.onDestroy.call(this);
+    }
 });
 Ext.reg('textfield', Ext.form.TextField);
 /**
@@ -62826,7 +62826,7 @@ Ext.form.NumberField = Ext.extend(Ext.form.TextField,  {
     },
 
     setValue : function(v) {
-    	v = Ext.isNumber(v) ? v : parseFloat(String(v).replace(this.decimalSeparator, "."));
+        v = Ext.isNumber(v) ? v : parseFloat(String(v).replace(this.decimalSeparator, "."));
         v = this.fixPrecision(v);
         v = isNaN(v) ? '' : String(v).replace(".", this.decimalSeparator);
         return Ext.form.NumberField.superclass.setValue.call(this, v);
@@ -64812,7 +64812,7 @@ Ext.form.Checkbox = Ext.extend(Ext.form.Field,  {
     // private
     actionMode : 'wrap',
 
-	// private
+    // private
     initComponent : function(){
         Ext.form.Checkbox.superclass.initComponent.call(this);
         this.addEvents(
@@ -64901,7 +64901,7 @@ Ext.form.Checkbox = Ext.extend(Ext.form.Field,  {
         return this.checked;
     },
 
-	// private
+    // private
     onClick : function(){
         if(this.el.dom.checked != this.checked){
             this.setValue(this.el.dom.checked);
@@ -65901,7 +65901,7 @@ Ext.form.Radio = Ext.extend(Ext.form.Checkbox, {
      * @return {String}
      */
     getGroupValue : function(){
-    	var p = this.el.up('form') || Ext.getBody();
+        var p = this.el.up('form') || Ext.getBody();
         var c = p.child('input[name="'+this.el.dom.name+'"]:checked', true);
         return c ? c.value : null;
     },
@@ -65913,10 +65913,10 @@ Ext.form.Radio = Ext.extend(Ext.form.Checkbox, {
      * @return {Ext.form.Field} this
      */
     setValue : function(v){
-    	var checkEl,
+        var checkEl,
             els,
             radio;
-    	if (typeof v == 'boolean') {
+        if (typeof v == 'boolean') {
             Ext.form.Radio.superclass.setValue.call(this, v);
         } else if (this.rendered) {
             checkEl = this.getCheckEl();
@@ -65928,11 +65928,11 @@ Ext.form.Radio = Ext.extend(Ext.form.Checkbox, {
         if(this.rendered && this.checked){
             checkEl = checkEl || this.getCheckEl();
             els = this.getCheckEl().select('input[name="' + this.el.dom.name + '"]');
-			els.each(function(el){
-				if(el.dom.id != this.id){
-					Ext.getCmp(el.dom.id).setValue(false);
-				}
-			}, this);
+            els.each(function(el){
+                if(el.dom.id != this.id){
+                    Ext.getCmp(el.dom.id).setValue(false);
+                }
+            }, this);
         }
         return this;
     },
@@ -75403,68 +75403,68 @@ Ext.grid.ColumnModel = Ext.extend(Ext.util.Observable, {
 
     constructor : function(config) {
         /**
-	     * An Array of {@link Ext.grid.Column Column definition} objects representing the configuration
-	     * of this ColumnModel.  See {@link Ext.grid.Column} for the configuration properties that may
-	     * be specified.
-	     * @property config
-	     * @type Array
-	     */
-	    if (config.columns) {
-	        Ext.apply(this, config);
-	        this.setConfig(config.columns, true);
-	    } else {
-	        this.setConfig(config, true);
-	    }
-	    
-	    this.addEvents(
-	        /**
-	         * @event widthchange
-	         * Fires when the width of a column is programmaticially changed using
-	         * <code>{@link #setColumnWidth}</code>.
-	         * Note internal resizing suppresses the event from firing. See also
-	         * {@link Ext.grid.GridPanel}.<code>{@link #columnresize}</code>.
-	         * @param {ColumnModel} this
-	         * @param {Number} columnIndex The column index
-	         * @param {Number} newWidth The new width
-	         */
-	        "widthchange",
-	        
-	        /**
-	         * @event headerchange
-	         * Fires when the text of a header changes.
-	         * @param {ColumnModel} this
-	         * @param {Number} columnIndex The column index
-	         * @param {String} newText The new header text
-	         */
-	        "headerchange",
-	        
-	        /**
-	         * @event hiddenchange
-	         * Fires when a column is hidden or "unhidden".
-	         * @param {ColumnModel} this
-	         * @param {Number} columnIndex The column index
-	         * @param {Boolean} hidden true if hidden, false otherwise
-	         */
-	        "hiddenchange",
-	        
-	        /**
-	         * @event columnmoved
-	         * Fires when a column is moved.
-	         * @param {ColumnModel} this
-	         * @param {Number} oldIndex
-	         * @param {Number} newIndex
-	         */
-	        "columnmoved",
-	        
-	        /**
-	         * @event configchange
-	         * Fires when the configuration is changed
-	         * @param {ColumnModel} this
-	         */
-	        "configchange"
-	    );
-	    
-	    Ext.grid.ColumnModel.superclass.constructor.call(this);
+         * An Array of {@link Ext.grid.Column Column definition} objects representing the configuration
+         * of this ColumnModel.  See {@link Ext.grid.Column} for the configuration properties that may
+         * be specified.
+         * @property config
+         * @type Array
+         */
+        if (config.columns) {
+            Ext.apply(this, config);
+            this.setConfig(config.columns, true);
+        } else {
+            this.setConfig(config, true);
+        }
+        
+        this.addEvents(
+            /**
+             * @event widthchange
+             * Fires when the width of a column is programmaticially changed using
+             * <code>{@link #setColumnWidth}</code>.
+             * Note internal resizing suppresses the event from firing. See also
+             * {@link Ext.grid.GridPanel}.<code>{@link #columnresize}</code>.
+             * @param {ColumnModel} this
+             * @param {Number} columnIndex The column index
+             * @param {Number} newWidth The new width
+             */
+            "widthchange",
+            
+            /**
+             * @event headerchange
+             * Fires when the text of a header changes.
+             * @param {ColumnModel} this
+             * @param {Number} columnIndex The column index
+             * @param {String} newText The new header text
+             */
+            "headerchange",
+            
+            /**
+             * @event hiddenchange
+             * Fires when a column is hidden or "unhidden".
+             * @param {ColumnModel} this
+             * @param {Number} columnIndex The column index
+             * @param {Boolean} hidden true if hidden, false otherwise
+             */
+            "hiddenchange",
+            
+            /**
+             * @event columnmoved
+             * Fires when a column is moved.
+             * @param {ColumnModel} this
+             * @param {Number} oldIndex
+             * @param {Number} newIndex
+             */
+            "columnmoved",
+            
+            /**
+             * @event configchange
+             * Fires when the configuration is changed
+             * @param {ColumnModel} this
+             */
+            "configchange"
+        );
+        
+        Ext.grid.ColumnModel.superclass.constructor.call(this);
     },
 
     /**
@@ -76058,38 +76058,38 @@ Ext.grid.RowSelectionModel = Ext.extend(Ext.grid.AbstractSelectionModel,  {
         this.lastActive = false;
 
         this.addEvents(
-	        /**
-	         * @event selectionchange
-	         * Fires when the selection changes
-	         * @param {SelectionModel} this
-	         */
-	        'selectionchange',
-	        /**
-	         * @event beforerowselect
-	         * Fires before a row is selected, return false to cancel the selection.
-	         * @param {SelectionModel} this
-	         * @param {Number} rowIndex The index to be selected
-	         * @param {Boolean} keepExisting False if other selections will be cleared
-	         * @param {Record} record The record to be selected
-	         */
-	        'beforerowselect',
-	        /**
-	         * @event rowselect
-	         * Fires when a row is selected.
-	         * @param {SelectionModel} this
-	         * @param {Number} rowIndex The selected index
-	         * @param {Ext.data.Record} r The selected record
-	         */
-	        'rowselect',
-	        /**
-	         * @event rowdeselect
-	         * Fires when a row is deselected.  To prevent deselection
-	         * {@link Ext.grid.AbstractSelectionModel#lock lock the selections}. 
-	         * @param {SelectionModel} this
-	         * @param {Number} rowIndex
-	         * @param {Record} record
-	         */
-	        'rowdeselect'
+            /**
+             * @event selectionchange
+             * Fires when the selection changes
+             * @param {SelectionModel} this
+             */
+            'selectionchange',
+            /**
+             * @event beforerowselect
+             * Fires before a row is selected, return false to cancel the selection.
+             * @param {SelectionModel} this
+             * @param {Number} rowIndex The index to be selected
+             * @param {Boolean} keepExisting False if other selections will be cleared
+             * @param {Record} record The record to be selected
+             */
+            'beforerowselect',
+            /**
+             * @event rowselect
+             * Fires when a row is selected.
+             * @param {SelectionModel} this
+             * @param {Number} rowIndex The selected index
+             * @param {Ext.data.Record} r The selected record
+             */
+            'rowselect',
+            /**
+             * @event rowdeselect
+             * Fires when a row is deselected.  To prevent deselection
+             * {@link Ext.grid.AbstractSelectionModel#lock lock the selections}. 
+             * @param {SelectionModel} this
+             * @param {Number} rowIndex
+             * @param {Record} record
+             */
+            'rowdeselect'
         );
         Ext.grid.RowSelectionModel.superclass.constructor.call(this);
     },
@@ -77419,40 +77419,40 @@ Ext.grid.CellSelectionModel = Ext.extend(Ext.grid.AbstractSelectionModel,  {
     constructor : function(config){
         Ext.apply(this, config);
 
-	    this.selection = null;
-	
-	    this.addEvents(
-	        /**
-	         * @event beforecellselect
-	         * Fires before a cell is selected, return false to cancel the selection.
-	         * @param {SelectionModel} this
-	         * @param {Number} rowIndex The selected row index
-	         * @param {Number} colIndex The selected cell index
-	         */
-	        "beforecellselect",
-	        /**
-	         * @event cellselect
-	         * Fires when a cell is selected.
-	         * @param {SelectionModel} this
-	         * @param {Number} rowIndex The selected row index
-	         * @param {Number} colIndex The selected cell index
-	         */
-	        "cellselect",
-	        /**
-	         * @event selectionchange
-	         * Fires when the active selection changes.
-	         * @param {SelectionModel} this
-	         * @param {Object} selection null for no selection or an object with two properties
-	         * <div class="mdetail-params"><ul>
-	         * <li><b>cell</b> : see {@link #getSelectedCell} 
-	         * <li><b>record</b> : Ext.data.record<p class="sub-desc">The {@link Ext.data.Record Record}
-	         * which provides the data for the row containing the selection</p></li>
-	         * </ul></div>
-	         */
-	        "selectionchange"
-	    );
-	
-	    Ext.grid.CellSelectionModel.superclass.constructor.call(this);
+        this.selection = null;
+    
+        this.addEvents(
+            /**
+             * @event beforecellselect
+             * Fires before a cell is selected, return false to cancel the selection.
+             * @param {SelectionModel} this
+             * @param {Number} rowIndex The selected row index
+             * @param {Number} colIndex The selected cell index
+             */
+            "beforecellselect",
+            /**
+             * @event cellselect
+             * Fires when a cell is selected.
+             * @param {SelectionModel} this
+             * @param {Number} rowIndex The selected row index
+             * @param {Number} colIndex The selected cell index
+             */
+            "cellselect",
+            /**
+             * @event selectionchange
+             * Fires when the active selection changes.
+             * @param {SelectionModel} this
+             * @param {Object} selection null for no selection or an object with two properties
+             * <div class="mdetail-params"><ul>
+             * <li><b>cell</b> : see {@link #getSelectedCell} 
+             * <li><b>record</b> : Ext.data.record<p class="sub-desc">The {@link Ext.data.Record Record}
+             * which provides the data for the row containing the selection</p></li>
+             * </ul></div>
+             */
+            "selectionchange"
+        );
+    
+        Ext.grid.CellSelectionModel.superclass.constructor.call(this);
     },
 
     /** @ignore */
@@ -77471,24 +77471,24 @@ Ext.grid.CellSelectionModel = Ext.extend(Ext.grid.AbstractSelectionModel,  {
         }
     },
 
-	//private
+    //private
     beforeEdit : function(e){
         this.select(e.row, e.column, false, true, e.record);
     },
 
-	//private
+    //private
     onRowUpdated : function(v, index, r){
         if(this.selection && this.selection.record == r){
             v.onCellSelect(index, this.selection.cell[1]);
         }
     },
 
-	//private
+    //private
     onViewChange : function(){
         this.clearSelections(true);
     },
 
-	/**
+    /**
      * Returns an array containing the row and column indexes of the currently selected cell
      * (e.g., [0, 0]), or null if none selected. The array has elements:
      * <div class="mdetail-params"><ul>
@@ -77504,7 +77504,7 @@ var data = record.get(fieldName);
      * </code></pre></p></li>
      * </ul></div>
      * @return {Array} An array containing the row and column indexes of the selected cell, or null if none selected.
-	 */
+     */
     getSelectedCell : function(){
         return this.selection ? this.selection.cell : null;
     },
@@ -77574,7 +77574,7 @@ var data = record.get(fieldName);
         }
     },
 
-	//private
+    //private
     isSelectable : function(rowIndex, colIndex, cm){
         return !cm.isHidden(colIndex);
     },
@@ -78176,34 +78176,34 @@ Ext.grid.PropertyColumnModel = Ext.extend(Ext.grid.ColumnModel, {
     
     constructor : function(grid, store){
         var g = Ext.grid,
-	        f = Ext.form;
-	        
-	    this.grid = grid;
-	    g.PropertyColumnModel.superclass.constructor.call(this, [
-	        {header: this.nameText, width:50, sortable: true, dataIndex:'name', id: 'name', menuDisabled:true},
-	        {header: this.valueText, width:50, resizable:false, dataIndex: 'value', id: 'value', menuDisabled:true}
-	    ]);
-	    this.store = store;
-	
-	    var bfield = new f.Field({
-	        autoCreate: {tag: 'select', children: [
-	            {tag: 'option', value: 'true', html: this.trueText},
-	            {tag: 'option', value: 'false', html: this.falseText}
-	        ]},
-	        getValue : function(){
-	            return this.el.dom.value == 'true';
-	        }
-	    });
-	    this.editors = {
-	        'date' : new g.GridEditor(new f.DateField({selectOnFocus:true})),
-	        'string' : new g.GridEditor(new f.TextField({selectOnFocus:true})),
-	        'number' : new g.GridEditor(new f.NumberField({selectOnFocus:true, style:'text-align:left;'})),
-	        'boolean' : new g.GridEditor(bfield, {
-	            autoSize: 'both'
-	        })
-	    };
-	    this.renderCellDelegate = this.renderCell.createDelegate(this);
-	    this.renderPropDelegate = this.renderProp.createDelegate(this);
+            f = Ext.form;
+            
+        this.grid = grid;
+        g.PropertyColumnModel.superclass.constructor.call(this, [
+            {header: this.nameText, width:50, sortable: true, dataIndex:'name', id: 'name', menuDisabled:true},
+            {header: this.valueText, width:50, resizable:false, dataIndex: 'value', id: 'value', menuDisabled:true}
+        ]);
+        this.store = store;
+    
+        var bfield = new f.Field({
+            autoCreate: {tag: 'select', children: [
+                {tag: 'option', value: 'true', html: this.trueText},
+                {tag: 'option', value: 'false', html: this.falseText}
+            ]},
+            getValue : function(){
+                return this.el.dom.value == 'true';
+            }
+        });
+        this.editors = {
+            'date' : new g.GridEditor(new f.DateField({selectOnFocus:true})),
+            'string' : new g.GridEditor(new f.TextField({selectOnFocus:true})),
+            'number' : new g.GridEditor(new f.NumberField({selectOnFocus:true, style:'text-align:left;'})),
+            'boolean' : new g.GridEditor(bfield, {
+                autoSize: 'both'
+            })
+        };
+        this.renderCellDelegate = this.renderCell.createDelegate(this);
+        this.renderPropDelegate = this.renderProp.createDelegate(this);
     },
 
     // private
@@ -78407,7 +78407,7 @@ var grid = new Ext.grid.PropertyGrid({
         this.ds = store.store;
         Ext.grid.PropertyGrid.superclass.initComponent.call(this);
 
-		this.mon(this.selModel, 'beforecellselect', function(sm, rowIndex, colIndex){
+        this.mon(this.selModel, 'beforecellselect', function(sm, rowIndex, colIndex){
             if(colIndex === 0){
                 this.startEditing.defer(200, this, [rowIndex, 1]);
                 return false;

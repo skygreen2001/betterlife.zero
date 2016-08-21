@@ -55,8 +55,8 @@ $emp = 7900;
 OCIBindByName($stmt, ':emp', $emp);
 $ok = OCIExecute($stmt);
 while (OCIFetchInto($stmt,$arr)) {
-	print_r($arr);
-	echo "&lt;hr>";	
+    print_r($arr);
+    echo "&lt;hr>";    
 } 
 </pre>
 <p>This generates the following output:
@@ -150,7 +150,7 @@ $rs = $db->Execute("select * from emp where empno>:emp order by empno",
                     array('emp' => 7900));
 while ($arr = $rs->FetchRow()) {
     print_r($arr);
-	echo "&lt;hr>";
+    echo "&lt;hr>";
 }
 </pre>
 <p>The Execute( ) function returns a recordset object, and you can retrieve the rows returned using $recordset-&gt;FetchRow( ). </p>
@@ -168,15 +168,15 @@ $emp = 7900;
 $ok = <b>OCIExecute</b>($stmt);
 
 while (<b>OCIFetchInto</b>($stmt,$arr)) {
-	print_r($arr);
-	echo "&lt;hr>";	
+    print_r($arr);
+    echo "&lt;hr>";    
 } </font></pre></td>
     <td><pre><font size="1">$recordset = $db-><b>Execute</b>("select * from emp where empno>:emp", 
                            array('emp' => 7900));
 
 while ($arr = $recordset-><b>FetchRow</b>()) {
-	print_r($arr);
-	echo "&lt;hr>";
+    print_r($arr);
+    echo "&lt;hr>";
 }</font></pre></td>
   </tr>
 </table>
@@ -187,8 +187,8 @@ MoveNext( ) offers the highest performance among all the techniques for iteratin
 <pre>
 $rs = $db->Execute("select * from emp where empno>:emp", array('emp' => 7900));
 while (!$rs->EOF) {
-	print_r($rs->fields);
-	$rs->MoveNext();
+    print_r($rs->fields);
+    $rs->MoveNext();
 }
 </pre>
 <p>And if you are interested in having the data returned in a 2-dimensional array, you can use:
@@ -239,7 +239,7 @@ $rs = $connection->CacheExecute($sql, array('id' => 1));
 <pre>
 $stmt = $db->Prepare('insert into table (field1, field2) values (:f1, :f2)');
 foreach ($arrayToInsert as $key => $value) {
-	$db->Execute($stmt, array('f1' => $key, 'f2' => $val);
+    $db->Execute($stmt, array('f1' => $key, 'f2' => $val);
 }
 </pre>
 <p>&nbsp;</p>
@@ -266,16 +266,16 @@ $db->UpdateClob('aTable', 'aclob', $clobValue, 'id=aSequence.currVal');
   (assuming that the <em>photo</em> field is a BLOB, and we want to store $blob_data into
   this field, and the primary key is the <em>id</em> field):
 <pre>
-	$sql = <span class="style1">"INSERT INTO photos ( ID, photo) ".
-			"VALUES ( :id, empty_blob() )".
-			" RETURNING photo INTO :xx"</span>;
+    $sql = <span class="style1">"INSERT INTO photos ( ID, photo) ".
+            "VALUES ( :id, empty_blob() )".
+            " RETURNING photo INTO :xx"</span>;
 
- 		$stmt = $db->PrepareSP($sql);
-		$db->InParameter($stmt, $<strong>id</strong>, <span class="style1">'id'</span>);
-		$blob = $db->InParameter($stmt, $<strong>blob_data</strong>, <span class="style1">'xx'</span>,-1, OCI_B_BLOB);
-		$db->StartTrans();
-		$ok = $db->Execute($stmt);
-		$db->CompleteTrans();
+         $stmt = $db->PrepareSP($sql);
+        $db->InParameter($stmt, $<strong>id</strong>, <span class="style1">'id'</span>);
+        $blob = $db->InParameter($stmt, $<strong>blob_data</strong>, <span class="style1">'xx'</span>,-1, OCI_B_BLOB);
+        $db->StartTrans();
+        $ok = $db->Execute($stmt);
+        $db->CompleteTrans();
 </pre> 
 <p>
 <h3>5. REF CURSORs</h3>
@@ -284,9 +284,9 @@ $db->UpdateClob('aTable', 'aclob', $clobValue, 'id=aSequence.currVal');
 TYPE TabType IS REF CURSOR RETURN TAB%ROWTYPE;
 
 PROCEDURE open_tab (tabcursor IN OUT TabType,tablenames IN VARCHAR) IS
-	BEGIN
-		OPEN tabcursor FOR SELECT * FROM TAB WHERE tname LIKE tablenames;
-	END open_tab;
+    BEGIN
+        OPEN tabcursor FOR SELECT * FROM TAB WHERE tname LIKE tablenames;
+    END open_tab;
 </pre>
 <p>In ADOdb, we could access this REF Cursor using the ExecuteCursor() function. The following will find
  all table names that begin with 'A' in the current schema:
@@ -302,9 +302,9 @@ while ($arr = $rs->FetchRow()) print_r($arr);
 stored procedure  requires an input  variable, and returns a result into an output variable:
 <pre>
 PROCEDURE data_out(input IN VARCHAR, output OUT VARCHAR) IS
-	BEGIN
-		output := 'I love '||input;
-	END;
+    BEGIN
+        output := 'I love '||input;
+    END;
 </pre>
 <p>The following ADOdb code allows you to call the stored procedure:</p>
 <pre>
@@ -329,14 +329,14 @@ while ($arr = $rs->FetchRow()) print_r($arr);
 <h4>Bind Parameters and LOBs</h4>
 <p>You can also operate on LOBs. In this example, we have IN and OUT parameters using CLOBs. 
 <pre>
-	$text = 'test test test';
-	$sql = "declare rs clob; begin :rs := lobinout(:sa0); end;";
-	$stmt = $conn -> PrepareSP($sql);
-	$conn -> InParameter($stmt,$text,'sa0', -1, OCI_B_CLOB); # -1 means variable length
-	$rs = '';
-	$conn -> OutParameter($stmt,$rs,'rs', -1, OCI_B_CLOB);
-	$conn -> Execute($stmt);
-	echo "return = ".$rs."&lt;br>";
+    $text = 'test test test';
+    $sql = "declare rs clob; begin :rs := lobinout(:sa0); end;";
+    $stmt = $conn -> PrepareSP($sql);
+    $conn -> InParameter($stmt,$text,'sa0', -1, OCI_B_CLOB); # -1 means variable length
+    $rs = '';
+    $conn -> OutParameter($stmt,$rs,'rs', -1, OCI_B_CLOB);
+    $conn -> Execute($stmt);
+    echo "return = ".$rs."&lt;br>";
 </pre>
 <p>Similarly, you can use the constant OCI_B_BLOB to indicate that you are using BLOBs.
 <h4>Reusing Bind Parameters with CURSOR_SHARING=FORCE</h4>
@@ -464,34 +464,34 @@ $db-&gt;Execute(&quot;insert into atable (f1, f2) values (?,?)&quot;, array(12, 
 <h4>Connection Examples</h4>
 <p>Just in case you are having problems connecting to Oracle, here are some examples:</p>
 <p>a. PHP and Oracle reside on the same machine, use default SID, with non-persistent connections:</p>
-<pre>	$conn = NewADOConnection('oci8');
-	$conn-&gt;Connect(false, 'scott', 'tiger');</pre>
+<pre>    $conn = NewADOConnection('oci8');
+    $conn-&gt;Connect(false, 'scott', 'tiger');</pre>
 <p>b. TNS Name defined in tnsnames.ora (or ONAMES or HOSTNAMES), eg. 'myTNS', using persistent connections:</p>
-<pre>	$conn = NewADOConnection('oci8');
-	$conn-&gt;PConnect(false, 'scott', 'tiger', 'myTNS');</pre>
+<pre>    $conn = NewADOConnection('oci8');
+    $conn-&gt;PConnect(false, 'scott', 'tiger', 'myTNS');</pre>
 <p>or</p>
-<pre> 	$conn-&gt;PConnect('myTNS', 'scott', 'tiger');</pre>
+<pre>     $conn-&gt;PConnect('myTNS', 'scott', 'tiger');</pre>
 <p>c. Host Address and SID</p>
 <pre>
-	$conn->connectSID = true;	
-	$conn-&gt;Connect('192.168.0.1', 'scott', 'tiger', 'SID');</pre>
+    $conn->connectSID = true;    
+    $conn-&gt;Connect('192.168.0.1', 'scott', 'tiger', 'SID');</pre>
 <p>d. Host Address and Service Name</p>
-<pre>	$conn-&gt;Connect('192.168.0.1', 'scott', 'tiger', 'servicename');</pre>
+<pre>    $conn-&gt;Connect('192.168.0.1', 'scott', 'tiger', 'servicename');</pre>
 <p>e. Oracle connection string:
-<pre>	$cstr = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=$host)(PORT=$port))
-			(CONNECT_DATA=(SID=$sid)))";
-	$conn-&gt;Connect($cstr, 'scott', 'tiger');
+<pre>    $cstr = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=$host)(PORT=$port))
+            (CONNECT_DATA=(SID=$sid)))";
+    $conn-&gt;Connect($cstr, 'scott', 'tiger');
 </pre>
 <p>f. ADOdb data source names (dsn):
 <pre>
-	$dsn = 'oci8://user:pwd@tnsname/?persist';  # persist is optional
-	$conn = ADONewConnection($dsn);  # no need for Connect/PConnect
-	
-	$dsn = 'oci8://user:pwd@host/sid';
-	$conn = ADONewConnection($dsn);
-	
-	$dsn = 'oci8://user:pwd@/';   # oracle on local machine
-	$conn = ADONewConnection($dsn);</pre>
+    $dsn = 'oci8://user:pwd@tnsname/?persist';  # persist is optional
+    $conn = ADONewConnection($dsn);  # no need for Connect/PConnect
+    
+    $dsn = 'oci8://user:pwd@host/sid';
+    $conn = ADONewConnection($dsn);
+    
+    $dsn = 'oci8://user:pwd@/';   # oracle on local machine
+    $conn = ADONewConnection($dsn);</pre>
 <p>With ADOdb data source names,
 you don't have to call Connect( ) or PConnect( ).
 </p>
@@ -509,7 +509,7 @@ $rs = $db->Execute("select * from emp where empno>:emp order by empno",
 if (!$rs) return InvokeErrorHandler();
 while ($arr = $rs->FetchRow()) {
     print_r($arr);
-	echo "&lt;hr>";
+    echo "&lt;hr>";
 }
 </pre>
 <p>You can retrieve the  error message and error number of the last SQL statement executed from ErrorMsg( ) and ErrorNo( ). You can also <a href=http://phplens.com/adodb/using.custom.error.handlers.and.pear_error.html>define a custom error handler function</a>.

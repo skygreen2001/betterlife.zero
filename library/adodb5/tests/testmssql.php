@@ -33,10 +33,10 @@ $conn->SetFetchMode(ADODB_FETCH_ASSOC);
 $rs = $conn->Execute($query);
 echo "<pre>";
 while( !$rs->EOF ) {
-	$output[] = $rs->fields;
-	var_dump($rs->fields);
-	$rs->MoveNext();
-	print "<p>";
+    $output[] = $rs->fields;
+    var_dump($rs->fields);
+    $rs->MoveNext();
+    print "<p>";
 }
 die();
 

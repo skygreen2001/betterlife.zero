@@ -167,16 +167,16 @@ The code snippet above will change the favorite color to red, and then UPDATE th
 <p>We provide two ways to define your own table:
 <p>1. Use a constructor parameter to override the default table naming behaviour.
 <pre>
-	class person extends ADOdb_Active_Record{}
-	$person = new person('People');
+    class person extends ADOdb_Active_Record{}
+    $person = new person('People');
 </pre>
 <p>2. Define it in a class declaration:
 <pre>
-	class person extends ADOdb_Active_Record
-	{
-	var $_table = 'People';
-	}
-	$person = new person();
+    class person extends ADOdb_Active_Record
+    {
+    var $_table = 'People';
+    }
+    $person = new person();
 </pre>
 
 <h3><li>$ADODB_ASSOC_CASE</h3>
@@ -270,19 +270,19 @@ $row = $db->GetRow("select * from tablex where id=$id");
 # PHP4 or PHP5 without enabling exceptions
 $obj = new ADOdb_Active_Record('Products');
 if ($obj->ErrorMsg()){
-	echo $obj->ErrorMsg();
+    echo $obj->ErrorMsg();
 } else {
-	$obj->Set($row);
+    $obj->Set($row);
 }
 
 # in PHP5, with exceptions enabled:
 
 include('adodb-exceptions.inc.php');
 try {
-	$obj = new ADOdb_Active_Record('Products');
-	$obj->Set($row);
+    $obj = new ADOdb_Active_Record('Products');
+    $obj->Set($row);
 } catch(exceptions $e) {
-	echo $e->getMessage();
+    echo $e->getMessage();
 }
 </pre>
 <p>
@@ -291,20 +291,20 @@ try {
 ADOdb_Active_Record does not require the table to have a primary key. You can insert records for such a table, but you will not be able to update nor delete. 
 <p>Sometimes you are retrieving data from a view or table that has no primary key, but has a unique index. You can dynamically set the primary key of a table through the constructor:
 <pre>
-	$pkeys = array('category','prodcode');
-	
-	// set primary key using constructor
-	$rec = new ADOdb_Active_Record('Products', $pkeys);
-	
-	// or define a new class
-	class Product extends ADOdb_Active_Record {
-		function __construct()
-		{
-			parent::__construct('Products', array('prodid'));
-		}
-	}
-	
-	$rec = new Product();
+    $pkeys = array('category','prodcode');
+    
+    // set primary key using constructor
+    $rec = new ADOdb_Active_Record('Products', $pkeys);
+    
+    // or define a new class
+    class Product extends ADOdb_Active_Record {
+        function __construct()
+        {
+            parent::__construct('Products', array('prodid'));
+        }
+    }
+    
+    $rec = new Product();
 </pre>
 
 
@@ -323,11 +323,11 @@ ADOdb_Active_Record::SetDatabaseAdapter($db2);
 $activeRecs = $db->GetActiveRecords('table1');
 
 foreach($activeRecs as $rec) {
-	$rec2 = new ADOdb_Active_Record('table2',$db2);
-	$rec2->id = $rec->id;
-	$rec2->name = $rec->name;
-	
-	$rec2->Save();
+    $rec2 = new ADOdb_Active_Record('table2',$db2);
+    $rec2->id = $rec->id;
+    $rec2->name = $rec->name;
+    
+    $rec2->Save();
 }
 </pre>
 <p>
@@ -389,71 +389,71 @@ $conn->CompleteTrans();
 <p>To globally define a one-to-many relationship we use the static function ADODB_Active_Record::ClassHasMany($class, $relation, $foreignKey = '', $foreignClass = 'ADODB_Active_Record'). For example, we have 2 tables, <strong>persons</strong> (parent table) and <strong>children</strong> (child table)
 linked by <strong>persons.id = children.person_id</strong>. The variable $person->children is an array that holds the children. To define this relationship:
 <pre>
-	class person extends ADOdb_Active_Record{}
-	ADODB_Active_Record::ClassHasMany('person', 'children','person_id');
-	
-	$person = new person();
-	$person->Load("id=1");
-	foreach($person->children as $c) {
-		echo " $c->name_first ";
-		$c->name_first .= ' K.';
-		$c->Save();  ## each child record must be saved individually
-	}
+    class person extends ADOdb_Active_Record{}
+    ADODB_Active_Record::ClassHasMany('person', 'children','person_id');
+    
+    $person = new person();
+    $person->Load("id=1");
+    foreach($person->children as $c) {
+        echo " $c->name_first ";
+        $c->name_first .= ' K.';
+        $c->Save();  ## each child record must be saved individually
+    }
 </pre>
 <p>If no data is loaded, then children is set to an empty array:
 <pre>
-	$person2 = new person();
-	$p = $person2->children;  ## $p is an empty array()
+    $person2 = new person();
+    $p = $person2->children;  ## $p is an empty array()
 </pre>
 <P>By default, data returned by HasMany() is unsorted. To define an order by clause (or define a SELECT LIMIT window), see <a href=#loadrelations>LoadRelations()</a> below. Another point is that all children are loaded only when the child member is accessed (in __get), and not when the Load() function of the parent object is called. This helps to conserve memory.
 
 <p>To create and save new parent and child records:
 <pre>
 
-	class person extends ADOdb_Active_Record{}
-	class children extends ADOdb_Active_Record{}
-	ADODB_Active_Record::ClassHasMany('person', 'children','person_id');
-	
-	$person = new person();
-	
-	for ($i=0; $i<10; $i++) 
-		$person->children[0] = new children('children');
-	 
-	 // modify fields of $person, then...
-	$person->save();
-	
-	foreach($person->children as $c) {
-		// modify fields of $c then...
-		$c->save();
-	}
+    class person extends ADOdb_Active_Record{}
+    class children extends ADOdb_Active_Record{}
+    ADODB_Active_Record::ClassHasMany('person', 'children','person_id');
+    
+    $person = new person();
+    
+    for ($i=0; $i<10; $i++) 
+        $person->children[0] = new children('children');
+     
+     // modify fields of $person, then...
+    $person->save();
+    
+    foreach($person->children as $c) {
+        // modify fields of $c then...
+        $c->save();
+    }
 </pre>
 <p>You can have multiple relationships (warning: relations are case-sensitive, 'Children' !== 'children'):
 <pre>
-	ADODB_Active_Record::ClassHasMany('person', 'children','person_id');
-	ADODB_Active_Record::ClassHasMany('person', 'siblings','person_id');
-	$person = new person();
-	$person->Load('id=1');
-	var_dump($person->children);
-	var_dump($person->siblings);
+    ADODB_Active_Record::ClassHasMany('person', 'children','person_id');
+    ADODB_Active_Record::ClassHasMany('person', 'siblings','person_id');
+    $person = new person();
+    $person->Load('id=1');
+    var_dump($person->children);
+    var_dump($person->siblings);
 </pre>
 <p>By default, the child class is ADOdb_Active_Record. Sometimes you might want the child class to be based on your own class which has additional functions. You can do so using the last parameter:
 <pre>
-	class person extends ADOdb_Active_Record{}
-	class child extends ADOdb_Active_Record { .... some modifications here ... }
-	ADODB_Active_Record::ClassHasMany('person', 'children','person_id', 'child');
+    class person extends ADOdb_Active_Record{}
+    class child extends ADOdb_Active_Record { .... some modifications here ... }
+    ADODB_Active_Record::ClassHasMany('person', 'children','person_id', 'child');
 </pre>
 <p>Lastly some troubleshooting issues. We use the __get() method to set 
 $p->children below. So once $p->children is defined by accessing it, we don't change the child reference, as shown below:
 <pre>
-	ADODB_Active_Record::ClassHasMany('person', 'children','person_id');
-	$p = new person();
-	$p->Load('id=1');
-	# $p->children points to person_id = 1
-	var_dump($p->children);
-	
-	$p->Load('id=2');
-	# $p->children still points to person_id = 1
-	var_dump($p->children); 
+    ADODB_Active_Record::ClassHasMany('person', 'children','person_id');
+    $p = new person();
+    $p->Load('id=1');
+    # $p->children points to person_id = 1
+    var_dump($p->children);
+    
+    $p->Load('id=2');
+    # $p->children still points to person_id = 1
+    var_dump($p->children); 
 </pre>
 <p>The solution to the above is to unset($p->children) before $p->Load('id=2').
 <h3><li>TableHasMany</h3>
@@ -479,55 +479,55 @@ ADODB_Active_Record::TableKeyHasMany('people', 'pid', 'children', 'person_id')
 <h3><li>A Complete ClassHasMany example</h3>
 <p>Here is sample usage using mysql:
 <pre>
-	include_once('../adodb.inc.php');
-	include_once('../adodb-active-record.inc.php');
+    include_once('../adodb.inc.php');
+    include_once('../adodb-active-record.inc.php');
 
-	$db = NewADOConnection('mysql://root@localhost/northwind');
-	ADOdb_Active_Record::SetDatabaseAdapter($db);
+    $db = NewADOConnection('mysql://root@localhost/northwind');
+    ADOdb_Active_Record::SetDatabaseAdapter($db);
 
-	$db->Execute("CREATE TEMPORARY TABLE `persons` (
-	                `id` int(10) unsigned NOT NULL auto_increment,
-	                `name_first` varchar(100) NOT NULL default '',
-	                `name_last` varchar(100) NOT NULL default '',
-	                `favorite_color` varchar(100) NOT NULL default '',
-	                PRIMARY KEY  (`id`)
-	            ) ENGINE=MyISAM;
-	           ");
-			   
-	$db->Execute("CREATE TEMPORARY TABLE `children` (
-	                `id` int(10) unsigned NOT NULL auto_increment,
-					`person_id` int(10) unsigned NOT NULL,
-					`gender` varchar(10) default 'F',
-	                `name_first` varchar(100) NOT NULL default '',
-	                `name_last` varchar(100) NOT NULL default '',
-	                `favorite_pet` varchar(100) NOT NULL default '',
-	                PRIMARY KEY  (`id`)
-	            ) ENGINE=MyISAM;
-	           ");
-			   
-	$db->Execute("insert into children (person_id,name_first,name_last) values (1,'Jill','Lim')");
-	$db->Execute("insert into children (person_id,name_first,name_last) values (1,'Joan','Lim')");
-	$db->Execute("insert into children (person_id,name_first,name_last) values (1,'JAMIE','Lim')");
-			   
-	class person extends ADOdb_Active_Record{}
-	ADODB_Active_Record::ClassHasMany('person', 'children','person_id');	
-	
-	$person = new person();
-	
-	$person->name_first     = 'John';
-	$person->name_last      = 'Lim';
-	$person->favorite_color = 'lavender';
-	$person->save(); // this save will perform an INSERT successfully
-	
-	$person2 = new person(); # no need to define HasMany() again, adodb remembers definition
-	$person2->Load('id=1');
-	
-	$c = $person2->children;
-	if (is_array($c) && sizeof($c) == 3 && $c[0]->name_first=='Jill' && $c[1]->name_first=='Joan'
-		&& $c[2]->name_first == 'JAMIE') echo "OK Loaded HasMany&lt;br>";
-	else {
-		echo "Error loading hasMany should have 3 array elements Jill Joan Jamie&lt;br>";
-	}
+    $db->Execute("CREATE TEMPORARY TABLE `persons` (
+                    `id` int(10) unsigned NOT NULL auto_increment,
+                    `name_first` varchar(100) NOT NULL default '',
+                    `name_last` varchar(100) NOT NULL default '',
+                    `favorite_color` varchar(100) NOT NULL default '',
+                    PRIMARY KEY  (`id`)
+                ) ENGINE=MyISAM;
+               ");
+               
+    $db->Execute("CREATE TEMPORARY TABLE `children` (
+                    `id` int(10) unsigned NOT NULL auto_increment,
+                    `person_id` int(10) unsigned NOT NULL,
+                    `gender` varchar(10) default 'F',
+                    `name_first` varchar(100) NOT NULL default '',
+                    `name_last` varchar(100) NOT NULL default '',
+                    `favorite_pet` varchar(100) NOT NULL default '',
+                    PRIMARY KEY  (`id`)
+                ) ENGINE=MyISAM;
+               ");
+               
+    $db->Execute("insert into children (person_id,name_first,name_last) values (1,'Jill','Lim')");
+    $db->Execute("insert into children (person_id,name_first,name_last) values (1,'Joan','Lim')");
+    $db->Execute("insert into children (person_id,name_first,name_last) values (1,'JAMIE','Lim')");
+               
+    class person extends ADOdb_Active_Record{}
+    ADODB_Active_Record::ClassHasMany('person', 'children','person_id');    
+    
+    $person = new person();
+    
+    $person->name_first     = 'John';
+    $person->name_last      = 'Lim';
+    $person->favorite_color = 'lavender';
+    $person->save(); // this save will perform an INSERT successfully
+    
+    $person2 = new person(); # no need to define HasMany() again, adodb remembers definition
+    $person2->Load('id=1');
+    
+    $c = $person2->children;
+    if (is_array($c) && sizeof($c) == 3 && $c[0]->name_first=='Jill' && $c[1]->name_first=='Joan'
+        && $c[2]->name_first == 'JAMIE') echo "OK Loaded HasMany&lt;br>";
+    else {
+        echo "Error loading hasMany should have 3 array elements Jill Joan Jamie&lt;br>";
+    }
 </pre>
 
 <h3><li>HasMany</h3>
@@ -535,25 +535,25 @@ ADODB_Active_Record::TableKeyHasMany('people', 'pid', 'children', 'person_id')
 <p>The older way to define a one-to-many relationship is to use $parentobj->HasMany($relation, $foreignKey = ''). For example, we have 2 tables, <strong>persons</strong> (parent table) and <strong>children</strong> (child table)
 linked by <strong>persons.id = children.person_id</strong>. The variable $person->children is an array that holds the children. To define this relationship:
 <pre>
-	class person extends ADOdb_Active_Record{}
-	
-	$person = new person();
-	$person->HasMany('children','person_id');
-	$person->Load("id=1");
-	foreach($person->children as $c) {
-		echo " $c->name_first ";
-		$c->name_first .= ' K.';
-		$c->Save();  ## each child record must be saved individually
-	}
+    class person extends ADOdb_Active_Record{}
+    
+    $person = new person();
+    $person->HasMany('children','person_id');
+    $person->Load("id=1");
+    foreach($person->children as $c) {
+        echo " $c->name_first ";
+        $c->name_first .= ' K.';
+        $c->Save();  ## each child record must be saved individually
+    }
 </pre>
 <p>This HasMany() definition is global for the current script. This means that you only need to define it once. In the following example, $person2 knows about <em>children</em>.
 <pre>
-	$person = new person();
-	$person->HasMany('children','person_id');
-	
-	$person2 = new person();
-	$person->Load("id=1");
-	$p = $person2->children;
+    $person = new person();
+    $person->HasMany('children','person_id');
+    
+    $person2 = new person();
+    $person->Load("id=1");
+    $p = $person2->children;
 </pre>
 
 
@@ -561,59 +561,59 @@ linked by <strong>persons.id = children.person_id</strong>. The variable $person
 <p>You can define the parent of the current object using ADODB_Active_Record::ClassBelongsTo($class, $relationName, $foreignKey, $parentPrimaryKey = 'id', $parentClass = 'ADODB_Active_Record'). In the example below,
 we have a child table <strong>kids</strong>, and a parent table <strong>person</strong>. We have a link <strong>kids.person_id = persons.id</strong>. We create a child first, then link it to the parent:
 <pre>
-	class kid extends ADOdb_Active_Record{};
-	ADODB_Active_Record::ClassBelongsTo('kid','person','person_id','id'); 
+    class kid extends ADOdb_Active_Record{};
+    ADODB_Active_Record::ClassBelongsTo('kid','person','person_id','id'); 
 
-	$ch = new kid(); // default tablename will be 'kids', with primary key 'id' 
-	$ch->Load('id=1');
-	$p = $ch->person;
-	if (!$p || $p->name_first != 'John') echo "Error loading belongsTo&lt;br>";
-	else echo "OK loading BelongTo&lt;br>";
+    $ch = new kid(); // default tablename will be 'kids', with primary key 'id' 
+    $ch->Load('id=1');
+    $p = $ch->person;
+    if (!$p || $p->name_first != 'John') echo "Error loading belongsTo&lt;br>";
+    else echo "OK loading BelongTo&lt;br>";
 </pre>
 <p>
 <p>Note that relationships are case-sensitive, so ClassBelongsTo('kid','PARENT', 'parent_id') and ClassBelongsTo('kid', 'parent', 'parent_id') are not the same. 
 <p>Also if no data is loaded into the child instance, then $p will return null;
 <pre>
-	ADODB_Active_Record::ClassBelongsTo('kid','person','person_id','id'); 
-	
-	$ch = new kid();
-	$p = $ch->person; # $p is null
+    ADODB_Active_Record::ClassBelongsTo('kid','person','person_id','id'); 
+    
+    $ch = new kid();
+    $p = $ch->person; # $p is null
 </pre>
 <p>Another way to define the class of the parent (which otherwise defaults to ADODB_Active_Record) as follows:
 <pre>
 
-	class kid extends ADOdb_Active_Record{};
-	class person extends ADOdb_Active_Record{... your modifications ... };
-	ADODB_Active_Record::ClassBelongsTo('kid','person','person_id','id', 'person'); 
+    class kid extends ADOdb_Active_Record{};
+    class person extends ADOdb_Active_Record{... your modifications ... };
+    ADODB_Active_Record::ClassBelongsTo('kid','person','person_id','id', 'person'); 
 </pre>
 <h3><li>TableBelongsTo</h3>
 <p>If the child table differs from the convention that the child table name is the plural of the child class name, use this function:
 ADODB_Active_Record::TableBelongsTo($childTable, $relationName, $foreignKey, $parentPrimaryKey = 'id', $parentClass = 'ADODB_Active_Record').
 <p>E.g. the class is <b>child</b>, but the table name is <b>children</b>, and the link between the two tables is children.person_id = person.id:
 <pre>
-	ADODB_Active_Record::TableBelongsTo('children','person','person_id','id');
+    ADODB_Active_Record::TableBelongsTo('children','person','person_id','id');
 </pre>
 <h3><li>TableKeyBelongsTo</h3>
 <p>If the child table differs from the convention that the child table name is the plural of the child class name or the primary key is not 'id', use this function:
 ADODB_Active_Record::TableKeyBelongsTo($childTable, $childKey, $relationName, $foreignKey, $parentPrimaryKey = 'id', $parentClass = 'ADODB_Active_Record').
 <p>E.g. the class is <b>child</b>, but the table name is <b>children</b> and primary key is <b>ch_id</b>, and the link between the two tables is children.person_id = person.id:
 <pre>
-	ADODB_Active_Record::TableKeyBelongsTo('children','ch_id', 'person','person_id','id');
+    ADODB_Active_Record::TableKeyBelongsTo('children','ch_id', 'person','person_id','id');
 </pre>
 <h3><li>BelongsTo</h3>
 <p>The following is deprecated. Use ClassBelongsTo/TableBelongsTo/TableKeyBelongsTo instead.
 <p>The older way to define the parent of the current object is using BelongsTo($relationName, $foreignKey, $parentPrimaryKey = 'id'). In the example below,
 we have a child table <strong>children</strong>, and a parent table <strong>person</strong>. We have a link <strong>children.person_id = persons.id</strong>. We create a child first, then link it to the parent:
 <pre>
-	class Child extends ADOdb_Active_Record{};
-	$ch = new Child('children',array('id'));
-	$ch->BelongsTo('person','person_id','id');  ## this can be simplified to $ch->BelongsTo('person')
-	                                            ## as foreign key defaults to $table.'_id' and 
-	                                            ## parent pkey defaults to 'id' 
-	$ch->Load('id=1');
-	$p = $ch->person;
-	if (!$p || $p->name_first != 'John') echo "Error loading belongsTo&lt;br>";
-	else echo "OK loading BelongTo&lt;br>";
+    class Child extends ADOdb_Active_Record{};
+    $ch = new Child('children',array('id'));
+    $ch->BelongsTo('person','person_id','id');  ## this can be simplified to $ch->BelongsTo('person')
+                                                ## as foreign key defaults to $table.'_id' and 
+                                                ## parent pkey defaults to 'id' 
+    $ch->Load('id=1');
+    $p = $ch->person;
+    if (!$p || $p->name_first != 'John') echo "Error loading belongsTo&lt;br>";
+    else echo "OK loading BelongTo&lt;br>";
 </pre>
 <p>You only need to define BelongsTo() once in a script as it is global for all instances. 
 <a name=loadrelations>
@@ -621,36 +621,36 @@ we have a child table <strong>children</strong>, and a parent table <strong>pers
 <p>Sometimes you want to load only a subset of data in a relationship. For example, you could load all female children sorted by children.name
 using LoadRelations($relation, $whereOrderBy = '', $offset = -1, $limit = -1):
 <pre>
-	# assume this has been called: 
-	#   ADODB_Active_Record::ClassHasMany('person', 'children','person_id');
-	$person = new person(); 
-	$person->Load('id=23');  
-	# Load doesn't load children until $person->children is accessed or LoadRelations is called:
-	$person->LoadRelations('children',"gender='F' order by name");
+    # assume this has been called: 
+    #   ADODB_Active_Record::ClassHasMany('person', 'children','person_id');
+    $person = new person(); 
+    $person->Load('id=23');  
+    # Load doesn't load children until $person->children is accessed or LoadRelations is called:
+    $person->LoadRelations('children',"gender='F' order by name");
 </pre>
 <p>Lastly, if you have lots of child data, you can define a window of data of records to load. In the following
 example, we load a window of 100 records at a time:
 <pre>
 
-	# assume this has been called: 
-	#  ADODB_Active_Record::ClassHasMany('Account', 'transactions','account_id'); 
-	$acc = new Account();
-	$acc->Load('id=23');
-	
-	$start = 0;
-	while(true) {
-		$acc->LoadRelations('transactions',"tx_done=0 order by trxdate", $start, $start+100);
-		if (!$acc->transactions) break;
-		foreach ($acc->transactions as $k => $trx) {
-			## process
-			$trx->tx_done = 1;
-			$trx->save();
-		}
-		$start += 100;
-		unset($acc->transactions);
+    # assume this has been called: 
+    #  ADODB_Active_Record::ClassHasMany('Account', 'transactions','account_id'); 
+    $acc = new Account();
+    $acc->Load('id=23');
+    
+    $start = 0;
+    while(true) {
+        $acc->LoadRelations('transactions',"tx_done=0 order by trxdate", $start, $start+100);
+        if (!$acc->transactions) break;
+        foreach ($acc->transactions as $k => $trx) {
+            ## process
+            $trx->tx_done = 1;
+            $trx->save();
+        }
+        $start += 100;
+        unset($acc->transactions);
 
 
-	}
+    }
 </pre>
 <p>The $offset is 0-based, and $limit is the number of records to retrieve. The default is to ignore $offset (-1) and $limit (-1).
 <h3><li>Acknowledgements</h3>
@@ -665,8 +665,8 @@ $table = 'products';
 $whereOrderBy = "name LIKE 'A%' ORDER BY Name";
 $activeRecArr = $db->GetActiveRecords($table, $whereOrderBy);
 foreach($activeRecArr as $rec) {
-	$rec->id = rand();
-	$rec->save();
+    $rec->id = rand();
+    $rec->save();
 }
 </pre>
 <p>
@@ -679,12 +679,12 @@ $activeRecArr = $db->GetActiveRecords($table);
 To use bind variables (assuming ? is the place-holder for your database):
 <pre>
 $activeRecArr = $db->GetActiveRecords($tableName, 'name LIKE ?',
-						array('A%'));
+                        array('A%'));
 </pre>
 <p>You can also define the primary keys of the table by passing an array of field names:
 <pre>
 $activeRecArr = $db->GetActiveRecords($tableName, 'name LIKE ?',
-						array('A%'), array('id'));
+                        array('A%'), array('id'));
 </pre>
 
 <h3><li>ADOConnection::GetActiveRecordsClass()</h3>
@@ -698,20 +698,20 @@ $activeRecArr = $db->GetActiveRecordsClass('Product',$table, $whereOrderBy);
 
 # the objects in $activeRecArr are of class 'Product'
 foreach($activeRecArr as $rec) {
-	$rec->id = rand();
-	$rec->save();
+    $rec->id = rand();
+    $rec->save();
 }
 </pre>
 <p>
 To use bind variables (assuming ? is the place-holder for your database):
 <pre>
 $activeRecArr = $db->GetActiveRecordsClass($className,$tableName, 'name LIKE ?',
-						array('A%'));
+                        array('A%'));
 </pre>
 <p>You can also define the primary keys of the table by passing an array of field names:
 <pre>
 $activeRecArr = $db->GetActiveRecordsClass($className,$tableName, 'name LIKE ?',
-						array('A%'), array('id'));
+                        array('A%'), array('id'));
 </pre>
 
 </ol>
@@ -742,7 +742,7 @@ $db->Execute("CREATE TEMPORARY TABLE `persons` (
                 PRIMARY KEY  (`id`)
             ) ENGINE=MyISAM;
            ");
-		   
+           
 class person extends ADOdb_Active_Record{}
 $person = new person();
 
@@ -794,7 +794,7 @@ var_dump($person2);
 // retrieve an array of records
 $activeArr = $db->GetActiveRecordsClass($class = "person",$table = "persons","id=".$db->Param(0),array(2));
 $person2 = $activeArr[0];
-echo "&lt;p>Name first (should be John): ",$person->name_first, "&lt;br>Class = ",get_class($person2);	
+echo "&lt;p>Name first (should be John): ",$person->name_first, "&lt;br>Class = ",get_class($person2);    
 </pre>
 
 
@@ -808,219 +808,219 @@ is more powerful but more complex. My personal preference is to keep it simpler,
 <p>It provides a new function called Find() that is quite intuitive to use as shown in the example below. It also supports loading all relationships using a single query (using joins).
 <pre>
 &lt;?php
-	function ar_assert($obj, $cond)
-	{
-		global $err_count;
-		$res = var_export($obj, true);
-		return (strpos($res, $cond));
-	}
+    function ar_assert($obj, $cond)
+    {
+        global $err_count;
+        $res = var_export($obj, true);
+        return (strpos($res, $cond));
+    }
 
-	include_once('../adodb.inc.php');
-	include_once('../adodb-active-recordx.inc.php');
-	
+    include_once('../adodb.inc.php');
+    include_once('../adodb-active-recordx.inc.php');
+    
 
-	$db = NewADOConnection('mysql://root@localhost/northwind');
-	$db->debug=0;
-	ADOdb_Active_Record::SetDatabaseAdapter($db);
-	echo "&lt;pre>\n";
-	echo "\n\n---------------------------------------------------------------------------\n";
-	echo "Preparing database using SQL queries (creating 'people', 'children')\n";
+    $db = NewADOConnection('mysql://root@localhost/northwind');
+    $db->debug=0;
+    ADOdb_Active_Record::SetDatabaseAdapter($db);
+    echo "&lt;pre>\n";
+    echo "\n\n---------------------------------------------------------------------------\n";
+    echo "Preparing database using SQL queries (creating 'people', 'children')\n";
 
-	$db->Execute("DROP TABLE `people`");
-	$db->Execute("DROP TABLE `children`");
+    $db->Execute("DROP TABLE `people`");
+    $db->Execute("DROP TABLE `children`");
 
-	$db->Execute("CREATE TABLE `people` (
-	                `id` int(10) unsigned NOT NULL auto_increment,
-	                `name_first` varchar(100) NOT NULL default '',
-	                `name_last` varchar(100) NOT NULL default '',
-	                `favorite_color` varchar(100) NOT NULL default '',
-	                PRIMARY KEY  (`id`)
-	            ) ENGINE=MyISAM;
-	           ");
-	$db->Execute("CREATE TABLE `children` (
-	                `id` int(10) unsigned NOT NULL auto_increment,
-					`person_id` int(10) unsigned NOT NULL,
-	                `name_first` varchar(100) NOT NULL default '',
-	                `name_last` varchar(100) NOT NULL default '',
-	                `favorite_pet` varchar(100) NOT NULL default '',
-	                PRIMARY KEY  (`id`)
-	            ) ENGINE=MyISAM;
-	           ");
-			   
-	
-	$db->Execute("insert into children (person_id,name_first,name_last,favorite_pet) values (1,'Jill','Lim','tortoise')");
-	$db->Execute("insert into children (person_id,name_first,name_last) values (1,'Joan','Lim')");
-	$db->Execute("insert into children (person_id,name_first,name_last) values (1,'JAMIE','Lim')");
-			   
-	// This class _implicitely_ relies on the 'people' table (pluralized form of 'person')
-	class Person extends ADOdb_Active_Record
-	{
-		function __construct()
-		{
-			parent::__construct();
-			$this->hasMany('children');
-		}
-	}
-	// This class _implicitely_ relies on the 'children' table
-	class Child extends ADOdb_Active_Record
-	{
-		function __construct()
-		{
-			parent::__construct();
-			$this->belongsTo('person');
-		}
-	}
-	// This class _explicitely_ relies on the 'children' table and shares its metadata with Child
-	class Kid extends ADOdb_Active_Record
-	{
-		function __construct()
-		{
-			parent::__construct('children');
-			$this->belongsTo('person');
-		}
-	}
-	// This class _explicitely_ relies on the 'children' table but does not share its metadata
-	class Rugrat extends ADOdb_Active_Record
-	{
-		function __construct()
-		{
-			parent::__construct('children', false, false, array('new' => true));
-		}
-	}
-	
-	echo "Inserting person in 'people' table ('John Lim, he likes lavender')\n";
-	echo "---------------------------------------------------------------------------\n";
-	$person = new Person();
-	$person->name_first     = 'John';
-	$person->name_last      = 'Lim';
-	$person->favorite_color = 'lavender';
-	$person->save(); // this save will perform an INSERT successfully
+    $db->Execute("CREATE TABLE `people` (
+                    `id` int(10) unsigned NOT NULL auto_increment,
+                    `name_first` varchar(100) NOT NULL default '',
+                    `name_last` varchar(100) NOT NULL default '',
+                    `favorite_color` varchar(100) NOT NULL default '',
+                    PRIMARY KEY  (`id`)
+                ) ENGINE=MyISAM;
+               ");
+    $db->Execute("CREATE TABLE `children` (
+                    `id` int(10) unsigned NOT NULL auto_increment,
+                    `person_id` int(10) unsigned NOT NULL,
+                    `name_first` varchar(100) NOT NULL default '',
+                    `name_last` varchar(100) NOT NULL default '',
+                    `favorite_pet` varchar(100) NOT NULL default '',
+                    PRIMARY KEY  (`id`)
+                ) ENGINE=MyISAM;
+               ");
+               
+    
+    $db->Execute("insert into children (person_id,name_first,name_last,favorite_pet) values (1,'Jill','Lim','tortoise')");
+    $db->Execute("insert into children (person_id,name_first,name_last) values (1,'Joan','Lim')");
+    $db->Execute("insert into children (person_id,name_first,name_last) values (1,'JAMIE','Lim')");
+               
+    // This class _implicitely_ relies on the 'people' table (pluralized form of 'person')
+    class Person extends ADOdb_Active_Record
+    {
+        function __construct()
+        {
+            parent::__construct();
+            $this->hasMany('children');
+        }
+    }
+    // This class _implicitely_ relies on the 'children' table
+    class Child extends ADOdb_Active_Record
+    {
+        function __construct()
+        {
+            parent::__construct();
+            $this->belongsTo('person');
+        }
+    }
+    // This class _explicitely_ relies on the 'children' table and shares its metadata with Child
+    class Kid extends ADOdb_Active_Record
+    {
+        function __construct()
+        {
+            parent::__construct('children');
+            $this->belongsTo('person');
+        }
+    }
+    // This class _explicitely_ relies on the 'children' table but does not share its metadata
+    class Rugrat extends ADOdb_Active_Record
+    {
+        function __construct()
+        {
+            parent::__construct('children', false, false, array('new' => true));
+        }
+    }
+    
+    echo "Inserting person in 'people' table ('John Lim, he likes lavender')\n";
+    echo "---------------------------------------------------------------------------\n";
+    $person = new Person();
+    $person->name_first     = 'John';
+    $person->name_last      = 'Lim';
+    $person->favorite_color = 'lavender';
+    $person->save(); // this save will perform an INSERT successfully
 
-	$err_count = 0;
+    $err_count = 0;
 
-	echo "\n\n---------------------------------------------------------------------------\n";
-	echo "person->Find('id=1') [Lazy Method]\n";
-	echo "person is loaded but its children will be loaded on-demand later on\n";
-	echo "---------------------------------------------------------------------------\n";
-	$person5 = new Person();
-	$people5 = $person5->Find('id=1');
-	echo (ar_assert($people5, "'name_first' => 'John'")) ? "[OK] Found John\n" : "[!!] Find failed\n";
-	echo (ar_assert($people5, "'favorite_pet' => 'tortoise'")) ? "[!!] Found relation when I shouldn't\n" : "[OK] No relation yet\n";
-	foreach($people5 as $person)
-	{
-		foreach($person->children as $child)
-		{
-			if($child->name_first);
-		}
-	}
-	echo (ar_assert($people5, "'favorite_pet' => 'tortoise'")) ? "[OK] Found relation: child\n" : "[!!] Missing relation: child\n";
+    echo "\n\n---------------------------------------------------------------------------\n";
+    echo "person->Find('id=1') [Lazy Method]\n";
+    echo "person is loaded but its children will be loaded on-demand later on\n";
+    echo "---------------------------------------------------------------------------\n";
+    $person5 = new Person();
+    $people5 = $person5->Find('id=1');
+    echo (ar_assert($people5, "'name_first' => 'John'")) ? "[OK] Found John\n" : "[!!] Find failed\n";
+    echo (ar_assert($people5, "'favorite_pet' => 'tortoise'")) ? "[!!] Found relation when I shouldn't\n" : "[OK] No relation yet\n";
+    foreach($people5 as $person)
+    {
+        foreach($person->children as $child)
+        {
+            if($child->name_first);
+        }
+    }
+    echo (ar_assert($people5, "'favorite_pet' => 'tortoise'")) ? "[OK] Found relation: child\n" : "[!!] Missing relation: child\n";
 
-	echo "\n\n---------------------------------------------------------------------------\n";
-	echo "person->Find('id=1' ... ADODB_WORK_AR) [Worker Method]\n";
-	echo "person is loaded, and so are its children\n";
-	echo "---------------------------------------------------------------------------\n";
-	$person6 = new Person();
-	$people6 = $person6->Find('id=1', false, false, array('loading' => ADODB_WORK_AR));
-	echo (ar_assert($people6, "'name_first' => 'John'")) ? "[OK] Found John\n" : "[!!] Find failed\n";
-	echo (ar_assert($people6, "'favorite_pet' => 'tortoise'")) ? "[OK] Found relation: child\n" : "[!!] Missing relation: child\n";
+    echo "\n\n---------------------------------------------------------------------------\n";
+    echo "person->Find('id=1' ... ADODB_WORK_AR) [Worker Method]\n";
+    echo "person is loaded, and so are its children\n";
+    echo "---------------------------------------------------------------------------\n";
+    $person6 = new Person();
+    $people6 = $person6->Find('id=1', false, false, array('loading' => ADODB_WORK_AR));
+    echo (ar_assert($people6, "'name_first' => 'John'")) ? "[OK] Found John\n" : "[!!] Find failed\n";
+    echo (ar_assert($people6, "'favorite_pet' => 'tortoise'")) ? "[OK] Found relation: child\n" : "[!!] Missing relation: child\n";
 
-	echo "\n\n---------------------------------------------------------------------------\n";
-	echo "person->Find('id=1' ... ADODB_JOIN_AR) [Join Method]\n";
-	echo "person and its children are loaded using a single query\n";
-	echo "---------------------------------------------------------------------------\n";
-	$person7 = new Person();
-	// When I specifically ask for a join, I have to specify which table id I am looking up
-	// otherwise the SQL parser will wonder which table's id that would be.
-	$people7 = $person7->Find('people.id=1', false, false, array('loading' => ADODB_JOIN_AR));
-	echo (ar_assert($people7, "'name_first' => 'John'")) ? "[OK] Found John\n" : "[!!] Find failed\n";
-	echo (ar_assert($people7, "'favorite_pet' => 'tortoise'")) ? "[OK] Found relation: child\n" : "[!!] Missing relation: child\n";
-	
-	echo "\n\n---------------------------------------------------------------------------\n";
-	echo "person->Load('people.id=1') [Join Method]\n";
-	echo "Load() always uses the join method since it returns only one row\n";
-	echo "---------------------------------------------------------------------------\n";
-	$person2 = new Person();
-	// Under the hood, Load(), since it returns only one row, always perform a join
-	// Therefore we need to clarify which id we are talking about.
-	$person2->Load('people.id=1');
-	echo (ar_assert($person2, "'name_first' => 'John'")) ? "[OK] Found John\n" : "[!!] Find failed\n";
-	echo (ar_assert($person2, "'favorite_pet' => 'tortoise'")) ? "[OK] Found relation: child\n" : "[!!] Missing relation: child\n";
+    echo "\n\n---------------------------------------------------------------------------\n";
+    echo "person->Find('id=1' ... ADODB_JOIN_AR) [Join Method]\n";
+    echo "person and its children are loaded using a single query\n";
+    echo "---------------------------------------------------------------------------\n";
+    $person7 = new Person();
+    // When I specifically ask for a join, I have to specify which table id I am looking up
+    // otherwise the SQL parser will wonder which table's id that would be.
+    $people7 = $person7->Find('people.id=1', false, false, array('loading' => ADODB_JOIN_AR));
+    echo (ar_assert($people7, "'name_first' => 'John'")) ? "[OK] Found John\n" : "[!!] Find failed\n";
+    echo (ar_assert($people7, "'favorite_pet' => 'tortoise'")) ? "[OK] Found relation: child\n" : "[!!] Missing relation: child\n";
+    
+    echo "\n\n---------------------------------------------------------------------------\n";
+    echo "person->Load('people.id=1') [Join Method]\n";
+    echo "Load() always uses the join method since it returns only one row\n";
+    echo "---------------------------------------------------------------------------\n";
+    $person2 = new Person();
+    // Under the hood, Load(), since it returns only one row, always perform a join
+    // Therefore we need to clarify which id we are talking about.
+    $person2->Load('people.id=1');
+    echo (ar_assert($person2, "'name_first' => 'John'")) ? "[OK] Found John\n" : "[!!] Find failed\n";
+    echo (ar_assert($person2, "'favorite_pet' => 'tortoise'")) ? "[OK] Found relation: child\n" : "[!!] Missing relation: child\n";
 
-	echo "\n\n---------------------------------------------------------------------------\n";
-	echo "child->Load('children.id=1') [Join Method]\n";
-	echo "We are now loading from the 'children' table, not from 'people'\n";
-	echo "---------------------------------------------------------------------------\n";
-	$ch = new Child();
-	$ch->Load('children.id=1');
-	echo (ar_assert($ch, "'name_first' => 'Jill'")) ? "[OK] Found Jill\n" : "[!!] Find failed\n";
-	echo (ar_assert($ch, "'favorite_color' => 'lavender'")) ? "[OK] Found relation: person\n" : "[!!] Missing relation: person\n";
+    echo "\n\n---------------------------------------------------------------------------\n";
+    echo "child->Load('children.id=1') [Join Method]\n";
+    echo "We are now loading from the 'children' table, not from 'people'\n";
+    echo "---------------------------------------------------------------------------\n";
+    $ch = new Child();
+    $ch->Load('children.id=1');
+    echo (ar_assert($ch, "'name_first' => 'Jill'")) ? "[OK] Found Jill\n" : "[!!] Find failed\n";
+    echo (ar_assert($ch, "'favorite_color' => 'lavender'")) ? "[OK] Found relation: person\n" : "[!!] Missing relation: person\n";
 
-	echo "\n\n---------------------------------------------------------------------------\n";
-	echo "child->Find('children.id=1' ... ADODB_WORK_AR) [Worker Method]\n";
-	echo "---------------------------------------------------------------------------\n";
-	$ch2 = new Child();
-	$ach2 = $ch2->Find('id=1', false, false, array('loading' => ADODB_WORK_AR));
-	echo (ar_assert($ach2, "'name_first' => 'Jill'")) ? "[OK] Found Jill\n" : "[!!] Find failed\n";
-	echo (ar_assert($ach2, "'favorite_color' => 'lavender'")) ? "[OK] Found relation: person\n" : "[!!] Missing relation: person\n";
+    echo "\n\n---------------------------------------------------------------------------\n";
+    echo "child->Find('children.id=1' ... ADODB_WORK_AR) [Worker Method]\n";
+    echo "---------------------------------------------------------------------------\n";
+    $ch2 = new Child();
+    $ach2 = $ch2->Find('id=1', false, false, array('loading' => ADODB_WORK_AR));
+    echo (ar_assert($ach2, "'name_first' => 'Jill'")) ? "[OK] Found Jill\n" : "[!!] Find failed\n";
+    echo (ar_assert($ach2, "'favorite_color' => 'lavender'")) ? "[OK] Found relation: person\n" : "[!!] Missing relation: person\n";
 
-	echo "\n\n---------------------------------------------------------------------------\n";
-	echo "kid->Find('children.id=1' ... ADODB_WORK_AR) [Worker Method]\n";
-	echo "Where we see that kid shares relationships with child because they are stored\n";
-	echo "in the common table's metadata structure.\n";
-	echo "---------------------------------------------------------------------------\n";
-	$ch3 = new Kid('children');
-	$ach3 = $ch3->Find('children.id=1', false, false, array('loading' => ADODB_WORK_AR));
-	echo (ar_assert($ach3, "'name_first' => 'Jill'")) ? "[OK] Found Jill\n" : "[!!] Find failed\n";
-	echo (ar_assert($ach3, "'favorite_color' => 'lavender'")) ? "[OK] Found relation: person\n" : "[!!] Missing relation: person\n";
+    echo "\n\n---------------------------------------------------------------------------\n";
+    echo "kid->Find('children.id=1' ... ADODB_WORK_AR) [Worker Method]\n";
+    echo "Where we see that kid shares relationships with child because they are stored\n";
+    echo "in the common table's metadata structure.\n";
+    echo "---------------------------------------------------------------------------\n";
+    $ch3 = new Kid('children');
+    $ach3 = $ch3->Find('children.id=1', false, false, array('loading' => ADODB_WORK_AR));
+    echo (ar_assert($ach3, "'name_first' => 'Jill'")) ? "[OK] Found Jill\n" : "[!!] Find failed\n";
+    echo (ar_assert($ach3, "'favorite_color' => 'lavender'")) ? "[OK] Found relation: person\n" : "[!!] Missing relation: person\n";
 
-	echo "\n\n---------------------------------------------------------------------------\n";
-	echo "kid->Find('children.id=1' ... ADODB_LAZY_AR) [Lazy Method]\n";
-	echo "Of course, lazy loading also retrieve medata information...\n";
-	echo "---------------------------------------------------------------------------\n";
-	$ch32 = new Kid('children');
-	$ach32 = $ch32->Find('children.id=1', false, false, array('loading' => ADODB_LAZY_AR));
-	echo (ar_assert($ach32, "'name_first' => 'Jill'")) ? "[OK] Found Jill\n" : "[!!] Find failed\n";
-	echo (ar_assert($ach32, "'favorite_color' => 'lavender'")) ? "[!!] Found relation when I shouldn't\n" : "[OK] No relation yet\n";
-	foreach($ach32 as $akid)
-	{
-		if($akid->person);
-	}
-	echo (ar_assert($ach32, "'favorite_color' => 'lavender'")) ? "[OK] Found relation: person\n" : "[!!] Missing relation: person\n";
-	
-	echo "\n\n---------------------------------------------------------------------------\n";
-	echo "rugrat->Find('children.id=1' ... ADODB_WORK_AR) [Worker Method]\n";
-	echo "In rugrat's constructor it is specified that\nit must forget any existing relation\n";
-	echo "---------------------------------------------------------------------------\n";
-	$ch4 = new Rugrat('children');
-	$ach4 = $ch4->Find('children.id=1', false, false, array('loading' => ADODB_WORK_AR));
-	echo (ar_assert($ach4, "'name_first' => 'Jill'")) ? "[OK] Found Jill\n" : "[!!] Find failed\n";
-	echo (ar_assert($ach4, "'favorite_color' => 'lavender'")) ? "[!!] Found relation when I shouldn't\n" : "[OK] No relation found\n";
+    echo "\n\n---------------------------------------------------------------------------\n";
+    echo "kid->Find('children.id=1' ... ADODB_LAZY_AR) [Lazy Method]\n";
+    echo "Of course, lazy loading also retrieve medata information...\n";
+    echo "---------------------------------------------------------------------------\n";
+    $ch32 = new Kid('children');
+    $ach32 = $ch32->Find('children.id=1', false, false, array('loading' => ADODB_LAZY_AR));
+    echo (ar_assert($ach32, "'name_first' => 'Jill'")) ? "[OK] Found Jill\n" : "[!!] Find failed\n";
+    echo (ar_assert($ach32, "'favorite_color' => 'lavender'")) ? "[!!] Found relation when I shouldn't\n" : "[OK] No relation yet\n";
+    foreach($ach32 as $akid)
+    {
+        if($akid->person);
+    }
+    echo (ar_assert($ach32, "'favorite_color' => 'lavender'")) ? "[OK] Found relation: person\n" : "[!!] Missing relation: person\n";
+    
+    echo "\n\n---------------------------------------------------------------------------\n";
+    echo "rugrat->Find('children.id=1' ... ADODB_WORK_AR) [Worker Method]\n";
+    echo "In rugrat's constructor it is specified that\nit must forget any existing relation\n";
+    echo "---------------------------------------------------------------------------\n";
+    $ch4 = new Rugrat('children');
+    $ach4 = $ch4->Find('children.id=1', false, false, array('loading' => ADODB_WORK_AR));
+    echo (ar_assert($ach4, "'name_first' => 'Jill'")) ? "[OK] Found Jill\n" : "[!!] Find failed\n";
+    echo (ar_assert($ach4, "'favorite_color' => 'lavender'")) ? "[!!] Found relation when I shouldn't\n" : "[OK] No relation found\n";
 
-	echo "\n\n---------------------------------------------------------------------------\n";
-	echo "kid->Find('children.id=1' ... ADODB_WORK_AR) [Worker Method]\n";
-	echo "Note how only rugrat forgot its relations - kid is fine.\n";
-	echo "---------------------------------------------------------------------------\n";
-	$ch5 = new Kid('children');
-	$ach5 = $ch5->Find('children.id=1', false, false, array('loading' => ADODB_WORK_AR));
-	echo (ar_assert($ach5, "'name_first' => 'Jill'")) ? "[OK] Found Jill\n" : "[!!] Find failed\n";
-	echo (ar_assert($ach5, "'favorite_color' => 'lavender'")) ? "[OK] I did not forget relation: person\n" : "[!!] I should not have forgotten relation: person\n";
-	
-	echo "\n\n---------------------------------------------------------------------------\n";
-	echo "rugrat->Find('children.id=1' ... ADODB_WORK_AR) [Worker Method]\n";
-	echo "---------------------------------------------------------------------------\n";
-	$ch6 = new Rugrat('children');
-	$ch6s = $ch6->Find('children.id=1', false, false, array('loading' => ADODB_WORK_AR));
-	$ach6 = $ch6s[0];
-	echo (ar_assert($ach6, "'name_first' => 'Jill'")) ? "[OK] Found Jill\n" : "[!!] Find failed\n";
-	echo (ar_assert($ach6, "'favorite_color' => 'lavender'")) ? "[!!] Found relation when I shouldn't\n" : "[OK] No relation yet\n";
-	echo "\nLoading relations:\n";
-	$ach6->belongsTo('person');
-	$ach6->LoadRelations('person', 'order by id', 0, 2);
-	echo (ar_assert($ach6, "'favorite_color' => 'lavender'")) ? "[OK] Found relation: person\n" : "[!!] Missing relation: person\n";
+    echo "\n\n---------------------------------------------------------------------------\n";
+    echo "kid->Find('children.id=1' ... ADODB_WORK_AR) [Worker Method]\n";
+    echo "Note how only rugrat forgot its relations - kid is fine.\n";
+    echo "---------------------------------------------------------------------------\n";
+    $ch5 = new Kid('children');
+    $ach5 = $ch5->Find('children.id=1', false, false, array('loading' => ADODB_WORK_AR));
+    echo (ar_assert($ach5, "'name_first' => 'Jill'")) ? "[OK] Found Jill\n" : "[!!] Find failed\n";
+    echo (ar_assert($ach5, "'favorite_color' => 'lavender'")) ? "[OK] I did not forget relation: person\n" : "[!!] I should not have forgotten relation: person\n";
+    
+    echo "\n\n---------------------------------------------------------------------------\n";
+    echo "rugrat->Find('children.id=1' ... ADODB_WORK_AR) [Worker Method]\n";
+    echo "---------------------------------------------------------------------------\n";
+    $ch6 = new Rugrat('children');
+    $ch6s = $ch6->Find('children.id=1', false, false, array('loading' => ADODB_WORK_AR));
+    $ach6 = $ch6s[0];
+    echo (ar_assert($ach6, "'name_first' => 'Jill'")) ? "[OK] Found Jill\n" : "[!!] Find failed\n";
+    echo (ar_assert($ach6, "'favorite_color' => 'lavender'")) ? "[!!] Found relation when I shouldn't\n" : "[OK] No relation yet\n";
+    echo "\nLoading relations:\n";
+    $ach6->belongsTo('person');
+    $ach6->LoadRelations('person', 'order by id', 0, 2);
+    echo (ar_assert($ach6, "'favorite_color' => 'lavender'")) ? "[OK] Found relation: person\n" : "[!!] Missing relation: person\n";
 
-	echo "\n\n---------------------------------------------------------------------------\n";
-	echo "Test suite complete.\n";
-	echo "---------------------------------------------------------------------------\n";
+    echo "\n\n---------------------------------------------------------------------------\n";
+    echo "Test suite complete.\n";
+    echo "---------------------------------------------------------------------------\n";
 ?>
 </pre>
  <h3>Todo (Code Contributions welcome)</h3>

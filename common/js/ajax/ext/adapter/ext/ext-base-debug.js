@@ -1549,64 +1549,64 @@ Ext.TaskMgr.start({
 Ext.util.TaskRunner = function(interval){
     interval = interval || 10;
     var tasks = [], 
-    	removeQueue = [],
-    	id = 0,
-    	running = false,
+        removeQueue = [],
+        id = 0,
+        running = false,
 
-    	// private
-    	stopThread = function(){
-	        running = false;
-	        clearInterval(id);
-	        id = 0;
-	    },
+        // private
+        stopThread = function(){
+            running = false;
+            clearInterval(id);
+            id = 0;
+        },
 
-    	// private
-    	startThread = function(){
-	        if(!running){
-	            running = true;
-	            id = setInterval(runTasks, interval);
-	        }
-	    },
+        // private
+        startThread = function(){
+            if(!running){
+                running = true;
+                id = setInterval(runTasks, interval);
+            }
+        },
 
-    	// private
-    	removeTask = function(t){
-	        removeQueue.push(t);
-	        if(t.onStop){
-	            t.onStop.apply(t.scope || t);
-	        }
-	    },
-	    
-    	// private
-    	runTasks = function(){
-	    	var rqLen = removeQueue.length,
-	    		now = new Date().getTime();	    			    		
-	    
-	        if(rqLen > 0){
-	            for(var i = 0; i < rqLen; i++){
-	                tasks.remove(removeQueue[i]);
-	            }
-	            removeQueue = [];
-	            if(tasks.length < 1){
-	                stopThread();
-	                return;
-	            }
-	        }	        
-	        for(var i = 0, t, itime, rt, len = tasks.length; i < len; ++i){
-	            t = tasks[i];
-	            itime = now - t.taskRunTime;
-	            if(t.interval <= itime){
-	                rt = t.run.apply(t.scope || t, t.args || [++t.taskRunCount]);
-	                t.taskRunTime = now;
-	                if(rt === false || t.taskRunCount === t.repeat){
-	                    removeTask(t);
-	                    return;
-	                }
-	            }
-	            if(t.duration && t.duration <= (now - t.taskStartTime)){
-	                removeTask(t);
-	            }
-	        }
-	    };
+        // private
+        removeTask = function(t){
+            removeQueue.push(t);
+            if(t.onStop){
+                t.onStop.apply(t.scope || t);
+            }
+        },
+        
+        // private
+        runTasks = function(){
+            var rqLen = removeQueue.length,
+                now = new Date().getTime();                                
+        
+            if(rqLen > 0){
+                for(var i = 0; i < rqLen; i++){
+                    tasks.remove(removeQueue[i]);
+                }
+                removeQueue = [];
+                if(tasks.length < 1){
+                    stopThread();
+                    return;
+                }
+            }            
+            for(var i = 0, t, itime, rt, len = tasks.length; i < len; ++i){
+                t = tasks[i];
+                itime = now - t.taskRunTime;
+                if(t.interval <= itime){
+                    rt = t.run.apply(t.scope || t, t.args || [++t.taskRunCount]);
+                    t.taskRunTime = now;
+                    if(rt === false || t.taskRunCount === t.repeat){
+                        removeTask(t);
+                        return;
+                    }
+                }
+                if(t.duration && t.duration <= (now - t.taskStartTime)){
+                    removeTask(t);
+                }
+            }
+        };
 
     /**
      * Starts a new task.
@@ -1687,9 +1687,9 @@ Ext.TaskMgr.start(task);
  * @singleton
  */
 Ext.TaskMgr = new Ext.util.TaskRunner();(function(){
-	var libFlyweight;
-	
-	function fly(el) {
+    var libFlyweight;
+    
+    function fly(el) {
         if (!libFlyweight) {
             libFlyweight = new Ext.Element.Flyweight();
         }
@@ -1698,32 +1698,32 @@ Ext.TaskMgr = new Ext.util.TaskRunner();(function(){
     }
     
     (function(){
-	var doc = document,
-		isCSS1 = doc.compatMode == "CSS1Compat",
-		MAX = Math.max,		
+    var doc = document,
+        isCSS1 = doc.compatMode == "CSS1Compat",
+        MAX = Math.max,        
         ROUND = Math.round,
-		PARSEINT = parseInt;
-		
-	Ext.lib.Dom = {
-	    isAncestor : function(p, c) {
-		    var ret = false;
-			
-			p = Ext.getDom(p);
-			c = Ext.getDom(c);
-			if (p && c) {
-				if (p.contains) {
-					return p.contains(c);
-				} else if (p.compareDocumentPosition) {
-					return !!(p.compareDocumentPosition(c) & 16);
-				} else {
-					while (c = c.parentNode) {
-						ret = c == p || ret;	        			
-					}
-				}	            
-			}	
-			return ret;
-		},
-		
+        PARSEINT = parseInt;
+        
+    Ext.lib.Dom = {
+        isAncestor : function(p, c) {
+            var ret = false;
+            
+            p = Ext.getDom(p);
+            c = Ext.getDom(c);
+            if (p && c) {
+                if (p.contains) {
+                    return p.contains(c);
+                } else if (p.compareDocumentPosition) {
+                    return !!(p.compareDocumentPosition(c) & 16);
+                } else {
+                    while (c = c.parentNode) {
+                        ret = c == p || ret;                        
+                    }
+                }                
+            }    
+            return ret;
+        },
+        
         getViewWidth : function(full) {
             return full ? this.getDocumentWidth() : this.getViewportWidth();
         },
@@ -1741,14 +1741,14 @@ Ext.TaskMgr = new Ext.util.TaskRunner();(function(){
         },
 
         getViewportHeight: function(){
-	        return Ext.isIE9m ? 
-	        	   (Ext.isStrict ? doc.documentElement.clientHeight : doc.body.clientHeight) :
-	        	   self.innerHeight;
+            return Ext.isIE9m ? 
+                   (Ext.isStrict ? doc.documentElement.clientHeight : doc.body.clientHeight) :
+                   self.innerHeight;
         },
 
         getViewportWidth : function() {
-	        return !Ext.isStrict && !Ext.isOpera ? doc.body.clientWidth :
-	        	   Ext.isIE9m ? doc.documentElement.clientWidth : self.innerWidth;
+            return !Ext.isStrict && !Ext.isOpera ? doc.body.clientWidth :
+                   Ext.isIE9m ? doc.documentElement.clientWidth : self.innerWidth;
         },
         
         getY : function(el) {
@@ -1761,70 +1761,70 @@ Ext.TaskMgr = new Ext.util.TaskRunner();(function(){
 
         getXY : function(el) {
             var p, 
-            	pe, 
-            	b,
-            	bt, 
-            	bl,     
-            	dbd,       	
-            	x = 0,
-            	y = 0, 
-            	scroll,
-            	hasAbsolute, 
-            	bd = (doc.body || doc.documentElement),
-            	ret = [0,0];
-            	
+                pe, 
+                b,
+                bt, 
+                bl,     
+                dbd,           
+                x = 0,
+                y = 0, 
+                scroll,
+                hasAbsolute, 
+                bd = (doc.body || doc.documentElement),
+                ret = [0,0];
+                
             el = Ext.getDom(el);
 
             if(el != bd){
-	            if (el.getBoundingClientRect) {
-	                b = el.getBoundingClientRect();
-	                scroll = fly(document).getScroll();
-	                ret = [ROUND(b.left + scroll.left), ROUND(b.top + scroll.top)];
-	            } else {  
-		            p = el;		
-		            hasAbsolute = fly(el).isStyle("position", "absolute");
-		
-		            while (p) {
-			            pe = fly(p);		
-		                x += p.offsetLeft;
-		                y += p.offsetTop;
-		
-		                hasAbsolute = hasAbsolute || pe.isStyle("position", "absolute");
-		                		
-		                if (Ext.isGecko) {		                    
-		                    y += bt = PARSEINT(pe.getStyle("borderTopWidth"), 10) || 0;
-		                    x += bl = PARSEINT(pe.getStyle("borderLeftWidth"), 10) || 0;	
-		
-		                    if (p != el && !pe.isStyle('overflow','visible')) {
-		                        x += bl;
-		                        y += bt;
-		                    }
-		                }
-		                p = p.offsetParent;
-		            }
-		
-		            if (Ext.isSafari && hasAbsolute) {
-		                x -= bd.offsetLeft;
-		                y -= bd.offsetTop;
-		            }
-		
-		            if (Ext.isGecko && !hasAbsolute) {
-		                dbd = fly(bd);
-		                x += PARSEINT(dbd.getStyle("borderLeftWidth"), 10) || 0;
-		                y += PARSEINT(dbd.getStyle("borderTopWidth"), 10) || 0;
-		            }
-		
-		            p = el.parentNode;
-		            while (p && p != bd) {
-		                if (!Ext.isOpera || (p.tagName != 'TR' && !fly(p).isStyle("display", "inline"))) {
-		                    x -= p.scrollLeft;
-		                    y -= p.scrollTop;
-		                }
-		                p = p.parentNode;
-		            }
-		            ret = [x,y];
-	            }
-         	}
+                if (el.getBoundingClientRect) {
+                    b = el.getBoundingClientRect();
+                    scroll = fly(document).getScroll();
+                    ret = [ROUND(b.left + scroll.left), ROUND(b.top + scroll.top)];
+                } else {  
+                    p = el;        
+                    hasAbsolute = fly(el).isStyle("position", "absolute");
+        
+                    while (p) {
+                        pe = fly(p);        
+                        x += p.offsetLeft;
+                        y += p.offsetTop;
+        
+                        hasAbsolute = hasAbsolute || pe.isStyle("position", "absolute");
+                                
+                        if (Ext.isGecko) {                            
+                            y += bt = PARSEINT(pe.getStyle("borderTopWidth"), 10) || 0;
+                            x += bl = PARSEINT(pe.getStyle("borderLeftWidth"), 10) || 0;    
+        
+                            if (p != el && !pe.isStyle('overflow','visible')) {
+                                x += bl;
+                                y += bt;
+                            }
+                        }
+                        p = p.offsetParent;
+                    }
+        
+                    if (Ext.isSafari && hasAbsolute) {
+                        x -= bd.offsetLeft;
+                        y -= bd.offsetTop;
+                    }
+        
+                    if (Ext.isGecko && !hasAbsolute) {
+                        dbd = fly(bd);
+                        x += PARSEINT(dbd.getStyle("borderLeftWidth"), 10) || 0;
+                        y += PARSEINT(dbd.getStyle("borderTopWidth"), 10) || 0;
+                    }
+        
+                    p = el.parentNode;
+                    while (p && p != bd) {
+                        if (!Ext.isOpera || (p.tagName != 'TR' && !fly(p).isStyle("display", "inline"))) {
+                            x -= p.scrollLeft;
+                            y -= p.scrollTop;
+                        }
+                        p = p.parentNode;
+                    }
+                    ret = [x,y];
+                }
+             }
             return ret;
         },
 
@@ -1832,12 +1832,12 @@ Ext.TaskMgr = new Ext.util.TaskRunner();(function(){
             (el = Ext.fly(el, '_setXY')).position();
             
             var pts = el.translatePoints(xy),
-            	style = el.dom.style,
-            	pos;            	
+                style = el.dom.style,
+                pos;                
             
-            for (pos in pts) {	            
-	            if (!isNaN(pts[pos])) {
-	                style[pos] = pts[pos] + "px";
+            for (pos in pts) {                
+                if (!isNaN(pts[pos])) {
+                    style[pos] = pts[pos] + "px";
                 }
             }
         },
@@ -3335,8 +3335,8 @@ Ext.lib.Ajax = function() {
             }
         }
     });
-})();	
-	if (Ext.isIE9m) {
+})();    
+    if (Ext.isIE9m) {
         function fnCleanUp() {
             var p = Function.prototype;
             delete p.createSequence;

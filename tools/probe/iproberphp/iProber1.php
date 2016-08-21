@@ -18,7 +18,7 @@
     |
     +--------------------------------------------------------------------------
 
-	 
+     
 /* Functions in this file */
 /**************************/
 
@@ -236,9 +236,9 @@ switch (PHP_OS) {
                         <tr>
                             <td>服务器域名/IP地址</td>
                             <td><?=$_SERVER['SERVER_NAME']?>
-						(
+                        (
 <?=@gethostbyname($_SERVER['SERVER_NAME'])?>
-						)</td>
+                        )</td>
                         </tr>
                         <tr>
                             <td>服务器操作系统
@@ -272,30 +272,30 @@ switch (PHP_OS) {
                         <tr>
                             <td>目前还有空余空间&nbsp;diskfreespace</td>
                             <td><?=round((@disk_free_space(".")/(1024*1024)),2)?>
-						M</td>
+                        M</td>
                         </tr>
 <?if("show"==$sysReShow) {?>
                         <tr>
                             <td>内存使用状况</td>
                             <td> 物理内存：共
     <?=$sysInfo['memTotal']?>
-						M, 已使用
+                        M, 已使用
     <?=$sysInfo['memUsed']?>
-						M, 空闲
+                        M, 空闲
     <?=$sysInfo['memFree']?>
-						M, 使用率
+                        M, 使用率
     <?=$sysInfo['memPercent']?>
-						%
+                        %
     <?=bar($sysInfo['memPercent'])?>
-						SWAP区：共
+                        SWAP区：共
                                     <?=$sysInfo['swapTotal']?>
-						M, 已使用
+                        M, 已使用
                                     <?=$sysInfo['swapUsed']?>
-						M, 空闲
+                        M, 空闲
                                     <?=$sysInfo['swapFree']?>
-						M, 使用率
+                        M, 使用率
                                     <?=$sysInfo['swapPercent']?>
-						%
+                        %
                                     <?=bar($sysInfo['swapPercent'])?>
                             </td>
                         </tr>
@@ -357,7 +357,7 @@ PHP基本特性
                         <tr>
                             <td>程序最长运行时间&nbsp;max_execution_time</td>
                             <td><?=getcon("max_execution_time")?>
-						秒</td>
+                        秒</td>
                         </tr>
                         <tr>
                             <td>magic_quotes_gpc</td>
@@ -492,11 +492,11 @@ PHP组件支持
                         <tr>
                             <th>检测对象</th>
                             <th>整数运算能力测试<br />
-						(1+1运算300万次)</th>
+                        (1+1运算300万次)</th>
                             <th>浮点运算能力测试<br />
-						(开平方300万次)</th>
+                        (开平方300万次)</th>
                             <th>数据I/O能力测试<br />
-						(读取10K文件10000次)</th>
+                        (读取10K文件10000次)</th>
                         </tr>
                         <tr>
                             <td>Tahiti 的电脑(P4 1.7G 256M WinXP)</td>

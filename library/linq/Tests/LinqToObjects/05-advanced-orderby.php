@@ -21,7 +21,7 @@
  * @category   PHPLinq
  * @package    PHPLinq
  * @copyright  Copyright (c) 2008 - 2009 PHPLinq (http://www.codeplex.com/PHPLinq)
- * @license    http://www.gnu.org/licenses/lgpl.txt	LGPL
+ * @license    http://www.gnu.org/licenses/lgpl.txt    LGPL
  * @version    0.4.0, 2009-01-27
  */
 
@@ -39,10 +39,10 @@ $employees = null;
 require_once('employees.inc.php');
 
 $result = from('$employee')->in($employees)
-			->orderBy('$employee => $employee->Name')
-			->select('new {
-							"EmailAddress" => $employee->Email,
-							"Domain" => substr($employee->Email, strpos($employee->Email, "@") + 1)
-					  }');
-				
+            ->orderBy('$employee => $employee->Name')
+            ->select('new {
+                            "EmailAddress" => $employee->Email,
+                            "Domain" => substr($employee->Email, strpos($employee->Email, "@") + 1)
+                      }');
+                
 print_r($result);

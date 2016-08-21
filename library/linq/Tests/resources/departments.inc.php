@@ -21,43 +21,43 @@
  * @category   PHPLinq
  * @package    PHPLinq
  * @copyright  Copyright (c) 2008 - 2009 PHPLinq (http://www.codeplex.com/PHPLinq)
- * @license    http://www.gnu.org/licenses/lgpl.txt	LGPL
+ * @license    http://www.gnu.org/licenses/lgpl.txt    LGPL
  * @version    0.4.0, 2009-01-27
  */
 
 // Department class
 class Department {
-	public $Id;
-	public $Name;
+    public $Id;
+    public $Name;
   
-	/**
-	 * Constructor
-	 *
-	 * @param int $id
-	 * @param string $name
-	 */
-	public function __construct($id = 0, $name = '') {
-		$this->Id			= $id;
-		$this->Name 		= $name;
-	}
-	
-	/**
-	 * Create instance from array
-	 *
-	 * @param array $values
-	 * @return Department
-	 */
-	public static function fromArray(array $values) {
-		return new Department(
-			$values['Id'],
-			$values['Name']
-		);
-	}
+    /**
+     * Constructor
+     *
+     * @param int $id
+     * @param string $name
+     */
+    public function __construct($id = 0, $name = '') {
+        $this->Id            = $id;
+        $this->Name         = $name;
+    }
+    
+    /**
+     * Create instance from array
+     *
+     * @param array $values
+     * @return Department
+     */
+    public static function fromArray(array $values) {
+        return new Department(
+            $values['Id'],
+            $values['Name']
+        );
+    }
 }
 
 // Department data source
 $departments = array(
-	new Department(1, 'Development'),
-	new Department(2, 'Operations'),
-	new Department(3, 'Management')
+    new Department(1, 'Development'),
+    new Department(2, 'Operations'),
+    new Department(3, 'Management')
 );

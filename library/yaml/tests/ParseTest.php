@@ -78,12 +78,12 @@ class ParseTest extends PHPUnit_Framework_TestCase {
 
     public function testSeq3() {
       $this->assertEquals (array("YAML is so easy to learn.",
-											"Your config files will never be the same."), $this->yaml[3]);
+                                            "Your config files will never be the same."), $this->yaml[3]);
     }
 
     public function testSeqMap() {
       $this->assertEquals (array("cpu" => "1.5ghz", "ram" => "1 gig",
-											"os" => "os x 10.4.1"), $this->yaml[4]);
+                                            "os" => "os x 10.4.1"), $this->yaml[4]);
     }
 
     public function testMappedSequence() {
@@ -92,7 +92,7 @@ class ParseTest extends PHPUnit_Framework_TestCase {
 
     public function testAnotherSequence() {
       $this->assertEquals (array("program" => "Adium", "platform" => "OS X",
-											"type" => "Chat Client"), $this->yaml[5]);
+                                            "type" => "Chat Client"), $this->yaml[5]);
     }
 
     public function testFoldedBlock() {
@@ -105,9 +105,9 @@ class ParseTest extends PHPUnit_Framework_TestCase {
 
     public function testCrazy() {
       $this->assertEquals (array( array("name" => "spartan", "notes" =>
-																			array( "Needs to be backed up",
-																						 "Needs to be normalized" ),
-																			 "type" => "mysql" )), $this->yaml['databases']);
+                                                                            array( "Needs to be backed up",
+                                                                                         "Needs to be normalized" ),
+                                                                             "type" => "mysql" )), $this->yaml['databases']);
     }
 
     public function testColons() {
@@ -124,7 +124,7 @@ class ParseTest extends PHPUnit_Framework_TestCase {
 
     public function testNestedNestedInline() {
       $this->assertEquals (array( "This", array("Is", "Getting", array("Ridiculous", "Guys")),
-									"Seriously", array("Show", "Mercy")), $this->yaml[8]);
+                                    "Seriously", array("Show", "Mercy")), $this->yaml[8]);
     }
 
     public function testInlineMappings() {
@@ -133,7 +133,7 @@ class ParseTest extends PHPUnit_Framework_TestCase {
 
     public function testNestedInlineMappings() {
       $this->assertEquals (array("name" => "mark", "age" => "older than chris",
-											 "brand" => array("marlboro", "lucky strike")), $this->yaml[10]);
+                                             "brand" => array("marlboro", "lucky strike")), $this->yaml[10]);
     }
 
     public function testReferences() {
@@ -146,9 +146,9 @@ class ParseTest extends PHPUnit_Framework_TestCase {
 
     public function testReferences3() {
       $this->assertEquals (array(
-																		array('Perl', 'Python', 'PHP', 'Ruby'),
-																		array('C/C++', 'Java')
-																	 ), $this->yaml['all languages']);
+                                                                        array('Perl', 'Python', 'PHP', 'Ruby'),
+                                                                        array('C/C++', 'Java')
+                                                                     ), $this->yaml['all languages']);
     }
 
     public function testEscapedQuotes() {

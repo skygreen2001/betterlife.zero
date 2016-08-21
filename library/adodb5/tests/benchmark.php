@@ -2,7 +2,7 @@
 
 <html>
 <head>
-	<title>ADODB Benchmarks</title>
+    <title>ADODB Benchmarks</title>
 </head> 
 
 <body>
@@ -36,44 +36,44 @@ function testdb(&$db,$createtab="create table ADOXYZ (id int, firstname char(24)
 {
 GLOBAL $ADODB_version,$ADODB_FETCH_MODE;
 
-	adodb_backtrace();
-	
-	$max = 100;
-	$sql = 'select * from ADOXYZ';
-	$ADODB_FETCH_MODE = ADODB_FETCH_NUM;
-	
-	//print "<h3>ADODB Version: $ADODB_version Host: <i>$db->host</i> &nbsp; Database: <i>$db->database</i></h3>";
-	
-	// perform query once to cache results so we are only testing throughput 
-	$rs = $db->Execute($sql);
-	if (!$rs){
-		print "Error in recordset<p>";
-		return;
-	}	
-	$arr = $rs->GetArray();
-	//$db->debug = true;
-	global $ADODB_COUNTRECS;
-	$ADODB_COUNTRECS = false;
-	$start = microtime();
-	for ($i=0; $i < $max; $i++) {
-		$rs = $db->Execute($sql);	
-		$arr = $rs->GetArray();
-	   //		 print $arr[0][1];
-	}
-	$end =  microtime();
-	$start = explode(' ',$start);
-	$end = explode(' ',$end);
-	
-	//print_r($start);
-	//print_r($end);
-	
-	  //  print_r($arr);
-	$total = $end[0]+trim($end[1]) - $start[0]-trim($start[1]);
-	printf ("<p>seconds = %8.2f for %d iterations each with %d records</p>",$total,$max, sizeof($arr));
-	flush();
+    adodb_backtrace();
+    
+    $max = 100;
+    $sql = 'select * from ADOXYZ';
+    $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
+    
+    //print "<h3>ADODB Version: $ADODB_version Host: <i>$db->host</i> &nbsp; Database: <i>$db->database</i></h3>";
+    
+    // perform query once to cache results so we are only testing throughput 
+    $rs = $db->Execute($sql);
+    if (!$rs){
+        print "Error in recordset<p>";
+        return;
+    }    
+    $arr = $rs->GetArray();
+    //$db->debug = true;
+    global $ADODB_COUNTRECS;
+    $ADODB_COUNTRECS = false;
+    $start = microtime();
+    for ($i=0; $i < $max; $i++) {
+        $rs = $db->Execute($sql);    
+        $arr = $rs->GetArray();
+       //         print $arr[0][1];
+    }
+    $end =  microtime();
+    $start = explode(' ',$start);
+    $end = explode(' ',$end);
+    
+    //print_r($start);
+    //print_r($end);
+    
+      //  print_r($arr);
+    $total = $end[0]+trim($end[1]) - $start[0]-trim($start[1]);
+    printf ("<p>seconds = %8.2f for %d iterations each with %d records</p>",$total,$max, sizeof($arr));
+    flush();
 
 
-		//$db->Close();
+        //$db->Close();
 }
 include("testdatabases.inc.php");
 

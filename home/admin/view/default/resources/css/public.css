@@ -1,24 +1,24 @@
 
 a {
-	color:#1E4176;
+    color:#1E4176;
 }
 
 a:link {
-	color:#1E4176;
-	text-decoration:none;
+    color:#1E4176;
+    text-decoration:none;
 }
 
 a:visited {
-	color:#555;
-	text-decoration:none;
+    color:#555;
+    text-decoration:none;
 }
 
 a:hover {
-	text-decoration:underline;
-	color:#15428b;
+    text-decoration:underline;
+    color:#15428b;
 }
 
 /* Grid 鼠标移动到行的效果 */
 .x-grid3-row-over .x-grid3-cell-inner {
-	font-weight: bold;
+    font-weight: bold;
 }

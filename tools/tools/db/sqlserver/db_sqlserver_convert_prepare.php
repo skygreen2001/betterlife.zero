@@ -6,80 +6,80 @@ $mysql_keywords=",ACCESSIBLE,ADD,ALL,ALTER,ANALYZE,AND,AS,ASC,ASENSITIVE,BEFORE,
 echo "<a href='?isComment=1'>开启注释</a>|<a href='?isComment=0'>关闭注释</a><br/>";
 $isComment=false;
 if (isset($_REQUEST["isComment"])&&!empty($_REQUEST["isComment"])){
-	if($_REQUEST["isComment"]=="1")$isComment=true;
+    if($_REQUEST["isComment"]=="1")$isComment=true;
 }
 
 $tableList=Manager_Db::newInstance()->dbinfo()->tableList();
 $fieldInfos=array();
 foreach ($tableList as $tablename){
-	$fieldInfoList=Manager_Db::newInstance()->dbinfo()->fieldInfoList($tablename);
-	foreach($fieldInfoList as $fieldname=>$field){
-		$fieldInfos[$tablename][$fieldname]["Field"]=$field["Field"];
-		$fieldInfos[$tablename][$fieldname]["Type"]=$field["Type"];
-		$fieldInfos[$tablename][$fieldname]["Comment"]=$field["Comment"];
-		$fieldInfos[$tablename][$fieldname]["Default"]=$field["Default"];
-	}
+    $fieldInfoList=Manager_Db::newInstance()->dbinfo()->fieldInfoList($tablename);
+    foreach($fieldInfoList as $fieldname=>$field){
+        $fieldInfos[$tablename][$fieldname]["Field"]=$field["Field"];
+        $fieldInfos[$tablename][$fieldname]["Type"]=$field["Type"];
+        $fieldInfos[$tablename][$fieldname]["Comment"]=$field["Comment"];
+        $fieldInfos[$tablename][$fieldname]["Default"]=$field["Default"];
+    }
 }
 
 $tableInfoList=Manager_Db::newInstance()->dbinfo()->tableInfoList();
 $filterTableColumns=array();
 if ($isComment) {
-	echo "1.列名头字母大写<br/>";
-	echo "2.表主键字段统一成ID<br/><br/>";
-	echo "3.去掉表前缀:".Config_Db::$table_prefix."<br/>";
-	echo "4.表名头字母大写<br/><br/>";
-	echo "--在MySQL的配置文件中my.ini [mysqld] 中增加一行<br/>";
-	echo "--lower_case_table_names=0<br/>";
-	echo "--参数解释：<br/>";
-	echo "--0：区分大小写<br/>";
-	echo "--1：不区分大小写<br/>";
-	echo "5.初始化commitTime<br/>";
-	echo "<br/>";
+    echo "1.列名头字母大写<br/>";
+    echo "2.表主键字段统一成ID<br/><br/>";
+    echo "3.去掉表前缀:".Config_Db::$table_prefix."<br/>";
+    echo "4.表名头字母大写<br/><br/>";
+    echo "--在MySQL的配置文件中my.ini [mysqld] 中增加一行<br/>";
+    echo "--lower_case_table_names=0<br/>";
+    echo "--参数解释：<br/>";
+    echo "--0：区分大小写<br/>";
+    echo "--1：不区分大小写<br/>";
+    echo "5.初始化commitTime<br/>";
+    echo "<br/>";
 }
 
 
 if ($isComment) {
-	echo str_repeat("*",40)."1.列名头字母大写".str_repeat("*",40)."<br/><br/>";
+    echo str_repeat("*",40)."1.列名头字母大写".str_repeat("*",40)."<br/><br/>";
 }
 foreach ($fieldInfos as $tablename=>$fieldInfo){
-	if ($isComment) {
-		echo "表名:$tablename<br/>";
-	}
+    if ($isComment) {
+        echo "表名:$tablename<br/>";
+    }
 
-	foreach ($fieldInfo as $fieldname=>$field){
-		$is_auto_increment=false;
-		$newwords=ucfirst($fieldname);
-		$auto_increment="";
-		$type=$fieldInfos[$tablename][$fieldname]["Type"];
-		if(stripos($newwords,"time")!==false){
-			$fieldWords=strtoupper($newwords);
-			if (!contain($fieldWords,"TIMES"))$type="datetime";
-		}else if(stripos($newwords,"_")!==false){
-			$index=stripos($newwords,"_");
-			$fname=substr($newwords,$index+1);
-			if($fname=="id"){
-				$fname="ID";
+    foreach ($fieldInfo as $fieldname=>$field){
+        $is_auto_increment=false;
+        $newwords=ucfirst($fieldname);
+        $auto_increment="";
+        $type=$fieldInfos[$tablename][$fieldname]["Type"];
+        if(stripos($newwords,"time")!==false){
+            $fieldWords=strtoupper($newwords);
+            if (!contain($fieldWords,"TIMES"))$type="datetime";
+        }else if(stripos($newwords,"_")!==false){
+            $index=stripos($newwords,"_");
+            $fname=substr($newwords,$index+1);
+            if($fname=="id"){
+                $fname="ID";
 
-				$classname=getClassname($tablename);
-				if (contain($newwords,$classname)){
-					$is_auto_increment=true;
-					$auto_increment=" auto_increment";
-				}
-			}else{
-				$fname=ucfirst($fname);
-			}
-			$newwords=substr($newwords,0,$index)."_".$fname;
-		}
-		if (contain($type,"timestamp")){
+                $classname=getClassname($tablename);
+                if (contain($newwords,$classname)){
+                    $is_auto_increment=true;
+                    $auto_increment=" auto_increment";
+                }
+            }else{
+                $fname=ucfirst($fname);
+            }
+            $newwords=substr($newwords,0,$index)."_".$fname;
+        }
+        if (contain($type,"timestamp")){
             if (empty($field["Default"]))$default=" default 0 ";
-		}else $default=" ";
+        }else $default=" ";
 
-		$comments=$fieldInfos[$tablename][$fieldname]["Comment"];
-		$comments=str_replace("\r","\\r",$comments);
-		$comments=str_replace("\n","\\n",$comments);
-		$comments=str_replace("'","",$comments);
-		echo "alter table $tablename change column $fieldname $newwords ".$type.$auto_increment.$default." COMMENT '".$comments."';<br/>";
-	}
+        $comments=$fieldInfos[$tablename][$fieldname]["Comment"];
+        $comments=str_replace("\r","\\r",$comments);
+        $comments=str_replace("\n","\\n",$comments);
+        $comments=str_replace("'","",$comments);
+        echo "alter table $tablename change column $fieldname $newwords ".$type.$auto_increment.$default." COMMENT '".$comments."';<br/>";
+    }
 }
 
 /**
@@ -89,64 +89,64 @@ foreach ($fieldInfos as $tablename=>$fieldInfo){
  */
 function getClassname($tablename)
 {
-	if (in_array($tablename, Config_Db::$orm)) {
-		$classname=array_search($tablename, Config_Db::$orm);
-	}else {
-		$classnameSplit= explode("_", $tablename);
-		$classnameSplit=array_reverse($classnameSplit);
-		$classname=ucfirst($classnameSplit[0]);
-	}
-	return $classname;
+    if (in_array($tablename, Config_Db::$orm)) {
+        $classname=array_search($tablename, Config_Db::$orm);
+    }else {
+        $classnameSplit= explode("_", $tablename);
+        $classnameSplit=array_reverse($classnameSplit);
+        $classname=ucfirst($classnameSplit[0]);
+    }
+    return $classname;
 }
 if ($isComment) {
-	echo "<br/>".str_repeat("*",40)."2.表主键字段统一成ID".str_repeat("*",40)."<br/>";
+    echo "<br/>".str_repeat("*",40)."2.表主键字段统一成ID".str_repeat("*",40)."<br/>";
 }
 foreach ($fieldInfos as $tablename=>$fieldInfo){
-	if ($isComment) {
-		echo "表名:$tablename<br/>";
-	}
-	$classname=getClassname($tablename);
-	$classname{0}=strtolower($classname{0});
-	$old_fieldname=$classname."_id";
-	$comments=$fieldInfos[$tablename][$old_fieldname]["Comment"];
-	$comments=str_replace("\r","\\r",$comments);
-	$comments=str_replace("\n","\\n",$comments);
-	echo "alter table $tablename change column $old_fieldname ID ".$fieldInfos[$tablename][$old_fieldname]["Type"]." auto_increment COMMENT '".$comments."';<br/>";
-	// if (!Manager_Db::newInstance()->dbinfo()->hasUnique($tablename,array("ID",$old_fieldname))){
-	// 	echo "alter table $tablename add unique(ID);<br/>";
-	// }
+    if ($isComment) {
+        echo "表名:$tablename<br/>";
+    }
+    $classname=getClassname($tablename);
+    $classname{0}=strtolower($classname{0});
+    $old_fieldname=$classname."_id";
+    $comments=$fieldInfos[$tablename][$old_fieldname]["Comment"];
+    $comments=str_replace("\r","\\r",$comments);
+    $comments=str_replace("\n","\\n",$comments);
+    echo "alter table $tablename change column $old_fieldname ID ".$fieldInfos[$tablename][$old_fieldname]["Type"]." auto_increment COMMENT '".$comments."';<br/>";
+    // if (!Manager_Db::newInstance()->dbinfo()->hasUnique($tablename,array("ID",$old_fieldname))){
+    //     echo "alter table $tablename add unique(ID);<br/>";
+    // }
 }
 
 if ($isComment) {
-	echo "<br/>".str_repeat("*",40)."3.去掉表前缀:".Config_Db::$table_prefix.str_repeat("*",40)."<br/>";
-	echo str_repeat("*",40)."4.表名头字母大写".str_repeat("*",40)."<br/><br/>";
+    echo "<br/>".str_repeat("*",40)."3.去掉表前缀:".Config_Db::$table_prefix.str_repeat("*",40)."<br/>";
+    echo str_repeat("*",40)."4.表名头字母大写".str_repeat("*",40)."<br/><br/>";
 }
 foreach ($tableList as $tablename){
-	$new_table_name=getClassname($tablename);
-	$new_table_names=strtoupper($new_table_name);
-	if (contain($mysql_keywords,",".$new_table_names.",")){
-		$new_table_name=$new_table_name."s";
-	}
-	echo "ALTER  TABLE $tablename RENAME TO $new_table_name;<br/>";
+    $new_table_name=getClassname($tablename);
+    $new_table_names=strtoupper($new_table_name);
+    if (contain($mysql_keywords,",".$new_table_names.",")){
+        $new_table_name=$new_table_name."s";
+    }
+    echo "ALTER  TABLE $tablename RENAME TO $new_table_name;<br/>";
 }
 
 if ($isComment) {
-	echo "<br/>".str_repeat("*",40)."5.初始化commitTime".str_repeat("*",40)."<br/>";
+    echo "<br/>".str_repeat("*",40)."5.初始化commitTime".str_repeat("*",40)."<br/>";
 }
 
 
 foreach ($fieldInfos as $tablename=>$fieldInfo){
-	foreach ($fieldInfo as $fieldname=>$field){
-		$new_table_name=getClassname($tablename);
-		$ufieldname=strtoupper($fieldname);
+    foreach ($fieldInfo as $fieldname=>$field){
+        $new_table_name=getClassname($tablename);
+        $ufieldname=strtoupper($fieldname);
 
-		$new_table_names=strtoupper($new_table_name);
-		if (contain($mysql_keywords,",".$new_table_names.",")){
-			$new_table_name=$new_table_name."s";
-		}
-		if($ufieldname=="COMMITTIME"){
-			echo "update $new_table_name set $fieldname = now();<br/>";
-		}
-	}
+        $new_table_names=strtoupper($new_table_name);
+        if (contain($mysql_keywords,",".$new_table_names.",")){
+            $new_table_name=$new_table_name."s";
+        }
+        if($ufieldname=="COMMITTIME"){
+            echo "update $new_table_name set $fieldname = now();<br/>";
+        }
+    }
 }
 ?>

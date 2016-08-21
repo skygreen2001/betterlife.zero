@@ -21,7 +21,7 @@
  * @category   PHPLinq
  * @package    PHPLinq
  * @copyright  Copyright (c) 2008 - 2009 PHPLinq (http://www.codeplex.com/PHPLinq)
- * @license    http://www.gnu.org/licenses/lgpl.txt	LGPL
+ * @license    http://www.gnu.org/licenses/lgpl.txt    LGPL
  * @version    0.4.0, 2009-01-27
  */
 
@@ -46,14 +46,14 @@ $employees[] = "Another string";
 
 // Query data
 $result = from('$employee')->in($employees)
-			->ofType('string')
-			->where('$employee => strlen($employee) > 2')
-			->select('$employee');
-				
+            ->ofType('string')
+            ->where('$employee => strlen($employee) > 2')
+            ->select('$employee');
+                
 print_r($result);
 
 $result = from('$employee')->in($employees)
-			->ofType('int')
-			->select('$employee');
-				
+            ->ofType('int')
+            ->select('$employee');
+                
 print_r($result);

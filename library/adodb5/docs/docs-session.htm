@@ -183,15 +183,15 @@ session_start();</font></pre>
 <pre> <a
  name="sessiontab"></a> <font color="#004040">
 CREATE TABLE sessions2(
-	  sesskey VARCHAR( 64 ) NOT NULL DEFAULT '',
-  	  expiry DATETIME NOT NULL ,
-	  expireref VARCHAR( 250 ) DEFAULT '',
-	  created DATETIME NOT NULL ,
-	  modified DATETIME NOT NULL ,
-	  sessdata LONGTEXT,
-	  PRIMARY KEY ( sesskey ) ,
-	  INDEX sess2_expiry( expiry ),
-	  INDEX sess2_expireref( expireref )
+      sesskey VARCHAR( 64 ) NOT NULL DEFAULT '',
+        expiry DATETIME NOT NULL ,
+      expireref VARCHAR( 250 ) DEFAULT '',
+      created DATETIME NOT NULL ,
+      modified DATETIME NOT NULL ,
+      sessdata LONGTEXT,
+      PRIMARY KEY ( sesskey ) ,
+      INDEX sess2_expiry( expiry ),
+      INDEX sess2_expireref( expireref )
 )</font></pre>
 
  <p> For PostgreSQL, use:
@@ -225,10 +225,10 @@ your php.ini session.cookie_lifetime and session.gc_probability settings. This w
 adodb's garbage collection function, which can be setup to do notification.
 <p>
 <pre>
-	PHP Session --> ADOdb Session  --> Find all recs  --> Send          --> Delete queued
-	GC Function     GC Function        to be deleted      notification      records
-	executed at     called by                             for all recs
-	random time     Session Extension                     queued for deletion
+    PHP Session --> ADOdb Session  --> Find all recs  --> Send          --> Delete queued
+    GC Function     GC Function        to be deleted      notification      records
+    executed at     called by                             for all recs
+    random time     Session Extension                     queued for deletion
 </pre>
 <p>When a session is created, we need to store a value in the session record (in the EXPIREREF field), typically 
 the userid of the session. Later when the session has expired,  just before the record is deleted,
@@ -245,7 +245,7 @@ $USERID. The function name is 'NotifyFn'.
 <p>
 So we define (before session_start() is called): </p>
 <pre> <font color="#004040">
-	$ADODB_SESSION_EXPIRE_NOTIFY = array('USERID','NotifyFn');
+    $ADODB_SESSION_EXPIRE_NOTIFY = array('USERID','NotifyFn');
 </font></pre>
 And when the NotifyFn is called (when the session expires), the
 $EXPIREREF holding the user id is passed in as the first parameter, eg. NotifyFn($userid, $sesskey). The
@@ -254,15 +254,15 @@ table) is the 2nd parameter.
 <p> Here is an example of a Notification function that deletes some
 records in the database and temporary files: </p>
 <pre><font color="#004040">
-	function NotifyFn($expireref, $sesskey)
-	{
-		global $ADODB_SESS_CONN; # the session connection object
-		$user = $ADODB_SESS_CONN-&gt;qstr($expireref);
-		
-		$ADODB_SESS_CONN-&gt;Execute("delete from shopping_cart where user=$user");          
-		system("rm /work/tmpfiles/$expireref/*");
-	}</font>  
-			  </pre>
+    function NotifyFn($expireref, $sesskey)
+    {
+        global $ADODB_SESS_CONN; # the session connection object
+        $user = $ADODB_SESS_CONN-&gt;qstr($expireref);
+        
+        $ADODB_SESS_CONN-&gt;Execute("delete from shopping_cart where user=$user");          
+        system("rm /work/tmpfiles/$expireref/*");
+    }</font>  
+              </pre>
 <p> NOTE 1: If you have register_globals disabled in php.ini, then you
 will have to manually set the EXPIREREF. E.g. </p>
 <pre> <font color="#004040">
@@ -301,14 +301,14 @@ will compress and then encrypt the record in the database.
   reducing the risk of session-hijacking. See this article on <a href=http://shiflett.org/articles/security-corner-feb2004>Session
   Fixation</a> for more info 
 on the theory behind this feature. Usage:<pre>
-	include('path/to/adodb/session/adodb-session2.php');
-	
-	session_start();
-	# Approximately every 10 page loads, reset cookie for safety.
-	# This is extremely simplistic example, better 
-	# to regenerate only when the user logs in or changes
-	# user privilege levels.
-	if ((rand()%10) == 0) adodb_session_regenerate_id(); 
+    include('path/to/adodb/session/adodb-session2.php');
+    
+    session_start();
+    # Approximately every 10 page loads, reset cookie for safety.
+    # This is extremely simplistic example, better 
+    # to regenerate only when the user logs in or changes
+    # user privilege levels.
+    if ((rand()%10) == 0) adodb_session_regenerate_id(); 
 </pre>
 <p>This function calls session_regenerate_id() internally or simulates it if the function does not exist.
 <h2>Vacuum/Optimize Database</h2>

@@ -21,7 +21,7 @@
  * @category   PHPLinq
  * @package    PHPLinq
  * @copyright  Copyright (c) 2008 - 2009 PHPLinq (http://www.codeplex.com/PHPLinq)
- * @license    http://www.gnu.org/licenses/lgpl.txt	LGPL
+ * @license    http://www.gnu.org/licenses/lgpl.txt    LGPL
  * @version    0.4.0, 2009-01-27
  */
 
@@ -39,6 +39,6 @@ PHPLinq_LinqToZendDb::setQueryCallback('print'); // Output generated queries to 
 require_once 'employees.db.inc.php';
 
 $result = from('$employee')->in( $employeeTable )
-			->select('$employee');
+            ->select('$employee');
 
 print_r($result);

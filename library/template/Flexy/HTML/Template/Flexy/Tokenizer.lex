@@ -78,7 +78,7 @@ define('YY_EOF' , 258);
 %type int
 %ignore_token  HTML_TEMPLATE_FLEXY_TOKEN_NONE
 %eofval{
-	return TOKEN_EOF;
+    return TOKEN_EOF;
 %eofval}
 
 
@@ -242,37 +242,37 @@ define('YY_EOF' , 258);
 
 
 
-DIGIT   =		[0-9]
-LCLETTER =	[a-z]
+DIGIT   =        [0-9]
+LCLETTER =    [a-z]
 
-UCLETTER =	[A-Z]
+UCLETTER =    [A-Z]
 NONASCII =  [\200-\377]
 
-LCNMCHAR	= [\._-]
-UCNMCHAR	= [\._-]
-RE		 = \n
-RS		 = \r
-SEPCHAR	 = \011
-SPACECHAR	=	\040
+LCNMCHAR    = [\._-]
+UCNMCHAR    = [\._-]
+RE         = \n
+RS         = \r
+SEPCHAR     = \011
+SPACECHAR    =    \040
 
 
-COM 	="--"
-CRO 	="&#"
-DSC	    ="]"
-DSO	    ="["
-ERO 	="&"
-ETAGO	="</"
-LIT	    = \"
+COM     ="--"
+CRO     ="&#"
+DSC        ="]"
+DSO        ="["
+ERO     ="&"
+ETAGO    ="</"
+LIT        = \"
 LITA    = "'"
 
 /* ' hack comment to make syntax highlighting to work in scintilla*/
 
-MDO	    = "<!"
-MSC	    = "]]"
+MDO        = "<!"
+MSC        = "]]"
 NET     = "/"
 PERO    = "%"
 PIC_PHP = "?>"
-PIO	    = "<?"
+PIO        = "<?"
 REFC    = ";"
 STAGO   = "<"
 TAGC    = ">"
@@ -323,21 +323,21 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 // "
 
 
-<YYINITIAL>{CRO}{NUMBER}{REFERENCE_END}?	 {
+<YYINITIAL>{CRO}{NUMBER}{REFERENCE_END}?     {
     // &#123;
     $this->value = $this->createToken('Text');
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
 
-<YYINITIAL>{CRO}{NAME}{REFERENCE_END}?		{
+<YYINITIAL>{CRO}{NAME}{REFERENCE_END}?        {
     // &#abc;
     $this->value = $this->createToken('Text');
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
   
-<YYINITIAL>{ERO}{NAME}{REFERENCE_END}?	{
+<YYINITIAL>{ERO}{NAME}{REFERENCE_END}?    {
     // &abc;
     $this->value = $this->createToken('Text');
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
@@ -454,7 +454,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     return $this->returnSimple();
 }
   
-<YYINITIAL>{PIO}{NAME}{WHITESPACE}		{ 
+<YYINITIAL>{PIO}{NAME}{WHITESPACE}        { 
     /* eg. <?xml-stylesheet, <?php ... */
     
     $t = $this->yytext();
@@ -489,7 +489,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 }
 
-<IN_ATTR>{PIC_PHP}	{
+<IN_ATTR>{PIC_PHP}    {
     // <em^/ -- NET tag */
     $this->attributes["?"] = true;
     $this->value = $this->createToken($this->tokenName, array($this->tagName,$this->attributes));
@@ -515,7 +515,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 }
 
 
-<YYINITIAL>{STAGO}{NSNAME}{WHITESPACE}		{
+<YYINITIAL>{STAGO}{NSNAME}{WHITESPACE}        {
     //<name -- start tag */
     if ($this->options['ignore_html']) {
         return $this->returnSimple();
@@ -530,7 +530,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 
   
-<YYINITIAL>{STAGO}{TAGC}			{  
+<YYINITIAL>{STAGO}{TAGC}            {  
     // <> -- empty start tag */
     if ($this->options['ignore_html']) {
         return $this->returnSimple();
@@ -559,7 +559,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 
   
-<IN_ATTR>{NSNAME}{SPACE}*={WHITESPACE}		{
+<IN_ATTR>{NSNAME}{SPACE}*={WHITESPACE}        {
    // <a ^href = "xxx"> -- attribute name 
     $this->attrKey = substr(trim($this->yytext()),0,-1);
     $this->yybegin(IN_ATTRVAL);
@@ -568,7 +568,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 }
 
   
-<IN_ATTR>{NSNAME}{WHITESPACE}		{
+<IN_ATTR>{NSNAME}{WHITESPACE}        {
     // <img src="xxx" ...ismap...> the ismap */
     
     $this->attributes[trim($this->yytext())] = true;
@@ -577,7 +577,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 }
 
 
-<IN_ATTRVAL>{NAME_TOKEN}{WHITESPACE}	{
+<IN_ATTRVAL>{NAME_TOKEN}{WHITESPACE}    {
     // <a name = ^12pt> -- number token */
     $this->attributes[$this->attrKey] = trim($this->yytext());
     $this->yybegin(IN_ATTR);
@@ -586,7 +586,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 }
 
   
-<IN_ATTRVAL>{NUMBER_TOKEN}{WHITESPACE}	{
+<IN_ATTRVAL>{NUMBER_TOKEN}{WHITESPACE}    {
     // <a name = ^xyz> -- name token */
     $this->attributes[$this->attrKey] = trim($this->yytext());
     $this->yybegin(IN_ATTR);
@@ -596,7 +596,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
                  
 
 
-//<IN_ATTRVAL>{LITERAL}{WHITESPACE}		{
+//<IN_ATTRVAL>{LITERAL}{WHITESPACE}        {
     // <a href = ^"a b c"> -- literal */
     // TODO add flexy parsing in here!!!
 //    $this->attributes[$this->attrKey] = trim($this->yytext());
@@ -606,7 +606,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 //}
  
 <IN_ATTRVAL> \'    {
-	//echo "STARTING SINGLEQUOTE";
+    //echo "STARTING SINGLEQUOTE";
     $this->attrVal = array( "'");
     $this->yybegin(IN_SINGLEQUOTE);
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
@@ -623,7 +623,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
  
 
-<IN_SINGLEQUOTE>([^\{\%\'\\]+|\\[^\'])+|"%"|"{"|{FLEXY_GTSTART}|{FLEXY_GTEND}	{
+<IN_SINGLEQUOTE>([^\{\%\'\\]+|\\[^\'])+|"%"|"{"|{FLEXY_GTSTART}|{FLEXY_GTEND}    {
     
     $this->attrVal[] = $this->yytext();
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
@@ -702,12 +702,12 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 
   // <a name= ^> -- illegal tag close */
-<IN_ATTRVAL>{TAGC}			{ 
+<IN_ATTRVAL>{TAGC}            { 
     return $this->raiseError("Tag close found where attribute value expected"); 
 }
 
   // <a name=foo ^>,</foo^> -- tag close */
-<IN_ATTR,IN_TAG>{TAGC}		{
+<IN_ATTR,IN_TAG>{TAGC}        {
     $this->value = $this->createToken($this->tokenName, array($this->tagName,$this->attributes));
     
     
@@ -725,13 +725,13 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 }
 
 
-<IN_ATTRVAL>{NET}	{
+<IN_ATTRVAL>{NET}    {
     // <em^/ -- NET tag */
     return $this->raiseError("attribute value missing"); 
 }
 
 
-<IN_ATTR>{NET}	{
+<IN_ATTR>{NET}    {
     // <em^/ -- NET tag */
     $this->yybegin(IN_NETDATA);
     $this->attributes["/"] = true;
@@ -739,7 +739,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 } 
 
-<IN_ATTR>{NET}{WHITESPACE}{TAGC}	{
+<IN_ATTR>{NET}{WHITESPACE}{TAGC}    {
     // <em^/ -- NET tag */
     $this->attributes["/"] = true;
     $this->value = $this->createToken($this->tokenName, array($this->tagName,$this->attributes));
@@ -749,7 +749,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 }
  
   
-<IN_ATTR,IN_ATTRVAL,IN_TAG> {STAGO}	{
+<IN_ATTR,IN_ATTRVAL,IN_TAG> {STAGO}    {
     // <foo^<bar> -- unclosed start tag */
     return $this->raiseError("Unclosed tags not supported"); 
 
@@ -757,7 +757,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
   
   
-<IN_ATTRVAL> ([^ \'\"\t\n\r>]+){WHITESPACE}	{
+<IN_ATTRVAL> ([^ \'\"\t\n\r>]+){WHITESPACE}    {
     // <a href = ^http://foo/> -- unquoted literal HACK */                          
     
     $this->attributes[$this->attrKey] = trim($this->yytext());
@@ -770,7 +770,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 // ' (put here for scintilla color render mess :)
 
-<IN_TAG,IN_ATTR> {WHITESPACE}	{
+<IN_TAG,IN_ATTR> {WHITESPACE}    {
     $this->value = '';
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
@@ -794,40 +794,40 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
  // 10 Markup Declarations: General */
 
  
-<IN_COM>([^-]|-[^-])*{WHITESPACE}	{
+<IN_COM>([^-]|-[^-])*{WHITESPACE}    {
     // inside a comment (not - or not --
     // <!^--...-->   -- comment */   
        
     return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
-<IN_COM>{COM}[^>]	{
-	// inside comment -- without a >
-	return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
+<IN_COM>{COM}[^>]    {
+    // inside comment -- without a >
+    return HTML_TEMPLATE_FLEXY_TOKEN_NONE;
 }
 
  
-<IN_COMSTYLE>([^"{"][^-]|-[^-])*{WHITESPACE}	{
+<IN_COMSTYLE>([^"{"][^-]|-[^-])*{WHITESPACE}    {
     // inside a style comment (not - or not --
     // <!^--...-->   -- comment */   
     $this->value = $this->createToken('Comment');
-	return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 <IN_COMSTYLE>. {
     // we allow anything inside of comstyle!!!
     $this->value = $this->createToken('Comment');
-	return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
-<IN_COMSTYLE>{COM}[^>]	{
-	// inside style comment -- without a >
+<IN_COMSTYLE>{COM}[^>]    {
+    // inside style comment -- without a >
     $this->value = $this->createToken('Comment');
-	return HTML_TEMPLATE_FLEXY_TOKEN_OK;
+    return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
 
 
 
 
-<IN_DSCOM>([^-]|-[^-])*{WHITESPACE}	{
+<IN_DSCOM>([^-]|-[^-])*{WHITESPACE}    {
     // inside a comment (not - or not --
     // <!^--...-->   -- comment */   
     $this->value = $this->createToken('DSComment');
@@ -835,34 +835,34 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 }
 
  
-<IN_MD>{PERO}{NAME}{REFERENCE_END}?{WHITESPACE}		{
+<IN_MD>{PERO}{NAME}{REFERENCE_END}?{WHITESPACE}        {
     // <!doctype ^%foo;> -- parameter entity reference */
     $this->value = $this->createToken('EntityRef');
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
  
-<IN_MD>{PERO}{SPACES}			{
+<IN_MD>{PERO}{SPACES}            {
     // <!entity ^% foo system "..." ...> -- parameter entity definition */
     $this->value = $this->createToken('EntityPar');
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
  
-<IN_MD>{NUMBER}{WHITESPACE} 	{   
+<IN_MD>{NUMBER}{WHITESPACE}     {   
     $this->value = $this->createToken('Number');
     
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
-<IN_MD>{NAME}{WHITESPACE}			{ 
+<IN_MD>{NAME}{WHITESPACE}            { 
     $this->value = $this->createToken('Name');
     
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
-<IN_MD>{NUMBER_TOKEN}{WHITESPACE}		{ 
+<IN_MD>{NUMBER_TOKEN}{WHITESPACE}        { 
     $this->value = $this->createToken('NumberT');
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
-<IN_MD>{NAME_TOKEN}{WHITESPACE}	{ 
+<IN_MD>{NAME_TOKEN}{WHITESPACE}    { 
     $this->value = $this->createToken('NameT');
     
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
@@ -878,7 +878,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 }
 
 
-<IN_COM>[-]*{COM}{TAGC}			{   
+<IN_COM>[-]*{COM}{TAGC}            {   
     
     $this->value = $this->createToken('Comment',
         '<!--'. substr($this->yy_buffer,$this->yyCommentBegin ,$this->yy_buffer_end - $this->yyCommentBegin),
@@ -888,7 +888,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 
-<IN_COMSTYLE>[-]*{COM}{TAGC}			{   
+<IN_COMSTYLE>[-]*{COM}{TAGC}            {   
     // --> inside a style tag.
     $this->value = $this->createToken('Comment');
     $this->yybegin(YYINITIAL); 
@@ -905,13 +905,13 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 }
 
 
-<IN_DSCOM>{COM}{TAGC}			{   
+<IN_DSCOM>{COM}{TAGC}            {   
     $this->value = $this->createToken('DSEnd');
     $this->yybegin(YYINITIAL); 
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
 }
 
-<IN_MD>{TAGC}			{   
+<IN_MD>{TAGC}            {   
     $this->value = $this->createToken('CloseTag');
     $this->yybegin(YYINITIAL); 
     return HTML_TEMPLATE_FLEXY_TOKEN_OK; 
@@ -920,7 +920,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
 
 //other constructs are errors. 
   
-<IN_MD>{DSO}			{
+<IN_MD>{DSO}            {
     // <!doctype foo ^[  -- declaration subset */
     $this->value = $this->createToken('BeginDS');
     $this->yybegin(IN_DS);
@@ -934,14 +934,14 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
  
 
 
-<IN_DS>{MSC}{TAGC}			{
+<IN_DS>{MSC}{TAGC}            {
     // ]]> -- marked section end */
      $this->value = $this->createToken('DSEnd');
     $this->yybegin(YYINITIAL);
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
   
-<IN_DS>{DSC}			{ 
+<IN_DS>{DSC}            { 
     // ] -- declaration subset close */
     $this->value = $this->createToken('DSEndSubset');
     $this->yybegin(IN_DSCOM); 
@@ -949,7 +949,7 @@ END_SCRIPT          = {ETAGO}(S|s)(C|c)(r|R)(I|i)(P|p)(T|t){TAGC}
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }
 
-<IN_DS>[^\]]+			{ 
+<IN_DS>[^\]]+            { 
     $this->value = $this->createToken('Declaration');
     return HTML_TEMPLATE_FLEXY_TOKEN_OK;
 }

@@ -1,120 +1,120 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <roleplayers>
-	<roleplayer id="SUPERADMIN">
-		<menuGroups>
-			<menuGroup id="nav" name="功能区" lang="en" iconCls="nav">
-				<menu name="系统管理人员" id="admin" address="index.php?go=admin.betterlife.admin" />
-				<menu name="博客" id="blog" address="index.php?go=admin.betterlife.blog" />
-				<menu name="用户" id="user" address="index.php?go=admin.betterlife.user" />
-				<menu name="地区" id="region" address="index.php?go=admin.betterlife.region" />
-				<menu name="退出" id="logout" address="index.php?go=admin.index.logout" />
-			</menuGroup>
-			<menuGroup id="navSystem" name="系统设置" iconCls="settings">
-				<menu name="菜单管理" address="index.php?go=admin.system.menumanager" />
-				<menu name="资源库管理" title="第三方库加载" address="index.php?go=admin.system.librarymanager" />
-				<menu name="模块管理" title="功能模块加载" address="index.php?go=admin.system.modulemanager" />
-				<menu name="监控宝" title="监测网站故障、发送告警短信和邮件，并分析网站性能趋势" address="http://www.jiankongbao.com/" />
-				<menu name="网站安全监测" title="360网站安全监测" address="http://webscan.360.cn/" />
-				<menu name="性能探测器" title="性能探针Probe，查看服务器性能" address="index.php?go=admin.system.probe" />
-			</menuGroup>
-			<menuGroup id="navProgram" lang="en" name="程序员区" iconCls="settings">
-				<menu name="Stumbleupon" address="http://www.stumbleupon.com/" />
-				<menu name="cooliris" title="Media browser plug-in, mobile app, gallery builder" address="http://www.cooliris.com/" />
-				<menu name="CSDN" address="http://www.csdn.net" />
-				<menu name="InfoQ" address="http://www.infoq.com" />
-				<menu name="PHP" address="http://www.php.net" />
-				<menu name="CS-Cart" address="http://www.cs-cart.com" />
-				<menu name="Sencha" address="http://www.sencha.com/" />
-				<menu name="ITEye" address="http://www.iteye.com/" title="ITeye Java编程 Spring框架 AJAX技术 Agile敏捷软件开发 ruby on rails实践 - ITeye做最棒的软件开发交流社区"/>
-				<menu name="C#" address="http://cplus.about.com/" />
-			</menuGroup>
-			<menuGroup id="navdesign" lang="en" name="展示区" iconCls="navdesign">
-				<menu name="TOPIT" title="审美品位分享的产品" address="http://www.topit.me/" />
-				<menu name="美图看看" title="美图看看网页版" address="http://xiuxiu.web.meitu.com/main.html" />
-				<menu name="Photoshop Online" address="http://www.photoshop.com/tools" />
-				<menu name="PhotoEditor" title="Pixlr Photo editor" address="http://pixlr.com/editor" />
-				<menu name="LifeVC" address="http://www.lifevc.com" />
-				<menu name="人人小站" address="http://zhan.renren.com" />
-				<menu name="WIX" title="CREATE YOUR FREE STUNNING WEBSITE" address="http://www.wix.com" />
-				<menu name="关注前端与用户体验" address="http://stylechen.com/" />
-				<menu name="Google Gravity" title="Google Gravity" address="http://mrdoob.com/projects/chromeexperiments/google_gravity/" />
-			</menuGroup>
-			<menuGroup id="navDev" name="开发者园地" iconCls="nav">
-				<menu name="实体类工具" title="根据输入的变量们直接生成setter和getter方法" address="tools/dev/phpsetget/PHPGetSet.html" />
-				<menu name="数据库工具" address="tools/tools/db.php" />
-				<menu name="文件管理" title="显示所有的核心源码文件信息" address="index.php?go=admin.system.filemanager" />
-				<menu name="淘宝" title="淘宝开放平台" address="http://open.taobao.com/" />
-				<menu name="百度" title="开发者平台" address="http://dev.baidu.com/" />
-			</menuGroup>
-			<menuGroup id="navWebDev" lang="en" name="Web优化工具" iconCls="navdesign" show="true">
-				<menu name="JS代码优化" title="JS代码优化" address="http://jspacker.pin5i.com/" />
-				<menu name="JSFIDDLE" title="mootools shell, easy test you snippets before implementing" address="http://jsfiddle.net/" />
-				<menu name="CSS compatibility" title="CSS contents and browser compatibility" address="http://www.quirksmode.org/css/contents.html" />
-				<menu name="Browsershots" title="浏览器兼容性测试，跨平台浏览器测试 - Browsershots" address="http://browsershots.org" />
-				<menu name="HtmlTidy" title="Html Tidy online" address="http://infohound.net/tidy/" />
-				<menu name="cssdrive" title="CSS Drive- Categorized CSS gallery and examples" address="http://www.cssdrive.com/" />
-				<menu name="Icon Finder" address="http://www.iconfinder.com/" />
-				<menu name="Convert Icon" address="http://www.converticon.com/" />
-				<menu name="Javascript Performance" title="Javascript Performance Testing" address="http://dromaeo.com/" />
-				<menu name="Test Everything" address="http://tester.jonasjohn.de/" />
-			</menuGroup>
-		</menuGroups>
-	</roleplayer>
+    <roleplayer id="SUPERADMIN">
+        <menuGroups>
+            <menuGroup id="nav" name="功能区" lang="en" iconCls="nav">
+                <menu name="系统管理人员" id="admin" address="index.php?go=admin.betterlife.admin" />
+                <menu name="博客" id="blog" address="index.php?go=admin.betterlife.blog" />
+                <menu name="用户" id="user" address="index.php?go=admin.betterlife.user" />
+                <menu name="地区" id="region" address="index.php?go=admin.betterlife.region" />
+                <menu name="退出" id="logout" address="index.php?go=admin.index.logout" />
+            </menuGroup>
+            <menuGroup id="navSystem" name="系统设置" iconCls="settings">
+                <menu name="菜单管理" address="index.php?go=admin.system.menumanager" />
+                <menu name="资源库管理" title="第三方库加载" address="index.php?go=admin.system.librarymanager" />
+                <menu name="模块管理" title="功能模块加载" address="index.php?go=admin.system.modulemanager" />
+                <menu name="监控宝" title="监测网站故障、发送告警短信和邮件，并分析网站性能趋势" address="http://www.jiankongbao.com/" />
+                <menu name="网站安全监测" title="360网站安全监测" address="http://webscan.360.cn/" />
+                <menu name="性能探测器" title="性能探针Probe，查看服务器性能" address="index.php?go=admin.system.probe" />
+            </menuGroup>
+            <menuGroup id="navProgram" lang="en" name="程序员区" iconCls="settings">
+                <menu name="Stumbleupon" address="http://www.stumbleupon.com/" />
+                <menu name="cooliris" title="Media browser plug-in, mobile app, gallery builder" address="http://www.cooliris.com/" />
+                <menu name="CSDN" address="http://www.csdn.net" />
+                <menu name="InfoQ" address="http://www.infoq.com" />
+                <menu name="PHP" address="http://www.php.net" />
+                <menu name="CS-Cart" address="http://www.cs-cart.com" />
+                <menu name="Sencha" address="http://www.sencha.com/" />
+                <menu name="ITEye" address="http://www.iteye.com/" title="ITeye Java编程 Spring框架 AJAX技术 Agile敏捷软件开发 ruby on rails实践 - ITeye做最棒的软件开发交流社区"/>
+                <menu name="C#" address="http://cplus.about.com/" />
+            </menuGroup>
+            <menuGroup id="navdesign" lang="en" name="展示区" iconCls="navdesign">
+                <menu name="TOPIT" title="审美品位分享的产品" address="http://www.topit.me/" />
+                <menu name="美图看看" title="美图看看网页版" address="http://xiuxiu.web.meitu.com/main.html" />
+                <menu name="Photoshop Online" address="http://www.photoshop.com/tools" />
+                <menu name="PhotoEditor" title="Pixlr Photo editor" address="http://pixlr.com/editor" />
+                <menu name="LifeVC" address="http://www.lifevc.com" />
+                <menu name="人人小站" address="http://zhan.renren.com" />
+                <menu name="WIX" title="CREATE YOUR FREE STUNNING WEBSITE" address="http://www.wix.com" />
+                <menu name="关注前端与用户体验" address="http://stylechen.com/" />
+                <menu name="Google Gravity" title="Google Gravity" address="http://mrdoob.com/projects/chromeexperiments/google_gravity/" />
+            </menuGroup>
+            <menuGroup id="navDev" name="开发者园地" iconCls="nav">
+                <menu name="实体类工具" title="根据输入的变量们直接生成setter和getter方法" address="tools/dev/phpsetget/PHPGetSet.html" />
+                <menu name="数据库工具" address="tools/tools/db.php" />
+                <menu name="文件管理" title="显示所有的核心源码文件信息" address="index.php?go=admin.system.filemanager" />
+                <menu name="淘宝" title="淘宝开放平台" address="http://open.taobao.com/" />
+                <menu name="百度" title="开发者平台" address="http://dev.baidu.com/" />
+            </menuGroup>
+            <menuGroup id="navWebDev" lang="en" name="Web优化工具" iconCls="navdesign" show="true">
+                <menu name="JS代码优化" title="JS代码优化" address="http://jspacker.pin5i.com/" />
+                <menu name="JSFIDDLE" title="mootools shell, easy test you snippets before implementing" address="http://jsfiddle.net/" />
+                <menu name="CSS compatibility" title="CSS contents and browser compatibility" address="http://www.quirksmode.org/css/contents.html" />
+                <menu name="Browsershots" title="浏览器兼容性测试，跨平台浏览器测试 - Browsershots" address="http://browsershots.org" />
+                <menu name="HtmlTidy" title="Html Tidy online" address="http://infohound.net/tidy/" />
+                <menu name="cssdrive" title="CSS Drive- Categorized CSS gallery and examples" address="http://www.cssdrive.com/" />
+                <menu name="Icon Finder" address="http://www.iconfinder.com/" />
+                <menu name="Convert Icon" address="http://www.converticon.com/" />
+                <menu name="Javascript Performance" title="Javascript Performance Testing" address="http://dromaeo.com/" />
+                <menu name="Test Everything" address="http://tester.jonasjohn.de/" />
+            </menuGroup>
+        </menuGroups>
+    </roleplayer>
 
-	<roleplayer id="MANAGER">
-		<menuGroups>
-			<menuGroup id="navProgram" lang="en" name="程序员区" iconCls="settings">
-				<menu name="Stumbleupon" address="http://www.stumbleupon.com/" />
-				<menu name="cooliris" title="Media browser plug-in, mobile app, gallery builder" address="http://www.cooliris.com/" />
-				<menu name="CSDN" address="http://www.csdn.net" />
-				<menu name="InfoQ" address="http://www.infoq.com" />
-				<menu name="PHP" address="http://www.php.net" />
-				<menu name="CS-Cart" address="http://www.cs-cart.com" />
-				<menu name="Sencha" address="http://www.sencha.com/" />
-				<menu name="ITEye" address="http://www.iteye.com/" title="ITeye Java编程 Spring框架 AJAX技术 Agile敏捷软件开发 ruby on rails实践 - ITeye做最棒的软件开发交流社区"/>
-				<menu name="C#" address="http://cplus.about.com/" />
-			</menuGroup>
-			<menuGroup id="navDev" name="开发者园地" iconCls="nav">
-				<menu name="实体类工具" title="根据输入的变量们直接生成setter和getter方法" address="tools/dev/phpsetget/PHPGetSet.html" />
-				<menu name="数据库工具" address="tools/tools/db.php" />
-				<menu name="文件管理" title="显示所有的核心源码文件信息" address="index.php?go=admin.system.filemanager" />
-				<menu name="淘宝" title="淘宝开放平台" address="http://open.taobao.com/" />
-				<menu name="百度" title="开发者平台" address="http://dev.baidu.com/" />
-			</menuGroup>
-		</menuGroups>
-	</roleplayer>
+    <roleplayer id="MANAGER">
+        <menuGroups>
+            <menuGroup id="navProgram" lang="en" name="程序员区" iconCls="settings">
+                <menu name="Stumbleupon" address="http://www.stumbleupon.com/" />
+                <menu name="cooliris" title="Media browser plug-in, mobile app, gallery builder" address="http://www.cooliris.com/" />
+                <menu name="CSDN" address="http://www.csdn.net" />
+                <menu name="InfoQ" address="http://www.infoq.com" />
+                <menu name="PHP" address="http://www.php.net" />
+                <menu name="CS-Cart" address="http://www.cs-cart.com" />
+                <menu name="Sencha" address="http://www.sencha.com/" />
+                <menu name="ITEye" address="http://www.iteye.com/" title="ITeye Java编程 Spring框架 AJAX技术 Agile敏捷软件开发 ruby on rails实践 - ITeye做最棒的软件开发交流社区"/>
+                <menu name="C#" address="http://cplus.about.com/" />
+            </menuGroup>
+            <menuGroup id="navDev" name="开发者园地" iconCls="nav">
+                <menu name="实体类工具" title="根据输入的变量们直接生成setter和getter方法" address="tools/dev/phpsetget/PHPGetSet.html" />
+                <menu name="数据库工具" address="tools/tools/db.php" />
+                <menu name="文件管理" title="显示所有的核心源码文件信息" address="index.php?go=admin.system.filemanager" />
+                <menu name="淘宝" title="淘宝开放平台" address="http://open.taobao.com/" />
+                <menu name="百度" title="开发者平台" address="http://dev.baidu.com/" />
+            </menuGroup>
+        </menuGroups>
+    </roleplayer>
 
-	<roleplayer id="NORMAL">
-		<menuGroups>
-			<menuGroup id="navdesign" lang="en" name="展示区" iconCls="navdesign">
-				<menu name="TOPIT" title="审美品位分享的产品" address="http://www.topit.me/" />
-				<menu name="美图看看" title="美图看看网页版" address="http://xiuxiu.web.meitu.com/main.html" />
-				<menu name="Photoshop Online" address="http://www.photoshop.com/tools" />
-				<menu name="PhotoEditor" title="Pixlr Photo editor" address="http://pixlr.com/editor" />
-				<menu name="LifeVC" address="http://www.lifevc.com" />
-				<menu name="人人小站" address="http://zhan.renren.com" />
-				<menu name="WIX" title="CREATE YOUR FREE STUNNING WEBSITE" address="http://www.wix.com" />
-				<menu name="关注前端与用户体验" address="http://stylechen.com/" />
-				<menu name="Google Gravity" title="Google Gravity" address="http://mrdoob.com/projects/chromeexperiments/google_gravity/" />
-			</menuGroup>
-		</menuGroups>
-	</roleplayer>
+    <roleplayer id="NORMAL">
+        <menuGroups>
+            <menuGroup id="navdesign" lang="en" name="展示区" iconCls="navdesign">
+                <menu name="TOPIT" title="审美品位分享的产品" address="http://www.topit.me/" />
+                <menu name="美图看看" title="美图看看网页版" address="http://xiuxiu.web.meitu.com/main.html" />
+                <menu name="Photoshop Online" address="http://www.photoshop.com/tools" />
+                <menu name="PhotoEditor" title="Pixlr Photo editor" address="http://pixlr.com/editor" />
+                <menu name="LifeVC" address="http://www.lifevc.com" />
+                <menu name="人人小站" address="http://zhan.renren.com" />
+                <menu name="WIX" title="CREATE YOUR FREE STUNNING WEBSITE" address="http://www.wix.com" />
+                <menu name="关注前端与用户体验" address="http://stylechen.com/" />
+                <menu name="Google Gravity" title="Google Gravity" address="http://mrdoob.com/projects/chromeexperiments/google_gravity/" />
+            </menuGroup>
+        </menuGroups>
+    </roleplayer>
 
-	<roleplayer id="PARTNER">
-		<menuGroups>
-			<menuGroup id="navWebDev" lang="en" name="Web优化工具" iconCls="navdesign" show="true">
-				<menu name="JS代码优化" title="JS代码优化" address="http://jspacker.pin5i.com/" />
-				<menu name="JSFIDDLE" title="mootools shell, easy test you snippets before implementing" address="http://jsfiddle.net/" />
-				<menu name="CSS compatibility" title="CSS contents and browser compatibility" address="http://www.quirksmode.org/css/contents.html" />
-				<menu name="Browsershots" title="浏览器兼容性测试，跨平台浏览器测试 - Browsershots" address="http://browsershots.org" />
-				<menu name="HtmlTidy" title="Html Tidy online" address="http://infohound.net/tidy/" />
-				<menu name="cssdrive" title="CSS Drive- Categorized CSS gallery and examples" address="http://www.cssdrive.com/" />
-				<menu name="Icon Finder" address="http://www.iconfinder.com/" />
-				<menu name="Convert Icon" address="http://www.converticon.com/" />
-				<menu name="Javascript Performance" title="Javascript Performance Testing" address="http://dromaeo.com/" />
-				<menu name="Test Everything" address="http://tester.jonasjohn.de/" />
-			</menuGroup>
-		</menuGroups>
-	</roleplayer>
+    <roleplayer id="PARTNER">
+        <menuGroups>
+            <menuGroup id="navWebDev" lang="en" name="Web优化工具" iconCls="navdesign" show="true">
+                <menu name="JS代码优化" title="JS代码优化" address="http://jspacker.pin5i.com/" />
+                <menu name="JSFIDDLE" title="mootools shell, easy test you snippets before implementing" address="http://jsfiddle.net/" />
+                <menu name="CSS compatibility" title="CSS contents and browser compatibility" address="http://www.quirksmode.org/css/contents.html" />
+                <menu name="Browsershots" title="浏览器兼容性测试，跨平台浏览器测试 - Browsershots" address="http://browsershots.org" />
+                <menu name="HtmlTidy" title="Html Tidy online" address="http://infohound.net/tidy/" />
+                <menu name="cssdrive" title="CSS Drive- Categorized CSS gallery and examples" address="http://www.cssdrive.com/" />
+                <menu name="Icon Finder" address="http://www.iconfinder.com/" />
+                <menu name="Convert Icon" address="http://www.converticon.com/" />
+                <menu name="Javascript Performance" title="Javascript Performance Testing" address="http://dromaeo.com/" />
+                <menu name="Test Everything" address="http://tester.jonasjohn.de/" />
+            </menuGroup>
+        </menuGroups>
+    </roleplayer>
 
 </roleplayers>

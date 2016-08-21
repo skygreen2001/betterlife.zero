@@ -5,10 +5,10 @@ $wsdl = "http://$wsdl_server_ip/betterlife/tools/webservice/wsdl_generator/Webse
 echo $wsdl."<br>\n";
 
 $options = Array('actor' =>'http://schema.betterlife.com',
-				 'login' => 'test',
-				 'password' => 'test',
+                 'login' => 'test',
+                 'password' => 'test',
                                  'compression' => SOAP_COMPRESSION_ACCEPT | SOAP_COMPRESSION_GZIP);
-				 //'trace' => true
+                 //'trace' => true
 $client = new SoapClient($wsdl,$options);
 $res = $client->getContacts();
 print_r($res);

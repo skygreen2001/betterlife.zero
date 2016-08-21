@@ -117,78 +117,78 @@ xbDetectBrowser();
 
 
 function getTableNodeName(Node){
-	return "pane" + Node;
+    return "pane" + Node;
 }
 
 
 function showNode(Node){
     
-	switch(navigator.family){
-		case 'nn4':
-			// Nav 4.x code fork...
-			var oTable = document.layers[getTableNodeName(Node)];
-			break;
+    switch(navigator.family){
+        case 'nn4':
+            // Nav 4.x code fork...
+            var oTable = document.layers[getTableNodeName(Node)];
+            break;
             
-		case 'ie4':
-			// IE 4/5 code fork...
-			var oTable = document.all[getTableNodeName(Node)];
-			break;
+        case 'ie4':
+            // IE 4/5 code fork...
+            var oTable = document.all[getTableNodeName(Node)];
+            break;
             
-		case 'gecko':
-			// Standards Compliant code fork...
-			var oTable = document.getElementById(getTableNodeName(Node));
-			break;
+        case 'gecko':
+            // Standards Compliant code fork...
+            var oTable = document.getElementById(getTableNodeName(Node));
+            break;
             
-	}
-	oTable.style.display = "block";
+    }
+    oTable.style.display = "block";
 }
 
 function hideNode(Node){
-	switch(navigator.family){
-		case 'nn4':
-			// Nav 4.x code fork...
-			var oTable = document.layers[getTableNodeName(Node)];
-			break;
+    switch(navigator.family){
+        case 'nn4':
+            // Nav 4.x code fork...
+            var oTable = document.layers[getTableNodeName(Node)];
+            break;
             
-		case 'ie4':
-			// IE 4/5 code fork...
-			var oTable = document.all[getTableNodeName(Node)];
-			break;
+        case 'ie4':
+            // IE 4/5 code fork...
+            var oTable = document.all[getTableNodeName(Node)];
+            break;
             
-		case 'gecko':
-			// Standards Compliant code fork...
-			var oTable = document.getElementById(getTableNodeName(Node));
-			break;
+        case 'gecko':
+            // Standards Compliant code fork...
+            var oTable = document.getElementById(getTableNodeName(Node));
+            break;
             
-	}
-	oTable.style.display = "none";
+    }
+    oTable.style.display = "none";
 }
 function toggleNodeVisibility(Node){
-	if (nodeIsVisible(Node)){
-		hideNode(Node);
-	}else{
-		showNode(Node);
-	}
+    if (nodeIsVisible(Node)){
+        hideNode(Node);
+    }else{
+        showNode(Node);
+    }
 }
 function nodeIsVisible(Node){
-	switch(navigator.family){
-		case 'nn4':
-			// Nav 4.x code fork...
-			var oTable = document.layers[getTableNodeName(Node)];
-			break;
+    switch(navigator.family){
+        case 'nn4':
+            // Nav 4.x code fork...
+            var oTable = document.layers[getTableNodeName(Node)];
+            break;
             
-		case 'ie4':
-			// IE 4/5 code fork...
-			var oTable = document.all[getTableNodeName(Node)];
-			break;
+        case 'ie4':
+            // IE 4/5 code fork...
+            var oTable = document.all[getTableNodeName(Node)];
+            break;
             
-		case 'gecko':
-			// Standards Compliant code fork...
-			var oTable = document.getElementById(getTableNodeName(Node));
-			break;
+        case 'gecko':
+            // Standards Compliant code fork...
+            var oTable = document.getElementById(getTableNodeName(Node));
+            break;
             
-	}
-	return (oTable && oTable.style.display == "block");
+    }
+    return (oTable && oTable.style.display == "block");
 }
 
 </script>
@@ -250,7 +250,7 @@ Select a Language To Translate To : {foreach:languages,lang}
         <span flexy:if="!item.already"> 
         <span flexy:if="item.short"><input 
             flexy:ignoreonly="yes" value="{item.to}" name="{translate}[{item.md5}]" size="40"></span>
-		 <textarea cols="40" rows="5" flexy:if="!item.short" flexy:ignore="yes" name="{translate}[{item.md5}]" size="40">{item.to}</textarea>
+         <textarea cols="40" rows="5" flexy:if="!item.short" flexy:ignore="yes" name="{translate}[{item.md5}]" size="40">{item.to}</textarea>
          </span>
       </td>
     </tr>

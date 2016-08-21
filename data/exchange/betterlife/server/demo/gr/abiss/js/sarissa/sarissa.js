@@ -44,7 +44,7 @@ Sarissa.REMOTE_CALL_FLAG = "gr.abiss.sarissa.REMOTE_CALL_FLAG";
 Sarissa._lastUniqueSuffix = 0;
 /** @private */
 Sarissa._getUniqueSuffix = function(){
-	return Sarissa._lastUniqueSuffix++;
+    return Sarissa._lastUniqueSuffix++;
 };
 /** @private */
 Sarissa._SARISSA_IEPREFIX4XSLPARAM = "";
@@ -70,14 +70,14 @@ if(!window.Node || !Node.ELEMENT_NODE){
 
 //This breaks for(x in o) loops in the old Safari
 if(Sarissa._SARISSA_IS_SAFARI_OLD){
-	HTMLHtmlElement = document.createElement("html").constructor;
-	Node = HTMLElement = {};
-	HTMLElement.prototype = HTMLHtmlElement.__proto__.__proto__;
-	HTMLDocument = Document = document.constructor;
-	var x = new DOMParser();
-	XMLDocument = x.constructor;
-	Element = x.parseFromString("<Single />", "text/xml").documentElement.constructor;
-	x = null;
+    HTMLHtmlElement = document.createElement("html").constructor;
+    Node = HTMLElement = {};
+    HTMLElement.prototype = HTMLHtmlElement.__proto__.__proto__;
+    HTMLDocument = Document = document.constructor;
+    var x = new DOMParser();
+    XMLDocument = x.constructor;
+    Element = x.parseFromString("<Single />", "text/xml").documentElement.constructor;
+    x = null;
 }
 if(typeof XMLDocument == "undefined" && typeof Document !="undefined"){ XMLDocument = Document; } 
 
@@ -144,20 +144,20 @@ if(Sarissa._SARISSA_IS_IE){
     // see non-IE version
     Sarissa.getDomDocument = function(sUri, sName){
         if(!_SARISSA_DOM_PROGID){
-        	try{
-        		_SARISSA_DOM_PROGID = Sarissa.pickRecentProgID(["Msxml2.DOMDocument.6.0", "Msxml2.DOMDocument.3.0", "MSXML2.DOMDocument", "MSXML.DOMDocument", "Microsoft.XMLDOM"]);
-        	}catch(e){
-        		_SARISSA_DOM_PROGID = "noActiveX";
-        	}
+            try{
+                _SARISSA_DOM_PROGID = Sarissa.pickRecentProgID(["Msxml2.DOMDocument.6.0", "Msxml2.DOMDocument.3.0", "MSXML2.DOMDocument", "MSXML.DOMDocument", "Microsoft.XMLDOM"]);
+            }catch(e){
+                _SARISSA_DOM_PROGID = "noActiveX";
+            }
         }
 
         // Not sure how far IE can carry this but try to do something useful when ActiveX is disabled
         var oDoc = _SARISSA_DOM_PROGID == "noActiveX" ? document.createElement("xml") : new ActiveXObject(_SARISSA_DOM_PROGID);
         // set validation off, make sure older IEs dont choke (no time or IEs to test ;-)
         try{
-        	oDoc.validateOnParse = false; 
-        	oDoc.resolveExternals = "false";
-        	oDoc.setProperty("ProhibitDTD", false);
+            oDoc.validateOnParse = false; 
+            oDoc.resolveExternals = "false";
+            oDoc.setProperty("ProhibitDTD", false);
         }catch(e){}
         
         // if a root tag name was provided, we need to load it in the DOM object
@@ -443,7 +443,7 @@ if(Sarissa._SARISSA_IS_IE){
             // do nothing
         }// TODO: check if the new document has content before trying to copynodes, check  for error handling in DOM 3 LS
         else if(Sarissa._SARISSA_HAS_DOM_FEATURE && window.Document && !Document.prototype.load && document.implementation.hasFeature('LS', '3.0')){
-    		//Opera 9 may get the XPath branch which gives creates XMLDocument, therefore it doesn't reach here which is good
+            //Opera 9 may get the XPath branch which gives creates XMLDocument, therefore it doesn't reach here which is good
             /**
             * <p>Factory method to obtain a new DOM Document object</p>
             * @memberOf Sarissa
@@ -495,8 +495,8 @@ if(!window.DOMParser){
         DOMParser.prototype.parseFromString = function(sXml, contentType){
             var doc = Sarissa.getDomDocument();
             try{
-            	doc.validateOnParse = false; 
-            	doc.setProperty("ProhibitDTD", false);
+                doc.validateOnParse = false; 
+                doc.setProperty("ProhibitDTD", false);
             }catch(e){}
             doc.loadXML(sXml);
             return doc;
@@ -639,7 +639,7 @@ Sarissa.clearChildNodes = function(oNode) {
  */
 Sarissa.copyChildNodes = function(nodeFrom, nodeTo, bPreserveExisting) {
     if(Sarissa._SARISSA_IS_SAFARI && nodeTo.nodeType == Node.DOCUMENT_NODE){ // SAFARI_OLD ??
-    	nodeTo = nodeTo.documentElement; //Apparently there's a bug in safari where you can't appendChild to a document node
+        nodeTo = nodeTo.documentElement; //Apparently there's a bug in safari where you can't appendChild to a document node
     }
     
     if((!nodeFrom) || (!nodeTo)){
@@ -724,10 +724,10 @@ Sarissa.xmlize = function(anyObject, objectName, indentSpace, skipEscape){
         s += "\n";
         var isArrayItem = anyObject instanceof Array;
         for(var name in anyObject){
-        	// do not xmlize functions 
-        	if (anyObject[name] instanceof Function){
-        		continue;
-        	} 
+            // do not xmlize functions 
+            if (anyObject[name] instanceof Function){
+                continue;
+            } 
             s += Sarissa.xmlize(anyObject[name], (isArrayItem?"array-item key=\""+name+"\"":name), indentSpace + " ");
         }
         s += indentSpace;
@@ -782,26 +782,26 @@ Sarissa.updateContentFromURI = function(sFromUrl, oTargetElement, xsltproc, call
         xmlhttp.open("GET", sFromUrl, true);
         xmlhttp.onreadystatechange = function() {
             if (xmlhttp.readyState == 4) {
-            	try{
-            		var oDomDoc = xmlhttp.responseXML;
-	            	if(oDomDoc && Sarissa.getParseErrorText(oDomDoc) == Sarissa.PARSED_OK){
-		                Sarissa.updateContentFromNode(xmlhttp.responseXML, oTargetElement, xsltproc);
-        				if(callback){
-		                	callback(sFromUrl, oTargetElement);
-		                }
-	            	}
-	            	else{
-	            		throw Sarissa.getParseErrorText(oDomDoc);
-	            	}
-            	}
-            	catch(e){
-            		if(callback){
-			        	callback(sFromUrl, oTargetElement, e);
-			        }
-			        else{
-			        	throw e;
-			        }
-            	}
+                try{
+                    var oDomDoc = xmlhttp.responseXML;
+                    if(oDomDoc && Sarissa.getParseErrorText(oDomDoc) == Sarissa.PARSED_OK){
+                        Sarissa.updateContentFromNode(xmlhttp.responseXML, oTargetElement, xsltproc);
+                        if(callback){
+                            callback(sFromUrl, oTargetElement);
+                        }
+                    }
+                    else{
+                        throw Sarissa.getParseErrorText(oDomDoc);
+                    }
+                }
+                catch(e){
+                    if(callback){
+                        callback(sFromUrl, oTargetElement, e);
+                    }
+                    else{
+                        throw e;
+                    }
+                }
             }
         };
         if (skipCache) {
@@ -813,10 +813,10 @@ Sarissa.updateContentFromURI = function(sFromUrl, oTargetElement, xsltproc, call
     catch(e){
         Sarissa.updateCursor(oTargetElement, "auto");
         if(callback){
-        	callback(sFromUrl, oTargetElement, e);
+            callback(sFromUrl, oTargetElement, e);
         }
         else{
-        	throw e;
+            throw e;
         }
     }
 };
@@ -864,7 +864,7 @@ Sarissa.updateContentFromNode = function(oNode, oTargetElement, xsltproc) {
         }
     }
     catch(e) {
-    	throw e;
+        throw e;
     }
     finally{
         Sarissa.updateCursor(oTargetElement, "auto");
@@ -945,7 +945,7 @@ Sarissa.formToQueryString = function(oForm){
  */
 Sarissa.updateContentFromForm = function(oForm, oTargetElement, xsltproc, callback) {
     try{
-    	Sarissa.updateCursor(oTargetElement, "wait");
+        Sarissa.updateCursor(oTargetElement, "wait");
         // build parameters from form fields
         var params = Sarissa.formToQueryString(oForm) + "&" + Sarissa.REMOTE_CALL_FLAG + "=true";
         var xmlhttp = new XMLHttpRequest();
@@ -960,38 +960,38 @@ Sarissa.updateContentFromForm = function(oForm, oTargetElement, xsltproc, callba
             xmlhttp.setRequestHeader("Connection", "close");
         }
         xmlhttp.onreadystatechange = function() {
-        	try{
-	            if (xmlhttp.readyState == 4) {
-	            	var oDomDoc = xmlhttp.responseXML;
-	            	if(oDomDoc && Sarissa.getParseErrorText(oDomDoc) == Sarissa.PARSED_OK){
-		                Sarissa.updateContentFromNode(xmlhttp.responseXML, oTargetElement, xsltproc);
-        				if(callback){
-		                	callback(oForm, oTargetElement);
-		                }
-	            	}
-	            	else{
-	            		throw Sarissa.getParseErrorText(oDomDoc);
-	            	}
-	            }
-        	}
-        	catch(e){
-        		if(callback){
-        			callback(oForm, oTargetElement, e);
-        		}
-        		else{
-        			throw e;
-        		}
-        	}
+            try{
+                if (xmlhttp.readyState == 4) {
+                    var oDomDoc = xmlhttp.responseXML;
+                    if(oDomDoc && Sarissa.getParseErrorText(oDomDoc) == Sarissa.PARSED_OK){
+                        Sarissa.updateContentFromNode(xmlhttp.responseXML, oTargetElement, xsltproc);
+                        if(callback){
+                            callback(oForm, oTargetElement);
+                        }
+                    }
+                    else{
+                        throw Sarissa.getParseErrorText(oDomDoc);
+                    }
+                }
+            }
+            catch(e){
+                if(callback){
+                    callback(oForm, oTargetElement, e);
+                }
+                else{
+                    throw e;
+                }
+            }
         };
         xmlhttp.send(bUseGet?"":params);
     }
     catch(e){
         Sarissa.updateCursor(oTargetElement, "auto");
         if(callback){
-        	callback(oForm, oTargetElement, e);
+            callback(oForm, oTargetElement, e);
         }
         else{
-        	throw e;
+            throw e;
         }
     }
     return false;
@@ -1005,51 +1005,51 @@ Sarissa.updateContentFromForm = function(oForm, oTargetElement, xsltproc, callba
  * @param {Function} oFunc the function object
  */
 Sarissa.getFunctionName = function(oFunc){
-	if(!oFunc || (typeof oFunc != 'function' )){
-		throw "The value of parameter 'oFunc' must be a function";
-	}
-	if(oFunc.name) { 
-		return oFunc.name; 
-	} 
-	// try to parse the function name from the defintion 
-	var sFunc = oFunc.toString(); 
-	alert("sFunc: "+sFunc);
-	var name = sFunc.substring(sFunc.indexOf('function') + 8 , sFunc.indexOf('(')); 
-	if(!name || name.length == 0 || name == " "){
-		// attach to window object under a new name
-		name = "SarissaAnonymous" + Sarissa._getUniqueSuffix();
-		window[name] = oFunc;
-	}
-	return name;
+    if(!oFunc || (typeof oFunc != 'function' )){
+        throw "The value of parameter 'oFunc' must be a function";
+    }
+    if(oFunc.name) { 
+        return oFunc.name; 
+    } 
+    // try to parse the function name from the defintion 
+    var sFunc = oFunc.toString(); 
+    alert("sFunc: "+sFunc);
+    var name = sFunc.substring(sFunc.indexOf('function') + 8 , sFunc.indexOf('(')); 
+    if(!name || name.length == 0 || name == " "){
+        // attach to window object under a new name
+        name = "SarissaAnonymous" + Sarissa._getUniqueSuffix();
+        window[name] = oFunc;
+    }
+    return name;
 };
 
 /**
  *
  */
 Sarissa.setRemoteJsonCallback = function(url, callback, callbackParam) {
-	if(!callbackParam){
-		callbackParam = "callback";
-	}
-	var callbackFunctionName = Sarissa.getFunctionName(callback);
-	//alert("callbackFunctionName: '" + callbackFunctionName+"', length: "+callbackFunctionName.length);
-	var id = "sarissa_json_script_id_" + Sarissa._getUniqueSuffix(); 
-	var oHead = document.getElementsByTagName("head")[0];
-	var scriptTag = document.createElement('script');
-	scriptTag.type = 'text/javascript';
-	scriptTag.id = id;
-	scriptTag.onload = function(){
-		// cleanUp
-		// document.removeChild(scriptTag);
-	};
-	if(url.indexOf("?") != -1){
-		url += ("&" + callbackParam + "=" + callbackFunctionName);
-	}
-	else{
-		url += ("?" + callbackParam + "=" + callbackFunctionName);
-	}
-	scriptTag.src = url;
-  	oHead.appendChild(scriptTag);
-  	return id;
+    if(!callbackParam){
+        callbackParam = "callback";
+    }
+    var callbackFunctionName = Sarissa.getFunctionName(callback);
+    //alert("callbackFunctionName: '" + callbackFunctionName+"', length: "+callbackFunctionName.length);
+    var id = "sarissa_json_script_id_" + Sarissa._getUniqueSuffix(); 
+    var oHead = document.getElementsByTagName("head")[0];
+    var scriptTag = document.createElement('script');
+    scriptTag.type = 'text/javascript';
+    scriptTag.id = id;
+    scriptTag.onload = function(){
+        // cleanUp
+        // document.removeChild(scriptTag);
+    };
+    if(url.indexOf("?") != -1){
+        url += ("&" + callbackParam + "=" + callbackFunctionName);
+    }
+    else{
+        url += ("?" + callbackParam + "=" + callbackFunctionName);
+    }
+    scriptTag.src = url;
+      oHead.appendChild(scriptTag);
+      return id;
 };
 
 //   EOF

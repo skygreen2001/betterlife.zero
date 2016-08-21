@@ -78,10 +78,10 @@ class PHPUnit_Extensions_Database_Operation_Update extends PHPUnit_Extensions_Da
         $setStatement = 'SET ' . implode(', ', $this->buildPreparedColumnArray($columns, $connection));
 
         $query = "
-			UPDATE {$connection->quoteSchemaObject($table->getTableMetaData()->getTableName())}
-			{$setStatement}
-			{$whereStatement}
-		";
+            UPDATE {$connection->quoteSchemaObject($table->getTableMetaData()->getTableName())}
+            {$setStatement}
+            {$whereStatement}
+        ";
 
         return $query;
     }

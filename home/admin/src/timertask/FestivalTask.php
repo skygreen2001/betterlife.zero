@@ -7,12 +7,12 @@
  */
 class FestivalTask extends BaseTask
 {
-	/**
-	 * 定时轮循节假日
-	 */
-	public function run()
-	{
-		LogMe::log("轮询节假日!");
-	}
+    /**
+     * 定时轮循节假日
+     */
+    public function run()
+    {
+        LogMe::log("轮询节假日!");
+    }
 }
 ?>

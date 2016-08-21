@@ -78,9 +78,9 @@ class PHPUnit_Extensions_Database_Operation_Replace extends PHPUnit_Extensions_D
         $whereStatement = 'WHERE ' . implode(' AND ', $this->buildPreparedColumnArray($keys, $connection));
 
         $query = "
-        	SELECT COUNT(*)
-        	FROM {$connection->quoteSchemaObject($table->getTableMetaData()->getTableName())}
-        	{$whereStatement}
+            SELECT COUNT(*)
+            FROM {$connection->quoteSchemaObject($table->getTableMetaData()->getTableName())}
+            {$whereStatement}
         ";
 
         return $query;

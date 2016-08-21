@@ -10,19 +10,19 @@
     </field>
  
 
-	
+    
     <field name="EXPIRY" type="T">
       <descr></descr>
       <NOTNULL/>
     </field>
-	
-	 	<field name="CREATED" type="T">
-	     <descr></descr>
+    
+         <field name="CREATED" type="T">
+         <descr></descr>
       <NOTNULL/>
     </field>
-	
-	 	<field name="MODIFIED" type="T">
-	     <descr></descr>
+    
+         <field name="MODIFIED" type="T">
+         <descr></descr>
       <NOTNULL/>
     </field>
 

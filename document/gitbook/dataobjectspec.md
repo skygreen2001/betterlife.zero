@@ -36,18 +36,18 @@
 定义形式如下:
 
     public $field_spec= array(
-    	EnumColumnNameDefault::ID=>'id',
-    	EnumColumnNameDefault::COMMITTIME=>'publishTime',
-    	EnumDataSpec::REMOVE=>array(
-    		'updateTime'
-    	),
-    	EnumDataSpec::MANY_MANY_TABLE=>array(
-    		//多对多关系类名=>多对多关系表名
-    	),
-    	EnumDataSpec::FOREIGN_ID=>array(
-    		//类名=>外键名
-    		//实例对象名=>外键名[在从属于一对一关系类名中经常遇到，比如家庭地址中省|市|区都关联同一个类:地区；需要用实例对象名]
-    	)
+        EnumColumnNameDefault::ID=>'id',
+        EnumColumnNameDefault::COMMITTIME=>'publishTime',
+        EnumDataSpec::REMOVE=>array(
+            'updateTime'
+        ),
+        EnumDataSpec::MANY_MANY_TABLE=>array(
+            //多对多关系类名=>多对多关系表名
+        ),
+        EnumDataSpec::FOREIGN_ID=>array(
+            //类名=>外键名
+            //实例对象名=>外键名[在从属于一对一关系类名中经常遇到，比如家庭地址中省|市|区都关联同一个类:地区；需要用实例对象名]
+        )
     );
 
 ####基本定义
@@ -101,23 +101,23 @@
 ####示例说明
 示例1:用户详细信息定义列规格说明如下:
 
-	public $field_spec=array(
-		EnumDataSpec::FOREIGN_ID=>array(
-			'country_r'=>"country",
-			"province_r"=>"province",
-			"city_r"=>"city",
-			'district_r'=>"district"
-		)
-	);
+    public $field_spec=array(
+        EnumDataSpec::FOREIGN_ID=>array(
+            'country_r'=>"country",
+            "province_r"=>"province",
+            "city_r"=>"city",
+            'district_r'=>"district"
+        )
+    );
 
 示例2:用户角色列规格说明如下:
 
-	public $field_spec=array(
-		EnumDataSpec::REMOVE=>array(
-			'commitTime',
-			'updateTime'
-		)
-	);
+    public $field_spec=array(
+        EnumDataSpec::REMOVE=>array(
+            'commitTime',
+            'updateTime'
+        )
+    );
 
 ###$has_one:一对一关系说明
 ####基本定义
@@ -134,9 +134,9 @@
 定义示例:
 
     class User extends DataObject {
-    	static $has_one=array(
-    		"userDetail"=> "UserDetail",
-    	);
+        static $has_one=array(
+            "userDetail"=> "UserDetail",
+        );
 调用示例:
 
     $user=User::get_by_id(1);
@@ -158,9 +158,9 @@
 定义示例:
 
     class Userdetail extends DataObject {
-    	static $belongs_has_one=array(
-    		"user"=>"User"
-    	);
+        static $belongs_has_one=array(
+            "user"=>"User"
+        );
 调用示例:
 
     $userdetail=Userdetail::get_by_id(1);
@@ -183,9 +183,9 @@
 定义示例:
 
     class Blog extends DataObject {
-    	static $has_many=array(
-    		"comments"=> "Comment",
-    	);
+        static $has_many=array(
+            "comments"=> "Comment",
+        );
 调用示例:
 
     $blog=Blog::get_by_id(1);
@@ -208,9 +208,9 @@
 定义示例:
 
     class User extends DataObject {
-    	static $many_many=array(
-    		"roles"=> "Role",
-    	);
+        static $many_many=array(
+            "roles"=> "Role",
+        );
 调用示例:
 
     $user=User::get_by_id(1);
@@ -232,9 +232,9 @@
 定义示例:
 
     class Role extends DataObject {
-    	static $belongs_many_many=array(
-    		"users"=>"User"
-    	);
+        static $belongs_many_many=array(
+            "users"=>"User"
+        );
 
 调用示例:
 

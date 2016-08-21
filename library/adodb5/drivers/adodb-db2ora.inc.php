@@ -23,57 +23,57 @@ define('ADODB_DB2OCI',1);
 function _colontrack($p)
 {
 global $_COLONARR,$_COLONSZ;
-	$v = (integer) substr($p,1);
-	if ($v > $_COLONSZ) return $p;
-	$_COLONARR[] = $v;
-	return '?';
+    $v = (integer) substr($p,1);
+    if ($v > $_COLONSZ) return $p;
+    $_COLONARR[] = $v;
+    return '?';
 }
 
 function _colonscope($sql,$arr)
 {
 global $_COLONARR,$_COLONSZ;
 
-	$_COLONARR = array();
-	$_COLONSZ = sizeof($arr);
-	
-	$sql2 = preg_replace("/(:[0-9]+)/e","_colontrack('\\1')",$sql);
-	
-	if (empty($_COLONARR)) return array($sql,$arr);
-	
-	foreach($_COLONARR as $k => $v) {
-		$arr2[] = $arr[$v]; 
-	}
-	
-	return array($sql2,$arr2);
+    $_COLONARR = array();
+    $_COLONSZ = sizeof($arr);
+    
+    $sql2 = preg_replace("/(:[0-9]+)/e","_colontrack('\\1')",$sql);
+    
+    if (empty($_COLONARR)) return array($sql,$arr);
+    
+    foreach($_COLONARR as $k => $v) {
+        $arr2[] = $arr[$v]; 
+    }
+    
+    return array($sql2,$arr2);
 }
 
 class ADODB_db2oci extends ADODB_db2 {
-	var $databaseType = "db2oci";	
-	var $sysTimeStamp = 'sysdate';
-	var $sysDate = 'trunc(sysdate)';
-	
-	function ADODB_db2oci()
-	{
-		$this->ADODB_db2();
-	}
-	
-	
-	function _Execute($sql, $inputarr)
-	{
-		if ($inputarr) list($sql,$inputarr) = _colonscope($sql, $inputarr);
-		return parent::_Execute($sql, $inputarr);
-	}
+    var $databaseType = "db2oci";    
+    var $sysTimeStamp = 'sysdate';
+    var $sysDate = 'trunc(sysdate)';
+    
+    function ADODB_db2oci()
+    {
+        $this->ADODB_db2();
+    }
+    
+    
+    function _Execute($sql, $inputarr)
+    {
+        if ($inputarr) list($sql,$inputarr) = _colonscope($sql, $inputarr);
+        return parent::_Execute($sql, $inputarr);
+    }
 };
  
 
-class  ADORecordSet_db2oci extends ADORecordSet_odbc {	
-	
-	var $databaseType = "db2oci";		
-	
-	function ADORecordSet_db2oci($id,$mode=false)
-	{
-		return $this->ADORecordSet_db2($id,$mode);
-	}
+class  ADORecordSet_db2oci extends ADORecordSet_odbc {    
+    
+    var $databaseType = "db2oci";        
+    
+    function ADORecordSet_db2oci($id,$mode=false)
+    {
+        return $this->ADORecordSet_db2($id,$mode);
+    }
 }
 
 } //define

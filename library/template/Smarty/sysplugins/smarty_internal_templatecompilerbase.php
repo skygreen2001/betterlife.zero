@@ -112,12 +112,12 @@ class Smarty_Internal_TemplateCompilerBase {
         $this->has_output = false;
         // log tag/attributes
         if (isset($this->smarty->get_used_tags) && $this->smarty->get_used_tags) {
-        	$this->used_tags[] = array($tag,$args);
+            $this->used_tags[] = array($tag,$args);
         } 
-		// check nocache option flag
+        // check nocache option flag
         if (in_array("'nocache'",$args) || in_array(array('nocache'=>'true'),$args)
-        		|| in_array(array('nocache'=>'"true"'),$args) || in_array(array('nocache'=>"'true'"),$args)) {
-        	$this->tag_nocache = true;
+                || in_array(array('nocache'=>'"true"'),$args) || in_array(array('nocache'=>"'true'"),$args)) {
+            $this->tag_nocache = true;
         }
         // compile the smarty tag (required compile classes to compile the tag are autoloaded)
         if (($_output = $this->callTagCompiler($tag, $args, $parameter)) === false) {
@@ -196,7 +196,7 @@ class Smarty_Internal_TemplateCompilerBase {
                     if ($plugin_type == Smarty::PLUGIN_BLOCK && $this->smarty->loadPlugin('smarty_compiler_' . $tag)) {
                         $plugin = 'smarty_compiler_' . $tag;
                         if (is_callable($plugin)) {
-                        	// convert arguments format for old compiler plugins
+                            // convert arguments format for old compiler plugins
                             $new_args = array();
                             foreach ($args as $mixed) {
                                 $new_args = array_merge($new_args, $mixed);
@@ -415,18 +415,18 @@ class Smarty_Internal_TemplateCompilerBase {
             // expected token from parser
             $error_text .= ' - Unexpected "' . $this->lex->value.'"';
             if (count($this->parser->yy_get_expected_tokens($this->parser->yymajor)) <= 4 ) {
-            	foreach ($this->parser->yy_get_expected_tokens($this->parser->yymajor) as $token) {
-            	    $exp_token = $this->parser->yyTokenName[$token];
-            	    if (isset($this->lex->smarty_token_names[$exp_token])) {
-            	        // token type from lexer
-            	        $expect[] = '"' . $this->lex->smarty_token_names[$exp_token] . '"';
-            	    } else {
-            	        // otherwise internal token name
-            	        $expect[] = $this->parser->yyTokenName[$token];
-            	    } 
-            	} 
-            	$error_text .= ', expected one of: ' . implode(' , ', $expect);
-        	}
+                foreach ($this->parser->yy_get_expected_tokens($this->parser->yymajor) as $token) {
+                    $exp_token = $this->parser->yyTokenName[$token];
+                    if (isset($this->lex->smarty_token_names[$exp_token])) {
+                        // token type from lexer
+                        $expect[] = '"' . $this->lex->smarty_token_names[$exp_token] . '"';
+                    } else {
+                        // otherwise internal token name
+                        $expect[] = $this->parser->yyTokenName[$token];
+                    } 
+                } 
+                $error_text .= ', expected one of: ' . implode(' , ', $expect);
+            }
         } 
         throw new SmartyCompilerException($error_text);
     } 

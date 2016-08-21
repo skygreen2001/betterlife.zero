@@ -21,7 +21,7 @@
  * @category   PHPExcel
  * @package    PHPExcel_Worksheet
  * @copyright  Copyright (c) 2006 - 2011 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
  * @version    1.7.6, 2011-02-27
  */
 
@@ -37,40 +37,40 @@
  */
 class PHPExcel_Worksheet_RowIterator extends CachingIterator
 {
-	/**
-	 * PHPExcel_Worksheet to iterate
-	 *
-	 * @var PHPExcel_Worksheet
-	 */
-	private $_subject;
+    /**
+     * PHPExcel_Worksheet to iterate
+     *
+     * @var PHPExcel_Worksheet
+     */
+    private $_subject;
 
-	/**
-	 * Current iterator position
-	 *
-	 * @var int
-	 */
-	private $_position = 1;
+    /**
+     * Current iterator position
+     *
+     * @var int
+     */
+    private $_position = 1;
 
-	/**
-	 * Create a new row iterator
-	 *
-	 * @param PHPExcel_Worksheet 		$subject
-	 */
-	public function __construct(PHPExcel_Worksheet $subject = null) {
-		// Set subject
-		$this->_subject = $subject;
-	}
+    /**
+     * Create a new row iterator
+     *
+     * @param PHPExcel_Worksheet         $subject
+     */
+    public function __construct(PHPExcel_Worksheet $subject = null) {
+        // Set subject
+        $this->_subject = $subject;
+    }
 
-	/**
-	 * Destructor
-	 */
-	public function __destruct() {
-		unset($this->_subject);
-	}
+    /**
+     * Destructor
+     */
+    public function __destruct() {
+        unset($this->_subject);
+    }
 
-	/**
-	 * Rewind iterator
-	 */
+    /**
+     * Rewind iterator
+     */
     public function rewind() {
         $this->_position = 1;
     }
@@ -81,7 +81,7 @@ class PHPExcel_Worksheet_RowIterator extends CachingIterator
      * @return PHPExcel_Worksheet_Row
      */
     public function current() {
-    	return new PHPExcel_Worksheet_Row($this->_subject, $this->_position);
+        return new PHPExcel_Worksheet_Row($this->_subject, $this->_position);
     }
 
     /**

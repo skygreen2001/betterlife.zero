@@ -21,17 +21,17 @@ Dispatcher::$isOutputStatic=true;
 Gc::$is_online_optimize=true;
 
 if (Gc::$dev_profile_on){
-	Profiler::init();
-	Profiler::mark("生成首页");
-	echo "/".str_repeat("*",40).UtilDateTime::now().":生成首页".str_repeat("*",40)."<br/>";
+    Profiler::init();
+    Profiler::mark("生成首页");
+    echo "/".str_repeat("*",40).UtilDateTime::now().":生成首页".str_repeat("*",40)."<br/>";
 }
 createOneStaticHtmlPage("model.index.index",$html_dir."index.html");
 if (Gc::$dev_profile_on){
-	Profiler::unmark("生成首页");
+    Profiler::unmark("生成首页");
 }
 
 if (Gc::$dev_profile_on){
-	Profiler::show();
+    Profiler::show();
 }
 echo "全部静态页面生成！";
 
@@ -42,9 +42,9 @@ echo "全部静态页面生成！";
  */
 function createOneStaticHtmlPage($go,$htmlfilename,$go_param=null)
 {
-	$htmlcontent=runphp($go,$go_param);
-	$htmlcontent=replaceProductDetailLink($htmlcontent);
-	file_put_contents($htmlfilename,$htmlcontent);
+    $htmlcontent=runphp($go,$go_param);
+    $htmlcontent=replaceProductDetailLink($htmlcontent);
+    file_put_contents($htmlfilename,$htmlcontent);
 }
 
 /**
@@ -52,10 +52,10 @@ function createOneStaticHtmlPage($go,$htmlfilename,$go_param=null)
  */
 function replaceProductDetailLink($content)
 {
-	if (!empty($content)){
-		$content=preg_replace("/index.php[?]go=model.blog.view&blog_id=(\d+)/i","html/blog_\\1.html",$content);
-	}
-	return $content;
+    if (!empty($content)){
+        $content=preg_replace("/index.php[?]go=model.blog.view&blog_id=(\d+)/i","html/blog_\\1.html",$content);
+    }
+    return $content;
 }
 
 /**
@@ -65,30 +65,30 @@ function replaceProductDetailLink($content)
  */
 function runphp($go,$pararm=null)
 {
-	$_GET["go"]=$go;
-	if (is_string($pararm)){
-		$pararm=parse_str($pararm);
-	}
-	if (is_array($pararm)){
-		foreach ($pararm as $key=>$value) {
-			$_GET[$key]=$value;
-		}
-	}
-	$result=Dispatcher::dispatch(new Router());
-	if (!empty($result)){
-		if (Gc::$is_online_optimize){
-			if (contain($result,"<body")){
-			   /************************start:整个Html页面去除注释，换行，空格********************/
-				$result=preg_replace("/<\!--(.*?)-->/","",$result);//去掉html里的注释
-				$result = preg_replace("~>\s+\n~",">",$result);
-				$result = preg_replace("~>\s+\r~",">",$result);
-				$result = preg_replace("~>\s+<~","><",$result);
-				$result=str_replace("\r\n","",$result);
-			   /************************end  :整个Html页面去除注释，换行，空格********************/
-			}
-		}
-	}
-	return $result;
+    $_GET["go"]=$go;
+    if (is_string($pararm)){
+        $pararm=parse_str($pararm);
+    }
+    if (is_array($pararm)){
+        foreach ($pararm as $key=>$value) {
+            $_GET[$key]=$value;
+        }
+    }
+    $result=Dispatcher::dispatch(new Router());
+    if (!empty($result)){
+        if (Gc::$is_online_optimize){
+            if (contain($result,"<body")){
+               /************************start:整个Html页面去除注释，换行，空格********************/
+                $result=preg_replace("/<\!--(.*?)-->/","",$result);//去掉html里的注释
+                $result = preg_replace("~>\s+\n~",">",$result);
+                $result = preg_replace("~>\s+\r~",">",$result);
+                $result = preg_replace("~>\s+<~","><",$result);
+                $result=str_replace("\r\n","",$result);
+               /************************end  :整个Html页面去除注释，换行，空格********************/
+            }
+        }
+    }
+    return $result;
 }
 ?>
 

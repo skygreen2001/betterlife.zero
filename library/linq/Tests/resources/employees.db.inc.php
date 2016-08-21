@@ -21,7 +21,7 @@
  * @category   PHPLinq
  * @package    PHPLinq
  * @copyright  Copyright (c) 2008 - 2009 PHPLinq (http://www.codeplex.com/PHPLinq)
- * @license    http://www.gnu.org/licenses/lgpl.txt	LGPL
+ * @license    http://www.gnu.org/licenses/lgpl.txt    LGPL
  * @version    0.4.0, 2009-01-27
  */
 
@@ -39,19 +39,19 @@ $employees = null;
 require_once 'employees.inc.php';
 
 $createTables = '
-	CREATE TABLE employees (
-		Id        		INTEGER NOT NULL PRIMARY KEY,
-		DepartmentId    INTEGER,
-		ManagerId		INTEGER,
-		Name			VARCHAR(100),
-		Email			VARCHAR(200),
-		Age				INTEGER
-	);
+    CREATE TABLE employees (
+        Id                INTEGER NOT NULL PRIMARY KEY,
+        DepartmentId    INTEGER,
+        ManagerId        INTEGER,
+        Name            VARCHAR(100),
+        Email            VARCHAR(200),
+        Age                INTEGER
+    );
 ';
 $db->query($createTables);
 
 foreach ($employees as $employee) {
-	$db->insert('employees', (array)$employee);
+    $db->insert('employees', (array)$employee);
 }
 
 // EmployeeTable class

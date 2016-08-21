@@ -1,74 +1,74 @@
 <?php
 /* 
- * Edition:	ET091001
- * Desc:	Core Engine 3 (Memcache/Compile/Replace)
- * File:	template.core.php
- * Author:	David Meng
- * Site:	http://www.systn.com
- * Email:	mdchinese@gmail.com
+ * Edition:    ET091001
+ * Desc:    Core Engine 3 (Memcache/Compile/Replace)
+ * File:    template.core.php
+ * Author:    David Meng
+ * Site:    http://www.systn.com
+ * Email:    mdchinese@gmail.com
  * 
 */
 
 define("ET3!",TRUE);
 class ETCore {
-    var $ThisFile	= '';				//当前文件
-    var $IncFile	= '';				//引入文件
-    var $ThisValue	= array();			//当前数值
-    var $FileList	= array();			//载入文件列表
-    var $IncList	= array();			//引入文件列表
-    var $ImgDir		= array('images');	//图片地址目录
-    var $HtmDir		= 'cache_htm/';		//静态存放的目录
-    var $HtmID		= '';				//静态文件ID
-    var $HtmTime	= '180';			//秒为单位，默认三分钟
-    var $AutoImage	= 1;				//自动解析图片目录开关默认值
-    var $Hacker		= "<?php defined('ET3!') OR die('You are Hacker!<br>Power by Ease Template!');";
-    var $Compile	= array();
-    var $Analysis	= array();
-    var $Emc		= array();
+    var $ThisFile    = '';                //当前文件
+    var $IncFile    = '';                //引入文件
+    var $ThisValue    = array();            //当前数值
+    var $FileList    = array();            //载入文件列表
+    var $IncList    = array();            //引入文件列表
+    var $ImgDir        = array('images');    //图片地址目录
+    var $HtmDir        = 'cache_htm/';        //静态存放的目录
+    var $HtmID        = '';                //静态文件ID
+    var $HtmTime    = '180';            //秒为单位，默认三分钟
+    var $AutoImage    = 1;                //自动解析图片目录开关默认值
+    var $Hacker        = "<?php defined('ET3!') OR die('You are Hacker!<br>Power by Ease Template!');";
+    var $Compile    = array();
+    var $Analysis    = array();
+    var $Emc        = array();
     /**
-     *	声明模板用法
+     *    声明模板用法
      */
     function ETCoreStart(
             $set = array(
-                    'ID'		 =>'1',					//缓存ID
-                    'TplType'	 =>'htm',				//模板格式
-                    'CacheDir'	 =>'cache',				//缓存目录
-                    'TemplateDir'=>'template' ,			//模板存放目录
-                    'AutoImage'	 =>'on' ,				//自动解析图片目录开关 on表示开放 off表示关闭
-                    'LangDir'	 =>'language' ,			//语言文件存放的目录
-                    'Language'	 =>'default' ,			//语言的默认文件
-                    'Copyright'	 =>'off' ,				//版权保护
-                    'MemCache'	 =>'' ,					//Memcache服务器地址例如:127.0.0.1:11211
-                    'Compress'	 =>'on' ,				//压缩代码
-                    'WebURL'	 =>'' ,					//如果采用路由模式请设定真实网站地址
+                    'ID'         =>'1',                    //缓存ID
+                    'TplType'     =>'htm',                //模板格式
+                    'CacheDir'     =>'cache',                //缓存目录
+                    'TemplateDir'=>'template' ,            //模板存放目录
+                    'AutoImage'     =>'on' ,                //自动解析图片目录开关 on表示开放 off表示关闭
+                    'LangDir'     =>'language' ,            //语言文件存放的目录
+                    'Language'     =>'default' ,            //语言的默认文件
+                    'Copyright'     =>'off' ,                //版权保护
+                    'MemCache'     =>'' ,                    //Memcache服务器地址例如:127.0.0.1:11211
+                    'Compress'     =>'on' ,                //压缩代码
+                    'WebURL'     =>'' ,                    //如果采用路由模式请设定真实网站地址
             )
     ) {
 
-        $this->TplID		= (defined('TemplateID')?TemplateID:( ((int)$set['ID']<=1)?1:(int)$set['ID']) ).'_';
+        $this->TplID        = (defined('TemplateID')?TemplateID:( ((int)$set['ID']<=1)?1:(int)$set['ID']) ).'_';
 
-        $this->CacheDir   	= (defined('NewCache')?NewCache:( (trim($set['CacheDir']) != '')?$set['CacheDir']:'cache') ).'/';
+        $this->CacheDir       = (defined('NewCache')?NewCache:( (trim($set['CacheDir']) != '')?$set['CacheDir']:'cache') ).'/';
 
-        $this->TemplateDir	= (defined('NewTemplate')?NewTemplate:( (trim($set['TemplateDir']) != '')?$set['TemplateDir']:'template') ).'/';
+        $this->TemplateDir    = (defined('NewTemplate')?NewTemplate:( (trim($set['TemplateDir']) != '')?$set['TemplateDir']:'template') ).'/';
 
-        $this->Ext			= (@$set['TplType'] != '')?$set['TplType']:'htm';
+        $this->Ext            = (@$set['TplType'] != '')?$set['TplType']:'htm';
 
-        $this->AutoImage	= (@$set['AutoImage']=='off')?0:1;
+        $this->AutoImage    = (@$set['AutoImage']=='off')?0:1;
 
-        $this->Copyright	= (@$set['Copyright']=='off')?0:1;
+        $this->Copyright    = (@$set['Copyright']=='off')?0:1;
 
-        $this->Compress		= (@$set['Compress']=='off')?0:1;
+        $this->Compress        = (@$set['Compress']=='off')?0:1;
 
-        $this->version		= (trim($_GET['EaseTemplateVer']))?die('Ease Templae E3!'):'';
+        $this->version        = (trim($_GET['EaseTemplateVer']))?die('Ease Templae E3!'):'';
 
-        $this->WebURL		= (@$set['WebURL'] != '')?$set['WebURL']:'';
+        $this->WebURL        = (@$set['WebURL'] != '')?$set['WebURL']:'';
 
         if(isset($_SERVER["PATH_INFO"]) && $this->WebURL=='') {
             die(ET_E_routing);
         }
 
         //载入语言文件
-        $this->Language	= (defined('Language')?Language:( (($set['Language']!='default' && $set['Language'])?$set['Language']:'default') ));
-        $this->LangDir		= (defined('LangDir')?LangDir:( ((@$set['LangDir']!='language' && @$set['LangDir'])?$set['LangDir']:'language') )).'/';
+        $this->Language    = (defined('Language')?Language:( (($set['Language']!='default' && $set['Language'])?$set['Language']:'default') ));
+        $this->LangDir        = (defined('LangDir')?LangDir:( ((@$set['LangDir']!='language' && @$set['LangDir'])?$set['LangDir']:'language') )).'/';
 
         if(is_dir($this->LangDir)) {
             if(@is_file($this->LangDir.$this->Language.'.php')) {
@@ -83,22 +83,22 @@ class ETCore {
 
         //缓存目录检测以及运行模式
         if(@ereg(':',$set['MemCache'])) {
-            $this->RunType		= 'MemCache';
+            $this->RunType        = 'MemCache';
             if(!FUNCTION_EXISTS('memcache_connect')) {
                 die(ET_E_memcache);
             }
-            $memset		= explode(":",$set['MemCache']);
-            $this->Emc	= memcache_connect($memset[0], $memset[1]) OR die(ET_E_unconnect);
+            $memset        = explode(":",$set['MemCache']);
+            $this->Emc    = memcache_connect($memset[0], $memset[1]) OR die(ET_E_unconnect);
         }else {
-            $this->RunType		= (@substr(@sprintf('%o', @fileperms($this->CacheDir)), -3)==777 && is_dir($this->CacheDir))?'Cache':'Replace';
+            $this->RunType        = (@substr(@sprintf('%o', @fileperms($this->CacheDir)), -3)==777 && is_dir($this->CacheDir))?'Cache':'Replace';
         }
 
     }
 
 
     /**
-     *	设置数值
-     *	set_var(变量名或是数组,设置数值[数组不设置此值]);
+     *    设置数值
+     *    set_var(变量名或是数组,设置数值[数组不设置此值]);
      */
     function set_var(
             $name,
@@ -113,8 +113,8 @@ class ETCore {
 
 
     /**
-     *	设置模板文件
-     *	set_file(文件名,设置目录);
+     *    设置模板文件
+     *    set_file(文件名,设置目录);
      */
     function set_file(
             $FileName,
@@ -125,14 +125,14 @@ class ETCore {
 
         //目录地址检测
         if(trim($NewDir) != '') {
-            $search_tmp	= str_replace('./','',$this->TemplateDir);
+            $search_tmp    = str_replace('./','',$this->TemplateDir);
             $search_tmp = PREG_REPLACE("/(^[a-z0-9A-Z]{1,100}).+/is","\\1",$search_tmp);
             $this->FileDir[$this->ThisFile] = eregi($search_tmp,$NewDir)?$NewDir.'/':$this->TemplateDir.$NewDir.'/';
         }else {
             $this->FileDir[$this->ThisFile] = $this->TemplateDir;
         }
 
-        $this->IncFile[$FileName]		 = $this->FileDir[$this->ThisFile].$this->ThisFile;
+        $this->IncFile[$FileName]         = $this->FileDir[$this->ThisFile].$this->ThisFile;
 
         if(!is_file($this->IncFile[$FileName]) && $this->Copyright==1) {
             die(ET_E_not_exist1.$this->IncFile[$FileName].ET_E_not_exist2);
@@ -170,7 +170,7 @@ class ETCore {
         //检测run方法
         $run = 0;
         if (eregi("run:",$ShowTPL)) {
-            $run	 = 1;
+            $run     = 1;
             //Fix =
             $ShowTPL = preg_replace('/(\{|<!--\s*)run:(\}|\s*-->)\s*=/','{run:}echo ',$ShowTPL);
             $ShowTPL = preg_replace('/(\{|<!--\s*)run:\s*=/','{run:echo ',$ShowTPL);
@@ -288,7 +288,7 @@ class ETCore {
     ) {
         if (is_dir($this->LangDir)) {
             //采用MD5效验
-            $id 	 = md5($str);
+            $id      = md5($str);
             //不存在数据则写入
             if($this->LangData[$id]=='' && $this->Language=='default') {
                 //语言包文件
@@ -304,18 +304,18 @@ class ETCore {
                 }
 
                 //修复'多\问题
-                $w_str	= str_replace("\\\\","\\\\\\\\", $str);
-                $w_str	= str_replace('"','\\\"', $w_str);
-                $w_str	= str_replace("\'","'", $w_str);
+                $w_str    = str_replace("\\\\","\\\\\\\\", $str);
+                $w_str    = str_replace('"','\\\"', $w_str);
+                $w_str    = str_replace("\'","'", $w_str);
 
                 //语言文件过大时采取建立新文件
-                $docs	= str_replace("\'","'", $str);
-                $docs	= str_replace('\\\\','\\', $docs);
-                $docs	= str_replace('\\"','"', $docs);
+                $docs    = str_replace("\'","'", $str);
+                $docs    = str_replace('\\\\','\\', $docs);
+                $docs    = str_replace('\\"','"', $docs);
                 if(strlen($docs)>400) {
                     $this->writer($this->LangDir.$this->Language.'.'.$id.'.php','<? $etl = "'.$w_str.'";?>');
-                    $docs	= substr($docs,0,40);		//简要说明
-                    $str	= 'o(O_O)o.ET Lang.o(*_*)o';	//语言新文件
+                    $docs    = substr($docs,0,40);        //简要说明
+                    $str    = 'o(O_O)o.ET Lang.o(*_*)o';    //语言新文件
                 }
 
                 //文件安全处理
@@ -362,10 +362,10 @@ class ETCore {
     ) {
         if($Files) {
             if (!strrpos($Files,$this->Ext)) {
-                $Files	= $Files.".".$this->Ext;
+                $Files    = $Files.".".$this->Ext;
             }
-            $FileLs		= $this->TemplateDir.$Files;
-            $contents	=$this->ParseCode($FileLs,$Files);
+            $FileLs        = $this->TemplateDir.$Files;
+            $contents    =$this->ParseCode($FileLs,$Files);
 
             if($this->RunType=='Cache') {
                 $this->FileDir[$Files] = $this->TemplateDir;
@@ -412,7 +412,7 @@ class ETCore {
             //编译记录
             $content = str_replace("\\","\\\\",$content);
             $content = str_replace("'","\'",$content);
-            $content = str_replace('echo"";',"",$content);		//替换多余数据
+            $content = str_replace('echo"";',"",$content);        //替换多余数据
             $wfile = ($cachename)?$cachename:$this->ThisFile;
 
             $this->writer($this->FileName($wfile,$this->TplID) ,$this->Hacker.'$EaseTemplate3_Cache = \''.$content.'\';');
@@ -431,16 +431,16 @@ class ETCore {
 
     /**
      *  检测缓存是否要更新
-     *	filename	缓存文件名
-     *	settime		指定事件则提供更新，只用于memcache
+     *    filename    缓存文件名
+     *    settime        指定事件则提供更新，只用于memcache
      */
     function FileUpdate($filname,$settime=0) {
 
         //检测设置模板文件
         if (is_array($this->IncFile)) {
             unset($k,$v);
-            $update		= 0;
-            $settime	= ($settime>0)?$settime:@filemtime($filname);
+            $update        = 0;
+            $settime    = ($settime>0)?$settime:@filemtime($filname);
             foreach ($this->IncFile AS $k=>$v) {
                 if (@filemtime($v)>$settime) {
                     $update = 1;
@@ -460,8 +460,8 @@ class ETCore {
 
 
     /**
-     *	输出运算
-     *   Filename	连载编译输出文件名
+     *    输出运算
+     *   Filename    连载编译输出文件名
      */
     function output($Filename = '') {
         switch($this->RunType) {
@@ -470,39 +470,39 @@ class ETCore {
             case'MemCache':
                 if ($Filename=='include_page') {
                     //直接输出文件
-                    $contents	= $this->reader($this->FileDir[$this->ThisFile].$this->ThisFile);
+                    $contents    = $this->reader($this->FileDir[$this->ThisFile].$this->ThisFile);
                 }else {
 
-                    $FileNames	= ($Filename)?$Filename:$this->ThisFile;
-                    $CacheFile	= $this->FileName($FileNames,$this->TplID);
+                    $FileNames    = ($Filename)?$Filename:$this->ThisFile;
+                    $CacheFile    = $this->FileName($FileNames,$this->TplID);
 
                     //检测记录时间
-                    $updateT	= memcache_get($this->Emc,$CacheFile.'_date');
-                    $update		= $this->FileUpdate($CacheFile,$updateT);
+                    $updateT    = memcache_get($this->Emc,$CacheFile.'_date');
+                    $update        = $this->FileUpdate($CacheFile,$updateT);
 
                     $CacheData = memcache_get($this->Emc,$CacheFile);
 
                     if(trim($CacheData) && $update) {
                         //Close
                         memcache_close($this->Emc);
-                        $contents	= $CacheData;
+                        $contents    = $CacheData;
                     }else {
                         if ($Filename) {
-                            $CacheData	= $this->ParseCode($this->FileList,$Filename);
+                            $CacheData    = $this->ParseCode($this->FileList,$Filename);
                             //cache date
                             @memcache_set($this->Emc,$CacheFile.'_date', time()) OR die(ET_E_mc_save);
                             @memcache_set($this->Emc,$CacheFile, $CacheData) OR die(ET_E_mc_save);
                             //Close
                             memcache_close($this->Emc);
-                            $contents	= $CacheData;
+                            $contents    = $CacheData;
                         }else {
-                            $CacheData	= $this->ParseCode();
+                            $CacheData    = $this->ParseCode();
                             //cache date
                             @memcache_set($this->Emc,$CacheFile.'_date', time()) OR die(ET_E_mc_save);
                             @memcache_set($this->Emc,$CacheFile, $CacheData) OR die(ET_E_mc_save);
                             //Close
                             memcache_close($this->Emc);
-                            $contents	= $CacheData;
+                            $contents    = $CacheData;
                         }
                     }
                 }
@@ -514,13 +514,13 @@ class ETCore {
                 if ($Filename=='include_page') {
                     //直接输出文件
 
-                    $contents	= $this->reader($this->FileDir[$this->ThisFile].$this->ThisFile);
+                    $contents    = $this->reader($this->FileDir[$this->ThisFile].$this->ThisFile);
                 }else {
 
-                    $FileNames	= ($Filename)?$Filename:$this->ThisFile;
-                    $CacheFile	= $this->FileName($FileNames,$this->TplID);
+                    $FileNames    = ($Filename)?$Filename:$this->ThisFile;
+                    $CacheFile    = $this->FileName($FileNames,$this->TplID);
 
-                    $CacheFile	= $this->FileUpdate($CacheFile);
+                    $CacheFile    = $this->FileUpdate($CacheFile);
                     if (@is_file($CacheFile)) {
                         @extract($this->Value());
                         ob_start();
@@ -531,13 +531,13 @@ class ETCore {
                             @eval('echo "'.$EaseTemplate3_Cache.'";');
                             $contents = ob_get_contents();
                             ob_end_clean();
-                            $contents	= $contents;
+                            $contents    = $contents;
                         }
                     }else {
                         if ($Filename) {
-                            $contents	= $this->ParseCode($this->FileList,$Filename);
+                            $contents    = $this->ParseCode($this->FileList,$Filename);
                         }else {
-                            $contents	= $this->ParseCode();
+                            $contents    = $this->ParseCode();
                         }
                     }
                 }
@@ -550,23 +550,23 @@ class ETCore {
                 if($Filename) {
                     if ($Filename=='include_page') {
                         //直接输出文件
-                        $contents	= $this->reader($this->FileDir[$this->ThisFile].$this->ThisFile);
+                        $contents    = $this->reader($this->FileDir[$this->ThisFile].$this->ThisFile);
                     }else {
-                        $contents	= $this->ParseCode($this->FileList);
+                        $contents    = $this->ParseCode($this->FileList);
                     }
                 }else {
-                    $contents	= $this->ParseCode();
+                    $contents    = $this->ParseCode();
                 }
         }
 
         //代码压缩
         if($this->Compress==1) {
             if (!empty($content)) {
-                $content	= preg_replace("~>\s+\r~", ">", preg_replace("~>\s+\n~", ">", $content));
-                $content	= preg_replace("~>\s+<~", "><", $content);
+                $content    = preg_replace("~>\s+\r~", ">", preg_replace("~>\s+\n~", ">", $content));
+                $content    = preg_replace("~>\s+<~", "><", $content);
             }
-            $contents	= str_replace("\r\n\r\n\r\n", "\r\n", $contents);
-            $contents	= str_replace("\r\n\r\n", "\r\n", $contents);
+            $contents    = str_replace("\r\n\r\n\r\n", "\r\n", $contents);
+            $contents    = str_replace("\r\n\r\n", "\r\n", $contents);
         }
         return $contents;
 
@@ -583,8 +583,8 @@ class ETCore {
 
 
     /**
-     *	输出模板内容
-     *   Filename	连载编译输出文件名
+     *    输出模板内容
+     *   Filename    连载编译输出文件名
      */
     function r(
             $Filename = ''
@@ -594,8 +594,8 @@ class ETCore {
 
 
     /**
-     *	打印模板内容
-     *   Filename	连载编译输出文件名
+     *    打印模板内容
+     *   Filename    连载编译输出文件名
      */
     function p($Filename = '') {
         echo $this->output($Filename);
@@ -603,17 +603,17 @@ class ETCore {
 
 
     /**
-     *	分析图片地址
+     *    分析图片地址
      *   content 分析内容
      *   fileadds 文件名
      */
     function ImgCheck($content,$fileadds='') {
         //Check Image Dir
         if($this->AutoImage==1) {
-            $file_dir	= dirname($fileadds);
+            $file_dir    = dirname($fileadds);
 
             if(isset($_SERVER["PATH_INFO"])) {
-                $file_dir	= $this->WebURL.$file_dir;
+                $file_dir    = $this->WebURL.$file_dir;
             }
 
             //增加替换目录
@@ -638,7 +638,7 @@ class ETCore {
 
 
     /**
-     *	获得所有设置与公共变量
+     *    获得所有设置与公共变量
      */
     function Value() {
         return (is_array($this->ThisValue))?array_merge($this->ThisValue,$GLOBALS):$GLOBALS;
@@ -646,14 +646,14 @@ class ETCore {
 
 
     /**
-     *	清除设置
+     *    清除设置
      */
     function clear() {
         $this->RunType = 'Replace';
     }
 
     /**
-     *	清除设置
+     *    清除设置
      */
     function ET_Inc($dirs='',$files='') {
         return '";$this->FileDir[\''.BASE64_DECODE($files).'\'] = \''.BASE64_DECODE($dirs).'\'; echo "';
@@ -673,7 +673,7 @@ class ETCore {
         if($w_dir && $w_filename && $w_content) {
             //目录检测数量
             $w_dir_ex  = explode('/',$w_dir);
-            $w_new_dir = '';	//处理后的写入目录
+            $w_new_dir = '';    //处理后的写入目录
             unset($dvs,$fdk,$fdv,$w_dir_len);
             foreach((array)$w_dir_ex AS $dvs) {
                 if(trim($dvs) && $dvs!='..') {
@@ -720,9 +720,9 @@ class ETCore {
             $Name = ''
     ) {
 
-        $Name			= trim($Name);
-        $this->HtmID	= md5($Name ? $Name : $_SERVER['REQUEST_URI']) . '.php';
-        $file_adds		= $this->HtmDir.$this->HtmID;
+        $Name            = trim($Name);
+        $this->HtmID    = md5($Name ? $Name : $_SERVER['REQUEST_URI']) . '.php';
+        $file_adds        = $this->HtmDir.$this->HtmID;
 
         //检测时间
         if(is_file($file_adds) && (time() - @filemtime($file_adds)<=$this->HtmTime)) {
@@ -763,7 +763,7 @@ class ETCore {
 
 
     /**
-     *	解析文件
+     *    解析文件
      */
     function FileName(
             $name,
@@ -774,7 +774,7 @@ class ETCore {
 
         if($dirnum>0) {
             if(!is_dir($this->CacheDir.'/'.$dirnum)) {
-                @mkdir($this->CacheDir.'/'.$dirnum,0777);	//建立多级缓存目录
+                @mkdir($this->CacheDir.'/'.$dirnum,0777);    //建立多级缓存目录
             }
             return $this->CacheDir.$dirnum.'/'.$id.str_replace("/",',',$name).".".$this->Language.'.php';
         }
@@ -788,7 +788,7 @@ class ETCore {
     function inc_php(
             $url = ''
     ) {
-        $parse	= parse_url($url);
+        $parse    = parse_url($url);
         unset($vals,$code_array);
         foreach((array)explode('&',$parse['query']) AS $vals) {
             $code_array .= preg_replace('/(.+)=(.+)/',"\$_GET['\\1']= \$\\1 ='\\2';",$vals);
@@ -798,9 +798,9 @@ class ETCore {
 
 
     /**
-     *	换行函数
-     *	Row(换行数,换行颜色);
-     *	Row("5,#ffffff:#e1e1e1");
+     *    换行函数
+     *    Row(换行数,换行颜色);
+     *    Row("5,#ffffff:#e1e1e1");
      */
     function Row(
             $Num = ''
@@ -812,7 +812,7 @@ class ETCore {
             $input = (trim($Nums[1]) == '')?'</tr><tr>':$Nums[1];
 
             if(trim($Nums[1]) != '') {
-                $Co	 	= explode(":",$Nums[1]);
+                $Co         = explode(":",$Nums[1]);
                 $OutStr = "if(\$_i%$Numr===0){\$row_count++;echo(\$row_count%2===0)?'</tr><tr bgcolor=\"$Co[0]\">':'</tr><tr bgcolor=\"$Co[1]\">';}";
             }else {
                 $OutStr = "if(\$_i%$Numr===0){echo '$input';}";
@@ -823,9 +823,9 @@ class ETCore {
 
 
     /**
-     *	间隔变色
-     *	Color(两组颜色代码);
-     *	Color('#FFFFFF,#DCDCDC');
+     *    间隔变色
+     *    Color(两组颜色代码);
+     *    Color('#FFFFFF,#DCDCDC');
      */
     function Color(
             $color = ''
@@ -840,7 +840,7 @@ class ETCore {
 
 
     /**
-     *	映射图片地址
+     *    映射图片地址
      */
     function Dirs(
             $adds = ''
@@ -853,8 +853,8 @@ class ETCore {
 
 
     /**
-     *	读取函数
-     *	reader(文件名);
+     *    读取函数
+     *    reader(文件名);
      */
     function reader(
             $filename
@@ -864,8 +864,8 @@ class ETCore {
 
 
     /**
-     *	写入函数
-     *	writer(文件名,写入数据, 写入数据方式);
+     *    写入函数
+     *    writer(文件名,写入数据, 写入数据方式);
      */
     function writer(
             $filename,
@@ -884,8 +884,8 @@ class ETCore {
 
 
     /**
-     *	建立目录
-     *	create_dir(建立文件夹的路径，支持多级目录);
+     *    建立目录
+     *    create_dir(建立文件夹的路径，支持多级目录);
      */
     function create_dir($dir_adds='') {
         $falg = true;
@@ -909,8 +909,8 @@ class ETCore {
 
 
     /**
-     *	删除目录及目录下所有文件
-     *	del_dir(删除的路径,1表示删除目录下数据，0默认删除本目录);
+     *    删除目录及目录下所有文件
+     *    del_dir(删除的路径,1表示删除目录下数据，0默认删除本目录);
      */
     function del_dir($dir_adds='',$del_def=0) {
         $result = false;
@@ -935,9 +935,9 @@ class ETCore {
 
 
     /**
-     *	引入模板系统
-     *	察看当前使用的模板以及调试信息
-     *	$mode 默认为直接显示，设置任意值将为return代码
+     *    引入模板系统
+     *    察看当前使用的模板以及调试信息
+     *    $mode 默认为直接显示，设置任意值将为return代码
      */
     function inc_list($mode='print') {
         //清除缓存 START
@@ -953,17 +953,17 @@ class ETCore {
         //清除缓存 END
 
         if(is_array($this->FileDir)) {
-            $list_file	= array();
-            $file_nums	= count($this->FileDir);
+            $list_file    = array();
+            $file_nums    = count($this->FileDir);
 
             foreach($this->FileDir AS $K=>$V) {
                 $File_Size   = @round(@filesize($V.$K) / 1024 * 100) / 100 . 'KB';
                 if(isset($_SERVER["PATH_INFO"])) {
                     if($this->WebURL!='') {
-                        $links	 = "<a href='".$this->WebURL.$V.$K."' target='_blank'>";
+                        $links     = "<a href='".$this->WebURL.$V.$K."' target='_blank'>";
                     }
                 }else {
-                    $links	 = "<a href='".$V.$K."' target='_blank'>";
+                    $links     = "<a href='".$V.$K."' target='_blank'>";
                 }
 
                 $list_file[] = "<tr><td colspan=\"2\" align=\"left\" bgcolor=\"#F7F7F7\">".$links."<font color='#6F7D84' style='font-size:14px;'>".$V.$K."</font></a><font color='#B4B4B4' style='font-size:10px;'>&nbsp;&nbsp;".$File_Size."</font></td></tr>";
@@ -980,7 +980,7 @@ class ETCore {
 
             $clear_link = $NowPAGE."?Ease_Templatepage=Clear&REFERER=".urlencode($BackURL)."!!!";
             $sf13    = ' style="font-size:13px;color:#666666"';
-            $result	 = '<br><table border="1" width="960" align="center" cellpadding="3" style="border-collapse: collapse" bordercolor="#DCDCDC">
+            $result     = '<br><table border="1" width="960" align="center" cellpadding="3" style="border-collapse: collapse" bordercolor="#DCDCDC">
 <tr bgcolor="#B5BDC1"><td align="left"><font color=#000000 style="font-size:16px;"><b>'.ET_E_inc_tpl.count($this-> FileDir).')</b></font></td>
 <td align="right">';
 

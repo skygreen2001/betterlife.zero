@@ -5,12 +5,12 @@
 定义示例:
     class Region extends DataObject{
 
-    	/**
-    	 * 从属一对一关系
-    	 */
-    	static $belong_has_one=array(
-    		"region_p"=>"Region"
-    	);
+        /**
+         * 从属一对一关系
+         */
+        static $belong_has_one=array(
+            "region_p"=>"Region"
+        );
 代码如下:
     $region=Region::get_by_id("2709");
     print_r($region);
@@ -45,28 +45,28 @@
 说明:获取地区信息
 定义示例:
     class Userdetail extends DataObject {
-    	/**
-    	 * 规格说明:外键声明
-    	 * @var mixed
-    	 */
-    	public $field_spec=array(
-    		EnumDataSpec::FOREIGN_ID=>array(
-    			'country_r'=>"country",
-    			"province_r"=>"province",
-    			"city_r"=>"city",
-    			'district_r'=>"district"
-    		)
-    	);
+        /**
+         * 规格说明:外键声明
+         * @var mixed
+         */
+        public $field_spec=array(
+            EnumDataSpec::FOREIGN_ID=>array(
+                'country_r'=>"country",
+                "province_r"=>"province",
+                "city_r"=>"city",
+                'district_r'=>"district"
+            )
+        );
 
-    	/**
-    	 * 从属一对一关系
-    	 */
-    	static $belong_has_one=array(
-    		"country_r"=>"Region",
-    		"province_r"=>"Region",
-    		"city_r"=>"Region",
-    		"district_r"=>"Region"
-    	);
+        /**
+         * 从属一对一关系
+         */
+        static $belong_has_one=array(
+            "country_r"=>"Region",
+            "province_r"=>"Region",
+            "city_r"=>"Region",
+            "district_r"=>"Region"
+        );
 代码如下:
     $user=User::get_by_id(1);
     $userDetail=$user->userdetail;

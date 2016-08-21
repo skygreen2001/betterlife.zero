@@ -9,12 +9,12 @@
  */
 class Action_Ajax extends Action
 {
-	/**
-	 * 仅供测试:Ajax请求
-	 */
-	public function test()
-	{
-		echo "Hello world!";
-	}
+    /**
+     * 仅供测试:Ajax请求
+     */
+    public function test()
+    {
+        echo "Hello world!";
+    }
 }
 ?>

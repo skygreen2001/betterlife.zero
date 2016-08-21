@@ -45,6 +45,6 @@
 
 
 参考:查看机器设备性能
-	http://www.cnblogs.com/xd502djj/archive/2011/02/28/1967350.html
+    http://www.cnblogs.com/xd502djj/archive/2011/02/28/1967350.html
 
 linux 下查看机器是cpu是几核的

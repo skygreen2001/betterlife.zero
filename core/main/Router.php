@@ -338,7 +338,7 @@ class Router
 		 * 设置模块
 		 */
 		$var  = self::VAR_GROUP;
-		$group= !empty($route[$var])?$route[$var]:Gc::$module_names[2];
+		$group= !empty($route[$var])?$route[$var]:Gc::$module_names[0];
 		if(!empty($route[$var])){
 			$group=$route[$var];
 			unset($route[$var]);

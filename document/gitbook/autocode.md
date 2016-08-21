@@ -23,12 +23,12 @@
 ##代码生成的策略
 代码生成核心根据项目重用的类型不同,生成代码的策略也不同。
 
-	项目重用类型
-		1.完整版【同现有版本一样】
-		2.通用版【后台使用Jquery框架】
-		3.高级版【后台使用Extjs框架】
-		4.精简版【只包括框架核心-包括MVC,前后台】
-		5.MINI版【只包括框架核心-只包括了DAO,不包括显示组件、Service层等】
+    项目重用类型
+        1.完整版【同现有版本一样】
+        2.通用版【后台使用Jquery框架】
+        3.高级版【后台使用Extjs框架】
+        4.精简版【只包括框架核心-包括MVC,前后台】
+        5.MINI版【只包括框架核心-只包括了DAO,不包括显示组件、Service层等】
 
     代码生成的策略具体调整配置如下:
 
@@ -42,12 +42,12 @@
 
         配置设置说明如下
 
-        	/**
-        	 * Model转换成后台Admin
-        	 * 		工程重用选择类型:通用版后
-        	 * 		代码生成会转向AutoCodePreviewReportLike
-        	 */
-        	const AFTER_MODEL_CONVERT_ADMIN=true;//原为false
+            /**
+             * Model转换成后台Admin
+             *         工程重用选择类型:通用版后
+             *         代码生成会转向AutoCodePreviewReportLike
+             */
+            const AFTER_MODEL_CONVERT_ADMIN=true;//原为false
 
         5.MINI版进行代码生成前需调整项目的配置
 
@@ -57,10 +57,10 @@
 
         配置设置说明如下
 
-        	/**
-        	 * 工程重用为MINI后,只需要生成实体类
-        	 */
-        	const ONLY_DOMAIN=true;//原为false
+            /**
+             * 工程重用为MINI后,只需要生成实体类
+             */
+            const ONLY_DOMAIN=true;//原为false
 
 ##代码生成的流程
 

@@ -327,9 +327,9 @@
 说明:查看用户详情
 定义示例:
     class Userdetail extends DataObject {
-    	static $belongs_has_one=array(
-    		"user"=>"User"
-    	);
+        static $belongs_has_one=array(
+            "user"=>"User"
+        );
 代码如下:
     $user=User::get_by_id(1);
     $userdetail=$user->userdetail;
@@ -361,9 +361,9 @@
 说明:查看博客评论
 定义示例:
     class Blog extends DataObject {
-    	static $has_many=array(
-    		"comments"=> "Comment",
-    	);
+        static $has_many=array(
+            "comments"=> "Comment",
+        );
 代码如下:
     $blog=Blog::get_by_id(1);
     $comments=$blog->comments;
@@ -392,9 +392,9 @@
 说明:查看用户角色
 定义示例:
     class User extends DataObject {
-    	static $many_many=array(
-    		"roles"=> "Role",
-    	);
+        static $many_many=array(
+            "roles"=> "Role",
+        );
 代码如下:
     $user=User::get_by_id(1);
     $roles=$user->roles;
@@ -420,9 +420,9 @@
 说明:获取用户信息
 定义示例:
     class Userdetail extends DataObject {
-    	static $belongs_has_one=array(
-    		"user"=>"User"
-    	);
+        static $belongs_has_one=array(
+            "user"=>"User"
+        );
 代码如下:
     $userdetail=Userdetail::get_by_id(1);
     $user=$userdetail->user;
@@ -448,9 +448,9 @@
 说明:查看角色用户
 定义示例:
     class Role extends DataObject {
-    	static $belongs_many_many=array(
-    		"users"=>"User"
-    	);
+        static $belongs_many_many=array(
+            "users"=>"User"
+        );
 代码如下:
     $role=Role::get_by_id(1);
     $users=$role->users;

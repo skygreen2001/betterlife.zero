@@ -17,7 +17,7 @@
 // +----------------------------------------------------------------------+
 //
 /** Class called from HTML_Template_Flexy_Compiler_Flexy_Tag's toString() method.
-*	For handling new custom flexy namespaced attributes. 
+*    For handling new custom flexy namespaced attributes. 
 */
 class HTML_Template_Flexy_Compiler_Flexy_CustomFlexyAttributes  
 {
@@ -25,7 +25,7 @@ class HTML_Template_Flexy_Compiler_Flexy_CustomFlexyAttributes
     /**
     * doCustomAttributes 
     * - for every flexy namespaced attribute found in the element parameter, 
-    *	if there is a method here to handle it then call the method.
+    *    if there is a method here to handle it then call the method.
     *
     * @params   object HTML_Template_Flexy_Token
     * @return   none 
@@ -125,7 +125,7 @@ class HTML_Template_Flexy_Compiler_Flexy_CustomFlexyAttributes
         if (! empty($val)) {
             //echo '<br/>VAL IS: ' . $val;
             $this->replaceChildren($element,$val);
-        }	
+        }    
     }
 
     /**

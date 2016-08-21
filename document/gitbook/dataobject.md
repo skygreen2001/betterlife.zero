@@ -108,7 +108,7 @@ github路径:https://github.com/skygreen2001/betterlife/blob/master/core/model/D
  * 该实体类设计为ActiveRecord模式。
  * 可直接在对象上操作CRUD增删改查操作
  * 查主要为：根据主键和名称查找对象。
- *			总记录数和分页查找等常规方法。
+ *            总记录数和分页查找等常规方法。
 
 更多高级定义情参考[3.3数据对象规格说明]
 

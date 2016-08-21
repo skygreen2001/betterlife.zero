@@ -218,8 +218,8 @@ $diskct=0;
 $disk=array();
 /*if(@disk_total_space("A:")!=NULL) *为防止影响服务器，不检查软驱 - 阿江说的
 {
-	$diskct=1;
-	$disk["A"]=round((@disk_free_space("A:")/(1024*1024*1024)),2)."G&nbsp;/&nbsp;".round((@disk_total_space("A:")/(1024*1024*1024)),2).'G';
+    $diskct=1;
+    $disk["A"]=round((@disk_free_space("A:")/(1024*1024*1024)),2)."G&nbsp;/&nbsp;".round((@disk_total_space("A:")/(1024*1024*1024)),2).'G';
 }*/
 $diskz=0; //磁盘总容量
 $diskk=0; //磁盘剩余容量
@@ -419,13 +419,13 @@ if(@disk_total_space("L:")!=NULL) {
         echo $diskct."&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;它们是：&nbsp;";
         foreach($disk as $key=>$value) {
             echo $key.'盘&nbsp;&nbsp;';
-//		$diskum=$diskum+$value;
+//        $diskum=$diskum+$value;
         }
     }
     else {
         echo '<font color="red">探测失败！</font>';
     }
-//		echo "磁盘容量：".$diskum;
+//        echo "磁盘容量：".$diskum;
     ?>&nbsp;&nbsp;&nbsp;&nbsp;磁盘总容量：<font color="#CC0000"><?PHP
     if(abs($diskz-80)<50) {
         echo '80G';
@@ -741,7 +741,7 @@ foreach ($able as $key=>$value) {
                     <td class="center">网络速度测试：
                         <input name="action" type="submit" class="gbutton" value="开始测试" />
                         <br />
-	(向客户端传送 100k 字节数据)
+    (向客户端传送 100k 字节数据)
                     </td>
                     <td colspan="3">
                         <table style="margin:0px;border:none" align="center" width="500" border="0" cellspacing="0" cellpadding="0">

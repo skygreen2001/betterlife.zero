@@ -1,14 +1,14 @@
 /* --------------- 修改 Ext CSS -------------- */
 
 .x-window-header-text, x-panel-header-text{
-	font-size:10pt;
+    font-size:10pt;
 }
 .x-panel-header-text, .x-window-header-text{
-	font-size:10pt;
+    font-size:10pt;
 }
 
-.x-tab button {	
-	font-size:10pt;
+.x-tab button {    
+    font-size:10pt;
 }
 .x-grid-row .x-grid-cell {
     border-style: solid;

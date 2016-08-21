@@ -14,12 +14,12 @@ require_once 'core/main/Initializer.php';
  */
 function class_autoloader($class_name)
 {
-	Initializer::autoload($class_name);
+    Initializer::autoload($class_name);
 }
 
 spl_autoload_register("class_autoloader");
 
 if (!isset($is_loadclass)||$is_loadclass==true) {
-	Initializer::initialize();
+    Initializer::initialize();
 }
 ?>

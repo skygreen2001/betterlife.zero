@@ -327,7 +327,7 @@ class HTML_Template_Flexy_Compiler_Flexy_Flexy  {
     * <flexy:partial src="test.html" subtemplateVar1="var1" 
     *   subtemplateVar2="object.var2" subtemplateVar3="#literal1#" />
     */
-	function partialToString($element)
+    function partialToString($element)
     {
         $src = $element->getAttribute('SRC');
         

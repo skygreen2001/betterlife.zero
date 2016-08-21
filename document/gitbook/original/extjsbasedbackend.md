@@ -14,27 +14,27 @@
     采用Ext Direct方式进行前台JS调用后台服务的方式。
     路径:home/admin/src/service/service.config.xml
     定义单元样式如下:
-    	<service name="ExtServiceBlog">
-    		<methods>
-    			<method name="save">
-    				<param name="len">1</param>
-    				<param name="formHandler">true</param>
-    			</method>
-    			<method name="update">
-    				<param name="len">1</param>
-    				<param name="formHandler">true</param>
-    			</method>
-    			<method name="deleteByIds">
-    				<param name="len">1</param>
-    			</method>
-    			<method name="queryPageBlog">
-    				<param name="len">1</param>
-    			</method>
-    			<method name="exportBlog">
-    				<param name="len">1</param>
-    			</method>
-    		</methods>
-    	</service>
+        <service name="ExtServiceBlog">
+            <methods>
+                <method name="save">
+                    <param name="len">1</param>
+                    <param name="formHandler">true</param>
+                </method>
+                <method name="update">
+                    <param name="len">1</param>
+                    <param name="formHandler">true</param>
+                </method>
+                <method name="deleteByIds">
+                    <param name="len">1</param>
+                </method>
+                <method name="queryPageBlog">
+                    <param name="len">1</param>
+                </method>
+                <method name="exportBlog">
+                    <param name="len">1</param>
+                </method>
+            </methods>
+        </service>
     这是以表bb_core_blog，类Blog定义的可访问服务接口。
 
 ### 后台服务
@@ -47,12 +47,12 @@
     路径:home/admin/action/Action_Upload.php
     形式如下:
     /**
-	 * 上传数据对象:博客数据文件
-	 */
-	public function uploadBlog()
-	{
-		return self::ExtResponse(Manager_ExtService::blogService()->import($_FILES));
-	}
+     * 上传数据对象:博客数据文件
+     */
+    public function uploadBlog()
+    {
+        return self::ExtResponse(Manager_ExtService::blogService()->import($_FILES));
+    }
 
 ## 表示层定义页面
     路径:home/admin/view/default/core

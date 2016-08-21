@@ -21,7 +21,7 @@
  * @category   PHPExcel
  * @package    PHPExcel_Worksheet
  * @copyright  Copyright (c) 2006 - 2011 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
  * @version    1.7.6, 2011-02-27
  */
 
@@ -35,49 +35,49 @@
  */
 class PHPExcel_Worksheet_RowDimension
 {
-	/**
-	 * Row index
-	 *
-	 * @var int
-	 */
-	private $_rowIndex;
+    /**
+     * Row index
+     *
+     * @var int
+     */
+    private $_rowIndex;
 
-	/**
-	 * Row height (in pt)
-	 *
-	 * When this is set to a negative value, the row height should be ignored by IWriter
-	 *
-	 * @var double
-	 */
-	private $_rowHeight		= -1;
+    /**
+     * Row height (in pt)
+     *
+     * When this is set to a negative value, the row height should be ignored by IWriter
+     *
+     * @var double
+     */
+    private $_rowHeight        = -1;
 
-	/**
-	 * Visible?
-	 *
-	 * @var bool
-	 */
-	private $_visible		= true;
+    /**
+     * Visible?
+     *
+     * @var bool
+     */
+    private $_visible        = true;
 
-	/**
-	 * Outline level
-	 *
-	 * @var int
-	 */
-	private $_outlineLevel	= 0;
+    /**
+     * Outline level
+     *
+     * @var int
+     */
+    private $_outlineLevel    = 0;
 
-	/**
-	 * Collapsed
-	 *
-	 * @var bool
-	 */
-	private $_collapsed		= false;
+    /**
+     * Collapsed
+     *
+     * @var bool
+     */
+    private $_collapsed        = false;
 
-	/**
-	 * Index to cellXf. Null value means row has no explicit cellXf format.
-	 *
-	 * @var int|null
-	 */
-	private $_xfIndex;
+    /**
+     * Index to cellXf. Null value means row has no explicit cellXf format.
+     *
+     * @var int|null
+     */
+    private $_xfIndex;
 
     /**
      * Create a new PHPExcel_Worksheet_RowDimension
@@ -86,11 +86,11 @@ class PHPExcel_Worksheet_RowDimension
      */
     public function __construct($pIndex = 0)
     {
-    	// Initialise values
-    	$this->_rowIndex		= $pIndex;
+        // Initialise values
+        $this->_rowIndex        = $pIndex;
 
-		// set row dimension as unformatted by default
-		$this->_xfIndex = null;
+        // set row dimension as unformatted by default
+        $this->_xfIndex = null;
     }
 
     /**
@@ -99,7 +99,7 @@ class PHPExcel_Worksheet_RowDimension
      * @return int
      */
     public function getRowIndex() {
-    	return $this->_rowIndex;
+        return $this->_rowIndex;
     }
 
     /**
@@ -109,8 +109,8 @@ class PHPExcel_Worksheet_RowDimension
      * @return PHPExcel_Worksheet_RowDimension
      */
     public function setRowIndex($pValue) {
-    	$this->_rowIndex = $pValue;
-    	return $this;
+        $this->_rowIndex = $pValue;
+        return $this;
     }
 
     /**
@@ -119,7 +119,7 @@ class PHPExcel_Worksheet_RowDimension
      * @return double
      */
     public function getRowHeight() {
-    	return $this->_rowHeight;
+        return $this->_rowHeight;
     }
 
     /**
@@ -129,8 +129,8 @@ class PHPExcel_Worksheet_RowDimension
      * @return PHPExcel_Worksheet_RowDimension
      */
     public function setRowHeight($pValue = -1) {
-    	$this->_rowHeight = $pValue;
-    	return $this;
+        $this->_rowHeight = $pValue;
+        return $this;
     }
 
     /**
@@ -139,7 +139,7 @@ class PHPExcel_Worksheet_RowDimension
      * @return bool
      */
     public function getVisible() {
-    	return $this->_visible;
+        return $this->_visible;
     }
 
     /**
@@ -149,8 +149,8 @@ class PHPExcel_Worksheet_RowDimension
      * @return PHPExcel_Worksheet_RowDimension
      */
     public function setVisible($pValue = true) {
-    	$this->_visible = $pValue;
-    	return $this;
+        $this->_visible = $pValue;
+        return $this;
     }
 
     /**
@@ -159,7 +159,7 @@ class PHPExcel_Worksheet_RowDimension
      * @return int
      */
     public function getOutlineLevel() {
-    	return $this->_outlineLevel;
+        return $this->_outlineLevel;
     }
 
     /**
@@ -172,12 +172,12 @@ class PHPExcel_Worksheet_RowDimension
      * @return PHPExcel_Worksheet_RowDimension
      */
     public function setOutlineLevel($pValue) {
-    	if ($pValue < 0 || $pValue > 7) {
-    		throw new Exception("Outline level must range between 0 and 7.");
-    	}
+        if ($pValue < 0 || $pValue > 7) {
+            throw new Exception("Outline level must range between 0 and 7.");
+        }
 
-    	$this->_outlineLevel = $pValue;
-    	return $this;
+        $this->_outlineLevel = $pValue;
+        return $this;
     }
 
     /**
@@ -186,7 +186,7 @@ class PHPExcel_Worksheet_RowDimension
      * @return bool
      */
     public function getCollapsed() {
-    	return $this->_collapsed;
+        return $this->_collapsed;
     }
 
     /**
@@ -196,43 +196,43 @@ class PHPExcel_Worksheet_RowDimension
      * @return PHPExcel_Worksheet_RowDimension
      */
     public function setCollapsed($pValue = true) {
-    	$this->_collapsed = $pValue;
-    	return $this;
+        $this->_collapsed = $pValue;
+        return $this;
     }
 
-	/**
-	 * Get index to cellXf
-	 *
-	 * @return int
-	 */
-	public function getXfIndex()
-	{
-		return $this->_xfIndex;
-	}
+    /**
+     * Get index to cellXf
+     *
+     * @return int
+     */
+    public function getXfIndex()
+    {
+        return $this->_xfIndex;
+    }
 
-	/**
-	 * Set index to cellXf
-	 *
-	 * @param int $pValue
-	 * @return PHPExcel_Worksheet_RowDimension
-	 */
-	public function setXfIndex($pValue = 0)
-	{
-		$this->_xfIndex = $pValue;
-		return $this;
-	}
+    /**
+     * Set index to cellXf
+     *
+     * @param int $pValue
+     * @return PHPExcel_Worksheet_RowDimension
+     */
+    public function setXfIndex($pValue = 0)
+    {
+        $this->_xfIndex = $pValue;
+        return $this;
+    }
 
-	/**
-	 * Implement PHP __clone to create a deep clone, not just a shallow copy.
-	 */
-	public function __clone() {
-		$vars = get_object_vars($this);
-		foreach ($vars as $key => $value) {
-			if (is_object($value)) {
-				$this->$key = clone $value;
-			} else {
-				$this->$key = $value;
-			}
-		}
-	}
+    /**
+     * Implement PHP __clone to create a deep clone, not just a shallow copy.
+     */
+    public function __clone() {
+        $vars = get_object_vars($this);
+        foreach ($vars as $key => $value) {
+            if (is_object($value)) {
+                $this->$key = clone $value;
+            } else {
+                $this->$key = $value;
+            }
+        }
+    }
 }

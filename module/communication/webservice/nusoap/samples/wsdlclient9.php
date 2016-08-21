@@ -1,13 +1,13 @@
 <?php
 /*
- *	$Id: wsdlclient9.php,v 1.1 2004/04/13 13:12:53 snichol Exp $
+ *    $Id: wsdlclient9.php,v 1.1 2004/04/13 13:12:53 snichol Exp $
  *
- *	WSDL client sample.
+ *    WSDL client sample.
  *
- *	Service: WSDL
- *	Payload: document/literal
- *	Transport: http
- *	Authentication: digest
+ *    Service: WSDL
+ *    Payload: document/literal
+ *    Transport: http
+ *    Authentication: digest
  */
 require_once('../../../../../init.php');
 Module_Loader::load_nusoap();
@@ -21,44 +21,44 @@ exit();
 $username = 'xxxxxx';
 $password = 'xxxxxx';
 $client = new nusoap_client("http://staging.mappoint.net/standard-30/mappoint.wsdl", true,
-						$proxyhost, $proxyport, $proxyusername, $proxypassword);
+                        $proxyhost, $proxyport, $proxyusername, $proxypassword);
 $err = $client->getError();
 if ($err) {
-	echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
+    echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 }
 $client->setCredentials($username, $password, 'digest');
 $view = array(
-	'Height' => 200,
-	'Width' => 300,
-	'CenterPoint' => array(
-		'Latitude' => 40,
-		'Longitude' => -120
-	)
+    'Height' => 200,
+    'Width' => 300,
+    'CenterPoint' => array(
+        'Latitude' => 40,
+        'Longitude' => -120
+    )
 );
 $myViews[] = new soapval('MapView', 'ViewByHeightWidth', $view, false, 'http://s.mappoint.net/mappoint-30/');
 $mapSpec = array(
-	'DataSourceName' => "MapPoint.NA",
-	'Views' => array('MapView' => $myViews)
+    'DataSourceName' => "MapPoint.NA",
+    'Views' => array('MapView' => $myViews)
 );
 $map = array('specification' => $mapSpec);
 $result = $client->call('GetMap', array('parameters' => $map));
 // Check for a fault
 if ($client->fault) {
-	echo '<h2>Fault</h2><pre>';
-	print_r($result);
-	echo '</pre>';
+    echo '<h2>Fault</h2><pre>';
+    print_r($result);
+    echo '</pre>';
 } else {
-	// Check for errors
-	$err = $client->getError();
-	if ($err) {
-		// Display the error
-		echo '<h2>Error</h2><pre>' . $err . '</pre>';
-	} else {
-		// Display the result
-		echo '<h2>Result</h2><pre>';
-		print_r($result);
-		echo '</pre>';
-	}
+    // Check for errors
+    $err = $client->getError();
+    if ($err) {
+        // Display the error
+        echo '<h2>Error</h2><pre>' . $err . '</pre>';
+    } else {
+        // Display the result
+        echo '<h2>Result</h2><pre>';
+        print_r($result);
+        echo '</pre>';
+    }
 }
 echo '<h2>Request</h2><pre>' . htmlspecialchars($client->request, ENT_QUOTES) . '</pre>';
 echo '<h2>Response</h2><pre>' . htmlspecialchars($client->response, ENT_QUOTES) . '</pre>';

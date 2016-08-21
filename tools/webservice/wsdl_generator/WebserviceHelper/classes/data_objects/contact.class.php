@@ -10,25 +10,25 @@
   *
   */
 class contact{
-	/** @var int */
-	public $id;
-	
-	/** @var string */
-	public $name;
+    /** @var int */
+    public $id;
+    
+    /** @var string */
+    public $name;
 
-	/** @var address */
-	public $address;
+    /** @var address */
+    public $address;
 
-	/** @var string */
-	public $email;
-	
-	/**
-	  * saves a contact
-	  *
-	  * @return void
-	  */
-	public function save() {
-		//save contact 2 db
-	}
+    /** @var string */
+    public $email;
+    
+    /**
+      * saves a contact
+      *
+      * @return void
+      */
+    public function save() {
+        //save contact 2 db
+    }
 }
 ?>

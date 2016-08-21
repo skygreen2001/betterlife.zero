@@ -18,170 +18,170 @@
 if (!defined('ADODB_DIR')) die();
 
 if (!defined('LDAP_ASSOC')) {
-	 define('LDAP_ASSOC',ADODB_FETCH_ASSOC);
-	 define('LDAP_NUM',ADODB_FETCH_NUM);
-	 define('LDAP_BOTH',ADODB_FETCH_BOTH);
+     define('LDAP_ASSOC',ADODB_FETCH_ASSOC);
+     define('LDAP_NUM',ADODB_FETCH_NUM);
+     define('LDAP_BOTH',ADODB_FETCH_BOTH);
 }
 
 class ADODB_ldap extends ADOConnection {
     var $databaseType = 'ldap';
-	var $dataProvider = 'ldap';
-	
-	# Connection information
+    var $dataProvider = 'ldap';
+    
+    # Connection information
     var $username = false;
     var $password = false;
     
     # Used during searches
     var $filter;
     var $dn;
-	var $version;
-	var $port = 389;
+    var $version;
+    var $port = 389;
 
-	# Options configuration information
-	var $LDAP_CONNECT_OPTIONS;
+    # Options configuration information
+    var $LDAP_CONNECT_OPTIONS;
 
-	# error on binding, eg. "Binding: invalid credentials"
-	var $_bind_errmsg = "Binding: %s";
-	
-	function ADODB_ldap() 
-	{		
-	}
-  		
-	// returns true or false
-	
-	function _connect( $host, $username, $password, $ldapbase)
-	{
-	global $LDAP_CONNECT_OPTIONS;
-		
-		if ( !function_exists( 'ldap_connect' ) ) return null;
-		
-		if (strpos('ldap://',$host) === 0 || strpos('ldaps://',$host) === 0) {
-			$this->_connectionID = @ldap_connect($host);
-		} else {
-			$conn_info = array( $host,$this->port);
-		
-			if ( strstr( $host, ':' ) ) {
-			    $conn_info = explode( ':', $host );
-			} 
-		
-			$this->_connectionID = @ldap_connect( $conn_info[0], $conn_info[1] );
-		}
-		if (!$this->_connectionID) {
-			$e = 'Could not connect to ' . $conn_info[0];
-			$this->_errorMsg = $e;
-			if ($this->debug) ADOConnection::outp($e);
-			return false;
-		}
-		if( count( $LDAP_CONNECT_OPTIONS ) > 0 ) {
-			$this->_inject_bind_options( $LDAP_CONNECT_OPTIONS );
-		}
-		
-		if ($username) {
-		    $bind = @ldap_bind( $this->_connectionID, $username, $password );
-		} else {
-			$username = 'anonymous';
-		    $bind = @ldap_bind( $this->_connectionID );		
-		}
-		
-		if (!$bind) {
-			$e = sprintf($this->_bind_errmsg,ldap_error($this->_connectionID));
-			$this->_errorMsg = $e;
-			if ($this->debug) ADOConnection::outp($e);
-			return false;
-		}
-		$this->_errorMsg = '';
-		$this->database = $ldapbase;
-		return $this->_connectionID;
-	}
+    # error on binding, eg. "Binding: invalid credentials"
+    var $_bind_errmsg = "Binding: %s";
+    
+    function ADODB_ldap() 
+    {        
+    }
+          
+    // returns true or false
+    
+    function _connect( $host, $username, $password, $ldapbase)
+    {
+    global $LDAP_CONNECT_OPTIONS;
+        
+        if ( !function_exists( 'ldap_connect' ) ) return null;
+        
+        if (strpos('ldap://',$host) === 0 || strpos('ldaps://',$host) === 0) {
+            $this->_connectionID = @ldap_connect($host);
+        } else {
+            $conn_info = array( $host,$this->port);
+        
+            if ( strstr( $host, ':' ) ) {
+                $conn_info = explode( ':', $host );
+            } 
+        
+            $this->_connectionID = @ldap_connect( $conn_info[0], $conn_info[1] );
+        }
+        if (!$this->_connectionID) {
+            $e = 'Could not connect to ' . $conn_info[0];
+            $this->_errorMsg = $e;
+            if ($this->debug) ADOConnection::outp($e);
+            return false;
+        }
+        if( count( $LDAP_CONNECT_OPTIONS ) > 0 ) {
+            $this->_inject_bind_options( $LDAP_CONNECT_OPTIONS );
+        }
+        
+        if ($username) {
+            $bind = @ldap_bind( $this->_connectionID, $username, $password );
+        } else {
+            $username = 'anonymous';
+            $bind = @ldap_bind( $this->_connectionID );        
+        }
+        
+        if (!$bind) {
+            $e = sprintf($this->_bind_errmsg,ldap_error($this->_connectionID));
+            $this->_errorMsg = $e;
+            if ($this->debug) ADOConnection::outp($e);
+            return false;
+        }
+        $this->_errorMsg = '';
+        $this->database = $ldapbase;
+        return $this->_connectionID;
+    }
     
 /*
-	Valid Domain Values for LDAP Options:
+    Valid Domain Values for LDAP Options:
 
-	LDAP_OPT_DEREF (integer)
-	LDAP_OPT_SIZELIMIT (integer)
-	LDAP_OPT_TIMELIMIT (integer)
-	LDAP_OPT_PROTOCOL_VERSION (integer)
-	LDAP_OPT_ERROR_NUMBER (integer)
-	LDAP_OPT_REFERRALS (boolean)
-	LDAP_OPT_RESTART (boolean)
-	LDAP_OPT_HOST_NAME (string)
-	LDAP_OPT_ERROR_STRING (string)
-	LDAP_OPT_MATCHED_DN (string)
-	LDAP_OPT_SERVER_CONTROLS (array)
-	LDAP_OPT_CLIENT_CONTROLS (array)
+    LDAP_OPT_DEREF (integer)
+    LDAP_OPT_SIZELIMIT (integer)
+    LDAP_OPT_TIMELIMIT (integer)
+    LDAP_OPT_PROTOCOL_VERSION (integer)
+    LDAP_OPT_ERROR_NUMBER (integer)
+    LDAP_OPT_REFERRALS (boolean)
+    LDAP_OPT_RESTART (boolean)
+    LDAP_OPT_HOST_NAME (string)
+    LDAP_OPT_ERROR_STRING (string)
+    LDAP_OPT_MATCHED_DN (string)
+    LDAP_OPT_SERVER_CONTROLS (array)
+    LDAP_OPT_CLIENT_CONTROLS (array)
 
-	Make sure to set this BEFORE calling Connect()
+    Make sure to set this BEFORE calling Connect()
 
-	Example:
+    Example:
 
-	$LDAP_CONNECT_OPTIONS = Array(
-		Array (
-			"OPTION_NAME"=>LDAP_OPT_DEREF,
-			"OPTION_VALUE"=>2
-		),
-		Array (
-			"OPTION_NAME"=>LDAP_OPT_SIZELIMIT,
-			"OPTION_VALUE"=>100
-		),
-		Array (
-			"OPTION_NAME"=>LDAP_OPT_TIMELIMIT,
-			"OPTION_VALUE"=>30
-		),
-		Array (
-			"OPTION_NAME"=>LDAP_OPT_PROTOCOL_VERSION,
-			"OPTION_VALUE"=>3
-		),
-		Array (
-			"OPTION_NAME"=>LDAP_OPT_ERROR_NUMBER,
-			"OPTION_VALUE"=>13
-		),
-		Array (
-			"OPTION_NAME"=>LDAP_OPT_REFERRALS,
-			"OPTION_VALUE"=>FALSE
-		),
-		Array (
-			"OPTION_NAME"=>LDAP_OPT_RESTART,
-			"OPTION_VALUE"=>FALSE
-		)
-	);
+    $LDAP_CONNECT_OPTIONS = Array(
+        Array (
+            "OPTION_NAME"=>LDAP_OPT_DEREF,
+            "OPTION_VALUE"=>2
+        ),
+        Array (
+            "OPTION_NAME"=>LDAP_OPT_SIZELIMIT,
+            "OPTION_VALUE"=>100
+        ),
+        Array (
+            "OPTION_NAME"=>LDAP_OPT_TIMELIMIT,
+            "OPTION_VALUE"=>30
+        ),
+        Array (
+            "OPTION_NAME"=>LDAP_OPT_PROTOCOL_VERSION,
+            "OPTION_VALUE"=>3
+        ),
+        Array (
+            "OPTION_NAME"=>LDAP_OPT_ERROR_NUMBER,
+            "OPTION_VALUE"=>13
+        ),
+        Array (
+            "OPTION_NAME"=>LDAP_OPT_REFERRALS,
+            "OPTION_VALUE"=>FALSE
+        ),
+        Array (
+            "OPTION_NAME"=>LDAP_OPT_RESTART,
+            "OPTION_VALUE"=>FALSE
+        )
+    );
 */
 
-	function _inject_bind_options( $options ) {
-		foreach( $options as $option ) {
-			ldap_set_option( $this->_connectionID, $option["OPTION_NAME"], $option["OPTION_VALUE"] )
-				or die( "Unable to set server option: " . $option["OPTION_NAME"] );
-		}
-	}
-	
-	/* returns _queryID or false */
-	function _query($sql,$inputarr=false)
-	{
-		$rs = @ldap_search( $this->_connectionID, $this->database, $sql );
-		$this->_errorMsg = ($rs) ? '' : 'Search error on '.$sql.': '.ldap_error($this->_connectionID);
-		return $rs; 
-	}
-
-	function ErrorMsg()
-	{
-		return $this->_errorMsg;
-	}
-	
-	function ErrorNo()
-	{
-		return @ldap_errno($this->_connectionID);
-	}
-	
-    /* closes the LDAP connection */
-	function _close()
-	{
-		@ldap_close( $this->_connectionID );
-		$this->_connectionID = false;
-	}
+    function _inject_bind_options( $options ) {
+        foreach( $options as $option ) {
+            ldap_set_option( $this->_connectionID, $option["OPTION_NAME"], $option["OPTION_VALUE"] )
+                or die( "Unable to set server option: " . $option["OPTION_NAME"] );
+        }
+    }
     
-	function SelectDB($db) {
-		$this->database = $db;
-		return true;
-	} // SelectDB
+    /* returns _queryID or false */
+    function _query($sql,$inputarr=false)
+    {
+        $rs = @ldap_search( $this->_connectionID, $this->database, $sql );
+        $this->_errorMsg = ($rs) ? '' : 'Search error on '.$sql.': '.ldap_error($this->_connectionID);
+        return $rs; 
+    }
+
+    function ErrorMsg()
+    {
+        return $this->_errorMsg;
+    }
+    
+    function ErrorNo()
+    {
+        return @ldap_errno($this->_connectionID);
+    }
+    
+    /* closes the LDAP connection */
+    function _close()
+    {
+        @ldap_close( $this->_connectionID );
+        $this->_connectionID = false;
+    }
+    
+    function SelectDB($db) {
+        $this->database = $db;
+        return true;
+    } // SelectDB
 
     function ServerInfo()
     {
@@ -279,58 +279,58 @@ class ADODB_ldap extends ADOConnection {
     
     }
 }
-	
+    
 /*--------------------------------------------------------------------------------------
-	 Class Name: Recordset
+     Class Name: Recordset
 --------------------------------------------------------------------------------------*/
 
-class ADORecordSet_ldap extends ADORecordSet{	
-	
-	var $databaseType = "ldap";
-	var $canSeek = false;
-	var $_entryID; /* keeps track of the entry resource identifier */
-	
-	function ADORecordSet_ldap($queryID,$mode=false) 
-	{
-		if ($mode === false) { 
-			global $ADODB_FETCH_MODE;
-			$mode = $ADODB_FETCH_MODE;
-		}
-		switch ($mode)
-		{
-		case ADODB_FETCH_NUM: 
-		  $this->fetchMode = LDAP_NUM; 
-		break;
-		case ADODB_FETCH_ASSOC: 
-		  $this->fetchMode = LDAP_ASSOC; 
-		break;
-		case ADODB_FETCH_DEFAULT:
-		case ADODB_FETCH_BOTH: 
-		default:
-		  $this->fetchMode = LDAP_BOTH; 
-		break;
-		}
-	
-		$this->ADORecordSet($queryID);	
-	}
-	
-	function _initrs()
-	{
-	   /* 
-	   This could be teaked to respect the $COUNTRECS directive from ADODB
-	   It's currently being used in the _fetch() function and the
-	   GetAssoc() function
+class ADORecordSet_ldap extends ADORecordSet{    
+    
+    var $databaseType = "ldap";
+    var $canSeek = false;
+    var $_entryID; /* keeps track of the entry resource identifier */
+    
+    function ADORecordSet_ldap($queryID,$mode=false) 
+    {
+        if ($mode === false) { 
+            global $ADODB_FETCH_MODE;
+            $mode = $ADODB_FETCH_MODE;
+        }
+        switch ($mode)
+        {
+        case ADODB_FETCH_NUM: 
+          $this->fetchMode = LDAP_NUM; 
+        break;
+        case ADODB_FETCH_ASSOC: 
+          $this->fetchMode = LDAP_ASSOC; 
+        break;
+        case ADODB_FETCH_DEFAULT:
+        case ADODB_FETCH_BOTH: 
+        default:
+          $this->fetchMode = LDAP_BOTH; 
+        break;
+        }
+    
+        $this->ADORecordSet($queryID);    
+    }
+    
+    function _initrs()
+    {
+       /* 
+       This could be teaked to respect the $COUNTRECS directive from ADODB
+       It's currently being used in the _fetch() function and the
+       GetAssoc() function
        */
-	    $this->_numOfRows = ldap_count_entries( $this->connection->_connectionID, $this->_queryID );
+        $this->_numOfRows = ldap_count_entries( $this->connection->_connectionID, $this->_queryID );
 
-	}
+    }
 
     /*
     Return whole recordset as a multi-dimensional associative array
-	*/
-	function GetAssoc($force_array = false, $first2cols = false) 
-	{
-		$records = $this->_numOfRows;
+    */
+    function GetAssoc($force_array = false, $first2cols = false) 
+    {
+        $records = $this->_numOfRows;
         $results = array();
             for ( $i=0; $i < $records; $i++ ) {
                 foreach ( $this->fields as $k=>$v ) {
@@ -345,11 +345,11 @@ class ADORecordSet_ldap extends ADORecordSet{
                 }
             }
         
-		return $results; 
-	}
+        return $results; 
+    }
     
     function GetRowAssoc()
-	{
+    {
         $results = array();
         foreach ( $this->fields as $k=>$v ) {
             if ( is_array( $v ) ) {
@@ -362,9 +362,9 @@ class ADORecordSet_ldap extends ADORecordSet{
             }
         }
  
-		return $results; 
-	}
-		
+        return $results; 
+    }
+        
     function GetRowNums()
     {
         $results = array();
@@ -382,42 +382,42 @@ class ADORecordSet_ldap extends ADORecordSet{
         }
         return $results;
     }
-	
-	function _fetch()
-	{		
-		if ( $this->_currentRow >= $this->_numOfRows && $this->_numOfRows >= 0 )
-        	return false;
-        	
+    
+    function _fetch()
+    {        
+        if ( $this->_currentRow >= $this->_numOfRows && $this->_numOfRows >= 0 )
+            return false;
+            
         if ( $this->_currentRow == 0 ) {
-		  $this->_entryID = ldap_first_entry( $this->connection->_connectionID, $this->_queryID );
+          $this->_entryID = ldap_first_entry( $this->connection->_connectionID, $this->_queryID );
         } else {
           $this->_entryID = ldap_next_entry( $this->connection->_connectionID, $this->_entryID );
         }
-	    
-	    $this->fields = ldap_get_attributes( $this->connection->_connectionID, $this->_entryID );
-	    $this->_numOfFields = $this->fields['count'];	
-	    switch ( $this->fetchMode ) {
+        
+        $this->fields = ldap_get_attributes( $this->connection->_connectionID, $this->_entryID );
+        $this->_numOfFields = $this->fields['count'];    
+        switch ( $this->fetchMode ) {
             
             case LDAP_ASSOC:
             $this->fields = $this->GetRowAssoc();
             break;
             
             case LDAP_NUM:
-			$this->fields = array_merge($this->GetRowNums(),$this->GetRowAssoc());
+            $this->fields = array_merge($this->GetRowNums(),$this->GetRowAssoc());
             break;
             
             case LDAP_BOTH:
             default:
-			$this->fields = $this->GetRowNums();
+            $this->fields = $this->GetRowNums();
             break;
         }
         return ( is_array( $this->fields ) );        
-	}
-	
-	function _close() {
-		@ldap_free_result( $this->_queryID );	
-		$this->_queryID = false;
-	}
-	
+    }
+    
+    function _close() {
+        @ldap_free_result( $this->_queryID );    
+        $this->_queryID = false;
+    }
+    
 }
 ?>

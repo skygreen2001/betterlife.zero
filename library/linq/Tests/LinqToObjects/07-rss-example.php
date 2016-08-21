@@ -21,7 +21,7 @@
  * @category   PHPLinq
  * @package    PHPLinq
  * @copyright  Copyright (c) 2008 - 2009 PHPLinq (http://www.codeplex.com/PHPLinq)
- * @license    http://www.gnu.org/licenses/lgpl.txt	LGPL
+ * @license    http://www.gnu.org/licenses/lgpl.txt    LGPL
  * @version    0.4.0, 2009-01-27
  */
 
@@ -37,16 +37,16 @@ require_once 'PHPLinq/LinqToObjects.php';
 // Create data source
 $rssFeed = simplexml_load_string(file_get_contents('http://blog.maartenballiauw.be/syndication.axd'));
 $result = from('$item')->in($rssFeed->xpath('//channel/item'))
-			->orderByDescending('$item => strtotime((string)$item->pubDate)')
-			->take(2)
-			->select('new {
-							"PostTitle" => (string)$item->title,
-							"PostAuthor" => (string)$item->author,
-							"MetaData" => new {
-												"Url" => (string)$item->link,
-												"Guid" => (string)$item->guid,
-												"PostDate" => strtotime((string)$item->pubDate)
-										  }
-					  }');
-				
+            ->orderByDescending('$item => strtotime((string)$item->pubDate)')
+            ->take(2)
+            ->select('new {
+                            "PostTitle" => (string)$item->title,
+                            "PostAuthor" => (string)$item->author,
+                            "MetaData" => new {
+                                                "Url" => (string)$item->link,
+                                                "Guid" => (string)$item->guid,
+                                                "PostDate" => strtotime((string)$item->pubDate)
+                                          }
+                      }');
+                
 print_r($result);

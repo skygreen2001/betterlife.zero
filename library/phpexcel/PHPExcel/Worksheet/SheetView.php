@@ -21,7 +21,7 @@
  * @category   PHPExcel
  * @package    PHPExcel_Worksheet
  * @copyright  Copyright (c) 2006 - 2011 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
  * @version    1.7.6, 2011-02-27
  */
 
@@ -35,23 +35,23 @@
  */
 class PHPExcel_Worksheet_SheetView
 {
-	/**
-	 * ZoomScale
-	 *
-	 * Valid values range from 10 to 400.
-	 *
-	 * @var int
-	 */
-	private $_zoomScale			= 100;
+    /**
+     * ZoomScale
+     *
+     * Valid values range from 10 to 400.
+     *
+     * @var int
+     */
+    private $_zoomScale            = 100;
 
-	/**
-	 * ZoomScaleNormal
-	 *
-	 * Valid values range from 10 to 400.
-	 *
-	 * @var int
-	 */
-	private $_zoomScaleNormal	= 100;
+    /**
+     * ZoomScaleNormal
+     *
+     * Valid values range from 10 to 400.
+     *
+     * @var int
+     */
+    private $_zoomScaleNormal    = 100;
 
     /**
      * Create a new PHPExcel_Worksheet_SheetView
@@ -60,73 +60,73 @@ class PHPExcel_Worksheet_SheetView
     {
     }
 
-	/**
-	 * Get ZoomScale
-	 *
-	 * @return int
-	 */
-	public function getZoomScale() {
-		return $this->_zoomScale;
-	}
+    /**
+     * Get ZoomScale
+     *
+     * @return int
+     */
+    public function getZoomScale() {
+        return $this->_zoomScale;
+    }
 
-	/**
-	 * Set ZoomScale
-	 *
-	 * Valid values range from 10 to 400.
-	 *
-	 * @param 	int 	$pValue
-	 * @throws 	Exception
-	 * @return PHPExcel_Worksheet_SheetView
-	 */
-	public function setZoomScale($pValue = 100) {
-		// Microsoft Office Excel 2007 only allows setting a scale between 10 and 400 via the user interface,
-		// but it is apparently still able to handle any scale >= 1
-		if (($pValue >= 1) || is_null($pValue)) {
-			$this->_zoomScale = $pValue;
-		} else {
-			throw new Exception("Scale must be greater than or equal to 1.");
-		}
-		return $this;
-	}
+    /**
+     * Set ZoomScale
+     *
+     * Valid values range from 10 to 400.
+     *
+     * @param     int     $pValue
+     * @throws     Exception
+     * @return PHPExcel_Worksheet_SheetView
+     */
+    public function setZoomScale($pValue = 100) {
+        // Microsoft Office Excel 2007 only allows setting a scale between 10 and 400 via the user interface,
+        // but it is apparently still able to handle any scale >= 1
+        if (($pValue >= 1) || is_null($pValue)) {
+            $this->_zoomScale = $pValue;
+        } else {
+            throw new Exception("Scale must be greater than or equal to 1.");
+        }
+        return $this;
+    }
 
-	/**
-	 * Get ZoomScaleNormal
-	 *
-	 * @return int
-	 */
-	public function getZoomScaleNormal() {
-		return $this->_zoomScaleNormal;
-	}
+    /**
+     * Get ZoomScaleNormal
+     *
+     * @return int
+     */
+    public function getZoomScaleNormal() {
+        return $this->_zoomScaleNormal;
+    }
 
-	/**
-	 * Set ZoomScale
-	 *
-	 * Valid values range from 10 to 400.
-	 *
-	 * @param 	int 	$pValue
-	 * @throws 	Exception
-	 * @return PHPExcel_Worksheet_SheetView
-	 */
-	public function setZoomScaleNormal($pValue = 100) {
-		if (($pValue >= 1) || is_null($pValue)) {
-			$this->_zoomScaleNormal = $pValue;
-		} else {
-			throw new Exception("Scale must be greater than or equal to 1.");
-		}
-		return $this;
-	}
+    /**
+     * Set ZoomScale
+     *
+     * Valid values range from 10 to 400.
+     *
+     * @param     int     $pValue
+     * @throws     Exception
+     * @return PHPExcel_Worksheet_SheetView
+     */
+    public function setZoomScaleNormal($pValue = 100) {
+        if (($pValue >= 1) || is_null($pValue)) {
+            $this->_zoomScaleNormal = $pValue;
+        } else {
+            throw new Exception("Scale must be greater than or equal to 1.");
+        }
+        return $this;
+    }
 
-	/**
-	 * Implement PHP __clone to create a deep clone, not just a shallow copy.
-	 */
-	public function __clone() {
-		$vars = get_object_vars($this);
-		foreach ($vars as $key => $value) {
-			if (is_object($value)) {
-				$this->$key = clone $value;
-			} else {
-				$this->$key = $value;
-			}
-		}
-	}
+    /**
+     * Implement PHP __clone to create a deep clone, not just a shallow copy.
+     */
+    public function __clone() {
+        $vars = get_object_vars($this);
+        foreach ($vars as $key => $value) {
+            if (is_object($value)) {
+                $this->$key = clone $value;
+            } else {
+                $this->$key = $value;
+            }
+        }
+    }
 }

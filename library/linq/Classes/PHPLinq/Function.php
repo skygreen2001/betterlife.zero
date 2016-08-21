@@ -21,7 +21,7 @@
  * @category   PHPLinq
  * @package    PHPLinq
  * @copyright  Copyright (c) 2008 - 2009 PHPLinq (http://www.codeplex.com/PHPLinq)
- * @license    http://www.gnu.org/licenses/lgpl.txt	LGPL
+ * @license    http://www.gnu.org/licenses/lgpl.txt    LGPL
  * @version    0.4.0, 2009-01-27
  */
 
@@ -34,78 +34,78 @@
  * @copyright  Copyright (c) 2008 - 2009 PHPLinq (http://www.codeplex.com/PHPLinq)
  */
 class PHPLinq_Function {
-	/**
-	 * Parameter names
-	 *
-	 * @var string
-	 */
-	private $_parameterNames;
-	
-	/**
-	 * Function code
-	 *
-	 * @var string
-	 */
-	private $_functionCode;
-	
-	/**
-	 * Function reference
-	 *
-	 * @var mixed
-	 */
-	private $_functionReference = null;
-	
-	/**
-	 * Construct function
-	 *
-	 * @param string $parameterNames Parameter names
-	 * @param string $functionCode Function code
-	 * @throws Exception
-	 */
-	public function __construct($parameterNames = '', $functionCode = '') {
-		// Check parameters
-		if (strpos($parameterNames, '$') === false) {
-			throw new PHPLinq_Exception('Missing arguments in parameter $parameterNames.');
-		}
-		if (strpos($functionCode, 'return') === false) {
-			throw new PHPLinq_Exception('Missing return statement in parameter $functionCode.');
-		}
-		
-		// Store parameters
-		$this->_parameterNames 		= $parameterNames;
-		$this->_functionCode 		= $functionCode;
-		$this->_functionReference 	= null;
-	}
-	
-	/**
-	 * Get function reference
-	 *
-	 * @return mixed
-	 */
-	public function getFunctionReference() {
-		if (is_null($this->_functionReference)) {
-			// Compile anonymous function
-			$this->_functionReference = create_function($this->_parameterNames, $this->_functionCode);
-		}
-		
-		return $this->_functionReference;
-	}
-	
-	/**
-	 * Get parameters
-	 *
-	 * @return string
-	 */
-	public function getParameterNames() {
-		return $this->_parameterNames;
-	}
-	
-	/**
-	 * Get source code
-	 *
-	 * @return string
-	 */
-	public function getFunctionCode() {
-		return $this->_functionCode;
-	}
+    /**
+     * Parameter names
+     *
+     * @var string
+     */
+    private $_parameterNames;
+    
+    /**
+     * Function code
+     *
+     * @var string
+     */
+    private $_functionCode;
+    
+    /**
+     * Function reference
+     *
+     * @var mixed
+     */
+    private $_functionReference = null;
+    
+    /**
+     * Construct function
+     *
+     * @param string $parameterNames Parameter names
+     * @param string $functionCode Function code
+     * @throws Exception
+     */
+    public function __construct($parameterNames = '', $functionCode = '') {
+        // Check parameters
+        if (strpos($parameterNames, '$') === false) {
+            throw new PHPLinq_Exception('Missing arguments in parameter $parameterNames.');
+        }
+        if (strpos($functionCode, 'return') === false) {
+            throw new PHPLinq_Exception('Missing return statement in parameter $functionCode.');
+        }
+        
+        // Store parameters
+        $this->_parameterNames         = $parameterNames;
+        $this->_functionCode         = $functionCode;
+        $this->_functionReference     = null;
+    }
+    
+    /**
+     * Get function reference
+     *
+     * @return mixed
+     */
+    public function getFunctionReference() {
+        if (is_null($this->_functionReference)) {
+            // Compile anonymous function
+            $this->_functionReference = create_function($this->_parameterNames, $this->_functionCode);
+        }
+        
+        return $this->_functionReference;
+    }
+    
+    /**
+     * Get parameters
+     *
+     * @return string
+     */
+    public function getParameterNames() {
+        return $this->_parameterNames;
+    }
+    
+    /**
+     * Get source code
+     *
+     * @return string
+     */
+    public function getFunctionCode() {
+        return $this->_functionCode;
+    }
 }

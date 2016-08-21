@@ -10,13 +10,13 @@
  */
 class Action_Index extends Action
 {
-	/**
-	 * 首页
-	 */
-	public function index()
-	{
-		//$this->redirect_url(Gc::$url_base."welcome.php");
-		$this->redirect("auth","login");
-	}
+    /**
+     * 首页
+     */
+    public function index()
+    {
+        //$this->redirect_url(Gc::$url_base."welcome.php");
+        $this->redirect("auth","login");
+    }
 }
 ?>

@@ -66,11 +66,11 @@ $joe->save($joe);```
 以类方法: queryPage为例
 ```
 $blogs=Blog::queryPage(0,10,
-	array(
-		//"(blog_content like '%关键字%' or blog_content like '%公开课%')",
-		"blog_id<4",
-		"user_id"=>1
-	)
+    array(
+        //"(blog_content like '%关键字%' or blog_content like '%公开课%')",
+        "blog_id<4",
+        "user_id"=>1
+    )
 );
 print_r($blogs);```
 

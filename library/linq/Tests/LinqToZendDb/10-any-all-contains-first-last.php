@@ -21,7 +21,7 @@
  * @category   PHPLinq
  * @package    PHPLinq
  * @copyright  Copyright (c) 2008 - 2009 PHPLinq (http://www.codeplex.com/PHPLinq)
- * @license    http://www.gnu.org/licenses/lgpl.txt	LGPL
+ * @license    http://www.gnu.org/licenses/lgpl.txt    LGPL
  * @version    0.4.0, 2009-01-27
  */
 
@@ -62,12 +62,12 @@ echo 'Contains(new Employee()): ' . ($result ? 'true' : 'false') . "\r\n";
 
 // Query data
 $result = from('$employee')->in($employeeTable)
-			->first();
-echo 'First Employee: ' . "\r\n";	
-print_r($result);	
+            ->first();
+echo 'First Employee: ' . "\r\n";    
+print_r($result);    
 
 $result = from('$employee')->in($employeeTable)
-			->last();
-echo 'Last Employee: ' . "\r\n";	
-print_r($result);		
+            ->last();
+echo 'Last Employee: ' . "\r\n";    
+print_r($result);        
 

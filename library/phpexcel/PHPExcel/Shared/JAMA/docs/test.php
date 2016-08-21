@@ -24,5 +24,5 @@ programming with Jama.
 </p>
 <?php
 highlight_file("../test/TestMatrix.php");
-include_once "includes/footer.php";	
+include_once "includes/footer.php";    
 ?>

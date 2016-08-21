@@ -1,13 +1,13 @@
 <?php
 /*
- *	$Id: wsdlclient8.php,v 1.1 2004/03/31 21:04:30 snichol Exp $
+ *    $Id: wsdlclient8.php,v 1.1 2004/03/31 21:04:30 snichol Exp $
  *
- *	WSDL client sample.
+ *    WSDL client sample.
  *
- *	Service: WSDL
- *	Payload: document/literal
- *	Transport: http
- *	Authentication: digest
+ *    Service: WSDL
+ *    Payload: document/literal
+ *    Transport: http
+ *    Authentication: digest
  */
 require_once('../../../../../init.php');
 Module_Loader::load_nusoap();
@@ -21,56 +21,56 @@ exit();
 $username = '';
 $password = '';
 $client = new nusoap_client("http://staging.mappoint.net/standard-30/mappoint.wsdl", true,
-						$proxyhost, $proxyport, $proxyusername, $proxypassword);
+                        $proxyhost, $proxyport, $proxyusername, $proxypassword);
 $err = $client->getError();
 if ($err) {
-	echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
+    echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 }
 $client->setCredentials($username, $password, 'digest');
 $address = array(
-	'AddressLine' => '563 Park Avenue',
-	'PrimaryCity' => 'New York',
-	'SecondaryCity' => 'Brooklyn',
-	'Subdivision' => '',
-	'PostalCode' => '',
-	'CountryRegion' => 'US',
-	'FormattedAddress' => ''
+    'AddressLine' => '563 Park Avenue',
+    'PrimaryCity' => 'New York',
+    'SecondaryCity' => 'Brooklyn',
+    'Subdivision' => '',
+    'PostalCode' => '',
+    'CountryRegion' => 'US',
+    'FormattedAddress' => ''
 );
 $findRange = array(
-	'StartIndex' => 0,
-	'Count' => 10
+    'StartIndex' => 0,
+    'Count' => 10
 );
 $findResultMask = 'AddressFlag';
 $findOptions = array(
-	'Range' => $findRange,
-	'SearchContext' => 1,
-	'ResultMask' => $findResultMask,
-	'ThresholdScore' => 0.85
+    'Range' => $findRange,
+    'SearchContext' => 1,
+    'ResultMask' => $findResultMask,
+    'ThresholdScore' => 0.85
 );
 $findAddressSpecification = array(
-	'DataSourceName' => 'MapPoint.NA',
-	'InputAddress' => $address,
-	'Options' => $findOptions
+    'DataSourceName' => 'MapPoint.NA',
+    'InputAddress' => $address,
+    'Options' => $findOptions
 );
 $findAddress = array('specification' => $findAddressSpecification);
 $result = $client->call('FindAddress', array('parameters' => $findAddress));
 // Check for a fault
 if ($client->fault) {
-	echo '<h2>Fault</h2><pre>';
-	print_r($result);
-	echo '</pre>';
+    echo '<h2>Fault</h2><pre>';
+    print_r($result);
+    echo '</pre>';
 } else {
-	// Check for errors
-	$err = $client->getError();
-	if ($err) {
-		// Display the error
-		echo '<h2>Error</h2><pre>' . $err . '</pre>';
-	} else {
-		// Display the result
-		echo '<h2>Result</h2><pre>';
-		print_r($result);
-		echo '</pre>';
-	}
+    // Check for errors
+    $err = $client->getError();
+    if ($err) {
+        // Display the error
+        echo '<h2>Error</h2><pre>' . $err . '</pre>';
+    } else {
+        // Display the result
+        echo '<h2>Result</h2><pre>';
+        print_r($result);
+        echo '</pre>';
+    }
 }
 echo '<h2>Request</h2><pre>' . htmlspecialchars($client->request, ENT_QUOTES) . '</pre>';
 echo '<h2>Response</h2><pre>' . htmlspecialchars($client->response, ENT_QUOTES) . '</pre>';

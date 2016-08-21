@@ -1,13 +1,13 @@
 <?php
 /*
- *	$Id: wsdlclient5.php,v 1.3 2004/02/23 19:22:19 snichol Exp $
+ *    $Id: wsdlclient5.php,v 1.3 2004/02/23 19:22:19 snichol Exp $
  *
- *	WSDL client sample.
+ *    WSDL client sample.
  *
- *	Service: WSDL
- *	Payload: rpc/encoded
- *	Transport: http
- *	Authentication: none
+ *    Service: WSDL
+ *    Payload: rpc/encoded
+ *    Transport: http
+ *    Authentication: none
  */
 
 require_once('../../../../../init.php');
@@ -22,38 +22,38 @@ $proxypassword = isset($_POST['proxypassword']) ? $_POST['proxypassword'] : '';
 $cache = new wsdlcache('.', 60);
 $wsdl = $cache->get('http://www.xmethods.net/sd/2001/BNQuoteService.wsdl');
 if (is_null($wsdl)) {
-	$wsdl = new wsdl('http://www.xmethods.net/sd/2001/BNQuoteService.wsdl',
-					$proxyhost, $proxyport, $proxyusername, $proxypassword);
-	$cache->put($wsdl);
+    $wsdl = new wsdl('http://www.xmethods.net/sd/2001/BNQuoteService.wsdl',
+                    $proxyhost, $proxyport, $proxyusername, $proxypassword);
+    $cache->put($wsdl);
 } else {
-	$wsdl->debug_str = '';
-	$wsdl->debug('Retrieved from cache');
+    $wsdl->debug_str = '';
+    $wsdl->debug('Retrieved from cache');
 }
 $client = new nusoap_client($wsdl, true,
-						$proxyhost, $proxyport, $proxyusername, $proxypassword);
+                        $proxyhost, $proxyport, $proxyusername, $proxypassword);
 $err = $client->getError();
 if ($err) {
-	echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
+    echo '<h2>Constructor error</h2><pre>' . $err . '</pre>';
 }
 $params = array('isbn' => '0060188782');
 $result = $client->call('getPrice', $params);
 // Check for a fault
 if ($client->fault) {
-	echo '<h2>Fault</h2><pre>';
-	print_r($result);
-	echo '</pre>';
+    echo '<h2>Fault</h2><pre>';
+    print_r($result);
+    echo '</pre>';
 } else {
-	// Check for errors
-	$err = $client->getError();
-	if ($err) {
-		// Display the error
-		echo '<h2>Error</h2><pre>' . $err . '</pre>';
-	} else {
-		// Display the result
-		echo '<h2>Result</h2><pre>';
-		print_r($result);
-		echo '</pre>';
-	}
+    // Check for errors
+    $err = $client->getError();
+    if ($err) {
+        // Display the error
+        echo '<h2>Error</h2><pre>' . $err . '</pre>';
+    } else {
+        // Display the result
+        echo '<h2>Result</h2><pre>';
+        print_r($result);
+        echo '</pre>';
+    }
 }
 echo '<h2>Request</h2><pre>' . htmlspecialchars($client->request, ENT_QUOTES) . '</pre>';
 echo '<h2>Response</h2><pre>' . htmlspecialchars($client->response, ENT_QUOTES) . '</pre>';

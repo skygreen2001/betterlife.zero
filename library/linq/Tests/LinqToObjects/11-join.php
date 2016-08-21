@@ -21,7 +21,7 @@
  * @category   PHPLinq
  * @package    PHPLinq
  * @copyright  Copyright (c) 2008 - 2009 PHPLinq (http://www.codeplex.com/PHPLinq)
- * @license    http://www.gnu.org/licenses/lgpl.txt	LGPL
+ * @license    http://www.gnu.org/licenses/lgpl.txt    LGPL
  * @version    0.4.0, 2009-01-27
  */
 
@@ -42,20 +42,20 @@ require_once('departments.inc.php');
 
 // Combine data
 $result = from('$employee')->in($employees)
-			->join('$department')->in($departments)->on('$employee, $department => $employee->DepartmentId == $department->Id')
-			->join('$manager')->in($employees)->on('$employee, $manager => $employee->ManagerId > 0 && $employee->ManagerId == $manager->Id')
-			->select('$employee = null, $department = null, $manager = null => new {
-							"Name" => $employee->Name,
-							"Email" => $employee->Email,
-							"Department" => $department,
-							"Manager" => $manager
-					  }');
+            ->join('$department')->in($departments)->on('$employee, $department => $employee->DepartmentId == $department->Id')
+            ->join('$manager')->in($employees)->on('$employee, $manager => $employee->ManagerId > 0 && $employee->ManagerId == $manager->Id')
+            ->select('$employee = null, $department = null, $manager = null => new {
+                            "Name" => $employee->Name,
+                            "Email" => $employee->Email,
+                            "Department" => $department,
+                            "Manager" => $manager
+                      }');
 
 print_r($result);
 
 // Combine data
 $result = from('$employee')->in($employees)
-			->join('$department')->in($departments)->on('$employee, $department => $employee->DepartmentId == $department->Id')
-			->select('$employee = null, $department = null => $employee->Name . " works for " . $department->Name');
-			
+            ->join('$department')->in($departments)->on('$employee, $department => $employee->DepartmentId == $department->Id')
+            ->select('$employee = null, $department = null => $employee->Name . " works for " . $department->Name');
+            
 print_r($result);

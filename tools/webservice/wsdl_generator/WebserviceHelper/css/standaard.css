@@ -1,132 +1,132 @@
 body {
-	margin: 10px;
-	background-color: #A0A0A0;
+    margin: 10px;
+    background-color: #A0A0A0;
 }
 body, table, th, td, p, div {
-	font-family: Arial, Helvetica;
-	font-size: 9pt;
-	color: #000000;
+    font-family: Arial, Helvetica;
+    font-size: 9pt;
+    color: #000000;
 }
 body {
-	margin: 2px
+    margin: 2px
 }
 form {
-	margin: 15px 0px 0px 0px;
+    margin: 15px 0px 0px 0px;
 }
 .clear {
-	border: solid 1px #A0A0A0;
+    border: solid 1px #A0A0A0;
 }
 .button {
-	background-color: #F0F0F0;
-	background-image: url('../images/button.gif');
+    background-color: #F0F0F0;
+    background-image: url('../images/button.gif');
 }
 input.between {
-	height: 18px;
-	font-size: 9px;
+    height: 18px;
+    font-size: 9px;
 }
 .medium {
-	width: 200px;
+    width: 200px;
 }
 .large {
-	width: 400px;
+    width: 400px;
 }
 td.desc {
 }
 td.input {
 }
 a {
-	color: #F9C184;
+    color: #F9C184;
 }
 p {
-	margin-top: 5px;
-	margin-bottom: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
 }
 h1 {
-	margin-top: 10px;
-	margin-bottom: 15px;
-	font-family: Arial, Helvetica;
-	font-size: 13pt;
-	color: #000000;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    font-family: Arial, Helvetica;
+    font-size: 13pt;
+    color: #000000;
 }
 h2 {
-	margin-top: 20px;
-	margin-bottom: 0px;
-	font-family: Arial, Helvetica;
-	font-size: 11pt;
-	color: #000000;
+    margin-top: 20px;
+    margin-bottom: 0px;
+    font-family: Arial, Helvetica;
+    font-size: 11pt;
+    color: #000000;
 }
 div.tabblad {
-	border-left: 1px solid #FFFFFF;
-	border-top: 1px solid #FFFFFF;
-	border-right: 1px solid #808080;
-	float: left;
-	margin-right: 3px;
-	padding: 2px 4px;
-	width: 100px;
-	cursor: pointer;
+    border-left: 1px solid #FFFFFF;
+    border-top: 1px solid #FFFFFF;
+    border-right: 1px solid #808080;
+    float: left;
+    margin-right: 3px;
+    padding: 2px 4px;
+    width: 100px;
+    cursor: pointer;
 }
 div.selected-outer {
-	font-weight: bold;
-	background-image: url('../images/tabouteron.gif');
-	border-bottom: 1px solid #C0C0C0;
+    font-weight: bold;
+    background-image: url('../images/tabouteron.gif');
+    border-bottom: 1px solid #C0C0C0;
 }
 div.selected-inner {
-	font-weight: bold;
-	background-image: url('../images/tabinneron.gif');
-	border-bottom: 1px solid #E0E0E0;
+    font-weight: bold;
+    background-image: url('../images/tabinneron.gif');
+    border-bottom: 1px solid #E0E0E0;
 }
 div.content {
-	border-left: 1px solid #FFFFFF;
-	border-bottom: 1px solid #808080;
-	border-right: 1px solid #808080;
-	border-top: 1px solid #FFFFFF;
-	padding: 5px;
+    border-left: 1px solid #FFFFFF;
+    border-bottom: 1px solid #808080;
+    border-right: 1px solid #808080;
+    border-top: 1px solid #FFFFFF;
+    padding: 5px;
 }
 .outer {
-	background-color: #C0C0C0;
+    background-color: #C0C0C0;
 }
 .inner {
-	background-color: #E0E0E0;
+    background-color: #E0E0E0;
 }
 th {
-	text-align: left;
+    text-align: left;
 }
 fieldset {
-	border: 1px solid #A0A0A0;
-	padding: 2px;
+    border: 1px solid #A0A0A0;
+    padding: 2px;
 }
 legend {
-	color: #000000;
+    color: #000000;
 }
 td.bleft {
-	border-left: 1px solid #808080;
+    border-left: 1px solid #808080;
 }
 td.bright {
-	border-right: 1px solid #808080;
+    border-right: 1px solid #808080;
 }
 td.btop {
-	border-top: 1px solid #808080;
+    border-top: 1px solid #808080;
 }
 td.bbottom {
-	border-bottom: 1px solid #808080;
+    border-bottom: 1px solid #808080;
 }
 input.selector {
-	font-size:10px;
-	font-weight:bold;
-	width:20px;
-	height:20px;
-	margin-top:0px;
-	background-color: #F0F0F0;
-	background-image: url('../images/button.gif');
+    font-size:10px;
+    font-weight:bold;
+    width:20px;
+    height:20px;
+    margin-top:0px;
+    background-color: #F0F0F0;
+    background-image: url('../images/button.gif');
 }
 input.selectorsmall {
-	font-size:8px;
-	font-weight:bold;
-	width:16px;
-	height:16px;
-	margin-top:0px;
-	background-color: #F0F0F0;
-	background-image: url('../images/button.gif');
+    font-size:8px;
+    font-weight:bold;
+    width:16px;
+    height:16px;
+    margin-top:0px;
+    background-color: #F0F0F0;
+    background-image: url('../images/button.gif');
 }
 
 /* calendar */

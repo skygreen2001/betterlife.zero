@@ -5,12 +5,12 @@
  * available in the /classes directory
  */
 function __autoload($classname) {
-	if(file_exists("classes/data_objects/$classname.class.php"))
-		include("classes/data_objects/$classname.class.php");
-	elseif(file_exists("classes/soap/$classname.class.php"))
-		include("classes/soap/$classname.class.php");
-	elseif(file_exists("classes/$classname.class.php"))
-		include("classes/$classname.class.php");
+    if(file_exists("classes/data_objects/$classname.class.php"))
+        include("classes/data_objects/$classname.class.php");
+    elseif(file_exists("classes/soap/$classname.class.php"))
+        include("classes/soap/$classname.class.php");
+    elseif(file_exists("classes/$classname.class.php"))
+        include("classes/$classname.class.php");
 }
 
 /**
@@ -20,9 +20,9 @@ function __autoload($classname) {
  * @return void
  */
 function debug($txt,$file="debug.txt"){
-	$fp = fopen($file, "a");
-	fwrite($fp, str_replace("\n","\r\n","---\r\n".$txt));
-	fclose($fp);
+    $fp = fopen($file, "a");
+    fwrite($fp, str_replace("\n","\r\n","---\r\n".$txt));
+    fclose($fp);
 }
 
 /**
@@ -35,27 +35,27 @@ function debug($txt,$file="debug.txt"){
  */
 /*
 function copyClass($old,$new){
-	foreach($old as $p_name=>$p_value){
-		if(is_object($new->$p_name)){
-			copyClass($old->$p_name,$new->$p_name);
-		}elseif(is_array($old->$p_name)){
-			if($i=strpos($p_name,"array")){
-				$name=substr($p_name,0,$i);
-			}else $name=false;
-			foreach($p_value as $item){
-				if($name){
-					if(!is_array($new->$p_name)) $new->$p_name=Array();
-					$new->{$p_name}[]=new $name();
-					$new_item=$new->{$p_name}[(count($new->$p_name)-1)];
-					copyClass($item,$new_item);
-				}else{
-					$new->{$p_name}[]=$item;
-				}
-			}
-		}else{
-			$new->$p_name=$old->$p_name;
-		}
-	}
+    foreach($old as $p_name=>$p_value){
+        if(is_object($new->$p_name)){
+            copyClass($old->$p_name,$new->$p_name);
+        }elseif(is_array($old->$p_name)){
+            if($i=strpos($p_name,"array")){
+                $name=substr($p_name,0,$i);
+            }else $name=false;
+            foreach($p_value as $item){
+                if($name){
+                    if(!is_array($new->$p_name)) $new->$p_name=Array();
+                    $new->{$p_name}[]=new $name();
+                    $new_item=$new->{$p_name}[(count($new->$p_name)-1)];
+                    copyClass($item,$new_item);
+                }else{
+                    $new->{$p_name}[]=$item;
+                }
+            }
+        }else{
+            $new->$p_name=$old->$p_name;
+        }
+    }
 }
 */
 ?>

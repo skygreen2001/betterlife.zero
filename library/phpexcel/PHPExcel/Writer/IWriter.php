@@ -21,7 +21,7 @@
  * @category   PHPExcel
  * @package    PHPExcel_Writer
  * @copyright  Copyright (c) 2006 - 2011 PHPExcel (http://www.codeplex.com/PHPExcel)
- * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
+ * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt    LGPL
  * @version    1.7.6, 2011-02-27
  */
 
@@ -35,11 +35,11 @@
  */
 interface PHPExcel_Writer_IWriter
 {
-	/**
-	 * Save PHPExcel to file
-	 *
-	 * @param 	string 		$pFileName
-	 * @throws 	Exception
-	 */	
-	public function save($pFilename = null);
+    /**
+     * Save PHPExcel to file
+     *
+     * @param     string         $pFileName
+     * @throws     Exception
+     */    
+    public function save($pFilename = null);
 }

@@ -12,12 +12,12 @@ $DBMS = @$_GET['db'];
 
 $DBMS = 'mysql';
 if ($DBMS == 'mysql') {
-	$db = NewADOConnection('mysql://root@localhost/northwind');
+    $db = NewADOConnection('mysql://root@localhost/northwind');
 } else if ($DBMS == 'postgres') {
-	$db = NewADOConnection('postgres');
-	$db->Connect("localhost","tester","test","test");
+    $db = NewADOConnection('postgres');
+    $db->Connect("localhost","tester","test","test");
 } else
-	$db = NewADOConnection('oci8://scott:natsoft@/');
+    $db = NewADOConnection('oci8://scott:natsoft@/');
 
 
 $arr = $db->ServerInfo();

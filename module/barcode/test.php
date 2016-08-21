@@ -17,15 +17,15 @@ $color_white = new BCGColor(255, 255, 255);
 
 $drawException = null;
 try {
-	$code = new BCGcode128();
-	$code->setScale(2); // Resolution
-	$code->setThickness(30); // Thickness
-	$code->setForegroundColor($color_black); // Color of bars
-	$code->setBackgroundColor($color_white); // Color of spaces
-	$code->setFont($font); // Font (or 0)
-	$code->parse('122072012195'); // Text
+    $code = new BCGcode128();
+    $code->setScale(2); // Resolution
+    $code->setThickness(30); // Thickness
+    $code->setForegroundColor($color_black); // Color of bars
+    $code->setBackgroundColor($color_white); // Color of spaces
+    $code->setFont($font); // Font (or 0)
+    $code->parse('122072012195'); // Text
 } catch(Exception $exception) {
-	$drawException = $exception;
+    $drawException = $exception;
 }
 
 /* Here is the list of the arguments
@@ -33,10 +33,10 @@ try {
 2 - Background color */
 $drawing = new BCGDrawing('', $color_white);
 if($drawException) {
-	$drawing->drawException($drawException);
+    $drawing->drawException($drawException);
 } else {
-	$drawing->setBarcode($code);
-	$drawing->draw();
+    $drawing->setBarcode($code);
+    $drawing->draw();
 }
 
 // Header that says it is an image (remove it if you save the barcode to a file)

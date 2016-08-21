@@ -14,7 +14,7 @@ $_CACHE['apps'] = array (
     'extra' => 
     array (
       'apppath' => '',
-      'extraurl' => '			',
+      'extraurl' => '            ',
     ),
     'recvnote' => '1',
   ), 
@@ -32,7 +32,7 @@ $_CACHE['apps'] = array (
     'extra' => 
     array (
       'apppath' => '',
-      'extraurl' => '			',
+      'extraurl' => '            ',
     ),
     'recvnote' => '1',
   ),

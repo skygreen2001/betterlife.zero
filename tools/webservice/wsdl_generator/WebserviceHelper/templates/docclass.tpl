@@ -2,8 +2,8 @@
 <!-- BEGIN: htmlheader -->
 <html>
 <head>
-	<title>WSDL Helper</title>
-	<link rel="stylesheet" href="css/doc.css" type="text/css">
+    <title>WSDL Helper</title>
+    <link rel="stylesheet" href="css/doc.css" type="text/css">
 </head>
 <body>
 <!-- END: htmlheader -->
@@ -17,40 +17,40 @@
 <table cellpadding="0" cellspacing="0">
 <tr>
 <td id="menu">
-	<h2>Classes</h2>
-	<!-- BEGIN: menuitem -->
-	<a href="?class={class.name}">{class.name}</a><br>
-	<!-- END: menuitem -->
+    <h2>Classes</h2>
+    <!-- BEGIN: menuitem -->
+    <a href="?class={class.name}">{class.name}</a><br>
+    <!-- END: menuitem -->
 </td>
 <td id="content">
-	<h2>Full description</h2>
-	<p>{class.fullDescription}</p>
+    <h2>Full description</h2>
+    <p>{class.fullDescription}</p>
 
-	<!-- BEGIN: properties -->
-	<h2>Properties</h2>
-	<!-- BEGIN: property -->
-	<a name="property_{property.name}"></a>
-	<div class="property{warning}">
-	{fullNameExt}<br>
-	{typeExt}<br>
-	{fullDescriptionExt}
-	</div>
-	<!-- END: property -->
-	<!-- END: properties -->
+    <!-- BEGIN: properties -->
+    <h2>Properties</h2>
+    <!-- BEGIN: property -->
+    <a name="property_{property.name}"></a>
+    <div class="property{warning}">
+    {fullNameExt}<br>
+    {typeExt}<br>
+    {fullDescriptionExt}
+    </div>
+    <!-- END: property -->
+    <!-- END: properties -->
 
-	<!-- BEGIN: methods -->
-	<h2>Methods</h2>
-	<!-- BEGIN: method -->
-	<a name="method_{method.name}"></a>
-	<div class="method{warning}">
-	{fullNameExt}<br>
-	{paramExt}
-	{returnExt}<br>
-	{throwsExt}
-	{fullDescriptionExt}<br>
-	</div>
-	<!-- END: method -->
-	<!-- END: methods -->
+    <!-- BEGIN: methods -->
+    <h2>Methods</h2>
+    <!-- BEGIN: method -->
+    <a name="method_{method.name}"></a>
+    <div class="method{warning}">
+    {fullNameExt}<br>
+    {paramExt}
+    {returnExt}<br>
+    {throwsExt}
+    {fullDescriptionExt}<br>
+    </div>
+    <!-- END: method -->
+    <!-- END: methods -->
 </td>
 </tr>
 </table>

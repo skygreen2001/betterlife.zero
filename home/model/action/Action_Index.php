@@ -9,13 +9,13 @@
  */
 class Action_Index extends ActionModel
 {
-	/**
-	 * 首页:网站所有页面列表
-	 */
-	public function index()
-	{
-		
-	}
+    /**
+     * 首页:网站所有页面列表
+     */
+    public function index()
+    {
+        
+    }
 }
 
 ?>

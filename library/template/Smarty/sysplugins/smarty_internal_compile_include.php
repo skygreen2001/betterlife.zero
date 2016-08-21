@@ -14,11 +14,11 @@
  * Smarty Internal Plugin Compile Include Class
  */
 class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase {
-	// caching mode to create nocache code but no cache file
-	const CACHING_NOCACHE_CODE = 9999;
-	// attribute definitions
+    // caching mode to create nocache code but no cache file
+    const CACHING_NOCACHE_CODE = 9999;
+    // attribute definitions
     public $required_attributes = array('file');
-   	public $shorttag_order = array('file');
+       public $shorttag_order = array('file');
     public $option_flags = array('nocache','inline','caching');
     public $optional_attributes = array('_any'); 
 
@@ -41,7 +41,7 @@ class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase {
             // check if compiled code can be merged (contains no variable part)
             if (!$compiler->has_variable_string && (substr_count($include_file, '"') == 2 or substr_count($include_file, "'") == 2) and substr_count($include_file, '(') == 0) {
              $tmp = null;
-	    eval("\$tmp = $include_file;");
+        eval("\$tmp = $include_file;");
                 if ($this->compiler->template->template_resource != $tmp) {
                     $tpl = new $compiler->smarty->template_class ($tmp, $compiler->smarty, $compiler->template, $compiler->template->cache_id, $compiler->template->compile_id);
                     // suppress writing of compiled file
@@ -164,8 +164,8 @@ class Smarty_Internal_Compile_Include extends Smarty_Internal_CompileBase {
             } else {
                 $_output .= " echo \$_template->getRenderedTemplate();?>";
                 if ($_parent_scope != Smarty::SCOPE_LOCAL) {
-                	$_output .= "<?php \$_template->updateParentVariables($_parent_scope);?>";
-            	}
+                    $_output .= "<?php \$_template->updateParentVariables($_parent_scope);?>";
+                }
             } 
         } 
         $_output .= "<?php unset(\$_template);?>";

@@ -6064,7 +6064,7 @@ Ext.supports = {
             }
         },
 
-		
+        
         {
             identity: 'CSS3LinearGradient',
             fn: function(doc, div) {
@@ -35341,11 +35341,11 @@ Ext.define('Ext.dd.DragDrop', {
         this.resetConstraints();
         this.setXConstraint(leftSpace - (pad.left||0), 
                 c.width - leftSpace - b.width - (pad.right||0), 
-				this.xTickSize
+                this.xTickSize
         );
         this.setYConstraint(topSpace - (pad.top||0), 
                 c.height - topSpace - b.height - (pad.bottom||0), 
-				this.yTickSize
+                this.yTickSize
         );
     },
 
@@ -50745,12 +50745,12 @@ Ext.define('Ext.util.Inflector', {
             woman: 'women',
             child: 'children',
             man: 'men',
-            corpus:	'corpora',
+            corpus:    'corpora',
             criterion: 'criteria',
-            curriculum:	'curricula',
+            curriculum:    'curricula',
             genus: 'genera',
-            memorandum:	'memoranda',
-            phenomenon:	'phenomena',
+            memorandum:    'memoranda',
+            phenomenon:    'phenomena',
             foot: 'feet',
             goose: 'geese',
             tooth: 'teeth',

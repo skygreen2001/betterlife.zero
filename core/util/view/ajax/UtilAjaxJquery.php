@@ -119,8 +119,8 @@ class UtilAjaxJquery extends UtilAjax implements IUtilAjax
         $result.= "type:'".$method."',";
         $result.= "dataType:'".$response_type."',";
         $result.= "beforeSend  : function (XMLHttpRequest) {
-	        XMLHttpRequest.setRequestHeader('response_type','$response_type');
-	    },";        
+            XMLHttpRequest.setRequestHeader('response_type','$response_type');
+        },";        
         if (isset($data)){        
             $result.= "data:".$data.",";
         }

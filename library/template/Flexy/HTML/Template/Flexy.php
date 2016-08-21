@@ -106,7 +106,7 @@ class HTML_Template_Flexy
         // compiling conditions ------------------------------------------
         'compiler'      => 'Flexy',  // which compiler to use. (Flexy,Regex, Raw,Xipe)
         'forceCompile'  =>  false,      // only suggested for debugging
-        'dontCompile'	=> false,		// never compile - use this if you're manually compiling your templates
+        'dontCompile'    => false,        // never compile - use this if you're manually compiling your templates
 
         // regex Compiler       ------------------------------------------
         'filters'       => array(),     // used by regex compiler.
@@ -634,7 +634,7 @@ class HTML_Template_Flexy
      
     function mergeElement($original,$new)
     {
-       	    // Clone objects is possible to avoid creating references between elements
+               // Clone objects is possible to avoid creating references between elements
          
         // no original - return new
         if (!$original) {

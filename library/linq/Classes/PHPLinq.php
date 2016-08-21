@@ -21,7 +21,7 @@
  * @category   PHPLinq
  * @package    PHPLinq
  * @copyright  Copyright (c) 2008 - 2009 PHPLinq (http://www.codeplex.com/PHPLinq)
- * @license    http://www.gnu.org/licenses/lgpl.txt	LGPL
+ * @license    http://www.gnu.org/licenses/lgpl.txt    LGPL
  * @version    0.4.0, 2009-01-27
  */
 
@@ -46,20 +46,20 @@ require_once('PHPLinq/Initiator.php');
  * @return PHPLinq_Initiator
  */
 function linqfrom($name) {
-	return new PHPLinq_Initiator($name);
+    return new PHPLinq_Initiator($name);
 }
 
 // Create easy-to-use initiator ("from")
 if (!function_exists('from')) {
-	/**
-	 * Set variable name to use as default
-	 *
-	 * @param string $name
-	 * @return PHPLinq_Initiator
-	 */
-	function from($name) {
-		return linqfrom($name);
-	}
+    /**
+     * Set variable name to use as default
+     *
+     * @param string $name
+     * @return PHPLinq_Initiator
+     */
+    function from($name) {
+        return linqfrom($name);
+    }
 } else {
-	error_log('A function with the name "from" already exists. Use linqfrom($name) instead of from($name).', E_NOTICE);
+    error_log('A function with the name "from" already exists. Use linqfrom($name) instead of from($name).', E_NOTICE);
 }

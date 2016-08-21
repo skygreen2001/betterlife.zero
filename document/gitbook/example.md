@@ -24,10 +24,10 @@ github路径:https://github.com/skygreen2001/betterlife/blob/master/db/mysql/dbd
 
 | 表名称 | 用途 | 备注 |
 | -- | -- | -- |
-| bb_core_blog | 博客 |	博客|
+| bb_core_blog | 博客 |    博客|
 | bb_core_comment | 评论 | 评论 |
 | bb_dic_region | 地区 | 地区 |
-| bb_log_logsystem | 系统日志 |	系统日志 |
+| bb_log_logsystem | 系统日志 |    系统日志 |
 | bb_log_loguser | 用户日志 | 用户日志 |
 | bb_msg_msg | 消息 | 消息 |
 | bb_msg_notice | 通知 | 通知 |

@@ -127,7 +127,7 @@ including adodb-cryptsession.php instead of adodb-session.php. </li>
  </pre>
  <p>An alternative way to set persistant or non-persistent connections is to call the following function before session_start() is called.
  <pre>
- 	ADODB_Session::persist('P'); # 'C' for non-persistent connections
+     ADODB_Session::persist('P'); # 'C' for non-persistent connections
  </pre>
  <h4>Installation</h4>
 <p>1. Create this table in your database (MySQL syntax):
@@ -137,24 +137,24 @@ including adodb-cryptsession.php instead of adodb-session.php. </li>
        SESSKEY char(32) not null,
        EXPIRY int(11) unsigned not null,
        EXPIREREF varchar(64),
-	   DATA text not null,
-	   primary key (sesskey)
-	   );</font>
+       DATA text not null,
+       primary key (sesskey)
+       );</font>
  </pre>
 
  <p>You may want to rename the 'data' field to 'session_data' as
-	'data' appears to be a reserved word for one or more of the following:
-	<ul>
-	<li>	ANSI SQL
-	<li>	IBM DB2
-	<li>	MS SQL Server
-	<li>	Postgres
-	<li>	SAP
-		</ul>
+    'data' appears to be a reserved word for one or more of the following:
+    <ul>
+    <li>    ANSI SQL
+    <li>    IBM DB2
+    <li>    MS SQL Server
+    <li>    Postgres
+    <li>    SAP
+        </ul>
 <p>
-	If you do, then execute:
+    If you do, then execute:
 <pre>
-		ADODB_Session::dataFieldName('session_data');
+        ADODB_Session::dataFieldName('session_data');
 </pre>
  <p> For the adodb-session-clob.php version, create this:
 <p>  <pre>
@@ -163,7 +163,7 @@ including adodb-cryptsession.php instead of adodb-session.php. </li>
  </pre>
  <p>2. Then define the following parameters. You can either modify this file, or define them before this file is included:
  <pre>      <font
- color="#004040"><br>    $ADODB_SESSION_DRIVER='database driver, eg. mysql or ibase';<br>    $ADODB_SESSION_CONNECT='server to connect to';<br>    $ADODB_SESSION_USER ='user';<br>    $ADODB_SESSION_PWD ='password';<br>    $ADODB_SESSION_DB ='database';<br>    $ADODB_SESSION_TBL = 'sessions'; # setting this is optional<br>	</font>
+ color="#004040"><br>    $ADODB_SESSION_DRIVER='database driver, eg. mysql or ibase';<br>    $ADODB_SESSION_CONNECT='server to connect to';<br>    $ADODB_SESSION_USER ='user';<br>    $ADODB_SESSION_PWD ='password';<br>    $ADODB_SESSION_DB ='database';<br>    $ADODB_SESSION_TBL = 'sessions'; # setting this is optional<br>    </font>
  </pre><p>
      When the session is created, $<b>ADODB_SESS_CONN</b> holds the connection object.<br>    <br>  3. Recommended is PHP 4.0.6 or later. There are documented session bugs in earlier versions of PHP.
 <h3>Notifications</h3>
@@ -174,10 +174,10 @@ your php.ini session.cookie_lifetime and session.gc_probability settings. This w
 adodb's garbage collection function, which can be setup to do notification.
 <p>
 <pre>
-	PHP Session --> ADOdb Session  --> Find all recs  --> Send          --> Delete queued
-	GC Function     GC Function        to be deleted      notification      records
-	executed at     called by                             for all recs
-	random time     Session Extension                     queued for deletion
+    PHP Session --> ADOdb Session  --> Find all recs  --> Send          --> Delete queued
+    GC Function     GC Function        to be deleted      notification      records
+    executed at     called by                             for all recs
+    random time     Session Extension                     queued for deletion
 </pre>
 <p>When a session is created, we need to store a value in the session record (in the EXPIREREF field), typically 
 the userid of the session. Later when the session has expired,  just before the record is deleted,
@@ -194,7 +194,7 @@ $USERID. The function name is 'NotifyFn'.
 <p>
 So we define (before session_start() is called): </p>
 <pre> <font color="#004040">
-	$ADODB_SESSION_EXPIRE_NOTIFY = array('USERID','NotifyFn');
+    $ADODB_SESSION_EXPIRE_NOTIFY = array('USERID','NotifyFn');
 </font></pre>
 And when the NotifyFn is called (when the session expires), the
 $USERID is passed in as the first parameter, eg. NotifyFn($userid, $sesskey). The
@@ -203,15 +203,15 @@ table) is the 2nd parameter.
 <p> Here is an example of a Notification function that deletes some
 records in the database and temporary files: </p>
 <pre><font color="#004040">
-	function NotifyFn($expireref, $sesskey)
-	{
-		global $ADODB_SESS_CONN; # the session connection object
-		$user = $ADODB_SESS_CONN-&gt;qstr($expireref);
-		
-		$ADODB_SESS_CONN-&gt;Execute("delete from shopping_cart where user=$user");          
-		system("rm /work/tmpfiles/$expireref/*");
-	}</font>  
-			  </pre>
+    function NotifyFn($expireref, $sesskey)
+    {
+        global $ADODB_SESS_CONN; # the session connection object
+        $user = $ADODB_SESS_CONN-&gt;qstr($expireref);
+        
+        $ADODB_SESS_CONN-&gt;Execute("delete from shopping_cart where user=$user");          
+        system("rm /work/tmpfiles/$expireref/*");
+    }</font>  
+              </pre>
 <p> NOTE 1: If you have register_globals disabled in php.ini, then you
 will have to manually set the EXPIREREF. E.g. </p>
 <pre> <font color="#004040">
@@ -248,23 +248,23 @@ can be logged in twice. Useful for security reasons.
   );</font>
  </pre> 
  <p>Then your PHP code could look like this:
-	 <pre>
-	ADODB_SESSION_DRIVER='oci8';
-	$ADODB_SESSION_CONNECT=$tnsname;
-	$ADODB_SESSION_USER ='scott';
-	$ADODB_SESSION_PWD = 'tiger';
-	$ADODB_SESSION_DB ='';
-	
-	$ADODB_SESSION_USE_LOBS = 'clob';
-	$ADODB_SESSION_TBL = 'sessions';
-	
-	$ADODB_SESS_DEBUG=0;
-	
-	include(ADODB_DIR.'/session/adodb-session.php');
-	
-	ADODB_Session::persist('P'); # use 'C' for non-persistent connects
-	
-	session_start();
+     <pre>
+    ADODB_SESSION_DRIVER='oci8';
+    $ADODB_SESSION_CONNECT=$tnsname;
+    $ADODB_SESSION_USER ='scott';
+    $ADODB_SESSION_PWD = 'tiger';
+    $ADODB_SESSION_DB ='';
+    
+    $ADODB_SESSION_USE_LOBS = 'clob';
+    $ADODB_SESSION_TBL = 'sessions';
+    
+    $ADODB_SESS_DEBUG=0;
+    
+    include(ADODB_DIR.'/session/adodb-session.php');
+    
+    ADODB_Session::persist('P'); # use 'C' for non-persistent connects
+    
+    session_start();
  </pre>
  <p>Note that you can set persistance using ADODB_Session::persist('P').
  
@@ -282,20 +282,20 @@ works with cookies. Useful to improve security by reducing the risk of session-h
 See this article on <a href=http://shiflett.org/articles/security-corner-feb2004>Session Fixation</a> for more info 
 on the theory behind this feature. Usage:
 <pre>
-	$ADODB_SESSION_DRIVER='mysql';
-	$ADODB_SESSION_CONNECT='localhost';
-	$ADODB_SESSION_USER ='root';
-	$ADODB_SESSION_PWD ='abc';
-	$ADODB_SESSION_DB ='phplens';
-	
-	include('path/to/adodb/session/adodb-session.php');
-	
-	session_start();
-	# Every 10 page loads, reset cookie for safety.
-	# This is extremely simplistic example, better 
-	# to regenerate only when the user logs in or changes
-	# user privilege levels.
-	if ((rand()%10) == 0) adodb_session_regenerate_id(); 
+    $ADODB_SESSION_DRIVER='mysql';
+    $ADODB_SESSION_CONNECT='localhost';
+    $ADODB_SESSION_USER ='root';
+    $ADODB_SESSION_PWD ='abc';
+    $ADODB_SESSION_DB ='phplens';
+    
+    include('path/to/adodb/session/adodb-session.php');
+    
+    session_start();
+    # Every 10 page loads, reset cookie for safety.
+    # This is extremely simplistic example, better 
+    # to regenerate only when the user logs in or changes
+    # user privilege levels.
+    if ((rand()%10) == 0) adodb_session_regenerate_id(); 
 </pre>
 <p>This function calls session_regenerate_id() internally or simulates it if the function does not exist.
 <h3>Vacuum/Optimize Database</h3>

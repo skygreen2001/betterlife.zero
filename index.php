@@ -12,8 +12,8 @@ require_once("core/main/Application.php");
  */
 $application_env=array();
 // $application_env=array(
-// 	"dev_debug_on"=>false,
-// 	"dev_profile_on"=>false,
+//     "dev_debug_on"=>false,
+//     "dev_profile_on"=>false,
 // );
 
 $application = new Application($application_env);

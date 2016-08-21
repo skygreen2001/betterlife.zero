@@ -78,12 +78,12 @@ require_once ("init.php");
 
 //测试删除功能,预先存入10条数据
 // for ($i=1; $i < 11; $i++) {
-// 	$user=new User();
-// 	$user->setUsername("betterlife".$i);
-// 	$user->setPassword("123456");
-// 	$user_id=$user->save();
-// 	if($user_id) echo("新增用户标识:".$user_id); else echo("新增用户失败!");
-// 	echo "<br/>";
+//     $user=new User();
+//     $user->setUsername("betterlife".$i);
+//     $user->setPassword("123456");
+//     $user_id=$user->save();
+//     if($user_id) echo("新增用户标识:".$user_id); else echo("新增用户失败!");
+//     echo "<br/>";
 // }
 //删除指定标识的用户
 // $isDelete=User::deleteByID(4);
@@ -143,11 +143,11 @@ require_once ("init.php");
 //查看从第1到5条博客记录
 // $blogs=Blog::queryPage(1,5);
 // $blogs=Blog::queryPage(0,10,
-// 	array(
-// 		"(blog_content like '%关键字%' or blog_content like '%公开课%')",
-// 		// "blog_id<4",
-// 		// "user_id"=>1
-// 	)
+//     array(
+//         "(blog_content like '%关键字%' or blog_content like '%公开课%')",
+//         // "blog_id<4",
+//         // "user_id"=>1
+//     )
 // );
 
 //查看第一页的博客记录，每页3条记录，无查询条件
@@ -201,8 +201,8 @@ require_once ("init.php");
 // $names = array("John", "Peter", "Joe", "Patrick", "Donald", "Eric");
 
 // $result = from('$name')->in($names)
-//			 ->where('$name => strlen($name) < 5')
-//			 ->select('$name');
+//             ->where('$name => strlen($name) < 5')
+//             ->select('$name');
 // print_r($result);
 
 //加载配置

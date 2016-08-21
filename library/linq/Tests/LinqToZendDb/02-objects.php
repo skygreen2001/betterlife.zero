@@ -21,7 +21,7 @@
  * @category   PHPLinq
  * @package    PHPLinq
  * @copyright  Copyright (c) 2008 - 2009 PHPLinq (http://www.codeplex.com/PHPLinq)
- * @license    http://www.gnu.org/licenses/lgpl.txt	LGPL
+ * @license    http://www.gnu.org/licenses/lgpl.txt    LGPL
  * @version    0.4.0, 2009-01-27
  */
 
@@ -39,15 +39,15 @@ PHPLinq_LinqToZendDb::setQueryCallback('print'); // Output generated queries to 
 require_once 'employees.db.inc.php';
 
 $result = from('$employee')->in($employeeTable)
-			->where('$employee => strlen($employee->Name) == 4')
-			->skip(1)->take(2)
-			->select('$employee');
+            ->where('$employee => strlen($employee->Name) == 4')
+            ->skip(1)->take(2)
+            ->select('$employee');
 
 print_r($result);
 
 
 $result = from('$employee')->in($employeeTable)
-			->where('$employee => str_repeat("x", 10) == "xxxxxxxxxx" && (strlen($employee->Name) == 4 || $employee->Name == "Maarten") && ($employee->Age == 24 || $employee->Age == 30)')
-			->select('$employee');
+            ->where('$employee => str_repeat("x", 10) == "xxxxxxxxxx" && (strlen($employee->Name) == 4 || $employee->Name == "Maarten") && ($employee->Age == 24 || $employee->Age == 30)')
+            ->select('$employee');
 
 print_r($result);

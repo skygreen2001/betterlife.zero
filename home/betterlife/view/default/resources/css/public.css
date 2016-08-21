@@ -2,185 +2,185 @@
  * 说明：图片路径在gzip情况下相对于common/js/gzip.php文件路径而设定。
 */
 html,body {
-	font:normal 15px SimSun,sans-serif;
-	border:0 none;
-	overflow:auto;
-	line-height:1.5em;
-	margin:2px 0 0;
-	padding:0;
+    font:normal 15px SimSun,sans-serif;
+    border:0 none;
+    overflow:auto;
+    line-height:1.5em;
+    margin:2px 0 0;
+    padding:0;
 }
 .contentBox{
-	margin:8px;
+    margin:8px;
 }
 .en-head {
-	font:bold .8em Geneva,Arial,Helvetica,sans-serif;
+    font:bold .8em Geneva,Arial,Helvetica,sans-serif;
 }
 
 .en {
-	font-family:verdana,Geneva,Helvetica,Arial,sans-serif;
+    font-family:verdana,Geneva,Helvetica,Arial,sans-serif;
 }
 
 table {
-	width:100%;
+    width:100%;
 }
 
 p {
-	margin:5px;
+    margin:5px;
 }
 
 div .block {
-	margin-top:10px;
-	border:1px solid #cfcfcf;
-	width:600px;
-	padding:10px;
+    margin-top:10px;
+    border:1px solid #cfcfcf;
+    width:600px;
+    padding:10px;
 }
 
 a {
-	color:#1E4176;
+    color:#1E4176;
 }
 
 a:link {
-	color:#1E4176;
-	text-decoration:none;
+    color:#1E4176;
+    text-decoration:none;
 }
 
 a:visited {
-	color:#555;
-	text-decoration:none;
+    color:#555;
+    text-decoration:none;
 }
 
 a:hover {
-	text-decoration:underline;
-	color:#15428b;
+    text-decoration:underline;
+    color:#15428b;
 }
 
 h1 {
-	font:bold 150% STXingkai;
+    font:bold 150% STXingkai;
 }
 
 h2 {
-	font:150% STXingkai;
+    font:150% STXingkai;
 }
 
 p#indexPage {
-	font:120%;
-	line-height:2em;
-	padding-left:30px;
-	text-align:left;
-	border-color:#000;
-	border-style:solid;
-	border-width:thin;
+    font:120%;
+    line-height:2em;
+    padding-left:30px;
+    text-align:left;
+    border-color:#000;
+    border-style:solid;
+    border-width:thin;
 }
 
 blockquote {
-	width:600px;
-	border:1px solid #cfcfcf;
-	margin:2px;
-	padding:5px;
+    width:600px;
+    border:1px solid #cfcfcf;
+    margin:2px;
+    padding:5px;
 }
 form {
-	margin: 0;
+    margin: 0;
 }
 textarea {
-	display: block;
+    display: block;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
-	.inputNormal{
-		margin-left:22px;
-		-webkit-border-radius: 6px;
-		-webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
-	}
-	.btnSubmit{
-		-webkit-border-radius: 6px;
-		-webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
-	}
+    .inputNormal{
+        margin-left:22px;
+        -webkit-border-radius: 6px;
+        -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+    }
+    .btnSubmit{
+        -webkit-border-radius: 6px;
+        -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+    }
 }
 
 .inputNormal {
-	border-radius: 6px 6px 6px 6px;
-	text-align:center;
-	height:28px;
-	line-height:28px;
-	background:gray;
-	color:#FFF;
-	background-color:gray;
-	width:160px;
-	margin-left: 12px;
-	border:1px solid gray;
+    border-radius: 6px 6px 6px 6px;
+    text-align:center;
+    height:28px;
+    line-height:28px;
+    background:gray;
+    color:#FFF;
+    background-color:gray;
+    width:160px;
+    margin-left: 12px;
+    border:1px solid gray;
 }
 .btnSubmit{
-	margin-top:5px;
-	width:126px;
-	height:38px;
-	color:#FFF;
-	cursor:pointer;
-	font:bold 84% SimSun,helvetica,sans-serif;
-	background-color:#000;
-	border:1px solid;
-	border-color:#696 #363 #363 #696;
-	border-radius: 6px 6px 6px 6px;
+    margin-top:5px;
+    width:126px;
+    height:38px;
+    color:#FFF;
+    cursor:pointer;
+    font:bold 84% SimSun,helvetica,sans-serif;
+    background-color:#000;
+    border:1px solid;
+    border-color:#696 #363 #363 #696;
+    border-radius: 6px 6px 6px 6px;
 }
 
 br {
-	clear:left;
+    clear:left;
 }
 
 /** 数据对象模板显示样式 */
 .block {
-	margin-top:10px;
-	border:1px solid #cfcfcf;
-	padding:10px;
+    margin-top:10px;
+    border:1px solid #cfcfcf;
+    padding:10px;
 }
 .viewdoblock {
-	width          : 98%;
-	border-collapse: collapse;
-	margin         : 10px;
-	border-left    : 1px solid #99BBE8;
-	border-right   : 1px solid #99BBE8;
-	border-top     : 5px solid #ccc;
-	border-bottom  : 5px solid #ccc;
+    width          : 98%;
+    border-collapse: collapse;
+    margin         : 10px;
+    border-left    : 1px solid #99BBE8;
+    border-right   : 1px solid #99BBE8;
+    border-top     : 5px solid #ccc;
+    border-bottom  : 5px solid #ccc;
 }
 .viewdoblock .entry{
-	font-size:14px;
+    font-size:14px;
 }
 .viewdoblock span{
 }
 .viewdoblock .head{
-	width      :32%;
-	text-align :right;
-	font-weight:bold;
-	line-height        : 1.5em;
-	padding-right      : 5px;
-	border             : 1px solid #ccc ;
-	border-bottom-width: 0px;
-	border-left-width  : 0px;
+    width      :32%;
+    text-align :right;
+    font-weight:bold;
+    line-height        : 1.5em;
+    padding-right      : 5px;
+    border             : 1px solid #ccc ;
+    border-bottom-width: 0px;
+    border-left-width  : 0px;
 }
 .viewdoblock .header{
-	text-align :center;
-	font-weight:bold;
-	line-height        : 1.5em;
-	padding-right      : 5px;
-	border             : 1px solid #ccc ;
-	border-bottom-width: 0px;
-	border-left-width  : 0px;
+    text-align :center;
+    font-weight:bold;
+    line-height        : 1.5em;
+    padding-right      : 5px;
+    border             : 1px solid #ccc ;
+    border-bottom-width: 0px;
+    border-left-width  : 0px;
 }
 .viewdoblock .content{
-	line-height :1.5em;
-	padding-left:20px;
-	border      : 1px solid #ccc ;
-	border-bottom-width: 0px;
-	border-right-width : 0px;
+    line-height :1.5em;
+    padding-left:20px;
+    border      : 1px solid #ccc ;
+    border-bottom-width: 0px;
+    border-right-width : 0px;
 }
 .viewdoblock .btnCol{
-	width:100px;
-	text-align :center;
-	line-height :1.5em;
-	border      : 1px solid #ccc ;
-	border-bottom-width: 0px;
-	border-right-width : 0px;
+    width:100px;
+    text-align :center;
+    line-height :1.5em;
+    border      : 1px solid #ccc ;
+    border-bottom-width: 0px;
+    border-right-width : 0px;
 }
 .viewdoblock .edit{
-	width: 800px;
+    width: 800px;
 }
 /* END */

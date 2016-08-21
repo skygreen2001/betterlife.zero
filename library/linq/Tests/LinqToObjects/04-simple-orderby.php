@@ -21,7 +21,7 @@
  * @category   PHPLinq
  * @package    PHPLinq
  * @copyright  Copyright (c) 2008 - 2009 PHPLinq (http://www.codeplex.com/PHPLinq)
- * @license    http://www.gnu.org/licenses/lgpl.txt	LGPL
+ * @license    http://www.gnu.org/licenses/lgpl.txt    LGPL
  * @version    0.4.0, 2009-01-27
  */
 
@@ -38,8 +38,8 @@ require_once 'PHPLinq/LinqToObjects.php';
 $names = array("John", "Peter", "Joe", "Patrick", "Donald", "Eric");
 
 $result = from('$name')->in($names)
-			->where('$name => strlen($name) < 5')
-			->orderBy('$name')
-			->select('$name');
-				
+            ->where('$name => strlen($name) < 5')
+            ->orderBy('$name')
+            ->select('$name');
+                
 print_r($result);

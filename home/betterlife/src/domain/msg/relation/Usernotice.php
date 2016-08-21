@@ -10,34 +10,34 @@
  */
 class Usernotice extends DataObject
 {
-	//<editor-fold defaultstate="collapsed" desc="定义部分">
-	/**
-	 * 标识
-	 * @var int
-	 * @access public
-	 */
-	public $usernotice_id;
-	/**
-	 * 用户编号
-	 * @var int
-	 * @access public
-	 */
-	public $user_id;
-	/**
-	 * 通知编号
-	 * @var int
-	 * @access public
-	 */
-	public $notice_id;
-	//</editor-fold>
+    //<editor-fold defaultstate="collapsed" desc="定义部分">
+    /**
+     * 标识
+     * @var int
+     * @access public
+     */
+    public $usernotice_id;
+    /**
+     * 用户编号
+     * @var int
+     * @access public
+     */
+    public $user_id;
+    /**
+     * 通知编号
+     * @var int
+     * @access public
+     */
+    public $notice_id;
+    //</editor-fold>
 
-	/**
-	 * 从属一对一关系
-	 */
-	static $belong_has_one=array(
-		"user"=>"User",
-		"notice"=>"Notice"
-	);
+    /**
+     * 从属一对一关系
+     */
+    static $belong_has_one=array(
+        "user"=>"User",
+        "notice"=>"Notice"
+    );
 
 }
 ?>

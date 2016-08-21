@@ -52,11 +52,11 @@ Originally, the user had to call adodb_sess_open().
 
 * dataFieldName(): Define the field name used to store the session data, as
 'DATA' appears to be a reserved word in the following cases:
-	ANSI SQL
-	IBM DB2
-	MS SQL Server
-	Postgres
-	SAP
+    ANSI SQL
+    IBM DB2
+    MS SQL Server
+    Postgres
+    SAP
 
 * filter(): Used to support multiple, simulataneous encryption/compression
 schemes.
@@ -101,8 +101,8 @@ What's To Do
 I've vascillated over whether to use a single function to get/set
 parameters:
 
-$user = ADODB_Session::user(); 	// get
-ADODB_Session::user($user);		// set
+$user = ADODB_Session::user();     // get
+ADODB_Session::user($user);        // set
 
 or to use separate functions (which is the PEAR/Java way):
 

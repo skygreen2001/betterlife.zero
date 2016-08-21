@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	/**
-	 * 加载Module遵循以下规则：
-	 * 1.加载的库文件应该都放在module目录下以加载Module的名称为子目录的名称内
-	 * 2.是否加载Module由load.module.xml文件相关规范说明决定。
-	 * 3.name:加载Module的名称，要求必须是英文和数字。
-	 * 4.init:加载Module的方法，一般库有一个头文件，该方法由库提供者定义在本文件内。
-	 * 5.open:是否加载Module。yes:加载，no:不加载，如果不定义则代表该Module由逻辑自定义开关规则。
-	 * 6.group:若干Module属于同一个解决方案。
-	 */
+    /**
+     * 加载Module遵循以下规则：
+     * 1.加载的库文件应该都放在module目录下以加载Module的名称为子目录的名称内
+     * 2.是否加载Module由load.module.xml文件相关规范说明决定。
+     * 3.name:加载Module的名称，要求必须是英文和数字。
+     * 4.init:加载Module的方法，一般库有一个头文件，该方法由库提供者定义在本文件内。
+     * 5.open:是否加载Module。yes:加载，no:不加载，如果不定义则代表该Module由逻辑自定义开关规则。
+     * 6.group:若干Module属于同一个解决方案。
+     */
  -->
 <modules>
    <module id="1" name="communication" open="true" init="load_communication" />

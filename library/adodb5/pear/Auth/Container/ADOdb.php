@@ -8,8 +8,8 @@ V5.11 5 May 2010   (c) 2000-2010 John Lim (jlim#natsoft.com). All rights reserve
   
   Latest version is available at http://adodb.sourceforge.net
   
-	Original Authors: Martin Jansen <mj#php.net>
-	Richard Tango-Lowy <richtl#arscognita.com>                          
+    Original Authors: Martin Jansen <mj#php.net>
+    Richard Tango-Lowy <richtl#arscognita.com>                          
 */
 
 require_once 'Auth/Container.php';
@@ -44,7 +44,7 @@ class Auth_Container_ADOdb extends Auth_Container
      */
     var $db = null;
     var $dsn = '';
-	
+    
     /**
      * User that is currently selected from the DB.
      * @var string
@@ -64,7 +64,7 @@ class Auth_Container_ADOdb extends Auth_Container
     function Auth_Container_ADOdb($dsn)
     {
         $this->_setDefaults();
-		
+        
         if (is_array($dsn)) {
             $this->_parseOptions($dsn);
 
@@ -72,7 +72,7 @@ class Auth_Container_ADOdb extends Auth_Container
                 PEAR::raiseError('No connection parameters specified!');
             }
         } else {
-        	// Extract db_type from dsn string.
+            // Extract db_type from dsn string.
             $this->options['dsn'] = $dsn;
         }
     }
@@ -90,13 +90,13 @@ class Auth_Container_ADOdb extends Auth_Container
      function _connect($dsn)
     {
         if (is_string($dsn) || is_array($dsn)) {
-        	if(!$this->db) {
-	        	$this->db = ADONewConnection($dsn);
-	    		if( $err = ADODB_Pear_error() ) {
-	   	    		return PEAR::raiseError($err);
-	    		}
-        	}
-        	
+            if(!$this->db) {
+                $this->db = ADONewConnection($dsn);
+                if( $err = ADODB_Pear_error() ) {
+                       return PEAR::raiseError($err);
+                }
+            }
+            
         } else {
             return PEAR::raiseError('The given dsn was not valid in file ' . __FILE__ . ' at line ' . __LINE__,
                                     41,
@@ -107,9 +107,9 @@ class Auth_Container_ADOdb extends Auth_Container
         }
         
         if(!$this->db) {
-        	return PEAR::raiseError(ADODB_Pear_error());
+            return PEAR::raiseError(ADODB_Pear_error());
         } else {
-        	return true;
+            return true;
         }
     }
 
@@ -127,9 +127,9 @@ class Auth_Container_ADOdb extends Auth_Container
      */
     function _prepare()
     {
-    	if(!$this->db) {
-    		$res = $this->_connect($this->options['dsn']);  		
-    	}
+        if(!$this->db) {
+            $res = $this->_connect($this->options['dsn']);          
+        }
         return true;
     }
 
@@ -168,7 +168,7 @@ class Auth_Container_ADOdb extends Auth_Container
      */
     function _setDefaults()
     {
-    	$this->options['db_type']	= 'mysql';
+        $this->options['db_type']    = 'mysql';
         $this->options['table']       = 'auth';
         $this->options['usernamecol'] = 'username';
         $this->options['passwordcol'] = 'password';
@@ -394,12 +394,12 @@ class Auth_Container_ADOdb extends Auth_Container
 }
 
 function showDbg( $string ) {
-	print "
+    print "
 -- $string</P>";
 }
 function dump( $var, $str, $vardump = false ) {
-	print "<H4>$str</H4><pre>";
-	( !$vardump ) ? ( print_r( $var )) : ( var_dump( $var ));
-	print "</pre>";
+    print "<H4>$str</H4><pre>";
+    ( !$vardump ) ? ( print_r( $var )) : ( var_dump( $var ));
+    print "</pre>";
 }
 ?>

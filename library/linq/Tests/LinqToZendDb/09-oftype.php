@@ -21,7 +21,7 @@
  * @category   PHPLinq
  * @package    PHPLinq
  * @copyright  Copyright (c) 2008 - 2009 PHPLinq (http://www.codeplex.com/PHPLinq)
- * @license    http://www.gnu.org/licenses/lgpl.txt	LGPL
+ * @license    http://www.gnu.org/licenses/lgpl.txt    LGPL
  * @version    0.4.0, 2009-01-27
  */
 
@@ -40,16 +40,16 @@ require_once 'employees.db.inc.php';
 
 // Query data
 $result = from('$employee')->in($employeeTable)
-			->ofType('string')
-			->where('$employee => strlen($employee->Name) > 2')
-			->select('$employee');
+            ->ofType('string')
+            ->where('$employee => strlen($employee->Name) > 2')
+            ->select('$employee');
 
 // Should be nothing!
 print_r($result);
 
 
 $result = from('$employee')->in($employeeTable)
-			->ofType('stdClass')
-			->select('$employee');
+            ->ofType('stdClass')
+            ->select('$employee');
 
 print_r($result);

@@ -21,7 +21,7 @@
  * @category   PHPLinq
  * @package    PHPLinq
  * @copyright  Copyright (c) 2008 - 2009 PHPLinq (http://www.codeplex.com/PHPLinq)
- * @license    http://www.gnu.org/licenses/lgpl.txt	LGPL
+ * @license    http://www.gnu.org/licenses/lgpl.txt    LGPL
  * @version    0.4.0, 2009-01-27
  */
 
@@ -41,76 +41,76 @@ require_once('PHPLinq/ILinqProvider.php');
  * @copyright  Copyright (c) 2008 - 2009 PHPLinq (http://www.codeplex.com/PHPLinq)
  */
 class PHPLinq_Initiator {
-	/**
-	 * Registered PHPLinq_ILinqProvider classes
-	 *
-	 * @var string[]
-	 */
-	private static $_registeredProviders = array();
-	
-	/**
-	 * Register PHPLinq_ILinqProvider class
-	 *
-	 * @param string $class Class name implementing PHPLinq_ILinqProvider
-	 * @param string $reference Path reference (for inclusion)
-	 */
-	public static function registerProvider($class = null, $reference = null) {
-		if (!is_null($class) && $class != '') {
-			// Require code
-			if (is_null($reference) || $reference == '') {
-				$reference = str_replace('_', '/', $class);
-				$reference .= '.php';
-			}
-			require_once($reference);
-			
-			// Add registered PHPLinq_ILinqProvider
-			self::$_registeredProviders[] = $class;
-		}
-	}
-	
-	/**
-	 * Default variable name
-	 *
-	 * @var string
-	 */
-	private $_from = '';
-	
-	/**
-	 * Parent PHPLinq_ILinqProvider instance, used with join conditions
-	 *
-	 * @var PHPLinq_ILinqProvider
-	 */
-	private $_parentProvider = null;
-	
-	/**
-	 * Create a new class instance
-	 *
-	 * @param string $name
-	 * @param PHPLinq_ILinqProvider $parentProvider Optional parent PHPLinq_ILinqProvider instance, used with join conditions
-	 * @return PHPLinq_Initiator
-	 */
-	public function __construct($name, PHPLinq_ILinqProvider $parentProvider = null) {
-		$this->_from = $name;
-		$this->_parentProvider = $parentProvider;
-		return $this;
-	}
-	
-	/**
-	 * Set source of data
-	 *
-	 * @param mixed $source
-	 * @return PHPLinq_ILinqProvider
-	 */
-	public function in($source) {
-		// Search correct provider
-		foreach (self::$_registeredProviders as $provider) {
-			if (call_user_func(array($provider, 'handles'), $source)) {
-				$returnValue = new $provider($this->_from, $this->_parentProvider);
-				return $returnValue->in($source);
-			}
-		}
-		
-		// No provider found...
-		throw new PHPLinq_Exception("No valid PHPLinq_ILinqProvider found for the specified data source.");
-	}
+    /**
+     * Registered PHPLinq_ILinqProvider classes
+     *
+     * @var string[]
+     */
+    private static $_registeredProviders = array();
+    
+    /**
+     * Register PHPLinq_ILinqProvider class
+     *
+     * @param string $class Class name implementing PHPLinq_ILinqProvider
+     * @param string $reference Path reference (for inclusion)
+     */
+    public static function registerProvider($class = null, $reference = null) {
+        if (!is_null($class) && $class != '') {
+            // Require code
+            if (is_null($reference) || $reference == '') {
+                $reference = str_replace('_', '/', $class);
+                $reference .= '.php';
+            }
+            require_once($reference);
+            
+            // Add registered PHPLinq_ILinqProvider
+            self::$_registeredProviders[] = $class;
+        }
+    }
+    
+    /**
+     * Default variable name
+     *
+     * @var string
+     */
+    private $_from = '';
+    
+    /**
+     * Parent PHPLinq_ILinqProvider instance, used with join conditions
+     *
+     * @var PHPLinq_ILinqProvider
+     */
+    private $_parentProvider = null;
+    
+    /**
+     * Create a new class instance
+     *
+     * @param string $name
+     * @param PHPLinq_ILinqProvider $parentProvider Optional parent PHPLinq_ILinqProvider instance, used with join conditions
+     * @return PHPLinq_Initiator
+     */
+    public function __construct($name, PHPLinq_ILinqProvider $parentProvider = null) {
+        $this->_from = $name;
+        $this->_parentProvider = $parentProvider;
+        return $this;
+    }
+    
+    /**
+     * Set source of data
+     *
+     * @param mixed $source
+     * @return PHPLinq_ILinqProvider
+     */
+    public function in($source) {
+        // Search correct provider
+        foreach (self::$_registeredProviders as $provider) {
+            if (call_user_func(array($provider, 'handles'), $source)) {
+                $returnValue = new $provider($this->_from, $this->_parentProvider);
+                return $returnValue->in($source);
+            }
+        }
+        
+        // No provider found...
+        throw new PHPLinq_Exception("No valid PHPLinq_ILinqProvider found for the specified data source.");
+    }
 }

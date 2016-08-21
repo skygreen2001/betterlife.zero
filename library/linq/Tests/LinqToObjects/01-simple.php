@@ -21,7 +21,7 @@
  * @category   PHPLinq
  * @package    PHPLinq
  * @copyright  Copyright (c) 2008 - 2009 PHPLinq (http://www.codeplex.com/PHPLinq)
- * @license    http://www.gnu.org/licenses/lgpl.txt	LGPL
+ * @license    http://www.gnu.org/licenses/lgpl.txt    LGPL
  * @version    0.4.0, 2009-01-27
  */
 
@@ -38,18 +38,18 @@ require_once 'PHPLinq/LinqToObjects.php';
 $names = array("John", "Peter", "Joe", "Patrick", "Donald", "Eric");
 
 $result = from('$name')->in($names)
-			->where('$name => strlen($name) < 5')
-			->select('$name');
-				
+            ->where('$name => strlen($name) < 5')
+            ->select('$name');
+                
 print_r($result);
 
 $result = from('$name')->in($names)->reverse()->select();
-				
+                
 print_r($result);
 
 echo 'count: ' . from('$name')->in($names)->count() . "\r\n";
 echo 'elementAt(2): ' . from('$name')->in($names)->elementAt(2) . "\r\n";
 
 $result = from('$name')->in($names)->concat(array("Maarten"))->select('$name');
-				
+                
 print_r($result);

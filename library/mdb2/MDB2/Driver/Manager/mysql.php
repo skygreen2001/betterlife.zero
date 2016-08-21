@@ -362,7 +362,7 @@ class MDB2_Driver_Manager_mysql extends MDB2_Driver_Manager_Common
         }
         if (is_array($table)) {
             foreach (array_keys($table) as $k) {
-            	$table[$k] = $db->quoteIdentifier($table[$k], true);
+                $table[$k] = $db->quoteIdentifier($table[$k], true);
             }
             $table = implode(', ', $table);
         } else {

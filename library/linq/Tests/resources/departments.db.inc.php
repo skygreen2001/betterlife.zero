@@ -21,7 +21,7 @@
  * @category   PHPLinq
  * @package    PHPLinq
  * @copyright  Copyright (c) 2008 - 2009 PHPLinq (http://www.codeplex.com/PHPLinq)
- * @license    http://www.gnu.org/licenses/lgpl.txt	LGPL
+ * @license    http://www.gnu.org/licenses/lgpl.txt    LGPL
  * @version    0.4.0, 2009-01-27
  */
 
@@ -39,15 +39,15 @@ $departments = null;
 require_once 'departments.inc.php';
 
 $createTables = '
-	CREATE TABLE departments (
-		Id        		INTEGER NOT NULL PRIMARY KEY,
-		Name			VARCHAR(100)
-	);
+    CREATE TABLE departments (
+        Id                INTEGER NOT NULL PRIMARY KEY,
+        Name            VARCHAR(100)
+    );
 ';
 $db->query($createTables);
 
 foreach ($departments as $department) {
-	$db->insert('departments', (array)$department);
+    $db->insert('departments', (array)$department);
 }
 
 // DepartmentTable class

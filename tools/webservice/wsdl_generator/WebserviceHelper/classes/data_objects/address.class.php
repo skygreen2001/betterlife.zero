@@ -9,16 +9,16 @@
   *
   */
 class address{
-	/** @var string */
-	public $street;
-	
-	/** @var string */
-	public $nr;
-	
-	/** @var string */
-	public $zipcode;	
-	
-	/** @var string */
-	public $city;	
+    /** @var string */
+    public $street;
+    
+    /** @var string */
+    public $nr;
+    
+    /** @var string */
+    public $zipcode;    
+    
+    /** @var string */
+    public $city;    
 }
 ?>

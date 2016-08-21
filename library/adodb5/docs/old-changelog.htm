@@ -421,11 +421,11 @@ on feedback by "Jerry Workman" jerry#mtncad.com.
 <p>We compare $rewritesql with $sql in pageexecute code in case of rewrite failure.
 <p><b>2.11 7 June 2002</b></p>
 <p>Fixed PageExecute() rewrite sql problem - COUNT(*) and ORDER BY don't go together with
-	mssql, access and postgres. Thx to Alexander Zhukov alex#unipack.ru
+    mssql, access and postgres. Thx to Alexander Zhukov alex#unipack.ru
 <p>DB2 support for CHARACTER type added - thx John Huong huongch#bigfoot.com
 <p>For ado, $argProvider not properly checked. Fixed - kalimero#ngi.it
 <p>Added $conn->Replace() function for update with automatic insert if the record does not exist. 
-	Supported by all databases except interbase.
+    Supported by all databases except interbase.
 <p><b>2.10 4 June 2002</b></p>
 <p>Added uniqueSort property to indicate mssql ORDER BY cols must be unique.
 <p>Optimized session handler by crc32 the data. We only write if session data has changed.
@@ -488,7 +488,7 @@ Bind params also work now, and raiseErrorFn with csv driver. Added csv driver to
   didn't agree on everything, but i hoped we agreed to disagree! 
 <p><b>1.90 6 April 2002</b></p>
 <p>Now all database drivers support fetch modes ADODB_FETCH_NUM and ADODB_FETCH_ASSOC, though
-	still not fully tested. Eg. Frontbase, Sybase, Informix.
+    still not fully tested. Eg. Frontbase, Sybase, Informix.
 <p>NextRecordSet() support for mssql. Contributed by "Sven Axelsson" sven.axelsson#bokochwebb.se
 <p>Added blob support for SQL Anywhere. Contributed by Wade Johnson wade#wadejohnson.de
 <p>Fixed some security loopholes in server.php. Server.php also supports fetch mode.

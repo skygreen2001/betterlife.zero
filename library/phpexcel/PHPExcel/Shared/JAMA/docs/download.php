@@ -27,9 +27,9 @@ $tarPath = $buildDir.$pkgName."/downloads/".$tarName;
 
 if($_GET['op'] == "download") {  
   
-	require_once('Archive/Tar.php');  
-	
-	$tar   = new Archive_Tar($tarPath);
+    require_once('Archive/Tar.php');  
+    
+    $tar   = new Archive_Tar($tarPath);
 
   // create $pkgName archive under $pkgName folder
   $files = glob("$pkgName/*.php");
@@ -40,14 +40,14 @@ if($_GET['op'] == "download") {
   $files = array_merge($files, glob("$pkgName/tests/*.php"));  
   $files = array_merge($files, glob("$pkgName/utils/*.php"));    
   
-	$tar->create($files);
-		
-	// create the download url
+    $tar->create($files);
+        
+    // create the download url
   $webDir  = substr($_SERVER['PHP_SELF'], 0, -18);
   $urlPath = "http://".$_SERVER['HTTP_HOST'].$webDir."/downloads";
   
   // redirect to download url
-	header("Location: $urlPath/$tarName");
+    header("Location: $urlPath/$tarName");
 
 }
 
