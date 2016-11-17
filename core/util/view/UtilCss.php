@@ -13,7 +13,7 @@ class UtilCss extends Util
      * 对CSS进行Gzip操作的路径
      * @var string
      */
-    private static $CSS_GZIP="common/js/gzip.php?css=";
+    private static $CSS_GZIP="misc/js/gzip.php?css=";
     /**
      * JS框架名称键名称
      * @var string

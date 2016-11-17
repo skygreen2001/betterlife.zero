@@ -19,7 +19,7 @@ class Action_Index extends ActionExt
             $this->redirect("index","index");
         }
         $this->loadCss("resources/css/login.css");
-        UtilJavascript::loadJsReady($this->view->viewObject,Gc::$url_base."common/js/ajax/jquery/jquery-1.7.1.js");
+        UtilJavascript::loadJsReady($this->view->viewObject,Gc::$url_base."misc/js/ajax/jquery/jquery-1.7.1.js");
         $this->loadJs("js/login.js");
         if (!empty($_POST)) {
             if (HttpSession::get("validate")!= md5($this->data["validate"])){

@@ -6,7 +6,7 @@
 class CheckBOMTask
 {
     /**
-    * 是否需要清除文件头的Bom 
+    * 是否需要清除文件头的Bom
     * @var mixed
     */
     private static $isRemoveBom=false;
@@ -21,18 +21,18 @@ class CheckBOMTask
           $basedir=$_GET['dir'];
           self::checkdir($basedir);
         }else{
-          self::checkdir($checkDir);             
-          //checkdir("../../../common/js/"); 
+          self::checkdir($checkDir);
+          //checkdir("../../../misc/js/");
           //checkdir("../../../core/");
-          //checkdir("../../../home/");  
-          //checkdir("../../../include/"); 
-          //checkdir("../../../library/"); 
-          //checkdir("../../../module/");  
-          //checkdir("../../../taglib/");    
-          //checkdir("../../../tools/");  
-        }                   
-    }  
-    
+          //checkdir("../../../home/");
+          //checkdir("../../../include/");
+          //checkdir("../../../library/");
+          //checkdir("../../../module/");
+          //checkdir("../../../taglib/");
+          //checkdir("../../../tools/");
+        }
+    }
+
     private static function checkdir($basedir)
     {
       if ($dh = opendir($basedir)) {
@@ -40,13 +40,13 @@ class CheckBOMTask
            if ($file != '.' && $file != '..'&& $file != '.git'){
               if (!is_dir($basedir."/".$file)) {
                   if (self::$isRemoveBom){
-                      echo "filename: $basedir/$file ".self::checkBOM("$basedir/$file")." <br>";                      
+                      echo "filename: $basedir/$file ".self::checkBOM("$basedir/$file")." <br>";
                   }else{
                       $cb=self::checkBOM("$basedir/$file");
                       if ($cb){
                         echo "filename: $basedir/$file ".$cb." <br>";
-                      }                                                                                                 
-                  }                                                                            
+                      }
+                  }
               }else{
                   $dirname = $basedir."/".$file;
                   self::checkdir($dirname);
@@ -56,9 +56,9 @@ class CheckBOMTask
         closedir($dh);
       }
     }
-    
-    private static function checkBOM ($filename) 
-    {              
+
+    private static function checkBOM ($filename)
+    {
       $contents = file_get_contents($filename);
       $charset[1] = substr($contents, 0, 1);
       $charset[2] = substr($contents, 1, 1);
@@ -72,11 +72,11 @@ class CheckBOMTask
            return ("<font color=red>BOM found.</font>");
         }
       }else{
-        //if (self::$isRemoveBom) return ("BOM Not Found."); else return ""; 
-      }                                                    
+        //if (self::$isRemoveBom) return ("BOM Not Found."); else return "";
+      }
     }
 
-    private static function rewrite ($filename, $data) 
+    private static function rewrite ($filename, $data)
     {
       $filenum = fopen($filename, "w");
       flock($filenum, LOCK_EX);

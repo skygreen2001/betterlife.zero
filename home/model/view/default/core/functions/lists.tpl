@@ -12,11 +12,14 @@
         <tr class="entry">
             <td class="content">{$functions.functions_id}</td>
             <td class="content">{$functions.url}</td>
-            <td class="btnCol"><my:a href="{$url_base}index.php?go=model.functions.view&id={$functions.functions_id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.functions.edit&id={$functions.functions_id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.functions.delete&id={$functions.functions_id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
+            <td class="btnCol"><my:a href="{$url_base}index.php?go=model.functions.view&amp;id={$functions.functions_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.functions.edit&amp;id={$functions.functions_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.functions.delete&amp;id={$functions.functions_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
         </tr>
         {/foreach}
     </table>
-    &nbsp;&nbsp;<my:page src='{$url_base}index.php?go=model.functions.lists' /><br/>
-    <div align="center"><my:a href='{$url_base}index.php?go=model.functions.edit&pageNo={$smarty.get.pageNo|default:"1"}'>新建</my:a>|<my:a href='{$url_base}index.php?go=model.index.index'>返回首页</my:a></div>
+
+    <div class="footer" align="center">
+        <div><my:page src='{$url_base}index.php?go=model.functions.lists' /></div>
+        <my:a href='{$url_base}index.php?go=model.functions.edit&amp;pageNo={$smarty.get.pageNo|default:"1"}'>新建</my:a>|<my:a href='{$url_base}index.php?go=model.index.index'>返回首页</my:a>
+    </div>
 </div>
 {/block}

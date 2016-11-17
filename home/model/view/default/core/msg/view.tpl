@@ -11,6 +11,6 @@
         <tr class="entry"><th class="head">发送内容</th><td class="content">{$msg.content}</td></tr>
         <tr class="entry"><th class="head">消息状态</th><td class="content">{$msg.statusShow}</td></tr>
     </table>
-    <div align="center"><my:a href='{$url_base}index.php?go=model.msg.lists&pageNo={$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{$url_base}index.php?go=model.msg.edit&id={$msg.msg_id}&pageNo={$smarty.get.pageNo|default:"1"}'>修改消息</my:a></div>
+    <div class="footer" align="center"><my:a href='{$url_base}index.php?go=model.msg.lists&amp;pageNo={$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{$url_base}index.php?go=model.msg.edit&amp;id={$msg.msg_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}'>修改消息</my:a></div>
 </div>
 {/block}

@@ -14,14 +14,15 @@ class Action_Userrole extends ActionModel
      */
     public function lists()
     {
-        if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){
-            $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];
+        if ($this->isDataHave(TagPageService::$linkUrl_pageFlag)){
+            $nowpage=$this->data[TagPageService::$linkUrl_pageFlag];
         }else{
             $nowpage=1;
         }
         $count=Userrole::count();
         $this->view->countUserroles=$count;
-        if($count>0){            $bb_page=UtilPage::init($nowpage,$count);
+        if($count>0){
+            $bb_page=TagPageService::init($nowpage,$count);
             $userroles = Userrole::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
             foreach ($userroles as $userrole) {
                 $user_instance=null;

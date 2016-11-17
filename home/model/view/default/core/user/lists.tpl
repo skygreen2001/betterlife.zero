@@ -20,11 +20,14 @@
             <td class="content">{$user.email}</td>
             <td class="content">{$user.cellphone}</td>
             <td class="content">{$user.loginTimes}</td>
-            <td class="btnCol"><my:a href="{$url_base}index.php?go=model.user.view&id={$user.user_id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.user.edit&id={$user.user_id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.user.delete&id={$user.user_id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
+            <td class="btnCol"><my:a href="{$url_base}index.php?go=model.user.view&amp;id={$user.user_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.user.edit&amp;id={$user.user_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.user.delete&amp;id={$user.user_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
         </tr>
         {/foreach}
     </table>
-    &nbsp;&nbsp;<my:page src='{$url_base}index.php?go=model.user.lists' /><br/>
-    <div align="center"><my:a href='{$url_base}index.php?go=model.user.edit&pageNo={$smarty.get.pageNo|default:"1"}'>新建</my:a>|<my:a href='{$url_base}index.php?go=model.index.index'>返回首页</my:a></div>
+
+    <div class="footer" align="center">
+        <div><my:page src='{$url_base}index.php?go=model.user.lists' /></div>
+        <my:a href='{$url_base}index.php?go=model.user.edit&amp;pageNo={$smarty.get.pageNo|default:"1"}'>新建</my:a>|<my:a href='{$url_base}index.php?go=model.index.index'>返回首页</my:a>
+    </div>
 </div>
 {/block}

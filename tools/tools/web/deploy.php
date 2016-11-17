@@ -18,7 +18,7 @@ if(startWith($contents,"<?php")){
     $redirect_head=<<<REDIRECT_HEAD
 <?php
 require_once ("Gc.php");
-require_once("include/common.php");
+require_once("core/include/common.php");
 if(!contains(\$_SERVER['HTTP_HOST'],array("127.0.0.1","localhost"))){
     header("location:".Gc::\$url_base."index.php?go=".Gc::\$appName.".index.index");
     die();

@@ -1,5 +1,5 @@
 /*
- * 说明：图片路径在gzip情况下相对于common/js/gzip.php文件路径而设定。
+ * 说明：图片路径在gzip情况下相对于misc/js/gzip.php文件路径而设定。
 */
 html,body {
     font:normal 15px SimSun,sans-serif;
@@ -8,6 +8,13 @@ html,body {
     line-height:1.5em;
     margin:2px 0 0;
     padding:0;
+}
+
+.contentBox{
+    width:80%;
+    margin: 0 auto;
+    padding: 20px;
+    height: 100%;
 }
 
 .en-head {
@@ -33,7 +40,7 @@ div{
 div .block {
     margin-top:10px;
     border:1px solid #cfcfcf;
-    width:600px;
+    /*width:600px;*/
     padding:10px;
 }
 
@@ -91,7 +98,7 @@ input {
     color:#FFF;
     background-color:gray;
 }
-  
+
 .btnSubmit{
     width:100px;
     height:32px;
@@ -101,7 +108,7 @@ input {
     background-color:#000;
     border:1px solid;
     border-color:#696 #363 #363 #696;
-} 
+}
 
 label {
     vertical-align:middle;
@@ -115,60 +122,60 @@ br {
     clear:left;
 }
 
-/** 数据对象模板显示样式 */ 
+/** 数据对象模板显示样式 */
 .block {
     margin-top:10px;
-    border:1px solid #cfcfcf; 
+    border:1px solid #cfcfcf;
     padding:10px;
 }
-.viewdoblock {  
+.viewdoblock {
     width          : 98%;
-    border-collapse: collapse;      
-    margin         : 10px;         
-    border-left    : 1px solid #99BBE8; 
-    border-right   : 1px solid #99BBE8; 
-    border-top     : 5px solid #ccc; 
-    border-bottom  : 5px solid #ccc; 
+    border-collapse: collapse;
+    margin         : 10px;
+    border-left    : 1px solid #99BBE8;
+    border-right   : 1px solid #99BBE8;
+    border-top     : 5px solid #ccc;
+    border-bottom  : 5px solid #ccc;
 }
-.viewdoblock .entry{      
-    font-size:14px;   
+.viewdoblock .entry{
+    font-size:14px;
 }
-.viewdoblock span{   
-}           
-.viewdoblock .head{   
-    width      :32%;             
+.viewdoblock span{
+}
+.viewdoblock .head{
+    width      :32%;
     text-align :right;
-    font-weight:bold;  
-    line-height        : 1.5em;    
-    padding-right      : 5px;    
-    border             : 1px solid #ccc ;          
-    border-bottom-width: 0px;   
-    border-left-width  : 0px;   
+    font-weight:bold;
+    line-height        : 1.5em;
+    padding-right      : 5px;
+    border             : 1px solid #ccc ;
+    border-bottom-width: 0px;
+    border-left-width  : 0px;
 }
-.viewdoblock .header{  
+.viewdoblock .header{
     text-align :center;
-    font-weight:bold;  
-    line-height        : 1.5em;    
-    padding-right      : 5px;    
-    border             : 1px solid #ccc ;          
-    border-bottom-width: 0px;   
-    border-left-width  : 0px;   
-}      
-.viewdoblock .content{    
-    line-height :1.5em;    
+    font-weight:bold;
+    line-height        : 1.5em;
+    padding-right      : 5px;
+    border             : 1px solid #ccc ;
+    border-bottom-width: 0px;
+    border-left-width  : 0px;
+}
+.viewdoblock .content{
+    line-height :1.5em;
     padding-left:20px;
-    border      : 1px solid #ccc ;    
-    border-bottom-width: 0px;   
-    border-right-width : 0px;    
-} 
-.viewdoblock .btnCol{  
-    width:100px;     
+    border      : 1px solid #ccc ;
+    border-bottom-width: 0px;
+    border-right-width : 0px;
+}
+.viewdoblock .btnCol{
+    width:100px;
     text-align :center;
-    line-height :1.5em;  
-    border      : 1px solid #ccc ;    
-    border-bottom-width: 0px;   
-    border-right-width : 0px;    
-} 
+    line-height :1.5em;
+    border      : 1px solid #ccc ;
+    border-bottom-width: 0px;
+    border-right-width : 0px;
+}
 .viewdoblock .edit{
     width: 800px;
 }

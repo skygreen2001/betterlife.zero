@@ -1,5 +1,5 @@
 <?php
-require_once ("../../../init.php");                         
+require_once ("../../../init.php");
 $isUpdate=false;
 if (isset($_REQUEST["detect_dir"])&&!empty($_REQUEST["detect_dir"]))
 {
@@ -8,18 +8,18 @@ if (isset($_REQUEST["detect_dir"])&&!empty($_REQUEST["detect_dir"]))
     if(array_key_exists("checkType",$_GET)&&($_GET["checkType"]=="2"))$isUpdate=true;
     foreach ($files as $file) {
         $contents=file_get_contents($file);
-        $encode = mb_detect_encoding($contents, array("ASCII","GB2312","GBK","BIG5","UTF-8")); 
+        $encode = mb_detect_encoding($contents, array("ASCII","GB2312","GBK","BIG5","UTF-8"));
         if ($encode != "UTF-8"){
-            echo $file."<br/>"; 
+            echo $file."<br/>";
             if ($isUpdate){
                 if($encode==false){
-                    $contents = mb_convert_encoding( $contents, 'UTF-8','Unicode'); 
+                    $contents = mb_convert_encoding( $contents, 'UTF-8','Unicode');
                 }else{
                     $contents= iconv($encode,"UTF-8",$contents);
                 }
-                $isGood=file_put_contents($file,$contents); 
+                $isGood=file_put_contents($file,$contents);
             }
-        } 
+        }
     }
 
 }else{
@@ -38,7 +38,7 @@ if (isset($_REQUEST["detect_dir"])&&!empty($_REQUEST["detect_dir"]))
     echo "<head>\r\n";
     echo UtilCss::form_css()."\r\n";
     $url_base=UtilNet::urlbase();
-    //echo "<script type='text/javascript' src='".$url_base."common/js/util/file.js'></script>";
+    //echo "<script type='text/javascript' src='".$url_base."misc/js/util/file.js'></script>";
     echo "</head>";
     echo "<body>";
     echo "<br/><br/><br/><br/><br/><h1 align='center'>$title</h1>";

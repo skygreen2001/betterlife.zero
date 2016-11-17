@@ -1,0 +1,12 @@
+{
+  "name": "bb",
+  "version": "1.0.0",
+  "private": true,
+  "directory": "misc/js",
+  "dependencies": {
+    "jquery": "1.11.1",
+
+    "ueditor": "v1.4.3.2",
+    "ckeditor": "#full/4.5.x"
+  }
+}

@@ -48,7 +48,7 @@ if(Config_AutoCode::AFTER_MODEL_CONVERT_ADMIN){
             echo"<div id='showPrepareWork' style='display: none;'>";
             echo AutoCodeModelLike::$showPreviewReport;
             echo "</div>";
-            echo "<p style='height:20px;text-align:right;'><span style='float:left'>&nbsp;&nbsp;<a style='margin-left:15px;' href='javascript:' style='cursor:pointer;' onclick=\"(document.getElementById('showReport').style.display=(document.getElementById('showReport').style.display=='none')?'':'none')\">显示报告</a></span><a href='$admin_url' target='_blank' style='margin-right: -12px;'>返回网站后台</a></p>";
+            echo "<p style='height:20px;text-align:right;'><span style='float:left'>&nbsp;&nbsp;<a style='margin-left:15px;' href='javascript:' style='cursor:pointer;' onclick=\"(document.getElementById('showReport').style.display=(document.getElementById('showReport').style.display=='none')?'':'none')\">显示报告</a></span></p>";
             echo "<div id='showReport' style='display: none;'>";
             echo AutoCodeModelLike::$showReport;
             echo "</div>";
@@ -91,30 +91,21 @@ if(Config_AutoCode::AFTER_MODEL_CONVERT_ADMIN){
 
         $admin_url=Gc::$url_base."admin/";
 
-        if (contain(strtolower(php_uname()),"darwin")){
-            $admin_url=UtilNet::urlbase();
-            $file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
-            if (contain($file_sub_dir,"tools".DS))
-                $file_sub_dir=substr($file_sub_dir,0,strpos($file_sub_dir,"tools".DS));
-            $domainSubDir=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir);
-            if(!endwith($admin_url,$domainSubDir))$admin_url.=$domainSubDir."admin/";
-        }
-
         if(Config_AutoCode::SHOW_PREVIEW_REPORT){
             echo "<div style='width: 1000px; margin-left: 110px;'>";
-            echo "<span>&nbsp;&nbsp;&nbsp;&nbsp;</span><a href='javascript:' style='cursor:pointer;' onclick=\"(document.getElementById('showPrepareWork').style.display=(document.getElementById('showPrepareWork').style.display=='none')?'':'none')\">预备工作</a>";
-            echo"<div id='showPrepareWork' style='display: none;'>";
+            echo "<span>&nbsp;&nbsp;&nbsp;&nbsp;</span><a href='javascript:' style='margin-left: 5%;cursor:pointer;' onclick=\"(document.getElementById('showPrepareWork').style.display=(document.getElementById('showPrepareWork').style.display=='none')?'':'none')\">预备工作</a>";
+            echo "<div id='showPrepareWork' style='display: none;'>";
             echo AutoCodeModel::$showPreviewReport;
             echo "</div>";
-            echo "<p style='height:20px;text-align:right;'><span style='float:left'>&nbsp;&nbsp;<a style='margin-left:15px;' href='javascript:' style='cursor:pointer;' onclick=\"(document.getElementById('showReport').style.display=(document.getElementById('showReport').style.display=='none')?'':'none')\">显示报告</a></span><a href='$admin_url' target='_blank' style='margin-right: -12px;'>返回网站后台</a></p>";
-            echo "<div id='showReport' style='display: none;'>";
+            echo "<p style='margin-left: 6%;padding-left:5px;height:20px;text-align:right;'><span style='float:left'>&nbsp;&nbsp;<a style='margin-left:15px;' href='javascript:' style='cursor:pointer;' onclick=\"(document.getElementById('showReport').style.display=(document.getElementById('showReport').style.display=='none')?'':'none')\">显示报告</a></span></p>";
+            echo "<div id='showReport' style='display: none;margin-left: 11%;'>";
             echo AutoCodeModel::$showReport;
             echo "</div>";
+            AutoCodePreviewReport::init();
+            $showReport=AutoCodePreviewReport::showReport($table_names);
+            echo $showReport;
             echo "</div>";
         }
-        AutoCodePreviewReport::init();
-        $showReport=AutoCodePreviewReport::showReport($table_names);
-        echo $showReport;
     }
 }
 

@@ -5,7 +5,7 @@
  +--------------------------------------------------<br/>
  * @category betterlife
  * @package core.main
- * @author skygreen
+ * @author skygreen <skygreen2001@gmail.com>
  */
 class Dispatcher
 {

@@ -8,6 +8,6 @@
         <tr class="entry"><th class="head">标题</th><td class="content">{$notice.title}</td></tr>
         <tr class="entry"><th class="head">通知内容</th><td class="content">{$notice.notice_content}</td></tr>
     </table>
-    <div align="center"><my:a href='{$url_base}index.php?go=model.notice.lists&pageNo={$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{$url_base}index.php?go=model.notice.edit&id={$notice.notice_id}&pageNo={$smarty.get.pageNo|default:"1"}'>修改通知</my:a></div>
+    <div class="footer" align="center"><my:a href='{$url_base}index.php?go=model.notice.lists&amp;pageNo={$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{$url_base}index.php?go=model.notice.edit&amp;id={$notice.notice_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}'>修改通知</my:a></div>
 </div>
 {/block}

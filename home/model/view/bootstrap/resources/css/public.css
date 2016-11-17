@@ -1,6 +1,6 @@
 /*
- * 说明：图片路径在gzip情况下相对于common/js/gzip.php文件路径而设定。
-*/
+ * 说明：图片路径在gzip情况下相对于misc/js/gzip.php文件路径而设定。
+ */
 html,body {
     font:normal 15px SimSun,sans-serif;
     border:0 none;
@@ -8,6 +8,13 @@ html,body {
     line-height:1.5em;
     margin:2px 0 0;
     padding:0;
+}
+
+.contentBox{
+    width:80%;
+    margin: 0 auto;
+    padding: 20px;
+    height: 100%;
 }
 
 .en-head {
@@ -29,7 +36,7 @@ p {
 div .block {
     margin-top:10px;
     border:1px solid #cfcfcf;
-    width:600px;
+    /*width:600px;*/
     padding:10px;
     margin:8px;
 }
@@ -55,10 +62,18 @@ a:hover {
 
 h1 {
     font:bold 150% STXingkai;
+    width: 100%;
+    margin: 50px auto 20px;
+    text-align: center;
 }
 
 h2 {
     font:150% STXingkai;
+}
+
+h3 {
+    width: 80%;
+    margin: 30px auto 9px auto;
 }
 
 p#indexPage {
@@ -79,25 +94,26 @@ blockquote {
 }
 
 input {
-    border:1px solid #FFF;
-    text-align:center;
+    border:1px solid #fff;
     width:200px;
     height:28px;
     line-height:28px;
     background:gray;
-    color:#FFF;
+    color:#fff;
     background-color:gray;
+    padding-left: 10px;
 }
 
 .btnSubmit{
     width:100px;
     height:32px;
-    color:#FFF;
+    color:#fff;
     cursor:pointer;
     font:bold 84% SimSun,helvetica,sans-serif;
     background-color:#000;
     border:1px solid;
     border-color:#696 #363 #363 #696;
+    margin: 10px 0;
 }
 
 label {
@@ -115,35 +131,37 @@ br {
 /** 数据对象模板显示样式 */
 .block {
     margin-top:10px;
-    border:1px solid #cfcfcf;
+    /*border:1px solid #cfcfcf;*/
     padding:10px;
 }
+
 .viewdoblock {
-    width          : 98%;
+    width          : 80%;
     border-collapse: collapse;
-    margin         : 10px;
+    margin: 0 auto;
     border-left    : 1px solid #99BBE8;
     border-right   : 1px solid #99BBE8;
     border-top     : 5px solid #ccc;
     border-bottom  : 5px solid #ccc;
 }
+
 .viewdoblock .entry{
     font-size:14px;
 }
-.viewdoblock span{
-}
+
 .viewdoblock .head{
-    width      :32%;
-    min-width  :150px;
-    white-space:nowrap;
-    text-align :right;
-    font-weight:bold;
+    width      : 20%;
+    min-width  : 150px;
+    white-space: nowrap;
+    text-align : right;
+    font-weight: bold;
     line-height        : 1.5em;
-    padding-right      : 5px;
+    padding-right      : 15px;
     border             : 1px solid #ccc ;
     border-bottom-width: 0px;
     border-left-width  : 0px;
 }
+
 .viewdoblock .header{
     text-align :center;
     font-weight:bold;
@@ -153,25 +171,46 @@ br {
     border-bottom-width: 0px;
     border-left-width  : 0px;
 }
-.viewdoblock .content{
-    line-height :1.5em;
-    padding-left:20px;
+
+.viewdoblock .content {
+    line-height : 1.5em;
     border      : 1px solid #ccc ;
     border-bottom-width: 0px;
     border-right-width : 0px;
-}
-.viewdoblock .btnCol{
-    width:100px;
-    text-align :center;
-    line-height :1.5em;
-    border      : 1px solid #ccc ;
-    border-bottom-width: 0px;
-    border-right-width : 0px;
-}
-.viewdoblock .edit{
-    width: 98%;
+    padding: 6px 12px;
+    text-align: left;
 }
 
+.viewdoblock .entry .header:first-child, .viewdoblock .entry .content:first-child  {
+    width: 36px;
+    text-align: center;
+}
+
+form .viewdoblock .entry .content {
+    padding: 6px 0 6px 7%;
+}
+
+.viewdoblock .btnCol{
+    width      : 100px;
+    text-align : center;
+    line-height: 1.5em;
+    border     : 1px solid #ccc ;
+    border-bottom-width: 0px;
+    border-right-width : 0px;
+    padding: 6px 12px;
+}
+
+.viewdoblock .edit{
+    border-radius: 6px;
+    padding-left: 10px;
+    width: 88%;
+    height: 36px;
+}
+
+.footer{
+    margin: 10px 0;
+    line-height: 30px;
+}
 
 /* 图片自适应显示 table-cell方式 */
 .wrap_2_inner img { max-height:600px; max-width:600px; *bottom:50%;*right:50%;margin:0 auto;}

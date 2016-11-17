@@ -1,5 +1,5 @@
 /*
- * 说明：图片路径在gzip情况下相对于common/js/gzip.php文件路径而设定。
+ * 说明：图片路径在gzip情况下相对于misc/js/gzip.php文件路径而设定。
  */
 html,body {
     font:normal 12px SimSun,sans-serif;
@@ -64,7 +64,7 @@ p#indexPage {
 
 p,.x-panel-body p {
     margin:5px;
-}    
+}
 
 #frmview{
     border: 0px;

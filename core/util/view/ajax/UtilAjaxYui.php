@@ -22,16 +22,16 @@ class UtilAjaxYui extends UtilAjax implements IUtilAjax
     {
         if (self::$IsGoogleApi){
             if ($viewObject)
-            {            
+            {
                 self::loadJsReady($viewObject,"https://ajax.googleapis.com/ajax/libs/yui/$version/build/yui/yui-min.js");
             }else{
-                self::loadJs("https://ajax.googleapis.com/ajax/libs/yui/$version/build/yui/yui-min.js");                
+                self::loadJs("https://ajax.googleapis.com/ajax/libs/yui/$version/build/yui/yui-min.js");
             }
         }else{
             self::loadAjaxJs(EnumJsFramework::JS_FW_YUI,$version,$viewObject);
         }
     }
- 
+
     /**
      * 发送Ajax请求的语句
      * @param string $url 通信的Url地址。
@@ -45,17 +45,17 @@ class UtilAjaxYui extends UtilAjax implements IUtilAjax
     {
         $result="";
         if (!empty ($callback))
-        {        
-            $url_base=UtilNet::urlbase(); 
-            $result=self::loadJsSentence($url_base."common/js/util/xmltojson.js"); 
+        {
+            $url_base=UtilNet::urlbase();
+            $result=self::loadJsSentence($url_base."misc/js/util/xmltojson.js"); 
         }
-        $result.= "<script type='text/javascript'>";     
-        //<editor-fold defaultstate="collapsed" desc="YUI"> 
-                     
+        $result.= "<script type='text/javascript'>";
+        //<editor-fold defaultstate="collapsed" desc="YUI">
+
         if((is_array($dataArray))&&(count($dataArray)>0))
         {
             $data=http_build_query($dataArray);
-        }  
+        }
         $result.="YUI().use('io-base', function(Y) {
                     var cfg,request;
                     cfg = {
@@ -68,17 +68,17 @@ class UtilAjaxYui extends UtilAjax implements IUtilAjax
         if (isset($callback)){
              $result.=$callback;
              $result.="
-                    Y.on('io:complete',onComplete,Y,true);";  
+                    Y.on('io:complete',onComplete,Y,true);";
         }
-        $result.="  
+        $result.="
                     request = Y.io('$url', cfg);";
         $result.="
-                  });";   
+                  });";
         //</editor-fold>
-        $result.= "</script>";           
-        return $result;        
+        $result.= "</script>";
+        return $result;
     }
-    
+
     /**
      * 生成Javascript的回调函数
      * @param string $local_service_flag 对象名称
@@ -87,7 +87,7 @@ class UtilAjaxYui extends UtilAjax implements IUtilAjax
      * @return string 回调函数
      */
     public static function callbackForJsFramework($local_service_flag,$response_type=EnumResponseType::XML)
-    {   
+    {
         $class_name=str_replace("RO","",$local_service_flag);
         //<editor-fold defaultstate="collapsed" desc="YUI">
         $result="
@@ -96,9 +96,9 @@ class UtilAjaxYui extends UtilAjax implements IUtilAjax
                       console.log('提交请求执行成功！');
                       return ;
                     }";
-        if (!self::$IsHtmlBody){            
-            $result.="      
-                    YUI().use('node', function (Y) {    
+        if (!self::$IsHtmlBody){
+            $result.="
+                    YUI().use('node', function (Y) {
                         Y.one('#object_name').append('$class_name');
                     })
             ";
@@ -113,26 +113,26 @@ class UtilAjaxYui extends UtilAjax implements IUtilAjax
                         catch (e) {
                             console.log('返回的Json数据语法格式错误！');
                         }
-                    })     
-                    YUI().use('node', function (Y) {    
+                    })
+                    YUI().use('node', function (Y) {
                         for(var item in data) {
                             var value = data[item];
                             Y.one('#properties').append('<li>'+item+':'+value+'</li>');
                         }
-                    })   
-                    ";                        
+                    })
+                    ";
         }
-        else if ($response_type==EnumResponseType::XML){                      
+        else if ($response_type==EnumResponseType::XML){
             $result.="
-                  var objectJson = xmltoJson(response.responseXML);    
+                  var objectJson = xmltoJson(response.responseXML);
                   YUI().use('node', function (Y) {
                       for(var item in objectJson) {
                              var value = objectJson[item];
-                             if(typeof(value) == 'object') { 
+                             if(typeof(value) == 'object') {
                                 for(var subitem in value) {
                                     var subvalue = value[subitem];
                                     for(var childitem in subvalue) {
-                                        if (subitem!='#text'){    
+                                        if (subitem!='#text'){
                                             var childvalue = subvalue[childitem];
                                             Y.one('#properties').append('<li>'+subitem+':'+childvalue+'</li>');
                                         }
@@ -142,15 +142,15 @@ class UtilAjaxYui extends UtilAjax implements IUtilAjax
                           }
                   })
                     ";
-        };                    
+        };
         $result.="}";
-        //</editor-fold>  
+        //</editor-fold>
         if (!self::$IsHtmlBody){
-            echo "<body><h1 id='object_name'></h1><ol id='properties'></ol></body>\r\n";  
+            echo "<body><h1 id='object_name'></h1><ol id='properties'></ol></body>\r\n";
             self::$IsHtmlBody=true;
         }
         return $result;
-    }    
+    }
 }
 
 ?>

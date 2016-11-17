@@ -12,11 +12,14 @@
         <tr class="entry">
             <td class="content">{$role.role_id}</td>
             <td class="content">{$role.role_name}</td>
-            <td class="btnCol"><my:a href="{$url_base}index.php?go=model.role.view&id={$role.role_id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.role.edit&id={$role.role_id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.role.delete&id={$role.role_id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
+            <td class="btnCol"><my:a href="{$url_base}index.php?go=model.role.view&amp;id={$role.role_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.role.edit&amp;id={$role.role_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.role.delete&amp;id={$role.role_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
         </tr>
         {/foreach}
     </table>
-    &nbsp;&nbsp;<my:page src='{$url_base}index.php?go=model.role.lists' /><br/>
-    <div align="center"><my:a href='{$url_base}index.php?go=model.role.edit&pageNo={$smarty.get.pageNo|default:"1"}'>新建</my:a>|<my:a href='{$url_base}index.php?go=model.index.index'>返回首页</my:a></div>
+
+    <div class="footer" align="center">
+        <div><my:page src='{$url_base}index.php?go=model.role.lists' /></div>
+        <my:a href='{$url_base}index.php?go=model.role.edit&amp;pageNo={$smarty.get.pageNo|default:"1"}'>新建</my:a>|<my:a href='{$url_base}index.php?go=model.index.index'>返回首页</my:a>
+    </div>
 </div>
 {/block}

@@ -18,14 +18,14 @@ class Action_Blog extends Action
         $this->description.="-显示博客列表";
         $this->uc_sync_login();
 
-        if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){
-          $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];
+        if ($this->isDataHave(TagPageService::$linkUrl_pageFlag)){
+          $nowpage=$this->data[TagPageService::$linkUrl_pageFlag];
         }else{
           $nowpage=1;
         }
 
         $count=Blog::count();
-        $bb_page=UtilPage::init($nowpage,$count);
+        $bb_page=TagPageService::init($nowpage,$count);
         $blogs = Blog::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
         if(!$blogs) {
             $this->redirect("blog","write");

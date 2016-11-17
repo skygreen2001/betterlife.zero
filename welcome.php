@@ -1,6 +1,6 @@
 <?php
 require_once ("Gc.php");
-require_once("include/common.php");
+require_once("core/include/common.php");
 if(!contains($_SERVER['HTTP_HOST'],array("127.0.0.1","localhost"))){
     header("location:".Gc::$url_base."index.php?go=".Gc::$appName.".index.index");
     die();
@@ -19,9 +19,23 @@ if(!contains($_SERVER['HTTP_HOST'],array("127.0.0.1","localhost"))){
 <meta name="creation-date" content="12/01/2010">
 <meta name="revisit-after" content="15 days">
 <title><?php echo Gc::$site_name ?></title>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="zh-CN" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Lang" content="zh_CN">
+<meta name="author" content="skygreen">
+<meta http-equiv="Reply-to" content="skygreen2001@gmail.com">
+<?php require_once ("Gc.php");?>
+<meta name="description" content="<?php echo Gc::$site_name?>">
+<meta name="keywords" content="<?php echo Gc::$site_name?>">
+<meta name="creation-date" content="12/01/2010">
+<meta name="revisit-after" content="15 days">
+<title><?php echo Gc::$site_name ?></title>
 <style type="text/css">
 body {
-    font:normal 12px SimSun,sans-serif;
+    font-size: 13px;
+    font-family:'Microsoft YaHei',"微软雅黑",Arial, sans-serif,'Open Sans';
     margin:0;
     padding:0;
     border:0 none;
@@ -29,13 +43,9 @@ body {
 p {
     margin:5px;
 }
-.en-head{
-    font:bold 0.8em Arial,verdana,Geneva,Helvetica,sans-serif;
-}
 .en{
-    font-family:verdana,Geneva,Helvetica,Arial,sans-serif;
+    font-family:Arial,verdana,Geneva,Helvetica,sans-serif;
 }
-
 a {
     color: #1E4176;
 }
@@ -43,44 +53,37 @@ a:link {
     color: #1E4176;
     text-decoration: none;
 }
-
 a:visited {
     color: #555;
     text-decoration: none;
 }
-
 a:hover {
     text-decoration: underline;
     color: #15428b;
 }
 h1{
-    font:bold 200% STXingkai;
-    margin-top: 160px;
+    margin: 150px 0 0 0;
 }
 #main {
-    position: absolute;
-    top: 50%;
-    left: 50%;
+    width: 100%;
+    height: 100%;
     align: center;
 }
 #inbox {
-    position: absolute;
-    top: -50%;
-    width: 360px;
-    margin: -330px -180px;
+    width: 480px;
+    margin: 0 auto;
 }
 #footnav {
-    position: absolute;
-    top: -50%;
     width: 300px;
-    margin: 120px 0px 0px -100px;
+    text-align: center;
+    margin: 10px auto 0px auto;
 }
 div#content{
     border-style:outset;
     border-color: black;
     border-width: thin;
-    font-size: 14px;
-    width: 360px;
+    font-size: 16px;
+    width: 480px;
     height: 150px;
     padding-top:80px;
     margin-top: 20px;
@@ -91,7 +94,7 @@ div#content{
 <body>
     <div id="main">
         <div id="inbox">
-            <h1 align="center">欢迎来到<span class="en-head"><?php echo Gc::$site_name ?></span></h1>
+            <h1 align="center">欢迎来到<span class="en-head"><?php echo Gc::$site_name ?></span>网站框架</h1>
             <div align="center">
                 <div id="content" align="center">
                     <p><a target="_blank" href="<?php echo Gc::$url_base?>index.php?go=<?php echo Gc::$appName ?>.index.index">网站前台</a></p>

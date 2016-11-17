@@ -18,11 +18,14 @@
             <td class="content">{$logsystem.ident}</td>
             <td class="content">{$logsystem.priorityShow}</td>
             <td class="content">{$logsystem.message}</td>
-            <td class="btnCol"><my:a href="{$url_base}index.php?go=model.logsystem.view&id={$logsystem.logsystem_id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.logsystem.edit&id={$logsystem.logsystem_id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.logsystem.delete&id={$logsystem.logsystem_id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
+            <td class="btnCol"><my:a href="{$url_base}index.php?go=model.logsystem.view&amp;id={$logsystem.logsystem_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.logsystem.edit&amp;id={$logsystem.logsystem_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.logsystem.delete&amp;id={$logsystem.logsystem_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
         </tr>
         {/foreach}
     </table>
-    &nbsp;&nbsp;<my:page src='{$url_base}index.php?go=model.logsystem.lists' /><br/>
-    <div align="center"><my:a href='{$url_base}index.php?go=model.logsystem.edit&pageNo={$smarty.get.pageNo|default:"1"}'>新建</my:a>|<my:a href='{$url_base}index.php?go=model.index.index'>返回首页</my:a></div>
+
+    <div class="footer" align="center">
+        <div><my:page src='{$url_base}index.php?go=model.logsystem.lists' /></div>
+        <my:a href='{$url_base}index.php?go=model.logsystem.edit&amp;pageNo={$smarty.get.pageNo|default:"1"}'>新建</my:a>|<my:a href='{$url_base}index.php?go=model.index.index'>返回首页</my:a>
+    </div>
 </div>
 {/block}

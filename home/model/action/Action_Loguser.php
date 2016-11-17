@@ -14,14 +14,15 @@ class Action_Loguser extends ActionModel
      */
     public function lists()
     {
-        if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){
-            $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];
+        if ($this->isDataHave(TagPageService::$linkUrl_pageFlag)){
+            $nowpage=$this->data[TagPageService::$linkUrl_pageFlag];
         }else{
             $nowpage=1;
         }
         $count=Loguser::count();
         $this->view->countLogusers=$count;
-        if($count>0){            $bb_page=UtilPage::init($nowpage,$count);
+        if($count>0){
+            $bb_page=TagPageService::init($nowpage,$count);
             $logusers = Loguser::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
             foreach ($logusers as $loguser) {
                 $user_instance=null;

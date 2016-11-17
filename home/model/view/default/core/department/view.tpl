@@ -11,6 +11,6 @@
         <tr class="entry"><th class="head">预估平均工资</th><td class="content">{$department.estsalary}</td></tr>
         <tr class="entry"><th class="head">实际工资</th><td class="content">{$department.actualsalary}</td></tr>
     </table>
-    <div align="center"><my:a href='{$url_base}index.php?go=model.department.lists&pageNo={$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{$url_base}index.php?go=model.department.edit&id={$department.department_id}&pageNo={$smarty.get.pageNo|default:"1"}'>修改用户所属部门</my:a></div>
+    <div class="footer" align="center"><my:a href='{$url_base}index.php?go=model.department.lists&amp;pageNo={$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{$url_base}index.php?go=model.department.edit&amp;id={$department.department_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}'>修改用户所属部门</my:a></div>
 </div>
 {/block}

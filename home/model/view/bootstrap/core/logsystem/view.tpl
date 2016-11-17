@@ -9,6 +9,6 @@
         <tr class="entry"><th class="head">优先级</th><td class="content">{$logsystem.priorityShow}</td></tr>
         <tr class="entry"><th class="head">日志内容</th><td class="content">{$logsystem.message}</td></tr>
     </table>
-    <div align="center"><my:a href='{$url_base}index.php?go=model.logsystem.lists&pageNo={$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{$url_base}index.php?go=model.logsystem.edit&id={$logsystem.logsystem_id}&pageNo={$smarty.get.pageNo|default:"1"}'>修改系统日志</my:a></div>
+    <div class="footer" align="center"><my:a href='{$url_base}index.php?go=model.logsystem.lists&amp;pageNo={$smarty.get.pageNo|default:"1"}'>返回列表</my:a>|<my:a href='{$url_base}index.php?go=model.logsystem.edit&amp;id={$logsystem.logsystem_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}'>修改系统日志</my:a></div>
 </div>
 {/block}

@@ -1,0 +1,52 @@
+{
+  "name": "BB",
+  "description": "a mini framework designed to compatiable with other php framework like drupal,thinkphp",
+  "keywords": [
+      "cms", "api", "php", "framework", "bb"
+  ],
+  "homepage": "https://github.com/skygreen2001/betterlife.core",
+  "license": "GPL",
+  "authors": [
+      {
+          "name": "skygreen2001",
+          "email": "skygreen2001@gmail.com",
+          "homepage": "http://blog.csdn.net/skygreen2001",
+          "role": "Developer For Better"
+      }
+  ],
+  "autoload": {
+    "classmap" : [
+      "../core/main/Initializer.php",
+      "../init.php"
+    ]
+  },
+  "config":{
+      "secure-http": false
+  },
+  "repositories": [
+    {
+        "type":"package",
+        "package": {
+            "name": "pear/MDB2",
+            "version": "2.4.1",
+            "source": {
+              "url": "https://github.com/pear/MDB2.git",
+              "type": "git",
+              "reference":"master"
+            }
+        }
+    }
+  ],
+  "require": {
+      "php": ">=5.2.0",
+      "symfony/yaml": ">=2.0.4",
+      "mustangostang/spyc": "dev-master",
+      "fusonic/linq": "@dev",
+      "adodb/adodb-php": ">=5.19",
+      "pear/MDB2": ">=2.0.0"
+  },
+  "require-dev": {
+    "pagon/composer-packer": "0.1.x"
+  },
+  "_comment": "pagon/composer-packer: Packer to build tar.gz for composer project."
+}

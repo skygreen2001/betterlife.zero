@@ -9,7 +9,7 @@
  * @author skygreen
  */
 class UtilAjaxDojo extends UtilAjax implements IUtilAjax
-{    
+{
     /**
      * 动态加载Dojo:Ajax Dojo Framework库
      * @link http://dojotoolkit.org/
@@ -26,12 +26,12 @@ class UtilAjaxDojo extends UtilAjax implements IUtilAjax
                 self::loadJsReady($viewObject,"https://ajax.googleapis.com/ajax/libs/dojo/$version/dojo/dojo.xd.js");
             }else{
                 self::loadJs("https://ajax.googleapis.com/ajax/libs/dojo/$version/dojo/dojo.xd.js");
-            } 
+            }
         }else{
-            self::loadAjaxJs(EnumJsFramework::JS_FW_DOJO,$version,$viewObject); 
-        }   
-    }   
-    
+            self::loadAjaxJs(EnumJsFramework::JS_FW_DOJO,$version,$viewObject);
+        }
+    }
+
     /**
      * 发送Ajax请求的语句
      * @param string $url 通信的Url地址。
@@ -42,25 +42,25 @@ class UtilAjaxDojo extends UtilAjax implements IUtilAjax
      * @return 发送Ajax请求的语句
      */
     public static function ajaxRequstStatement($url,$dataArray,$method,$response_type=EnumResponseType::XML,$callback=null)
-    { 
+    {
         $result="";
         if (!empty ($callback))
-        {        
-            $url_base=UtilNet::urlbase(); 
-            $result=self::loadJsSentence("common/js/util/xmltojson.js");  
+        {
+            $url_base=UtilNet::urlbase();
+            $result=self::loadJsSentence("misc/js/util/xmltojson.js");  
         }
         $result.= "<script type='text/javascript'>";
-        //<editor-fold defaultstate="collapsed" desc="dojo">       
+        //<editor-fold defaultstate="collapsed" desc="dojo">
         if((is_array($dataArray))&&(count($dataArray)>0))
         {
             $data=json_encode($dataArray);
 //            $data="{";
 //            foreach ($dataArray as $key => $value) {
 //              $data.=$key.":'".$value."'".",";
-//            }    
+//            }
 //            $data=substr($data, 0, strlen($data)-1);
 //            $data.="}";
-        }          
+        }
         $result.="
             //Deferred对象允许用同步调用的写法写异步调用
             var deferredResult = ";
@@ -82,22 +82,22 @@ class UtilAjaxDojo extends UtilAjax implements IUtilAjax
                 $result.="
                     dojo.xhrDelete({";
                 break;;
-        }        
+        }
         $result.="
                 url: '$url',
-                content: $data, 
+                content: $data,
                 handleAs:'$response_type', //得到的response将被认为是JSON，并自动转为object
                 headers:{
                     'response_type':'$response_type'
                 }
-            });";        
-        if (isset($callback)){ 
+            });";
+        if (isset($callback)){
             $result.="
                 //当响应结果可用时再调用回调函数
-                deferredResult.then($callback);                           
-            ";   
+                deferredResult.then($callback);
+            ";
         }
-        
+
         $result.="
             error: function(error, ioargs) {
                 var message = '';
@@ -116,14 +116,14 @@ class UtilAjaxDojo extends UtilAjax implements IUtilAjax
                 }
                 alert(message+':'+error);
                console.log(message+':'+error);
-               deferredResult.reject(error);  
+               deferredResult.reject(error);
             };";
 
-        //</editor-fold> 
-        $result.= "</script>";           
+        //</editor-fold>
+        $result.= "</script>";
         return $result;
     }
-        
+
     /**
      * 生成Javascript的回调函数
      * @param string $local_service_flag 对象名称
@@ -132,7 +132,7 @@ class UtilAjaxDojo extends UtilAjax implements IUtilAjax
      * @return string 回调函数
      */
     public static function callbackForJsFramework($local_service_flag,$response_type=EnumResponseType::XML)
-    {   
+    {
         $class_name=str_replace("RO","",$local_service_flag);
         //<editor-fold defaultstate="collapsed" desc="dojo">
         $result="function(response) {
@@ -140,8 +140,8 @@ class UtilAjaxDojo extends UtilAjax implements IUtilAjax
                       console.log('请求失败！检查头信息是否是application/xml或者application/json :(');
                       return ;
                     }";
-        if (!self::$IsHtmlBody){           
-            $result.="            
+        if (!self::$IsHtmlBody){
+            $result.="
                     dojo.byId('object_name').innerHTML='$class_name';";
         }
         if ($response_type==EnumResponseType::JSON){
@@ -155,11 +155,11 @@ class UtilAjaxDojo extends UtilAjax implements IUtilAjax
                   }";
         }
         else if ($response_type==EnumResponseType::XML){
-            $result.="                                  
-                      var objectJson = xmltoJson(response);              
+            $result.="
+                      var objectJson = xmltoJson(response);
                       for(var item in objectJson) {
                          var value = objectJson[item];
-                         if(typeof(value) == 'object') { 
+                         if(typeof(value) == 'object') {
                             for(var subitem in value) {
                                var subvalue = value[subitem];
                                for(var childitem in subvalue) {
@@ -175,8 +175,8 @@ class UtilAjaxDojo extends UtilAjax implements IUtilAjax
                   }";
         }
         //</editor-fold>
-        if (!self::$IsHtmlBody){   
-            echo "<body><h1 id='object_name'></h1><ol id='properties'></ol></body>\r\n"; 
+        if (!self::$IsHtmlBody){
+            echo "<body><h1 id='object_name'></h1><ol id='properties'></ol></body>\r\n";
             self::$IsHtmlBody=true;
         }
         return $result;

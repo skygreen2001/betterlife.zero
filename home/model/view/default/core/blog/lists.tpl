@@ -16,11 +16,14 @@
             <td class="content">{$blog.username}</td>
             <td class="content">{$blog.blog_name}</td>
             <td class="content">{$blog.blog_content}</td>
-            <td class="btnCol"><my:a href="{$url_base}index.php?go=model.blog.view&id={$blog.blog_id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.blog.edit&id={$blog.blog_id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.blog.delete&id={$blog.blog_id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
+            <td class="btnCol"><my:a href="{$url_base}index.php?go=model.blog.view&amp;id={$blog.blog_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.blog.edit&amp;id={$blog.blog_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.blog.delete&amp;id={$blog.blog_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
         </tr>
         {/foreach}
     </table>
-    &nbsp;&nbsp;<my:page src='{$url_base}index.php?go=model.blog.lists' /><br/>
-    <div align="center"><my:a href='{$url_base}index.php?go=model.blog.edit&pageNo={$smarty.get.pageNo|default:"1"}'>新建</my:a>|<my:a href='{$url_base}index.php?go=model.index.index'>返回首页</my:a></div>
+
+    <div class="footer" align="center">
+        <div><my:page src='{$url_base}index.php?go=model.blog.lists' /></div>
+        <my:a href='{$url_base}index.php?go=model.blog.edit&amp;pageNo={$smarty.get.pageNo|default:"1"}'>新建</my:a>|<my:a href='{$url_base}index.php?go=model.index.index'>返回首页</my:a>
+    </div>
 </div>
 {/block}

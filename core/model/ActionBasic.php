@@ -47,10 +47,10 @@ class ActionBasic extends Object
 	public $description;
 	/**
 	 * 在线编辑器,参考:EnumOnlineEditorType
-	 * 1.CKEditor
-	 * 2.KindEditor
-	 * 3.xhEditor
-	 * 4.ueditor
+	 * 1.CKEDITOR
+	 * 2.KINDEDITOR
+	 * 3.XHEDITOR
+	 * 4.UEDITOR
 	 * @var mixed
 	 */
 	public $online_editor=EnumOnlineEditorType::UEDITOR;//CKEDITOR
@@ -138,7 +138,7 @@ class ActionBasic extends Object
 	 */
 	public function loadCss($defaultCssFile="resources/css/index.css")
 	{
-        if (contain($defaultCssFile,"common/js/ajax/")){
+        if (contain($defaultCssFile,"misc/js/ajax/")){
 		    $defaultCssFile=Gc::$url_base.$defaultCssFile;
         }else{
             $defaultCssFile=$this->view->template_url.$defaultCssFile;
@@ -163,7 +163,7 @@ class ActionBasic extends Object
 	 */
 	public function loadJs($defaultJsFile="js/index.js")
 	{
-        if (startWith($defaultJsFile,"common/js/ajax/")){
+        if (startWith($defaultJsFile,"misc/js/ajax/")){
 		    $defaultJsFile=Gc::$url_base.$defaultJsFile;
         }else{
             $defaultJsFile=$this->view->template_url.$defaultJsFile;
@@ -315,15 +315,15 @@ class ActionBasic extends Object
 				{
 					$this->view->viewObject=new ViewObject();
 				}
-				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.config.js");
+				UtilJavascript::loadJsReady($this->view->viewObject, "misc/js/onlineditor/ueditor/ueditor.config.js");
 				if (UtilAjax::$IsDebug){
-					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.all.js");
-					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.parse.js");
+					UtilJavascript::loadJsReady($this->view->viewObject, "misc/js/onlineditor/ueditor/ueditor.all.js");
+					UtilJavascript::loadJsReady($this->view->viewObject, "misc/js/onlineditor/ueditor/ueditor.parse.js");
 				}else{
-					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.all.min.js");
-					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/ueditor.parse.min.js");
+					UtilJavascript::loadJsReady($this->view->viewObject, "misc/js/onlineditor/ueditor/ueditor.all.min.js");
+					UtilJavascript::loadJsReady($this->view->viewObject, "misc/js/onlineditor/ueditor/ueditor.parse.min.js");
 				}
-				UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/ueditor/lang/zh-cn/zh-cn.js");
+				UtilJavascript::loadJsReady($this->view->viewObject, "misc/js/onlineditor/ueditor/lang/zh-cn/zh-cn.js");
 
 				if (is_array($textarea_ids)&&(count($textarea_ids)>0)){
 					for($i=0;$i<count($textarea_ids);$i++){
@@ -363,17 +363,17 @@ class ActionBasic extends Object
 				UtilAjaxJquery::load("1.7.1",$this->view->viewObject);
 				UtilXheditor::loadcss($this->view->viewObject);
 				if (UtilAjax::$IsDebug){
-					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/xheditor/xheditor-1.1.13-zh-cn.js");
+					UtilJavascript::loadJsReady($this->view->viewObject, "misc/js/onlineditor/xheditor/xheditor-1.1.13-zh-cn.js");
 				}else{
-					UtilJavascript::loadJsReady($this->view->viewObject, "common/js/onlineditor/xheditor/xheditor-1.1.13-zh-cn.min.js");
+					UtilJavascript::loadJsReady($this->view->viewObject, "misc/js/onlineditor/xheditor/xheditor-1.1.13-zh-cn.min.js");
 				}
 				UtilXheditor::loadJsPlugin($this->view->viewObject);
 				if (is_array($textarea_ids)&&(count($textarea_ids)>0)){
 					for($i=0;$i<count($textarea_ids);$i++){
-						UtilXheditor::loadJsFunction($textarea_ids[$i],$this->view->viewObject,null,"width:'98%',height:350,");
+						UtilXheditor::loadJsFunction($textarea_ids[$i],$this->view->viewObject,null,"width:'100%',height:'350px',");
 					}
 				}else{
-					UtilXheditor::loadJsFunction($textarea_ids,$this->view->viewObject,null,"width:'98%',height:350,");
+					UtilXheditor::loadJsFunction($textarea_ids,$this->view->viewObject,null,"width:'100%',height:'350px',");
 				}
 				$this->view->online_editor="xhEditor";
 				break;

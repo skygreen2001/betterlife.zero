@@ -14,15 +14,15 @@ class Action_Comment extends ActionModel
      */
     public function lists()
     {
-        if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){
-            $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];
+        if ($this->isDataHave(TagPageService::$linkUrl_pageFlag)){
+            $nowpage=$this->data[TagPageService::$linkUrl_pageFlag];
         }else{
             $nowpage=1;
         }
         $count=Comment::count();
         $this->view->countComments=$count;
         if($count>0){
-            $bb_page=UtilPage::init($nowpage,$count);
+            $bb_page=TagPageService::init($nowpage,$count);
             $comments = Comment::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
             foreach ($comments as $comment) {
                 $user_instance=null;

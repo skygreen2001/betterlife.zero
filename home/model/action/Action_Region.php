@@ -14,32 +14,16 @@ class Action_Region extends ActionModel
      */
     public function lists()
     {
-        if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){
-            $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];
+        if ($this->isDataHave(TagPageService::$linkUrl_pageFlag)){
+            $nowpage=$this->data[TagPageService::$linkUrl_pageFlag];
         }else{
             $nowpage=1;
         }
-        $conditions=" 1=1 ";
-
-        $region = $this->model->Region;
-        $region_type=$region->region_type;
-        if(($_POST["region_type"]>0)||(!$_POST)){
-            if(array_key_exists("region_type", $_POST))if($_POST["region_type"])$region_type=$_POST["region_type"];
-            if($region_type){
-                $conditions.=" and region_type=".$region_type;
-                $this->view->region_type=$region_type;
-            }
-        }
-        $region_name=$region->region_name;
-        if($region_name)$conditions.=" and region_name like '%".$region_name."%'";
-
-        $this->view->region=$region;
-
-        $count=Region::count($conditions);
+        $count=Region::count();
         $this->view->countRegions=$count;
-        $bb_page=UtilPage::init($nowpage,$count);
-        if($count>0){                               
-            $regions = Region::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint(),$conditions);
+        if($count>0){
+            $bb_page=TagPageService::init($nowpage,$count);
+            $regions = Region::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
             foreach ($regions as $region) {
                 $region_instance=null;
                 if ($region->parent_id){
@@ -51,8 +35,8 @@ class Action_Region extends ActionModel
                     $region["regionShowAll"]=$this->regionShowAll($region->parent_id,$level);
                 }
             }
+            $this->view->set("regions",$regions);
         }
-        $this->view->set("regions",$regions);
     }
 
     /**

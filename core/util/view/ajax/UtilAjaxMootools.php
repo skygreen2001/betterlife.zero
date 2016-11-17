@@ -9,7 +9,7 @@
  * @author skygreen
  */
 class UtilAjaxMootools extends UtilAjax implements IUtilAjax
-{    
+{
     /**
      * 动态加载Mootools:Ajax Javascript Framework库
      * @link http://mootools.net/download
@@ -27,17 +27,17 @@ class UtilAjaxMootools extends UtilAjax implements IUtilAjax
                 self::loadJs("https://ajax.googleapis.com/ajax/libs/mootools/$version/mootools-yui-compressed.js");
             }
         }  else {
-            $ajax_root="common/js/ajax/";    
-            $group=EnumJsFramework::JS_FW_MOOTOOLS;    
+            $ajax_root="misc/js/ajax/";
+            $group=EnumJsFramework::JS_FW_MOOTOOLS;
             if ($viewObject)
-            {            
+            {
                 self::loadJsReady($viewObject,$ajax_root.$group."/".$group.".js");
             }  else {
                 self::loadJs($ajax_root.$group."/".$group.".js");
             }
         }
     }
-    
+
     /**
      * 发送Ajax请求的语句
      * @param string $url 通信的Url地址。
@@ -52,8 +52,8 @@ class UtilAjaxMootools extends UtilAjax implements IUtilAjax
         $result="";
         if (!empty ($callback))
         {
-            $url_base=UtilNet::urlbase();   
-            $result= self::loadJsSentence($url_base."common/js/util/xmltojson.js");  
+            $url_base=UtilNet::urlbase();
+            $result= self::loadJsSentence($url_base."misc/js/util/xmltojson.js");
             $result.="<script type='text/javascript'>
                     Element.implement({
                         appendHTML: function(html,where){
@@ -63,47 +63,47 @@ class UtilAjaxMootools extends UtilAjax implements IUtilAjax
                     </script>
                 ";
         }
-        $result.= "<script type='text/javascript'>";  
-        //<editor-fold defaultstate="collapsed" desc="Mootools"> 
+        $result.= "<script type='text/javascript'>";
+        //<editor-fold defaultstate="collapsed" desc="Mootools">
         //@link http://mootools.net/docs/core/Request/Request
-        if ($response_type==EnumResponseType::JSON){                          
+        if ($response_type==EnumResponseType::JSON){
             if((is_array($dataArray))&&(count($dataArray)>0))
             {
-                $data=json_encode($dataArray);                
+                $data=json_encode($dataArray);
 //                $data="{";
 //                foreach ($dataArray as $key => $value) {
 //                  $data.=$key.":'".$value."'".",";
-//                }    
+//                }
 //                $data=substr($data, 0, strlen($data)-1);
 //                $data.="}";
-            }    
+            }
         }
-        else if ($response_type==EnumResponseType::XML) 
+        else if ($response_type==EnumResponseType::XML)
         {
             if((is_array($dataArray))&&(count($dataArray)>0))
             {
                 $data=http_build_query($dataArray);
-            }   
+            }
         }
-        if ($response_type==EnumResponseType::JSON){                                             
+        if ($response_type==EnumResponseType::JSON){
             $result.="var myRequest = new Request.JSON({";
         }
-        else if ($response_type==EnumResponseType::XML) 
+        else if ($response_type==EnumResponseType::XML)
         {
             $result.="var myRequest = new Request({";
-            $result.="method:'".$method."',"; 
+            $result.="method:'".$method."',";
         }
-        $result.="url:'".$url."',";         
+        $result.="url:'".$url."',";
         if (isset ($callback)){
             $result.="onSuccess: $callback,";
         }
         if(Gc::$dev_debug_on){
-            if ($response_type==EnumResponseType::JSON){ 
+            if ($response_type==EnumResponseType::JSON){
                 $result.="onError:function(text, error){
                             console.log('请求失败！ :(。返回信息'+text+'，失败原因：'+error+'。');
-                            }\r\n"; 
-            } 
-            else if ($response_type==EnumResponseType::XML) 
+                            }\r\n";
+            }
+            else if ($response_type==EnumResponseType::XML)
             {
                 $result.="
                       onFailure: function(xhr){
@@ -112,22 +112,22 @@ class UtilAjaxMootools extends UtilAjax implements IUtilAjax
             }
         }else{
             $result=substr($result, 0,  strlen($result)-1);
-        }  
+        }
         $result.= "});\r\n";
-        $result.= "myRequest.setHeader('response_type', '$response_type');\r\n"; 
-        $result.= "myRequest.setHeader('request_method', '$method');\r\n"; 
-        if ($response_type==EnumResponseType::JSON){        
+        $result.= "myRequest.setHeader('response_type', '$response_type');\r\n";
+        $result.= "myRequest.setHeader('request_method', '$method');\r\n";
+        if ($response_type==EnumResponseType::JSON){
             $result.="myRequest.get($data);";
         }
-        else if ($response_type==EnumResponseType::XML) 
+        else if ($response_type==EnumResponseType::XML)
         {
             $result.=" myRequest.send('$data');";
         }
-        //</editor-fold>                 
-        $result.= "</script>";           
-        return $result; 
+        //</editor-fold>
+        $result.= "</script>";
+        return $result;
     }
-        
+
     /**
      * 生成Javascript的回调函数
      * @param string $local_service_flag 对象名称
@@ -136,9 +136,9 @@ class UtilAjaxMootools extends UtilAjax implements IUtilAjax
      * @return string 回调函数
      */
     public static function callbackForJsFramework($local_service_flag,$response_type=EnumResponseType::XML)
-    {   
+    {
         $class_name=str_replace("RO","",$local_service_flag);
-        //<editor-fold defaultstate="collapsed" desc="Mootools"> 
+        //<editor-fold defaultstate="collapsed" desc="Mootools">
         $result="function(response) {
                     if (response==true){
                       console.log('提交请求执行成功！');
@@ -146,8 +146,8 @@ class UtilAjaxMootools extends UtilAjax implements IUtilAjax
                     }
                     var ol = $(document.body).getElement('ol');
                     var h1 = $(document.body).getElement('h1');";
-        if (!self::$IsHtmlBody){            
-            $result.="            
+        if (!self::$IsHtmlBody){
+            $result.="
                     h1.appendText('$class_name');";
         }
         if ($response_type==EnumResponseType::JSON){
@@ -161,17 +161,17 @@ class UtilAjaxMootools extends UtilAjax implements IUtilAjax
         else if ($response_type==EnumResponseType::XML){
             $result.="
                       var responseXml=createXmlDom(response);
-                      var objectJson = xmltoJson(responseXml);  
+                      var objectJson = xmltoJson(responseXml);
                       //var dumpt=dump(objectJson);
                       //alert(dumpt);
                       //$(document.body).appendText(dumpt);
                       for(var item in objectJson) {
                          var value = objectJson[item];
-                         if(typeof(value) == 'object') { 
+                         if(typeof(value) == 'object') {
                             for(var subitem in value) {
                                 var subvalue = value[subitem];
                                 for(var childitem in subvalue) {
-                                    if (subitem!='#text'){   
+                                    if (subitem!='#text'){
                                         var childvalue = subvalue[childitem];
                                         ol.appendHTML('<li>'+subitem+':'+childvalue+'</li>');
                                     }
@@ -182,13 +182,13 @@ class UtilAjaxMootools extends UtilAjax implements IUtilAjax
                     ";
         };
         $result.="}";
-        //</editor-fold>  
+        //</editor-fold>
         if (!self::$IsHtmlBody){
-            echo "<body><h1 id='object_name'></h1><ol id='properties'></ol></body>\r\n";  
+            echo "<body><h1 id='object_name'></h1><ol id='properties'></ol></body>\r\n";
             self::$IsHtmlBody=true;
         }
         return $result;
-    }    
+    }
 }
 
 ?>

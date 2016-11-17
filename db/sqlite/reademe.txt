@@ -1,5 +1,0 @@
-betterlife2:
-   Sqlite 2 演示数据库
-
-betterlife3:
-   Sqlite 3 演示数据库

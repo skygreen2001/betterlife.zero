@@ -27,7 +27,7 @@ class UtilAjax extends Util
      * 对JS进行Gzip操作的路径
      * @var string
      */
-    protected static $JS_GZIP="common/js/gzip.php?js=";
+    protected static $JS_GZIP="misc/js/gzip.php?js=";
     /**
      * JS框架名称键名称
      * @var string

@@ -1,0 +1,26 @@
+{
+  "name": "BB",
+  "version": "1.0.0",
+  "private": true,
+  "devDependencies": {
+    "gulp": "^3.8.1",
+
+    "gulp-bower": "^0.0.13",
+    "gulp-composer": "^0.4.0",
+
+    "gulp-connect": "^2.0.5",
+    "gulp-ignore": "^1.2.0",
+    "gulp-rimraf": "^0.1.0",
+    "gulp-less": "^3.0.3",
+    "gulp-concat": "^2.3.4",
+    "gulp-order": "^1.1.1",
+    "gulp-uglify": "^0.3.1",
+    "run-sequence": "^0.3.6",
+    "gulp-sourcemaps": "^1.1.0",
+    "gulp-cssmin": "^0.1.6",
+    "gulp-mobilizer": "^0.0.2",
+    "gulp-replace": "^0.4.0",
+    "streamqueue": "^0.1.1",
+    "gulp-rename": "^1.2.0"
+  }
+}

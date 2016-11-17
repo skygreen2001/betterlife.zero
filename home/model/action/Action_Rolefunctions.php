@@ -14,14 +14,15 @@ class Action_Rolefunctions extends ActionModel
      */
     public function lists()
     {
-        if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){
-            $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];
+        if ($this->isDataHave(TagPageService::$linkUrl_pageFlag)){
+            $nowpage=$this->data[TagPageService::$linkUrl_pageFlag];
         }else{
             $nowpage=1;
         }
         $count=Rolefunctions::count();
         $this->view->countRolefunctionss=$count;
-        if($count>0){            $bb_page=UtilPage::init($nowpage,$count);
+        if($count>0){
+            $bb_page=TagPageService::init($nowpage,$count);
             $rolefunctionss = Rolefunctions::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
             foreach ($rolefunctionss as $rolefunctions) {
                 $role_instance=null;

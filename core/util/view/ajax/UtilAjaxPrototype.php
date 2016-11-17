@@ -9,7 +9,7 @@
  * @author skygreen
  */
 class UtilAjaxPrototype extends UtilAjax implements IUtilAjax
-{    
+{
     /**
      * 动态加载Prototype:Ajax Javascript Framework库
      * @link http://api.prototypejs.org/Prototype/
@@ -25,20 +25,20 @@ class UtilAjaxPrototype extends UtilAjax implements IUtilAjax
             {
                 self::loadJsReady($viewObject,"https://ajax.googleapis.com/ajax/libs/prototype/$version/prototype.js");
             }else{
-                self::loadJs("https://ajax.googleapis.com/ajax/libs/prototype/$version/prototype.js");                
+                self::loadJs("https://ajax.googleapis.com/ajax/libs/prototype/$version/prototype.js");
             }
-        }else{        
-            $ajax_root="common/js/ajax/";    
-            $group=EnumJsFramework::JS_FW_PROTOTYPE;   
+        }else{
+            $ajax_root="misc/js/ajax/";
+            $group=EnumJsFramework::JS_FW_PROTOTYPE;
             if ($viewObject)
             {
                 self::loadJsReady($viewObject,$ajax_root.$group."/".$group.".js");
             }else{
-                self::loadJs($ajax_root.$group."/".$group.".js");                
+                self::loadJs($ajax_root.$group."/".$group.".js");
             }
         }
     }
-    
+
     /**
      * 发送Ajax请求的语句
      * @param string $url 通信的Url地址。
@@ -52,43 +52,43 @@ class UtilAjaxPrototype extends UtilAjax implements IUtilAjax
     {
         $result="";
         if (!empty ($callback))
-        {                
-            $url_base=UtilNet::urlbase();    
-            $result=self::loadJsSentence($url_base."common/js/util/xmltojson.js");  
+        {
+            $url_base=UtilNet::urlbase();
+            $result=self::loadJsSentence($url_base."misc/js/util/xmltojson.js");  
         }
-        $result.= "<script type='text/javascript'>"; 
-        //<editor-fold defaultstate="collapsed" desc="ProtoType">    
-         
+        $result.= "<script type='text/javascript'>";
+        //<editor-fold defaultstate="collapsed" desc="ProtoType">
+
         if((is_array($dataArray))&&(count($dataArray)>0))
         {
             $data=http_build_query($dataArray);
-        }  
-        $result.="new Ajax.Request('$url',{";  
+        }
+        $result.="new Ajax.Request('$url',{";
         $result.="method: '".$method."',";
         $result.="parameters: '$data',";
         $result.="requestHeaders:{
             'response_type':'$response_type'
         },";
-        if (isset($callback)){ 
+        if (isset($callback)){
             $result.= "onSuccess:".$callback.",";
         }
-        if (Gc::$dev_debug_on){        
+        if (Gc::$dev_debug_on){
             $result.="onException: function(transport,e){
                  console.log('请求失败！ :(||||'+e.name+':'+e.message);
-            },";            
+            },";
             $result.="
                   onFailure: function(request){
                     console.log('请求失败！ :(');
-                  }\r\n";          
-        }else{            
+                  }\r\n";
+        }else{
             $result=substr($result, 0,  strlen($result)-1);
         }
         $result.= "});";
-        //</editor-fold>      
-        $result.= "</script>";           
+        //</editor-fold>
+        $result.= "</script>";
         return $result;
     }
-        
+
     /**
      * 生成Javascript的回调函数
      * @param string $local_service_flag 对象名称
@@ -97,16 +97,16 @@ class UtilAjaxPrototype extends UtilAjax implements IUtilAjax
      * @return string 回调函数
      */
     public static function callbackForJsFramework($local_service_flag,$response_type=EnumResponseType::XML)
-    {   
+    {
         $class_name=str_replace("RO","",$local_service_flag);
-        //<editor-fold defaultstate="collapsed" desc="Prototype"> 
+        //<editor-fold defaultstate="collapsed" desc="Prototype">
         $result="function(response) {";
-        $result.="   
+        $result.="
                     var ol = $('properties');
                     var h1 = $('object_name');";
-        if (!self::$IsHtmlBody){            
-            $result.="            
-                    h1.insert('$class_name');";                    
+        if (!self::$IsHtmlBody){
+            $result.="
+                    h1.insert('$class_name');";
         }
         if ($response_type==EnumResponseType::JSON){
             $result.="
@@ -115,7 +115,7 @@ class UtilAjaxPrototype extends UtilAjax implements IUtilAjax
                         var value = responseJson[item];
                         ol.insert({bottom:'<li>'+item+':'+value+'</li>'});
                     }
-                    ";                        
+                    ";
         }
         else if ($response_type==EnumResponseType::XML){
             $result.="
@@ -124,7 +124,7 @@ class UtilAjaxPrototype extends UtilAjax implements IUtilAjax
                   var objectJson = xmltoJson(responseXml);
                   for(var item in objectJson) {
                          var value = objectJson[item];
-                         if(typeof(value) == 'object') { 
+                         if(typeof(value) == 'object') {
                             for(var subitem in value) {
                                 var subvalue = value[subitem];
                                 for(var childitem in subvalue) {
@@ -141,11 +141,11 @@ class UtilAjaxPrototype extends UtilAjax implements IUtilAjax
         $result.="}";
         //</editor-fold>
         if (!self::$IsHtmlBody){
-            echo "<body><h1 id='object_name'></h1><ol id='properties'></ol></body>\r\n";  
+            echo "<body><h1 id='object_name'></h1><ol id='properties'></ol></body>\r\n";
             self::$IsHtmlBody=true;
         }
         return $result;
-    }    
+    }
 }
 
 ?>

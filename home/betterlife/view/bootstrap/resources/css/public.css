@@ -1,5 +1,5 @@
 /*
- * 说明：图片路径在gzip情况下相对于common/js/gzip.php文件路径而设定。
+ * 说明：图片路径在gzip情况下相对于misc/js/gzip.php文件路径而设定。
 */
 html,body {
     font:normal 15px SimSun,sans-serif;
@@ -9,15 +9,14 @@ html,body {
     margin:2px 0 0;
     padding:0;
 }
-.contentBox{                  
-    position: absolute;   
-    width:600px;
-    height:300px;   
-    left:50%;   
-    top:300px;                     
-    margin-left:-300px;   
-    margin-top:-290px; 
+
+.contentBox{
+    width:80%;
+    margin: 0 auto;
+    padding: 20px;
+    height: 100%;
 }
+
 .en-head {
     font:bold .8em Geneva,Arial,Helvetica,sans-serif;
 }
@@ -41,7 +40,7 @@ label{
 div .block {
     margin-top:10px;
     border:1px solid #cfcfcf;
-    width:600px;
+    /*width:600px;*/
     padding:10px;
 }
 
@@ -86,19 +85,25 @@ blockquote {
     padding:5px;
     font-size:14px;
 }
+
 form {
     margin: 0;
 }
+
 textarea {
     display: block;
 }
 
 @media screen and (-webkit-min-device-pixel-ratio:0) {
     .inputNormal{
-        margin-left:22px;
         -webkit-border-radius: 6px;
         -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
     }
+
+    .inputLogin {
+        margin-left:22px;
+    }
+
     .btnSubmit{
         -webkit-border-radius: 6px;
         -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
@@ -106,16 +111,19 @@ textarea {
 }
 
 .inputNormal {
-    border-radius: 6px 6px 6px 6px;
-    text-align:center;
+    border-radius: 6px;
+    padding-left: 10px;
     height:36px;
     line-height:36px;
     background:gray;
-    color:#FFF;
+    color:#fff;
     background-color:gray;
     width:160px;
-    margin-left: 12px;
     border:1px solid gray;
+}
+.inputLogin {
+    margin-left: 12px;
+    width: 80%;
 }
 .btnSubmit{
     margin-top:5px;
@@ -127,13 +135,11 @@ textarea {
     background-color:#000;
     border:1px solid;
     border-color:#696 #363 #363 #696;
-    border-radius: 6px 6px 6px 6px;
+    border-radius: 6px;
 }
-
 br {
     clear:left;
 }
-
 /** 数据对象模板显示样式 */
 .block {
     margin-top:10px;

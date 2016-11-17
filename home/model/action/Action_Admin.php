@@ -14,14 +14,15 @@ class Action_Admin extends ActionModel
      */
     public function lists()
     {
-        if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){
-            $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];
+        if ($this->isDataHave(TagPageService::$linkUrl_pageFlag)){
+            $nowpage=$this->data[TagPageService::$linkUrl_pageFlag];
         }else{
             $nowpage=1;
         }
         $count=Admin::count();
         $this->view->countAdmins=$count;
-        if($count>0){            $bb_page=UtilPage::init($nowpage,$count);
+        if($count>0){
+            $bb_page=TagPageService::init($nowpage,$count);
             $admins = Admin::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
             foreach ($admins as $admin) {
                 $department_instance=null;

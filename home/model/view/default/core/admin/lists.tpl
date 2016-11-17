@@ -24,11 +24,14 @@
             <td class="content">{$admin.roletypeShow}</td>
             <td class="content">{$admin.seescopeShow}</td>
             <td class="content">{$admin.loginTimes}</td>
-            <td class="btnCol"><my:a href="{$url_base}index.php?go=model.admin.view&id={$admin.admin_id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.admin.edit&id={$admin.admin_id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.admin.delete&id={$admin.admin_id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
+            <td class="btnCol"><my:a href="{$url_base}index.php?go=model.admin.view&amp;id={$admin.admin_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.admin.edit&amp;id={$admin.admin_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.admin.delete&amp;id={$admin.admin_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
         </tr>
         {/foreach}
     </table>
-    &nbsp;&nbsp;<my:page src='{$url_base}index.php?go=model.admin.lists' /><br/>
-    <div align="center"><my:a href='{$url_base}index.php?go=model.admin.edit&pageNo={$smarty.get.pageNo|default:"1"}'>新建</my:a>|<my:a href='{$url_base}index.php?go=model.index.index'>返回首页</my:a></div>
+
+    <div class="footer" align="center">
+        <div><my:page src='{$url_base}index.php?go=model.admin.lists' /></div>
+        <my:a href='{$url_base}index.php?go=model.admin.edit&amp;pageNo={$smarty.get.pageNo|default:"1"}'>新建</my:a>|<my:a href='{$url_base}index.php?go=model.index.index'>返回首页</my:a>
+    </div>
 </div>
 {/block}

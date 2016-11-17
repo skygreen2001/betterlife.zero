@@ -1,45 +1,6 @@
 <?php
-//<editor-fold defaultstate="collapsed" desc="枚举类型">
 //加载枚举类型定义
 class_exists("Enum")||require(dirname(__FILE__)."/core/Enum.php");
-/**
- * 日志记录方式
- */
-class EnumLogType extends Enum{
-    /**
-     * 默认。根据在 php.ini 文件中的 error_log 配置，错误被发送到服务器日志系统或文件。
-     */
-    const SYSTEM    = 0;
-    /**
-     * 日志通过邮件发送
-     */
-    const MAIL      = 1;
-    /**
-     * 通过 PHP debugging 连接来发送错误,在PHP3以后就不再使用了
-     */
-    const DEGUG     = 2;
-    /**
-     * 错误发送到文件目标字符串
-     */
-    const FILE      = 3;
-    /**
-     * SAPI:Server Application Programming Interface 服务端应用编程端口.
-     */
-    const SAPI      = 4;
-    /**
-     * 浏览器显示。
-     */
-    const BROWSER    = 11;
-    /**
-     * 默认记录在数据库中
-     */
-    const DB        = 100;
-    /**
-     * 通过Firebug Console 输出。
-     */
-    const FIREBUG   = 101;
-}
-//</editor-fold>
 
 /**
  +-----------------------------------<br/>
@@ -52,21 +13,29 @@ class Gc
 {
     //<editor-fold desc="网站使用设置">
     /**
-     * 是否在线性能优化
-     * @var mixed
+     * 数据库配置
      */
-    public static $is_online_optimize=false;
+    public static $database_config = array(
+        'db_type' => 0,//默认使用mysql数据库. EnumDbSource::DB_MYSQL=0, 具体定义参见Config_Db.php里EnumDbSource的定义
+        'driver'  => 1,//数据库使用调用引擎. EnumDbEngine::ENGINE_OBJECT_MYSQL_MYSQLI, 具体定义参见Config_Db.php里EnumDbEngine的定义
+        'host' => '127.0.0.1',//数据库主机[默认本地 localhost]
+        'port' => '',//数据库端口
+        'database' => 'betterlife',//数据库名称
+        'username' => 'root',//数据库用户名
+        'password' => '',//数据库密码
+        'prefix'   => 'bb_',//数据库表名前缀
+    );
     /**
      * 网站应用的名称<br/>
      * 展示给网站用户
      * @var string
      * @static
      */
-    public static $site_name="Betterlife CMS网站框架";
+    public static $site_name="Betterlife CMS";
     /**
      * 网站应用的版本
      */
-    public static $version="1.0";
+    public static $version="1.0.0";
     /**
      * 网站根路径的URL路径
      * @var string
@@ -90,18 +59,6 @@ class Gc
      */
     public static $nav_framework_path;//="C:\\wamp\\www\\betterlife\\";
     /**
-     * 上传或者下载文件的路径
-     *
-     * @var mixed
-     */
-    public static $attachment_path;//="C:\\wamp\\www\\betterlife\\attachment\\";
-    /**
-     * 上传或者下载文件的网络路径
-     *
-     * @var mixed
-     */
-    public static $attachment_url;//="http://localhost/betterlife/attachment/";
-    /**
      * 上传图片的网络路径
      *
      * @var mixed
@@ -113,6 +70,18 @@ class Gc
      * @var mixed
      */
     public static $upload_path;//="C:\\wamp\\www\\betterlife\\upload\\";
+    /**
+     * 上传或者下载文件的路径
+     *
+     * @var mixed
+     */
+    public static $attachment_path;//="C:\\wamp\\www\\betterlife\\upload\\attachment\\";
+    /**
+     * 上传或者下载文件的网络路径
+     *
+     * @var mixed
+     */
+    public static $attachment_url;//="http://localhost/betterlife/upload/attachment/";
     //</editor-fold>
 
     //<editor-fold desc="开发者使用设置">
@@ -170,27 +139,29 @@ class Gc
      * @static
      */
     public static $url_model=0;
-
     /**
      * 是否打开Debug模式
      * @var bool
      * @static
      */
     public static $dev_debug_on=false;
-
     /**
      * 是否打开Smarty Debug Console窗口
      * @var bool
      * @static
      */
     public static $dev_smarty_on=false;
-
     /**
      * 是否要Profile网站性能
      * @var bool
      * @static
      */
     public static $dev_profile_on=false;
+    /**
+     * 是否在线性能优化
+     * @var mixed
+     */
+    public static $is_online_optimize=false;
     /**
      * 模板模式<br/>
      * 本框架自带四种开源模板支持<br/>
@@ -230,7 +201,7 @@ class Gc
      */
     public static $self_theme_dir_every=array(
         'betterlife'=>'bootstrap',
-        'model'=>'bootstrap'
+        // 'model'=>'bootstrap'
     );
     /**
      * 是否与Ucenter的用户中心进行整合
@@ -346,16 +317,10 @@ class Gc
     //<editor-fold defaultstate="collapsed" desc="初始化设置">
     public static function init()
     {
-        if (empty(Gc::$nav_root_path)){
-            Gc::$nav_root_path=dirname(__FILE__).DS;
-            Gc::$attachment_path=Gc::$nav_root_path."attachment".DS;
-            Gc::$upload_path=Gc::$nav_root_path."upload".DS;
-        }
-
-        if (empty(Gc::$nav_framework_path)){
-            Gc::$nav_framework_path=dirname(__FILE__).DS;
-        }
-
+        if (empty(Gc::$nav_root_path)) Gc::$nav_root_path=__DIR__.DS;
+        if (empty(Gc::$nav_framework_path)) Gc::$nav_framework_path=__DIR__.DS;
+        if (empty(Gc::$upload_path)) Gc::$upload_path=Gc::$nav_root_path."upload".DS;
+        if (empty(Gc::$attachment_path)) Gc::$attachment_path=Gc::$upload_path."attachment".DS;
         if (empty(Gc::$url_base)){
             $baseurl="";
             if(isset($_SERVER['HTTPS']) && strpos('on',$_SERVER['HTTPS'])){
@@ -370,46 +335,29 @@ class Gc
                 }
             }
             $baseDir = dirname($_SERVER['SCRIPT_NAME']);
-            $baseurl.=($baseDir == '\\' ? '' : $baseDir);
-            if (strpos(strrev($baseurl), "/") !== 0)$baseurl.='/';
-            Gc::$url_base=$baseurl;
-            $with_file=$_SERVER["SCRIPT_FILENAME"];
-            $file_sub_dir=dirname($with_file).DS;
-            $file_sub_dir=str_replace("/", DIRECTORY_SEPARATOR, $file_sub_dir);
-            $file_sub_dir=str_replace(Gc::$nav_root_path, "", $file_sub_dir);
-            $file_sub_dir=str_replace(DIRECTORY_SEPARATOR, "/", $file_sub_dir);
-            Gc::$url_base=str_replace(strtolower($file_sub_dir), "", strtolower(Gc::$url_base));
-            if (empty(Gc::$attachment_url)){
-                Gc::$attachment_url=Gc::$url_base;
-                $same_part=explode(DIRECTORY_SEPARATOR,Gc::$nav_root_path);
-                if ($same_part&&(count($same_part)>2)){
-                    $same_part=$same_part[count($same_part)-2];
-                    if (strpos(strtolower(Gc::$attachment_url),"/".strtolower($same_part)."/")!== false) {
-                        Gc::$attachment_url=substr(Gc::$attachment_url,0,(strrpos(Gc::$attachment_url,$same_part."/")+strlen($same_part)+1))."attachment/";
-                    }else{
-                        $parse_url=parse_url(Gc::$attachment_url);
-                        Gc::$attachment_url=$parse_url["scheme"]."://".$parse_url["host"];
-                        if (!empty($parse_url["port"]))  Gc::$attachment_url.=":".$parse_url["port"];
-                        Gc::$attachment_url.="/attachment/";
-                    }
-                }
-            }
-            if (empty(Gc::$upload_url)){
-                Gc::$upload_url=Gc::$url_base;
-                $same_part=explode(DIRECTORY_SEPARATOR,Gc::$nav_root_path);
-                if ($same_part&&(count($same_part)>2)){
-                    $same_part=$same_part[count($same_part)-2];
-                    if (strpos(strtolower(Gc::$upload_url),"/".strtolower($same_part)."/")!== false) {
-                        Gc::$upload_url=substr(Gc::$upload_url,0,(strrpos(Gc::$upload_url,$same_part."/")+strlen($same_part)+1))."upload/";
-                    }else{
-                        $parse_url=parse_url(Gc::$upload_url);
-                        Gc::$upload_url=$parse_url["scheme"]."://".$parse_url["host"];
-                        if (!empty($parse_url["port"]))  Gc::$upload_url.=":".$parse_url["port"];
-                        Gc::$upload_url.="/upload/";
-                    }
+            $baseurl .= ($baseDir == '\\' ? '' : $baseDir);
+            if (strpos(strrev($baseurl), "/") !== 0) $baseurl .= '/';
+            $file_sub_dir = str_replace(Gc::$nav_root_path, "", getcwd() . DS);
+            $file_sub_dir = str_replace(DS, "/", $file_sub_dir);
+            Gc::$url_base = str_replace(strtolower($file_sub_dir), "", strtolower($baseurl));
+        }
+        if (empty(Gc::$upload_url)){
+            Gc::$upload_url=Gc::$url_base;
+            $same_part=explode(DS,Gc::$nav_root_path);
+            if ($same_part&&(count($same_part)>2)){
+                $same_part=$same_part[count($same_part)-2];
+                if (strpos(strtolower(Gc::$upload_url),"/".strtolower($same_part)."/")!== false) {
+                    Gc::$upload_url=substr(Gc::$upload_url,0,(strrpos(Gc::$upload_url,$same_part."/")+strlen($same_part)+1))."upload/";
+                }else{
+                    $parse_url=parse_url(Gc::$upload_url);
+                    Gc::$upload_url=$parse_url["scheme"]."://".$parse_url["host"];
+                    if (!empty($parse_url["port"]))  Gc::$upload_url.=":".$parse_url["port"];
+                    Gc::$upload_url.="/upload/";
                 }
             }
         }
+        if (empty(Gc::$attachment_url)) Gc::$attachment_url = Gc::$upload_url."attachment/";
+
     }
     //</editor-fold>
 }

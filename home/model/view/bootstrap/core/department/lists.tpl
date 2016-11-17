@@ -22,11 +22,14 @@
             <td class="content">{$department.actualexpenses}</td>
             <td class="content">{$department.estsalary}</td>
             <td class="content">{$department.actualsalary}</td>
-            <td class="btnCol"><my:a href="{$url_base}index.php?go=model.department.view&id={$department.department_id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.department.edit&id={$department.department_id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.department.delete&id={$department.department_id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
+            <td class="btnCol"><my:a href="{$url_base}index.php?go=model.department.view&amp;id={$department.department_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.department.edit&amp;id={$department.department_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.department.delete&amp;id={$department.department_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
         </tr>
         {/foreach}
     </table>
-    &nbsp;&nbsp;<my:page src='{$url_base}index.php?go=model.department.lists' /><br/>
-    <div align="center"><my:a href='{$url_base}index.php?go=model.department.edit&pageNo={$smarty.get.pageNo|default:"1"}'>新建</my:a>|<my:a href='{$url_base}index.php?go=model.index.index'>返回首页</my:a></div>
+
+    <div class="footer" align="center">
+        <div><my:page src='{$url_base}index.php?go=model.department.lists' /></div>
+        <my:a href='{$url_base}index.php?go=model.department.edit&amp;pageNo={$smarty.get.pageNo|default:"1"}'>新建</my:a>|<my:a href='{$url_base}index.php?go=model.index.index'>返回首页</my:a>
+    </div>
 </div>
 {/block}

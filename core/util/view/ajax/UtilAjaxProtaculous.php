@@ -15,8 +15,8 @@ class UtilAjaxProtaculous extends UtilAjax implements IUtilAjax
      * @param string $version javascript框架的版本号
      * @param ViewObject $viewObject 表示层显示对象,只在Web框架中使用,一般结合loadJsReady使用
      */
-    public static function load($version="",$viewObject=null) 
-    {        
+    public static function load($version="",$viewObject=null)
+    {
         self::loadAjaxJs(EnumJsFramework::JS_FW_PROTOTYPE,$version,$viewObject);
         self::loadAjaxJs(EnumJsFramework::JS_FW_SCRIPTACULOUS,$version,$viewObject);
     }
@@ -32,16 +32,16 @@ class UtilAjaxProtaculous extends UtilAjax implements IUtilAjax
      * @return 发送Ajax请求的语句
      */
     public static function ajaxRequstStatement($url,$dataArray,$method,$response_type=EnumResponseType::XML,$callback=null)
-    {        
-        $result="";  
-        $result.= "<script type='text/javascript'>"; 
-        //<editor-fold defaultstate="collapsed" desc="Protaculous">   
-        $result.="";                
-        //</editor-fold>  
-        $result.= "</script>";           
+    {
+        $result="";
+        $result.= "<script type='text/javascript'>";
+        //<editor-fold defaultstate="collapsed" desc="Protaculous">
+        $result.="";
+        //</editor-fold>
+        $result.= "</script>";
         return $result;
-    }    
-    
+    }
+
     /**
      * 生成Javascript的回调函数
      * @todo
@@ -51,15 +51,15 @@ class UtilAjaxProtaculous extends UtilAjax implements IUtilAjax
      * @return string 回调函数
      */
     public static function callbackForJsFramework($local_service_flag,$response_type=EnumResponseType::XML)
-    {  
+    {
         $class_name=str_replace("RO","",$local_service_flag);
-        
+
         if (!self::$IsHtmlBody){
-            echo "<body><h1 id='object_name'></h1><ol id='properties'></ol></body>\r\n";  
+            echo "<body><h1 id='object_name'></h1><ol id='properties'></ol></body>\r\n";
             self::$IsHtmlBody=true;
-        } 
+        }
         return $result;
-    }    
+    }
 }
 
 ?>

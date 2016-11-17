@@ -6,8 +6,8 @@
     <link rel="icon" href="favicon.ico" mce_href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="{$template_url}resources/css/public.css" />
     <link rel="icon" href="favicon.ico" mce_href="favicon.ico" type="image/x-icon">
-    <script type="text/javascript" src="{$url_base}common/js/ajax/jquery/jquery-1.11.0.js"></script>
-    {*<script src="{$url_base}common/js/ajax/jquery/jquery-1.11.0.min.js"></script>  *}
+    <script type="text/javascript" src="{$url_base}misc/js/ajax/jquery/jquery-1.11.0.js"></script>
+    {*<script src="{$url_base}misc/js/ajax/jquery/jquery-1.11.0.min.js"></script>  *}
     <script type="text/javascript" src="{$template_url}js/public.js"></script>
 {$viewObject->css_ready|default:""}
 {$viewObject->js_ready|default:""}

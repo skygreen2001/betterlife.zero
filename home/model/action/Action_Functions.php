@@ -14,14 +14,15 @@ class Action_Functions extends ActionModel
      */
     public function lists()
     {
-        if ($this->isDataHave(UtilPage::$linkUrl_pageFlag)){
-            $nowpage=$this->data[UtilPage::$linkUrl_pageFlag];
+        if ($this->isDataHave(TagPageService::$linkUrl_pageFlag)){
+            $nowpage=$this->data[TagPageService::$linkUrl_pageFlag];
         }else{
             $nowpage=1;
         }
         $count=Functions::count();
         $this->view->countFunctionss=$count;
-        if($count>0){            $bb_page=UtilPage::init($nowpage,$count);
+        if($count>0){
+            $bb_page=TagPageService::init($nowpage,$count);
             $functionss = Functions::queryPage($bb_page->getStartPoint(),$bb_page->getEndPoint());
             $this->view->set("functionss",$functionss);
         }

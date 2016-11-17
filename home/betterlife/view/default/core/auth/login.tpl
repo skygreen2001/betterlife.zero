@@ -12,5 +12,5 @@
         </form>
         <my:a href="{$url_base}index.php?go={$appName}.auth.register">注册</my:a>
     </div>
-    <div align="center">[测试帐户]用户名:admin,密码:admin<br/>[测试帐户]用户名:china,密码:iloveu</div>
+    <div><div style="width:50%; margin:0 auto;" align="left">[测试帐户]用户名:admin,密码:admin<br/>[测试帐户]用户名:china,密码:iloveu</div></div>
 {/block}

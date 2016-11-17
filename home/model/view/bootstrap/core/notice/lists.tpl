@@ -16,11 +16,14 @@
             <td class="content">{$notice.noticeType}</td>
             <td class="content">{$notice.title}</td>
             <td class="content">{$notice.notice_content}</td>
-            <td class="btnCol"><my:a href="{$url_base}index.php?go=model.notice.view&id={$notice.notice_id}&pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.notice.edit&id={$notice.notice_id}&pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.notice.delete&id={$notice.notice_id}&pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
+            <td class="btnCol"><my:a href="{$url_base}index.php?go=model.notice.view&amp;id={$notice.notice_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">查看</my:a>|<my:a href="{$url_base}index.php?go=model.notice.edit&amp;id={$notice.notice_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">修改</my:a>|<my:a href="{$url_base}index.php?go=model.notice.delete&amp;id={$notice.notice_id}&amp;pageNo={$smarty.get.pageNo|default:"1"}">删除</my:a></td>
         </tr>
         {/foreach}
     </table>
-    &nbsp;&nbsp;<my:page src='{$url_base}index.php?go=model.notice.lists' /><br/>
-    <div align="center"><my:a href='{$url_base}index.php?go=model.notice.edit&pageNo={$smarty.get.pageNo|default:"1"}'>新建</my:a>|<my:a href='{$url_base}index.php?go=model.index.index'>返回首页</my:a></div>
+
+    <div class="footer" align="center">
+        <div><my:page src='{$url_base}index.php?go=model.notice.lists' /></div>
+        <my:a href='{$url_base}index.php?go=model.notice.edit&amp;pageNo={$smarty.get.pageNo|default:"1"}'>新建</my:a>|<my:a href='{$url_base}index.php?go=model.index.index'>返回首页</my:a>
+    </div>
 </div>
 {/block}

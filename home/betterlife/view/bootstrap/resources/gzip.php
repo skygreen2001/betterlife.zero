@@ -28,8 +28,8 @@ if (isset ($jsFile)){
     if (!endWith($jsFile, ".js"))return;
     header("Content-type: text/javascript; charset: UTF-8");
     if (EnumJsFramework::isEnumValue($group)) {
-        $ajax_root=Gc::$nav_root_path."common".DS."js".DS."ajax".DS;
-        $jsFile=str_replace("/", DIRECTORY_SEPARATOR, $jsFile);
+        $ajax_root=Gc::$nav_root_path."misc".DS."js".DS."ajax".DS;
+        $jsFile=str_replace("/", DS, $jsFile);
         switch ($group){
             case EnumJsFramework::JS_FW_JQUERY:
             case EnumJsFramework::JS_FW_MOOTOOLS:
@@ -40,15 +40,15 @@ if (isset ($jsFile)){
             case EnumJsFramework::JS_FW_DOJO:
             case EnumJsFramework::JS_FW_YUI:
             case EnumJsFramework::JS_FW_SCRIPTACULOUS:
-                include($ajax_root.$group.DS.$group.".js");
+                include($ajax_root . $group . DS . $group.".js");
                 break;
             case EnumJsFramework::JS_FW_EXTJS:
                 if ($version<4){
-                    $ext_root=$ajax_root."ext".DS;
+                    $ext_root = $ajax_root . "ext" . DS;
                 }else{
-                    $ext_root=$ajax_root."ext4".DS;
+                    $ext_root = $ajax_root . "ext4" . DS;
                 }
-                $js_header=$ext_root.$jsFile;
+                $js_header = $ext_root . $jsFile;
                 include($js_header);
                 break;
         }
@@ -62,7 +62,7 @@ if (isset ($jsFile)){
             }else{
                 $jsFile=$_SERVER["DOCUMENT_ROOT"]."/".$jsFile;
             }
-            $jsFile=str_replace("/",DIRECTORY_SEPARATOR,$jsFile);
+            $jsFile=str_replace("/",DS,$jsFile);
         }
         include($jsFile);
     }
@@ -73,8 +73,8 @@ if (isset ($cssFile)){
     if (!endWith($cssFile, ".css"))return;
     header("Content-type: text/css; charset: UTF-8");
     if (EnumJsFramework::isEnumValue($group)) {
-        $ajax_root=Gc::$nav_root_path."common".DS."js".DS."ajax".DS;
-        $cssFile=str_replace("/", DIRECTORY_SEPARATOR, $cssFile);
+        $ajax_root=Gc::$nav_root_path."misc".DS."js".DS."ajax".DS;
+        $cssFile=str_replace("/", DS, $cssFile);
         switch ($group){
             case EnumJsFramework::JS_FW_EXTJS:
                 if ($version<4){
@@ -95,7 +95,7 @@ if (isset ($cssFile)){
             }else{
                 $cssFile=$_SERVER["DOCUMENT_ROOT"]."/".$cssFile;
             }
-            $cssFile=str_replace("/",DIRECTORY_SEPARATOR,$cssFile);
+            $cssFile=str_replace("/",DS,$cssFile);
         }
         include($cssFile);
     }

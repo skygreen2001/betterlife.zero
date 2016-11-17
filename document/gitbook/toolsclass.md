@@ -14,7 +14,6 @@
         -.UtilFileSystem.php:文件目录操作
         -.UtilImage.php:图像处理
         -.UtilNumber.php:数字处理
-        -.UtilPage.php:分页［与自定义标签配合使用］
         -.UtilPinyin.php:中文转换成拼音工具类
         -.UtilObject.php:对象类管理
         -.UtilReflection.php:类反射注入

@@ -1,15 +1,23 @@
 {extends file="$templateDir/layout/normal/layout.tpl"}
 {block name=body}
- <div class="block">
-    <div><h1>{if $usernotice}编辑{else}新增{/if}用户收到通知</h1><p><font color="red">{$message|default:''}</font></p></div>
-    <form name="usernoticeForm" method="post"><input type="hidden" name="usernotice_id" value="{$usernotice.usernotice_id}"/>
-    <table class="viewdoblock">
-        {if $usernotice}<tr class="entry"><th class="head">标识</th><td class="content">{$usernotice.usernotice_id}</td></tr>{/if}
+     <div class="block">
+        <div><h1>{if $usernotice}编辑{else}新增{/if}用户收到通知</h1><p><font color="red">{$message|default:''}</font></p></div>
+        <form name="usernoticeForm" method="post"><input type="hidden" name="usernotice_id" value="{$usernotice.usernotice_id}"/>
+        <table class="viewdoblock">
+        {if $usernotice}
+        <tr class="entry"><th class="head">标识</th><td class="content">{$usernotice.usernotice_id}</td></tr>
+        {/if}
         <tr class="entry"><th class="head">用户编号</th><td class="content"><input type="text" class="edit" name="user_id" value="{$usernotice.user_id}"/></td></tr>
         <tr class="entry"><th class="head">通知编号</th><td class="content"><input type="text" class="edit" name="notice_id" value="{$usernotice.notice_id}"/></td></tr>
-        <tr class="entry"><td class="content" colspan="2" align="center"><input type="submit" value="提交" class="btnSubmit" /></td></tr>
-    </table>
-    </form>
-    <div align="center"><my:a href='{$url_base}index.php?go=model.usernotice.lists&pageNo={$smarty.get.pageNo|default:"1"}'>返回列表</my:a>{if $usernotice}|<my:a href='{$url_base}index.php?go=model.usernotice.view&id={$usernotice.id}&pageNo={$smarty.get.pageNo|default:"1"}'>查看用户收到通知</my:a>{/if}</div>
-</div>
+            <tr class="entry"><td class="content" colspan="2" align="center"><input type="submit" value="提交" class="btnSubmit" /></td></tr>
+        </table>
+        </form>
+        <div class="footer" align="center">
+            <my:a href='{$url_base}index.php?go=model.usernotice.lists&amp;pageNo={$smarty.get.pageNo|default:"1"}'>返回列表</my:a>
+            {if $usernotice}
+            |<my:a href='{$url_base}index.php?go=model.usernotice.view&amp;id={$usernotice.id}&amp;pageNo={$smarty.get.pageNo|default:"1"}'>查看用户收到通知</my:a>
+            {/if}
+        </div>
+    </div>
+
 {/block}

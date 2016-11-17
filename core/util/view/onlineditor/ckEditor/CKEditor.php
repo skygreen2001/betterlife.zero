@@ -98,18 +98,18 @@ class CKEditor
             $this->basePath = $basePath;
         }
     }
-                           
+
     /**
-     * 加载CKEditor JS库   
+     * 加载CKEditor JS库
      */
     public function load()
     {
         $out="";
         if (!$this->initialized) {
             $out .= $this->init();
-        }    
-        return $out;  
-    } 
+        }
+        return $out;
+    }
 
     /**
      * Creates a %CKEditor instance.
@@ -523,7 +523,7 @@ class CKEditor
         //$documentRoot = substr($realPath, 0, strlen($realPath) - strlen($selfPath));
         //$fileUrl = substr($file, strlen($documentRoot));
         //$ckeditorUrl = str_replace("CKEditor.php", "", $fileUrl);
-        $ckeditorUrl=Gc::$url_base."common/js/onlineditor/ckeditor/";
+        $ckeditorUrl=Gc::$url_base."misc/js/onlineditor/ckeditor/";
         return $ckeditorUrl;
     }
 
