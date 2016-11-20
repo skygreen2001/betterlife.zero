@@ -2,7 +2,7 @@ machine:
   timezone:
     Asia/Shanghai
   php:
-    version: 5.4.5
+    version: 5.4.21
   hosts:
     app.test  : 127.0.0.1
     circlehost: 127.0.0.1
