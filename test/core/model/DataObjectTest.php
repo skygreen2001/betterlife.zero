@@ -26,7 +26,7 @@ class DataObjectTest extends PHPUnit_Framework_TestCase {
      * This method is called after a test is executed.
      */
     protected function tearDown() {
-        
+
     }
     /**
      * Implement testSetCommitTime().
@@ -36,7 +36,7 @@ class DataObjectTest extends PHPUnit_Framework_TestCase {
          $id=$this->user->getId();
          echo $id;
     }
-    
+
     /**
      * Implement testSetCommitTime().
      */
@@ -48,14 +48,14 @@ class DataObjectTest extends PHPUnit_Framework_TestCase {
      * Implement testIsNeedUpdateTime().
      */
     public function testIsNeedCommitTime() {
-        $this->assertEquals(true, $this->user->isNeedCommitTime());
+        $this->assertEquals(null, $this->user->isNeedCommitTime());
     }
-    
+
     /**
      * Implement testIsNeedUpdateTime().
      */
     public function testIsNeedUpdateTime() {
-        $this->assertEquals(false, $this->user->isNeedUpdateTime());
+        $this->assertEquals(null, $this->user->isNeedUpdateTime());
     }
 
     /**

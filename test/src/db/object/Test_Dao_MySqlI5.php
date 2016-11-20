@@ -10,6 +10,8 @@ class Test_Dao_MySqlI5 extends Test_Parent {
     const DELETE_FAIL="删除数据失败！";
     const UPDATE_FAIL="修改数据失败！";
     private $id=12;
+    private $username="test";
+
     /**
      * @var GenderFilter
      */
@@ -39,8 +41,8 @@ class Test_Dao_MySqlI5 extends Test_Parent {
         $joe=new User();
 //        $joe->setId($this->id);
 //        $joe->setName("abc");
-        $joe["name"]="betterlife";
-        $joe->setDepartmentId(5);
+        $joe["username"]=$username;
+        $joe->setEmail("skygreen2001@gmail.com");
         $result= $this->sharedFixture->save($joe);
         $this->assertEquals($result,$this->id,self::INSERT_FAIL);
     }
@@ -53,18 +55,18 @@ class Test_Dao_MySqlI5 extends Test_Parent {
     }
 
     public function testGet_one() {
-        $joe=$this->sharedFixture->get_one(new User(), "name='test'");
+        $joe=$this->sharedFixture->get_one(new User(), "username='$username'");
         print_r($joe);
     }
 
     public function testSqlQuery() {
-        $joe=$this->sharedFixture->sqlExecute("select * from apts_user_user where name='judy'","User");
+        $joe=$this->sharedFixture->sqlExecute("select * from bb_user_user where username='$username'","User");
         print_r($joe);
     }
 
     public function testGet() {
         $joe=new User();
-        $result= $this->sharedFixture->get($joe,"departmentId=5");
+        $result= $this->sharedFixture->get($joe,"id=3");
         print_r($result);
     }
 
@@ -79,8 +81,7 @@ class Test_Dao_MySqlI5 extends Test_Parent {
         $joe=new User();
         $joe->setId($this->id);
 //        $joe->setName("zhangwenyan");
-        $joe["name"]="onlyyou";
-        $joe->setDepartmentId(7);
+        $joe["username"]="onlyyou";
         $joe->setPassword(md5("test"));
         $result= $this->sharedFixture->update($joe);
         $this->assertTrue($result,self::UPDATE_FAIL);
@@ -88,7 +89,7 @@ class Test_Dao_MySqlI5 extends Test_Parent {
     }
     public function testCount() {
         $joe=new User();
-        $result= $this->sharedFixture->count($joe,"name='joy'");
+        $result= $this->sharedFixture->count($joe,"username='$username'");
         echo($result);
     }
     public function testQueryPage() {

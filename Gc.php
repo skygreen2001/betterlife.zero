@@ -341,23 +341,24 @@ class Gc
             $file_sub_dir = str_replace(DS, "/", $file_sub_dir);
             Gc::$url_base = str_replace(strtolower($file_sub_dir), "", strtolower($baseurl));
         }
-        if (empty(Gc::$upload_url)){
-            Gc::$upload_url=Gc::$url_base;
-            $same_part=explode(DS,Gc::$nav_root_path);
-            if ($same_part&&(count($same_part)>2)){
-                $same_part=$same_part[count($same_part)-2];
-                if (strpos(strtolower(Gc::$upload_url),"/".strtolower($same_part)."/")!== false) {
-                    Gc::$upload_url=substr(Gc::$upload_url,0,(strrpos(Gc::$upload_url,$same_part."/")+strlen($same_part)+1))."upload/";
+        if (empty(Gc::$upload_url)) {
+            Gc::$upload_url = Gc::$url_base;
+            $same_part = explode(DS,Gc::$nav_root_path);
+            if ($same_part && (count($same_part) > 2)) {
+                $same_part = $same_part[count($same_part)-2];
+                if (strpos(strtolower(Gc::$upload_url), "/" . strtolower($same_part)."/") !== false) {
+                    Gc::$upload_url = substr(Gc::$upload_url, 0, (strrpos(Gc::$upload_url, $same_part . "/") + strlen($same_part) + 1)) . "upload/";
                 }else{
-                    $parse_url=parse_url(Gc::$upload_url);
-                    Gc::$upload_url=$parse_url["scheme"]."://".$parse_url["host"];
-                    if (!empty($parse_url["port"]))  Gc::$upload_url.=":".$parse_url["port"];
-                    Gc::$upload_url.="/upload/";
+                    $parse_url = parse_url(Gc::$upload_url);
+                    if(array_key_exists("scheme", $parse_url)) {
+                        if ($parse_url) Gc::$upload_url = $parse_url["scheme"] . "://" . $parse_url["host"];
+                        if (!empty($parse_url["port"])) Gc::$upload_url .= ":" . $parse_url["port"];
+                    }
+                    Gc::$upload_url .= "/upload/";
                 }
             }
         }
-        if (empty(Gc::$attachment_url)) Gc::$attachment_url = Gc::$upload_url."attachment/";
-
+        if (empty(Gc::$attachment_url)) Gc::$attachment_url = Gc::$upload_url . 'attachment/';
     }
     //</editor-fold>
 }
