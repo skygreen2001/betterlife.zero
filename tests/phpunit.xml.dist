@@ -1,0 +1,16 @@
+<phpunit bootstrap="./Bootstrap.php" colors="true">
+    <testsuites>
+        <testsuite name="Betterlife Test Suite">
+            <directory>./core</directory>
+            <directory>./src</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory>../core/</directory>
+            <exclude>
+                <directory>../install/</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>

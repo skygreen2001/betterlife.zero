@@ -1,5 +1,5 @@
 <?php
-require_once(dirname(__FILE__)."/../init.php");
+// require_once(dirname(__FILE__) . "/../init.php");
 require_once('PHPUnit/Framework.php');
 require_once('PHPUnit/TextUI/TestRunner.php');
 
@@ -17,4 +17,3 @@ class Test_Parent extends PHPUnit_Framework_TestCase {
         $this->assertTrue(true,self::INIT);
     }
 }
-?>

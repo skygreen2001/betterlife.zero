@@ -1,6 +1,6 @@
 <?php
 //加载枚举类型定义
-class_exists("Enum")||require(dirname(__FILE__)."/core/Enum.php");
+class_exists("Enum") || require(__DIR__ . "/core/Enum.php");
 
 /**
  +-----------------------------------<br/>
