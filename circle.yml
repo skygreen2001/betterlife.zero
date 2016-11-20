@@ -1,0 +1,14 @@
+machine:
+  timezone:
+    Asia/Shanghai
+  php:
+    version: 5.4.5
+  hosts:
+    app.test  : 127.0.0.1
+    circlehost: 127.0.0.1
+  environment:
+    CIRCLE_ENV: test
+    DATABASE_URL: mysql://root:@127.0.0.1:3306/betterlife
+test:
+  override:
+    - phpunit tests
