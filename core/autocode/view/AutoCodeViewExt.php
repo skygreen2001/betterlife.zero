@@ -192,7 +192,8 @@ class AutoCodeViewExt extends AutoCode
 					foreach ($showClasses as $key=>$value) {
 						$key_i=$key;
 						$key_i{0}=strtolower($key_i{0});
-						$classname=$key;
+						$classname = $key;
+            $tablename = self::getTablename($key);
 
 						$fieldInfo=self::$fieldInfos[self::getTablename($key)];
 						if (array_key_exists("parent_id",$fieldInfo)){
