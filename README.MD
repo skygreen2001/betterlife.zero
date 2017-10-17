@@ -1,5 +1,10 @@
-# Betterlife
-betterlife core with minimize project size
+# betterlife
+
+最新代码已经移植到 [betterlife 2](https://github.com/skygreen2001/betterlife.core)
+
+符合中国开发者思维方式的快速开发的框架，设计初衷快捷、简单、实用。
+
+它包括一套实用的通用模版、后台管理模版、手机模版，并根据项目的需要，按照数据库的设计一键生成定制化的代码框架。
 
 ## 安装说明
     * **安装NodeJs**
