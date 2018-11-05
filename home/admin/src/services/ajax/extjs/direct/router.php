@@ -210,6 +210,8 @@ $remoteCall=new RemoteServiceCall();
 $post_data=null;
 if (isset($HTTP_RAW_POST_DATA)){
     $post_data=$HTTP_RAW_POST_DATA;
+} else {
+  $post_data = file_get_contents("php://input");
 }
 $remoteCall->initData($post_data);
 $remoteCall->request();
