@@ -46,10 +46,14 @@ class RemoteServiceCall
     public function initData($post_data)
     {
         //$post_data = file_get_contents("php://input");
-        //$post_data='{"url":"http:\/\/127.0.0.1\/betterlife\/core\/util\/view\/ajax\/extjs\/direct\/router.php","type":"remoting","actions":{"MemberService":[{"name":"doSelect","len":2,"formHandler":true},{"name":"getInfo","len":1},{"name":"getApp","len":1}]}}';
+        //$post_data='{"url":"http:\/\/localhost\/enjoyoung\/core\/util\/view\/ajax\/extjs\/direct\/router.php","type":"remoting","actions":{"MemberService":[{"name":"doSelect","len":2,"formHandler":true},{"name":"getInfo","len":1},{"name":"getApp","len":1}]}}';
         if (isset($post_data)) {
             header('Content-Type:text/javascript;charset=UTF-8');
-            $data = json_decode($post_data);
+            $data = @json_decode($post_data);
+            if (!$data){
+                $str_json = urlparamToJsonString($post_data);
+                if ( $str_json ) $data = @json_decode($str_json);
+            }
         } else if (isset($_POST['extAction'])) { // form post
             $this->isForm = true;
             $this->isUpload = $_POST['extUpload'] == 'true';
@@ -120,27 +124,27 @@ class RemoteServiceCall
      */
     private function doRpc($cdata) {
         try {
-            //$cdata->action="MemberService";
+            if ( $cdata && !$cdata->action ) $cdata->action = $cdata->extAction;
             if (!isset(self::$configApi[$cdata->action])) {
                 throw new Exception('调用未定义的Service: ' . $cdata->action);
             }
-
             $action = $cdata->action;
+
             $a = self::$configApi[$action];
 
             if (array_key_exists("before",$a))$this->doAroundCalls($a['before'], $cdata);
 
             //$cdata->method="doSelect";
             //$cdata->tid=100;
-
+            if ( $cdata && !$cdata->method ) $cdata->method = $cdata->extMethod;
             $method = $cdata->method;
-
             $mdef = $a['methods'][$method];
             if (!$mdef) {
                 throw new Exception("在Service里 $action 调用未定义的方法: $method ");
             }
             if (array_key_exists("before",$mdef))$this->doAroundCalls($mdef['before'], $cdata);
 
+            if ( $cdata && !$cdata->tid ) $cdata->tid = $cdata->extTID;
             $r = array(
                 'type' => 'rpc',
                 'tid' => $cdata->tid,
@@ -148,10 +152,12 @@ class RemoteServiceCall
                 'method' => $method
             );
             $o = new $action();
-            $params = isset($cdata->data) && is_array($cdata->data) ? $cdata->data : array();
+
+            $params = isset($cdata->data) && is_array($cdata->data) ? $cdata->data : $cdata;
+            if ( !$params ) $params = array();
 
             $params=$this->clearValuelessData($params);
-
+            if ( $params && is_object($params) ) $params = array((array) $params);
             $r['result'] = call_user_func_array(array($o, $method), $params);
 
             if (array_key_exists("after",$mdef))$this->doAroundCalls($mdef['after'], $cdata, $r);
@@ -179,6 +185,12 @@ class RemoteServiceCall
                 unset($params[0]["extType"]);
                 unset($params[0]["extUpload"]);
             }
+        }else{
+            unset($params->extAction);
+            unset($params->extMethod);
+            unset($params->extTID);
+            unset($params->extType);
+            unset($params->extUpload);
         }
         return $params;
     }
