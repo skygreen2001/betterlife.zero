@@ -21,7 +21,7 @@ DataObjectSpec::init();
  * @package core.model
  * @author skygreen
  */
-abstract class DataObject extends Object implements ArrayAccess
+abstract class DataObject extends BBObject implements ArrayAccess
 {
 	//<editor-fold defaultstate="collapsed" desc="定义部分">
 	/**

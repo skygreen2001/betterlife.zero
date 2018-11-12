@@ -8,7 +8,7 @@ Manager_Communication::init();
  * @package core.model
  * @author skygreen
  */
-class RemoteObject extends Object
+class RemoteObject extends BBObject
 {
     /**
      * 第三方进行通信的服务器地址

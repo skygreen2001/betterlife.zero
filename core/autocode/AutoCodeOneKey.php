@@ -81,7 +81,7 @@ class AutoCodeOneKey extends AutoCode
     /**
      * 用户输入需求
      */
-    public static function UserInput()
+    public static function UserInput($title = "", $inputArr = null, $default_value = "", $more_content = "")
     {
         parent::UserInput("一键生成前后台所有模板文件");
     }

@@ -94,7 +94,7 @@ class UtilFileSystem extends Util
         }else{
             LogMe::log("创建文件:".$filename."失败！");
         }
-        fclose($cFile);
+        if ( $cFile ) fclose($cFile);
     }
 
     /**

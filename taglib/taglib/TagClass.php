@@ -2,7 +2,7 @@
 /**
  * The Parent Class of all tags
  *
- * @author zyp
+ * @author skygreen <skygreen2001@gmail.com>
  */
 abstract class TagClass {
     const PREFIX="my";// tag prefix name
@@ -20,9 +20,9 @@ abstract class TagClass {
         $this->setHtml();
     }
 
-/**
- * Return the replace content by the assigned tag define.
- */
+    /**
+     * Return the replace content by the assigned tag define.
+     */
     abstract function setHtml();
 
     public function getHtml(){
@@ -52,11 +52,11 @@ abstract class TagClass {
         $this->attributesDesc=$attributesDesc;
     }
 
-/**
- *
- * @param $tagStr
- * @return take the attribute from tag
- */
+    /**
+     *
+     * @param $tagStr
+     * @return take the attribute from tag
+     */
     final function getAttributesFormTag($tagStr){
         $attributes=array();
         preg_match_all('/\b(\w+)\=(\\\\"([^\\\"]+)\\\"|\\\\\'([^\\\\\']+)\\\\\')/is',$tagStr,$split);
@@ -64,14 +64,14 @@ abstract class TagClass {
         foreach($split[0] as $str){
             $tmpArr=preg_split('/\=(?=\\\"|\\\\\')|\=(?=\"|\')/',$str);
             //              $tmpArr=preg_split('/\=(?=\"|\')/',$str);
-            $attributes[$tmpArr[0]]=ereg_replace("\\\\\'","",ereg_replace("\\\\\"","",$tmpArr[1]));
+            $attributes[$tmpArr[0]]=preg_replace('/\\\\\'/i','',preg_replace('/\\\\\"/i','',$tmpArr[1]));
             //              $attributes[$tmpArr[0]]=$tmpArr[1];
         }
 
         preg_match_all('/\b(\w+)\=(\"([^\"]+)\"|\'([^\']+)\')/is',$tagStr,$split);
         foreach($split[0] as $str){
             $tmpArr=preg_split('/\=(?=\"|\')|\=(?=\"|\')/',$str);
-            $attributes[$tmpArr[0]]=ereg_replace("\'","",ereg_replace("\"","",$tmpArr[1]));
+            $attributes[$tmpArr[0]]=preg_replace("/\'/i",'',preg_replace("/\"/i",'',$tmpArr[1]));
         }
         return $attributes;
     }

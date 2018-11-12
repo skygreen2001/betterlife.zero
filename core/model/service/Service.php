@@ -3,12 +3,12 @@
  +--------------------------------------------------<br/>
  * 所有Service的父类<br/>
  +---------------------------------------------------
- * @category betterlife  
+ * @category betterlife
  * @package core.model
  * @subpackage service
- * @author skygreen 
+ * @author skygreen
  */
-class Service extends Object {
+class Service extends BBObject {
     /**
      * @var IDao 当前使用的数据库调用对象
      */
@@ -19,7 +19,7 @@ class Service extends Object {
         }
         return self::$currentDao;
     }
-    
+
     /**
      * 获取数据对象属性映射表字段意义
      * @param string $dataobject 当前数据对象
@@ -28,19 +28,19 @@ class Service extends Object {
      */
     public static function fieldsMean($tablename)
     {
-       return Manager_Db::newInstance()->dbinfo()->fieldMapNameList($tablename);  
-    }    
-    
+       return Manager_Db::newInstance()->dbinfo()->fieldMapNameList($tablename);
+    }
+
     /**
      * 转换成数组
-     * @return int 
+     * @return int
      */
-    public static function toArray(){        
+    public static function toArray(){
         $servicename=get_called_class();
         $result=null;
         $services=array();
         if (class_exists($servicename)){
-           $service=new ReflectionClass($servicename);               
+           $service=new ReflectionClass($servicename);
            $methods=$service->getMethods();
            $methodsArr=array();
            foreach ($methods as $method) {
@@ -69,6 +69,6 @@ class Service extends Object {
         }
         //print_r($result);
         return $result;
-    }    
+    }
 }
 ?>

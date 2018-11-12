@@ -6,7 +6,7 @@
  * @subpackage dataobject
  * @author skygreen
  */
-class DataObjectRelation extends Object
+class DataObjectRelation extends BBObject
 {
 	  /**
 	 * 获取多对多关系表名称定义，如无定义，则按默认规则查找指定表。<br/>

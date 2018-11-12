@@ -8,12 +8,12 @@
  * @package core
  * @author skygreen
  */
-class Manager extends Object{     
+class Manager extends BBObject{     
     public function __clone()
     {
         trigger_error('不允许Clone本管理类.', E_USER_ERROR);
     }
- 
+
 }
 
 ?>

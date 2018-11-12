@@ -7,7 +7,7 @@
  * @package module
  * @author zhouyuepu
  */
-class Module_Loader 
+class Module_Loader
 {
     /**
      * @var 加载Module的标识
@@ -57,13 +57,17 @@ class Module_Loader
             $blockAttr=$block[Util::XML_ELEMENT_ATTRIBUTES];
             if (array_key_exists(self::SPEC_OPEN, $blockAttr)){
                 if (strtolower($blockAttr[self::SPEC_OPEN])==self::OPEN_YES){
-                    if(method_exists(self, $blockAttr[self::SPEC_INIT])){
-                        @self::$blockAttr[self::SPEC_INIT]();
-                    }
+                    $init_m = $blockAttr[self::SPEC_INIT];
+                    if ($init_m) self::$init_m();
+                    // if(method_exists(self, $blockAttr[self::SPEC_INIT])){
+                    //     @self::$blockAttr[self::SPEC_INIT]();
+                    // }
                 }
             }else{
-                if(method_exists(self, $blockAttr[self::SPEC_INIT]))
-                    @self::$blockAttr[self::SPEC_INIT]();
+                $init_m = $blockAttr[self::SPEC_INIT];
+                if ($init_m) self::$init_m();
+                // if(method_exists(self, $blockAttr[self::SPEC_INIT]))
+                //     @self::$blockAttr[self::SPEC_INIT]();
             }
         }
     }

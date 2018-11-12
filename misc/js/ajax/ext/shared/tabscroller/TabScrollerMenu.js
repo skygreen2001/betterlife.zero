@@ -7,7 +7,7 @@
 Ext.ns('Ext.ux');
 /**
  * @class Ext.ux.TabScrollerMenu
- * @extends Object 
+ * @extends BBObject 
  * Plugin (ptype = 'tabscrollermenu') for adding a tab scroller menu to tabs.
  * @constructor 
  * @param {Object} config Configuration options

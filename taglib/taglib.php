@@ -2,7 +2,7 @@
 /**
  * Refer:http://bbs.blueidea.com/archiver/tid-2965257.html
  */
-ob_start("render_tag");                      
+ob_start("render_tag");
 /**
  * need handle the tags
  * $buffer = preg_replace_callback('/<fb:(\w+-\w+)((\s+\w+=\\\"\w+\\\"|\s+\w+=\"\w+\"|\s+\w+=\\\\\'\w+\\\\\'|\s+\w+=\'\w+\')*)>(.+?)<\/fb:\1>/is', 'parseTag', $buffer);
@@ -46,28 +46,28 @@ function render_tag($buffer) {
     }
     if (Gc::$is_online_optimize){
         if (contain($result,"<body")){
-           /************************start:整个Html页面去除注释，换行，空格********************/ 
+           /************************start:整个Html页面去除注释，换行，空格********************/
 //            $result=preg_replace("/<\!--(.*?)-->/","",$result);//去掉html里的注释
-//            $result = preg_replace("~>\s+\n~",">",$result);   
+//            $result = preg_replace("~>\s+\n~",">",$result);
 //            $result = preg_replace("~>\s+\r~",">",$result);
-//            $result = preg_replace("~>\s+<~","><",$result);              
-//            $result=str_replace("\r\n","",$result); 
+//            $result = preg_replace("~>\s+<~","><",$result);
+//            $result=str_replace("\r\n","",$result);
            /************************end  :整个Html页面去除注释，换行，空格********************/
            /************************start:Html页面body部分去除注释，换行，空格********************/
             $r_arr=explode("<body",$result);
-            $r_arr[1]=str_replace("\r\n","",$r_arr[1]);      
+            $r_arr[1]=str_replace("\r\n","",$r_arr[1]);
             $r_arr[1]=preg_replace("/<\!--(.*?)-->/","",$r_arr[1]);//去掉html里的注释
-            $r_arr[1] = preg_replace("~>\s+\n~",">",$r_arr[1]);   
+            $r_arr[1] = preg_replace("~>\s+\n~",">",$r_arr[1]);
             $r_arr[1] = preg_replace("~>\s+\r~",">",$r_arr[1]);
-            $r_arr[1] = preg_replace("~>\s+<~","><",$r_arr[1]);                    
-            $result=implode("<body",$r_arr);  
+            $r_arr[1] = preg_replace("~>\s+<~","><",$r_arr[1]);
+            $result=implode("<body",$r_arr);
             if (contain($result,"</html>")){
-                $result=str_replace("</html>","",$result);    
+                $result=str_replace("</html>","",$result);
                 $result.="\r\n</html>";
             }
-           /************************end  :Html页面body部分去除注释，换行，空格********************/  
-        }                                    
-    }    
+           /************************end  :Html页面body部分去除注释，换行，空格********************/
+        }
+    }
     return $result;
 }
 
@@ -87,11 +87,11 @@ function parseTag($matches) {
                 $content=isset($matches[4])?$matches[4]:"";
                 $invokeTag=new TagDemoClass($matches[1],$matches[2],$content);
                 break;
-            case 'page':   
+            case 'page':
                 $content=isset($matches[4])?$matches[4]:"";
                 $invokeTag=new TagPageClass($matches[1],$matches[2],$content);
                 break;
-            case 'a':   
+            case 'a':
                 $content=isset($matches[4])?$matches[4]:"";
                 $invokeTag=new TagHrefClass($matches[1],$matches[2],$content);
                 break;

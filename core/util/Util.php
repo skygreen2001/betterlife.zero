@@ -7,7 +7,7 @@
  * @package util
  * @author zhouyuepu
  */
-class Util extends Object {
+class Util extends BBObject {
     /**
      * xml单个element的属性值们。
      */
@@ -15,11 +15,11 @@ class Util extends Object {
     /**
      * xml单个element的内容。
      */
-    const XML_ELEMENT_TEXT="text";   
+    const XML_ELEMENT_TEXT="text";
 
     /**
      * 垃圾回收，全称为Garbage Collection
-     * @param mixed $value 
+     * @param mixed $value
      */
     public static function gc(&$value){
         $value = null;

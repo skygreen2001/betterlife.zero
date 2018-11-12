@@ -409,7 +409,7 @@ class Cron
  * 任务基础类
  * @author skygreen
  */
-class BaseTask extends Object
+class BaseTask extends BBObject
 {
 	public $_config = null;
 

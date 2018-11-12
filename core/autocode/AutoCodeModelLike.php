@@ -86,7 +86,7 @@ class AutoCodeModelLike extends AutoCode
     /**
      * 用户输入需求
      */
-    public static function UserInput()
+    public static function UserInput($title = "", $inputArr = null, $default_value = "", $more_content = "")
     {
         $default_dir=Gc::$nav_root_path."model".DS;
         self::$save_dir=$default_dir;

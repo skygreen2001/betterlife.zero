@@ -2,7 +2,7 @@
 Ext.getBody().on("contextmenu", Ext.emptyFn, null, {preventDefault: true});
 /**
  * @class Ext.ux.TabCloseMenu
- * @extends Object
+ * @extends BBObject
  * Plugin (ptype = 'tabclosemenu') for adding a close context menu to tabs. Note that the menu respects
  * the closable configuration on the tab. As such, commands like remove others and remove all will not
  * remove items that are not closable.

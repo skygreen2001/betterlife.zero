@@ -132,7 +132,7 @@ class Dal_Pdo extends Dal  implements IDal
 			}
 			$this->stmt=$this->connection->prepare($sql);
 			$this->stmt->execute ();
-			$parts = split(" ",trim($sql));
+			$parts = explode(" ",trim($sql));
 			$type = strtolower($parts[0]);
 			if((Crud_Sql_Update::SQL_KEYWORD_UPDATE==$type)||(Crud_Sql_Delete::SQL_KEYWORD_DELETE==$type)) {
 				return true;

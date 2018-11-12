@@ -53,7 +53,7 @@ class AutoCodePreviewReportLike extends AutoCode
 		self::$bg_action_upload_file=self::$m_bg.DS.AutoCodeAction::$action_dir.DS."Action_Upload.php";
 		self::$bg_manage_service_ext_file=self::$m_bg.DS.self::$dir_src.DS.AutoCodeService::$service_dir.DS.AutoCodeService::$ext_dir.DS."Manager_ExtService.php";
 		self::$bg_service_xml_file=self::$m_bg.DS.self::$dir_src.DS.AutoCodeService::$service_dir.DS."service.config.xml";
-		self::$bg_menu_xml_file=self::$m_bg.DS.self::$dir_src.DS."view".DS."menu".DS."menu.config.xml";
+		self::$bg_menu_xml_file=self::$m_bg.DS.self::$dir_src.DS."view".DS."menu.config.xml";
 		self::$model_index_file=self::$m_model.DS.Config_F::VIEW_VIEW.DS.Gc::$self_theme_dir.DS.Config_F::VIEW_CORE.DS."index".DS."index".Config_F::SUFFIX_FILE_TPL;
 	}
 

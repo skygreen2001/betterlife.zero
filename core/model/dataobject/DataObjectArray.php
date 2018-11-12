@@ -7,7 +7,7 @@
  * @subpackage dataobject
  * @author skygreen
  */
-class DataObjectArray extends Object implements ArrayAccess
+class DataObjectArray extends BBObject implements ArrayAccess
 {
 	//<editor-fold defaultstate="collapsed" desc="魔术方法">
 	/**

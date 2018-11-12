@@ -8,18 +8,18 @@
 * @subpackage base
 * @author skygreen
 */
-class HttpExchangeBase extends Object 
-{   
+class HttpExchangeBase extends BBObject 
+{
     private $timeout = 10;
     private $defaultChunk = 4096;
-    private $http_ver = "1.1";    
+    private $http_ver = "1.1";
     private $proxyHost;
     private $proxyPort;
     private $responseCode;
     private $responseHeader;
     private $response_type;
     private $responseBody;
-    
+
     /**
      +-------------------------------------------<br/>
      * 获取fsocket里的返回内容
@@ -34,7 +34,7 @@ class HttpExchangeBase extends Object
      +-------------------------------------------<br/>
      * @link http://darkend.blog.163.com/blog/static/1756620152011065216996/
      * @param string $content 通过fsocket获取的返回信息包括头信息。
-     * @return string 只有需要的返回内容，无头信息 
+     * @return string 只有需要的返回内容，无头信息
      */
     private function getReturnContent($content){
         if($content&&(strlen($content)>0)){
@@ -45,15 +45,15 @@ class HttpExchangeBase extends Object
                 $content = substr($content, strlen($content) - $length);
             }else{
                 //第一种解决方案
-                $resultArr= stristr($content,"\r\n\r\n"); 
+                $resultArr= stristr($content,"\r\n\r\n");
                 $reult=substr($resultArr,4,strlen($resultArr));
-                return  $reult;                
+                return  $reult;
             }
         }
         return $content;
     }
-    
-    public function HttpExchangeBase($response_type=EnumResponseType::XML){        
+
+    public function HttpExchangeBase($response_type=EnumResponseType::XML){
         $this->responseHeader['Pragma'] = "no-cache";
         $this->responseHeader['Cache-Control'] = "no-cache";
         $this->responseHeader['Connection'] = "close";
@@ -62,10 +62,10 @@ class HttpExchangeBase extends Object
         $this->response_type=$response_type;
         $this->responseHeader['response_type'] =$this->response_type;
     }
-    
+
     /**
     * 发送请求到第三方。
-    * 
+    *
     * @param string $action 请求Action，可以为Post、Get方式。
     * @param string $url
     * @param array $headers 请求头信息
@@ -84,7 +84,7 @@ class HttpExchangeBase extends Object
         if (!empty($headers)){
             $this->responseHeader=$headers;
             $this->responseHeader[response_type] =$this->response_type;
-        }        
+        }
         if ( $data )
         {
             if ( is_array( $data ) )
@@ -92,7 +92,7 @@ class HttpExchangeBase extends Object
                 $data = http_build_query( $data );
             }
             $this->responseHeader['Content-length'] = strlen( $data );
-        }                
+        }
         foreach ($this->responseHeader as $k => $v )
         {
             $out .= $k.":".$v."\r\n";
@@ -197,10 +197,10 @@ class HttpExchangeBase extends Object
             return false;
         }
     }
-    
+
     /**
     * 发送Get请求
-    * 
+    *
     * @param string $url 请求Url
     * @param array $headers 请求头信息。
     * @param mixed $callback 回调函数
@@ -213,7 +213,7 @@ class HttpExchangeBase extends Object
 
     /**
     * 发送Post请求
-    * 
+    *
     * @param string $url 请求Url
     * @param string $data 发送传递的数据
     * @param array $headers 请求头信息。
@@ -224,7 +224,7 @@ class HttpExchangeBase extends Object
     {
         return $this->action( "post", $url, $data, $headers, $callback);
     }
-    
+
     /**
     * 发送Put请求
     * @param string $url 请求Url
@@ -236,8 +236,8 @@ class HttpExchangeBase extends Object
     public function put( $url, $data, $headers = null, $callback = null )
     {
         return $this->action( "put", $url, $data, $headers, $callback);
-    }    
-    
+    }
+
     /**
     * 发送Delete请求
     * @param string $url 请求Url
@@ -249,11 +249,11 @@ class HttpExchangeBase extends Object
     public function delete( $url, $data, $headers = null, $callback = null )
     {
         return $this->action( "delete", $url, $data, $headers, $callback);
-    }    
+    }
 
     /**
     * ping 指定请求的Url地址，看是否该请求地址存在可响应。
-    * 
+    *
     * @param mixed $url
     * @return string
     */
@@ -261,10 +261,10 @@ class HttpExchangeBase extends Object
     {
         return $this->action("GET",$url,array($this,"_void"));
     }
-    
+
     /**
     * 上传文件
-    * 
+    *
     * @param string $url 请求url地址
     * @param mixed $files 需要上传的文件们。
     * @param mixed $data 需要上传的form数据。
@@ -295,9 +295,9 @@ class HttpExchangeBase extends Object
         }
         $output .= "--".$boundary."--\r\n";
         return $this->action( "post", $url,$output,$headers,$callback);
-    }  
-    
-    
+    }
+
+
     private function _http_query( &$return, $data, $prefix = null, $key = "" )
     {
         $ret = array( );
@@ -325,6 +325,6 @@ class HttpExchangeBase extends Object
     private function _void( )
     {
         return false;
-    }  
+    }
 }
 ?>

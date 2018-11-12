@@ -164,7 +164,7 @@ class ActionExt extends ActionBasic
                     "Linux系统需要执行指令:<br/>".str_repeat("&nbsp;",8).
                     "sudo mkdir -p ".Gc::$upload_path."<br/>".str_repeat("&nbsp;",8).
                     "sudo chown -R www-data:www-data ".Gc::$upload_path."<br/>".str_repeat("&nbsp;",8).
-                    "sudo chmod -R 0755 ".Gc::$upload_path."</p>");
+                    "sudo chmod -R 0777 ".Gc::$upload_path."</p>");
 
             }
         }

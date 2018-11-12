@@ -103,7 +103,7 @@ class RemoteServiceCall
      */
     private function data_object2array($responsedata)
     {
-        if ((!empty($responsedata))&&(count($responsedata)>0)){
+        if ((!empty($responsedata))&&is_array($responsedata)&&(count($responsedata)>0)){
             foreach ($responsedata as $key=>$data) {
                 if (is_object($data)){
                     $responsedata[$key]=UtilObject::object_to_array($data);

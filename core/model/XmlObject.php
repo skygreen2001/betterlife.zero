@@ -4,7 +4,7 @@
  * 所有Xml格式数据实体类的父类<br/>
  +-----------------------------------------<br/>
  */
-class XmlObject extends Object implements ArrayAccess
+class XmlObject extends BBObject implements ArrayAccess
 {
 	/**
 	* 库的唯一标识:库的名称

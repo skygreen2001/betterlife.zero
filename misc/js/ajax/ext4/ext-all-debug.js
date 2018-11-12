@@ -14259,7 +14259,7 @@ Ext.define('Ext.Template', {
 
 /**
  * @class Ext.ComponentQuery
- * @extends Object
+ * @extends BBObject
  *
  * Provides searching of Components within Ext.ComponentManager (globally) or a specific
  * Ext.container.Container on the document with a similar syntax to a CSS selector.
@@ -14496,7 +14496,7 @@ Ext.define('Ext.ComponentQuery', {
 
     /**
      * @class Ext.ComponentQuery.Query
-     * @extends Object
+     * @extends BBObject
      * @private
      */
     cq.Query = Ext.extend(Object, {
@@ -14781,7 +14781,7 @@ Ext.define('Ext.ComponentQuery', {
 });
 /**
  * @class Ext.util.Filter
- * @extends Object
+ * @extends BBObject
  * <p>Represents a filter that can be applied to a {@link Ext.util.MixedCollection MixedCollection}. Can either simply
  * filter on a property/value pair or pass in a filter function with custom logic. Filters are always used in the context
  * of MixedCollections, though {@link Ext.data.Store Store}s frequently create them when filtering and searching on their
@@ -14928,7 +14928,7 @@ Ext.define('Ext.util.Filter', {
 });
 /**
  * @class Ext.util.Sorter
- * @extends Object
+ * @extends BBObject
  * Represents a single sorter that can be applied to a Store
  */
 Ext.define('Ext.util.Sorter', {
@@ -15406,7 +15406,7 @@ Ext.define('Ext.ElementLoader', {
 
 /**
  * @class Ext.layout.Layout
- * @extends Object
+ * @extends BBObject
  * @private
  * Base Layout class - extended by ComponentLayout and ContainerLayout
  */
@@ -16227,7 +16227,7 @@ Ext.state.Manager.setProvider(new Ext.state.CookieProvider({
 
 /**
  * @class Ext.AbstractManager
- * @extends Object
+ * @extends BBObject
  * @ignore
  * Base Manager class
  */

@@ -106,7 +106,7 @@ class AutoCodeViewDefault extends AutoCode
      * 用户输入需求
      * @param $default_value 默认值
      */
-    public static function UserInput($default_value="")
+    public static function UserInput($title = "", $inputArr = null, $default_value = "", $more_content = "")
     {
         $inputArr=array(
             "0"=>"生成前台所需的表示层页面",
@@ -299,7 +299,7 @@ LISTS;
                 }
             }
         }
-
+        $ueTextareacontents = "";
         if (count($text_area_fieldname)>=1){
             $kindEditor_prepare = "    ";
             $ckeditor_prepare = "    ";

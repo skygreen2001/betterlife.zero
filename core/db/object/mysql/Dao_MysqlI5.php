@@ -125,7 +125,7 @@ class Dao_MysqlI5 extends Dao implements IDaoNormal
 				$this->stmt->execute();
 				Exception_Mysqli::record();
 
-				$parts = split(" ",trim($sqlstring));
+				$parts = explode(" ",trim($sqlstring));
 				$type = strtolower($parts[0]);
 				if((Crud_Sql_Update::SQL_KEYWORD_UPDATE==$type)||(Crud_Sql_Delete::SQL_KEYWORD_DELETE==$type)) {
 					$this->stmt->free_result();

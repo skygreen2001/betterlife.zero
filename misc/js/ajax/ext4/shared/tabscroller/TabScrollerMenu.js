@@ -1,7 +1,7 @@
 Ext.ns('Ext.ux');
 /**
  * @class Ext.ux.TabScrollerMenu
- * @extends Object
+ * @extends BBObject
  * Plugin (ptype = 'tabscrollermenu') for adding a tab menu to a TabBar is the Tabs overflow.
  * @constructor
  * @param {Object} config Configuration options

@@ -372,7 +372,7 @@ class Dao_Postgres extends Dao implements IDaoNormal
 		if (Config_Db::$debug_show_sql){
 			LogMe::log("SQL:".$sql);
 		}
-		$parts = split(" ",trim($sql));
+		$parts = explode(" ",trim($sql));
 		$type = strtolower($parts[0]);
 		if((Crud_Sql_Update::SQL_KEYWORD_UPDATE==$type)||(Crud_Sql_Delete::SQL_KEYWORD_DELETE==$type)) {
 			$this->result=pg_query($this->connection,$sql);

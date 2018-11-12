@@ -79,74 +79,76 @@ class Exception_Customize extends Exception {
             $this->errorInfo['extra']=$this->extra;
         }
         $current=0;// 当前异常
-        foreach ($trace as $track) {
-            if (!empty($track['class'])) {
-                if (strpos($track['class'],ExceptionMe::CLASSNAME)===false) {
-                    break;
+        if ( $trace ) {
+            foreach ($trace as $track) {
+                if (!empty($track['class'])) {
+                    if (strpos($track['class'],ExceptionMe::CLASSNAME)===false) {
+                        break;
+                    }else {
+                        $current+=1;
+                    }
                 }else {
                     $current+=1;
                 }
-            }else {
-                $current+=1;
             }
-        }
-        $this->class = $trace[$current]['class'];
-        $this->function = $trace[$current]['function'];
-        $this->file = $trace[$current]['file'];
-        $this->line = $trace[$current]['line'];
-        $file   = file($this->file);
-        $traceInfo='';
-        $time = date("y-m-d H:i:m");
-        $this->errorInfo['tracktime']= '['.$time.'] ';
-        $max_comments=80;//跟踪异常之间用等号注释行间隔开；因此设定等长便于排版
-        foreach($trace as $t) {
-            if (isset ($t['class'])) {
-                $traceInfo .= $t['class'];
-            }
-            if (isset ($t['type'])) {
-                $traceInfo .= $t['type'];
-            }
-            $traceInfo .= $t['function'].'(';
-            $args=array();
-            if (!empty ($t['args'])) {
-                foreach ($t['args'] as $arg) {
-                    if (is_object($arg)) {
-                        $args=get_class($arg);
-                    }else {
-                        $args=$arg;
+            $this->class = $trace[$current]['class'];
+            $this->function = $trace[$current]['function'];
+            $this->file = $trace[$current]['file'];
+            $this->line = $trace[$current]['line'];
+            $file   = file($this->file);
+            $traceInfo='';
+            $time = date("y-m-d H:i:m");
+            $this->errorInfo['tracktime']= '['.$time.'] ';
+            $max_comments=80;//跟踪异常之间用等号注释行间隔开；因此设定等长便于排版
+            foreach($trace as $t) {
+                if (isset ($t['class'])) {
+                    $traceInfo .= $t['class'];
+                }
+                if (isset ($t['type'])) {
+                    $traceInfo .= $t['type'];
+                }
+                $traceInfo .= $t['function'].'(';
+                $args=array();
+                if (!empty ($t['args'])) {
+                    foreach ($t['args'] as $arg) {
+                        if (is_object($arg)) {
+                            $args=get_class($arg);
+                        }else {
+                            $args=$arg;
+                        }
                     }
                 }
-            }
-            if (is_array($args)&&(count($args)>0)) {
-                if (count($args)==1){
-                    $args=$args[0];
-                    if (is_array($args)){
-                         $traceInfo .= implode(',', $args);
+                if (is_array($args)&&(count($args)>0)) {
+                    if (count($args)==1){
+                        $args=$args[0];
+                        if (is_array($args)){
+                             $traceInfo .= implode(',', $args);
+                        }
+                    }else{
+                        $traceInfo .= implode(',', $args);
                     }
-                }else{
-                    $traceInfo .= implode(',', $args);
+                }
+                $traceInfo .=")\n";
+                if (isset($t['file'])) {
+                    $traceInfo .=str_pad($t['file']."(".$t['line'].")", $max_comments,"=",STR_PAD_BOTH);
+                    $traceInfo .="\n";
                 }
             }
-            $traceInfo .=")\n";
-            if (isset($t['file'])) {
-                $traceInfo .=str_pad($t['file']."(".$t['line'].")", $max_comments,"=",STR_PAD_BOTH);
-                $traceInfo .="\n";
-            }
+            $this->errorInfo['param']=$trace[$current]['args'];
+            $this->errorInfo['message']   = $this->message;
+            $this->errorInfo['type']      = $this->type;
+            $this->errorInfo['detail']='';
+            $this->errorInfo['detail']   .=   ($this->line-2).': '.$file[$this->line-3]."\n";
+            $this->errorInfo['detail']   .=   ($this->line-1).': '.$file[$this->line-2]."\n";
+            $this->errorInfo['detail']   .=   ($this->line).':<font color="#FF6600" ><b>'.$file[$this->line-1].'</b></font>'."\n";
+            $this->errorInfo['detail']   .=   ($this->line+1).': '.$file[$this->line]."\n";
+            $this->errorInfo['detail']   .=   ($this->line+2).': '.$file[$this->line+1];
+            $this->errorInfo['class']     =   $this->class;
+            $this->errorInfo['function']  =   $this->function;
+            $this->errorInfo['file']      = $this->file;
+            $this->errorInfo['line']      = $this->line;
+            $this->errorInfo['trace']     = $traceInfo;
         }
-        $this->errorInfo['param']=$trace[$current]['args'];
-        $this->errorInfo['message']   = $this->message;
-        $this->errorInfo['type']      = $this->type;
-        $this->errorInfo['detail']='';
-        $this->errorInfo['detail']   .=   ($this->line-2).': '.$file[$this->line-3]."\n";
-        $this->errorInfo['detail']   .=   ($this->line-1).': '.$file[$this->line-2]."\n";
-        $this->errorInfo['detail']   .=   ($this->line).':<font color="#FF6600" ><b>'.$file[$this->line-1].'</b></font>'."\n";
-        $this->errorInfo['detail']   .=   ($this->line+1).': '.$file[$this->line]."\n";
-        $this->errorInfo['detail']   .=   ($this->line+2).': '.$file[$this->line+1];
-        $this->errorInfo['class']     =   $this->class;
-        $this->errorInfo['function']  =   $this->function;
-        $this->errorInfo['file']      = $this->file;
-        $this->errorInfo['line']      = $this->line;
-        $this->errorInfo['trace']     = $traceInfo;
         return "";
     }
 

@@ -7,7 +7,7 @@
  * @package core.autocode
  * @author skygreen <skygreen2001@gmail.com>
  */
-class AutoCode extends Object
+class AutoCode extends BBObject
 {
 	/**
 	 * 显示生成前结果
@@ -264,7 +264,7 @@ class AutoCode extends Object
 	protected static function column_type($type)
 	{
 		if (UtilString::contain($type,"(")){
-			list($typep,$length)=split('[()]', $type);
+			list($typep, $length) = preg_split("/[()]/", $type);
 		}else{
 			$typep=$type;
 		}
@@ -303,7 +303,7 @@ class AutoCode extends Object
 	protected static function column_length($type)
 	{
 		if (UtilString::contain($type,"(")){
-			list($typep,$length)=split('[()]', $type);
+			list($typep,$length) = preg_split("/[()]/", $type);
 		}else{
 			$length=1;
 		}

@@ -145,7 +145,7 @@ class AutoCodeViewExt extends AutoCode
 	 * 用户输入需求
 	 * @param $default_value 默认值
 	 */
-	public static function UserInput($default_value)
+	public static function UserInput($title = "", $inputArr = null, $default_value = "", $more_content = "")
 	{
 		parent::UserInput("一键生成后台表示层<使用ExtJs框架>",$default_value);
 	}
@@ -511,33 +511,35 @@ class AutoCodeViewExt extends AutoCode
 		$fields=substr($fields,0,strlen($fields)-3);
 		$result['fields']=$fields;
 		$result['relationStore_onlyForFieldLabels']=$relationStore;
-		if ($isHaveRelation){
-			$relationViewDefine=self::relationViewDefine($tablename,$classname,$instancename,$relationStore);
+    $relationViewDefine = "";
+    $relationStore="";
+		if ( $isHaveRelation ) {
+			$relationViewDefine = self::relationViewDefine($tablename,$classname,$instancename,$relationStore);
+  		$relationStore=$relationViewDefine['relationStore'];
+  		$relationClassesView=$relationViewDefine['one2many'];
+  		$relationViewAdds=$relationViewDefine['relationViewAdds'];
+  		$relationViewGrids=$relationViewDefine['relationViewGrids'];
+  		$viewRelationDoSelect=$relationViewDefine['viewRelationDoSelect'];
+  		$relationViewGridInit=$relationViewDefine['relationViewGridInit'];
+  		$relationM2mMenu=$relationViewDefine['m2mMenu'];
+  		$relationM2mRowSelect=$relationViewDefine['m2mRowSelect'];
+  		$relationM2mRowSelectElse=$relationViewDefine['m2mRowSelectElse'];
+  		$relationM2mMenuShowHide=$relationViewDefine['m2mMenuShowHide'];
+  		$relationM2mShowHide=$relationViewDefine['m2mShowHide'];
+  		$relationM2mRunningWindow=$relationViewDefine['m2mRunningWindow'];
+  		$result['relationStore']=$relationStore;
+  		$result['relationClassesView']=$relationClassesView;
+  		$result['relationViewAdds']=$relationViewAdds;
+  		$result['relationViewGrids']=$relationViewGrids;
+  		$result['viewRelationDoSelect']="\r\n".$viewRelationDoSelect;
+  		$result['relationViewGridInit']="\r\n".$relationViewGridInit;
+  		$result['relationM2mMenu']=$relationM2mMenu;
+  		$result['relationM2mRowSelect']=$relationM2mRowSelect;
+  		$result['relationM2mRowSelectElse']=$relationM2mRowSelectElse;
+  		$result['relationM2mMenuShowHide']=$relationM2mMenuShowHide;
+  		$result['relationM2mShowHide']=$relationM2mShowHide;
+  		$result['relationM2mRunningWindow']=$relationM2mRunningWindow;
 		}
-		$relationStore=$relationViewDefine['relationStore'];
-		$relationClassesView=$relationViewDefine['one2many'];
-		$relationViewAdds=$relationViewDefine['relationViewAdds'];
-		$relationViewGrids=$relationViewDefine['relationViewGrids'];
-		$viewRelationDoSelect=$relationViewDefine['viewRelationDoSelect'];
-		$relationViewGridInit=$relationViewDefine['relationViewGridInit'];
-		$relationM2mMenu=$relationViewDefine['m2mMenu'];
-		$relationM2mRowSelect=$relationViewDefine['m2mRowSelect'];
-		$relationM2mRowSelectElse=$relationViewDefine['m2mRowSelectElse'];
-		$relationM2mMenuShowHide=$relationViewDefine['m2mMenuShowHide'];
-		$relationM2mShowHide=$relationViewDefine['m2mShowHide'];
-		$relationM2mRunningWindow=$relationViewDefine['m2mRunningWindow'];
-		$result['relationStore']=$relationStore;
-		$result['relationClassesView']=$relationClassesView;
-		$result['relationViewAdds']=$relationViewAdds;
-		$result['relationViewGrids']=$relationViewGrids;
-		$result['viewRelationDoSelect']="\r\n".$viewRelationDoSelect;
-		$result['relationViewGridInit']="\r\n".$relationViewGridInit;
-		$result['relationM2mMenu']=$relationM2mMenu;
-		$result['relationM2mRowSelect']=$relationM2mRowSelect;
-		$result['relationM2mRowSelectElse']=$relationM2mRowSelectElse;
-		$result['relationM2mMenuShowHide']=$relationM2mMenuShowHide;
-		$result['relationM2mShowHide']=$relationM2mShowHide;
-		$result['relationM2mRunningWindow']=$relationM2mRunningWindow;
 		return $result;
 	}
 

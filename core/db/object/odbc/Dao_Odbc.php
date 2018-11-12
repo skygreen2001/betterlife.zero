@@ -413,7 +413,7 @@ class Dao_Odbc extends Dao implements IDaoNormal
 				LogMe::log("SQL:".$sqlstring);
 			}
 			$this->stmt = odbc_exec($this->connection,$sqlstring);
-			$parts = split(" ",trim($sqlstring));
+			$parts = explode(" ",trim($sqlstring));
 			$type = strtolower($parts[0]);
 			if((Crud_Sql_Update::SQL_KEYWORD_UPDATE==$type)||(Crud_Sql_Delete::SQL_KEYWORD_DELETE==$type)) {
 				return true;

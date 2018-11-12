@@ -326,7 +326,7 @@ class AutoCodeService extends AutoCode
      * 用户输入需求
      * @param $default_value 默认值
      */
-    public static function UserInput($default_value)
+    public static function UserInput($title = "", $inputArr = null, $default_value = "", $more_content = "")
     {
         $inputArr=array(
             "2"=>"生成标准方法的Service",
@@ -897,7 +897,7 @@ class AutoCodeService extends AutoCode
      */
     private static function many2manyXml($classname)
     {
-        $result="";
+        $result=array();
         $many2manyUpdate="";
         $many2manyQueryPageXml="";
         if ((is_array(self::$relation_all))&&(array_key_exists($classname, self::$relation_all)))

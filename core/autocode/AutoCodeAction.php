@@ -237,7 +237,7 @@ class AutoCodeAction extends AutoCode
      * 用户输入需求
      * @param $default_value 默认值
      */
-    public static function UserInput($default_value="")
+    public static function UserInput($title = "", $inputArr = null, $default_value = "", $more_content = "")
     {
         $inputArr=array(
             "0"=>"前端Action,继承基本Action",
@@ -643,7 +643,7 @@ class AutoCodeAction extends AutoCode
             }
         }
 
-        if (count($img_fieldname>0)){
+        if ($img_fieldname && is_array($img_fieldname) && count($img_fieldname)>0){
             foreach ($img_fieldname as $fieldname) {
                 $result.="            if (!empty(\$_FILES)&&!empty(\$_FILES[\"{$fieldname}Upload\"][\"name\"])){\r\n".
                          "                \$result=\$this->uploadImg(\$_FILES,\"{$fieldname}Upload\",\"{$fieldname}\",\"$instancename\");\r\n".

@@ -364,7 +364,7 @@ class Dao_Php5 extends Dao implements IDaoNormal
 		try {
 			$this->sQuery=$sqlstring;
 			$this->executeSQL();
-			$parts = split(" ",trim($sqlstring));
+			$parts = explode(" ",trim($sqlstring));
 			$type = strtolower($parts[0]);
 			if((Crud_Sql_Update::SQL_KEYWORD_UPDATE==$type)||(Crud_Sql_Delete::SQL_KEYWORD_DELETE==$type)) {
 				mysql_free_result($this->result);
