@@ -106,7 +106,7 @@ class AutoCodeViewDefault extends AutoCode
      * 用户输入需求
      * @param $default_value 默认值
      */
-    public static function UserInput($title = "", $inputArr = null, $default_value = "", $more_content = "")
+    public static function UserInput($default_value = "", $inputArr = null, $title = "", $more_content = "")
     {
         $inputArr=array(
             "0"=>"生成前台所需的表示层页面",

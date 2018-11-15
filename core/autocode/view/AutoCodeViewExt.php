@@ -145,7 +145,7 @@ class AutoCodeViewExt extends AutoCode
 	 * 用户输入需求
 	 * @param $default_value 默认值
 	 */
-	public static function UserInput($title = "", $inputArr = null, $default_value = "", $more_content = "")
+	public static function UserInput($default_value = "", $inputArr = null, $title = "", $more_content = "")
 	{
 		parent::UserInput("一键生成后台表示层<使用ExtJs框架>",$default_value);
 	}

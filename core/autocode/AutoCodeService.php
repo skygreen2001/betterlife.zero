@@ -305,14 +305,14 @@ class AutoCodeService extends AutoCode
                               "                <param name=\"len\">1</param>\r\n".
                               "                <param name=\"formHandler\">true</param>\r\n".
                               "            </method>\r\n".
-                              $many2manyXml["many2manyUpdate"].
+                              @$many2manyXml["many2manyUpdate"].
                               "            <method name=\"deleteByIds\">\r\n".
                               "                <param name=\"len\">1</param>\r\n".
                               "            </method>\r\n".
                               "            <method name=\"queryPage{$classname}\">\r\n".
                               "                <param name=\"len\">1</param>\r\n".
                               "            </method>\r\n".
-                              $many2manyXml["many2manyQueryPageXml"].
+                              @$many2manyXml["many2manyQueryPageXml"].
                               "            <method name=\"export{$classname}\">\r\n".
                               "                <param name=\"len\">1</param>\r\n".
                               "            </method>\r\n".
@@ -326,7 +326,7 @@ class AutoCodeService extends AutoCode
      * 用户输入需求
      * @param $default_value 默认值
      */
-    public static function UserInput($title = "", $inputArr = null, $default_value = "", $more_content = "")
+    public static function UserInput($default_value = "", $inputArr = null, $title = "", $more_content = "")
     {
         $inputArr=array(
             "2"=>"生成标准方法的Service",

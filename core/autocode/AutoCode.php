@@ -330,7 +330,7 @@ class AutoCode extends BBObject
 	 * @param $default_value 默认值
 	 * @param $more_content 更多个性化内容
 	 */
-	protected static function UserInput($title,$inputArr=null,$default_value="",$more_content="")
+	protected static function UserInput($title, $inputArr=null, $default_value="", $more_content="")
 	{
 		ob_clean();
 		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
