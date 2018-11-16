@@ -278,5 +278,16 @@ class Library_Loader
         set_include_path(get_include_path().PATH_SEPARATOR.self::dir_library()."linq".DS. 'Classes'.DS);
         require_once  self::dir_library()."linq".DS. 'Classes'.DS.'PHPLinq'.DS."LinqToObjects.php";
     }
+    
+    /**
+     * 加载nelexa/zip库<br/>
+     * 使用Zip方法<br/>
+     * @link https://github.com/Ne-Lexa/php-zip
+     */
+    private static function load_phpzip()
+    {
+        $dir_phpzip   = Gc::$nav_root_path . "install" . DS . "vendor" . DS . "nelexa" . DS . "zip" . DS . "src" . DS;
+        set_include_path(get_include_path() . PATH_SEPARATOR . $dir_phpzip);
+    }
 }
 ?>

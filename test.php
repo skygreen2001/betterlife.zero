@@ -207,7 +207,7 @@ require_once ("init.php");
 
 //加载配置
 //读取json变量配置
-UtilConfigJson::main();
+// UtilConfigJson::main();
 //读取php变量配置
 // UtilConfigPhp::main();
 //读取xml变量配置
@@ -223,4 +223,13 @@ UtilConfigJson::main();
 
 // LogMe::log("我在想事情呢！等等我");
 // LogMe::log("不急不急,休息一下！");
+
+if( contains( $_SERVER['HTTP_HOST'], array("127.0.0.1", "localhost", "192.168.") ) ) {
+    phpinfo();
+}
+
+
+
+
+
 ?>
