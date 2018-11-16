@@ -47,26 +47,30 @@ class RemoteServiceCall
     {
         //$post_data = file_get_contents("php://input");
         //$post_data='{"url":"http:\/\/localhost\/enjoyoung\/core\/util\/view\/ajax\/extjs\/direct\/router.php","type":"remoting","actions":{"MemberService":[{"name":"doSelect","len":2,"formHandler":true},{"name":"getInfo","len":1},{"name":"getApp","len":1}]}}';
-        if (isset($post_data)) {
-            header('Content-Type:text/javascript;charset=UTF-8');
+        if ( isset($post_data) ) {
+            // header('Content-Type:text/javascript;charset=UTF-8');
             $data = @json_decode($post_data);
-            if (!$data){
-                $str_json = urlparamToJsonString($post_data);
+            if ( !$data ) {
+                if ( is_array($post_data) ) {
+                    $str_json = json_encode($post_data);
+                } else {
+                    $str_json = urlparamToJsonString($post_data);
+                }
                 if ( $str_json ) $data = @json_decode($str_json);
             }
-        } else if (isset($_POST['extAction'])) { // form post
-            $this->isForm = true;
+        } else if ( isset($_POST['extAction']) ) { // form post
+            $this->isForm   = true;
             $this->isUpload = $_POST['extUpload'] == 'true';
             $data = new DirectAction();
             $data->action = $_POST['extAction'];
             $data->method = $_POST['extMethod'];
-            $data->tid = isset($_POST['extTID']) ? $_POST['extTID'] : null; // not set for upload
-            $data->data = array($_POST, $_FILES);
+            $data->tid    = isset($_POST['extTID']) ? $_POST['extTID'] : null; // not set for upload
+            $data->data   = array($_POST, $_FILES);
         } else {
             die('非法的请求.');
         }
-        $this->data=$data;
-        self::$configApi=Config_Service::serviceConfig();
+        $this->data      = $data;
+        self::$configApi = Config_Service::serviceConfig();
     }
     /**
      * 发送请求
@@ -81,19 +85,19 @@ class RemoteServiceCall
         } else {
             $response = $this->doRpc($this->data);
         }
-        if ($this->isForm && $this->isUpload) {
+        if ( $this->isForm && $this->isUpload ) {
             ob_clean();
             echo '<html><body><textarea>';
             echo json_encode($response);
             echo '</textarea></body></html>';
         } else {
-            if (self::ISOBJECTTOARRAY){
-                if (!isset($response["result"])){
-                    foreach ($response as $key=>$response_sub) {
-                        $response[$key]["result"]["data"]=$this->data_object2array($response_sub["result"]["data"]);
+            if ( self::ISOBJECTTOARRAY ) {
+                if ( !isset($response["result"]) ) {
+                    foreach ($response as $key => $response_sub) {
+                        @$response[$key]["result"]["data"] = $this->data_object2array($response_sub["result"]["data"]);
                     }
-                }else{
-                    $response["result"]["data"]=$this->data_object2array($response["result"]["data"]);
+                } else {
+                    @$response["result"]["data"] = $this->data_object2array($response["result"]["data"]);
                 }
             }
             echo json_encode($response);
@@ -107,7 +111,7 @@ class RemoteServiceCall
      */
     private function data_object2array($responsedata)
     {
-        if ((!empty($responsedata))&&is_array($responsedata)&&(count($responsedata)>0)){
+        if ( ( !empty($responsedata) ) && is_array($responsedata) && ( count($responsedata) > 0 ) ) {
             foreach ($responsedata as $key=>$data) {
                 if (is_object($data)){
                     $responsedata[$key]=UtilObject::object_to_array($data);
@@ -124,27 +128,25 @@ class RemoteServiceCall
      */
     private function doRpc($cdata) {
         try {
-            if ( $cdata && !$cdata->action ) $cdata->action = $cdata->extAction;
-            if (!isset(self::$configApi[$cdata->action])) {
+            if ( $cdata && !isset($cdata->action) ) $cdata->action = $cdata->extAction;
+            if ( !isset(self::$configApi[$cdata->action]) ) {
                 throw new Exception('调用未定义的Service: ' . $cdata->action);
             }
             $action = $cdata->action;
 
             $a = self::$configApi[$action];
 
-            if (array_key_exists("before",$a))$this->doAroundCalls($a['before'], $cdata);
+            if ( array_key_exists("before",$a) ) $this->doAroundCalls($a['before'], $cdata);
 
-            //$cdata->method="doSelect";
-            //$cdata->tid=100;
-            if ( $cdata && !$cdata->method ) $cdata->method = $cdata->extMethod;
+            if ( $cdata && !isset($cdata->method) ) $cdata->method = $cdata->extMethod;
             $method = $cdata->method;
-            $mdef = $a['methods'][$method];
-            if (!$mdef) {
+            $mdef   = $a['methods'][$method];
+            if ( !$mdef ) {
                 throw new Exception("在Service里 $action 调用未定义的方法: $method ");
             }
-            if (array_key_exists("before",$mdef))$this->doAroundCalls($mdef['before'], $cdata);
+            if ( array_key_exists("before", $mdef) )$this->doAroundCalls($mdef['before'], $cdata);
 
-            if ( $cdata && !$cdata->tid ) $cdata->tid = $cdata->extTID;
+            if ( $cdata && !isset($cdata->tid) ) $cdata->tid = $cdata->extTID;
             $r = array(
                 'type' => 'rpc',
                 'tid' => $cdata->tid,
@@ -156,16 +158,16 @@ class RemoteServiceCall
             $params = isset($cdata->data) && is_array($cdata->data) ? $cdata->data : $cdata;
             if ( !$params ) $params = array();
 
-            $params=$this->clearValuelessData($params);
+            $params = $this->clearValuelessData( $params );
             if ( $params && is_object($params) ) $params = array((array) $params);
             $r['result'] = call_user_func_array(array($o, $method), $params);
 
-            if (array_key_exists("after",$mdef))$this->doAroundCalls($mdef['after'], $cdata, $r);
-            if (array_key_exists("after",$a))$this->doAroundCalls($a['after'], $cdata, $r);
+            if ( array_key_exists("after", $mdef) ) $this->doAroundCalls($mdef['after'], $cdata, $r);
+            if ( array_key_exists("after", $a) ) $this->doAroundCalls($a['after'], $cdata, $r);
         } catch (Exception $e) {
-            $r['type'] = 'exception';
+            $r['type']    = 'exception';
             $r['message'] = $e->getMessage();
-            $r['where'] = $e->getTraceAsString();
+            $r['where']   = $e->getTraceAsString();
         }
         return $r;
     }
@@ -175,9 +177,9 @@ class RemoteServiceCall
      */
     private function clearValuelessData($params)
     {
-        if(is_array($params)&&count($params)>0)
+        if( is_array($params) && count($params) > 0 )
         {
-            if (is_array($params[0])&&count($params[0]>0))
+            if ( is_array($params[0]) && count($params[0] > 0 ))
             {
                 unset($params[0]["extAction"]);
                 unset($params[0]["extMethod"]);
@@ -202,29 +204,30 @@ class RemoteServiceCall
      * @param type $returnData
      * @return type
      */
-    private function doAroundCalls($fns, $cdata, $returnData=null)
+    private function doAroundCalls($fns, $cdata, $returnData = null)
     {
-        if (!$fns) {
+        if ( !$fns ) {
             return;
         }
-        if (is_array($fns)) {
-            $returnData=array();
+        if ( is_array($fns) ) {
+            $returnData = array();
             foreach ($fns as $f) {
-                $returnData=array_merge_recursive($returnData,$f($cdata));
+                $returnData = array_merge_recursive($returnData, $f($cdata));
             }
         } else {
-            $returnData=$fns($cdata);
+            $returnData = $fns($cdata);
         }
     }
 }
 
-$remoteCall=new RemoteServiceCall();
-$post_data=null;
+$remoteCall = new RemoteServiceCall();
+$post_data  = null;
 if (isset($HTTP_RAW_POST_DATA)){
-    $post_data=$HTTP_RAW_POST_DATA;
+    $post_data = $HTTP_RAW_POST_DATA;
 } else {
-  $post_data = file_get_contents("php://input");
+    $post_data = file_get_contents("php://input");
 }
+if (!$post_data) $post_data = array_merge($_POST,$_GET);
 $remoteCall->initData($post_data);
 $remoteCall->request();
 ?>
