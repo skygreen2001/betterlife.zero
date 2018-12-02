@@ -88,41 +88,53 @@ class AutoCodeModelLike extends AutoCode
      */
     public static function UserInput($title = "", $inputArr = null, $default_value = "", $more_content = "")
     {
-        $default_dir=Gc::$nav_root_path."model".DS;
-        self::$save_dir=$default_dir;
+        $default_dir    = Gc::$nav_root_path . "model" . DS;
+        self::$save_dir = $default_dir;
 
         self::init();
-        $title="一键生成指定表前后台所有模板";
-        $inputArr=array();
-        foreach (self::$tableList as $tablename) {
-            $inputArr[$tablename]=$tablename;
-        }
-        echo  "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>\r\n
-                <html lang='zh-CN' xml:lang='zh-CN' xmlns='http://www.w3.org/1999/xhtml'>\r\n";
-        echo "<head>\r\n";
-        echo UtilCss::form_css()."\r\n";
-        $url_base=UtilNet::urlbase();
-        echo "</head>";
-        echo "<body>";
-        echo "<br/><br/><br/><h1 align='center'>$title</h1>\r\n";
-        echo "<div align='center' height='450'>\r\n";
-        echo "<form>\r\n";
-        echo "  <div style='line-height:1.5em;'>\r\n";
-        echo "      <label>输出文件路径:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' name='save_dir' value='$default_dir' id='save_dir' />\r\n";
-        if (!empty($inputArr)){
-            echo "<br/><br/>\r\n
-                    <label>&nbsp;&nbsp;&nbsp;选择需要生成的表:</label><select multiple='multiple' size='8' style='height:320px;' name='table_names[]'>\r\n";
-            foreach ($inputArr as $key=>$value) {
-                echo "        <option value='$key'>$value</option>\r\n";
+        $inputArr = array();
+        if ( self::$tableList ) {
+            foreach (self::$tableList as $tablename) {
+                $inputArr[$tablename] = $tablename;
             }
-            echo "      </select>\r\n";
         }
-        echo "  </div>\r\n";
-        echo "  <input type='submit' value='生成' /><br/>\r\n";
-        echo "</form>\r\n";
-        echo "</div>\r\n";
-        echo "</body>\r\n";
-        echo "</html>";
+        include("view" . DS . "form" . DS . "model.php");
+        echo $userinput_model;
+        // $default_dir=Gc::$nav_root_path."model".DS;
+        // self::$save_dir=$default_dir;
+        //
+        // self::init();
+        // $title="一键生成指定表前后台所有模板";
+        // $inputArr=array();
+        // foreach (self::$tableList as $tablename) {
+        //     $inputArr[$tablename]=$tablename;
+        // }
+        // echo  "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>\r\n
+        //         <html lang='zh-CN' xml:lang='zh-CN' xmlns='http://www.w3.org/1999/xhtml'>\r\n";
+        // echo "<head>\r\n";
+        // echo UtilCss::form_css()."\r\n";
+        // $url_base=UtilNet::urlbase();
+        // echo "</head>";
+        // echo "<body>";
+        // echo "<br/><br/><br/><h1 align='center'>$title</h1>\r\n";
+        // echo "<div align='center' height='450'>\r\n";
+        // echo "<form>\r\n";
+        // echo "  <div style='line-height:1.5em;'>\r\n";
+        // echo "      <label>输出文件路径:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' name='save_dir' value='$default_dir' id='save_dir' />\r\n";
+        // if (!empty($inputArr)){
+        //     echo "<br/><br/>\r\n
+        //             <label>&nbsp;&nbsp;&nbsp;选择需要生成的表:</label><select multiple='multiple' size='8' style='height:320px;' name='table_names[]'>\r\n";
+        //     foreach ($inputArr as $key=>$value) {
+        //         echo "        <option value='$key'>$value</option>\r\n";
+        //     }
+        //     echo "      </select>\r\n";
+        // }
+        // echo "  </div>\r\n";
+        // echo "  <input type='submit' value='生成' /><br/>\r\n";
+        // echo "</form>\r\n";
+        // echo "</div>\r\n";
+        // echo "</body>\r\n";
+        // echo "</html>";
     }
 
     /**

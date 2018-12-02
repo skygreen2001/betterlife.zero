@@ -31,6 +31,8 @@ class UtilCss extends Util
      */
     public static $CssLoaded=array();
 
+    public static $color_b = "#77cc6d";
+
     const CSS_REPORT_TABLE="report";
     /**
      * 动态加载Ext Required CSS文件
@@ -211,30 +213,73 @@ class UtilCss extends Util
     {
         echo '<style type="text/css">
             table.'.self::CSS_REPORT_TABLE.' {
-                    border-width: 0px;
-                    border-spacing: ;
-                    border-style: groove;
-                    border-color: ;
-                    border-collapse: separate;
-                    background-color: white;
+                border: 1px solid '. self::$color_b .';
+                background-color: #fff;
+                margin:0 auto;
             }
             table.'.self::CSS_REPORT_TABLE.' th {
-                    border-width: 1px;
-                    padding: 1px;
-                    border-style: solid;
-                    border-color: green;
-                    background-color: #fff5ee;
-                    -moz-border-radius: ;
+                padding: 5px;
+                border-right:1px solid '. self::$color_b .';
+                border-bottom:1px solid '. self::$color_b .';
             }
             table.'.self::CSS_REPORT_TABLE.' td {
-                    border-width: 1px;
-                    padding: 1px;
-                    border-style: solid;
-                    border-color: green;
-                    background-color: #fff5ee;
-                    -moz-border-radius: ;
+                padding: 5px 10px;
+                border-right:1px solid '. self::$color_b .';
+                border-bottom:1px solid '. self::$color_b .';
+                word-break: break-all;
+            }
+            table.'.self::CSS_REPORT_TABLE.' th:last-child, table.'.self::CSS_REPORT_TABLE.' td:last-child {
+                border-right: 0px;
+            }
+            tbody table.'.self::CSS_REPORT_TABLE.' tr:last-child td {
+                border-bottom: 0px;
             }
             </style>';
+    }
+
+    /**
+     * 代码生成预览样式报表
+     */
+    public static function preview_report_info()
+    {
+        echo '<style type="text/css">
+            table {
+                border-collapse: separate;
+                border-spacing: 0;
+            }
+            table, td, th {
+                vertical-align: middle;
+                padding: 6px 0px;
+            }
+            table.preview {
+                border-collapse: collapse;
+                margin-bottom: 1.4em;
+                width: 80%;
+            }
+            table.preview th {
+                text-align: center;
+                font-weight: bold;
+            }
+            table.preview td {
+                text-align:center;
+                padding: 6px 12px;
+            }
+            table.preview, table.preview th,table.preview td {
+                border: 1px solid '. self::$color_b .';
+            }
+            table.preview td:first-child {
+                min-width: 90px;
+                padding: 6px 0px;
+            }
+            table.preview td:last-child {
+                min-width: 160px;
+                padding: 6px 0px;
+            }
+            table.preview a:hover{
+                padding-bottom: 2px;
+                border-bottom: 1px solid '. self::$color_b .';
+            }
+        </style>';
     }
 
     /**
@@ -244,122 +289,169 @@ class UtilCss extends Util
     {
         $showResult = '<style type="text/css">
                 html,body {
-                    font:normal 15px SimSun,sans-serif;
-                    border:0 none;
-                    overflow:auto;
-                    line-height:1.5em;
-                    margin:5px 0 0;
-                    padding:0;
+                  font:normal 15px SimSun,sans-serif;
+                  border:0 none;
+                  overflow:auto;
+                  line-height:1.5em;
+                  margin:5px 0 0;
+                  padding:0;
                 }
-                div {
-                    margin:15px;
+                .container {
+                  width:800px;
+                  margin:0 auto;
                 }
                 h1,h2,h3 {
-                    font:bold 150% Arial,sans-serif,Microsoft YaHei UI,Microsoft YaHei, SimSun,sans-serif,STXihei;
+                  font:bold 150% Arial,sans-serif,Microsoft YaHei UI,Microsoft YaHei, SimSun,sans-serif,STXihei;
+                }
+                h1{
+                  margin-top: 150px;
                 }
                 p#indexPage {
-                    line-height:2em;
-                    width:500px;
-                    padding-left:30px;
-                    text-align:left;
+                  line-height:2em;
+                  width:500px;
+                  padding-left:30px;
+                  text-align:left;
                 }
-
                 a {
-                    color: #1E4176;
+                  color:#555;
+                  cursor: pointer;
                 }
                 a:link {
-                    color: #1E4176;
-                    text-decoration: none;
+                  text-decoration: none;
                 }
-
                 a:visited {
-                    color: #555;
-                    text-decoration: none;
+                  text-decoration: none;
                 }
-
-                a:hover {
-                    text-decoration: underline;
-                    color: #15428b;
+                a:hover, a:focus {
+                  color:'. self::$color_b .';
+                }
+                .after_link{
+                  margin-left: -25px;
+                }
+                input,button,select,textarea{
+                  outline: none;
+                }
+                input[type="checkbox"]{
+                  cursor: pointer;
+                }
+                form{
+                  line-height:1.5em;
                 }
                 label {
-                    vertical-align:middle;
-                    width:150px;
-                    height:35px;
-                    text-align:right;
-                    margin:2px 4px 6px;
+                  vertical-align:middle;
+                  width:200px;
+                  height:35px;
+                  text-align:right;
+                  display:inline-block;
+                  margin:32px 16px 6px;
+                }
+                form#autocodeForm label.mode{
+                  margin-top: 0px;
+                }
+                form#autocodeForm select{
+                  margin-top: -20px;
                 }
                 input[type=text],input[type=password]{
-                    border:1px solid #FFF;
-                    text-align:center;
-                    width:200px;
-                    height:28px;
-                    line-height:28px;
-                    color:white;
-                    background:gray;
+                  border:1px solid #fff;
+                  text-align:center;
+                  width:200px;
+                  height:28px;
+                  line-height:28px;
+                  color:white;
+                  background:gray;
 
-                    margin:10px 0px 0px 0px;
-                    font-size: 14px;
-                    color: #555;
-                    vertical-align: middle;
-                    background-color: #fff;
-                    border: 1px solid #ccc;
-                    border-radius: 4px;
-                    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-                    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-                    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-                    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+                  margin:10px 0px 0px 0px;
+                  font-size: 14px;
+                  color: #555;
+                  vertical-align: middle;
+                  background-color: #fff;
+                  border: 1px solid #ccc;
+                  border-radius: 4px;
+                  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+                  box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+                  -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+                  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+                }
+                input.input_save_dir{
+                  width:412px;
+                  text-align:left;
+                  padding-left:10px;
                 }
                 select{
-                    width:410px;
-                    text-align:left;
-                    padding:6px 0px 4px 10px;
-                    font-size:14px;
-                    height:28px;
-                    line-height:28px;
-                    vertical-align:bottom;
-                     box-sizing: content-box;
-                     -moz-box-sizing:content-box;
-                     -webkit-box-sizing:content-box;
-
-
-                    margin:10px 0px 0px 0px;
-                    font-size: 14px;
-                    color: #555;
-                    vertical-align: middle;
-                    background-color: #fff;
-                    border: 1px solid #ccc;
-                    border-radius: 4px;
-                    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-                    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-                    -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
-                    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+                  width:423px;
+                  text-align:left;
+                  padding:6px 0px 4px 10px;
+                  font-size:14px;
+                  height:28px;
+                  line-height:28px;
+                  vertical-align:bottom;
+                  box-sizing: content-box;
+                  -moz-box-sizing:content-box;
+                  -webkit-box-sizing:content-box;
+                  margin:0px;
+                  font-size: 14px;
+                  color: #555;
+                  vertical-align: middle;
+                  background-color: #fff;
+                  border: 1px solid #ccc;
+                  border-radius: 4px;
+                  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+                  box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+                  -webkit-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+                  transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
                 }
                 input[type=button]{
-                    border:1px solid;
-                    text-align:center;
-                    width:80px;
-                    height:28px;
+                  border:1px solid;
+                  text-align:center;
+                  width:80px;
+                  height:28px;
                 }
                 input:hover {
-                    border:1px solid green;
-                    color:#000;
-                    background:#FFF;
+                  border:1px solid '. self::$color_b .';
+                  color:#000;
+                  background:#FFF;
+                }
+                .btnSubmit{
+                  margin-top:15px;
+                  width:126px;
+                  height:38px;
+                  color:#FFF;
+                  cursor:pointer;
+
+                  font-size: 15px;
+                  font-weight: 600;
+                  background-color:'. self::$color_b .';
+                  border:1px solid;
+                  border-color:#fff;
+                  border-radius: 6px;
+                }
+                .container .btnSubmit{
+                  margin-left:120px;
+                  font-weight:600;
+                }
+                .btnSubmit:hover{
+                  color:#000;
+                  background-color:#fff;
+                }
+                .more_java{
+                  color: #666;
+                  margin-left:120px;
+                }
+                .more_java:hover{
+                  color:'. self::$color_b .';
                 }
 
-                input[type=submit] {
-                    width:100px;
-                    height:32px;
-                    color:#FFF;
-                    cursor:pointer;
-                    font:bold 84% SimSun,helvetica,sans-serif;
-                    background-color:#000;
-                    border:1px solid;
-                    border-color:#696 #363 #363 #696;
+                .prj-onekey label{
+                  margin-top:20px;
                 }
-
-                input[type=submit]:hover{
-                    color:#000;
-                    background-color:#FFF;
+                .prj-onekey input{
+                  margin-top:0px;
+                }
+                @media screen and (-webkit-min-device-pixel-ratio:0) {
+                  .btnSubmit{
+                    -webkit-border-radius: 6px;
+                    -webkit-box-shadow: 0px 1px 3px rgba(0,0,0,0.5);
+                  }
                 }
             </style>';
         return $showResult;

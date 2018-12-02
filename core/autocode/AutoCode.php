@@ -332,38 +332,41 @@ class AutoCode extends BBObject
 	 */
 	protected static function UserInput($title, $inputArr=null, $default_value="", $more_content="")
 	{
-		ob_clean();
-		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-				<html lang="zh-CN" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">';
-		echo "<head>\r\n";
-		echo UtilCss::form_css()."\r\n";
-		$url_base=UtilNet::urlbase();
-		echo "</head>";
-		echo "<body>";
-		echo "<br/><br/><br/><br/><br/><h1 align='center'>$title</h1>";
-		echo "<div align='center' height='450'>";
-		echo "<form id='autocodeForm' target='_blank'>";
-		echo "  <div style='line-height:1.5em;'>";
-		$default_dir=Gc::$nav_root_path."model".DS;
-		echo "      <label>输出文件路径:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' name='save_dir' value='$default_dir' id='save_dir' />";
-
-		if (!empty($inputArr)){
-			echo "<br/><br/>
-					<label>&nbsp;&nbsp;&nbsp;生成模式:</label><select name='type'>";
-			foreach ($inputArr as $key=>$value) {
-				$selectd="";
-				if($default_value==$key)$selectd="selected='selected'";
-				echo "        <option value='$key' $selectd>$value</option>";
-			}
-			echo "      </select>";
-		}
-		echo "  </div>";
-		echo "  <input type='submit' value='生成' /><br/>";
-		echo $more_content;
-		echo "</form>";
-		echo "</div>";
-		echo "</body>";
-		echo "</html>";
+      ob_clean();
+      include("view" . DS . "form" . DS . "userinput.php");
+      echo $userinput_model;
+		// ob_clean();
+		// echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+		// 		<html lang="zh-CN" xml:lang="zh-CN" xmlns="http://www.w3.org/1999/xhtml">';
+		// echo "<head>\r\n";
+		// echo UtilCss::form_css()."\r\n";
+		// $url_base=UtilNet::urlbase();
+		// echo "</head>";
+		// echo "<body>";
+		// echo "<br/><br/><br/><br/><br/><h1 align='center'>$title</h1>";
+		// echo "<div align='center' height='450'>";
+		// echo "<form id='autocodeForm' target='_blank'>";
+		// echo "  <div style='line-height:1.5em;'>";
+		// $default_dir=Gc::$nav_root_path."model".DS;
+		// echo "      <label>输出文件路径:</label><input style='width:400px;text-align:left;padding-left:10px;' type='text' name='save_dir' value='$default_dir' id='save_dir' />";
+		//
+		// if (!empty($inputArr)){
+		// 	echo "<br/><br/>
+		// 			<label>&nbsp;&nbsp;&nbsp;生成模式:</label><select name='type'>";
+		// 	foreach ($inputArr as $key=>$value) {
+		// 		$selectd="";
+		// 		if($default_value==$key)$selectd="selected='selected'";
+		// 		echo "        <option value='$key' $selectd>$value</option>";
+		// 	}
+		// 	echo "      </select>";
+		// }
+		// echo "  </div>";
+		// echo "  <input type='submit' value='生成' /><br/>";
+		// echo $more_content;
+		// echo "</form>";
+		// echo "</div>";
+		// echo "</body>";
+		// echo "</html>";
 	}
 
 	/**

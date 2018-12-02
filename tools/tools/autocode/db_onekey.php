@@ -43,15 +43,15 @@ if(Config_AutoCode::AFTER_MODEL_CONVERT_ADMIN){
         }
 
         if(Config_AutoCode::SHOW_PREVIEW_REPORT){
-            echo "<div style='width: 1000px; margin-left: 110px;'>";
-            echo "<span>&nbsp;&nbsp;&nbsp;&nbsp;</span><a href='javascript:' style='cursor:pointer;' onclick=\"(document.getElementById('showPrepareWork').style.display=(document.getElementById('showPrepareWork').style.display=='none')?'':'none')\">预备工作</a>";
-            echo"<div id='showPrepareWork' style='display: none;'>";
+            echo "<div style='width:80%;margin:0 auto;'>";
+            echo "  <a href='javascript:' style='cursor:pointer;' onclick=\"(document.getElementById('showPrepareWork').style.display=(document.getElementById('showPrepareWork').style.display=='none')?'':'none')\">预备工作</a>";
+            echo "  <div id='showPrepareWork' style='display: none;'>";
             echo AutoCodeModelLike::$showPreviewReport;
-            echo "</div>";
-            echo "<p style='height:20px;text-align:right;'><span style='float:left'>&nbsp;&nbsp;<a style='margin-left:15px;' href='javascript:' style='cursor:pointer;' onclick=\"(document.getElementById('showReport').style.display=(document.getElementById('showReport').style.display=='none')?'':'none')\">显示报告</a></span></p>";
-            echo "<div id='showReport' style='display: none;'>";
+            echo "  </div>";
+            echo "  <p style='height:20px;text-align:right;'><span style='float:left'><a href='javascript:' style='cursor:pointer;' onclick=\"(document.getElementById('showReport').style.display=(document.getElementById('showReport').style.display=='none')?'':'none')\">显示报告</a></span></p>";
+            echo "  <div id='showReport' style='display: none;margin-left: 2%;'>";
             echo AutoCodeModelLike::$showReport;
-            echo "</div>";
+            echo "  </div>";
             echo "</div>";
         }
         AutoCodePreviewReportLike::init();
@@ -80,32 +80,40 @@ if(Config_AutoCode::AFTER_MODEL_CONVERT_ADMIN){
         $save_dir=$_REQUEST["save_dir"];
         AutoCodeModel::$save_dir =$save_dir;
 
-        $table_names=$_GET["table_names"];
-        if(empty($table_names)){
-            die("<div align='center'><font color='red'>至少选择一张表,请确认！</font></div>");
-        }else{
-            AutoCodeConfig::Decode();
-            AutoCodeModel::$showReport="";
-            AutoCodeModel::AutoCode($table_names);
+        if ( !array_key_exists("table_names", $_GET) ) {
+            if ( !Manager_Db::newInstance()->dao()->isCanConnect() ) {
+              die("<br><br><div align='center'><font color='red'>无法连接上数据库，请确认Gc.php文件里数据库配置是否正确！</font></div>");
+            }
+            die("<br><br><div align='center'><font color='red'>至少选择一张表,请确认！</font></div>");
+        } else {
+            $table_names=$_GET["table_names"];
+            if(empty($table_names)){
+                die("<div align='center'><font color='red'>至少选择一张表,请确认！</font></div>");
+            }else{
+                AutoCodeConfig::Decode();
+                AutoCodeModel::$showReport="";
+                AutoCodeModel::AutoCode($table_names);
+            }
         }
 
         $admin_url=Gc::$url_base."admin/";
 
         if(Config_AutoCode::SHOW_PREVIEW_REPORT){
-            echo "<div style='width: 1000px; margin-left: 110px;'>";
-            echo "<span>&nbsp;&nbsp;&nbsp;&nbsp;</span><a href='javascript:' style='margin-left: 5%;cursor:pointer;' onclick=\"(document.getElementById('showPrepareWork').style.display=(document.getElementById('showPrepareWork').style.display=='none')?'':'none')\">预备工作</a>";
-            echo "<div id='showPrepareWork' style='display: none;'>";
+            echo "<div style='width:80%;margin:0 auto;'>";
+            echo "  <a href='javascript:' style='cursor:pointer;' onclick=\"(document.getElementById('showPrepareWork').style.display=(document.getElementById('showPrepareWork').style.display=='none')?'':'none')\">预备工作</a>";
+            echo "  <div id='showPrepareWork' style='display: none;'>";
             echo AutoCodeModel::$showPreviewReport;
-            echo "</div>";
-            echo "<p style='margin-left: 6%;padding-left:5px;height:20px;text-align:right;'><span style='float:left'>&nbsp;&nbsp;<a style='margin-left:15px;' href='javascript:' style='cursor:pointer;' onclick=\"(document.getElementById('showReport').style.display=(document.getElementById('showReport').style.display=='none')?'':'none')\">显示报告</a></span></p>";
-            echo "<div id='showReport' style='display: none;margin-left: 11%;'>";
+            echo "  </div>";
+            echo "  <p style='height:20px;text-align:right;'><span style='float:left'><a href='javascript:' style='cursor:pointer;' onclick=\"(document.getElementById('showReport').style.display=(document.getElementById('showReport').style.display=='none')?'':'none')\">显示报告</a></span></p>";
+            echo "  <div id='showReport' style='display: none;margin-left: 2%;'>";
             echo AutoCodeModel::$showReport;
-            echo "</div>";
-            AutoCodePreviewReport::init();
-            $showReport=AutoCodePreviewReport::showReport($table_names);
-            echo $showReport;
+            echo "  </div>";
             echo "</div>";
         }
+        AutoCodePreviewReport::init();
+        $showReport=AutoCodePreviewReport::showReport($table_names);
+        echo $showReport;
+        echo "</div>";
     }
 }
 

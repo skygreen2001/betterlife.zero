@@ -496,8 +496,9 @@ function toggle(source)
 $moreContent
   </tbody>
 </table>
-	<input type="submit" value='覆盖生成' />
+	<input class="btnSubmit" type="submit" value='覆盖生成' />
 </form>
+<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
 </div>
 REPORT;
 		return $showResult;
