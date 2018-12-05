@@ -45,19 +45,19 @@ class Exception_Customize extends Exception {
      +----------------------------------------------------------
      *
      */
-    public function __construct($exception,$code=0,$extra=null) {
-        if ($exception instanceof Exception) {
-            parent::__construct($exception->getMessage(),$exception->getCode());
-            $this->type=get_class($exception);
-            $this->trace=$exception->getTrace();
-            @array_unshift($this->trace,array("file"=>$exception->getFile(),"line"=>$exception->getLine(),
-                    "function"=>$this->trace[0]["function"],"class"=>$this->trace[0]["class"],
-                    "args"=>"","type"=>$this->trace[0]["type"]));
-        }else if (is_string($exception)) {
-            parent::__construct($exception,$code);
-            $this->type = get_class($this);
+    public function __construct($exception, $code = 0, $extra = null) {
+        if ( $exception instanceof Exception || $exception instanceof Error ) {
+            parent::__construct($exception->getMessage(), $exception->getCode());
+            $this->type  = get_class($exception);
+            $this->trace = $exception->getTrace();
+            @array_unshift($this->trace, array("file" => $exception->getFile(), "line" => $exception->getLine(),
+                    "function" => $this->trace[0]["function"], "class" => $this->trace[0]["class"],
+                    "args" => "", "type" => $this->trace[0]["type"]));
+        } else if ( is_string($exception) ) {
+            parent::__construct($exception, $code);
+            $this->type  = get_class($this);
             $this->extra = $extra;
-            $this->trace=parent::getTrace();
+            $this->trace = parent::getTrace();
         }
         echo $this;
     }
@@ -75,79 +75,79 @@ class Exception_Customize extends Exception {
      */
     public function __toString() {
         $trace = $this->trace;
-        if($this->extra) {
-            $this->errorInfo['extra']=$this->extra;
+        if ( $this->extra ) {
+            $this->errorInfo['extra'] = $this->extra;
         }
-        $current=0;// 当前异常
+        $current = 0;// 当前异常
         if ( $trace ) {
             foreach ($trace as $track) {
-                if (!empty($track['class'])) {
-                    if (strpos($track['class'],ExceptionMe::CLASSNAME)===false) {
+                if ( !empty($track['class']) ) {
+                    if ( strpos($track['class'], ExceptionMe::CLASSNAME) === false ) {
                         break;
-                    }else {
-                        $current+=1;
+                    } else {
+                        $current += 1;
                     }
-                }else {
-                    $current+=1;
+                } else {
+                    $current += 1;
                 }
             }
-            $this->class = $trace[$current]['class'];
+            $this->class    = $trace[$current]['class'];
             $this->function = $trace[$current]['function'];
             $this->file = $trace[$current]['file'];
             $this->line = $trace[$current]['line'];
-            $file   = file($this->file);
-            $traceInfo='';
+            $file       = file($this->file);
+            $traceInfo  ='';
             $time = date("y-m-d H:i:m");
-            $this->errorInfo['tracktime']= '['.$time.'] ';
-            $max_comments=80;//跟踪异常之间用等号注释行间隔开；因此设定等长便于排版
-            foreach($trace as $t) {
-                if (isset ($t['class'])) {
+            $this->errorInfo['tracktime'] = '['.$time.'] ';
+            $max_comments = 80;//跟踪异常之间用等号注释行间隔开；因此设定等长便于排版
+            foreach ($trace as $t) {
+                if ( isset($t['class']) ) {
                     $traceInfo .= $t['class'];
                 }
-                if (isset ($t['type'])) {
+                if ( isset($t['type']) ) {
                     $traceInfo .= $t['type'];
                 }
-                $traceInfo .= $t['function'].'(';
-                $args=array();
-                if (!empty ($t['args'])) {
+                $traceInfo .= $t['function'] . '(';
+                $args = array();
+                if ( !empty($t['args']) ) {
                     foreach ($t['args'] as $arg) {
-                        if (is_object($arg)) {
-                            $args=get_class($arg);
-                        }else {
-                            $args=$arg;
+                        if ( is_object($arg) ) {
+                            $args = get_class($arg);
+                        } else {
+                            $args = $arg;
                         }
                     }
                 }
-                if (is_array($args)&&(count($args)>0)) {
-                    if (count($args)==1){
-                        $args=$args[0];
-                        if (is_array($args)){
-                             $traceInfo .= implode(',', $args);
+                if ( is_array($args) && ( count($args) > 0) ) {
+                    if ( count($args) == 1 ) {
+                        $args = $args[0];
+                        if ( is_array($args) ) {
+                            $traceInfo .= implode(',', $args);
                         }
-                    }else{
+                    } else {
                         $traceInfo .= implode(',', $args);
                     }
                 }
-                $traceInfo .=")\n";
-                if (isset($t['file'])) {
-                    $traceInfo .=str_pad($t['file']."(".$t['line'].")", $max_comments,"=",STR_PAD_BOTH);
-                    $traceInfo .="\n";
+                $traceInfo .= ")\n";
+                if ( isset($t['file']) ) {
+                    $traceInfo .= str_pad($t['file'] . "(" . $t['line'] . ")", $max_comments, "=", STR_PAD_BOTH);
+                    $traceInfo .= "\n\n";
                 }
             }
-            $this->errorInfo['param']=$trace[$current]['args'];
-            $this->errorInfo['message']   = $this->message;
-            $this->errorInfo['type']      = $this->type;
-            $this->errorInfo['detail']='';
-            $this->errorInfo['detail']   .=   ($this->line-2).': '.$file[$this->line-3]."\n";
-            $this->errorInfo['detail']   .=   ($this->line-1).': '.$file[$this->line-2]."\n";
-            $this->errorInfo['detail']   .=   ($this->line).':<font color="#FF6600" ><b>'.$file[$this->line-1].'</b></font>'."\n";
-            $this->errorInfo['detail']   .=   ($this->line+1).': '.$file[$this->line]."\n";
-            $this->errorInfo['detail']   .=   ($this->line+2).': '.$file[$this->line+1];
-            $this->errorInfo['class']     =   $this->class;
-            $this->errorInfo['function']  =   $this->function;
-            $this->errorInfo['file']      = $this->file;
-            $this->errorInfo['line']      = $this->line;
-            $this->errorInfo['trace']     = $traceInfo;
+            $this->errorInfo['param']    = $trace[$current]['args'];
+            $this->errorInfo['message']  = $this->message;
+            $this->errorInfo['type']     = $this->type;
+            $this->errorInfo['detail']   = '';
+            $this->errorInfo['detail']  .= ($this->line - 2) . ': ' . $file[$this->line - 3] . "\n";
+            $this->errorInfo['detail']  .= ($this->line - 1) . ': ' . $file[$this->line - 2] . "\n";
+            $this->errorInfo['detail']  .= ($this->line) . ':<font color="#FF6600" ><b>' . $file[$this->line - 1] . '</b></font>' . "\n";
+            $this->errorInfo['detail']  .= ($this->line + 1) . ': ' . $file[$this->line] . "\n";
+            $this->errorInfo['detail']  .= ($this->line + 2) . ': ' . $file[$this->line + 1];
+            $this->errorInfo['class']    = $this->class;
+            $this->errorInfo['function'] = $this->function;
+            $this->errorInfo['file']     = $this->file;
+            $this->errorInfo['line']     = $this->line;
+            $this->errorInfo['trace']    = $traceInfo;
         }
         return "";
     }
