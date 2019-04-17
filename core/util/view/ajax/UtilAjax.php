@@ -192,46 +192,48 @@ class UtilAjax extends Util
                     return ;
                 }
                 $file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
-                if(contain($file_sub_dir,Gc::$nav_root_path)){
-                    $result="    <script type=\"text/javascript\" src=\"".$url_base.self::$JS_GZIP."{$jsFile}\"></script>\r\n";
-                }else{
-                    $isLocalJsFile=str_replace(Gc::$url_base,$file_sub_dir,$jsFile);
-                    if (contain($isLocalJsFile,"home".DS))
-                        $isLocalJsFile=substr($isLocalJsFile,0,strpos($isLocalJsFile,"home".DS));
-                    $js_gzip=str_replace($_SERVER["DOCUMENT_ROOT"],"",$isLocalJsFile);
-                    $js_gzip=str_replace("\\","/",$js_gzip);
-
-                    if (contain(strtolower(php_uname()),"darwin")){
-                        $js_gzip=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir);
-
-                        $start_str=substr($js_gzip, 0,strpos($js_gzip, "/"));
-                        $url_basei=substr($url_base, 0,strlen($url_base)-1);
-                        $end_str=substr($url_basei,strrpos($url_basei, "/")+1);
-                        if($start_str==$end_str)$js_gzip=str_replace($end_str."/","",$js_gzip);
-                    }
-
-                    $result="    <script type=\"text/javascript\" src=\"".$url_base.$js_gzip.self::$JS_GZIP."{$jsFile}\"></script>\r\n";
+                if ( contain( Gc::$nav_root_path, "/mnt/" ) && contain( $file_sub_dir, "/var/" ) ) {
+                  $file_sub_dir = str_replace("/var/", "/mnt/", $file_sub_dir);
                 }
-            }else{
-                if (in_array($jsFile, self::$JsLoaded)){
+                if ( contain( $file_sub_dir, Gc::$nav_root_path ) ) {
+                    $result="    <script type=\"text/javascript\" src=\"".$url_base.self::$JS_GZIP."{$jsFile}\"></script>\r\n";
+                } else {
+                    $isLocalJsFile = str_replace(Gc::$url_base, $file_sub_dir, $jsFile);
+                    if ( contain( $isLocalJsFile, "home" . DS ) )
+                        $isLocalJsFile = substr($isLocalJsFile, 0, strpos($isLocalJsFile, "home" . DS));
+                    $js_gzip = str_replace($_SERVER["DOCUMENT_ROOT"], "", $isLocalJsFile);
+                    $js_gzip = str_replace("\\", "/", $js_gzip);
+
+                    if ( contain( strtolower(php_uname()), "darwin") ) {
+                        $js_gzip = str_replace($_SERVER["DOCUMENT_ROOT"] . "/", "", $file_sub_dir);
+
+                        $start_str = substr($js_gzip, 0, strpos($js_gzip, "/"));
+                        $url_basei = substr($url_base, 0,strlen($url_base) - 1);
+                        $end_str = substr($url_basei, strrpos($url_basei, "/") + 1);
+                        if ( $start_str == $end_str )$js_gzip = str_replace($end_str . "/", "", $js_gzip);
+                    }
+                    $result = "    <script type=\"text/javascript\" src=\"".$url_base.$js_gzip.self::$JS_GZIP."{$jsFile}\"></script>\r\n";
+                }
+            } else {
+                if ( in_array($jsFile, self::$JsLoaded) ) {
                     return ;
                 }
-                if (startWith($jsFile, "http")){
-                    $result="    <script type=\"text/javascript\" src=\"".$jsFile."\"></script>\r\n";
-                }else{
-                    if (contain(strtolower(php_uname()),"darwin")){
-                        $file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
-                        $jsFile=str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir).$jsFile;
+                if ( startWith($jsFile, "http") ) {
+                    $result = "    <script type=\"text/javascript\" src=\"" . $jsFile . "\"></script>\r\n";
+                } else {
+                    if ( contain( strtolower(php_uname()), "darwin") ) {
+                        $file_sub_dir = str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])) . DS;
+                        $jsFile = str_replace($_SERVER["DOCUMENT_ROOT"]."/", "", $file_sub_dir) . $jsFile;
 
-                        $start_str=substr($jsFile, 0,strpos($jsFile, "/"));
-                        $url_basei=substr($url_base, 0,strlen($url_base)-1);
-                        $end_str=substr($url_basei,strrpos($url_basei, "/")+1);
-                        if($start_str==$end_str)$jsFile=str_replace($end_str."/","",$jsFile);
+                        $start_str = substr($jsFile, 0, strpos($jsFile, "/"));
+                        $url_basei = substr($url_base, 0, strlen($url_base)-1);
+                        $end_str = substr($url_basei, strrpos($url_basei, "/") + 1);
+                        if ( $start_str == $end_str ) $jsFile = str_replace($end_str . "/", "", $jsFile);
                     }
-                    $result="    <script type=\"text/javascript\" src=\"".$url_base.$jsFile."\"></script>\r\n";
+                    $result = "    <script type=\"text/javascript\" src=\"" . $url_base . $jsFile . "\"></script>\r\n";
                 }
             }
-            self::$JsLoaded[]=$jsFile;
+            self::$JsLoaded[] = $jsFile;
         }
         return $result;
     }

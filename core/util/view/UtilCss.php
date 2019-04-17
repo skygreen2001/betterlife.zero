@@ -112,6 +112,9 @@ class UtilCss extends Util
                 $css_gzip=self::$CSS_GZIP;
                 if (contain($cssFile,Gc::$url_base)){
                     $file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+                    if ( contain( Gc::$nav_root_path, "/mnt/" ) && contain( $file_sub_dir, "/var/" ) ) {
+                      $file_sub_dir = str_replace("/var/", "/mnt/", $file_sub_dir);
+                    }
                     if(contain($file_sub_dir,Gc::$nav_root_path)){
                         $isLocalCssFile=str_replace(Gc::$url_base,Gc::$nav_root_path,$cssFile);
                     }else{

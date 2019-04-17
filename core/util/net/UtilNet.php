@@ -48,18 +48,22 @@ class UtilNet extends Util
      */
     public static function urlbase()
     {
-        $with_file=$_SERVER["SCRIPT_FILENAME"];
-        $file_sub_dir=dirname($with_file).DIRECTORY_SEPARATOR;
-        $file_sub_dir=str_replace("/", DIRECTORY_SEPARATOR, $file_sub_dir);
-        if(contain($file_sub_dir,Gc::$nav_root_path)){
-            $file_sub_dir=str_replace(Gc::$nav_root_path, "", $file_sub_dir);
-        }else{
-            $file_sub_dir=str_replace($_SERVER["DOCUMENT_ROOT"], "", $file_sub_dir);
+        $with_file = $_SERVER["SCRIPT_FILENAME"];
+        $file_sub_dir = dirname($with_file).DIRECTORY_SEPARATOR;
+
+        if ( contain( Gc::$nav_root_path, "/mnt/" ) && contain( $file_sub_dir, "/var/" ) ) {
+          $file_sub_dir = str_replace("/var/", "/mnt/", $file_sub_dir);
         }
-        $file_sub_dir=str_replace(DIRECTORY_SEPARATOR, "/", $file_sub_dir);
-        $url_base=Gc::$url_base;
-        if($file_sub_dir!="/")$url_base=str_replace($file_sub_dir, "", $url_base);
-        if(!endwith($url_base,"/"))$url_base.="/";
+        $file_sub_dir = str_replace("/", DIRECTORY_SEPARATOR, $file_sub_dir);
+        if ( contain( $file_sub_dir, Gc::$nav_root_path ) ) {
+            $file_sub_dir = str_replace(Gc::$nav_root_path, "", $file_sub_dir);
+        } else {
+            $file_sub_dir = str_replace($_SERVER["DOCUMENT_ROOT"], "", $file_sub_dir);
+        }
+        $file_sub_dir = str_replace(DIRECTORY_SEPARATOR, "/", $file_sub_dir);
+        $url_base = Gc::$url_base;
+        if ( $file_sub_dir != "/" ) $url_base = str_replace($file_sub_dir, "", $url_base);
+        if ( !endwith($url_base,"/") ) $url_base .= "/";
         return $url_base;
     }
 

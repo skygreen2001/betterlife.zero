@@ -53,13 +53,16 @@ if (isset ($jsFile)){
                 break;
         }
     }else{
-        $url_base=UtilNet::urlbase();
-        if (contain($jsFile,$url_base)){
-            $jsFile=str_replace($url_base,"",$jsFile);
-            $file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
-            if(contain($file_sub_dir,Gc::$nav_root_path)){
+        $url_base = UtilNet::urlbase();
+        if ( contain($jsFile, $url_base) ) {
+            $jsFile = str_replace($url_base,"",$jsFile);
+            $file_sub_dir = str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+            if ( contain( Gc::$nav_root_path, "/mnt/" ) && contain( $file_sub_dir, "/var/" ) ) {
+              $file_sub_dir = str_replace("/var/", "/mnt/", $file_sub_dir);
+            }
+            if ( contain($file_sub_dir, Gc::$nav_root_path) ) {
                 $jsFile=Gc::$nav_root_path.$jsFile;
-            }else{
+            } else {
                 $jsFile=$_SERVER["DOCUMENT_ROOT"]."/".$jsFile;
             }
             $jsFile=str_replace("/",DS,$jsFile);
@@ -68,7 +71,7 @@ if (isset ($jsFile)){
     }
 }
 
-if (isset ($cssFile)){
+if ( isset($cssFile) ) {
     if(contain($cssFile,"?"))$cssFile=substr($cssFile,0,strpos($cssFile,"?"));
     if (!endWith($cssFile, ".css"))return;
     header("Content-type: text/css; charset: UTF-8");
@@ -90,10 +93,13 @@ if (isset ($cssFile)){
         if (contain($cssFile,$url_base)){
             $cssFile=str_replace($url_base,"",$cssFile);
             $file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
-            if(contain($file_sub_dir,Gc::$nav_root_path)){
-                $cssFile=Gc::$nav_root_path.$cssFile;
-            }else{
-                $cssFile=$_SERVER["DOCUMENT_ROOT"]."/".$cssFile;
+            if ( contain( Gc::$nav_root_path, "/mnt/" ) && contain( $file_sub_dir, "/var/" ) ) {
+              $file_sub_dir = str_replace("/var/", "/mnt/", $file_sub_dir);
+            }
+            if ( contain( $file_sub_dir, Gc::$nav_root_path ) ) {
+                $cssFile = Gc::$nav_root_path . $cssFile;
+            } else {
+                $cssFile = $_SERVER["DOCUMENT_ROOT"] . "/" . $cssFile;
             }
             $cssFile=str_replace("/",DS,$cssFile);
         }

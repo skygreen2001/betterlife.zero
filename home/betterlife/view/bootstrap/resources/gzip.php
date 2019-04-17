@@ -57,6 +57,9 @@ if (isset ($jsFile)){
         if (contain($jsFile,$url_base)){
             $jsFile=str_replace($url_base,"",$jsFile);
             $file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+            if ( contain( Gc::$nav_root_path, "/mnt/" ) && contain( $file_sub_dir, "/var/" ) ) {
+              $file_sub_dir = str_replace("/var/", "/mnt/", $file_sub_dir);
+            }
             if(contain($file_sub_dir,Gc::$nav_root_path)){
                 $jsFile=Gc::$nav_root_path.$jsFile;
             }else{
@@ -90,6 +93,9 @@ if (isset ($cssFile)){
         if (contain($cssFile,$url_base)){
             $cssFile=str_replace($url_base,"",$cssFile);
             $file_sub_dir=str_replace("/", DS, dirname($_SERVER["SCRIPT_FILENAME"])).DS;
+            if ( contain( Gc::$nav_root_path, "/mnt/" ) && contain( $file_sub_dir, "/var/" ) ) {
+              $file_sub_dir = str_replace("/var/", "/mnt/", $file_sub_dir);
+            }
             if(contain($file_sub_dir,Gc::$nav_root_path)){
                 $cssFile=Gc::$nav_root_path.$cssFile;
             }else{
