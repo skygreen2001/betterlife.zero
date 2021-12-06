@@ -39,17 +39,20 @@
 
 ### 参考框架：
 * **English**
-    * SilverStripe:http://doc.silverstripe.org/
     * Drupal：http://drupal.org/handbook
+    * SilverStripe:http://doc.silverstripe.org/
     * Lavaral: http://laravel.com/
-    * CodeIgniter：http://codeigniter.com/user_guide/index.html
-    * Symfony:http://symphony-cms.com/
-    * Joomla：http://docs.joomla.org/
+    * Symfony: http://symphony-cms.com/
+    * Yii    : https://www.yiiframework.com/
+    * Joomla : http://docs.joomla.org/
+    * Phalcon: https://phalcon.io/
+    * CodeIgniter: http://codeigniter.com/user_guide/index.html
+    * Yaf    : https://www.php.net/manual/zh/book.yaf.php
 
 * **国内**
-    * ThinkPHP:http://www.thinkphp.cn/Manual
-    * QEE:http://qeephp.com/，原为FleaPHP
-    * 康盛创想产品:http://faq.comsenz.com/development【comsenz】
+    * ThinkPHP: http://www.thinkphp.cn/Manual
+    * Swoole  : https://www.swoole.com/ 
+    * Discuz!:https://discuz.com/
     * MyOA:http://www.tongda2000.com/download/document.php#oa
 
 * **MVC框架**
@@ -59,9 +62,8 @@
     * Mambo:a full-featured, award-winning content management system
 
 * **CMS**
-    * 织梦CMS: http://help.dedecms.com/
-    * PHPWind: http://faq.phpwind.net/
-    * 帝国CMS:http://bbs.phome.net/ShowThread/?threadid=18902&forumid=13
+    * 织梦CMS: http://www.dedecms.com/
+    * 帝国CMS: http://www.phome.net/
 
 * **数据库DAO-DAL框架**
     * Metabase
@@ -78,8 +80,6 @@
     * packagist:https://packagist.org/
     * PEAR:http://pear.php.net/
     * PECL:http://pecl.php.net/
-    * ?ezComponents:http://ezcomponents.org/
-
 
 ### Book
     * Object-oriented programming with php5 [author:Hasin Hayder]
@@ -87,22 +87,25 @@
 ### 代码规范[Code Guide]
     * PHP-fig:http://www.php-fig.org/
     * PHP The right way:http://www.phptherightway.com/#code_style_guide
+    * 代码风格指南: https://laravel-china.github.io/php-the-right-way/#code_style_guide
     * Drupal Code Standard:https://www.drupal.org/docs/develop/standards
     * PHP Coding Guidelines & Best Practices:http://flowframework.readthedocs.io/en/stable/TheDefinitiveGuide/PartV/CodingGuideLines/PHP.html
     * Tencent AlloyTeam:http://alloyteam.github.io/CodeGuide/
 
 ### 推荐工具
     * 部署：XAMMP(Wamp/Lamp/Mamp) | XAMPP
-    * IDE：Atom | Sublime | Brackets
+    * IDE：Atom | Sublime | Brackets | VS Code
 
 ### 在线资源
-    * Github Tools:https://github.com/integrations
-    * http://codemirror.net/
+    * Github Tools: https://github.com/integrations
+    * codemirror  : http://codemirror.net/
 
 ## FAQ
 * 一般来讲：中文字符集都采用UTF-8，但在Ajax发送Json中文数据发现Firefox正常，IE为乱码;
-  需要标明：contentType: "application/x-www-form-urlencoded; charset=utf-8",
-  解决方法参考：http://91jquery.com/jQuery/1769.html
+*  需要标明：contentType: "application/x-www-form-urlencoded; charset=utf-8",
+*  解决方法参考：http://91jquery.com/jQuery/1769.html
+
+   ```
       jQuery(form).ajaxSubmit({
         url: "ajax.aspx?a=memberlogin",
         type: "post",
@@ -110,12 +113,13 @@
         contentType: "application/x-www-form-urlencoded; charset=utf-8",
         success: showLoginResponse
       });
-
+   ```
+   
 * 网站框架访问样式不正常，发现无法正常加载Css或者Gzip；
-    提示：
-      内容编码错误
-      无法显示您尝试查看的页面，因为它使用了无效或者不支持的压缩格式。
-    回答：
-      1.清除所有文件带有的BOM.
-      2.反置PHP.ini里的zlib output compression设置。
-      3.mysql数据库列字段名不能为desc关键字。
+    - 提示：
+      - 内容编码错误
+      - 无法显示您尝试查看的页面，因为它使用了无效或者不支持的压缩格式。
+    - 回答：
+      - 1.清除所有文件带有的BOM.
+      - 2.反置PHP.ini里的zlib output compression设置。
+      - 3.mysql数据库列字段名不能为desc关键字。
