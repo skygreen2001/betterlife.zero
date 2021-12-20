@@ -98,7 +98,7 @@ class Crud_Sql_Update extends Crud_SQL {
 				$this->values =join(",",$values);
 			}
 		}else {
-			Exception_Db::recordException(Exception_Db::UPDATE_VALUE_NULL,__FILE__,__LINE__,$this);
+			Exception_Db::recordException(Wl::ERROR_INFO_UPDATE_VALUE_NULL,__FILE__,__LINE__,$this);
 		}
 		return $this;
 	}

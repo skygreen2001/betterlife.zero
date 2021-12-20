@@ -1,6 +1,6 @@
 # betterlife
 
-最新代码已经移植到 [betterlife 2](https://github.com/skygreen2001/betterlife.core)
+最新代码已经移植到 [betterlife 2](https://github.com/skygreen2001/betterlife)
 
 符合中国开发者思维方式的快速开发的框架，设计初衷快捷、简单、实用。
 
@@ -10,9 +10,9 @@
     * **安装NodeJs**
         下载地址: https://nodejs.org/en/download/
     * **通过Github官网下载**
-        官网地址: https://github.com/skygreen2001/betterlife
-        * git clone https://github.com/skygreen2001/betterlife.git
-        * git clone git@github.com:skygreen2001/betterlife.git
+        官网地址: https://github.com/skygreen2001/betterlife.zero
+        * git clone https://github.com/skygreen2001/betterlife.zero.git
+        * git clone git@github.com:skygreen2001/betterlife.zero.git
     * **安装Gulp**
       npm install --global gulp
     * **安装目录下运行**
@@ -22,12 +22,12 @@
       gulp
 
 ## 框架目录定义
-    * core    :框架核心支持文件
-    * install :安装目录
-    * library :通用功能模块
-    * module  :通用应用模块，如搜索引擎，百度地图等
-    * taglib  :自定义标签，您也可以在自己的应用中定义自定义标签
-    * tools   :开发中通常用到的小工具【需发布在应用中访问url路径使用】
+    * core    : 框架核心支持文件
+    * install : 安装目录
+    * library : 通用功能模块
+    * module  : 通用应用模块，如通信，条形码等
+    * taglib  : 自定义标签，您也可以在自己的应用中定义自定义标签
+    * tools   : 开发中通常用到的小工具【需发布在应用中访问url路径使用】
     * home    : 基于MVC模式网站开发实际工作目录
     * document: 框架帮助说明文档
     * misc    : 引用第三方Js、Css、Image、Fonts资源目录

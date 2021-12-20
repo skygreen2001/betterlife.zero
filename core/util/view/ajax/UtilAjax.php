@@ -40,7 +40,7 @@ class UtilAjax extends Util
     protected static $JS_FLAG_VERSION="v";
     /**
      * 默认使用的Ajax框架名称
-     * @var enum
+     * @var string
      */
     public static $ajax_fw_name_default=EnumJsFramework::JS_FW_JQUERY;//JS_FW_JQUERY
     /**

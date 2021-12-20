@@ -23,6 +23,7 @@ class View {
     const TEMPLATE_MODE_SMARTTEMPLATE=2;
     const TEMPLATE_MODE_EASETEMPLATE=3;
     const TEMPLATE_MODE_TEMPLATELITE=4;
+    const TEMPLATE_MODE_FLEXY=5;
 
     /**
      * EaseTemplate 是否开启Memcache

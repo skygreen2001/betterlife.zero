@@ -141,7 +141,7 @@ class Manager_Communication extends Manager{
      * @param enum $commType 通信实现方式标识符
      * @return 通信实现方式 
      */
-    private static function getComm($commType)
+    private static function getComm($commType=null)
     {
         if (($commType==null)||(empty($commType))){
             $commType=self::$comm_default;

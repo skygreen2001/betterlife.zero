@@ -46,7 +46,7 @@ class Service_Communication extends Service
     /**
      *
      * @param type $request_data
-     * @param type $str_object
+     * @param array|string $str_object
      * @return type 核心应用程序的封装。
      */
     private function execute($str_object,$request_data)
